@@ -1,0 +1,9 @@
+{
+  "name": "wasabee_frontend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/wasabee_frontend",
+  "projectType": "application",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project wasabee_frontend --web",
+  "targets": {}
+}
