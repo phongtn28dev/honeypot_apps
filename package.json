@@ -2,7 +2,10 @@
   "name": "@honeypot-frontend/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "pop2pump": "nx dev pop2pump --port 9001",
+    "wasabee": "nx dev wasabee --port 9002"
+  },
   "private": true,
   "dependencies": {
     "next": "~15.1.4",
@@ -20,6 +23,7 @@
     "@nx/next": "20.4.6",
     "@nx/workspace": "20.4.6",
     "@swc-node/register": "~1.9.1",
+    "@swc/cli": "~0.3.12",
     "@swc/core": "~1.5.7",
     "@swc/helpers": "~0.5.11",
     "@testing-library/react": "16.1.0",

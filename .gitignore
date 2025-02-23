@@ -44,3 +44,13 @@ Thumbs.db
 # Next.js
 .next
 out
+
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+.env.test.local
+
+
+.npmrc

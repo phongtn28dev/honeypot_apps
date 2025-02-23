@@ -11,7 +11,7 @@ export function Index() {
           <div id="welcome">
             <h1>
               <span> Hello there, </span>
-              Welcome wasabee_frontend 👋
+              Welcome pop2pump 👋
             </h1>
           </div>
 
@@ -395,7 +395,7 @@ export function Index() {
                 </svg>
                 View project details
               </summary>
-              <pre>nx show project wasabee_frontend --web</pre>
+              <pre>nx show project pop2pump --web</pre>
             </details>
             <details>
               <summary>
