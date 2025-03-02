@@ -17,16 +17,33 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Load and replace .env.workflow variables
-        id: replace-env
+      - name: Install jq and gh CLI
         run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+          sudo apt-get update
+          sudo apt-get install -y gh
+
+      - name: Authenticate gh CLI
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh auth login --with-token <<< "$GITHUB_TOKEN"
+
+      - name: Load and replace .env.workflow variables
+        run: |
+          # 获取仓库的 Secrets 列表
+          secrets_json=$(gh api repos/$GITHUB_REPOSITORY/actions/secrets)
+
           # 动态替换 .env.workflow 文件中的占位符
           while IFS= read -r line; do
             # 检查行中是否包含 ${...} 格式的占位符
             if [[ "$line" =~ \$\{([^}]+)\} ]]; then
               var_name="${BASH_REMATCH[1]}"
-              # 从 GitHub Secrets 中获取对应的值
-              var_value="${{ secrets[var_name] }}"
+              # 从 Secrets 列表中获取对应的值
+              var_value=$(echo "$secrets_json" | jq -r --arg var_name "$var_name" '.secrets[] | select(.name == $var_name) | .value')
               # 如果找到了对应的值，则替换占位符
               if [[ -n "$var_value" ]]; then
                 line="${line//\$\{$var_name\}/$var_value}"
