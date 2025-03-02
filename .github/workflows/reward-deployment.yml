@@ -17,6 +17,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Load and replace .env.workflow variables
+        run: |
+          # 动态替换 .env.workflow 文件中的占位符
+          while IFS= read -r line; do
+            # 检查行中是否包含 ${...} 格式的占位符
+            if [[ "$line" =~ \$\{([^}]+)\} ]]; then
+              var_name="${BASH_REMATCH[1]}"
+              # 从环境变量中获取对应的值
+              var_value="${!var_name}"
+              # 替换占位符为实际值
+              line="${line//\$\{$var_name\}/$var_value}"
+            fi
+            echo "$line"
+          done < .github/workflows/.env.workflow > .github/workflows/.env.workflow.tmp
+          mv .github/workflows/.env.workflow.tmp .github/workflows/.env.workflow
+
+      - name: Print .env.workflow file
+        run: cat .github/workflows/.env.workflow
+
       - name: Update Vercel Environment Variables for Project
         env:
           ENV_FILE: .github/workflows/.env.workflow
@@ -24,7 +43,6 @@ jobs:
           TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
           PROJECT_NAME: reward-vault-market
           PROJECT_ID: prj_Yhv6hufFe068byTjwTCRds5PP4YB
-
         run: |
           while IFS='=' read -r key value || [[ -n "$key" ]]; do
             if [[ ! -z "$key" && "$key" != \#* ]]; then
