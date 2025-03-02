@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - .env
+      - .env.workflow
       - '.github/workflows/reward-deployment.yml'
       - 'apps/reward-vault-market/**'
 
