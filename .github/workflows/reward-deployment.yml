@@ -17,21 +17,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install jq and gh CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y jq
-          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-          sudo apt-get update
-          sudo apt-get install -y gh
-
-      - name: Authenticate gh CLI with PAT
-        env:
-          WORKFLOW_GITHUB_TOKEN: ${{ secrets.WORKFLOW_GITHUB_TOKEN }} # 使用 Personal Access Token (PAT)
-        run: |
-          # 使用 PAT 登录 gh CLI
-          echo "$WORKFLOW_GITHUB_TOKEN" | gh auth login --with-token
+      - name: Load Env File with Secrets
+        uses: schaermu/github-actions-env-file@v2
+        with:
+          file: .github/workflows/.env.workflow
 
       - name: Convert to Unix format
         run: sed -i 's/\r$//' .github/workflows/.env.workflow
@@ -47,18 +36,12 @@ jobs:
             echo "line of: $line"
             while [[ "$line" =~ (\$\{([^}]+)\}) ]]; do
               var_name="${BASH_REMATCH[2]}"
-              var_value=$(echo "${secrets.$var_name}")
+              var_value=$(echo "${!var_name}")
               line="${line//${BASH_REMATCH[1]}/$var_value}"
             done
             echo "$line"
           done < .github/workflows/.env.workflow > .github/workflows/.env.workflow.tmp
           mv .github/workflows/.env.workflow.tmp .github/workflows/.env.workflow
-
-      - name: Print .env.workflow file
-        run: |
-          echo "===== Start of .env.workflow ====="
-          cat .github/workflows/.env.workflow
-          echo "===== End of .env.workflow ====="
 
       - name: Update Vercel Environment Variables for Project
         env:
