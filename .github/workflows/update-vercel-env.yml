@@ -43,7 +43,6 @@ jobs:
             
             for KEY in $(echo $ENV_VARS | jq -r 'keys[]'); do
               VALUE=$(echo $ENV_VARS | jq -r --arg KEY "$KEY" '.[$KEY]')
-              
               echo "Updating $KEY=$VALUE"
               
               curl -X POST "https://api.vercel.com/v10/projects/$PROJECT_ID/env?teamId=$VERCEL_TEAM_ID" \
