@@ -18,16 +18,21 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Load and replace .env.workflow variables
+        id: replace-env
         run: |
           # 动态替换 .env.workflow 文件中的占位符
           while IFS= read -r line; do
             # 检查行中是否包含 ${...} 格式的占位符
             if [[ "$line" =~ \$\{([^}]+)\} ]]; then
               var_name="${BASH_REMATCH[1]}"
-              # 从环境变量中获取对应的值
-              var_value="${!var_name}"
-              # 替换占位符为实际值
-              line="${line//\$\{$var_name\}/$var_value}"
+              # 从 GitHub Secrets 中获取对应的值
+              var_value="${{ secrets[var_name] }}"
+              # 如果找到了对应的值，则替换占位符
+              if [[ -n "$var_value" ]]; then
+                line="${line//\$\{$var_name\}/$var_value}"
+              else
+                echo "Warning: Secret '$var_name' not found in GitHub Secrets."
+              fi
             fi
             echo "$line"
           done < .github/workflows/.env.workflow > .github/workflows/.env.workflow.tmp
