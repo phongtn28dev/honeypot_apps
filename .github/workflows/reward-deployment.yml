@@ -52,6 +52,7 @@ jobs:
           # 获取项目当前的环境变量列表
           current_envs=$(curl -s -X GET "https://api.vercel.com/v10/projects/$PROJECT_ID/env?teamId=$TEAM_ID" \
                             -H "Authorization: Bearer $VERCEL_TOKEN")
+          echo "current_envs: $current_envs"
 
           # 读取环境变量文件并逐行处理
           while IFS='=' read -r key value || [[ -n "$key" ]]; do
