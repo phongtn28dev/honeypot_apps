@@ -25,6 +25,7 @@ jobs:
       - name: Convert to Unix format
         run: |
           sed -i 's/\r$//' .github/workflows/.env.workflow
+          echo "" >> .github/workflows/.env.workflow
 
       - name: Load and replace .env.workflow variables
         shell: bash
