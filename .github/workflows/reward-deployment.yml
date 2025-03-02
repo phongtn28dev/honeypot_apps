@@ -27,10 +27,8 @@ jobs:
           sudo apt-get install -y gh
 
       - name: Authenticate gh CLI
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh auth login --with-token <<< "$GITHUB_TOKEN"
+          gh auth login --with-token <<< ${{ secrets.GITHUB_TOKEN }}
 
       - name: Load and replace .env.workflow variables
         run: |
