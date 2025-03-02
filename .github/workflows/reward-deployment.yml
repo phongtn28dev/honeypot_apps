@@ -22,7 +22,7 @@ jobs:
         with:
           secrets: ${{ toJSON(secrets) }}
 
-      - name: Convert to Unix format
+      - name: Convert to env format
         run: |
           sed -i 's/\r$//' .github/workflows/.env.workflow
           echo "" >> .github/workflows/.env.workflow
@@ -41,7 +41,7 @@ jobs:
           done < .github/workflows/.env.workflow > .github/workflows/.env.workflow.tmp
           mv .github/workflows/.env.workflow.tmp .github/workflows/.env.workflow
 
-      - name: Update Vercel Environment Variables for Project
+      - name: Create or Update Vercel Environment Variables for Project
         env:
           ENV_FILE: .github/workflows/.env.workflow
           VERCEL_TOKEN: ${{ secrets.WORKFLOW_VERCEL_TOKEN }}
@@ -49,17 +49,41 @@ jobs:
           PROJECT_NAME: reward-vault-market
           PROJECT_ID: prj_Yhv6hufFe068byTjwTCRds5PP4YB
         run: |
+          # 获取项目当前的环境变量列表
+          current_envs=$(curl -s -X GET "https://api.vercel.com/v10/projects/$PROJECT_ID/env?teamId=$TEAM_ID" \
+                            -H "Authorization: Bearer $VERCEL_TOKEN")
+
+          # 读取环境变量文件并逐行处理
           while IFS='=' read -r key value || [[ -n "$key" ]]; do
             if [[ ! -z "$key" && "$key" != \#* ]]; then
-              echo "Setting $key in Vercel..."
-              curl -X POST "https://api.vercel.com/v10/projects/$PROJECT_ID/env?teamId=$TEAM_ID" \
-              -H "Authorization: Bearer $VERCEL_TOKEN" \
-              -H "Content-Type: application/json" \
-              --data "{
-                \"key\": \"$key\",
-                \"value\": \"$value\",
-                \"type\": \"plain\",
-                \"target\": [\"production\", \"preview\"]
-              }"
+              # 检查环境变量是否已经存在
+              var_exists=$(echo "$current_envs" | jq -r '.envs[] | select(.key == "$key") | .key')
+
+              if [ "$var_exists" == "$key" ]; then
+                # 如果环境变量已存在，获取 ID 并更新
+                echo "$key already exists, updating..."
+                ENV_VAR_ID=$(echo "$current_envs" | jq -r ".envs[] | select(.key == \"$key\") | .id")
+                curl -X PUT "https://api.vercel.com/v10/projects/$PROJECT_ID/env/$ENV_VAR_ID?teamId=$TEAM_ID" \
+                    -H "Authorization: Bearer $VERCEL_TOKEN" \
+                    -H "Content-Type: application/json" \
+                    --data "{
+                      \"key\": \"$key\",
+                      \"value\": \"$value\",
+                      \"type\": \"encrypted\",
+                      \"target\": [\"production\", \"preview\"]
+                    }"
+              else
+                # 如果环境变量不存在，则创建
+                echo "Setting $key in Vercel..."
+                curl -X POST "https://api.vercel.com/v10/projects/$PROJECT_ID/env?teamId=$TEAM_ID" \
+                    -H "Authorization: Bearer $VERCEL_TOKEN" \
+                    -H "Content-Type: application/json" \
+                    --data "{
+                      \"key\": \"$key\",
+                      \"value\": \"$value\",
+                      \"type\": \"encrypted\",
+                      \"target\": [\"production\", \"preview\"]
+                    }"
+              fi
             fi
           done < "$ENV_FILE"
