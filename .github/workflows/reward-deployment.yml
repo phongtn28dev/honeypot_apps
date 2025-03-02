@@ -37,8 +37,6 @@ jobs:
       - name: Print Updated .env.workflow
         run: |
           echo "Updated .env.workflow:"
-          cat .github/workflows/.env.workflow
-
 
       - name: Update Vercel Environment Variables for Project
         env:
