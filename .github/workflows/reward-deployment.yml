@@ -27,8 +27,8 @@ jobs:
               continue
             fi
 
-            # 解析 GitHub format (${{ secrets.SECRET_NAME }})
-            if [[ "$value" =~ ^\${{secrets.*}}$ ]]; then
+            # 解析 GitHub format secrets.SECRET_NAME
+            if [[ "$value" =~ ^\${{*.*}}$ ]]; then
               secret_name=$(echo "$value" | sed 's/[${} ]//g' | cut -d'.' -f2)
               replacement_value="${!secret_name}"
               if [[ -n "$replacement_value" ]]; then
