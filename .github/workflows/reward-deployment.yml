@@ -1,4 +1,4 @@
-name: Update Vercel ENV for reward-vault-market
+name: Update Multiple ENV for Multiple Vercel Projects
 
 on:
   push:
@@ -16,17 +16,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Update Vercel Environment Variables for Projects $PROJECT_NAME
+      - name: Update Vercel Environment Variables for Project
         env:
           ENV_FILE: ./.env.workflow
           VERCEL_TOKEN: ${{ secrets.WORKFLOW_VERCEL_TOKEN }}
           TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
-          PROJECT_NAME: 'reward-vault-market'
-          PROJECT_ID: 'prj_Yhv6hufFe068byTjwTCRds5PP4YB'
+          PROJECT_NAME: reward-vault-market
+          PROJECT_ID: prj_Yhv6hufFe068byTjwTCRds5PP4YB
 
         run: |
-          while IFS='=' read -r key value; do
-            if [[ ! -z "$key" ]]; then
+          while IFS='=' read -r key value || [[ -n "$key" ]]; do
+            if [[ ! -z "$key" && "$key" != \#* ]]; then
               echo "Setting $key in Vercel..."
               curl -X POST "https://api.vercel.com/v10/projects/$PROJECT_ID/env?teamId=$TEAM_ID" \
               -H "Authorization: Bearer $VERCEL_TOKEN" \
@@ -38,4 +38,4 @@ jobs:
                 \"target\": [\"production\", \"preview\"]
               }"
             fi
-          done < $ENV_FILE
+          done < "$ENV_FILE"
