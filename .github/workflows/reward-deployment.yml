@@ -64,7 +64,7 @@ jobs:
             echo "value: $value"
             if [[ ! -z "$key" && "$key" != \#* ]]; then
               # 检查环境变量是否已经存在
-              var_exists=$(echo "$current_envs" | jq -r '.envs[] | select(.key == "$key") | .key')
+              var_exists=$(echo "$current_envs" | jq -r ".envs[] | select(.key == \"$key\") | .key")
               echo "var_exists: $var_exists"
               echo "key: $key"
               if [ "$var_exists" == "$key" ]; then
