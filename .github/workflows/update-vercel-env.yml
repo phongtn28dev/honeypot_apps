@@ -16,11 +16,14 @@ jobs:
       - name: Update Vercel Environment Variables for Multiple Projects
         env:
           VERCEL_TOKEN: ${{ secrets.WORKFLOW_VERCEL_TOKEN }}
-          PROJECTS: '["prj_Yhv6hufFe068byTjwTCRds5PP4YB"]'  # 这里填入你的多个项目 ID
+          PROJECTS: '["prj_Yhv6hufFe068byTjwTCRds5PP4YB"]' 
+          PROJECTS_JSON: '{
+            "reward_vault_market": "prj_Yhv6hufFe068byTjwTCRds5PP4YB",
+          }' # 这里填入你的多个项目 ID
           ENV_VARS: '{
-            "TEST_ACTION_ENV_1": "value1",
-            "TEST_ACTION_ENV_2": "value2",
-            "TEST_ACTION_ENV_3": "value3"
+            "TEST_ACTION_ENV_1": "value1-1",
+            "TEST_ACTION_ENV_2": "value2-2",
+            "TEST_ACTION_ENV_3": "value3-3"
           }'  # 这里填入你要更新的多个环境变量
         run: |
           for PROJECT_ID in $(echo $PROJECTS | jq -r '.[]'); do
@@ -31,7 +34,7 @@ jobs:
               
               echo "Updating $KEY=$VALUE"
               
-              curl -X POST "https://api.vercel.com/v10/projects/$PROJECT_ID/env" \
+              curl -X POST "https://api.vercel.com/v10/projects/$PROJECT_ID/env?teamId={secrets.VERCEL_TEAM_ID}" \
               -H "Authorization: Bearer $VERCEL_TOKEN" \
               -H "Content-Type: application/json" \
               --data '{
