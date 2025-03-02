@@ -17,22 +17,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Replace Secrets Directly in .env.workflow
+      - name: Load environment variables from .env.workflow
         run: |
-          # 遍历所有环境变量并替换
-          while IFS= read -r line; do
-            if [[ $line =~ \$\{\{\ secrets\.([a-zA-Z0-9_]+) \}\}$ ]]; then
-              secret_name="${BASH_REMATCH[1]}"
-              secret_value="${!secret_name}"
+          # Load the environment variables from the .env.workflow file
+          set -o allexport
+          source .github/workflows/.env.workflow
+          set +o allexport
 
-              if [[ -n "$secret_value" ]]; then
-                echo "Replacing $secret_name in .env.workflow"
-                sed -i "s|\${{ secrets.$secret_name }}|$secret_value|g" .github/workflows/.env.workflow
-              else
-                echo "Warning: Secret $secret_name is not defined!"
-              fi
-            fi
-          done < .github/workflows/.env.workflow
+      - name: Display environment variables
+        run: |
+          echo "test_action_key=$TEST_ACTION_ENV_1"
 
       - name: Update Vercel Environment Variables for Project
         env:
