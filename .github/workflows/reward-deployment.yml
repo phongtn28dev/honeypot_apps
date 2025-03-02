@@ -34,10 +34,6 @@ jobs:
             fi
           done < .github/workflows/.env.workflow
     
-      - name: Print Updated .env.workflow
-        run: |
-          echo "Updated .env.workflow:"
-
       - name: Update Vercel Environment Variables for Project
         env:
           source .env  # 载入环境变量
