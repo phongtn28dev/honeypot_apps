@@ -6,6 +6,7 @@ on:
       - main # 监听 main 分支的 push 事件
     paths:
       - .env
+      - '.github/workflows/reward-deployment.yml'
       - 'apps/reward-vault-market/**'
 
 jobs:
