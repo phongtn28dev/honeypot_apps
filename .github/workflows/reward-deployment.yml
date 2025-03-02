@@ -16,6 +16,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Set up jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
 
       - name: Export secrets to env
         uses: oNaiPs/secrets-to-env-action@v1
