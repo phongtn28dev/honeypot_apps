@@ -17,19 +17,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-    - name: Replace Secrets in .env.workflow
-      env:
-        ENV_FILE: .github/workflows/.env.workflow
-      run: |
-        while IFS='=' read -r key value; do
-          if [[ "$value" =~ ^\${{.*}}$ ]]; then
-            secret_name=$(echo "$value" | sed 's/[${} ]//g' | cut -d'.' -f2)
-            replacement_value="${!secret_name}"
-            if [[ -n "$replacement_value" ]]; then
-              sed -i "s|$value|$replacement_value|g" $ENV_FILE
+      - name: Replace Secrets in .env.workflow
+        env:
+          ENV_FILE: .github/workflows/.env.workflow
+        run: |
+          while IFS='=' read -r key value; do
+            if [[ "$value" =~ ^\${{.*}}$ ]]; then
+              secret_name=$(echo "$value" | sed 's/[${} ]//g' | cut -d'.' -f2)
+              replacement_value="${!secret_name}"
+              if [[ -n "$replacement_value" ]]; then
+                sed -i "s|$value|$replacement_value|g" $ENV_FILE
+              fi
             fi
-          fi
-        done < $ENV_FILE
+          done < $ENV_FILE
 
       - name: Update Vercel Environment Variables for Project
         env:
