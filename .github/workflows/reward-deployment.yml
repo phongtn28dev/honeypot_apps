@@ -35,7 +35,6 @@ jobs:
 
       - name: Load and replace .env.workflow variables
         run: |
-          /bin/bash -c '
           echo "===== Original .env.workflow ====="
           cat .github/workflows/.env.workflow
           echo "===== End of .env.workflow ====="
