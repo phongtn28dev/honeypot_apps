@@ -42,7 +42,9 @@ jobs:
             while [[ "$line" =~ (\$\{([^}]+)\}) ]]; do
               var_name="${BASH_REMATCH[2]}"
               var_value=$(echo "$secrets_json" | jq -r --arg var_name "$var_name" '.secrets | map(select(.name == $var_name)) | .[0].value // empty')
+              echo "var_name: $var_name, var_value: $var_value"
               line="${line//${BASH_REMATCH[1]}/$var_value}"
+              echo "line: $line"
             done
             echo "$line"
           done < .github/workflows/.env.workflow > .github/workflows/.env.workflow.tmp
