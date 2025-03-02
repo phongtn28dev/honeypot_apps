@@ -35,7 +35,9 @@ jobs:
           done
 
       - name: Print Updated ENV File
-        run: cat .env
+        run: |
+          echo "Updated ENV File:"
+          cat .env
 
       - name: Update Vercel Environment Variables for Project
         env:
