@@ -28,10 +28,10 @@ jobs:
 
       - name: Authenticate gh CLI with PAT
         env:
-          MY_PAT: ${{ secrets.MY_PAT }} # 使用 Personal Access Token (PAT)
+          WORKFLOW_GITHUB_TOKEN: ${{ secrets.WORKFLOW_GITHUB_TOKEN }} # 使用 Personal Access Token (PAT)
         run: |
           # 使用 PAT 登录 gh CLI
-          echo "$MY_PAT" | gh auth login --with-token
+          echo "$WORKFLOW_GITHUB_TOKEN" | gh auth login --with-token
 
       - name: Load and replace .env.workflow variables
         run: |
