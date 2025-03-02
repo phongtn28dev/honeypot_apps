@@ -38,6 +38,7 @@ jobs:
           secrets_json=$(gh api repos/$GITHUB_REPOSITORY/actions/secrets)
           echo "secrets_json: $secrets_json"
           while IFS= read -r line; do
+            echo "line: $line"
             while [[ "$line" =~ (\$\{([^}]+)\}) ]]; do
               var_name="${BASH_REMATCH[2]}"
               var_value=$(echo "$secrets_json" | jq -r --arg var_name "$var_name" '.secrets | map(select(.name == $var_name)) | .[0].value // empty')
