@@ -13,6 +13,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Debug VERCEL_TOKEN
+          run: |
+            if [ -z "$VERCEL_TOKEN" ]; then
+              echo "ERROR: VERCEL_TOKEN is EMPTY!"
+              exit 1
+            else
+              echo "VERCEL_TOKEN is set with length: ${#VERCEL_TOKEN}"
+            fi
+          env:
+        VERCEL_TOKEN: ${{ secrets.WORKFLOW_VERCEL_TOKEN }}
+
       - name: Update Vercel Environment Variables for Multiple Projects
         env:
           VERCEL_TOKEN: ${{ secrets.WORKFLOW_VERCEL_TOKEN }}
