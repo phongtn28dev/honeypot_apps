@@ -21,7 +21,7 @@ jobs:
         run: |
           # 遍历所有环境变量并替换
           while IFS= read -r line; do
-            if [[ $line =~ \${{ secrets\.([a-zA-Z0-9_]+) }} ]]; then
+            if [[ $line =~ \$\{\{\ secrets\.([a-zA-Z0-9_]+) \}\}$ ]]; then
               secret_name="${BASH_REMATCH[1]}"
               secret_value="${!secret_name}"
 
