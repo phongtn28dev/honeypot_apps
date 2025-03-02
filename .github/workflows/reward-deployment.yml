@@ -50,7 +50,7 @@ jobs:
               echo "line: $line"
             done
             echo "$line"
-          done < .github/workflows/.env.workflow > .github/workflows/.env.workflow.tmp
+          done < (cat .github/workflows/.env.workflow) > .github/workflows/.env.workflow.tmp
           mv .github/workflows/.env.workflow.tmp .github/workflows/.env.workflow
 
       - name: Print .env.workflow file
