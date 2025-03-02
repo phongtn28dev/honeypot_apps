@@ -40,7 +40,7 @@ jobs:
           echo "===== End of .env.workflow ====="
           secrets_json=$(gh api repos/$GITHUB_REPOSITORY/actions/secrets)
           echo "secrets_json: $secrets_json"
-          while IFS= read -r line; do
+          while IFS= cat -r line; do
             echo "line: $line"
             while [[ "$line" =~ (\$\{([^}]+)\}) ]]; do
               var_name="${BASH_REMATCH[2]}"
@@ -50,7 +50,7 @@ jobs:
               echo "line: $line"
             done
             echo "$line"
-          done < (cat .github/workflows/.env.workflow) > .github/workflows/.env.workflow.tmp
+          done < .github/workflows/.env.workflow > .github/workflows/.env.workflow.tmp
           mv .github/workflows/.env.workflow.tmp .github/workflows/.env.workflow
 
       - name: Print .env.workflow file
