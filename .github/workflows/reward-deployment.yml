@@ -30,10 +30,6 @@ jobs:
       - name: Load and replace .env.workflow variables
         shell: bash
         run: |
-          echo "===== Original .env.workflow ====="
-          cat .github/workflows/.env.workflow
-          echo "===== End of .env.workflow ====="
-          echo "===== Start of while loop ====="
           while IFS= read -r line; do
             echo "line of: $line"
             while [[ "$line" =~ (\$\{([^}]+)\}) ]]; do
