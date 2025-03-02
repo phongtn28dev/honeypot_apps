@@ -35,7 +35,7 @@ jobs:
               echo "Updating $KEY=$VALUE"
               
               curl -X POST "https://api.vercel.com/v10/projects/$PROJECT_ID/env?teamId={secrets.VERCEL_TEAM_ID}" \
-              -H "Authorization: Bearer $VERCEL_TOKEN" \
+              -H "Authorization: Bearer {secrets.WORKFLOW_VERCEL_TOKEN}" \
               -H "Content-Type: application/json" \
               --data '{
                 "key": "'"$KEY"'",
