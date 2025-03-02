@@ -47,7 +47,7 @@ jobs:
             echo "line of: $line"
             while [[ "$line" =~ (\$\{([^}]+)\}) ]]; do
               var_name="${BASH_REMATCH[2]}"
-              var_value=$(echo "${secrets.${var_name}}")
+              var_value=$(echo "${secrets.$var_name}")
               line="${line//${BASH_REMATCH[1]}/$var_value}"
             done
             echo "$line"
