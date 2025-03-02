@@ -88,3 +88,9 @@ jobs:
               fi
             fi
           done < "$ENV_FILE"
+
+      - name: Print .env.workflow file
+        run: |
+          echo "===== Start of .env.workflow ====="
+          cat  .github/workflows/.env.workflow
+          echo "===== End of .env.workflow ====="
