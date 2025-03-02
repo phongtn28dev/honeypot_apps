@@ -52,6 +52,7 @@ jobs:
               --data '{
                 "key": "'"$KEY"'",
                 "value": "'"$VALUE"'",
+                "type": "plain",
                 "target": ["production", "preview"]
               }'
 
