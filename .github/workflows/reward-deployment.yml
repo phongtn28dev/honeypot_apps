@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - .env.workflow
+      - '.github/workflows/.env.workflow'
       - '.github/workflows/reward-deployment.yml'
       - 'apps/reward-vault-market/**'
 
@@ -65,6 +65,7 @@ jobs:
               continue
             fi
             echo "key: $key"
+            value=$(echo "$value" | xargs)
             echo "value: $value"
             if [[ ! -z "$key" && "$key" != \#* ]]; then
               # 检查环境变量是否已经存在
