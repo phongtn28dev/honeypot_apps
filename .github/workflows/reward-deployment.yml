@@ -36,6 +36,7 @@ jobs:
       - name: Load and replace .env.workflow variables
         run: |
           secrets_json=$(gh api repos/$GITHUB_REPOSITORY/actions/secrets)
+          echo "secrets_json: $secrets_json"
           while IFS= read -r line; do
             while [[ "$line" =~ (\$\{([^}]+)\}) ]]; do
               var_name="${BASH_REMATCH[2]}"
