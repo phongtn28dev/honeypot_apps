@@ -52,7 +52,7 @@ jobs:
               --data '{
                 "key": "'"$KEY"'",
                 "value": "'"$VALUE"'",
-                "type": "plain",
+                "type": "encrypted",
                 "target": ["production", "preview"]
               }'
 
