@@ -19,20 +19,25 @@ jobs:
 
       - name: Replace placeholders with GitHub Secrets dynamically
         run: |
-          # 获取 GitHub Secrets 名称
-          SECRETS=$(grep -oP '\${{ secrets\.\K[^}]+(?= }})' .github/workflows/.env.workflow | sort -u)
-
-          # 遍历每个 secret 并进行替换
-          for SECRET in $SECRETS; do
-            # 从 GitHub Secrets 中获取实际值
-            SECRET_VALUE="${{ secrets[$SECRET] }}"
-            if [ -z "$SECRET_VALUE" ]; then
-              echo "Error: Secret $SECRET is not available"
-              exit 1
+          # 读取 .env.workflow 文件
+          while IFS= read -r line; do
+            # 检查是否包含占位符 ${ secrets.xxx }
+            if [[ "$line" =~ \${{ secrets\.(.*) }} ]]; then
+              # 提取 secret 名称
+              SECRET_NAME="${BASH_REMATCH[1]}"
+              # 获取实际 secret 值
+              SECRET_VALUE="${{ secrets[$SECRET_NAME] }}"
+              # 如果 secret 值为空，则报错
+              if [ -z "$SECRET_VALUE" ]; then
+                echo "Error: Secret $SECRET_NAME is not available"
+                exit 1
+              fi
+              # 用实际的 secret 值替换占位符
+              line=${line//\${{ secrets.$SECRET_NAME }}/$SECRET_VALUE}
             fi
-            # 替换 .env.workflow 文件中的占位符
-            sed -i "s|\${{ secrets.$SECRET }}|$SECRET_VALUE|g" .github/workflows/.env.workflow
-          done
+            # 将替换后的行写回文件
+            echo "$line" >> .github/workflows/.env.workflow
+          done < .github/workflows/.env.workflow
 
       - name: Load environment variables from .env.workflow
         run: |
