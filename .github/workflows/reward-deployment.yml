@@ -44,7 +44,7 @@ jobs:
           echo "===== End of .env.workflow ====="
           echo "===== Start of while loop ====="
           while IFS= read -r line; do
-            echo "line: $line"
+            echo "line of: $line"
             while [[ "$line" =~ (\$\{([^}]+)\}) ]]; do
               var_name="${BASH_REMATCH[2]}"
               echo "var_name: $var_name"
