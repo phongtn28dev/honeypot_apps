@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/.reward.env'
+      - '.github/workflows/.pop2pump.env'
       - '.github/workflows/reward-deployment.yml'
       - 'apps/reward-vault-market/**'
 
@@ -28,10 +28,10 @@ jobs:
 
       - name: Convert to env format
         run: |
-          sed -i 's/\r$//' .github/workflows/.reward.env
-          echo "" >> .github/workflows/.reward.env
+          sed -i 's/\r$//' .github/workflows/.pop2pump.env
+          echo "" >> .github/workflows/.pop2pump.env
 
-      - name: Load and replace .reward.env variables
+      - name: Load and replace .pop2pump.env variables
         shell: bash
         run: |
           while IFS= read -r line; do
@@ -42,12 +42,12 @@ jobs:
               line="${line//${BASH_REMATCH[1]}/$var_value}"
             done
             echo "$line"
-          done < .github/workflows/.reward.env > .github/workflows/.reward.env.tmp
-          mv .github/workflows/.reward.env.tmp .github/workflows/.reward.env
+          done < .github/workflows/.pop2pump.env > .github/workflows/.pop2pump.env.tmp
+          mv .github/workflows/.pop2pump.env.tmp .github/workflows/.pop2pump.env
 
       - name: Create or Update Vercel Environment Variables for Project
         env:
-          ENV_FILE: .github/workflows/.reward.env
+          ENV_FILE: .github/workflows/.pop2pump.env
           VERCEL_TOKEN: ${{ secrets.WORKFLOW_VERCEL_TOKEN }}
           TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
           PROJECT_NAME: reward-vault-market
@@ -101,8 +101,8 @@ jobs:
             fi
           done < "$ENV_FILE"
 
-      - name: Print .reward.env file
+      - name: Print .pop2pump.env file
         run: |
-          echo "===== Start of .reward.env ====="
-          cat  .github/workflows/.reward.env
-          echo "===== End of .reward.env ====="
+          echo "===== Start of .pop2pump.env ====="
+          cat  .github/workflows/.pop2pump.env
+          echo "===== End of .pop2pump.env ====="
