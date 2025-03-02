@@ -17,39 +17,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Replace placeholders with GitHub Secrets dynamically
-        run: |
-          # 读取 .env.workflow 文件
-          while IFS= read -r line; do
-            # 检查是否包含占位符 ${ secrets.xxx }
-            if [[ "$line" =~ \${{ secrets\.(.*) }} ]]; then
-              # 提取 secret 名称
-              SECRET_NAME="${BASH_REMATCH[1]}"
-              # 获取实际 secret 值
-              SECRET_VALUE="${{ secrets[$SECRET_NAME] }}"
-              # 如果 secret 值为空，则报错
-              if [ -z "$SECRET_VALUE" ]; then
-                echo "Error: Secret $SECRET_NAME is not available"
-                exit 1
-              fi
-              # 用实际的 secret 值替换占位符
-              line=${line//\${{ secrets.$SECRET_NAME }}/$SECRET_VALUE}
-            fi
-            # 将替换后的行写回文件
-            echo "$line" >> .github/workflows/.env.workflow
-          done < .github/workflows/.env.workflow
-
-      - name: Load environment variables from .env.workflow
-        run: |
-          # 加载 .env.workflow 文件中的环境变量
-          set -o allexport
-          source .github/workflows/.env.workflow
-          set +o allexport
-
-      - name: Display environment variables
-        run: |
-          echo "test_action_key=$TEST_ACTION_ENV_1"
-
       - name: Update Vercel Environment Variables for Project
         env:
           ENV_FILE: .github/workflows/.env.workflow
