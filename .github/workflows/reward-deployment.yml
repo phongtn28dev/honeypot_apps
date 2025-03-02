@@ -1,4 +1,4 @@
-name: Update Multiple ENV for Multiple Vercel Projects
+name: Update Vercel ENV for reward-vault-market
 
 on:
   push:
