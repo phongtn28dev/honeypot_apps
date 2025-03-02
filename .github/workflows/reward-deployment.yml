@@ -36,27 +36,26 @@ jobs:
       - name: Convert to Unix format
         run: sed -i 's/\r$//' .github/workflows/.env.workflow
 
-      - name: Replace placeholders in .env.workflow dynamically
+      - name: Load and replace .env.workflow variables
+        shell: bash
         run: |
-          echo "==== Before Replacement ===="
+          echo "===== Original .env.workflow ====="
           cat .github/workflows/.env.workflow
-
+          echo "===== End of .env.workflow ====="
+          echo "===== Start of while loop ====="
           while IFS= read -r line; do
-            if [[ "$line" =~ \${([A-Za-z0-9_]+)} ]]; then
-              secret_name="${BASH_REMATCH[1]}"
-              secret_value="${{ secrets[secret_name] }}"  # 获取 GitHub Secret 值
-
-              if [[ -z "$secret_value" ]]; then
-                echo "Warning: Secret '$secret_name' not found!"
-              else
-                echo "Replacing $secret_name in .env.workflow"
-                sed -i "s|\${$secret_name}|$secret_value|g" .github/workflows/.env.workflow
-              fi
-            fi
-          done < .github/workflows/.env.workflow
-
-          echo "==== After Replacement ===="
-          cat .github/workflows/.env.workflow
+            echo "line: $line"
+            while [[ "$line" =~ (\$\{([^}]+)\}) ]]; do
+              var_name="${BASH_REMATCH[2]}"
+              echo "var_name: $var_name"
+              var_value=$(echo "${!var_name}")
+              echo "var_name: $var_name, var_value: $var_value"
+              line="${line//${BASH_REMATCH[1]}/$var_value}"
+              echo "line: $line"
+            done
+            echo "$line"
+          done < .github/workflows/.env.workflow > .github/workflows/.env.workflow.tmp
+          mv .github/workflows/.env.workflow.tmp .github/workflows/.env.workflow
 
       - name: Print .env.workflow file
         run: |
