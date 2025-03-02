@@ -3,7 +3,7 @@ name: Update Vercel ENV for reward-vault-market
 on:
   push:
     branches:
-      - main # 监听 main 分支的 push 事件
+      - main
     paths:
       - .env
       - '.github/workflows/reward-deployment.yml'
@@ -19,20 +19,18 @@ jobs:
 
       - name: Replace placeholders with GitHub Secrets
         run: |
-          # 读取 .env.workflow 文件并逐个替换其中的占位符变量
+          # 使用 grep 和 sed 替换 .env.workflow 中的占位符
           while IFS= read -r line; do
-            # 如果行中包含占位符，则进行替换
-            echo "$line" | while IFS= read -r var; do
-              # 使用 sed 替换文件中的每个占位符
-              if [[ "$var" =~ \${{[[:space:]]?secrets\.[a-zA-Z_]+[[:space:]]?}} ]]; then
-                SECRET_VAR=$(echo "$var" | sed -E 's/\${{ secrets\.(.*) }}/\1/')
-                REPLACEMENT="${{ secrets[$SECRET_VAR] }}"
-                echo "$line" | sed "s|${var}|${REPLACEMENT}|g" >> .github/workflows/.env.workflow
-              else
-                # 将没有占位符的行直接写入 .env.workflow
-                echo "$line" >> .github/workflows/.env.workflow
-              fi
-            done
+            # 查找包含 ${{ secrets.xxx }} 的行
+            if echo "$line" | grep -q '\${{ secrets\.'; then
+              # 获取环境变量的名称并进行替换
+              SECRET_VAR=$(echo "$line" | sed -E 's/\${{ secrets\.(.*) }}/\1/')
+              REPLACEMENT="${{ secrets[$SECRET_VAR] }}"
+              # 使用 sed 替换占位符
+              line=$(echo "$line" | sed "s|\${{ secrets.$SECRET_VAR }}|$REPLACEMENT|g")
+            fi
+            # 将替换后的行写回文件
+            echo "$line" >> .github/workflows/.env.workflow
           done < .github/workflows/.env.workflow
 
       - name: Load environment variables from .env.workflow
