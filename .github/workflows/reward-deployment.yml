@@ -48,6 +48,7 @@ jobs:
 
       - name: Update Vercel Environment Variables for Project
         env:
+          ENV_FILE: .github/workflows/.env.workflow
           VERCEL_TOKEN: ${{ secrets.WORKFLOW_VERCEL_TOKEN }}
           TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
           PROJECT_NAME: reward-vault-market
@@ -67,4 +68,4 @@ jobs:
                 \"target\": [\"production\", \"preview\"]
               }"
             fi
-          done < .env
+          done < "$ENV_FILE"
