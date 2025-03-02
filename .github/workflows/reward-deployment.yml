@@ -33,6 +33,9 @@ jobs:
           # 使用 PAT 登录 gh CLI
           echo "$WORKFLOW_GITHUB_TOKEN" | gh auth login --with-token
 
+      - name: Convert to Unix format
+        run: sed -i 's/\r$//' .github/workflows/.env.workflow
+
       - name: Load and replace .env.workflow variables
         run: |
           echo "===== Original .env.workflow ====="
@@ -40,7 +43,7 @@ jobs:
           echo "===== End of .env.workflow ====="
           secrets_json=$(gh api repos/$GITHUB_REPOSITORY/actions/secrets)
           echo "secrets_json: $secrets_json"
-          while IFS= cat -r line; do
+          while IFS= read -r line; do
             echo "line: $line"
             while [[ "$line" =~ (\$\{([^}]+)\}) ]]; do
               var_name="${BASH_REMATCH[2]}"
