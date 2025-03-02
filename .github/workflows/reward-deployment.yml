@@ -17,10 +17,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Load Env File with Secrets
-        uses: schaermu/github-actions-env-file@v2
+      - uses: oNaiPs/secrets-to-env-action@v1
         with:
-          file: .github/workflows/.env.workflow
+          secrets: ${{ toJSON(secrets) }}
 
       - name: Convert to Unix format
         run: sed -i 's/\r$//' .github/workflows/.env.workflow
