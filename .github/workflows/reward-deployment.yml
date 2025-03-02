@@ -43,6 +43,7 @@ jobs:
             # 检查行中是否包含 ${...} 格式的占位符
             if [[ "$line" =~ \$\{([^}]+)\} ]]; then
               var_name="${BASH_REMATCH[1]}"
+              echo "var_name: $var_name"
               # 从 Secrets 列表中获取对应的值
               var_value=$(echo "$secrets_json" | jq -r --arg var_name "$var_name" '.secrets[] | select(.name == $var_name) | .value')
               # 如果找到了对应的值，则替换占位符
