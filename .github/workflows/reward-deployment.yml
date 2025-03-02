@@ -17,7 +17,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - uses: oNaiPs/secrets-to-env-action@v1
+      - name: Export secrets to env
+        uses: oNaiPs/secrets-to-env-action@v1
         with:
           secrets: ${{ toJSON(secrets) }}
 
