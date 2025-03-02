@@ -60,7 +60,10 @@ jobs:
           mv .github/workflows/.env.workflow.tmp .github/workflows/.env.workflow
 
       - name: Print .env.workflow file
-        run: cat .github/workflows/.env.workflow
+        run: |
+          echo "===== Start of .env.workflow ====="
+          cat .github/workflows/.env.workflow
+          echo "===== End of .env.workflow ====="
 
       - name: Update Vercel Environment Variables for Project
         env:
