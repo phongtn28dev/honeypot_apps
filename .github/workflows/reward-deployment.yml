@@ -1,38 +1,73 @@
-- name: Install jq and gh CLI
-  run: |
-    sudo apt-get update
-    sudo apt-get install -y jq gh
+name: Update Vercel ENV for reward-vault-market
 
-- name: Authenticate gh CLI with PAT
-  env:
-    WORKFLOW_GITHUB_TOKEN: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
-  run: |
-    echo "$WORKFLOW_GITHUB_TOKEN" | gh auth login --with-token --hostname github.com
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .env
+      - '.github/workflows/reward-deployment.yml'
+      - 'apps/reward-vault-market/**'
 
-- name: Load and replace .env.workflow variables
-  run: |
-    secrets_json=$(gh api repos/$GITHUB_REPOSITORY/actions/secrets)
-    while IFS= read -r line; do
-      while [[ "$line" =~ (\$\{([^}]+)\}) ]]; do
-        var_name="${BASH_REMATCH[2]}"
-        var_value=$(echo "$secrets_json" | jq -r --arg var_name "$var_name" '.secrets | map(select(.name == $var_name)) | .[0].value // empty')
-        line="${line//${BASH_REMATCH[1]}/$var_value}"
-      done
-      echo "$line"
-    done < .github/workflows/.env.workflow > .github/workflows/.env.workflow.tmp
-    mv .github/workflows/.env.workflow.tmp .github/workflows/.env.workflow
+jobs:
+  update-env:
+    runs-on: ubuntu-latest
 
-- name: Update Vercel Environment Variables
-  run: |
-    while IFS='=' read -r key value || [[ -n "$key" ]]; do
-      if [[ ! -z "$key" && "$key" != \#* ]]; then
-        json_payload=$(jq -n --arg key "$key" --arg value "$value" --argjson target '["production", "preview"]' '{key: $key, value: $value, type: "plain", target: $target}')
-        curl -X DELETE "https://api.vercel.com/v10/projects/$PROJECT_ID/env/$key?teamId=$TEAM_ID" \
-          -H "Authorization: Bearer $VERCEL_TOKEN" \
-          -H "Content-Type: application/json"
-        curl -X POST "https://api.vercel.com/v10/projects/$PROJECT_ID/env?teamId=$TEAM_ID" \
-          -H "Authorization: Bearer $VERCEL_TOKEN" \
-          -H "Content-Type: application/json" \
-          --data "$json_payload"
-      fi
-    done < .github/workflows/.env.workflow
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install jq and gh CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+          sudo apt-get update
+          sudo apt-get install -y gh
+
+      - name: Authenticate gh CLI with PAT
+        env:
+          WORKFLOW_GITHUB_TOKEN: ${{ secrets.WORKFLOW_GITHUB_TOKEN }} # 使用 Personal Access Token (PAT)
+        run: |
+          # 使用 PAT 登录 gh CLI
+          echo "$WORKFLOW_GITHUB_TOKEN" | gh auth login --with-token
+
+      - name: Load and replace .env.workflow variables
+        run: |
+          secrets_json=$(gh api repos/$GITHUB_REPOSITORY/actions/secrets)
+          while IFS= read -r line; do
+            while [[ "$line" =~ (\$\{([^}]+)\}) ]]; do
+              var_name="${BASH_REMATCH[2]}"
+              var_value=$(echo "$secrets_json" | jq -r --arg var_name "$var_name" '.secrets | map(select(.name == $var_name)) | .[0].value // empty')
+              line="${line//${BASH_REMATCH[1]}/$var_value}"
+            done
+            echo "$line"
+          done < .github/workflows/.env.workflow > .github/workflows/.env.workflow.tmp
+          mv .github/workflows/.env.workflow.tmp .github/workflows/.env.workflow
+
+      - name: Print .env.workflow file
+        run: cat .github/workflows/.env.workflow
+
+      - name: Update Vercel Environment Variables for Project
+        env:
+          ENV_FILE: .github/workflows/.env.workflow
+          VERCEL_TOKEN: ${{ secrets.WORKFLOW_VERCEL_TOKEN }}
+          TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
+          PROJECT_NAME: reward-vault-market
+          PROJECT_ID: prj_Yhv6hufFe068byTjwTCRds5PP4YB
+        run: |
+          while IFS='=' read -r key value || [[ -n "$key" ]]; do
+            if [[ ! -z "$key" && "$key" != \#* ]]; then
+              echo "Setting $key in Vercel..."
+              curl -X POST "https://api.vercel.com/v10/projects/$PROJECT_ID/env?teamId=$TEAM_ID" \
+              -H "Authorization: Bearer $VERCEL_TOKEN" \
+              -H "Content-Type: application/json" \
+              --data "{
+                \"key\": \"$key\",
+                \"value\": \"$value\",
+                \"type\": \"plain\",
+                \"target\": [\"production\", \"preview\"]
+              }"
+            fi
+          done < "$ENV_FILE"
