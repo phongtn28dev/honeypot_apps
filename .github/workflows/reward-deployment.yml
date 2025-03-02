@@ -34,6 +34,7 @@ jobs:
           echo "$WORKFLOW_GITHUB_TOKEN" | gh auth login --with-token
 
       - name: Load and replace .env.workflow variables
+        shell: bash
         run: |
           echo "===== Original .env.workflow ====="
           cat .github/workflows/.env.workflow
