@@ -33,6 +33,9 @@ jobs:
               VALUE=$(echo $ENV_VARS | jq -r --arg KEY "$KEY" '.[$KEY]')
               
               echo "Updating $KEY=$VALUE"
+              echo "teamId: $VERCEL_TEAM_ID"
+              echo "teamId: $VERCEL_TOKEN"
+              
               
               curl -X POST "https://api.vercel.com/v10/projects/$PROJECT_ID/env?teamId={secrets.VERCEL_TEAM_ID}" \
               -H "Authorization: Bearer $VERCEL_TOKEN" \
