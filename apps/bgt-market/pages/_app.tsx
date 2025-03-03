@@ -20,7 +20,6 @@ import { chain } from '@/services/chain';
 import { DM_Sans, Inter } from 'next/font/google';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { Analytics } from '@vercel/analytics/react';
-// import { capsuleClient, capsuleModalProps } from "@/config/wagmi/capsualWallet";
 import { ApolloProvider } from '@apollo/client';
 import { bgtClient, infoClient } from '@/lib/algebra/graphql/clients';
 import Image from 'next/image';
