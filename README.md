@@ -41,3 +41,10 @@ To generate a new library, use:
 ```sh
 npx nx g @nx/react:lib <lib-name>
 ```
+
+## add env
+
+```sh
+open  https://github.com/Honeypot-Finance/honeypot_apps/settings/secrets/actions
+Add repository secret
+```

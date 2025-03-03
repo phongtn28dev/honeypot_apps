@@ -86,7 +86,6 @@ export default function App({
   Component: NextLayoutPage;
 }) {
   const ComponentLayout = Component.Layout || Layout;
-
   // const [isEthereum, setIsEthereum] = useState(false);
 
   // useEffect(() => {
