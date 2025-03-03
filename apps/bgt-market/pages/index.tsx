@@ -17,10 +17,6 @@ import { watchBlockNumber } from 'viem/actions';
 import { Address, zeroAddress } from 'viem';
 import { ValidatedVaultAddresses } from '@/config/validatedVaultAddresses';
 import {
-  WarppedNextDropdown,
-  WarppedNextDropdownMenu,
-} from '@/components/wrappedNextUI/Dropdown/Dropdown';
-import {
   DropdownItem,
   DropdownTrigger,
   SelectItem,

@@ -18,7 +18,7 @@ const nextConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       "styled-components": path.resolve(
-        "node_modules/styled-components/dist/styled-components.esm.js"
+        "../../node_modules/styled-components/dist/styled-components.esm.js"
       ), // alias for styled-components ESM build
     };
     return config;
