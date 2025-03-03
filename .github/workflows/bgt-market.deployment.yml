@@ -1,13 +1,13 @@
-name: Update Vercel ENV for reward-vault-market
+name: Update Vercel ENV for bgt-market
 
 on:
   push:
     branches:
       - main
     paths:
-      - '.github/workflows/.env.wasabee'
-      - '.github/workflows/reward-deployment.yml'
-      - 'apps/reward-vault-market/**'
+      # - '.github/workflows/.env.bgt-market'
+      # - '.github/workflows/bgt-market.deployment.yml'
+      # - 'apps/bgt-market/**'
 
 jobs:
   update-env:
@@ -28,10 +28,10 @@ jobs:
 
       - name: Convert to env format
         run: |
-          sed -i 's/\r$//' .github/workflows/.env.wasabee
-          echo "" >> .github/workflows/.env.wasabee
+          sed -i 's/\r$//' .github/workflows/.env.bgt-market
+          echo "" >> .github/workflows/.env.bgt-market
 
-      - name: Load and replace .env.wasabee variables
+      - name: Load and replace .env.bgt-market variables
         shell: bash
         run: |
           while IFS= read -r line; do
@@ -42,15 +42,15 @@ jobs:
               line="${line//${BASH_REMATCH[1]}/$var_value}"
             done
             echo "$line"
-          done < .github/workflows/.env.wasabee > .github/workflows/.env.wasabee.tmp
-          mv .github/workflows/.env.wasabee.tmp .github/workflows/.env.wasabee
+          done < .github/workflows/.env.bgt-market > .github/workflows/.env.bgt-market.tmp
+          mv .github/workflows/.env.bgt-market.tmp .github/workflows/.env.bgt-market
 
       - name: Create or Update Vercel Environment Variables for Project
         env:
-          ENV_FILE: .github/workflows/.env.wasabee
+          ENV_FILE: .github/workflows/.env.bgt-market
           VERCEL_TOKEN: ${{ secrets.WORKFLOW_VERCEL_TOKEN }}
           TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
-          PROJECT_NAME: reward-vault-market
+          PROJECT_NAME: bgt-market
           PROJECT_ID: prj_Yhv6hufFe068byTjwTCRds5PP4YB
         run: |
           # 获取项目当前的环境变量列表
@@ -101,8 +101,8 @@ jobs:
             fi
           done < "$ENV_FILE"
 
-      - name: Print .env.wasabee file
+      - name: Print .env.bgt-market file
         run: |
-          echo "===== Start of .env.wasabee ====="
-          cat  .github/workflows/.env.wasabee
-          echo "===== End of .env.wasabee ====="
+          echo "===== Start of .env.bgt-market ====="
+          cat  .github/workflows/.env.bgt-market
+          echo "===== End of .env.bgt-market ====="

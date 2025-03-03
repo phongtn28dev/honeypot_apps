@@ -5,9 +5,9 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/.env.pop2pump'
-      - '.github/workflows/reward-deployment.yml'
-      - 'apps/reward-vault-market/**'
+      - '.github/workflows/.env.wasabee'
+      - '.github/workflows/wasabee.deployment.yml'
+      - 'apps/wasabee/**'
 
 jobs:
   update-env:
@@ -28,10 +28,10 @@ jobs:
 
       - name: Convert to env format
         run: |
-          sed -i 's/\r$//' .github/workflows/.env.pop2pump
-          echo "" >> .github/workflows/.env.pop2pump
+          sed -i 's/\r$//' .github/workflows/.env.wasabee
+          echo "" >> .github/workflows/.env.wasabee
 
-      - name: Load and replace .env.pop2pump variables
+      - name: Load and replace .env.wasabee variables
         shell: bash
         run: |
           while IFS= read -r line; do
@@ -42,12 +42,12 @@ jobs:
               line="${line//${BASH_REMATCH[1]}/$var_value}"
             done
             echo "$line"
-          done < .github/workflows/.env.pop2pump > .github/workflows/.env.pop2pump.tmp
-          mv .github/workflows/.env.pop2pump.tmp .github/workflows/.env.pop2pump
+          done < .github/workflows/.env.wasabee > .github/workflows/.env.wasabee.tmp
+          mv .github/workflows/.env.wasabee.tmp .github/workflows/.env.wasabee
 
       - name: Create or Update Vercel Environment Variables for Project
         env:
-          ENV_FILE: .github/workflows/.env.pop2pump
+          ENV_FILE: .github/workflows/.env.wasabee
           VERCEL_TOKEN: ${{ secrets.WORKFLOW_VERCEL_TOKEN }}
           TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
           PROJECT_NAME: reward-vault-market
@@ -101,8 +101,8 @@ jobs:
             fi
           done < "$ENV_FILE"
 
-      - name: Print .env.pop2pump file
+      - name: Print .env.wasabee file
         run: |
-          echo "===== Start of .env.pop2pump ====="
-          cat  .github/workflows/.env.pop2pump
-          echo "===== End of .env.pop2pump ====="
+          echo "===== Start of .env.wasabee ====="
+          cat  .github/workflows/.env.wasabee
+          echo "===== End of .env.wasabee ====="
