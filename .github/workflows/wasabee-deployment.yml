@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/.wasabee.env'
+      - '.github/workflows/.env.wasabee'
       - '.github/workflows/reward-deployment.yml'
       - 'apps/reward-vault-market/**'
 
@@ -28,10 +28,10 @@ jobs:
 
       - name: Convert to env format
         run: |
-          sed -i 's/\r$//' .github/workflows/.wasabee.env
-          echo "" >> .github/workflows/.wasabee.env
+          sed -i 's/\r$//' .github/workflows/.env.wasabee
+          echo "" >> .github/workflows/.env.wasabee
 
-      - name: Load and replace .wasabee.env variables
+      - name: Load and replace .env.wasabee variables
         shell: bash
         run: |
           while IFS= read -r line; do
@@ -42,12 +42,12 @@ jobs:
               line="${line//${BASH_REMATCH[1]}/$var_value}"
             done
             echo "$line"
-          done < .github/workflows/.wasabee.env > .github/workflows/.wasabee.env.tmp
-          mv .github/workflows/.wasabee.env.tmp .github/workflows/.wasabee.env
+          done < .github/workflows/.env.wasabee > .github/workflows/.env.wasabee.tmp
+          mv .github/workflows/.env.wasabee.tmp .github/workflows/.env.wasabee
 
       - name: Create or Update Vercel Environment Variables for Project
         env:
-          ENV_FILE: .github/workflows/.wasabee.env
+          ENV_FILE: .github/workflows/.env.wasabee
           VERCEL_TOKEN: ${{ secrets.WORKFLOW_VERCEL_TOKEN }}
           TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
           PROJECT_NAME: reward-vault-market
@@ -101,8 +101,8 @@ jobs:
             fi
           done < "$ENV_FILE"
 
-      - name: Print .wasabee.env file
+      - name: Print .env.wasabee file
         run: |
-          echo "===== Start of .wasabee.env ====="
-          cat  .github/workflows/.wasabee.env
-          echo "===== End of .wasabee.env ====="
+          echo "===== Start of .env.wasabee ====="
+          cat  .github/workflows/.env.wasabee
+          echo "===== End of .env.wasabee ====="
