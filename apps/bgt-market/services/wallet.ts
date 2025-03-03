@@ -1,25 +1,26 @@
-import { Network, networks } from "./network";
-import BigNumber from "bignumber.js";
-import { Address, PublicClient, WalletClient } from "viem";
-import { RouterV2Contract } from "./contract/dex/routerv2-contract";
-import { FactoryContract } from "./contract/dex/factory-contract";
-import { FtoFactoryContract } from "./contract/launches/fto/ftofactory-contract";
-import { FtoFacadeContract } from "./contract/launches/fto/ftofacade-contract";
-import { makeAutoObservable, reaction } from "mobx";
-import { createPublicClientByChain } from "@/lib/client";
-import { StorageState } from "./utils";
-import { MemeFactoryContract } from "@/services/contract/launches/pot2pump/memefactory-contract";
-import { MEMEFacadeContract } from "@/services/contract/launches/pot2pump/memefacade-contract";
-import { ICHIVaultFactoryContract } from "@/services/contract/aquabera/ICHIVaultFactory-contract";
-import { BGTMarketContract } from "./contract/bgt-market/bgt-market";
+import { Network, networks } from './network';
+import BigNumber from 'bignumber.js';
+import { Address, PublicClient, WalletClient } from 'viem';
+import { RouterV2Contract } from './contract/dex/routerv2-contract';
+import { FactoryContract } from './contract/dex/factory-contract';
+import { FtoFactoryContract } from './contract/launches/fto/ftofactory-contract';
+import { FtoFacadeContract } from './contract/launches/fto/ftofacade-contract';
+import { makeAutoObservable, reaction } from 'mobx';
+import { createPublicClientByChain } from '@/lib/client';
+import { StorageState } from './utils';
+import { MemeFactoryContract } from '@/services/contract/launches/pot2pump/memefactory-contract';
+import { MEMEFacadeContract } from '@/services/contract/launches/pot2pump/memefacade-contract';
+import { ICHIVaultFactoryContract } from '@/services/contract/aquabera/ICHIVaultFactory-contract';
+import { BGTMarketContract } from './contract/bgt-market/bgt-market';
+import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
 
 export class Wallet {
-  account: string = "";
-  accountShort = "";
-  networks: Network[] = [];
+  account: string = '';
+  accountShort = '';
+  networks: Network[] = networks;
   balance: BigNumber = new BigNumber(0);
   walletClient!: WalletClient;
-  currentChainId: number = -1;
+  currentChainId: number = DEFAULT_CHAIN_ID;
   contracts: {
     routerV2: RouterV2Contract;
     factory: FactoryContract;
@@ -30,16 +31,15 @@ export class Wallet {
     vaultFactory: ICHIVaultFactoryContract;
     bgtMarket: BGTMarketContract;
   } = {} as any;
-  publicClient!: PublicClient;
+  publicClient: PublicClient = createPublicClientByChain(
+    this.currentChain.chain
+  );
   isInit = false;
   get networksMap() {
-    return this.networks.reduce(
-      (acc, network) => {
-        acc[network.chainId] = network;
-        return acc;
-      },
-      {} as Record<number, Network>
-    );
+    return this.networks.reduce((acc, network) => {
+      acc[network.chainId] = network;
+      return acc;
+    }, {} as Record<number, Network>);
   }
 
   get currentChain() {
@@ -73,7 +73,7 @@ export class Wallet {
       return;
     }
     this.currentChainId = walletClient.chain.id;
-    const mockAccount = localStorage.getItem("mockAccount");
+    const mockAccount = localStorage.getItem('mockAccount');
     this.account = mockAccount || walletClient.account.address;
     this.contracts = {
       routerV2: new RouterV2Contract({
