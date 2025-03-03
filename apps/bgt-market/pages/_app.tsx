@@ -21,7 +21,7 @@ import { DM_Sans, Inter } from 'next/font/google';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { Analytics } from '@vercel/analytics/react';
 import { ApolloProvider } from '@apollo/client';
-import { bgtClient, infoClient } from '@/lib/algebra/graphql/clients';
+import { bgtClient } from '@/lib/algebra/graphql/clients';
 import Image from 'next/image';
 import SafeProvider from '@safe-global/safe-apps-react-sdk';
 import { berachainNetwork } from '@/services/network';
