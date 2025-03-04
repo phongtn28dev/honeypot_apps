@@ -11,7 +11,7 @@ export function useUserBgtVaults() {
   useEffect(() => {
     const vaultList = Object.entries(ValidatedVaultAddresses).map(
       ([key, value]) => {
-        return new BGTVault({ address: key as Address, name: value });
+        return BGTVault.getBgtVault({ address: key as Address, name: value });
       }
     );
 

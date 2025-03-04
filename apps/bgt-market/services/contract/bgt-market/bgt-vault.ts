@@ -8,6 +8,30 @@ import { RewardVaultABI } from '@/lib/abis/bgt-market/RewardVaultABI';
 import { chain } from '@/services/chain';
 
 export class BGTVault implements BaseContract {
+  static bgtVaultMap: Record<string, BGTVault> = {};
+  static getBgtVault({
+    address,
+    force,
+    ...args
+  }: {
+    address: Address;
+    force?: boolean;
+  } & Partial<BGTVault>) {
+    const lowerAddress = address.toLowerCase() as Address;
+    const key = lowerAddress;
+    const token = BGTVault.bgtVaultMap[key];
+
+    if (!token) {
+      BGTVault.bgtVaultMap[key] = new BGTVault({
+        address: lowerAddress,
+        ...args,
+      });
+    } else {
+      BGTVault.bgtVaultMap[key].setData(args);
+    }
+
+    return BGTVault.bgtVaultMap[key];
+  }
   address: Address = zeroAddress;
   name: string = 'BGTVault';
   abi = RewardVaultABI;
@@ -16,6 +40,10 @@ export class BGTVault implements BaseContract {
   constructor(args: Partial<BGTVault>) {
     Object.assign(this, args);
     makeAutoObservable(this);
+  }
+
+  setData({ ...args }: Partial<BGTVault>) {
+    Object.assign(this, args);
   }
 
   get contract() {
@@ -42,16 +70,17 @@ export class BGTVault implements BaseContract {
 
   async updateCurrentUserBgtInVault() {
     if (!wallet.account) return '0';
+
     const userBgt = await this.contract.read.earned([
       wallet.account as Address,
     ]);
+    console.log(userBgt, wallet.account);
     this.userBgtInVault = userBgt.toString();
     return userBgt;
   }
 
-  async readCurrentUserBgtInVault(account: Address) {
+  async readAddressBgtInVault(account: Address) {
     const userBgt = await this.contract.read.earned([account]);
-    this.userBgtInVault = userBgt.toString();
     return userBgt;
   }
 

@@ -73,13 +73,12 @@ export const BuyOrdersList = observer(() => {
                     Filled
                   </th>{' '}
                   <th className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base font-medium">
-                    {' '}
-                    <Switch
+                    {/* <Switch
                       defaultSelected
                       onValueChange={setShowOnlyPendingBuyOrders}
                     >
                       <span className="">only show pending</span>
-                    </Switch>
+                    </Switch> */}
                   </th>
                 </tr>
               </thead>
@@ -216,13 +215,13 @@ export const SellOrdersList = () => {
                     Total Price
                   </th>{' '}
                   <th className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base font-medium">
-                    {' '}
+                    {/* {' '}
                     <Switch
                       defaultSelected
                       onValueChange={setShowOnlyPendingSellOrders}
                     >
                       <span>only show pending</span>
-                    </Switch>
+                    </Switch> */}
                   </th>
                 </tr>
               </thead>

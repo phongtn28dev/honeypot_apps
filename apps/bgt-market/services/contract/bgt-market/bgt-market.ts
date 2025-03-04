@@ -1,15 +1,16 @@
-import { BaseContract } from "./..";
-import { wallet } from "@/services/wallet";
-import { makeAutoObservable } from "mobx";
-import { Address, getContract, parseEther, zeroAddress } from "viem";
-import { ICHIVaultFactoryABI } from "@/lib/abis/aquabera/ICHIVaultFactory";
-import { ContractWrite } from "@/services/utils";
-import { BGTMarketABI } from "@/lib/abis/bgt-market/BGTMarketABI";
-import { BGTVault } from "./bgt-vault";
+import { BaseContract } from './..';
+import { wallet } from '@/services/wallet';
+import { makeAutoObservable } from 'mobx';
+import { Address, getContract, parseEther, zeroAddress } from 'viem';
+import { ICHIVaultFactoryABI } from '@/lib/abis/aquabera/ICHIVaultFactory';
+import { ContractWrite } from '@/services/utils';
+import { BGTMarketABI } from '@/lib/abis/bgt-market/BGTMarketABI';
+import { BGTVault } from './bgt-vault';
+import { simulateContract } from 'viem/actions';
 
 export class BGTMarketContract implements BaseContract {
   address: Address = zeroAddress;
-  name: string = "BGTMarket";
+  name: string = 'BGTMarket';
   abi = BGTMarketABI;
 
   constructor(args: Partial<BGTMarketContract>) {
@@ -32,7 +33,7 @@ export class BGTMarketContract implements BaseContract {
 
     try {
       // check if bgt vault operator approved
-      const rewardVault = new BGTVault({
+      const rewardVault = BGTVault.getBgtVault({
         address: vaultAddress,
       });
 
@@ -44,7 +45,7 @@ export class BGTMarketContract implements BaseContract {
       const res = await wallet.publicClient.simulateContract({
         address: wallet.contracts.bgtMarket.address,
         abi: wallet.contracts.bgtMarket.abi,
-        functionName: "postOrder",
+        functionName: 'postOrder',
         account: wallet.account as Address,
         args: [BigInt(price), (vaultAddress ?? zeroAddress) as Address],
       });
@@ -52,7 +53,7 @@ export class BGTMarketContract implements BaseContract {
       console.log(res);
 
       return new ContractWrite(this.contract.write.postOrder, {
-        action: "Post Order",
+        action: 'Post Order',
       }).call([price, vaultAddress]);
     } catch (error) {
       console.error(error);
@@ -70,14 +71,14 @@ export class BGTMarketContract implements BaseContract {
       const res = await wallet.publicClient.simulateContract({
         address: wallet.contracts.bgtMarket.address,
         abi: wallet.contracts.bgtMarket.abi,
-        functionName: "postOrder",
+        functionName: 'postOrder',
         account: wallet.account as Address,
         args: [BigInt(price)],
         value: value,
       });
 
       return new ContractWrite(this.contract.write.postOrder, {
-        action: "Post Order",
+        action: 'Post Order',
       }).call([price], {
         value: value,
       });
@@ -92,19 +93,28 @@ export class BGTMarketContract implements BaseContract {
       return;
     }
     return new ContractWrite(this.contract.write.closeOrder, {
-      action: "Close Order",
+      action: 'Close Order',
     }).call([orderId]);
   }
 
-  fillSellOrder(orderId: bigint) {
+  async fillSellOrder(orderId: bigint, value: bigint) {
     if (!wallet.walletClient) {
       return;
     }
 
     try {
+      const res = await wallet.publicClient.simulateContract({
+        address: wallet.contracts.bgtMarket.address,
+        abi: wallet.contracts.bgtMarket.abi,
+        functionName: 'fillOrder',
+        account: wallet.account as Address,
+        args: [orderId],
+        value: value,
+      });
+
       return new ContractWrite(this.contract.write.fillOrder, {
-        action: "Fill Order",
-      }).call([orderId]);
+        action: 'Fill Order',
+      }).call([orderId], { value: value });
     } catch (e) {
       console.error(e);
     }
@@ -116,7 +126,7 @@ export class BGTMarketContract implements BaseContract {
     }
 
     try {
-      const rewardVault = new BGTVault({
+      const rewardVault = BGTVault.getBgtVault({
         address: vaultAddress,
       });
 
@@ -125,8 +135,16 @@ export class BGTMarketContract implements BaseContract {
         wallet.currentChain.contracts.bgtMarket as Address
       );
 
+      const res = await wallet.publicClient.simulateContract({
+        address: wallet.contracts.bgtMarket.address,
+        abi: wallet.contracts.bgtMarket.abi,
+        functionName: 'fillOrder',
+        account: wallet.account as Address,
+        args: [orderId, vaultAddress],
+      });
+
       return new ContractWrite(this.contract.write.fillOrder, {
-        action: "Fill Order",
+        action: 'Fill Order',
       }).call([orderId, vaultAddress]);
     } catch (e) {
       console.error(e);

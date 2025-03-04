@@ -7,12 +7,14 @@ import { Button, SelectItem } from '@nextui-org/react';
 import { cn } from '@nextui-org/theme';
 import { PressEvent } from '@react-types/shared';
 import { observer } from 'mobx-react-lite';
-import { useCallback, useEffect, useState } from 'react';
-import { Address, formatEther } from 'viem';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Address, formatEther, parseEther } from 'viem';
 import { watchBlockNumber } from 'viem/actions';
 import CardContainer from '../CardContianer/v3';
 import { WarppedNextSelect } from '../wrappedNextUI/Select/Select';
 import { usePollingBlockNumber } from '@/lib/hooks/useBlockNumber';
+import { UserBgtVaults } from './UserBgtVaults';
+import { useUserBgtVaults } from '@/lib/hooks/useUserBgtVaults';
 
 export const BuyOrderListRow = observer(({ order }: { order: Order }) => {
   return (
@@ -50,8 +52,8 @@ export const BuyOrderListRow = observer(({ order }: { order: Order }) => {
           {order.dealer.id.toLowerCase() === wallet.account.toLowerCase() &&
             order.status === 'Pending' && (
               <Button
-                disabled={!wallet.walletClient || !wallet.isInit}
-                isDisabled={!wallet.walletClient || !wallet.isInit}
+                disabled={!wallet.walletClient}
+                isDisabled={!wallet.walletClient}
                 onPress={() => {
                   wallet.contracts.bgtMarket.closeOrder(BigInt(order.id));
                 }}
@@ -80,7 +82,7 @@ export const SellOrderListRow = observer(({ order }: { order: Order }) => {
   useEffect(() => {
     if (!order.vaultAddress || order.status !== OrderStatus.Pending) return;
     setRewardVault(
-      new BGTVault({
+      BGTVault.getBgtVault({
         address: order.vaultAddress.toLowerCase() as Address,
       })
     );
@@ -105,9 +107,8 @@ export const SellOrderListRow = observer(({ order }: { order: Order }) => {
   useEffect(() => {
     if (!rewardVault) return;
     rewardVault
-      .readCurrentUserBgtInVault(order.dealer.id as Address)
+      .readAddressBgtInVault(order.dealer.id as Address)
       .then((res) => {
-        console.log(res);
         setOrderVaultBgt(res.toString());
       });
   }, [rewardVault, block]);
@@ -158,10 +159,13 @@ export const SellOrderListRow = observer(({ order }: { order: Order }) => {
           {!(order.dealer.id.toLowerCase() === wallet.account.toLowerCase()) &&
             order.status === 'Pending' && (
               <Button
-                disabled={!wallet.walletClient || !wallet.isInit}
-                isDisabled={!wallet.walletClient || !wallet.isInit}
+                disabled={!wallet.walletClient}
+                isDisabled={!wallet.walletClient}
                 onPress={() => {
-                  wallet.contracts.bgtMarket.fillSellOrder(BigInt(order.id));
+                  wallet.contracts.bgtMarket.fillSellOrder(
+                    BigInt(order.id),
+                    BigInt((order.price / 10000) * Number(orderVaultBgt) * 1.1)
+                  );
                 }}
               >
                 {!wallet.walletClient ? 'Connect Wallet' : 'Fill Order'}
@@ -173,7 +177,10 @@ export const SellOrderListRow = observer(({ order }: { order: Order }) => {
   );
 });
 
-const FillBuyOrderModalButton = ({ order }: { order: Order }) => {
+const FillBuyOrderModalButton = observer(({ order }: { order: Order }) => {
+  const isWallet = useMemo(() => {
+    return wallet.walletClient;
+  }, [wallet.isInit, wallet.walletClient]);
   const handleClick = (e: PressEvent) => {
     popmodal.openModal({
       content: <FillBuyOrderModal order={order} />,
@@ -183,8 +190,8 @@ const FillBuyOrderModalButton = ({ order }: { order: Order }) => {
 
   return (
     <Button
-      disabled={!wallet.walletClient || !wallet.isInit}
-      isDisabled={!wallet.walletClient || !wallet.isInit}
+      disabled={!isWallet}
+      isDisabled={!isWallet}
       onPress={(e) => {
         handleClick(e);
       }}
@@ -192,12 +199,13 @@ const FillBuyOrderModalButton = ({ order }: { order: Order }) => {
       {!wallet.walletClient ? 'Connect Wallet' : 'Fill Order'}
     </Button>
   );
-};
+});
 
 const FillBuyOrderModal = ({ order }: { order: Order }) => {
   const [selectedVault, setSelectedVault] = useState<Address | undefined>(
     undefined
   );
+  const { bgtVaults } = useUserBgtVaults();
 
   const handleClick = () => {
     if (!selectedVault) return;
@@ -210,15 +218,16 @@ const FillBuyOrderModal = ({ order }: { order: Order }) => {
         <label>Vault Address</label>
         <WarppedNextSelect
           isRequired
-          items={Object.entries(ValidatedVaultAddresses)}
-          defaultSelectedKeys={[Object.keys(ValidatedVaultAddresses)[0]]}
+          items={bgtVaults}
           onSelectionChange={(e) => {
             setSelectedVault(e.currentKey?.toLowerCase() as Address);
           }}
         >
-          {Object.entries(ValidatedVaultAddresses).map(([key, value]) => (
-            <SelectItem key={key} value={key}>
-              {value}({key})
+          {bgtVaults.map((vault) => (
+            <SelectItem key={vault.address} value={vault.address}>
+              {vault.name}(
+              {Number(formatEther(BigInt(vault.userBgtInVault))).toFixed(5)})
+              BGT
             </SelectItem>
           ))}
         </WarppedNextSelect>
