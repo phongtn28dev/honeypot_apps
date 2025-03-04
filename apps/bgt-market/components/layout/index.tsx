@@ -18,7 +18,6 @@ import _ from 'lodash';
 import { notificationService } from '@/services/notification';
 import { wallet } from '@/services/wallet';
 import { InvitationCodeModal } from '../InvitationCodeModal/InvitationCodeModal';
-import { INVITATION_LOCK } from '@/config/locks';
 
 export const Layout = observer(
   ({
