@@ -7,6 +7,7 @@ import { ContractWrite } from '@/services/utils';
 import { BGTMarketABI } from '@/lib/abis/bgt-market/BGTMarketABI';
 import { BGTVault } from './bgt-vault';
 import { simulateContract } from 'viem/actions';
+import { WrappedToastify } from '@/lib/wrappedToastify';
 
 export class BGTMarketContract implements BaseContract {
   address: Address = zeroAddress;
@@ -57,6 +58,13 @@ export class BGTMarketContract implements BaseContract {
       }).call([price, vaultAddress]);
     } catch (error) {
       console.error(error);
+
+      if (String(error).includes('too less bgt')) {
+        WrappedToastify.error({
+          title: 'Too less BGT',
+          message: 'Need at least 0.01 bgt in vault to post a sell order',
+        });
+      }
     }
 
     return;
@@ -84,6 +92,13 @@ export class BGTMarketContract implements BaseContract {
       });
     } catch (error) {
       console.error(error);
+
+      if (String(error).includes('small order')) {
+        WrappedToastify.error({
+          title: 'Buying amount too small',
+          message: 'Need at least 0.01 Bera',
+        });
+      }
     }
     return;
   }
@@ -148,6 +163,14 @@ export class BGTMarketContract implements BaseContract {
       }).call([orderId, vaultAddress]);
     } catch (e) {
       console.error(e);
+
+      if (String(e).includes('No BGT available in vault')) {
+        WrappedToastify.error({
+          title: 'No BGT available in vault',
+          message:
+            'No BGT available in vault, please use another vault with bgt in',
+        });
+      }
     }
   }
 

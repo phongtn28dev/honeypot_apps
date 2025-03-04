@@ -39,12 +39,15 @@ export const BuyOrderListRow = observer(({ order }: { order: Order }) => {
       </td>
       <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
         <div className="flex flex-col sm:flex-row justify-end items-end gap-1">
-          {(order.price / 10000).toFixed(4)}
+          {(order.price / 10000).toFixed(4)} BERA
         </div>
       </td>
       <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
         <div className="flex flex-col sm:flex-row justify-end items-end gap-1">
-          {((order.spentBalance / order.balance) * 100).toFixed(2)}%
+          {((Number(order.spentBalance) / Number(order.balance)) * 100).toFixed(
+            2
+          )}
+          %
         </div>
       </td>
       <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap hidden sm:table-cell">
@@ -132,7 +135,7 @@ export const SellOrderListRow = observer(({ order }: { order: Order }) => {
       </td>
       <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
         <div className="flex flex-col sm:flex-row justify-end items-end gap-1">
-          {(order.price / 10000).toFixed(4)}
+          {(order.price / 10000).toFixed(4)} BERA
         </div>
       </td>
       <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
