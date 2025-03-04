@@ -37,12 +37,12 @@ const HomePage: NextLayoutPage = observer(() => {
   return (
     <div className="w-screen h-full p-2">
       <div className="lg:grid grid-cols-[1fr_400px] gap-2">
-        <CardContainer className="col-start-2 grid grid-cols-1 grid-rows-[1fr_1fr]">
+        <CardContainer className="col-start-2 lg:grid grid-cols-1 grid-rows-[1fr_1fr]">
           <UserBgtVaults />
           <PostOrderModal />
         </CardContainer>
 
-        <CardContainer className="row-start-1">
+        <CardContainer className="row-start-1 lg:grid grid-cols-1 grid-rows-[1fr_1fr]">
           <BuyOrdersList />
           <SellOrdersList />
         </CardContainer>

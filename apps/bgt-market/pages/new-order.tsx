@@ -14,6 +14,7 @@ import { simulateContract } from 'viem/actions';
 import { useMemo, useState } from 'react';
 import { ValidatedVaultAddresses } from '@/config/validatedVaultAddresses';
 import { useUserBgtVaults } from '@/lib/hooks/useUserBgtVaults';
+import { WrappedToastify } from '@/lib/wrappedToastify';
 
 type FormValues = {
   price: string;
@@ -43,22 +44,30 @@ const PostOrderModal: NextLayoutPage = observer(() => {
   const [buyOrSelLoading, setBuyOrSellLoading] = useState<boolean>(false);
   const onSubmit = async (data: FormValues) => {
     setBuyOrSellLoading(true);
-    console.log(data);
-    if (OrderType.BuyBgt === data.orderType) {
-      console.log('buy');
-      const orderTransaction = wallet.contracts.bgtMarket.postBuyOrder(
-        BigInt(Number(data.price) * 10000),
-        BigInt(parseEther(data.orderBuyValue ?? '0'))
-      );
+    try {
+      if (OrderType.BuyBgt === data.orderType) {
+        console.log('buy');
+        const orderTransaction = wallet.contracts.bgtMarket.postBuyOrder(
+          BigInt(Math.floor(Number(data.price) * 10000)),
+          BigInt(parseEther(data.orderBuyValue ?? '0'))
+        );
 
-      await orderTransaction;
-    } else {
-      console.log('sell');
-      const orderTransaction = wallet.contracts.bgtMarket.postSellOrder(
-        BigInt(Number(data.price) * 10000),
-        (data.vaultAddress ?? zeroAddress) as Address
-      );
-      await orderTransaction;
+        await orderTransaction;
+      } else {
+        console.log('sell');
+        const orderTransaction = wallet.contracts.bgtMarket.postSellOrder(
+          BigInt(Math.floor(Number(data.price) * 10000)),
+          (data.vaultAddress ?? zeroAddress) as Address
+        );
+        await orderTransaction;
+      }
+    } catch (e) {
+      if (String(e).includes('RangeError')) {
+        WrappedToastify.error({
+          title: 'Price BGT per Bera too small',
+          message: 'Need at least 1 BGT per Bera',
+        });
+      }
     }
 
     setBuyOrSellLoading(false);

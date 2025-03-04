@@ -23,6 +23,7 @@ import { Switch } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { cn } from '@/lib/tailwindcss';
 import { BuyOrderListRow, SellOrderListRow } from './OrderListRow';
+import { usePollingBlockNumber } from '@/lib/hooks/useBlockNumber';
 
 export const BuyOrdersList = observer(() => {
   const [onlyShowPendingBuyOrders, setShowOnlyPendingBuyOrders] =
@@ -41,20 +42,15 @@ export const BuyOrdersList = observer(() => {
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
   const pageSize = 10;
+  const { block } = usePollingBlockNumber();
 
   useEffect(() => {
-    const watch =
-      wallet.publicClient &&
-      watchBlockNumber(wallet.publicClient, {
-        onBlockNumber: (blockNumber) => {
-          refetchBuyOrders();
-        },
-      });
-  }, [wallet.publicClient]);
+    refetchBuyOrders();
+  }, [block]);
 
   return (
-    <div className="p-2 sm:p-6 w-full">
-      <div className="bg-[#202020] rounded-2xl overflow-hidden w-full">
+    <div className="p-2 sm:p-6 w-full h-full">
+      <div className="bg-[#202020] rounded-2xl overflow-hidden w-full h-full">
         <div className="p-2 sm:p-6 w-full">
           <div className="border border-[#5C5C5C] rounded-2xl overflow-hidden overflow-x-auto w-full [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-[#323232] [&::-webkit-scrollbar-thumb]:bg-[#FFCD4D] [&::-webkit-scrollbar-thumb]:rounded-full [scrollbar-color:#FFCD4D_#323232] [scrollbar-width:thin]">
             <table className="w-full">
@@ -73,13 +69,12 @@ export const BuyOrdersList = observer(() => {
                     Filled
                   </th>{' '}
                   <th className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base font-medium">
-                    {' '}
-                    <Switch
+                    {/* <Switch
                       defaultSelected
                       onValueChange={setShowOnlyPendingBuyOrders}
                     >
                       <span className="">only show pending</span>
-                    </Switch>
+                    </Switch> */}
                   </th>
                 </tr>
               </thead>
@@ -98,7 +93,7 @@ export const BuyOrdersList = observer(() => {
                   </tr>
                 ) : (
                   recentBuyOrders?.orders.map((order) => (
-                    <BuyOrderListRow order={order as Order} />
+                    <BuyOrderListRow key={order.id} order={order as Order} />
                   ))
                 )}
               </tbody>
@@ -185,19 +180,15 @@ export const SellOrdersList = () => {
   const [hasNextPage, setHasNextPage] = useState(false);
   const pageSize = 10;
 
+  const { block } = usePollingBlockNumber();
+
   useEffect(() => {
-    const watch =
-      wallet.publicClient &&
-      watchBlockNumber(wallet.publicClient, {
-        onBlockNumber: (blockNumber) => {
-          refetchSellOrders();
-        },
-      });
-  }, [wallet.publicClient]);
+    refetchSellOrders();
+  }, [block]);
 
   return (
-    <div className="p-2 sm:p-6 w-full">
-      <div className="bg-[#202020] rounded-2xl overflow-hidden w-full">
+    <div className="p-2 sm:p-6 w-full h-full">
+      <div className="bg-[#202020] rounded-2xl overflow-hidden w-full h-full">
         <div className="p-2 sm:p-6 w-full">
           <div className="border border-[#5C5C5C] rounded-2xl overflow-hidden overflow-x-auto w-full [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-[#323232] [&::-webkit-scrollbar-thumb]:bg-[#FFCD4D] [&::-webkit-scrollbar-thumb]:rounded-full [scrollbar-color:#FFCD4D_#323232] [scrollbar-width:thin]">
             <table className="w-full">
@@ -216,13 +207,13 @@ export const SellOrdersList = () => {
                     Total Price
                   </th>{' '}
                   <th className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base font-medium">
-                    {' '}
+                    {/* {' '}
                     <Switch
                       defaultSelected
                       onValueChange={setShowOnlyPendingSellOrders}
                     >
                       <span>only show pending</span>
-                    </Switch>
+                    </Switch> */}
                   </th>
                 </tr>
               </thead>
@@ -241,7 +232,7 @@ export const SellOrdersList = () => {
                   </tr>
                 ) : (
                   recentSellOrders?.orders.map((order) => (
-                    <SellOrderListRow order={order as Order} />
+                    <SellOrderListRow key={order.id} order={order as Order} />
                   ))
                 )}
               </tbody>
