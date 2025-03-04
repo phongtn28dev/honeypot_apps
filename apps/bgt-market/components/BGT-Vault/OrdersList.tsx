@@ -23,6 +23,7 @@ import { Switch } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { cn } from '@/lib/tailwindcss';
 import { BuyOrderListRow, SellOrderListRow } from './OrderListRow';
+import { usePollingBlockNumber } from '@/lib/hooks/useBlockNumber';
 
 export const BuyOrdersList = observer(() => {
   const [onlyShowPendingBuyOrders, setShowOnlyPendingBuyOrders] =
@@ -41,16 +42,11 @@ export const BuyOrdersList = observer(() => {
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
   const pageSize = 10;
+  const { block } = usePollingBlockNumber();
 
   useEffect(() => {
-    const watch =
-      wallet.publicClient &&
-      watchBlockNumber(wallet.publicClient, {
-        onBlockNumber: (blockNumber) => {
-          refetchBuyOrders();
-        },
-      });
-  }, [wallet.publicClient]);
+    refetchBuyOrders();
+  }, [block]);
 
   return (
     <div className="p-2 sm:p-6 w-full h-full">
@@ -184,15 +180,11 @@ export const SellOrdersList = () => {
   const [hasNextPage, setHasNextPage] = useState(false);
   const pageSize = 10;
 
+  const { block } = usePollingBlockNumber();
+
   useEffect(() => {
-    const watch =
-      wallet.publicClient &&
-      watchBlockNumber(wallet.publicClient, {
-        onBlockNumber: (blockNumber) => {
-          refetchSellOrders();
-        },
-      });
-  }, [wallet.publicClient]);
+    refetchSellOrders();
+  }, [block]);
 
   return (
     <div className="p-2 sm:p-6 w-full h-full">
