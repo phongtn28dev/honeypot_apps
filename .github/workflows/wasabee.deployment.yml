@@ -32,7 +32,7 @@ jobs:
           secrets: ${{ toJSON(secrets) }}
 
       - name: Install dependencies
-        run: pnpm install axios dotenv fs  --legacy-peer-deps --no-save --no-package-lock
+        run: pnpm install axios dotenv fs -g
 
       - name: Process env file with Node.js
         env:
