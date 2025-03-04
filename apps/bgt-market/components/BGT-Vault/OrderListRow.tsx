@@ -171,7 +171,7 @@ export const SellOrderListRow = observer(({ order }: { order: Order }) => {
                   );
                 }}
               >
-                {!wallet.walletClient ? 'Connect Wallet' : 'Fill Order'}
+                {!wallet.walletClient ? 'Connect Wallet' : 'Buy'}
               </Button>
             )}
         </div>
