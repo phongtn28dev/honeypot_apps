@@ -74,7 +74,6 @@ export class BGTVault implements BaseContract {
     const userBgt = await this.contract.read.earned([
       wallet.account as Address,
     ]);
-    console.log(userBgt, wallet.account);
     this.userBgtInVault = userBgt.toString();
     return userBgt;
   }
