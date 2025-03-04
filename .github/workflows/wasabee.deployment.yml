@@ -28,7 +28,7 @@ jobs:
           secrets: ${{ toJSON(secrets) }}
 
       - name: Update Vercel ENV
-        uses: ./.github/actions/update.env
+        uses: ./.github/actions
         with:
           env-file: .github/workflows/.env.wasabee
 
