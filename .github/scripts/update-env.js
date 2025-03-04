@@ -11,6 +11,10 @@ let envContent = fs.readFileSync(process.env.ENV_FILE, "utf8");
 
 // 替换环境变量
 envContent = envContent.replace(/\$\{([^}]+)\}/g, (_, varName) => {
+ if (varName === "NPM_RC") {
+  console.log("varName", varName);
+  console.log(process.env[varName]);
+ }
  return process.env[varName] || "";
 });
 
