@@ -24,7 +24,7 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm install
+        run: npm install @actions/core
 
       - name: Export secrets to env
         uses: oNaiPs/secrets-to-env-action@v1
