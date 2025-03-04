@@ -27,7 +27,7 @@ export const BuyOrderListRow = observer(({ order }: { order: Order }) => {
             order.status === OrderStatus.Filled && 'text-green-500'
           )}
         >
-          Buy
+          BuyBGT
           {order.status !== OrderStatus.Pending && `(Order ${order.status})`}
         </div>
       </td>
@@ -126,7 +126,7 @@ export const SellOrderListRow = observer(({ order }: { order: Order }) => {
             order.status === OrderStatus.Filled && 'text-green-500'
           )}
         >
-          Sell
+          SellBGT
           {order.status !== OrderStatus.Pending && `(Order ${order.status})`}
         </div>
       </td>
