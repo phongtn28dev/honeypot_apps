@@ -53,8 +53,8 @@ export const BuyOrdersList = observer(() => {
   }, [wallet.publicClient]);
 
   return (
-    <div className="p-2 sm:p-6 w-full">
-      <div className="bg-[#202020] rounded-2xl overflow-hidden w-full">
+    <div className="p-2 sm:p-6 w-full h-full">
+      <div className="bg-[#202020] rounded-2xl overflow-hidden w-full h-full">
         <div className="p-2 sm:p-6 w-full">
           <div className="border border-[#5C5C5C] rounded-2xl overflow-hidden overflow-x-auto w-full [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-[#323232] [&::-webkit-scrollbar-thumb]:bg-[#FFCD4D] [&::-webkit-scrollbar-thumb]:rounded-full [scrollbar-color:#FFCD4D_#323232] [scrollbar-width:thin]">
             <table className="w-full">
@@ -98,7 +98,7 @@ export const BuyOrdersList = observer(() => {
                   </tr>
                 ) : (
                   recentBuyOrders?.orders.map((order) => (
-                    <BuyOrderListRow order={order as Order} />
+                    <BuyOrderListRow key={order.id} order={order as Order} />
                   ))
                 )}
               </tbody>
@@ -196,8 +196,8 @@ export const SellOrdersList = () => {
   }, [wallet.publicClient]);
 
   return (
-    <div className="p-2 sm:p-6 w-full">
-      <div className="bg-[#202020] rounded-2xl overflow-hidden w-full">
+    <div className="p-2 sm:p-6 w-full h-full">
+      <div className="bg-[#202020] rounded-2xl overflow-hidden w-full h-full">
         <div className="p-2 sm:p-6 w-full">
           <div className="border border-[#5C5C5C] rounded-2xl overflow-hidden overflow-x-auto w-full [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-[#323232] [&::-webkit-scrollbar-thumb]:bg-[#FFCD4D] [&::-webkit-scrollbar-thumb]:rounded-full [scrollbar-color:#FFCD4D_#323232] [scrollbar-width:thin]">
             <table className="w-full">
@@ -241,7 +241,7 @@ export const SellOrdersList = () => {
                   </tr>
                 ) : (
                   recentSellOrders?.orders.map((order) => (
-                    <SellOrderListRow order={order as Order} />
+                    <SellOrderListRow key={order.id} order={order as Order} />
                   ))
                 )}
               </tbody>

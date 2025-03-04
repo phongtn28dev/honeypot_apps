@@ -62,15 +62,7 @@ export const BuyOrderListRow = observer(({ order }: { order: Order }) => {
 
           {!(order.dealer.id.toLowerCase() === wallet.account.toLowerCase()) &&
             order.status === 'Pending' && (
-              <Button
-                disabled={!wallet.walletClient || !wallet.isInit}
-                isDisabled={!wallet.walletClient || !wallet.isInit}
-                onPress={() => {
-                  wallet.contracts.bgtMarket.fillSellOrder(BigInt(order.id));
-                }}
-              >
-                {!wallet.walletClient ? 'Connect Wallet' : 'Fill Order'}
-              </Button>
+              <FillBuyOrderModalButton order={order as Order} />
             )}
         </div>
       </td>
@@ -108,13 +100,14 @@ export const SellOrderListRow = observer(({ order }: { order: Order }) => {
       default:
         return '0';
     }
-  }, []);
+  }, [order.status, orderVaultBgt, order]);
 
   useEffect(() => {
     if (!rewardVault) return;
     rewardVault
       .readCurrentUserBgtInVault(order.dealer.id as Address)
       .then((res) => {
+        console.log(res);
         setOrderVaultBgt(res.toString());
       });
   }, [rewardVault, block]);
@@ -129,7 +122,7 @@ export const SellOrderListRow = observer(({ order }: { order: Order }) => {
             order.status === OrderStatus.Filled && 'text-green-500'
           )}
         >
-          Buy
+          Sell
           {order.status !== OrderStatus.Pending && `(Order ${order.status})`}
         </div>
       </td>
@@ -164,19 +157,15 @@ export const SellOrderListRow = observer(({ order }: { order: Order }) => {
 
           {!(order.dealer.id.toLowerCase() === wallet.account.toLowerCase()) &&
             order.status === 'Pending' && (
-              <FillBuyOrderModalButton order={order as Order} />
-              // <Button
-              //   disabled={!wallet.walletClient || !wallet.isInit}
-              //   isDisabled={!wallet.walletClient || !wallet.isInit}
-              //   onPress={() => {
-              //     wallet.contracts.bgtMarket.fillBuyOrder(
-              //       BigInt(order.id),
-              //       zeroAddress
-              //     );
-              //   }}
-              // >
-              //   {!wallet.walletClient ? "Connect Wallet" : "Fill Order"}
-              // </Button>
+              <Button
+                disabled={!wallet.walletClient || !wallet.isInit}
+                isDisabled={!wallet.walletClient || !wallet.isInit}
+                onPress={() => {
+                  wallet.contracts.bgtMarket.fillSellOrder(BigInt(order.id));
+                }}
+              >
+                {!wallet.walletClient ? 'Connect Wallet' : 'Fill Order'}
+              </Button>
             )}
         </div>
       </td>
