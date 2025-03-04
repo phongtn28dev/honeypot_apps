@@ -50,6 +50,12 @@ async function updateVercelEnv() {
 
   if (existingEnvKeys.includes(key)) {
    console.log(`🔄 Updating ${key}...`);
+
+   if (key === "NPM_RC") {
+    console.log("key", key);
+    console.log("value", value);
+   }
+
    const envVarId = currentEnvs.find((env) => env.key === key).id;
    await axios.patch(
     `https://api.vercel.com/v10/projects/${projectId}/env/${envVarId}?teamId=${teamId}`,
