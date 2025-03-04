@@ -1,4 +1,4 @@
-name: Update Vercel ENV and deploy for project wasabee
+name: update Vercel ENV and deploy for project wasabee
 
 on:
   push:
