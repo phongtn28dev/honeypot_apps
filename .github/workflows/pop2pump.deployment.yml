@@ -1,4 +1,4 @@
-name: Update Vercel ENV for wasabee
+name: Update Vercel ENV for pop2pump
 
 on:
   push:

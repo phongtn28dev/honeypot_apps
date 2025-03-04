@@ -33,5 +33,5 @@ jobs:
         env:
           ENV_FILE: .github/workflows/.env.bgt-market
           PROJECT_NAME: bgt-market
-·         PROJECT_ID: prj_Yhv6hufFe068byTjwTCRds5PP4YB
+          PROJECT_ID: prj_Yhv6hufFe068byTjwTCRds5PP4YB
         run: node .github/scripts/update-env.js
