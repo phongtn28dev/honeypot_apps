@@ -10,7 +10,7 @@ on:
       - 'apps/wasabee/**'
 
 jobs:
-  Deploy_wasabee:
+  deploy_wasabee:
     runs-on: ubuntu-latest
 
     steps:
