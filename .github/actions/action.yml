@@ -1,5 +1,0 @@
-name: 'Update Vercel ENV'
-description: 'Update Vercel ENV'
-runs:
-  using: 'node20'
-  main: 'index.js'
