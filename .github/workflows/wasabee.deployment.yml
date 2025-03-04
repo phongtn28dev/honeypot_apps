@@ -3,7 +3,7 @@ name: Update Vercel ENV for wasabee
 on:
   push:
     branches:
-      - main
+      - dev
     paths:
       - '.github/workflows/.env.wasabee'
       - '.github/workflows/wasabee.deployment.yml'
@@ -34,7 +34,7 @@ jobs:
       - name: Install dependencies
         run: npm install axios dotenv fs  --legacy-peer-deps --no-save --no-package-lock
 
-      - name: Process .env.pop2pump with Node.js
+      - name: Process env file with Node.js
         env:
           ENV_FILE: .github/workflows/.env.wasabee
           PROJECT_NAME: wasabee
