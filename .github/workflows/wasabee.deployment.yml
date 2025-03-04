@@ -21,6 +21,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
+          cache: 'pnpm'
 
       - name: Export secrets to env
         uses: oNaiPs/secrets-to-env-action@v1
@@ -28,7 +29,7 @@ jobs:
           secrets: ${{ toJSON(secrets) }}
 
       - name: Install dependencies
-        run: npm install axios dotenv fs
+        run: pnpm install axios dotenv fs
 
       - name: Process env file with Node.js
         env:
