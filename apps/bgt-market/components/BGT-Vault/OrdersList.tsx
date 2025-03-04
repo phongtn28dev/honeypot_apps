@@ -63,7 +63,7 @@ export const BuyOrdersList = observer(() => {
                     Total Balance
                   </th>
                   <th className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base font-medium">
-                    Price (BGT)
+                    Price per BGT
                   </th>
                   <th className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base font-medium">
                     Filled
@@ -201,7 +201,7 @@ export const SellOrdersList = () => {
                     BGT
                   </th>
                   <th className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base font-medium">
-                    Price (BGT)
+                    Price per BGT
                   </th>
                   <th className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base font-medium">
                     Total Price
