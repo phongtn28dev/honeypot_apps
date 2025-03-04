@@ -17,14 +17,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
-          cache: 'pnpm'
 
       - name: Export secrets to env
         uses: oNaiPs/secrets-to-env-action@v1
@@ -32,7 +28,7 @@ jobs:
           secrets: ${{ toJSON(secrets) }}
 
       - name: Install dependencies
-        run: pnpm install axios dotenv fs
+        run: npm install axios dotenv fs
 
       - name: Process env file with Node.js
         env:
