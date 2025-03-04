@@ -16,15 +16,12 @@ export default async function handler(
 
   const correctCode = process.env.INVITATION_CODE;
 
-  if (code === correctCode) {
+  if (code?.trim() === correctCode?.trim()) {
     return res.status(200).json({ success: true });
   } else {
-    return res
-      .status(400)
-      .json({
-        success: false,
-        message: 'Invalid invitation code',
-        correctCode: correctCode,
-      });
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid invitation code',
+    });
   }
 }
