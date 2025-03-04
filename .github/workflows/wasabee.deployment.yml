@@ -7,7 +7,7 @@ on:
     paths:
       - '.github/workflows/.env.wasabee'
       - '.github/workflows/wasabee.deployment.yml'
-      - '.github/workflows/scripts/update-env.js'
+      - '.github/scripts/update-env.js'
       - 'apps/wasabee/**'
 
 jobs:

@@ -7,7 +7,7 @@ on:
     paths:
       - '.github/workflows/.env.pop2pump'
       - '.github/workflows/pop2pump.deployment.yml'
-      - '.github/workflows/scripts/update-env.js'
+      - '.github/scripts/update-env.js'
       - 'apps/pop2pump/**'
 
 jobs:

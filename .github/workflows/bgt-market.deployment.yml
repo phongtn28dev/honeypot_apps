@@ -7,7 +7,7 @@ on:
     paths:
       - '.github/workflows/.env.bgt-market'
       - '.github/workflows/bgt-market.deployment.yml'
-      - '.github/workflows/scripts/update-env.js'
+      - '.github/scripts/update-env.js'
       - 'apps/bgt-market/**'
 
 jobs:
