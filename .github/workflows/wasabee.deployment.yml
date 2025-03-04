@@ -31,10 +31,15 @@ jobs:
         with:
           secrets: ${{ toJSON(secrets) }}
 
-      - name: Update Vercel ENV
-        uses: ./.github/actions
-        with:
-          env-file: .github/workflows/.env.wasabee
+      - name: Install dependencies
+        run: npm install axios dotenv fs
+
+      - name: Process .env.pop2pump with Node.js
+        env:
+          ENV_FILE: .github/workflows/.env.wasabee
+          PROJECT_NAME: wasabee
+          PROJECT_ID: prj_KrcyBlpF1ND3qz2231CII1SZpjyl
+        run: node .github/js/update-env.js
 
       # - name: Load and replace .env.wasabee variables
       #   shell: bash
