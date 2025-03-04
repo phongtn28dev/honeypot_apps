@@ -18,7 +18,7 @@ console.log("process.env.ENV_FILE", process.env.ENV_FILE);
 
 // 写回更新后的 env 文件
 fs.writeFileSync(process.env.ENV_FILE, envContent);
-console.log("✅ Updated .env.pop2pump");
+console.log("✅ Updated", process.env.ENV_FILE);
 
 // 获取 Vercel 现有环境变量
 async function getVercelEnv() {
