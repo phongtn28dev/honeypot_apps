@@ -3,7 +3,7 @@ name: Update Vercel ENV for wasabee
 on:
   push:
     branches:
-      - dev
+      - main
     paths:
       - '.github/workflows/.env.wasabee'
       - '.github/workflows/wasabee.deployment.yml'
