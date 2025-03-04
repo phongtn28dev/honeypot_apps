@@ -37,6 +37,9 @@ jobs:
           PROJECT_ID: prj_KrcyBlpF1ND3qz2231CII1SZpjyl
         run: node .github/scripts/update-env.js
 
+      - name: Install Vercel CLI
+        run: npm install -g vercel@22.0.1
+
       - name: Deploy to Vercel Action
         uses: BetaHuhn/deploy-to-vercel-action@develop
         with:
