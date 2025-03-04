@@ -38,7 +38,7 @@ jobs:
         env:
           ENV_FILE: .github/workflows/.env.wasabee
           PROJECT_NAME: wasabee
-          PROJECT_ID: prj_KrcyBlpF1ND3qz2231CII1SZpjyl
+          PROJECT_ID: prj_if8S3CxnJt92clpRW8uPaCjVKsa7
         run: node .github/scripts/update-env.js
 
       - name: Install Vercel CLI
@@ -47,7 +47,7 @@ jobs:
       - name: Deploy to Vercel Action
         uses: BetaHuhn/deploy-to-vercel-action@develop
         env:
-          PROJECT_ID: prj_KrcyBlpF1ND3qz2231CII1SZpjyl
+          PROJECT_ID: prj_if8S3CxnJt92clpRW8uPaCjVKsa7
         with:
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
           VERCEL_TOKEN: ${{ secrets.WORKFLOW_VERCEL_TOKEN }}
