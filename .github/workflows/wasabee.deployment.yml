@@ -19,8 +19,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
-        with:
-          version: 9.1.2 # 指定与 `pnpm-lock.yaml` 兼容的版本
 
       - name: Set up Node.js
         uses: actions/setup-node@v3

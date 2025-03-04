@@ -6,7 +6,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Welcome to wasabee-frontend!</title>
+        <title>Welcome to wasabee-frontend test!</title>
       </Head>
       <main className="app">
         <Component {...pageProps} />
