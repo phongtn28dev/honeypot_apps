@@ -1,4 +1,4 @@
-name: Update Vercel ENV for reward-vault-market
+name: Update Vercel ENV for pop2pump
 
 on:
   push:

@@ -1,4 +1,4 @@
-name: Update Vercel ENV for reward-vault-market
+name: Update Vercel ENV for wasabee
 
 on:
   push:
@@ -33,7 +33,7 @@ jobs:
           secrets: ${{ toJSON(secrets) }}
 
       - name: Update Vercel ENV
-        uses: ./.github/actions/update.vercel.env.js
+        uses: ./.github/actions/action.yml
         with:
           env-file: .github/workflows/.env.wasabee
 

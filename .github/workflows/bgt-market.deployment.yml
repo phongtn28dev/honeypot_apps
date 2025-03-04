@@ -3,7 +3,7 @@ name: Update Vercel ENV for bgt-market
 on:
   push:
     branches:
-      - main
+      # - main
     paths:
       # - '.github/workflows/.env.bgt-market'
       # - '.github/workflows/bgt-market.deployment.yml'
