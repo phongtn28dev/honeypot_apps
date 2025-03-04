@@ -10,7 +10,7 @@ on:
       - 'apps/wasabee/**'
 
 jobs:
-  update-env:
+  Deploy wasabee:
     runs-on: ubuntu-latest
 
     steps:
