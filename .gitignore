@@ -56,3 +56,4 @@ out
 .npmrc
 
 apps/*/.vercel/*
+pnpm-lock.yaml
