@@ -1,4 +1,5 @@
 export function Index() {
+  console.log('1');
   /*
    * Replace the elements below with your own.
    *
