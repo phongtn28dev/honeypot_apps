@@ -23,13 +23,16 @@ jobs:
         with:
           node-version: 20
 
+      # - name: Install dependencies
+      #   run: npm install @actions/core --legacy-peer-deps --no-save --no-package-lock
+
       - name: Export secrets to env
         uses: oNaiPs/secrets-to-env-action@v1
         with:
           secrets: ${{ toJSON(secrets) }}
 
       - name: Install dependencies
-        run: npm install axios dotenv fs
+        run: npm install axios dotenv fs  --legacy-peer-deps --no-save --no-package-lock
 
       - name: Process .env.pop2pump with Node.js
         env:
