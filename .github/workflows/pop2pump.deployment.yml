@@ -1,4 +1,4 @@
-name: Update Vercel ENV for pop2pump
+name: update Vercel ENV and deploy for project pop2pump
 
 on:
   push:
@@ -7,20 +7,27 @@ on:
     paths:
       - '.github/workflows/.env.pop2pump'
       - '.github/workflows/pop2pump.deployment.yml'
+      - '.github/workflows/scripts/update-env.js'
       - 'apps/pop2pump/**'
 
 jobs:
-  update-env:
+  deploy_pop2pump:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9.1.2 # 指定与 `pnpm-lock.yaml` 兼容的版本
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
+          cache: 'pnpm'
 
       - name: Export secrets to env
         uses: oNaiPs/secrets-to-env-action@v1
@@ -28,7 +35,7 @@ jobs:
           secrets: ${{ toJSON(secrets) }}
 
       - name: Install dependencies
-        run: npm install axios dotenv fs  --legacy-peer-deps --no-save --no-package-lock
+        run: pnpm install axios dotenv fs
 
       - name: Process env file with Node.js
         env:
@@ -36,3 +43,16 @@ jobs:
           PROJECT_NAME: pop2pump
           PROJECT_ID: prj_l1jJ60wagBQ3Zs6bx1n5bAYyb0pW
         run: node .github/scripts/update-env.js
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@22.0.1
+
+      - name: Deploy to Vercel Action
+        uses: BetaHuhn/deploy-to-vercel-action@develop
+        env:
+          PROJECT_ID: prj_l1jJ60wagBQ3Zs6bx1n5bAYyb0pW
+        with:
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
+          VERCEL_TOKEN: ${{ secrets.WORKFLOW_VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
+          VERCEL_PROJECT_ID: ${{ env.PROJECT_ID }}
