@@ -1,4 +1,4 @@
-name: Update Vercel ENV for wasabee
+name: update Vercel ENV and deploy for project wasabee
 
 on:
   push:
@@ -7,24 +7,27 @@ on:
     paths:
       - '.github/workflows/.env.wasabee'
       - '.github/workflows/wasabee.deployment.yml'
-      - '.github/actions/*'
+      - '.github/scripts/update-env.js'
       - 'apps/wasabee/**'
 
 jobs:
-  update-env:
+  deploy_wasabee:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9.1.2 # 指定与 `pnpm-lock.yaml` 兼容的版本
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
-
-      # - name: Install dependencies
-      #   run: npm install @actions/core --legacy-peer-deps --no-save --no-package-lock
+          cache: 'pnpm'
 
       - name: Export secrets to env
         uses: oNaiPs/secrets-to-env-action@v1
@@ -32,81 +35,24 @@ jobs:
           secrets: ${{ toJSON(secrets) }}
 
       - name: Install dependencies
-        run: npm install axios dotenv fs  --legacy-peer-deps --no-save --no-package-lock
+        run: pnpm install axios dotenv fs
 
-      - name: Process .env.pop2pump with Node.js
+      - name: Process env file with Node.js
         env:
           ENV_FILE: .github/workflows/.env.wasabee
           PROJECT_NAME: wasabee
-          PROJECT_ID: prj_KrcyBlpF1ND3qz2231CII1SZpjyl
-        run: node .github/js/update-env.js
+          PROJECT_ID: prj_if8S3CxnJt92clpRW8uPaCjVKsa7
+        run: node .github/scripts/update-env.js
 
-      # - name: Load and replace .env.wasabee variables
-      #   shell: bash
-      #   run: |
-      #     while IFS= read -r line; do
-      #       echo "line of: $line"
-      #       while [[ "$line" =~ (\$\{([^}]+)\}) ]]; do
-      #         var_name="${BASH_REMATCH[2]}"
-      #         var_value=$(echo "${!var_name}")
-      #         line="${line//${BASH_REMATCH[1]}/$var_value}"
-      #       done
-      #       echo "$line"
-      #     done < .github/workflows/.env.wasabee > .github/workflows/.env.wasabee.tmp
-      #     mv .github/workflows/.env.wasabee.tmp .github/workflows/.env.wasabee
+      - name: Install Vercel CLI
+        run: npm install -g vercel@22.0.1
 
-      # - name: Create or Update Vercel Environment Variables for Project
-      #   env:
-      #     ENV_FILE: .github/workflows/.env.wasabee
-      #     VERCEL_TOKEN: ${{ secrets.WORKFLOW_VERCEL_TOKEN }}
-      #     TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
-      #     PROJECT_NAME: reward-vault-market
-      #     PROJECT_ID: prj_Yhv6hufFe068byTjwTCRds5PP4YB
-      #   run: |
-      #     # 获取项目当前的环境变量列表
-      #     current_envs=$(curl -s -X GET "https://api.vercel.com/v10/projects/$PROJECT_ID/env?teamId=$TEAM_ID" \
-      #                       -H "Authorization: Bearer $VERCEL_TOKEN")
-      #     echo "current_envs: $current_envs"
-
-      #     # 读取环境变量文件并逐行处理
-      #     while IFS='=' read -r key value || [[ -n "$key" ]]; do
-      #      # 跳过空行或仅包含空格的行
-      #       if [[ -z "$key" || "$key" =~ ^[[:space:]]*$ ]]; then
-      #         continue
-      #       fi
-      #       echo "key: $key"
-      #       value=$(echo "$value" | xargs)
-      #       echo "value: $value"
-      #       if [[ ! -z "$key" && "$key" != \#* ]]; then
-      #         # 检查环境变量是否已经存在
-      #         var_exists=$(echo "$current_envs" | jq -r ".envs[] | select(.key == \"$key\") | .key")
-      #         echo "var_exists: $var_exists"
-      #         echo "key: $key"
-      #         if [ "$var_exists" == "$key" ]; then
-      #           # 如果环境变量已存在，获取 ID 并更新
-      #           echo "$key already exists, updating..."
-      #           ENV_VAR_ID=$(echo "$current_envs" | jq -r ".envs[] | select(.key == \"$key\") | .id")
-      #           curl -X PATCH "https://api.vercel.com/v10/projects/$PROJECT_ID/env/$ENV_VAR_ID?teamId=$TEAM_ID" \
-      #               -H "Authorization: Bearer $VERCEL_TOKEN" \
-      #               -H "Content-Type: application/json" \
-      #               --data "{
-      #                 \"key\": \"$key\",
-      #                 \"value\": \"$value\",
-      #                 \"type\": \"encrypted\",
-      #                 \"target\": [\"production\", \"preview\"]
-      #               }"
-      #         else
-      #           # 如果环境变量不存在，则创建
-      #           echo "Setting $key in Vercel..."
-      #           curl -X POST "https://api.vercel.com/v10/projects/$PROJECT_ID/env?teamId=$TEAM_ID" \
-      #               -H "Authorization: Bearer $VERCEL_TOKEN" \
-      #               -H "Content-Type: application/json" \
-      #               --data "{
-      #                 \"key\": \"$key\",
-      #                 \"value\": \"$value\",
-      #                 \"type\": \"encrypted\",
-      #                 \"target\": [\"production\", \"preview\"]
-      #               }"
-      #         fi
-      #       fi
-      #     done < "$ENV_FILE"
+      - name: Deploy to Vercel Action
+        uses: BetaHuhn/deploy-to-vercel-action@develop
+        env:
+          PROJECT_ID: prj_if8S3CxnJt92clpRW8uPaCjVKsa7
+        with:
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
+          VERCEL_TOKEN: ${{ secrets.WORKFLOW_VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
+          VERCEL_PROJECT_ID: ${{ env.PROJECT_ID }}

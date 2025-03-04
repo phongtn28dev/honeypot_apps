@@ -18,7 +18,7 @@ console.log("process.env.ENV_FILE", process.env.ENV_FILE);
 
 // 写回更新后的 env 文件
 fs.writeFileSync(process.env.ENV_FILE, envContent);
-console.log("✅ Updated .env.pop2pump");
+console.log("✅ Updated", process.env.ENV_FILE);
 
 // 获取 Vercel 现有环境变量
 async function getVercelEnv() {
@@ -34,6 +34,14 @@ async function getVercelEnv() {
  }
 }
 
+
+function getValue(key, value) {
+ if (key === "NPM_RC") {
+  return Buffer.from(value, "base64").toString("utf8");
+ }
+ return value;
+}
+
 // 更新或创建 Vercel 环境变量
 async function updateVercelEnv() {
  const currentEnvs = await getVercelEnv();
@@ -46,12 +54,14 @@ async function updateVercelEnv() {
 
   if (existingEnvKeys.includes(key)) {
    console.log(`🔄 Updating ${key}...`);
+
+
    const envVarId = currentEnvs.find((env) => env.key === key).id;
    await axios.patch(
     `https://api.vercel.com/v10/projects/${projectId}/env/${envVarId}?teamId=${teamId}`,
     {
      key,
-     value,
+     value: getValue(key, value),
      type: "encrypted",
      target: ["production", "preview"],
     },

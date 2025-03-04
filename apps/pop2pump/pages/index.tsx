@@ -4,6 +4,7 @@ export function Index() {
    *
    * Note: The corresponding styles are in the ./index.tailwind file.
    */
+  console.log(1);
   return (
     <div>
       <div className="wrapper">
