@@ -43,8 +43,8 @@ const HomePage: NextLayoutPage = observer(() => {
         </CardContainer>
 
         <CardContainer className="row-start-1 lg:grid grid-cols-1 grid-rows-[1fr_1fr]">
-          <BuyOrdersList />
           <SellOrdersList />
+          <BuyOrdersList />
         </CardContainer>
       </div>
     </div>

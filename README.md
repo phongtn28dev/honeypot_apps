@@ -50,9 +50,9 @@ npx nx g @nx/react:lib <lib-name>
 ## pull vercel env to local
 
 ```sh
-cd apps/<app-name>
-
 pnpm install -g vercel
+
+cd apps/<app-name>
 
 vercel link
 
@@ -62,4 +62,11 @@ vercel link
 ? What’s the name of your existing project? apps-<app-name>
 
 vercel env pull .env.local --environment production
+```
+
+## create graphql code
+
+```sh
+cd apps/<app-name>
+npx graphql-codegen --config algebra_codegen.ts
 ```
