@@ -237,7 +237,7 @@ export const SellOrderListRow = observer(
                       ?.then(() => actionCallBack);
                   }}
                 >
-                  {!wallet.walletClient ? 'Connect Wallet' : 'Fill Order'}
+                  {!wallet.walletClient ? 'Connect Wallet' : 'Buy'}
                 </Button>
               )}
           </div>
@@ -275,7 +275,7 @@ const FillBuyOrderModalButton = observer(
           handleClick(e);
         }}
       >
-        {!wallet.walletClient ? 'Connect Wallet' : 'Fill Order'}
+        {!wallet.walletClient ? 'Connect Wallet' : 'Sell'}
       </Button>
     );
   }
@@ -327,7 +327,7 @@ const FillBuyOrderModal = ({
             handleClick();
           }}
         >
-          {!wallet.walletClient ? 'Connect Wallet' : 'Fill Order'}
+          {!wallet.walletClient ? 'Connect Wallet' : 'Sell'}
         </Button>
       </div>
     </CardContainer>
