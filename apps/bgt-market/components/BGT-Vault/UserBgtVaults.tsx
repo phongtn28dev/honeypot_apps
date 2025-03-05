@@ -7,6 +7,7 @@ import { Address, formatEther } from 'viem';
 import { LoadingDisplay } from '../LoadingDisplay/LoadingDisplay';
 import Button from '../button/v3';
 import { wallet } from '@/services/wallet';
+import { ADDRESS_ZERO } from '@cryptoalgebra/sdk';
 
 export const UserBgtVaults = observer(() => {
   const { bgtVaults, loading } = useUserBgtVaults();
@@ -39,11 +40,15 @@ export const UserBgtVaults = observer(() => {
                 </span>
                 <span>
                   {vault.bgtVaultApproved ? (
-                    <Button isDisabled disabled>
-                      Approved
+                    <Button
+                      className="bg-[red]"
+                      onPress={() => vault.setOperator(ADDRESS_ZERO)}
+                    >
+                      Unapprove
                     </Button>
                   ) : (
                     <Button
+                      className="bg-[green]"
                       onPress={() =>
                         vault.setOperator(
                           wallet.currentChain.contracts.bgtMarket as Address
