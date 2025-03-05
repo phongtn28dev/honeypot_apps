@@ -70,9 +70,9 @@ export class BgtOrder {
   get orderString() {
     switch (this.orderType) {
       case OrderType.BuyBgt:
-        return 'Buy';
+        return 'BuyBGT';
       case OrderType.SellBgt:
-        return 'Sell';
+        return 'SellBGT';
     }
   }
 
