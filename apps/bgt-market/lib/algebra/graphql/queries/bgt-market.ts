@@ -19,6 +19,8 @@ export const GET_USER_ORDERS = gql`
       where: { dealer: $user, status_in: $status_in }
       first: $first
       skip: $skip
+      orderBy: id
+      orderDirection: desc
     ) {
       ...OrderFields
     }
@@ -31,6 +33,8 @@ export const GET_RECENT_BUY_ORDERS = gql`
       where: { orderType: BuyBGT, status_in: $status_in }
       skip: $skip
       first: $first
+      orderBy: price
+      orderDirection: desc
     ) {
       ...OrderFields
     }
@@ -43,6 +47,8 @@ export const GET_RECENT_SELL_ORDERS = gql`
       where: { orderType: SellBGT, status_in: $status_in }
       skip: $skip
       first: $first
+      orderBy: price
+      orderDirection: asc
     ) {
       ...OrderFields
     }

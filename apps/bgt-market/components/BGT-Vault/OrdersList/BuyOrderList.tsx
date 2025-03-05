@@ -41,8 +41,8 @@ export const BuyOrdersList = observer(() => {
       status_in: onlyShowPendingBuyOrders
         ? [OrderStatus.Pending]
         : [OrderStatus.Pending, OrderStatus.Closed, OrderStatus.Filled],
-      skip: pageSize * (page - 1),
-      first: pageSize,
+      //   skip: pageSize * (page - 1),
+      //   first: pageSize,
     },
   });
 
@@ -57,7 +57,7 @@ export const BuyOrdersList = observer(() => {
     <div className="p-2 sm:p-6 w-full h-full">
       <div className="bg-[#202020] rounded-2xl overflow-hidden w-full h-full">
         <div className="p-2 sm:p-6 w-full">
-          <div className="border border-[#5C5C5C] rounded-2xl overflow-hidden overflow-x-auto w-full [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-[#323232] [&::-webkit-scrollbar-thumb]:bg-[#FFCD4D] [&::-webkit-scrollbar-thumb]:rounded-full [scrollbar-color:#FFCD4D_#323232] [scrollbar-width:thin]">
+          <div className="border border-[#5C5C5C] rounded-2xl overflow-scroll overflow-x-auto w-full [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-[#323232] [&::-webkit-scrollbar-thumb]:bg-[#FFCD4D] [&::-webkit-scrollbar-thumb]:rounded-full [scrollbar-color:#FFCD4D_#323232] [scrollbar-width:thin]">
             <table className="w-full">
               <thead className="bg-[#323232] text-white">
                 <tr>
@@ -97,21 +97,23 @@ export const BuyOrdersList = observer(() => {
                     </td>
                   </tr>
                 ) : (
-                  recentBuyOrders?.orders.map((order) => (
-                    <BuyOrderListRow
-                      key={order.id}
-                      order={BgtOrder.getBgtOrder(
-                        BgtOrder.gqlOrderToBgtOrder(order as Order)
-                      )}
-                      actionCallBack={refetchBuyOrders}
-                    />
-                  ))
+                  Object.values(recentBuyOrders?.orders ?? [])
+                    ?.sort((a, b) => Number(b.price) - Number(a.price))
+                    ?.map((order) => (
+                      <BuyOrderListRow
+                        key={order.id}
+                        order={BgtOrder.getBgtOrder(
+                          BgtOrder.gqlOrderToBgtOrder(order as Order)
+                        )}
+                        actionCallBack={refetchBuyOrders}
+                      />
+                    ))
                 )}
               </tbody>
             </table>
           </div>
 
-          <div className="mt-4 sm:mt-6 flex justify-end w-full">
+          {/* <div className="mt-4 sm:mt-6 flex justify-end w-full">
             <div className="flex items-center gap-1 sm:gap-6">
               <div className="flex items-center gap-1 sm:gap-4">
                 <button
@@ -164,7 +166,7 @@ export const BuyOrdersList = observer(() => {
                 </button>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

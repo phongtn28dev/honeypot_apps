@@ -14378,6 +14378,8 @@ export const UserOrdersDocument = gql`
     where: {dealer: $user, status_in: $status_in}
     first: $first
     skip: $skip
+    orderBy: id
+    orderDirection: desc
   ) {
     ...OrderFields
   }
@@ -14425,6 +14427,8 @@ export const RecentBuyOrdersDocument = gql`
     where: {orderType: BuyBGT, status_in: $status_in}
     skip: $skip
     first: $first
+    orderBy: price
+    orderDirection: desc
   ) {
     ...OrderFields
   }
@@ -14471,6 +14475,8 @@ export const RecentSellOrdersDocument = gql`
     where: {orderType: SellBGT, status_in: $status_in}
     skip: $skip
     first: $first
+    orderBy: price
+    orderDirection: asc
   ) {
     ...OrderFields
   }

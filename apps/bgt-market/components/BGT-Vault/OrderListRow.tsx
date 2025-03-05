@@ -175,7 +175,7 @@ export const SellOrderListRow = observer(
     }, [block]);
 
     return (
-      <tr key={order.orderId} className="hover:bg-[#2a2a2a] transition-colors">
+      <tr key={order.orderId} className="hover:bg-[#2a2a2a] transition-colors ">
         <td className="py-2 px-2 sm:px-4 text-sm sm:text-base font-mono whitespace-nowrap">
           <div
             className={cn(
