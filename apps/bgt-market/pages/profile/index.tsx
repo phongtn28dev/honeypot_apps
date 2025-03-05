@@ -93,7 +93,7 @@ export const Profile = observer(() => {
               <Tab key="my-orders" title="My Orders">
                 <UserOrdersList />
               </Tab>
-              <Tab key="transaction-history" title="Transaction History"></Tab>
+              {/* <Tab key="transaction-history" title="Fill History"></Tab> */}
             </Tabs>
           )}
         </div>
