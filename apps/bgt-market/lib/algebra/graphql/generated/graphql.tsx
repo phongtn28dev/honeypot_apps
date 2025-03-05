@@ -9888,6 +9888,7 @@ export type Swap = {
   amount0: Scalars['BigDecimal']['output'];
   amount1: Scalars['BigDecimal']['output'];
   amountUSD: Scalars['BigDecimal']['output'];
+  amountUSDUntracked: Scalars['BigDecimal']['output'];
   id: Scalars['ID']['output'];
   liquidity: Scalars['BigInt']['output'];
   logIndex?: Maybe<Scalars['BigInt']['output']>;
@@ -9923,6 +9924,14 @@ export type Swap_Filter = {
   amount1_not?: InputMaybe<Scalars['BigDecimal']['input']>;
   amount1_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
   amountUSD?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amountUSDUntracked?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amountUSDUntracked_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amountUSDUntracked_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amountUSDUntracked_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  amountUSDUntracked_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amountUSDUntracked_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amountUSDUntracked_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amountUSDUntracked_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
   amountUSD_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
   amountUSD_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
   amountUSD_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
@@ -10100,6 +10109,7 @@ export enum Swap_OrderBy {
   Amount0 = 'amount0',
   Amount1 = 'amount1',
   AmountUsd = 'amountUSD',
+  AmountUsdUntracked = 'amountUSDUntracked',
   Id = 'id',
   Liquidity = 'liquidity',
   LogIndex = 'logIndex',
@@ -13325,8 +13335,20 @@ export type RecentOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type RecentOrdersQuery = { __typename?: 'Query', orders: Array<{ __typename?: 'Order', id: string, price: any, vaultAddress: string, balance: any, spentBalance: any, height: any, orderType: OrderType, status: OrderStatus, dealer: { __typename?: 'Account', id: string } }> };
 
+export type UserOrdersQueryVariables = Exact<{
+  user?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  status_in?: InputMaybe<Array<OrderStatus> | OrderStatus>;
+}>;
+
+
+export type UserOrdersQuery = { __typename?: 'Query', orders: Array<{ __typename?: 'Order', id: string, price: any, vaultAddress: string, balance: any, spentBalance: any, height: any, orderType: OrderType, status: OrderStatus, dealer: { __typename?: 'Account', id: string } }> };
+
 export type RecentBuyOrdersQueryVariables = Exact<{
   status_in?: InputMaybe<Array<OrderStatus> | OrderStatus>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
@@ -13334,6 +13356,8 @@ export type RecentBuyOrdersQuery = { __typename?: 'Query', orders: Array<{ __typ
 
 export type RecentSellOrdersQueryVariables = Exact<{
   status_in?: InputMaybe<Array<OrderStatus> | OrderStatus>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
@@ -14348,9 +14372,60 @@ export type RecentOrdersQueryHookResult = ReturnType<typeof useRecentOrdersQuery
 export type RecentOrdersLazyQueryHookResult = ReturnType<typeof useRecentOrdersLazyQuery>;
 export type RecentOrdersSuspenseQueryHookResult = ReturnType<typeof useRecentOrdersSuspenseQuery>;
 export type RecentOrdersQueryResult = Apollo.QueryResult<RecentOrdersQuery, RecentOrdersQueryVariables>;
+export const UserOrdersDocument = gql`
+    query UserOrders($user: String, $skip: Int, $first: Int, $status_in: [OrderStatus!]) {
+  orders(
+    where: {dealer: $user, status_in: $status_in}
+    first: $first
+    skip: $skip
+  ) {
+    ...OrderFields
+  }
+}
+    ${OrderFieldsFragmentDoc}`;
+
+/**
+ * __useUserOrdersQuery__
+ *
+ * To run a query within a React component, call `useUserOrdersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserOrdersQuery({
+ *   variables: {
+ *      user: // value for 'user'
+ *      skip: // value for 'skip'
+ *      first: // value for 'first'
+ *      status_in: // value for 'status_in'
+ *   },
+ * });
+ */
+export function useUserOrdersQuery(baseOptions?: Apollo.QueryHookOptions<UserOrdersQuery, UserOrdersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserOrdersQuery, UserOrdersQueryVariables>(UserOrdersDocument, options);
+      }
+export function useUserOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserOrdersQuery, UserOrdersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserOrdersQuery, UserOrdersQueryVariables>(UserOrdersDocument, options);
+        }
+export function useUserOrdersSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UserOrdersQuery, UserOrdersQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserOrdersQuery, UserOrdersQueryVariables>(UserOrdersDocument, options);
+        }
+export type UserOrdersQueryHookResult = ReturnType<typeof useUserOrdersQuery>;
+export type UserOrdersLazyQueryHookResult = ReturnType<typeof useUserOrdersLazyQuery>;
+export type UserOrdersSuspenseQueryHookResult = ReturnType<typeof useUserOrdersSuspenseQuery>;
+export type UserOrdersQueryResult = Apollo.QueryResult<UserOrdersQuery, UserOrdersQueryVariables>;
 export const RecentBuyOrdersDocument = gql`
-    query RecentBuyOrders($status_in: [OrderStatus!]) {
-  orders(where: {orderType: BuyBGT, status_in: $status_in}) {
+    query RecentBuyOrders($status_in: [OrderStatus!], $skip: Int, $first: Int) {
+  orders(
+    where: {orderType: BuyBGT, status_in: $status_in}
+    skip: $skip
+    first: $first
+  ) {
     ...OrderFields
   }
 }
@@ -14369,6 +14444,8 @@ export const RecentBuyOrdersDocument = gql`
  * const { data, loading, error } = useRecentBuyOrdersQuery({
  *   variables: {
  *      status_in: // value for 'status_in'
+ *      skip: // value for 'skip'
+ *      first: // value for 'first'
  *   },
  * });
  */
@@ -14389,8 +14466,12 @@ export type RecentBuyOrdersLazyQueryHookResult = ReturnType<typeof useRecentBuyO
 export type RecentBuyOrdersSuspenseQueryHookResult = ReturnType<typeof useRecentBuyOrdersSuspenseQuery>;
 export type RecentBuyOrdersQueryResult = Apollo.QueryResult<RecentBuyOrdersQuery, RecentBuyOrdersQueryVariables>;
 export const RecentSellOrdersDocument = gql`
-    query RecentSellOrders($status_in: [OrderStatus!]) {
-  orders(where: {orderType: SellBGT, status_in: $status_in}) {
+    query RecentSellOrders($status_in: [OrderStatus!], $skip: Int, $first: Int) {
+  orders(
+    where: {orderType: SellBGT, status_in: $status_in}
+    skip: $skip
+    first: $first
+  ) {
     ...OrderFields
   }
 }
@@ -14409,6 +14490,8 @@ export const RecentSellOrdersDocument = gql`
  * const { data, loading, error } = useRecentSellOrdersQuery({
  *   variables: {
  *      status_in: // value for 'status_in'
+ *      skip: // value for 'skip'
+ *      first: // value for 'first'
  *   },
  * });
  */
