@@ -1,0 +1,158 @@
+import BigNumber from 'bignumber.js';
+import { wallet } from '../wallet';
+import { get, makeAutoObservable, reaction } from 'mobx';
+import { Address, formatEther, getContract, zeroAddress } from 'viem';
+import { ContractWrite } from '../utils';
+import { amountFormatted } from '@/lib/format';
+import { ERC20ABI } from '@/lib/abis/erc20';
+import { faucetABI } from '@/lib/abis/faucet';
+import { watchAsset } from 'viem/actions';
+import { networksMap } from '../network';
+import { WrappedToastify } from '@/lib/wrappedToastify';
+import { trpcClient } from '@/lib/trpc';
+import NetworkManager from '../network';
+import { getSingleTokenData } from '@/lib/algebra/graphql/clients/token';
+import {
+  Order,
+  OrderStatus,
+  OrderType,
+} from '@/lib/algebra/graphql/generated/graphql';
+import { BGTVault } from '../contract/bgt-market/bgt-vault';
+
+export class BgtOrder {
+  static gqlOrderToBgtOrder(order: Order): BgtOrder {
+    return BgtOrder.getBgtOrder({
+      orderId: order.id.toString(),
+      dealerId: order.dealer.id as Address,
+      price: order.price.toString(),
+      vaultAddress: order.vaultAddress as Address,
+      balance: order.balance.toString(),
+      spentBalance: order.spentBalance.toString(),
+      height: order.height.toString(),
+      orderType: order.orderType,
+      status: order.status,
+    });
+  }
+  static bgtOrderMap: Record<string, BgtOrder> = {};
+  static getBgtOrder({
+    orderId,
+    dealerId,
+    ...args
+  }: {
+    orderId: string;
+  } & Partial<BgtOrder>) {
+    const key = orderId;
+    const order = BgtOrder.bgtOrderMap[key];
+
+    if (!order) {
+      BgtOrder.bgtOrderMap[key] = new BgtOrder({
+        orderId: orderId,
+        dealerId: dealerId as Address,
+        ...args,
+      });
+    } else {
+      BgtOrder.bgtOrderMap[key].setData(args);
+    }
+    return BgtOrder.bgtOrderMap[key];
+  }
+
+  orderId: string;
+  dealerId: Address = zeroAddress;
+  price: number = 0;
+  vaultAddress: Address = zeroAddress;
+  balance: bigint = BigInt(0);
+  spentBalance: bigint = BigInt(0);
+  height: string = '0';
+  orderType: OrderType = OrderType.BuyBgt;
+  status: OrderStatus = OrderStatus.Pending;
+  orderVaultBgt: bigint = BigInt(0);
+
+  get orderString() {
+    switch (this.orderType) {
+      case OrderType.BuyBgt:
+        return 'Buy';
+      case OrderType.SellBgt:
+        return 'Sell';
+    }
+  }
+
+  get pricePerBgtString() {
+    return (this.price / 10000).toFixed(4);
+  }
+
+  get rewardVault() {
+    if (!this.vaultAddress || this.status !== OrderStatus.Pending) return;
+
+    return BGTVault.getBgtVault({
+      address: this.vaultAddress.toLowerCase() as Address,
+    });
+  }
+
+  get totalPriceString() {
+    switch (this.orderType) {
+      case OrderType.BuyBgt:
+        return (
+          Number(this.pricePerBgtString) * Number(formatEther(this.balance))
+        );
+      case OrderType.SellBgt:
+        return (Number(this.pricePerBgtString) * Number(this.SaleBGT)).toFixed(
+          4
+        );
+    }
+  }
+
+  get SaleBGT(): string {
+    if (this.orderType === OrderType.SellBgt) {
+      switch (this.status) {
+        case OrderStatus.Closed:
+          return '0';
+        case OrderStatus.Filled:
+          return (
+            Number(formatEther(BigInt(this.spentBalance))) /
+            Number(this.pricePerBgtString)
+          ).toFixed(4);
+        case OrderStatus.Pending:
+          return Number(formatEther(BigInt(this.orderVaultBgt))).toFixed(4);
+        default:
+          return '0';
+      }
+    } else {
+      return formatEther(this.balance);
+    }
+  }
+
+  get filledPercentString() {
+    switch (this.orderType) {
+      case OrderType.BuyBgt:
+        return `${(
+          (Number(this.spentBalance) / Number(this.balance)) *
+          100
+        ).toFixed(2)}%`;
+      case OrderType.SellBgt:
+        if (this.status === OrderStatus.Filled) {
+          return '100%';
+        } else {
+          return '0%';
+        }
+    }
+  }
+
+  constructor({ orderId, ...args }: Partial<BgtOrder> & { orderId: string }) {
+    this.setData(args);
+    this.orderId = orderId;
+    makeAutoObservable(this);
+  }
+
+  updateOrderVaultBgt() {
+    if (!this.rewardVault) return;
+    this.rewardVault
+      .readAddressBgtInVault(this.dealerId as Address)
+      .then((res) => {
+        this.orderVaultBgt = res;
+      });
+  }
+
+  setData({ ...args }: Partial<BgtOrder>) {
+    Object.assign(this, args);
+  }
+}

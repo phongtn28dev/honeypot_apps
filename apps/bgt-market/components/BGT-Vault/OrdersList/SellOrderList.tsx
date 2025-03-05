@@ -24,8 +24,9 @@ import { observer } from 'mobx-react-lite';
 import { cn } from '@/lib/tailwindcss';
 import { BuyOrderListRow, SellOrderListRow } from '../OrderListRow';
 import { usePollingBlockNumber } from '@/lib/hooks/useBlockNumber';
+import { BgtOrder } from '@/services/bgt-market/bgtOrder';
 
-export const SellOrdersList = () => {
+export const SellOrdersList = observer(() => {
   const [onlyshowPendingSellOrders, setShowOnlyPendingSellOrders] =
     useState<boolean>(true);
 
@@ -102,7 +103,9 @@ export const SellOrdersList = () => {
                   recentSellOrders?.orders.map((order) => (
                     <SellOrderListRow
                       key={order.id}
-                      order={order as Order}
+                      order={BgtOrder.getBgtOrder(
+                        BgtOrder.gqlOrderToBgtOrder(order as Order)
+                      )}
                       actionCallBack={refetchSellOrders}
                     />
                   ))
@@ -169,4 +172,4 @@ export const SellOrdersList = () => {
       </div>
     </div>
   );
-};
+});

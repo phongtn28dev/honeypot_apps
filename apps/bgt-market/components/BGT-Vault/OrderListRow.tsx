@@ -15,17 +15,18 @@ import { WarppedNextSelect } from '../wrappedNextUI/Select/Select';
 import { usePollingBlockNumber } from '@/lib/hooks/useBlockNumber';
 import { UserBgtVaults } from './UserBgtVaults';
 import { useUserBgtVaults } from '@/lib/hooks/useUserBgtVaults';
+import { BgtOrder } from '@/services/bgt-market/bgtOrder';
 
 export const UserOrderListRow = observer(
   ({
     order,
     actionCallBack,
   }: {
-    order: Order;
+    order: BgtOrder;
     actionCallBack?: () => void;
   }) => {
     return (
-      <tr key={order.id} className="hover:bg-[#2a2a2a] transition-colors">
+      <tr key={order.orderId} className="hover:bg-[#2a2a2a] transition-colors">
         <td className="py-2 px-2 sm:px-4 text-sm sm:text-base font-mono whitespace-nowrap">
           <div
             className={cn(
@@ -34,40 +35,41 @@ export const UserOrderListRow = observer(
               order.status === OrderStatus.Filled && 'text-green-500'
             )}
           >
-            {order.orderType}
+            {order.orderString}
             {order.status !== OrderStatus.Pending && `(Order ${order.status})`}
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-sm sm:text-base font-mono whitespace-nowrap hidden md:table-cell">
           <div className="flex items-center gap-2">
-            {formatEther(order.balance)}{' '}
+            {order.SaleBGT}{' '}
             {wallet?.currentChain?.nativeToken?.symbol ?? 'BERA'}
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
           <div className="flex flex-col sm:flex-row justify-end items-end gap-1">
-            {(order.price / 10000).toFixed(4)} BERA
+            {order.pricePerBgtString} BERA
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
           <div className="flex flex-col sm:flex-row justify-end items-end gap-1">
-            {(
-              (Number(order.spentBalance) / Number(order.balance)) *
-              100
-            ).toFixed(2)}
-            %
+            {order.totalPriceString} BERA
+          </div>
+        </td>
+        <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
+          <div className="flex flex-col sm:flex-row justify-end items-end gap-1">
+            {order.filledPercentString}
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap hidden sm:table-cell">
           <div>
-            {order.dealer.id.toLowerCase() === wallet.account.toLowerCase() &&
+            {order.dealerId.toLowerCase() === wallet.account.toLowerCase() &&
               order.status === 'Pending' && (
                 <Button
                   disabled={!wallet.walletClient}
                   isDisabled={!wallet.walletClient}
                   onPress={() => {
                     wallet.contracts.bgtMarket
-                      .closeOrder(BigInt(order.id))
+                      .closeOrder(BigInt(order.orderId))
                       ?.then(() => {
                         order.status = OrderStatus.Closed;
                         actionCallBack?.();
@@ -78,11 +80,9 @@ export const UserOrderListRow = observer(
                 </Button>
               )}
 
-            {!(
-              order.dealer.id.toLowerCase() === wallet.account.toLowerCase()
-            ) &&
+            {!(order.dealerId.toLowerCase() === wallet.account.toLowerCase()) &&
               order.status === 'Pending' && (
-                <FillBuyOrderModalButton order={order as Order} />
+                <FillBuyOrderModalButton order={order} />
               )}
           </div>
         </td>
@@ -96,11 +96,11 @@ export const BuyOrderListRow = observer(
     order,
     actionCallBack,
   }: {
-    order: Order;
+    order: BgtOrder;
     actionCallBack?: () => void;
   }) => {
     return (
-      <tr key={order.id} className="hover:bg-[#2a2a2a] transition-colors">
+      <tr key={order.orderId} className="hover:bg-[#2a2a2a] transition-colors">
         <td className="py-2 px-2 sm:px-4 text-sm sm:text-base font-mono whitespace-nowrap">
           <div
             className={cn(
@@ -109,40 +109,36 @@ export const BuyOrderListRow = observer(
               order.status === OrderStatus.Filled && 'text-green-500'
             )}
           >
-            Buy
+            {order.orderString}
             {order.status !== OrderStatus.Pending && `(Order ${order.status})`}
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-sm sm:text-base font-mono whitespace-nowrap hidden md:table-cell">
           <div className="flex items-center gap-2">
-            {formatEther(order.balance)}{' '}
+            {order.SaleBGT}{' '}
             {wallet?.currentChain?.nativeToken?.symbol ?? 'BERA'}
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
           <div className="flex flex-col sm:flex-row justify-end items-end gap-1">
-            {(order.price / 10000).toFixed(4)} BERA
+            {order.pricePerBgtString} BERA
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
           <div className="flex flex-col sm:flex-row justify-end items-end gap-1">
-            {(
-              (Number(order.spentBalance) / Number(order.balance)) *
-              100
-            ).toFixed(2)}
-            %
+            {order.filledPercentString}
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap hidden sm:table-cell">
           <div>
-            {order.dealer.id.toLowerCase() === wallet.account.toLowerCase() &&
+            {order.dealerId.toLowerCase() === wallet.account.toLowerCase() &&
               order.status === 'Pending' && (
                 <Button
                   disabled={!wallet.walletClient}
                   isDisabled={!wallet.walletClient}
                   onPress={() => {
                     wallet.contracts.bgtMarket
-                      .closeOrder(BigInt(order.id))
+                      .closeOrder(BigInt(order.orderId))
                       ?.then(() => {
                         order.status = OrderStatus.Closed;
                         actionCallBack?.();
@@ -153,11 +149,9 @@ export const BuyOrderListRow = observer(
                 </Button>
               )}
 
-            {!(
-              order.dealer.id.toLowerCase() === wallet.account.toLowerCase()
-            ) &&
+            {!(order.dealerId.toLowerCase() === wallet.account.toLowerCase()) &&
               order.status === 'Pending' && (
-                <FillBuyOrderModalButton order={order as Order} />
+                <FillBuyOrderModalButton order={order} />
               )}
           </div>
         </td>
@@ -171,51 +165,17 @@ export const SellOrderListRow = observer(
     order,
     actionCallBack,
   }: {
-    order: Order;
+    order: BgtOrder;
     actionCallBack?: () => void;
   }) => {
-    const [orderVaultBgt, setOrderVaultBgt] = useState<string>('');
-    const [rewardVault, setRewardVault] = useState<BGTVault | undefined>(
-      undefined
-    );
     const { block } = usePollingBlockNumber();
 
     useEffect(() => {
-      if (!order.vaultAddress || order.status !== OrderStatus.Pending) return;
-      setRewardVault(
-        BGTVault.getBgtVault({
-          address: order.vaultAddress.toLowerCase() as Address,
-        })
-      );
-    }, [order.vaultAddress, order.status]);
-
-    const getSaleBGT = useCallback(() => {
-      switch (order.status) {
-        case OrderStatus.Closed:
-          return '0';
-        case OrderStatus.Filled:
-          return (
-            Number(formatEther(BigInt(order.spentBalance))) /
-            (order.price / 10000)
-          ).toFixed(4);
-        case OrderStatus.Pending:
-          return Number(formatEther(BigInt(orderVaultBgt))).toFixed(4);
-        default:
-          return '0';
-      }
-    }, [order.status, orderVaultBgt, order]);
-
-    useEffect(() => {
-      if (!rewardVault) return;
-      rewardVault
-        .readAddressBgtInVault(order.dealer.id as Address)
-        .then((res) => {
-          setOrderVaultBgt(res.toString());
-        });
-    }, [rewardVault, block]);
+      order.updateOrderVaultBgt();
+    }, [block]);
 
     return (
-      <tr key={order.id} className="hover:bg-[#2a2a2a] transition-colors">
+      <tr key={order.orderId} className="hover:bg-[#2a2a2a] transition-colors">
         <td className="py-2 px-2 sm:px-4 text-sm sm:text-base font-mono whitespace-nowrap">
           <div
             className={cn(
@@ -224,34 +184,34 @@ export const SellOrderListRow = observer(
               order.status === OrderStatus.Filled && 'text-green-500'
             )}
           >
-            Sell
+            {order.orderString}
             {order.status !== OrderStatus.Pending && `(Order ${order.status})`}
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-sm sm:text-base font-mono whitespace-nowrap hidden md:table-cell">
-          <div className="flex items-center gap-2">{getSaleBGT()}</div>
+          <div className="flex items-center gap-2">{order.SaleBGT}</div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
           <div className="flex flex-col sm:flex-row justify-end items-end gap-1">
-            {(order.price / 10000).toFixed(4)} BERA
+            {order.pricePerBgtString} BERA
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
           <div className="flex flex-col sm:flex-row justify-end items-end gap-1">
-            {((order.price / 10000) * Number(getSaleBGT())).toFixed(4)}{' '}
+            {order.totalPriceString}{' '}
             {wallet?.currentChain?.nativeToken?.symbol ?? 'BERA'}
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap hidden sm:table-cell">
           <div>
-            {order.dealer.id.toLowerCase() === wallet.account.toLowerCase() &&
+            {order.dealerId.toLowerCase() === wallet.account.toLowerCase() &&
               order.status === 'Pending' && (
                 <Button
                   disabled={!wallet.walletClient || !wallet.isInit}
                   isDisabled={!wallet.walletClient || !wallet.isInit}
                   onPress={() => {
                     wallet.contracts.bgtMarket
-                      .closeOrder(BigInt(order.id))
+                      .closeOrder(BigInt(order.orderId))
                       ?.then(() => actionCallBack);
                   }}
                 >
@@ -259,9 +219,7 @@ export const SellOrderListRow = observer(
                 </Button>
               )}
 
-            {!(
-              order.dealer.id.toLowerCase() === wallet.account.toLowerCase()
-            ) &&
+            {!(order.dealerId.toLowerCase() === wallet.account.toLowerCase()) &&
               order.status === 'Pending' && (
                 <Button
                   disabled={!wallet.walletClient}
@@ -269,9 +227,11 @@ export const SellOrderListRow = observer(
                   onPress={() => {
                     wallet.contracts.bgtMarket
                       .fillSellOrder(
-                        BigInt(order.id),
+                        BigInt(order.orderId),
                         BigInt(
-                          (order.price / 10000) * Number(orderVaultBgt) * 1.1
+                          (order.price / 10000) *
+                            Number(order.orderVaultBgt) *
+                            1.1
                         )
                       )
                       ?.then(() => actionCallBack);
@@ -292,7 +252,7 @@ const FillBuyOrderModalButton = observer(
     order,
     actionCallBack,
   }: {
-    order: Order;
+    order: BgtOrder;
     actionCallBack?: () => void;
   }) => {
     const isWallet = useMemo(() => {
@@ -325,7 +285,7 @@ const FillBuyOrderModal = ({
   order,
   actionCallBack,
 }: {
-  order: Order;
+  order: BgtOrder;
   actionCallBack?: () => void;
 }) => {
   const [selectedVault, setSelectedVault] = useState<Address | undefined>(
@@ -336,7 +296,7 @@ const FillBuyOrderModal = ({
   const handleClick = () => {
     if (!selectedVault) return;
     wallet.contracts.bgtMarket
-      .fillBuyOrder(BigInt(order.id), selectedVault)
+      .fillBuyOrder(BigInt(order.orderId), selectedVault)
       ?.then(() => actionCallBack);
   };
 

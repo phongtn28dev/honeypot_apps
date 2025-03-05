@@ -29,6 +29,7 @@ import {
   UserOrderListRow,
 } from './../OrderListRow';
 import { usePollingBlockNumber } from '@/lib/hooks/useBlockNumber';
+import { BgtOrder } from '@/services/bgt-market/bgtOrder';
 
 export const UserOrdersList = observer(() => {
   const [onlyPendingOrders, setOnlyPendingOrders] = useState<boolean>(true);
@@ -71,11 +72,14 @@ export const UserOrdersList = observer(() => {
                     Order
                   </th>
                   <th className="py-2 px-2 sm:px-4 text-left text-sm sm:text-base font-medium w-[160px] hidden md:table-cell">
-                    Total Balance
+                    Deal Amount
                   </th>
                   <th className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base font-medium">
                     Price per BGT
                   </th>
+                  <th className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base font-medium">
+                    Total Price
+                  </th>{' '}
                   <th className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base font-medium">
                     Filled
                   </th>{' '}
@@ -107,7 +111,9 @@ export const UserOrdersList = observer(() => {
                   orders?.orders.map((order) => (
                     <UserOrderListRow
                       key={order.id}
-                      order={order as Order}
+                      order={BgtOrder.getBgtOrder(
+                        BgtOrder.gqlOrderToBgtOrder(order as Order)
+                      )}
                       actionCallBack={refetchOrders}
                     />
                   ))
