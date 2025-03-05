@@ -75,15 +75,16 @@ const PostOrderModal: NextLayoutPage = observer(() => {
 
   return (
     <div className="w-full h-full">
-      <div className="flex items-center gap-2">
-        <span className="w-full text-black text-base md:text-xl font-bold text-center">
-          Create Order
-        </span>
-      </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full rounded-[24px]  bg-white p-5"
+        className="w-full rounded-[24px]  bg-white p-5 pt-3"
       >
+        <div className="flex items-center gap-2">
+          <span className="w-full text-black text-base md:text-xl font-bold text-center">
+            Create Order
+          </span>
+        </div>
+
         <div className="flex flex-col gap-2">
           <label>Order Type</label>
           <WarppedNextSelect
@@ -112,7 +113,7 @@ const PostOrderModal: NextLayoutPage = observer(() => {
 
         {buyOrSell !== undefined && (
           <>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1 pt-[15px]">
               <label>Price BGT Per Bera</label>
               <input
                 type="text"
@@ -128,7 +129,7 @@ const PostOrderModal: NextLayoutPage = observer(() => {
             </div>
 
             {buyOrSell === OrderType.BuyBgt && (
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-1 pt-[15px]">
                 <label>Buying Amount(Bera)</label>
                 <input
                   type="text"
@@ -145,7 +146,7 @@ const PostOrderModal: NextLayoutPage = observer(() => {
             )}
 
             {buyOrSell === OrderType.SellBgt && (
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-1 pt-[15px]">
                 <label>Vault</label>
                 <WarppedNextSelect
                   isRequired
@@ -173,7 +174,7 @@ const PostOrderModal: NextLayoutPage = observer(() => {
           type="submit"
           disabled={!wallet.walletClient || buyOrSelLoading}
           isLoading={buyOrSelLoading}
-          className="w-full bg-black text-white font-bold rounded-[12px] md:rounded-[16px] px-3 py-2 md:py-[18px] border-2 border-black hover:bg-black/90 text-sm md:text-base h-[40px] md:h-[60px]"
+          className="w-full bg-black text-white font-bold rounded-[12px] md:rounded-[16px] px-3 py-2 md:py-[18px] border-2 border-black hover:bg-black/90 text-sm md:text-base h-[40px] md:h-[60px] mt-[10px]"
         >
           {!wallet.isInit ? 'Connect Wallet' : 'Create Order'}
         </Button>
