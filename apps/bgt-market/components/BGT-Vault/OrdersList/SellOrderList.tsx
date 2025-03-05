@@ -45,8 +45,6 @@ export const SellOrdersList = observer(() => {
       skip: pageSize * (page - 1),
       first: pageSize,
     },
-
-    skip: !wallet.account,
   });
 
   const { block } = usePollingBlockNumber();

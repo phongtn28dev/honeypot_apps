@@ -44,9 +44,9 @@ export const BuyOrdersList = observer(() => {
       skip: pageSize * (page - 1),
       first: pageSize,
     },
-
-    skip: !wallet.account,
   });
+
+  console.log(recentBuyOrders);
 
   const { block } = usePollingBlockNumber();
   useEffect(() => {
