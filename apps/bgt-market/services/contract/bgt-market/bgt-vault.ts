@@ -1,6 +1,6 @@
 import { BaseContract } from './..';
 import { wallet } from '@/services/wallet';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { Address, getContract, zeroAddress } from 'viem';
 import { ICHIVaultFactoryABI } from '@/lib/abis/aquabera/ICHIVaultFactory';
 import { ContractWrite } from '@/services/utils';
@@ -36,6 +36,7 @@ export class BGTVault implements BaseContract {
   name: string = 'BGTVault';
   abi = RewardVaultABI;
   userBgtInVault = '0';
+  bgtVaultApproved = false;
 
   constructor(args: Partial<BGTVault>) {
     Object.assign(this, args);
@@ -43,7 +44,9 @@ export class BGTVault implements BaseContract {
   }
 
   setData({ ...args }: Partial<BGTVault>) {
-    Object.assign(this, args);
+    runInAction(() => {
+      Object.assign(this, args);
+    });
   }
 
   get contract() {
@@ -74,8 +77,33 @@ export class BGTVault implements BaseContract {
     const userBgt = await this.contract.read.earned([
       wallet.account as Address,
     ]);
-    this.userBgtInVault = userBgt.toString();
+    runInAction(() => {
+      this.userBgtInVault = userBgt.toString();
+    });
     return userBgt;
+  }
+
+  async updateCurrentUserBgtVaultAppoveState() {
+    if (!wallet.account) return false;
+
+    const operator = await this.readOperator(wallet.account as Address);
+
+    const isBgtMarketContractApproved =
+      operator === wallet.currentChain.contracts.bgtMarket;
+
+    console.log(isBgtMarketContractApproved);
+    if (isBgtMarketContractApproved) {
+      console.log(this.name);
+      runInAction(() => {
+        this.bgtVaultApproved = true;
+      });
+    } else {
+      runInAction(() => {
+        this.bgtVaultApproved = false;
+      });
+    }
+
+    return isBgtMarketContractApproved;
   }
 
   async readAddressBgtInVault(account: Address) {

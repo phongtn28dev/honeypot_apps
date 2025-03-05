@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react';
 import { Address } from 'viem';
 import { usePollingBlockNumber } from './useBlockNumber';
 import { wallet } from '@/services/wallet';
-import { chain } from '@/services/chain';
-import { useAccount } from 'wagmi';
 import { useObserver } from 'mobx-react-lite';
 
 export function useUserBgtVaults() {
@@ -33,11 +31,11 @@ export function useUserBgtVaults() {
     }
 
     Promise.all([
-      bgtVaults.map(async (vault) => {
-        vault.updateCurrentUserBgtInVault();
+      ...bgtVaults.map(async (vault) => {
+        await vault.updateCurrentUserBgtInVault();
+        await vault.updateCurrentUserBgtVaultAppoveState();
       }),
-    ]).then(() => {
-      console.log(bgtVaults.map((b) => b.userBgtInVault));
+    ]).then((res) => {
       setLoading(false);
     });
   }, [block, bgtVaults, account]);

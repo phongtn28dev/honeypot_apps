@@ -1,20 +1,20 @@
-import { wallet } from "./wallet";
-import { Token } from "./contract/token";
-import { PairContract } from "@/services/contract/dex/liquidity/pair-contract";
-import BigNumber from "bignumber.js";
-import { trpcClient } from "@/lib/trpc";
-import { makeAutoObservable, reaction, toJS, when } from "mobx";
+import { wallet } from './wallet';
+import { Token } from './contract/token';
+import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
+import BigNumber from 'bignumber.js';
+import { trpcClient } from '@/lib/trpc';
+import { makeAutoObservable, reaction, toJS, when } from 'mobx';
 import {
   AsyncState,
   IndexerPaginationState,
   OldIndexerPaginationState,
   StorageState,
   ValueState,
-} from "./utils";
-import { add, debounce, forEach } from "lodash";
-import dayjs from "dayjs";
-import { PageRequest, PairFilter } from "./indexer/indexerTypes";
-import { Address, zeroAddress } from "viem";
+} from './utils';
+import { add, debounce, forEach } from 'lodash';
+import dayjs from 'dayjs';
+import { PageRequest, PairFilter } from './indexer/indexerTypes';
+import { Address, zeroAddress } from 'viem';
 
 class Liquidity {
   pairPage = new OldIndexerPaginationState<PairFilter, PairContract>({
@@ -28,7 +28,7 @@ class Liquidity {
         pageRequest: pageRequest,
       });
 
-      if (pairs.status === "success") {
+      if (pairs.status === 'success') {
         const pariContracts = pairs.data.pairs.map((pair) => {
           const token0 = Token.getToken({
             ...pair.token0,
@@ -73,17 +73,17 @@ class Liquidity {
           pageInfo: {
             hasNextPage: true,
             hasPreviousPage: false,
-            startCursor: "",
-            endCursor: "",
+            startCursor: '',
+            endCursor: '',
           },
         };
       }
     },
     filter: {
-      searchString: "",
+      searchString: '',
       limit: 10,
-      sortingTarget: "trackedReserveETH",
-      sortingDirection: "desc",
+      sortingTarget: 'trackedReserveETH',
+      sortingDirection: 'desc',
     },
   });
 
@@ -96,7 +96,7 @@ class Liquidity {
         pageRequest: pageRequest,
       });
 
-      if (pairs.status === "success") {
+      if (pairs.status === 'success') {
         const pariContracts = pairs.data.holdingPairs.map((pair) => {
           const token0 = Token.getToken({
             address: pair.pair.token0Id,
@@ -152,17 +152,17 @@ class Liquidity {
           pageInfo: {
             hasNextPage: true,
             hasPreviousPage: false,
-            startCursor: "",
-            endCursor: "",
+            startCursor: '',
+            endCursor: '',
           },
         };
       }
     },
     filter: {
-      searchString: "",
+      searchString: '',
       limit: 10,
-      sortingTarget: "trackedReserveETH",
-      sortingDirection: "desc",
+      sortingTarget: 'trackedReserveETH',
+      sortingDirection: 'desc',
     },
   });
 
@@ -231,8 +231,8 @@ class Liquidity {
 
   fromToken: Token | null = null;
   toToken: Token | null = null;
-  fromAmount = "";
-  toAmount = "";
+  fromAmount = '';
+  toAmount = '';
   deadline = 0;
   isInit = false;
 
@@ -287,29 +287,26 @@ class Liquidity {
 
   get buttonContent() {
     if (!this.fromToken || !this.toToken) {
-      return "Select Tokens";
+      return 'Select Tokens';
     }
     if (this.currentPair.loading) {
-      return "Loading Pair";
+      return 'Loading Pair';
     }
     if (!this.fromAmount || !this.toAmount) {
-      return "Enter Amount";
+      return 'Enter Amount';
     }
     if (
       Number(this.toAmount) > this.toToken.balance.toNumber() ||
       Number(this.fromAmount) > this.fromToken.balance.toNumber()
     ) {
-      return "Insufficient Balance";
+      return 'Insufficient Balance';
     }
 
-    return "Add LP";
+    return 'Add LP';
   }
 
   constructor() {
     makeAutoObservable(this);
-    this.getBundlePrice().then(() => {
-      //console.log("bundlePrice", this.bundlePrice);
-    });
     reaction(
       () => this.fromToken?.address,
       () => {
@@ -344,7 +341,7 @@ class Liquidity {
         //@ts-ignore
         this.toAmount = toAmount?.toFixed();
       } else {
-        this.toAmount = "";
+        this.toAmount = '';
       }
     }
   }, 300);
@@ -364,7 +361,7 @@ class Liquidity {
         //@ts-ignore
         this.fromAmount = fromAmount.toFixed();
       } else {
-        this.fromAmount = "";
+        this.fromAmount = '';
       }
     }
   }, 300);
@@ -380,11 +377,11 @@ class Liquidity {
     ) {
       if (this.toToken?.address === token.address) {
         this.toToken = this.fromToken;
-        this.toAmount = "";
+        this.toAmount = '';
       }
       this.fromToken = token;
       this.fromToken.init();
-      this.fromAmount = "";
+      this.fromAmount = '';
     }
   }
 
@@ -399,11 +396,11 @@ class Liquidity {
     ) {
       if (this.fromToken?.address === token.address) {
         this.fromToken = this.toToken;
-        this.fromAmount = "";
+        this.fromAmount = '';
       }
       this.toToken = token;
       this.toToken.init();
-      this.toAmount = "";
+      this.toAmount = '';
     }
   }
 
@@ -458,7 +455,7 @@ class Liquidity {
       : 0;
     const deadline = dayjs().unix() + 60 * (this.deadline || 20);
 
-    console.log("liqidity agrs", [
+    console.log('liqidity agrs', [
       this.fromToken.address as `0x${string}`,
       this.toToken.address as `0x${string}`,
       token0AmountWithDec,
@@ -484,7 +481,7 @@ class Liquidity {
 
     if (!this.balanced) {
       if (this.fromToken.isNative) {
-        if (token0AmountWithDec && token0AmountWithDec !== "0") {
+        if (token0AmountWithDec && token0AmountWithDec !== '0') {
           // @ts-ignore
           await wallet.currentChain.nativeToken.deposit.callV2({
             value: BigInt(token0AmountWithDec),
@@ -501,7 +498,7 @@ class Liquidity {
           BigInt(deadline),
         ]);
       } else if (this.toToken.isNative) {
-        if (token1AmountWithDec && token1AmountWithDec !== "0") {
+        if (token1AmountWithDec && token1AmountWithDec !== '0') {
           // @ts-ignore
           await wallet.currentChain.nativeToken.deposit.callV2({
             value: BigInt(token1AmountWithDec),
@@ -530,7 +527,7 @@ class Liquidity {
       }
     } else {
       if (this.fromToken.isNative) {
-        console.log("addLiquidityETH", [
+        console.log('addLiquidityETH', [
           this.toToken.address as `0x${string}`,
           BigInt(token1AmountWithDec),
           BigInt(token1MinAmountWithDec),
@@ -578,8 +575,8 @@ class Liquidity {
       }
     }
 
-    this.fromAmount = "";
-    this.toAmount = "";
+    this.fromAmount = '';
+    this.toAmount = '';
     Promise.all([this.fromToken.getBalance(), this.toToken.getBalance()]);
   });
 
@@ -594,7 +591,7 @@ class Liquidity {
         chainId: String(wallet.currentChainId),
       });
 
-    validatedTokenPairs.status === "success" &&
+    validatedTokenPairs.status === 'success' &&
       validatedTokenPairs.data.pairs.forEach((pair) => {
         const token0 = Token.getToken({
           address: pair.token0.id.toLowerCase(),
@@ -629,11 +626,13 @@ class Liquidity {
   }
 
   async getBundlePrice() {
+    if (!wallet.currentChainId) return;
+
     const res = await trpcClient.indexerFeedRouter.getBundle.query({
       chainId: String(wallet.currentChainId),
     });
 
-    res.status === "success" &&
+    res.status === 'success' &&
       (this.bundlePrice = Number(res.data.bundle.price));
   }
 
@@ -668,7 +667,7 @@ class Liquidity {
           token1Address as Address,
         ]);
 
-        console.log("pairAdd", pairAdd);
+        console.log('pairAdd', pairAdd);
 
         if (pairAdd && pairAdd !== zeroAddress) {
           const pairContract = new PairContract({
@@ -735,7 +734,7 @@ class Liquidity {
     wallet.currentChain.contracts.ftoTokens.forEach((ftoToken) => {
       const memoryPair = this.getMemoryPair(
         tokenAddress.toLowerCase(),
-        ftoToken.address?.toLowerCase() ?? ""
+        ftoToken.address?.toLowerCase() ?? ''
       );
 
       if (memoryPair) {

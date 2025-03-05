@@ -1,7 +1,7 @@
-import { publicProcedure, router } from "../trpc";
-import z from "zod";
-import { indexer } from "@/services/indexer/indexer";
-import { type PairFilter } from "@/services/launchpad";
+import { publicProcedure, router } from '../trpc';
+import z from 'zod';
+import { indexer } from '@/services/indexer/indexer';
+import { type PairFilter } from '@/services/launchpad';
 import {
   GhostPoolPairResponse,
   GhostParticipatedProjectsResponse,
@@ -11,8 +11,8 @@ import {
   GhostToken,
   LaunchTokenData,
   GhostAlgebraPairResponse,
-} from "@/services/indexer/indexerTypes";
-import { cacheProvider, getCacheKey } from "@/lib/server/cache";
+} from '@/services/indexer/indexerTypes';
+import { cacheProvider, getCacheKey } from '@/lib/server/cache';
 
 export const indexerFeedRouter = router({
   getFilteredFtoPairs: publicProcedure
@@ -27,16 +27,16 @@ export const indexerFeedRouter = router({
         provider: z.string().optional(),
         pageRequest: z
           .object({
-            direction: z.string(z.enum(["next", "prev"])),
+            direction: z.string(z.enum(['next', 'prev'])),
             cursor: z.string().optional(),
           })
           .optional(),
-        projectType: z.enum(["fto", "meme"]).optional(),
+        projectType: z.enum(['fto', 'meme']).optional(),
       })
     )
     .query(async ({ input }) => {
       return cacheProvider.getOrSet(
-        getCacheKey("getFilteredFtoPairs", input),
+        getCacheKey('getFilteredFtoPairs', input),
         async () => {
           const res = await indexer.getFilteredFtoPairs(
             input.filter as PairFilter,
@@ -59,7 +59,7 @@ export const indexerFeedRouter = router({
     )
     .query(async ({ input }) => {
       return cacheProvider.getOrSet(
-        getCacheKey("getMostSuccessfulFtos", input),
+        getCacheKey('getMostSuccessfulFtos', input),
         async () => {
           const res = await indexer.getMostSuccessfulFtos(
             input.chainId,
@@ -73,7 +73,7 @@ export const indexerFeedRouter = router({
   getAllFtoTokens: publicProcedure
     .output(
       z.object({
-        status: z.literal("success"),
+        status: z.literal('success'),
         data: z.array(
           z.object({
             id: z.string(),
@@ -87,7 +87,7 @@ export const indexerFeedRouter = router({
     )
     .query(async (): Promise<any> => {
       return cacheProvider.getOrSet(
-        getCacheKey("getAllFtoTokens"),
+        getCacheKey('getAllFtoTokens'),
         async () => {
           const res = await indexer.getAllFtoTokens();
 
@@ -97,7 +97,7 @@ export const indexerFeedRouter = router({
     }),
   getAllPairs: publicProcedure.query(
     async (): Promise<ApiResponseType<GhostPoolPairResponse>> => {
-      return cacheProvider.getOrSet(getCacheKey("getAllPairs"), async () => {
+      return cacheProvider.getOrSet(getCacheKey('getAllPairs'), async () => {
         const res = await indexer.dataProvider.getAllPairs();
         return res;
       });
@@ -121,7 +121,7 @@ export const indexerFeedRouter = router({
         provider: z.string().optional(),
         pageRequest: z
           .object({
-            direction: z.enum(["next", "prev"]),
+            direction: z.enum(['next', 'prev']),
             cursor: z.string().optional(),
           })
           .optional(),
@@ -130,7 +130,7 @@ export const indexerFeedRouter = router({
     .query(
       async ({ input }): Promise<ApiResponseType<GhostPoolPairResponse>> => {
         return cacheProvider.getOrSet(
-          getCacheKey("getFilteredPairs", input),
+          getCacheKey('getFilteredPairs', input),
           async () => {
             const res = await indexer.getFilteredPairs(
               input.filter,
@@ -158,7 +158,7 @@ export const indexerFeedRouter = router({
           .optional(),
         pageRequest: z
           .object({
-            direction: z.string(z.enum(["next", "prev"])),
+            direction: z.string(z.enum(['next', 'prev'])),
             cursor: z.string().optional(),
           })
           .optional(),
@@ -166,7 +166,7 @@ export const indexerFeedRouter = router({
     )
     .query(async ({ input }) => {
       return cacheProvider.getOrSet(
-        getCacheKey("getHoldingsPairs", input),
+        getCacheKey('getHoldingsPairs', input),
         async () => {
           const res = await indexer.getHoldingPairs(
             input.walletAddress,
@@ -187,7 +187,7 @@ export const indexerFeedRouter = router({
     )
     .query(async ({ input }) => {
       return cacheProvider.getOrSet(
-        getCacheKey("getValidatedTokenPairs", input),
+        getCacheKey('getValidatedTokenPairs', input),
         async () => {
           const res = await indexer.getValidatedTokenPairs(input.chainId);
           return res;
@@ -200,7 +200,7 @@ export const indexerFeedRouter = router({
   getTrendingMEMEPairs: publicProcedure.query(
     async (): Promise<ApiResponseType<TrendingMEMEs>> => {
       return cacheProvider.getOrSet(
-        getCacheKey("getTrendingMEMEPairs"),
+        getCacheKey('getTrendingMEMEPairs'),
         async () => {
           const res = await indexer.getTrendingMEMEPairs();
           return res;
@@ -216,7 +216,7 @@ export const indexerFeedRouter = router({
     )
     .query(async ({ input }): Promise<ApiResponseType<GhostBundleResponse>> => {
       return cacheProvider.getOrSet(
-        getCacheKey("getBundle", input),
+        getCacheKey('getBundle', input),
         async () => {
           const res = await indexer.getBundle(input.chainId);
           return res;
@@ -229,14 +229,14 @@ export const indexerFeedRouter = router({
         walletAddress: z.string(),
         chainId: z.string(),
         pageRequest: z.object({
-          direction: z.string(z.enum(["next", "prev"])),
+          direction: z.string(z.enum(['next', 'prev'])),
           cursor: z.string().optional(),
         }),
-        type: z.enum(["fto", "meme"]),
+        type: z.enum(['fto', 'meme']),
         filter: z.object({
           search: z.string().optional(),
           limit: z.number(),
-          status: z.enum(["success", "fail", "all", "processing"]).optional(),
+          status: z.enum(['success', 'fail', 'all', 'processing']).optional(),
         }),
       })
     )
@@ -245,7 +245,7 @@ export const indexerFeedRouter = router({
         input,
       }): Promise<ApiResponseType<GhostParticipatedProjectsResponse>> => {
         return cacheProvider.getOrSet(
-          getCacheKey("getParticipatedProjects", input),
+          getCacheKey('getParticipatedProjects', input),
           async () => {
             const res = await indexer.getParticipatedProjects(
               input.walletAddress,
@@ -269,7 +269,7 @@ export const indexerFeedRouter = router({
     )
     .query(async ({ input }): Promise<ApiResponseType<GhostToken>> => {
       return cacheProvider.getOrSet(
-        getCacheKey("getPairTokenData", input),
+        getCacheKey('getPairTokenData', input),
         async () => {
           const res = await indexer.getPairTokenData(
             input.tokenAddress,
@@ -288,7 +288,7 @@ export const indexerFeedRouter = router({
     )
     .query(async ({ input }): Promise<ApiResponseType<LaunchTokenData[]>> => {
       return cacheProvider.getOrSet(
-        getCacheKey("getMemeGraphData", input),
+        getCacheKey('getMemeGraphData', input),
         async () => {
           return await indexer.getMemeGraphData(input.tokenAddress);
         }

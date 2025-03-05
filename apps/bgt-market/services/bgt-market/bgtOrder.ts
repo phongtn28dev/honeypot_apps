@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { wallet } from '../wallet';
-import { get, makeAutoObservable, reaction } from 'mobx';
+import { get, makeAutoObservable, reaction, runInAction } from 'mobx';
 import { Address, formatEther, getContract, zeroAddress } from 'viem';
 import { ContractWrite } from '../utils';
 import { amountFormatted } from '@/lib/format';
@@ -148,11 +148,15 @@ export class BgtOrder {
     this.rewardVault
       .readAddressBgtInVault(this.dealerId as Address)
       .then((res) => {
-        this.orderVaultBgt = res;
+        runInAction(() => {
+          this.orderVaultBgt = res;
+        });
       });
   }
 
   setData({ ...args }: Partial<BgtOrder>) {
-    Object.assign(this, args);
+    runInAction(() => {
+      Object.assign(this, args);
+    });
   }
 }
