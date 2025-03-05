@@ -37,9 +37,9 @@ async function getVercelEnv() {
 
 function getValue(key, value) {
  if (key === "NPM_RC") {
-  return Buffer.from(value, "base64").toString("utf8");
+  return Buffer.from(value, "base64").toString("utf8").trim();
  }
- return value;
+ return value.trim();
 }
 
 // 更新或创建 Vercel 环境变量
