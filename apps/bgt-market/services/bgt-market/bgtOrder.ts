@@ -124,15 +124,22 @@ export class BgtOrder {
   get filledPercentString() {
     switch (this.orderType) {
       case OrderType.BuyBgt:
-        return `${(
+        const filledAmount =
+          Number(formatEther(this.spentBalance)) / Number(this.price / 10000);
+
+        return `${
+          filledAmount != 0 && filledAmount < 0.01
+            ? '<0.01'
+            : filledAmount.toFixed(2)
+        } BGT (${(
           (Number(this.spentBalance) / Number(this.balance)) *
           100
-        ).toFixed(2)}%`;
+        ).toFixed(2)}%)`;
       case OrderType.SellBgt:
         if (this.status === OrderStatus.Filled) {
-          return '100%';
+          return 'Filled';
         } else {
-          return '0%';
+          return 'Unfilled';
         }
     }
   }
