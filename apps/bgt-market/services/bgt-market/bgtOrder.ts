@@ -151,7 +151,7 @@ export class BgtOrder {
   }
 
   updateOrderVaultBgt() {
-    if (!this.rewardVault) return;
+    if (!this.rewardVault || this.rewardVault.address === zeroAddress) return;
     this.rewardVault
       .readAddressBgtInVault(this.dealerId as Address)
       .then((res) => {

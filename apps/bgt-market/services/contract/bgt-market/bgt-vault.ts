@@ -72,7 +72,7 @@ export class BGTVault implements BaseContract {
   }
 
   async updateCurrentUserBgtInVault() {
-    if (!wallet.account) return '0';
+    if (!wallet.account || this.address === zeroAddress) return '0';
 
     const userBgt = await this.contract.read.earned([
       wallet.account as Address,
@@ -84,7 +84,7 @@ export class BGTVault implements BaseContract {
   }
 
   async updateCurrentUserBgtVaultAppoveState() {
-    if (!wallet.account) return false;
+    if (!wallet.account || this.address === zeroAddress) return false;
 
     const operator = await this.readOperator(wallet.account as Address);
 

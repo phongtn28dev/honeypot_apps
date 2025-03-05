@@ -1,5 +1,9 @@
 import { ValidatedVaultAddresses } from '@/config/validatedVaultAddresses';
-import { Order, OrderStatus } from '@/lib/algebra/graphql/generated/graphql';
+import {
+  Order,
+  OrderStatus,
+  OrderType,
+} from '@/lib/algebra/graphql/generated/graphql';
 import { BGTVault } from '@/services/contract/bgt-market/bgt-vault';
 import { popmodal } from '@/services/popmodal';
 import { wallet } from '@/services/wallet';
@@ -25,6 +29,12 @@ export const UserOrderListRow = observer(
     order: BgtOrder;
     actionCallBack?: () => void;
   }) => {
+    const { block } = usePollingBlockNumber();
+
+    useEffect(() => {
+      order.updateOrderVaultBgt();
+    }, [block]);
+
     return (
       <tr key={order.orderId} className="hover:bg-[#2a2a2a] transition-colors">
         <td className="py-2 px-2 sm:px-4 text-sm sm:text-base font-mono whitespace-nowrap">
@@ -41,8 +51,8 @@ export const UserOrderListRow = observer(
         </td>
         <td className="py-2 px-2 sm:px-4 text-sm sm:text-base font-mono whitespace-nowrap hidden md:table-cell">
           <div className="flex items-center gap-2">
-            {order.SaleBGT}{' '}
-            {wallet?.currentChain?.nativeToken?.symbol ?? 'BERA'}
+            {order.SaleBGT} {order.orderType === OrderType.BuyBgt && 'BERA'}
+            {order.orderType === OrderType.SellBgt && 'BGT'}
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
