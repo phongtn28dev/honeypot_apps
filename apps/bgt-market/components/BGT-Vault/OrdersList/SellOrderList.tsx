@@ -99,7 +99,7 @@ export const SellOrdersList = observer(() => {
                   </tr>
                 ) : (
                   Object.values(recentSellOrders?.orders ?? [])
-                    ?.sort((a, b) => Number(b.price)-Number(a.price))
+                    ?.sort((a, b) => Number(b.price) - Number(a.price))
                     .map((order) => (
                       <SellOrderListRow
                         key={order.id}
