@@ -6,17 +6,6 @@
  "build": {
   "env": {
    "NPM_CONFIG_REGISTRY": "https://registry.npmjs.org/"
-  },
-  "projects": {
-   "apps-bgt-market": {
-    "rootDirectory": "apps/bet-market"
-   },
-   "apps-pot2pump": {
-    "rootDirectory": "apps/pot2pump"
-   },
-   "apps-wasabee": {
-    "rootDirectory": "apps/wasabee"
-   }
   }
  }
 }
