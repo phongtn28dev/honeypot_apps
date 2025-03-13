@@ -114,7 +114,7 @@ const PostOrderModal: NextLayoutPage = observer(() => {
         {buyOrSell !== undefined && (
           <>
             <div className="flex flex-col gap-1 pt-[15px]">
-              <label>Price BGT Per Bera</label>
+              <label>Price BERA Per BGT</label>
               <input
                 type="text"
                 {...register('price', { required: true })}

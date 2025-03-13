@@ -40,7 +40,7 @@ export class BGTMarketContract implements BaseContract {
 
       await rewardVault.setOperatorIfNot(
         wallet.account as Address,
-        wallet.currentChain.contracts.bgtMarket as Address
+        wallet.currentChain.contracts.bgtMarket as Address,
       );
 
       const res = await wallet.publicClient.simulateContract({
@@ -63,6 +63,11 @@ export class BGTMarketContract implements BaseContract {
         WrappedToastify.error({
           title: 'Too less BGT',
           message: 'Need at least 0.01 bgt in vault to post a sell order',
+        });
+      } else {
+        WrappedToastify.error({
+          title: 'Error',
+          message: 'Error posting sell order',
         });
       }
     }
@@ -98,6 +103,11 @@ export class BGTMarketContract implements BaseContract {
           title: 'Buying amount too small',
           message: 'Need at least 0.01 Bera',
         });
+      } else {
+        WrappedToastify.error({
+          title: 'Error',
+          message: 'Error posting buy order',
+        });
       }
     }
     return;
@@ -132,6 +142,18 @@ export class BGTMarketContract implements BaseContract {
       }).call([orderId], { value: value });
     } catch (e) {
       console.error(e);
+
+      if (String(e).includes('does not have enough funds')) {
+        WrappedToastify.error({
+          title: 'Not enough funds',
+          message: 'Not enough funds to fill order',
+        });
+      } else {
+        WrappedToastify.error({
+          title: 'Error',
+          message: 'Error filling order',
+        });
+      }
     }
   }
 
@@ -147,7 +169,7 @@ export class BGTMarketContract implements BaseContract {
 
       await rewardVault.setOperatorIfNot(
         wallet.account as Address,
-        wallet.currentChain.contracts.bgtMarket as Address
+        wallet.currentChain.contracts.bgtMarket as Address,
       );
 
       const res = await wallet.publicClient.simulateContract({
@@ -169,6 +191,11 @@ export class BGTMarketContract implements BaseContract {
           title: 'No BGT available in vault',
           message:
             'No BGT available in vault, please use another vault with bgt in',
+        });
+      } else {
+        WrappedToastify.error({
+          title: 'Error',
+          message: 'Error filling order',
         });
       }
     }
