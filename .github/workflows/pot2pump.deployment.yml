@@ -36,7 +36,7 @@ jobs:
 
       - name: Setup npmrc
         run: |
-          echo ${{ secrets.NPM_RC }} > ~/.npmrc
+          echo "${{ secrets.NPM_RC }}" > ~/.npmrc
 
       - name: Install dependencies
         run: pnpm install axios dotenv fs
