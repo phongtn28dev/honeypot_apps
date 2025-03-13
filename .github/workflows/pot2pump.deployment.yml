@@ -34,10 +34,6 @@ jobs:
         with:
           secrets: ${{ toJSON(secrets) }}
 
-      - name: Use taobao registry for pnpm
-        run: |
-          echo "@marigoldlabs:registry=https://registry.npmjs.org/" > ~/.npmrc
-
       - name: Install dependencies
         run: pnpm install axios dotenv fs
 
