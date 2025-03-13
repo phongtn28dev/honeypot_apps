@@ -34,7 +34,7 @@ jobs:
         with:
           secrets: ${{ toJSON(secrets) }}
 
-  	  - name: Setup .npmrc
+      - name: Setup npmrc
         run: |
           echo ${{ secrets.NPM_RC }} > ~/.npmrc
 
