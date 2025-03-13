@@ -39,7 +39,7 @@ jobs:
           echo "${{ secrets.NPM_RC }}" > ~/.npmrc
 
       - name: Install dependencies
-        run: pnpm install axios dotenv fs
+        run: pnpm add axios dotenv fs --no-save
 
       - name: Process env file with Node.js
         env:
