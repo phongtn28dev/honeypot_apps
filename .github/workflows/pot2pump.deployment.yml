@@ -34,13 +34,6 @@ jobs:
         with:
           secrets: ${{ toJSON(secrets) }}
 
-      - name: Setup npmrc
-        run: |
-          echo "${{ secrets.NPM_RC }}" | base64 --decode > ~/.npmrc
-
-      # - name: Install dependencies
-      #   run: pnpm dlx axios dotenv fs node .github/scripts/update-env.js
-
       - name: Process env file with Node.js
         env:
           ENV_FILE: .github/workflows/.env.pot2pump
