@@ -47,7 +47,8 @@ jobs:
           PROJECT_NAME: pot2pump
           PROJECT_ID: prj_l1jJ60wagBQ3Zs6bx1n5bAYyb0pW
         run: |
-          pnpm dlx dotenv axios fs node .github/scripts/update-env.js
+          pnpm add axios dotenv fs --global
+          pnpm exec node .github/scripts/update-env.js
 
       - name: Install Vercel CLI
         run: npm install -g vercel@22.0.1
