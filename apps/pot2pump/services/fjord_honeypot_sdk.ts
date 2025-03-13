@@ -2,10 +2,16 @@ import {
   FjordSdk,
   PoolCreateArgs,
   Pool,
-} from "node_modules/@marigoldlabs/fjord-honeypot-sdk/dist/index.js";
+  // 假设使用的是npm，需要先安装该模块
+  // npm install @marigoldlabs/fjord-honeypot-sdk
+  // 或者使用yarn
+  // yarn add @marigoldlabs/fjord-honeypot-sdk
 
-const API_URL = "https://fjord-api-dev.fly.dev/api";
-const API_KEY = "x0cyKZA90n+ztKyluX2Zb+YSi5FCCp7h7702hlbZ4ps=";
+  // 通常在TypeScript中，不需要指定 .js 扩展名
+} from '@marigoldlabs/fjord-honeypot-sdk';
+
+const API_URL = 'https://fjord-api-dev.fly.dev/api';
+const API_KEY = 'x0cyKZA90n+ztKyluX2Zb+YSi5FCCp7h7702hlbZ4ps=';
 
 const sdk = new FjordSdk(API_URL, API_KEY);
 
@@ -61,7 +67,7 @@ export type TCreatePool = {
 export type TCreateSwap = {
   poolId: string;
   txHash: string;
-  type: "buy" | "sell" | "swap"; // Assuming the type field is limited to specific values
+  type: 'buy' | 'sell' | 'swap'; // Assuming the type field is limited to specific values
   tokenIn: string;
   tokenInSym: string;
   tokenOut: string;
@@ -71,7 +77,7 @@ export type TCreateSwap = {
   walletAddress: string;
   blockHash: string;
   logIndex: number;
-  status: "success" | "failed" | "pending"; // Assuming status has specific possible values
+  status: 'success' | 'failed' | 'pending'; // Assuming status has specific possible values
   assetPriceProxyRoundId: string;
   assetPriceValue: string;
   sharePriceInAsset: string;
@@ -106,10 +112,10 @@ class FjordHoneySdk {
               { assetTokenAddress: { contains: search } },
             ]
           : undefined,
-        owner: !!filters?.owner ? filters.owner : undefined,
+        owner: filters?.owner ? filters.owner : undefined,
         endsAt: filters?.endsAt,
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
     })) as any as { data: Pool[] };
   };
 
@@ -164,9 +170,9 @@ class FjordHoneySdk {
         imageUrl: pool.imageUrl,
         redemptionDelay: pool.redemptionDelay,
         learnMoreUrl: pool.learnMoreUrl,
-        ecosystem: "evm",
+        ecosystem: 'evm',
         version: 2,
-        semver: "2.1.0",
+        semver: '2.1.0',
       },
     });
     return createdPool;
@@ -189,7 +195,7 @@ class FjordHoneySdk {
         version: 1,
         blockHash: data.blockHash,
         logIndex: data.logIndex,
-        status: "success",
+        status: 'success',
         assetPriceProxyRoundId: data.assetPriceProxyRoundId,
         assetPriceTimestamp: new Date(),
         assetPriceValue: data.assetPriceValue,
@@ -198,7 +204,7 @@ class FjordHoneySdk {
         swapFee: data.swapFee,
         chainIn: data.chainIn,
         chainOut: data.chainOut,
-        source: "fe",
+        source: 'fe',
         blockNumber: data.blockNumber,
       },
     });
