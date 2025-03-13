@@ -34,15 +34,15 @@ jobs:
         with:
           secrets: ${{ toJSON(secrets) }}
 
-      - name: Install dependencies
-        run: pnpm install axios dotenv fs
-
       - name: Process env file with Node.js
         env:
           ENV_FILE: .github/workflows/.env.wasabee
           PROJECT_NAME: wasabee
           PROJECT_ID: prj_if8S3CxnJt92clpRW8uPaCjVKsa7
-        run: node .github/scripts/update-env.js
+        run: |
+          pnpm add axios dotenv fs --global
+          export NODE_PATH=$(pnpm root -g)
+          node .github/scripts/update-env.js
 
       - name: Install Vercel CLI
         run: npm install -g vercel@22.0.1
