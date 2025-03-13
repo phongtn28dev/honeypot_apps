@@ -27,13 +27,16 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
-          registry-url: 'https://registry.npmjs.org/'
           cache: 'pnpm'
 
       - name: Export secrets to env
         uses: oNaiPs/secrets-to-env-action@v1
         with:
           secrets: ${{ toJSON(secrets) }}
+
+      - name: Use taobao registry for pnpm
+        run: |
+          echo "@marigoldlabs:registry=https://registry.npmjs.org/" > ~/.npmrc
 
       - name: Install dependencies
         run: pnpm install axios dotenv fs
