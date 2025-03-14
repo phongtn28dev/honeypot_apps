@@ -63,7 +63,9 @@ const PoolChart = observer(({ pool }: PoolChartProps) => {
           (day) => now - day.date <= 15552000
         );
         break;
-      // 'ALL' doesn't need filtering
+      case 'ALL':
+        filteredData = [...pool.poolDayData];
+        break;
     }
 
     // Map data based on selected chart type
