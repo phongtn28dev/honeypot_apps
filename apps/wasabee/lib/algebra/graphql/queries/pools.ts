@@ -67,6 +67,8 @@ export const TICK_FRAGMENT = gql`
     liquidityGross
     price0
     price1
+    feesUSD
+    volumeUSD
   }
 `;
 
@@ -192,6 +194,26 @@ export const USER_ACTIVE_POSITIONS = gql`
   }
 `;
 
+export const TOP_POOL_POSITIONS = gql`
+  query TopPoolPositions(
+    $poolId: String!
+    $orderBy: Position_orderBy
+    $orderDirection: OrderDirection
+    $first: Int
+    $skip: Int
+  ) {
+    positions(
+      where: { pool: $poolId, liquidity_gt: 0 }
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+      first: $first
+      skip: $skip
+    ) {
+      ...PositionFields
+    }
+  }
+`;
+
 export const POSITION_FRAGMENT = gql`
   fragment PositionFields on Position {
     id
@@ -210,5 +232,11 @@ export const POSITION_FRAGMENT = gql`
     depositedToken1
     withdrawnToken0
     withdrawnToken1
+    tickLower {
+      ...TickFields
+    }
+    tickUpper {
+      ...TickFields
+    }
   }
 `;

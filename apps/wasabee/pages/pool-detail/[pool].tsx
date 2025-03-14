@@ -253,9 +253,16 @@ const PoolPage = observer(() => {
           <PoolHeader pool={poolEntity} token0={token0} token1={token1} />
           {poolInfo?.pool && <PoolChart pool={poolInfo.pool as Pool} />}
 
-          <Tabs>
+          <Tabs
+            classNames={{
+              tabList: 'w-full',
+              tab: 'w-full',
+              tabContent: 'w-full',
+              panel: 'w-full',
+            }}
+          >
             <Tab key="top-positions" title="Top Positions">
-              <TopPoolPositions />
+              <TopPoolPositions poolId={poolId ? poolId : zeroAddress} />
             </Tab>
             <Tab key="my-positions" title="My Positions">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-0 gap-y-8 w-full lg:gap-8">
