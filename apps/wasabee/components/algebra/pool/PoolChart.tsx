@@ -45,27 +45,27 @@ const PoolChart = observer(({ pool }: PoolChartProps) => {
     // Filter data based on time range
     switch (selectedTimeRange) {
       case '1D':
-        filteredData = [...pool.poolHourData].filter(
-          (day) => now - day.periodStartUnix <= 86400
-        );
+        filteredData = [...pool.poolHourData]
+          .filter((day) => now - day.periodStartUnix <= 86400)
+          .sort((a, b) => a.periodStartUnix - b.periodStartUnix);
         break;
       case '1W':
-        filteredData = [...pool.poolDayData].filter(
-          (day) => now - day.date <= 604800
-        );
+        filteredData = [...pool.poolDayData]
+          .filter((day) => now - day.date <= 604800)
+          .sort((a, b) => a.date - b.date);
         break;
       case '1M':
-        filteredData = [...pool.poolDayData].filter(
-          (day) => now - day.date <= 2592000
-        );
+        filteredData = [...pool.poolDayData]
+          .filter((day) => now - day.date <= 2592000)
+          .sort((a, b) => a.date - b.date);
         break;
       case '6M':
-        filteredData = [...pool.poolDayData].filter(
-          (day) => now - day.date <= 15552000
-        );
+        filteredData = [...pool.poolDayData]
+          .filter((day) => now - day.date <= 15552000)
+          .sort((a, b) => a.date - b.date);
         break;
       case 'ALL':
-        filteredData = [...pool.poolDayData];
+        filteredData = [...pool.poolDayData].sort((a, b) => a.date - b.date);
         break;
     }
 
