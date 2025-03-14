@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { format } from 'date-fns';
 
 interface PoolChartProps {
   pool: Pool;
@@ -149,6 +150,16 @@ const PoolChart = observer(({ pool }: PoolChartProps) => {
             tickLine={false}
             axisLine={false}
             tick={{ fontSize: 12 }}
+            tickFormatter={(unixTime) => {
+              const date = new Date(unixTime * 1000);
+              return selectedTimeRange === '1D'
+                ? format(date, 'HH:mm')
+                : selectedTimeRange === '1W'
+                ? format(date, 'EEE')
+                : selectedTimeRange === '1M'
+                ? format(date, 'MMM d')
+                : format(date, 'MMM d, yyyy');
+            }}
           />
           <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 12 }} />
           <Area
@@ -160,8 +171,11 @@ const PoolChart = observer(({ pool }: PoolChartProps) => {
           />
           <Tooltip
             content={<CustomTooltip />}
-            labelFormatter={(value) => {
-              return new Date(value).toLocaleDateString();
+            labelFormatter={(unixTime) => {
+              const date = new Date(unixTime * 1000);
+              return selectedTimeRange === '1D'
+                ? format(date, 'MMM d, yyyy HH:mm')
+                : format(date, 'MMM d, yyyy');
             }}
           />
         </AreaChart>
