@@ -1,38 +1,40 @@
-import PageContainer from "@/components/algebra/common/PageContainer";
-import ActiveFarming from "@/components/algebra/farming/ActiveFarming";
-import MyPositions from "@/components/algebra/pool/MyPositions";
-import MyPositionsToolbar from "@/components/algebra/pool/MyPositionsToolbar";
-import PoolHeader from "@/components/algebra/pool/PoolHeader";
-import PositionCard from "@/components/algebra/position/PositionCard";
-import { Button } from "@/components/algebra/ui/button";
-import { Skeleton } from "@/components/algebra/ui/skeleton";
-import { useActiveFarming } from "@/lib/algebra/hooks/farming/useActiveFarming";
-import { useClosedFarmings } from "@/lib/algebra/hooks/farming/useClosedFarmings";
-import { usePool } from "@/lib/algebra/hooks/pools/usePool";
-import { usePositions } from "@/lib/algebra/hooks/positions/usePositions";
-import { getPositionAPR } from "@/lib/algebra/utils/positions/getPositionAPR";
-import { getPositionFees } from "@/lib/algebra/utils/positions/getPositionFees";
-import { formatAmountWithAlphabetSymbol } from "@/lib/algebra/utils/common/formatAmount";
-import { ADDRESS_ZERO, Position, ZERO } from "@cryptoalgebra/sdk";
-import { Plus } from "lucide-react";
-import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-import { useAccount } from "wagmi";
-import JSBI from "jsbi";
+import PageContainer from '@/components/algebra/common/PageContainer';
+import ActiveFarming from '@/components/algebra/farming/ActiveFarming';
+import MyPositions from '@/components/algebra/pool/MyPositions';
+import MyPositionsToolbar from '@/components/algebra/pool/MyPositionsToolbar';
+import PoolHeader from '@/components/algebra/pool/PoolHeader';
+import PositionCard from '@/components/algebra/position/PositionCard';
+import { Button } from '@/components/algebra/ui/button';
+import { Skeleton } from '@/components/algebra/ui/skeleton';
+import { useActiveFarming } from '@/lib/algebra/hooks/farming/useActiveFarming';
+import { useClosedFarmings } from '@/lib/algebra/hooks/farming/useClosedFarmings';
+import { usePool } from '@/lib/algebra/hooks/pools/usePool';
+import { usePositions } from '@/lib/algebra/hooks/positions/usePositions';
+import { getPositionAPR } from '@/lib/algebra/utils/positions/getPositionAPR';
+import { getPositionFees } from '@/lib/algebra/utils/positions/getPositionFees';
+import { formatAmountWithAlphabetSymbol } from '@/lib/algebra/utils/common/formatAmount';
+import { ADDRESS_ZERO, Position, ZERO } from '@cryptoalgebra/sdk';
+import { Plus } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useMemo, useState } from 'react';
+import { useAccount } from 'wagmi';
+import JSBI from 'jsbi';
 import {
   useSinglePoolQuery,
   usePoolFeeDataQuery,
   useNativePriceQuery,
-} from "@/lib/algebra/graphql/generated/graphql";
-import { FormattedPosition } from "@/types/algebra/types/formatted-position";
-import { Address, zeroAddress } from "viem";
-import { cn } from "@/lib/tailwindcss";
-import { Token } from "@/services/contract/token";
-import CardContainer from "@/components/CardContianer/v3";
-import { useRouter } from "next/router";
-import { wallet } from "@/services/wallet";
-import { observer } from "mobx-react-lite";
-import { LoadingContainer } from "@/components/LoadingDisplay/LoadingDisplay";
+  Pool,
+} from '@/lib/algebra/graphql/generated/graphql';
+import { FormattedPosition } from '@/types/algebra/types/formatted-position';
+import { Address, zeroAddress } from 'viem';
+import { cn } from '@/lib/tailwindcss';
+import { Token } from '@/services/contract/token';
+import CardContainer from '@/components/CardContianer/v3';
+import { useRouter } from 'next/router';
+import { wallet } from '@/services/wallet';
+import { observer } from 'mobx-react-lite';
+import { LoadingContainer } from '@/components/LoadingDisplay/LoadingDisplay';
+import PoolChart from '@/components/algebra/pool/PoolChart';
 
 const PoolPage = observer(() => {
   const { address: account } = useAccount();
@@ -48,13 +50,14 @@ const PoolPage = observer(() => {
 
   const { data: poolInfo } = useSinglePoolQuery({
     variables: {
-      poolId: poolId?.toLowerCase() ?? "",
+      poolId: poolId?.toLowerCase() ?? '',
     },
   });
+  console.log('poolInfo', poolInfo?.pool);
 
   const { data: poolFeeData } = usePoolFeeDataQuery({
     variables: {
-      poolId: poolId?.toLowerCase() ?? "",
+      poolId: poolId?.toLowerCase() ?? '',
     },
   });
 
@@ -197,7 +200,13 @@ const PoolPage = observer(() => {
         outOfRange:
           poolEntity.tickCurrent < position.tickLower ||
           poolEntity.tickCurrent > position.tickUpper,
-        range: `${formatAmountWithAlphabetSymbol(position.token0PriceLower.toFixed(6), 6)} — ${formatAmountWithAlphabetSymbol(position.token0PriceUpper.toFixed(6), 6)}`,
+        range: `${formatAmountWithAlphabetSymbol(
+          position.token0PriceLower.toFixed(6),
+          6
+        )} — ${formatAmountWithAlphabetSymbol(
+          position.token0PriceUpper.toFixed(6),
+          6
+        )}`,
         liquidityUSD: formatLiquidityUSD(position),
         feesUSD: formatFeesUSD(idx),
         apr: formatAPR(idx),
@@ -226,15 +235,24 @@ const PoolPage = observer(() => {
     positionsData.length === 0 &&
     poolEntity;
 
+  const chartData = useMemo(() => {
+    if (!poolInfo?.pool?.poolDayData) return [];
+
+    return poolInfo.pool.poolDayData
+      .map((day) => ({
+        date: new Date(day.date * 1000).toLocaleDateString(),
+        value: parseFloat(day.volumeUSD),
+      }))
+      .reverse();
+  }, [poolInfo?.pool?.poolDayData]);
+
   return (
     <PageContainer>
       <CardContainer className="gap-y-6">
         <LoadingContainer isLoading={!poolEntity}>
-          <PoolHeader
-            pool={poolEntity}
-            token0={token0}
-            token1={token1}
-          />
+          <PoolHeader pool={poolEntity} token0={token0} token1={token1} />
+          {poolInfo?.pool && <PoolChart pool={poolInfo.pool as Pool} />}
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-0 gap-y-8 w-full lg:gap-8">
             <div className="col-span-2">
               {!account ? (
@@ -298,13 +316,10 @@ const NoPositions = ({ poolId }: { poolId: Address }) => (
       {`You don't have positions for this pool`}
     </h2>
     <p className="text-md font-semibold my-4">{`Let's create one!`}</p>
-    <Button
-      className="gap-2"
-      asChild
-    >
+    <Button className="gap-2" asChild>
       <Link
         className={cn(
-          "flex items-center gap-x-1 p-2.5 cursor-pointer border border-[#2D2D2D] bg-[#FFCD4D] rounded-2xl shadow-[2px_2px_0px_0px_#000] hover:bg-[#FFD666]"
+          'flex items-center gap-x-1 p-2.5 cursor-pointer border border-[#2D2D2D] bg-[#FFCD4D] rounded-2xl shadow-[2px_2px_0px_0px_#000] hover:bg-[#FFD666]'
         )}
         href={`/new-position/${poolId.toLowerCase()}`}
       >

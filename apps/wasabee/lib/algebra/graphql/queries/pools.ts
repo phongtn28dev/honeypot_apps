@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 export const POOL_FRAGMENT = gql`
   fragment PoolFields on Pool {
@@ -13,13 +13,13 @@ export const POOL_FRAGMENT = gql`
     poolHourData(first: 100, orderBy: periodStartUnix, orderDirection: desc) {
       ...PoolHourDataFields
     }
-    poolDayData(first: 30, orderBy: date, orderDirection: desc) {
+    poolDayData(first: 100, orderBy: date, orderDirection: desc) {
       ...PoolDayDataFields
     }
-    poolWeekData(first: 10, orderBy: week, orderDirection: desc) {
+    poolWeekData(first: 100, orderBy: week, orderDirection: desc) {
       ...PoolWeekDataFields
     }
-    poolMonthData(first: 24, orderBy: month, orderDirection: desc) {
+    poolMonthData(first: 100, orderBy: month, orderDirection: desc) {
       ...PoolMonthDataFields
     }
     sqrtPrice
