@@ -1,58 +1,58 @@
-# name: update Vercel ENV and deploy for project pot2pump
+name: update Vercel ENV and deploy for project pot2pump
 
-# on:
-#   push:
-#     branches:
-#       - main
-#     paths:
-#       - '.github/workflows/.env.pot2pump'
-#       - '.github/workflows/pot2pump.deployment.yml'
-#       - '.github/scripts/update-env.js'
-#       - 'apps/pot2pump/**'
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/.env.pot2pump'
+      - '.github/workflows/pot2pump.deployment.yml'
+      - '.github/scripts/update-env.js'
+      - 'apps/pot2pump/**'
 
-# jobs:
-#   deploy_pot2pump:
-#     runs-on: ubuntu-latest
+jobs:
+  deploy_pot2pump:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-#       - name: Setup pnpm
-#         uses: pnpm/action-setup@v2
-#         with:
-#           version: 9.1.2 # 指定与 `pnpm-lock.yaml` 兼容的版本
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9.1.2 # 指定与 `pnpm-lock.yaml` 兼容的版本
 
-#       - name: Set up Node.js
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: 20
-#           cache: 'pnpm'
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'pnpm'
 
-#       - name: Export secrets to env
-#         uses: oNaiPs/secrets-to-env-action@v1
-#         with:
-#           secrets: ${{ toJSON(secrets) }}
+      - name: Export secrets to env
+        uses: oNaiPs/secrets-to-env-action@v1
+        with:
+          secrets: ${{ toJSON(secrets) }}
 
-#       - name: Process env file with Node.js
-#         env:
-#           ENV_FILE: .github/workflows/.env.pot2pump
-#           PROJECT_NAME: pot2pump
-#           PROJECT_ID: prj_l1jJ60wagBQ3Zs6bx1n5bAYyb0pW
-#         run: |
-#           pnpm add axios dotenv fs --global
-#           export NODE_PATH=$(pnpm root -g)
-#           node .github/scripts/update-env.js
+      - name: Process env file with Node.js
+        env:
+          ENV_FILE: .github/workflows/.env.pot2pump
+          PROJECT_NAME: pot2pump
+          PROJECT_ID: prj_l1jJ60wagBQ3Zs6bx1n5bAYyb0pW
+        run: |
+          pnpm add axios dotenv fs --global
+          export NODE_PATH=$(pnpm root -g)
+          node .github/scripts/update-env.js
 
-#       - name: Install Vercel CLI
-#         run: npm install -g vercel@22.0.1
+      - name: Install Vercel CLI
+        run: npm install -g vercel@22.0.1
 
-#       - name: Deploy to Vercel Action
-#         uses: BetaHuhn/deploy-to-vercel-action@develop
-#         env:
-#           PROJECT_ID: prj_l1jJ60wagBQ3Zs6bx1n5bAYyb0pW
-#         with:
-#           GITHUB_TOKEN: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
-#           VERCEL_TOKEN: ${{ secrets.WORKFLOW_VERCEL_TOKEN }}
-#           VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
-#           VERCEL_PROJECT_ID: ${{ env.PROJECT_ID }}
+      - name: Deploy to Vercel Action
+        uses: BetaHuhn/deploy-to-vercel-action@develop
+        env:
+          PROJECT_ID: prj_l1jJ60wagBQ3Zs6bx1n5bAYyb0pW
+        with:
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
+          VERCEL_TOKEN: ${{ secrets.WORKFLOW_VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
+          VERCEL_PROJECT_ID: ${{ env.PROJECT_ID }}
