@@ -625,17 +625,6 @@ class Liquidity {
     this.isInit = true;
   }
 
-  async getBundlePrice() {
-    if (!wallet.currentChainId) return;
-
-    const res = await trpcClient.indexerFeedRouter.getBundle.query({
-      chainId: String(wallet.currentChainId),
-    });
-
-    res.status === 'success' &&
-      (this.bundlePrice = Number(res.data.bundle.price));
-  }
-
   async getPairByTokens(token0Address: string, token1Address: string) {
     try {
       const memoryPair = this.getMemoryPair(token0Address, token1Address);

@@ -4,6 +4,7 @@ import { Tabs } from '@nextui-org/react';
 import rhinoLogo from '@/public/images/partners/rhino-finance-logo.svg';
 import { Tab } from '@nextui-org/react';
 import Image from 'next/image';
+import OrbiterBridge from './OrbiterBridge';
 
 export default function Bridge() {
   return (
@@ -31,7 +32,7 @@ export default function Bridge() {
         }}
       >
         <Tab key="orbiter" title="Orbiter">
-          1
+          <OrbiterBridge />
         </Tab>
         <Tab
           key="rhino"
