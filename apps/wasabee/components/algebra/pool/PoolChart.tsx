@@ -159,13 +159,17 @@ const PoolChart = observer(({ pool }: PoolChartProps) => {
             fill="url(#colorValue)"
           />
           <Tooltip
-            content={<CustomTooltip />}
-            labelFormatter={(unixTime) => {
-              const date = new Date(unixTime * 1000);
-              return selectedTimeRange === '1D'
-                ? format(date, 'MMM d, yyyy HH:mm')
-                : format(date, 'MMM d, yyyy');
-            }}
+            content={(props: TooltipProps<number, string>) => (
+              <CustomTooltip
+                {...props}
+                labelFormatter={(unixTime: number) => {
+                  const date = new Date(unixTime * 1000);
+                  return selectedTimeRange === '1D'
+                    ? format(date, 'MMM d, yyyy HH:mm')
+                    : format(date, 'MMM d, yyyy');
+                }}
+              />
+            )}
           />
         </AreaChart>
       </ResponsiveContainer>
@@ -177,12 +181,17 @@ const CustomTooltip = ({
   active,
   payload,
   label,
-}: TooltipProps<number, string>) => {
+  labelFormatter,
+}: TooltipProps<number, string> & {
+  labelFormatter?: (value: any, index?: number) => string;
+}) => {
   if (active && payload && payload.length) {
     return (
-      <div className="custom-tooltip bg-white p-2 rounded-md shadow-md border border-gray-300">
-        <p className="label text-sm font-medium">{label}</p>
-        <p className="value text-sm">
+      <div className="bg-white p-2 rounded-lg border border-black shadow-md">
+        <p className="text-sm font-medium text-black">
+          {labelFormatter ? labelFormatter(label, 0) : label}
+        </p>
+        <p className="text-sm font-medium text-black">
           {DynamicFormatAmount({
             amount: payload[0].value?.toString() ?? '0',
             decimals: 2,
@@ -192,6 +201,7 @@ const CustomTooltip = ({
       </div>
     );
   }
+  return null;
 };
 
 export default PoolChart;
