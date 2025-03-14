@@ -67,11 +67,11 @@ export const appPathsList: Menu[] = [
     title: 'Pools',
     routePath: '/pools',
   },
-  {
-    path: `/bridge`,
-    title: 'Bridge',
-    routePath: '/bridge',
-  },
+  // {
+  //   path: `/bridge`,
+  //   title: 'Bridge',
+  //   routePath: '/bridge',
+  // },
 
   {
     path: `/leaderboard`,
