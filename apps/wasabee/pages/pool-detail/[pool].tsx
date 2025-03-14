@@ -35,7 +35,8 @@ import { wallet } from '@/services/wallet';
 import { observer } from 'mobx-react-lite';
 import { LoadingContainer } from '@/components/LoadingDisplay/LoadingDisplay';
 import PoolChart from '@/components/algebra/pool/PoolChart';
-
+import { Tab, Tabs } from '@nextui-org/react';
+import TopPoolPositions from '@/components/algebra/pool/TopPoolPositions';
 const PoolPage = observer(() => {
   const { address: account } = useAccount();
   const [token0, setToken0] = useState<Token | null>(null);
@@ -53,7 +54,6 @@ const PoolPage = observer(() => {
       poolId: poolId?.toLowerCase() ?? '',
     },
   });
-  console.log('poolInfo', poolInfo?.pool);
 
   const { data: poolFeeData } = usePoolFeeDataQuery({
     variables: {
@@ -253,57 +253,66 @@ const PoolPage = observer(() => {
           <PoolHeader pool={poolEntity} token0={token0} token1={token1} />
           {poolInfo?.pool && <PoolChart pool={poolInfo.pool as Pool} />}
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-0 gap-y-8 w-full lg:gap-8">
-            <div className="col-span-2">
-              {!account ? (
-                <NoAccount />
-              ) : positionsLoading || isFarmingLoading || areDepositsLoading ? (
-                <LoadingState />
-              ) : noPositions ? (
-                <NoPositions poolId={poolId ? poolId : zeroAddress} />
-              ) : (
-                <>
-                  <MyPositionsToolbar
-                    positionsData={positionsData}
-                    poolId={poolId ? poolId : zeroAddress}
-                  />
-                  <MyPositions
-                    positions={positionsData}
-                    poolId={poolId ? poolId : zeroAddress}
-                    selectedPosition={selectedPosition?.id}
-                    selectPosition={(positionId) =>
-                      selectPosition((prev) =>
-                        prev === positionId ? null : positionId
-                      )
-                    }
-                  />
-                  {farmingInfo &&
-                    deposits &&
-                    !isFarmingLoading &&
-                    !areDepositsLoading && (
-                      <div>
-                        <h2 className="font-semibold text-xl text-left mt-12">
-                          Farming
-                        </h2>
-                        <ActiveFarming
-                          deposits={deposits && deposits.deposits}
-                          farming={farmingInfo}
-                          positionsData={positionsData}
-                        />
-                      </div>
-                    )}
-                </>
-              )}
-            </div>
+          <Tabs>
+            <Tab key="top-positions" title="Top Positions">
+              <TopPoolPositions />
+            </Tab>
+            <Tab key="my-positions" title="My Positions">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-0 gap-y-8 w-full lg:gap-8">
+                <div className="col-span-2">
+                  {!account ? (
+                    <NoAccount />
+                  ) : positionsLoading ||
+                    isFarmingLoading ||
+                    areDepositsLoading ? (
+                    <LoadingState />
+                  ) : noPositions ? (
+                    <NoPositions poolId={poolId ? poolId : zeroAddress} />
+                  ) : (
+                    <>
+                      <MyPositionsToolbar
+                        positionsData={positionsData}
+                        poolId={poolId ? poolId : zeroAddress}
+                      />
+                      <MyPositions
+                        positions={positionsData}
+                        poolId={poolId ? poolId : zeroAddress}
+                        selectedPosition={selectedPosition?.id}
+                        selectPosition={(positionId) =>
+                          selectPosition((prev) =>
+                            prev === positionId ? null : positionId
+                          )
+                        }
+                      />
+                      {farmingInfo &&
+                        deposits &&
+                        !isFarmingLoading &&
+                        !areDepositsLoading && (
+                          <div>
+                            <h2 className="font-semibold text-xl text-left mt-12">
+                              Farming
+                            </h2>
+                            <ActiveFarming
+                              deposits={deposits && deposits.deposits}
+                              farming={farmingInfo}
+                              positionsData={positionsData}
+                            />
+                          </div>
+                        )}
+                    </>
+                  )}
+                </div>
 
-            <div className="flex flex-col gap-8 w-full h-full">
-              <PositionCard
-                farming={farmingInfo}
-                closedFarmings={closedFarmings}
-                selectedPosition={selectedPosition}
-              />
-            </div>
-          </div>
+                <div className="flex flex-col gap-8 w-full h-full">
+                  <PositionCard
+                    farming={farmingInfo}
+                    closedFarmings={closedFarmings}
+                    selectedPosition={selectedPosition}
+                  />
+                </div>
+              </div>
+            </Tab>
+          </Tabs>
         </LoadingContainer>
       </CardContainer>
     </PageContainer>

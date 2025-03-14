@@ -91,43 +91,32 @@ const PoolChart = observer(({ pool }: PoolChartProps) => {
 
   return (
     <div className="w-full h-[300px] bg-white rounded-[24px] p-4 border border-black shadow-[4px_4px_0px_0px_#D29A0D]">
-      <div className="flex justify-between mb-4">
-        <div className="flex gap-4">
-          <button
-            className={cn(
-              'px-4 py-2 rounded-lg bg-[#F5F5F5] text-sm',
-              selectedChartType === 'tvl' && 'bg-black text-white'
-            )}
-            onClick={() => setSelectedChartType('tvl')}
-          >
-            TVL
-          </button>
-          <button
-            className={cn(
-              'px-4 py-2 rounded-lg bg-[#F5F5F5] text-sm',
-              selectedChartType === 'volume' && 'bg-black text-white'
-            )}
-            onClick={() => setSelectedChartType('volume')}
-          >
-            Volume
-          </button>
-          <button
-            className={cn(
-              'px-4 py-2 rounded-lg bg-[#F5F5F5] text-sm',
-              selectedChartType === 'fees' && 'bg-black text-white'
-            )}
-            onClick={() => setSelectedChartType('fees')}
-          >
-            Fees
-          </button>
+      <div className="flex flex-col sm:flex-row sm:justify-between gap-4 mb-4">
+        <div className="flex flex-wrap gap-2">
+          {[
+            { key: 'tvl', label: 'TVL' },
+            { key: 'volume', label: 'Volume' },
+            { key: 'fees', label: 'Fees' },
+          ].map(({ key, label }) => (
+            <button
+              key={key}
+              className={cn(
+                'px-4 py-2 rounded-lg bg-[#F5F5F5] text-sm flex-1 sm:flex-none',
+                selectedChartType === key && 'bg-black text-white'
+              )}
+              onClick={() => setSelectedChartType(key as chartType)}
+            >
+              {label}
+            </button>
+          ))}
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {(['1D', '1W', '1M', '6M', 'ALL'] as timeRange[]).map((range) => (
             <button
               key={range}
               className={cn(
-                'px-3 py-1 rounded-lg bg-[#F5F5F5] text-xs',
+                'px-3 py-1 rounded-lg bg-[#F5F5F5] text-xs flex-1 sm:flex-none',
                 selectedTimeRange === range && 'bg-black text-white'
               )}
               onClick={() => setSelectedTimeRange(range)}
