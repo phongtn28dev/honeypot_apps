@@ -1,12 +1,12 @@
-import { StaticImageData } from "next/image";
-import { ReactNode } from "react";
-import Image from "next/image";
+import { StaticImageData } from 'next/image';
+import { ReactNode } from 'react';
+import Image from 'next/image';
 
 export const DOMAIN_MAP = {
-  MAIN: "https://honeypotfinance.xyz",
-  POT2PUMP: "https://pot2pump.honeypotfinance.xyz",
-  DREAMPAD: "https://dreampad.honeypotfinance.xyz",
-  WASABEE: "https://wasabee.honeypotfinance.xyz",
+  MAIN: 'https://honeypotfinance.xyz',
+  POT2PUMP: 'https://pot2pump.honeypotfinance.xyz',
+  DREAMPAD: 'https://dreampad.honeypotfinance.xyz',
+  WASABEE: 'https://wasabee.honeypotfinance.xyz',
 } as const;
 
 export type PathChatConfig = {
@@ -59,19 +59,24 @@ export const appPathsList: Menu[] = [
   // },
   {
     path: `/swap`,
-    title: "Swap",
-    routePath: "/swap",
+    title: 'Swap',
+    routePath: '/swap',
   },
   {
     path: `/pools`,
-    title: "LP Pool List",
-    routePath: "/pools",
+    title: 'Pools',
+    routePath: '/pools',
+  },
+  {
+    path: `/bridge`,
+    title: 'Bridge',
+    routePath: '/bridge',
   },
 
   {
     path: `/leaderboard`,
-    title: "Leaderboard",
-    routePath: "/leaderboard",
+    title: 'Leaderboard',
+    routePath: '/leaderboard',
   },
   // {
   //   path: `https://pot2pump.honeypotfinance.xyz/`,
@@ -84,7 +89,7 @@ const getFlatPaths = (paths: Menu[]): flatMenu[] => {
   let flatPaths: flatMenu[] = [];
 
   paths.forEach((path) => {
-    if (typeof path.path === "string") {
+    if (typeof path.path === 'string') {
       flatPaths.push({
         path: path.path,
         title: path.title,
