@@ -148,6 +148,21 @@ export class OrbiterBridge {
           spender: orbiterRouterV3.address,
         });
 
+        const sim = await simulateContract(wallet.walletClient, {
+          address: orbiterRouterV3.address as `0x${string}`,
+          account: wallet.account as `0x${string}`,
+          chain: wallet.currentChain.chain,
+          abi: orbiterRouterV3.abi,
+          functionName: 'transferToken',
+          args: [
+            fromToken.address as `0x${string}`,
+            this.router.makerAddress as `0x${string}`,
+            BigInt(transaction.value),
+            // @ts-ignore
+            transaction.raw.data,
+          ],
+        });
+
         await new ContractWrite(
           orbiterRouterV3.contract.write.transferToken
         ).call({
@@ -158,7 +173,7 @@ export class OrbiterBridge {
           args: [
             fromToken.address,
             this.router.makerAddress,
-            this.fromAmount,
+            transaction.value,
             // @ts-ignore
             transaction.raw.data,
           ],
