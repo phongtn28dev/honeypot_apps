@@ -17,7 +17,6 @@ import {
 } from '@nextui-org/react';
 import { LoadingContainer } from '@/components/LoadingDisplay/LoadingDisplay';
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
-import { truncateAddress } from '@usecapsule/rainbowkit-wallet';
 import { Copy } from '@/components/Copy';
 import { truncate } from '@/lib/format';
 

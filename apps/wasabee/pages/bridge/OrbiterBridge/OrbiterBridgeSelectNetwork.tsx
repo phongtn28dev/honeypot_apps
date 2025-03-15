@@ -25,17 +25,19 @@ export const OrbiterBridgeSelectNetwork = observer(({ type }: Props) => {
     }
   };
 
-  const selectionList =
-    type === 'from'
-      ? orbiterNetworks
-      : orbiterBridgeService.tradePairs.map((pair) => {
-          return {
-            id: pair.dstChainId,
-            name: orbiterNetworks.find(
-              (network) => network.id === pair.dstChainId
-            )?.name,
-          };
-        });
+  // const selectionList =
+  //   type === 'from'
+  //     ? orbiterNetworks
+  //     : orbiterBridgeService.tradePairs.map((pair) => {
+  //         return {
+  //           id: pair.dstChainId,
+  //           name: orbiterNetworks.find(
+  //             (network) => network.id.toString() === pair.dstChainId
+  //           )?.name,
+  //         };
+  //       });
+
+  const selectionList = orbiterNetworks;
 
   return (
     <Select

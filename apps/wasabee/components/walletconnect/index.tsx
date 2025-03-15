@@ -1,11 +1,11 @@
-import { ConnectButton } from "@usecapsule/rainbowkit";
-import { Balance } from "../balance";
-import { BalanceSvg } from "../svg/balance";
-import { ButtonHTMLAttributes } from "react";
-import { WalletSvg } from "../svg/wallet";
-import Image from "next/image";
-import { useConnect, useConnectors } from "wagmi";
-import NetworkSelect from "./NetworkSelect";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { Balance } from '../balance';
+import { BalanceSvg } from '../svg/balance';
+import { ButtonHTMLAttributes } from 'react';
+import { WalletSvg } from '../svg/wallet';
+import Image from 'next/image';
+import { useConnect, useConnectors } from 'wagmi';
+import NetworkSelect from './NetworkSelect';
 
 const ConnectButtonCustom = (props: ButtonHTMLAttributes<any>) => {
   return (
@@ -20,7 +20,7 @@ export const WalletConnect = () => {
   const { connect } = useConnect();
   const connectors = useConnectors();
 
-  const mockConnector = connectors.find((connector) => connector.id === "mock");
+  const mockConnector = connectors.find((connector) => connector.id === 'mock');
   return (
     <ConnectButton.Custom>
       {({
@@ -34,20 +34,20 @@ export const WalletConnect = () => {
       }) => {
         // Note: If your app doesn't use authentication, you
         // can remove all 'authenticationStatus' checks
-        const ready = mounted && authenticationStatus !== "loading";
+        const ready = mounted && authenticationStatus !== 'loading';
         const connected =
           ready &&
           account &&
           chain &&
-          (!authenticationStatus || authenticationStatus === "authenticated");
+          (!authenticationStatus || authenticationStatus === 'authenticated');
         return (
           <div
             {...(!ready && {
-              "aria-hidden": true,
+              'aria-hidden': true,
               style: {
                 opacity: 0,
-                pointerEvents: "none",
-                userSelect: "none",
+                pointerEvents: 'none',
+                userSelect: 'none',
               },
             })}
           >
@@ -58,7 +58,7 @@ export const WalletConnect = () => {
                     {/* <NetworkSelect /> */}
                     <ConnectButtonCustom
                       onClick={() => {
-                        if (process.env.NEXT_PUBLIC_MOCK === "true") {
+                        if (process.env.NEXT_PUBLIC_MOCK === 'true') {
                           connect({ connector: mockConnector! });
                         } else {
                           openConnectModal();
@@ -87,7 +87,7 @@ export const WalletConnect = () => {
                     <div className=" text-nowrap">
                       {account.displayBalance
                         ? `${account.displayBalance}`
-                        : "-"}
+                        : '-'}
                     </div>
                   </Balance>
                   <button
@@ -102,13 +102,13 @@ export const WalletConnect = () => {
                           width: 12,
                           height: 12,
                           borderRadius: 999,
-                          overflow: "hidden",
+                          overflow: 'hidden',
                           marginRight: 4,
                         }}
                       >
                         {chain.iconUrl && (
                           <Image
-                            alt={chain.name ?? "Chain icon"}
+                            alt={chain.name ?? 'Chain icon'}
                             src={chain.iconUrl}
                             style={{ width: 12, height: 12 }}
                           />
@@ -133,7 +133,7 @@ export const WalletConnect = () => {
 export const WalletConnectMobile = () => {
   const { connect } = useConnect();
   const connectors = useConnectors();
-  const mockConnector = connectors.find((connector) => connector.id === "mock");
+  const mockConnector = connectors.find((connector) => connector.id === 'mock');
   return (
     <ConnectButton.Custom>
       {({
@@ -147,20 +147,20 @@ export const WalletConnectMobile = () => {
       }) => {
         // Note: If your app doesn't use authentication, you
         // can remove all 'authenticationStatus' checks
-        const ready = mounted && authenticationStatus !== "loading";
+        const ready = mounted && authenticationStatus !== 'loading';
         const connected =
           ready &&
           account &&
           chain &&
-          (!authenticationStatus || authenticationStatus === "authenticated");
+          (!authenticationStatus || authenticationStatus === 'authenticated');
         return (
           <div
             {...(!ready && {
-              "aria-hidden": true,
+              'aria-hidden': true,
               style: {
                 opacity: 0,
-                pointerEvents: "none",
-                userSelect: "none",
+                pointerEvents: 'none',
+                userSelect: 'none',
               },
             })}
           >
@@ -169,7 +169,7 @@ export const WalletConnectMobile = () => {
                 return (
                   <ConnectButtonCustom
                     onClick={() => {
-                      if (process.env.NEXT_PUBLIC_MOCK === "true") {
+                      if (process.env.NEXT_PUBLIC_MOCK === 'true') {
                         connect({ connector: mockConnector! });
                       } else {
                         openConnectModal();
@@ -194,12 +194,12 @@ export const WalletConnectMobile = () => {
                 <div className="flex gap-[12px] flex-col">
                   <Balance className="flex">
                     <>
-                      <BalanceSvg></BalanceSvg>{" "}
+                      <BalanceSvg></BalanceSvg>{' '}
                       <div className=" text-nowrap">
-                        {" "}
+                        {' '}
                         {account.displayBalance
                           ? `${account.displayBalance}`
-                          : "-"}
+                          : '-'}
                       </div>
                     </>
                   </Balance>
@@ -215,13 +215,13 @@ export const WalletConnectMobile = () => {
                           width: 12,
                           height: 12,
                           borderRadius: 999,
-                          overflow: "hidden",
+                          overflow: 'hidden',
                           marginRight: 4,
                         }}
                       >
                         {chain.iconUrl && (
                           <Image
-                            alt={chain.name ?? "Chain icon"}
+                            alt={chain.name ?? 'Chain icon'}
                             src={chain.iconUrl}
                             style={{ width: 12, height: 12 }}
                           />

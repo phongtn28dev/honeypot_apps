@@ -4,6 +4,7 @@ import {
   Token as OrbiterToken,
   TradePair,
   Router,
+  TransactionParams,
 } from '@orbiter-finance/bridge-sdk';
 import { Token } from '@/services/contract/token';
 import { action, makeAutoObservable, reaction } from 'mobx';
@@ -11,6 +12,9 @@ import { wallet } from './wallet';
 import BigNumber from 'bignumber.js';
 import { clientToProvider } from '@/hooks/useEthersProvider';
 import { Client } from 'viem';
+import { ContractWrite } from './utils';
+import { OrbiterRouterV3 } from './contract/orbiter/OrbiterRouterV3';
+import { simulateContract } from 'viem/actions';
 
 const orbiter = await OrbiterClient.create({
   apiEndpoint: ENDPOINT.MAINNET,
@@ -117,22 +121,12 @@ export class OrbiterBridge {
     ) {
       return;
     }
+
     try {
-      const provider = clientToProvider(wallet.walletClient);
-      console.log(provider);
-
-      if (!this.selectedToken.isNative) {
-        const approve = await this.router.createApprove(
-          wallet.account,
-          this.toAmount
-        );
-
-        const fromToken = await Token.getToken({
-          address: this.selectedToken.address,
-        });
-
-        await provider.sendTransaction(approve.raw as `0x${string}`);
-      }
+      const routerAddress = this.router.routerConfig.endpointContract;
+      const orbiterRouterV3 = new OrbiterRouterV3({
+        address: routerAddress as `0x${string}`,
+      });
 
       const transaction = await this.router.createTransaction(
         wallet.account,
@@ -140,12 +134,48 @@ export class OrbiterBridge {
         this.fromAmount
       );
 
-      console.log(transaction);
-      const response = await wallet.walletClient.sendRawTransaction({
-        serializedTransaction: transaction.raw as `0x${string}`,
-      });
+      if (!this.selectedToken.isNative) {
+        const fromToken = Token.getToken({
+          address: this.selectedToken.address,
+        });
 
-      console.log(response);
+        await fromToken.approveIfNoAllowance({
+          amount: BigInt(
+            BigNumber(this.fromAmount)
+              .times(10 ** fromToken.decimals)
+              .toString()
+          ).toString(),
+          spender: orbiterRouterV3.address,
+        });
+
+        await new ContractWrite(
+          orbiterRouterV3.contract.write.transferToken
+        ).call({
+          // @ts-ignore
+          value: BigInt(transaction.raw.value),
+          account: wallet.account as `0x${string}`,
+          chain: wallet.currentChain.chain,
+          args: [
+            fromToken.address,
+            this.router.makerAddress,
+            this.fromAmount,
+            // @ts-ignore
+            transaction.raw.data,
+          ],
+        });
+      } else {
+        await new ContractWrite(orbiterRouterV3.contract.write.transfer).call({
+          // @ts-ignore
+          value: BigInt(transaction.raw.value),
+          account: wallet.account as `0x${string}`,
+          chain: wallet.currentChain.chain,
+          args: [
+            this.router.makerAddress,
+            // @ts-ignore
+            transaction.raw.data,
+          ],
+        });
+      }
     } catch (error) {
       console.error(error);
     }

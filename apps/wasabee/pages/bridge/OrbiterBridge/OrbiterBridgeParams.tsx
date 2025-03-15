@@ -12,6 +12,15 @@ export const OrbiterBridgeParams = observer(() => {
 
   return (
     <div className="w-full flex flex-col gap-2 mt-4 p-4 bg-transparent rounded-xl">
+      {/* <div className="flex justify-between items-center">
+        <span className="text-sm text-default-500">Router Address</span>
+        <Tooltip content={router.contractAddress}>
+          <span className="text-sm font-medium">
+            {truncate(router.contractAddress ?? '', 12)}
+          </span>
+        </Tooltip>
+      </div>
+
       <div className="flex justify-between items-center">
         <span className="text-sm text-default-500">Maker Address</span>
         <Tooltip content={router.makerAddress}>
@@ -19,7 +28,7 @@ export const OrbiterBridgeParams = observer(() => {
             {truncate(router.makerAddress, 12)}
           </span>
         </Tooltip>
-      </div>
+      </div> */}
 
       <div className="flex justify-between items-center">
         <span className="text-sm text-default-500">From Token Address</span>

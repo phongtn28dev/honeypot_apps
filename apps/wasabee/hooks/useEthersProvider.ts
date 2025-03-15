@@ -15,6 +15,7 @@ export function clientToProvider(client: WalletClient) {
     chainId: chain.id,
     name: chain.name,
   };
+
   if (transport.type === 'fallback')
     return new providers.FallbackProvider(
       (transport.transports as ReturnType<Transport>[]).map(
