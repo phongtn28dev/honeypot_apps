@@ -100,18 +100,15 @@ const NewPositionPage = () => {
   const { startPriceTypedValue } = useMintState();
 
   useEffect(() => {
-    return () => {
-      onLeftRangeInput('');
-      onRightRangeInput('');
-    };
-  }, []);
-
-  useEffect(() => {
-    onLeftRangeInput(leftrange as string);
+    if (leftrange) {
+      onLeftRangeInput(leftrange as string);
+    }
   }, [leftrange]);
 
   useEffect(() => {
-    onRightRangeInput(rightrange as string);
+    if (rightrange) {
+      onRightRangeInput(rightrange as string);
+    }
   }, [rightrange]);
 
   return (

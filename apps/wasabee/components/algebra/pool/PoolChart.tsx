@@ -90,7 +90,7 @@ const PoolChart = observer(({ pool }: PoolChartProps) => {
   }, [pool, selectedChartType, selectedTimeRange]);
 
   return (
-    <div className="w-full h-[300px] bg-white rounded-[24px] p-4 border border-black shadow-[4px_4px_0px_0px_#D29A0D]">
+    <div className="w-full h-[400px] bg-white rounded-[24px] p-4 border border-black shadow-[4px_4px_0px_0px_#D29A0D]">
       <div className="flex flex-col sm:flex-row sm:justify-between gap-4 mb-4">
         <div className="flex flex-wrap gap-2">
           {[
@@ -126,7 +126,7 @@ const PoolChart = observer(({ pool }: PoolChartProps) => {
           ))}
         </div>
       </div>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height={400 - 100}>
         <AreaChart data={currentChartData}>
           <defs>
             <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">

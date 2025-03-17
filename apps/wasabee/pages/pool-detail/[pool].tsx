@@ -37,6 +37,7 @@ import { LoadingContainer } from '@/components/LoadingDisplay/LoadingDisplay';
 import PoolChart from '@/components/algebra/pool/PoolChart';
 import { Tab, Tabs } from '@nextui-org/react';
 import TopPoolPositions from '@/components/algebra/pool/TopPoolPositions';
+import PoolStatsCard from '@/components/algebra/pool/PoolStatsCard';
 const PoolPage = observer(() => {
   const { address: account } = useAccount();
   const [token0, setToken0] = useState<Token | null>(null);
@@ -251,7 +252,10 @@ const PoolPage = observer(() => {
       <CardContainer className="gap-y-6">
         <LoadingContainer isLoading={!poolEntity}>
           <PoolHeader pool={poolEntity} token0={token0} token1={token1} />
-          {poolInfo?.pool && <PoolChart pool={poolInfo.pool as Pool} />}
+          <div className="w-full grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-4">
+            {poolInfo?.pool && <PoolChart pool={poolInfo.pool as Pool} />}
+            <PoolStatsCard pool={poolInfo?.pool as Pool} />
+          </div>
 
           <Tabs
             classNames={{
