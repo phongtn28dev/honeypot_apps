@@ -1,32 +1,32 @@
-import { Button } from "@/components/button";
-import { Copy } from "@/components/Copy";
-import { NoData } from "@/components/table";
-import { wallet } from "@/services/wallet";
-import { NextLayoutPage } from "@/types/nextjs";
-import { observer } from "mobx-react-lite";
-import Image from "next/image";
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { amountFormatted } from "../lib/format";
-import TokenLogo from "@/components/TokenLogo/TokenLogo";
-import TokenBalanceCard from "@/components/TokenBalanceCard/TokenBalanceCard";
-import CardContianer from "@/components/CardContianer/CardContianer";
-import { useAccount, useBalance, UseBalanceReturnType } from "wagmi";
-import Link from "next/link";
-import { Modal, ModalContent, ModalHeader, Tooltip } from "@nextui-org/react";
-import { ControlledToolTip } from "@/components/molecule/ControlledToolTip/ControlledToolTip";
-import { NativeFaucetContract } from "@/services/contract/faucet-contract";
-import { faucet } from "@/services/faucet";
+import { Button } from '@/components/button';
+import { Copy } from '@/components/Copy';
+import { NoData } from '@/components/table';
+import { wallet } from '@/services/wallet';
+import { NextLayoutPage } from '@/types/nextjs';
+import { observer } from 'mobx-react-lite';
+import Image from 'next/image';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { amountFormatted } from '../lib/format';
+import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import TokenBalanceCard from '@/components/TokenBalanceCard/TokenBalanceCard';
+import CardContianer from '@/components/CardContianer/CardContianer';
+import { useAccount, useBalance, UseBalanceReturnType } from 'wagmi';
+import Link from 'next/link';
+import { Modal, ModalContent, ModalHeader, Tooltip } from '@nextui-org/react';
+import { ControlledToolTip } from '@/components/molecule/ControlledToolTip/ControlledToolTip';
+import { NativeFaucetContract } from '@/services/contract/faucet-contract';
+import { faucet } from '@/services/faucet';
 import {
   OptionsDropdown,
   optionsPresets,
-} from "@/components/OptionsDropdown/OptionsDropdown";
-import { VscHome } from "react-icons/vsc";
-import { FaDonate } from "react-icons/fa";
-import { sendTransaction } from "viem/actions";
-import { toast } from "react-toastify";
-import { motion } from "framer-motion";
-import Countdown from "react-countdown";
-import { WrappedToastify } from "@/lib/wrappedToastify";
+} from '@/components/OptionsDropdown/OptionsDropdown';
+import { VscHome } from 'react-icons/vsc';
+import { FaDonate } from 'react-icons/fa';
+import { sendTransaction } from 'viem/actions';
+import { toast } from 'react-toastify';
+import { motion } from 'framer-motion';
+import Countdown from 'react-countdown';
+import { WrappedToastify } from '@/lib/wrappedToastify';
 
 export function DonationModal({
   balance,
@@ -47,7 +47,7 @@ export function DonationModal({
             <div className="flex items-center gap-2">
               <input
                 className="w-full bg-[#1D1407] border-[1px] border-[#F7931A] rounded-[8px] p-[8px] text-[#F7931A] placeholder-[#F7931A] placeholder-opacity-[0.5]"
-                placeholder={"enter amount"}
+                placeholder={'enter amount'}
                 step={undefined}
                 onChange={
                   ((e: ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +60,7 @@ export function DonationModal({
                   await faucet.nativeFaucet?.donateToContract(String(amount));
                   await balance.refetch();
                   WrappedToastify.success({
-                    message: "Thank you for your donation!",
+                    message: 'Thank you for your donation!',
                   });
                   setModalOpen(false);
                 }}
@@ -134,10 +134,10 @@ const FaucetPage: NextLayoutPage = observer(() => {
                 <div className="flex-1 flex items-center">
                   <Image
                     className={
-                      "border border-[color:var(--card-stroke,#F7931A)] rounded-[50%] mr-[1rem]"
+                      'border border-[color:var(--card-stroke,#F7931A)] rounded-[50%] mr-[1rem]'
                     }
                     src={
-                      wallet.currentChain?.officialFaucets?.[0]?.logoURI ?? ""
+                      wallet.currentChain?.officialFaucets?.[0]?.logoURI ?? ''
                     }
                     alt=""
                     width={24}
@@ -152,7 +152,7 @@ const FaucetPage: NextLayoutPage = observer(() => {
                       wallet.currentChain?.chain.nativeCurrency.decimals,
                     fixed: 3,
                   })}
-                </div>{" "}
+                </div>{' '}
                 <OptionsDropdown
                   className="min-h-0 h-[unset]"
                   options={[
@@ -164,7 +164,7 @@ const FaucetPage: NextLayoutPage = observer(() => {
                           href={
                             (wallet.currentChain?.officialFaucets &&
                               wallet.currentChain?.officialFaucets[0].url) ||
-                            ""
+                            ''
                           }
                         >
                           Official Faucet
@@ -174,14 +174,14 @@ const FaucetPage: NextLayoutPage = observer(() => {
                         window.open(
                           (wallet.currentChain?.officialFaucets &&
                             wallet.currentChain?.officialFaucets[0].url) ||
-                            "",
-                          "_blank"
+                            '',
+                          '_blank'
                         );
                       },
                     },
                     {
                       icon: <FaDonate />,
-                      display: "Donate",
+                      display: 'Donate',
                       onClick: () => {
                         setIsdonationModalOpen(true);
                       },
@@ -203,7 +203,7 @@ const FaucetPage: NextLayoutPage = observer(() => {
                 <Button
                   className="lg:ml-[13px] w-full"
                   onClick={async () => {
-                    await faucet.nativeFaucet!.Claim();
+                    // await faucet.nativeFaucet!.Claim();
                     balance.refetch();
                   }}
                   isDisabled={!faucet.nativeFaucet.canclaim}
@@ -213,16 +213,16 @@ const FaucetPage: NextLayoutPage = observer(() => {
                       date={faucet.nativeFaucet.nextFaucetTime}
                       renderer={({ hours, minutes, seconds, completed }) => {
                         if (completed) {
-                          return "Claim!";
+                          return 'Claim!';
                         } else {
                           return `Next Claim: ${hours}h ${minutes}m ${seconds}s`;
                         }
                       }}
                     />
                   ) : faucet.nativeFaucet.canclaim ? (
-                    "Claim"
+                    'Claim'
                   ) : (
-                    "Not Available"
+                    'Not Available'
                   )}
                 </Button>
               </motion.div>
@@ -245,7 +245,7 @@ const FaucetPage: NextLayoutPage = observer(() => {
                 <div className="flex-1 flex items-center">
                   <Image
                     className="border border-[color:var(--card-stroke,#F7931A)] rounded-full mr-4"
-                    src={token.logoURI ?? ""}
+                    src={token.logoURI ?? ''}
                     alt={token.name}
                     width={24}
                     height={24}
@@ -263,15 +263,15 @@ const FaucetPage: NextLayoutPage = observer(() => {
                   className="min-h-0 h-[unset]"
                   options={[
                     optionsPresets.copy({
-                      copyText: token?.address ?? "",
-                      displayText: "Copy Token address",
-                      copysSuccessText: "Token address copied",
+                      copyText: token?.address ?? '',
+                      displayText: 'Copy Token address',
+                      copysSuccessText: 'Token address copied',
                     }),
                     optionsPresets.importTokenToWallet({
                       token: token,
                     }),
                     optionsPresets.viewOnExplorer({
-                      address: token?.address ?? "",
+                      address: token?.address ?? '',
                     }),
                   ]}
                 />
@@ -282,7 +282,7 @@ const FaucetPage: NextLayoutPage = observer(() => {
                 className="lg:ml-[13px] w-full"
                 onClick={async () => {
                   await token.faucet.call().then((tx) => {
-                    if (tx.status === "success") {
+                    if (tx.status === 'success') {
                       token.claimed = true;
                     }
                   });
@@ -290,7 +290,7 @@ const FaucetPage: NextLayoutPage = observer(() => {
                   await token.getClaimed();
                 }}
               >
-                {token.claimed ? "Tokens Claimed" : "Claim Tokens"}
+                {token.claimed ? 'Tokens Claimed' : 'Claim Tokens'}
               </Button>
             </motion.div>
           ))

@@ -1,27 +1,27 @@
-import { exec } from "~/lib/contract";
-import { BaseContract } from ".";
-import { wallet } from "../wallet";
-import { Signer, ethers } from "ethers";
-import { Contract } from "ethcall";
-import BigNumber from "bignumber.js";
-import { makeAutoObservable } from "mobx";
-import { get } from "http";
-import { getContract } from "viem";
-import { faucetABI } from "@/lib/abis/faucet";
-import { ContractWrite } from "../utils";
-import { berachainBartioTestnetNetwork, networksMap } from "../chain";
-import { DailyFaucetABI } from "@/lib/abis/faucet/daily-faucet";
-import { Token } from "./token";
-import { trpcClient } from "@/lib/trpc";
-import { toast } from "react-toastify";
-import { WrappedToastify } from "@/lib/wrappedToastify";
-import { TransactionSuccessToastify } from "@/components/CustomToastify/TransactionPendingToastify/TransactionPendingToastify";
+import { exec } from '~/lib/contract';
+import { BaseContract } from '.';
+import { wallet } from '../wallet';
+import { Signer, ethers } from 'ethers';
+import { Contract } from 'ethcall';
+import BigNumber from 'bignumber.js';
+import { makeAutoObservable } from 'mobx';
+import { get } from 'http';
+import { getContract } from 'viem';
+import { faucetABI } from '@/lib/abis/faucet';
+import { ContractWrite } from '../utils';
+import { berachainBartioTestnetNetwork, networksMap } from '../chain';
+import { DailyFaucetABI } from '@/lib/abis/faucet/daily-faucet';
+import { Token } from './token';
+import { trpcClient } from '@/lib/trpc';
+import { toast } from 'react-toastify';
+import { WrappedToastify } from '@/lib/wrappedToastify';
+import { TransactionSuccessToastify } from '@/components/CustomToastify/TransactionPendingToastify/TransactionPendingToastify';
 
 export class NativeFaucetContract implements BaseContract {
-  address = "";
-  name: string = "";
+  address = '';
+  name: string = '';
   canclaim = false;
-  cantClaimReason = "";
+  cantClaimReason = '';
   nextFaucetTime: number | undefined = undefined;
   abi = DailyFaucetABI;
 
@@ -96,41 +96,41 @@ export class NativeFaucetContract implements BaseContract {
     return this.nextFaucetTime;
   }
 
-  async Claim(): Promise<boolean> {
-    this.canclaim = false;
-    const loadingToast = WrappedToastify.pending({
-      title: "Claim Faucet",
-      message: "Claiming faucet...",
-      options: { autoClose: false, isLoading: true },
-    });
+  // async Claim(): Promise<boolean> {
+  //   this.canclaim = false;
+  //   const loadingToast = WrappedToastify.pending({
+  //     title: "Claim Faucet",
+  //     message: "Claiming faucet...",
+  //     options: { autoClose: false, isLoading: true },
+  //   });
 
-    const applyNativeFaucet = await trpcClient.token.applyNativeFaucet
-      .mutate({
-        address: wallet.account,
-      })
-      .catch((err) => {
-        console.dir(err);
-        WrappedToastify.error({ message: err.message });
-        this.cantClaimReason = err.message;
-      });
+  //   const applyNativeFaucet = await trpcClient.token.applyNativeFaucet
+  //     .mutate({
+  //       address: wallet.account,
+  //     })
+  //     .catch((err) => {
+  //       console.dir(err);
+  //       WrappedToastify.error({ message: err.message });
+  //       this.cantClaimReason = err.message;
+  //     });
 
-    toast.dismiss(loadingToast);
+  //   toast.dismiss(loadingToast);
 
-    if (applyNativeFaucet) {
-      WrappedToastify.success({
-        title: "Claim Faucet",
-        message: TransactionSuccessToastify({
-          hash: applyNativeFaucet.hash,
-          action: "Claim Faucet",
-        }),
-      });
-      this.nextFaucetTime = Date.now() + 24 * 60 * 60 * 1000;
-      this.isClaimable();
-      return true;
-    } else {
-      return false;
-    }
-  }
+  //   if (applyNativeFaucet) {
+  //     WrappedToastify.success({
+  //       title: "Claim Faucet",
+  //       message: TransactionSuccessToastify({
+  //         hash: applyNativeFaucet.hash,
+  //         action: "Claim Faucet",
+  //       }),
+  //     });
+  //     this.nextFaucetTime = Date.now() + 24 * 60 * 60 * 1000;
+  //     this.isClaimable();
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   donateToContract = async (amount: string) => {
     const tx = await wallet.walletClient.sendTransaction({
