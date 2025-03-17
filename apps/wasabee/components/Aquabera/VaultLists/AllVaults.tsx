@@ -49,7 +49,7 @@ export function AllAquaberaVaults({
         token0: vault.tokenA,
         token1: vault.tokenB,
         address: vault.id as `0x${string}`,
-        apr: Number(vault.feeApr_1d),
+        apr: Number(vault.feeApr_30d),
       });
       if (vaultContract) {
         setVaultsContracts((prev) => [...prev, vaultContract]);
