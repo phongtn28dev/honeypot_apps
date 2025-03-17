@@ -1,25 +1,25 @@
 // pages/vault/[address].tsx
-import { useRouter } from "next/router";
-import { useState, useEffect, useCallback } from "react";
-import { ICHIVaultContract } from "@/services/contract/aquabera/ICHIVault-contract";
-import { Address, isAddress, zeroAddress } from "viem";
-import { Button } from "@/components/algebra/ui/button";
-import TokenLogo from "@/components/TokenLogo/TokenLogo";
-import { DepositToVaultModal } from "@/components/Aquabera/modals/DepositToVaultModal";
-import { wallet } from "@/services/wallet";
-import { Token as AlgebraToken } from "@cryptoalgebra/sdk";
-import { WithdrawFromVaultModal } from "@/components/Aquabera/modals/WithdrawFromVaultModal";
-import { getSingleVaultDetails } from "@/lib/algebra/graphql/clients/vaults";
-import { SingleVaultDetailsQuery } from "@/lib/algebra/graphql/generated/graphql";
-import BigNumber from "bignumber.js";
-import { DynamicFormatAmount } from "@/lib/algebra/utils/common/formatAmount";
-import { observer } from "mobx-react-lite";
-import Link from "next/link";
-import CardContainer from "@/components/CardContianer/v3";
-import Copy from "@/components/Copy/v3";
-import { HiExternalLink } from "react-icons/hi";
-import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
-import { cn, Tooltip } from "@nextui-org/react";
+import { useRouter } from 'next/router';
+import { useState, useEffect, useCallback } from 'react';
+import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
+import { Address, isAddress, zeroAddress } from 'viem';
+import { Button } from '@/components/algebra/ui/button';
+import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { DepositToVaultModal } from '@/components/Aquabera/modals/DepositToVaultModal';
+import { wallet } from '@/services/wallet';
+import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
+import { WithdrawFromVaultModal } from '@/components/Aquabera/modals/WithdrawFromVaultModal';
+import { getSingleVaultDetails } from '@/lib/algebra/graphql/clients/vaults';
+import { SingleVaultDetailsQuery } from '@/lib/algebra/graphql/generated/graphql';
+import BigNumber from 'bignumber.js';
+import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { observer } from 'mobx-react-lite';
+import Link from 'next/link';
+import CardContainer from '@/components/CardContianer/v3';
+import Copy from '@/components/Copy/v3';
+import { HiExternalLink } from 'react-icons/hi';
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
+import { cn, Tooltip } from '@nextui-org/react';
 
 export const VaultDetail = observer(() => {
   const router = useRouter();
@@ -27,10 +27,10 @@ export const VaultDetail = observer(() => {
   const [vault, setVault] = useState<ICHIVaultContract | null>(null);
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
-  const [poolTvl, setPoolTvl] = useState<string>("0");
-  const [poolVolume24h, setPoolVolume24h] = useState<string>("0");
-  const [poolFees24h, setPoolFees24h] = useState<string>("0");
-  const [volatility, setVolatility] = useState<string>("0");
+  const [poolTvl, setPoolTvl] = useState<string>('0');
+  const [poolVolume24h, setPoolVolume24h] = useState<string>('0');
+  const [poolFees24h, setPoolFees24h] = useState<string>('0');
+  const [volatility, setVolatility] = useState<string>('0');
 
   useEffect(() => {
     if (!wallet.isInit || !wallet.account || !wallet.walletClient) return;
@@ -38,7 +38,7 @@ export const VaultDetail = observer(() => {
     wallet.contracts.vaultVolatilityCheck
       .currentVolatility(address as string)
       .then((volatility) => {
-        setVolatility(volatility?.toString() ?? "0");
+        setVolatility(volatility?.toString() ?? '0');
       });
   }, [wallet.isInit, wallet.account, wallet.walletClient, address]);
 
@@ -53,7 +53,7 @@ export const VaultDetail = observer(() => {
     )
       return;
 
-    console.log("address", address);
+    console.log('address', address);
 
     // Fetch token addresses and pool data
     const loadVaultData = async () => {
@@ -116,14 +116,14 @@ export const VaultDetail = observer(() => {
     const fractionalPart = value % divisor;
 
     // Convert to string and pad with zeros if needed
-    const fractionalStr = fractionalPart.toString().padStart(18, "0");
+    const fractionalStr = fractionalPart.toString().padStart(18, '0');
 
     // Show up to 6 decimal places for better readability
     const displayDecimals = 18;
     const formattedFractional = fractionalStr.slice(0, displayDecimals);
 
     // Remove trailing zeros
-    const trimmedFractional = formattedFractional.replace(/0+$/, "");
+    const trimmedFractional = formattedFractional.replace(/0+$/, '');
 
     return trimmedFractional
       ? `${integerPart}.${trimmedFractional}`
@@ -135,7 +135,7 @@ export const VaultDetail = observer(() => {
       {/* Add Back Button */}
       <div className="mb-4">
         <Button
-          onClick={() => router.push("/pools")}
+          onClick={() => router.push('/pools')}
           className="flex items-center gap-2"
         >
           <svg
@@ -163,14 +163,8 @@ export const VaultDetail = observer(() => {
               {vault?.token0 && vault?.token1 && (
                 <>
                   <div className="flex -space-x-2">
-                    <TokenLogo
-                      token={vault?.token0}
-                      size={48}
-                    />
-                    <TokenLogo
-                      token={vault?.token1}
-                      size={48}
-                    />
+                    <TokenLogo token={vault?.token0} size={48} />
+                    <TokenLogo token={vault?.token1} size={48} />
                   </div>
                   <span className="text-2xl font-bold text-honey">
                     {vault?.token0?.symbol}/{vault?.token1?.symbol}
@@ -191,7 +185,7 @@ export const VaultDetail = observer(() => {
                 disabled={!wallet.account || !wallet.walletClient}
                 className="ml-[-1px] rounded-[8px] border border-black bg-[#FFCD4D] p-2 text-[#202020] shadow-[2px_2px_0px_0px_#000] hover:translate-y-[2px] hover:shadow-[2px_1px_0px_0px_#000] active:translate-y-[2px] active:shadow-none disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {!wallet.walletClient ? "connect wallet to deposit" : "Deposit"}
+                {!wallet.walletClient ? 'connect wallet to deposit' : 'Deposit'}
               </Button>
               {hasShares && (
                 <Button
@@ -245,7 +239,7 @@ export const VaultDetail = observer(() => {
                     {DynamicFormatAmount({
                       amount: vault?.userTVLUSD ?? 0,
                       decimals: 3,
-                      endWith: "$",
+                      endWith: '$',
                     })}
                     )
                   </span>
@@ -273,7 +267,7 @@ export const VaultDetail = observer(() => {
                         Number(vault?.totalsupplyShares)) *
                       100
                     ).toFixed(2)
-                  : "0"}
+                  : '0'}
                 %
               </p>
             </div>
@@ -283,7 +277,7 @@ export const VaultDetail = observer(() => {
                 {DynamicFormatAmount({
                   amount: vault?.tvlUSD ?? 0,
                   decimals: 3,
-                  endWith: "$",
+                  endWith: '$',
                 })}
               </p>
             </div>
@@ -293,7 +287,7 @@ export const VaultDetail = observer(() => {
                 {DynamicFormatAmount({
                   amount: poolTvl,
                   decimals: 3,
-                  endWith: "$",
+                  endWith: '$',
                 })}
               </p>
             </div>
@@ -305,7 +299,7 @@ export const VaultDetail = observer(() => {
                 {DynamicFormatAmount({
                   amount: poolVolume24h,
                   decimals: 3,
-                  endWith: "$",
+                  endWith: '$',
                 })}
               </p>
             </div>
@@ -315,13 +309,20 @@ export const VaultDetail = observer(() => {
                 {DynamicFormatAmount({
                   amount: poolFees24h,
                   decimals: 5,
-                  endWith: "$",
+                  endWith: '$',
                 })}
+              </p>
+            </div>
+
+            <div className="rounded-[24px] border border-black bg-white px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D] relative">
+              <h3 className="text-base text-[#202020] mb-2">APR </h3>
+              <p className={cn('text-2xl font-bold text-[#202020]')}>
+                {vault?.apr.toFixed(2)}%
               </p>
             </div>
             <div className="rounded-[24px] border border-black bg-white px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D] relative">
               <h3 className="text-base text-[#202020] mb-2">
-                Volatility{" "}
+                Volatility{' '}
                 <span>
                   <Tooltip content="higher the volatility, higher the slippage">
                     <QuestionMarkCircleIcon className="w-4 h-4 inline-block" />
@@ -330,9 +331,9 @@ export const VaultDetail = observer(() => {
               </h3>
               <p
                 className={cn(
-                  "text-2xl font-bold text-[#202020]",
-                  volatility > "500" && "text-orange-500",
-                  volatility > "1000" && "text-red-500"
+                  'text-2xl font-bold text-[#202020]',
+                  volatility > '500' && 'text-orange-500',
+                  volatility > '1000' && 'text-red-500'
                 )}
               >
                 {volatility}%
@@ -411,12 +412,12 @@ export const VaultDetail = observer(() => {
                     className="flex justify-between items-center"
                   >
                     <div className="flex items-center gap-2 min-w-[100px]">
-                      {tx.__typename === "VaultDeposit" && (
+                      {tx.__typename === 'VaultDeposit' && (
                         <span className="text-[#202020] font-medium">
                           Deposit
                         </span>
                       )}
-                      {tx.__typename === "VaultWithdraw" && (
+                      {tx.__typename === 'VaultWithdraw' && (
                         <span className="text-[#202020] font-medium">
                           Withdraw
                         </span>
@@ -425,7 +426,7 @@ export const VaultDetail = observer(() => {
 
                     <div className="text-[#202020] min-w-[200px]">
                       <div className=" text-sm text-[#202020]">
-                        {tx.__typename === "VaultDeposit" && (
+                        {tx.__typename === 'VaultDeposit' && (
                           <div className="flex flex-col  gap-2">
                             <div>
                               <span className="text-sm text-[#202020]">
@@ -451,7 +452,7 @@ export const VaultDetail = observer(() => {
                             </div>
                           </div>
                         )}
-                        {tx.__typename === "VaultWithdraw" && (
+                        {tx.__typename === 'VaultWithdraw' && (
                           <div className="flex flex-col gap-2">
                             <div>
                               <span className="text-sm text-[#202020]">
@@ -483,10 +484,10 @@ export const VaultDetail = observer(() => {
                     <div className="text-[#202020] flex-grow">
                       <Link
                         target="_blank"
-                        href={`https://berascan.com/tx/${tx.id.split("-")[0]}`}
+                        href={`https://berascan.com/tx/${tx.id.split('-')[0]}`}
                         className="text-[#202020] underline hover:text-[#202020]/80"
                       >
-                        {tx.id.split("-")[0]}
+                        {tx.id.split('-')[0]}
                       </Link>
                     </div>
                     <div className="text-sm text-[#202020]">

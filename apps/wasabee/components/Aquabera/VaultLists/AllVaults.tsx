@@ -1,34 +1,41 @@
-import { wallet } from "@/services/wallet";
-import { Currency } from "@cryptoalgebra/sdk";
-import { Token } from "@/services/contract/token";
-import { useEffect, useState, useMemo } from "react";
-import { ChevronUp, ChevronDown } from "lucide-react";
-import { Button } from "@/components/algebra/ui/button";
-import { DepositToVaultModal } from "../modals/DepositToVaultModal";
+import { wallet } from '@/services/wallet';
+import { Currency } from '@cryptoalgebra/sdk';
+import { Token } from '@/services/contract/token';
+import { useEffect, useState, useMemo } from 'react';
+import { ChevronUp, ChevronDown } from 'lucide-react';
+import { Button } from '@/components/algebra/ui/button';
+import { DepositToVaultModal } from '../modals/DepositToVaultModal';
 import {
   getSingleVaultDetails,
   getVaultPageData,
-} from "@/lib/algebra/graphql/clients/vaults";
-import { VaultsSortedByHoldersQuery } from "@/lib/algebra/graphql/generated/graphql";
-import { ICHIVaultContract } from "@/services/contract/aquabera/ICHIVault-contract";
-import VaultRow from "./VaulltRow";
+} from '@/lib/algebra/graphql/clients/vaults';
+import { VaultsSortedByHoldersQuery } from '@/lib/algebra/graphql/generated/graphql';
+import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
+import VaultRow from './VaulltRow';
 
-type SortField = "pair" | "allow_token" | "address" | "tvl" | "volume" | "fees";
-type SortDirection = "asc" | "desc";
+type SortField =
+  | 'pair'
+  | 'allow_token'
+  | 'address'
+  | 'tvl'
+  | 'volume'
+  | 'fees'
+  | 'apr';
+type SortDirection = 'asc' | 'desc';
 
 interface AllAquaberaVaultsProps {
   searchString?: string;
 }
 
 export function AllAquaberaVaults({
-  searchString = "",
+  searchString = '',
 }: AllAquaberaVaultsProps) {
   const [vaultsContracts, setVaultsContracts] = useState<ICHIVaultContract[]>(
     []
   );
   const [vaults, setVaults] = useState<VaultsSortedByHoldersQuery>();
-  const [sortField, setSortField] = useState<SortField>("tvl");
-  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+  const [sortField, setSortField] = useState<SortField>('tvl');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [page, setPage] = useState(1);
   const rowsPerPage = 10;
 
@@ -42,6 +49,7 @@ export function AllAquaberaVaults({
         token0: vault.tokenA,
         token1: vault.tokenB,
         address: vault.id as `0x${string}`,
+        apr: Number(vault.feeApr_1d),
       });
       if (vaultContract) {
         setVaultsContracts((prev) => [...prev, vaultContract]);
@@ -64,10 +72,10 @@ export function AllAquaberaVaults({
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
-      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     } else {
       setSortField(field);
-      setSortDirection("desc");
+      setSortDirection('desc');
     }
   };
 
@@ -87,38 +95,40 @@ export function AllAquaberaVaults({
       if (!vaultsContracts.length) return [];
 
       const sortedVaults = [...vaultsContracts].sort((a, b) => {
-        const multiplier = sortDirection === "asc" ? 1 : -1;
+        const multiplier = sortDirection === 'asc' ? 1 : -1;
 
         switch (sortField) {
-          case "pair":
+          case 'pair':
             const aSymbol = Token.getToken({
-              address: a.token0?.address ?? "",
+              address: a.token0?.address ?? '',
             }).symbol;
             const bSymbol = Token.getToken({
-              address: b.token0?.address ?? "",
+              address: b.token0?.address ?? '',
             }).symbol;
             return multiplier * aSymbol.localeCompare(bSymbol);
-          case "allow_token":
+          case 'allow_token':
             return (
               multiplier *
               getAllowToken(a)?.symbol.localeCompare(getAllowToken(b)?.symbol)
             );
-          case "address":
+          case 'address':
             return multiplier * a.address.localeCompare(b.address);
-          case "tvl":
+          case 'tvl':
             return multiplier * (Number(a.tvlUSD || 0) - Number(b.tvlUSD || 0));
-          case "volume":
+          case 'volume':
             return (
               multiplier *
               (Number(a.pool?.volume_24h_USD || 0) -
                 Number(b.pool?.volume_24h_USD || 0))
             );
-          case "fees":
+          case 'fees':
             return (
               multiplier *
               (Number(a.pool?.fees_24h_USD || 0) -
                 Number(b.pool?.fees_24h_USD || 0))
             );
+          case 'apr':
+            return multiplier * (Number(a.apr || 0) - Number(b.apr || 0));
           default:
             return 0;
         }
@@ -144,22 +154,22 @@ export function AllAquaberaVaults({
               <th className="py-4 px-6 cursor-pointer text-[#4D4D4D]">
                 <div
                   className="flex items-center gap-2"
-                  onClick={() => handleSort("pair")}
+                  onClick={() => handleSort('pair')}
                 >
                   <span>Token Pair</span>
                   <div className="flex flex-col">
                     <ChevronUp
                       className={`h-3 w-3 ${
-                        sortField === "pair" && sortDirection === "asc"
-                          ? "text-black"
-                          : "text-[#4D4D4D]"
+                        sortField === 'pair' && sortDirection === 'asc'
+                          ? 'text-black'
+                          : 'text-[#4D4D4D]'
                       }`}
                     />
                     <ChevronDown
                       className={`h-3 w-3 ${
-                        sortField === "pair" && sortDirection === "desc"
-                          ? "text-black"
-                          : "text-[#4D4D4D]"
+                        sortField === 'pair' && sortDirection === 'desc'
+                          ? 'text-black'
+                          : 'text-[#4D4D4D]'
                       }`}
                     />
                   </div>
@@ -168,22 +178,22 @@ export function AllAquaberaVaults({
               <th className="py-4 px-6 cursor-pointer text-[#4D4D4D] min-w-[180px]">
                 <div
                   className="flex items-center gap-2"
-                  onClick={() => handleSort("pair")}
+                  onClick={() => handleSort('pair')}
                 >
                   <span>Allow Token</span>
                   <div className="flex flex-col">
                     <ChevronUp
                       className={`h-3 w-3 ${
-                        sortField === "pair" && sortDirection === "asc"
-                          ? "text-black"
-                          : "text-[#4D4D4D]"
+                        sortField === 'pair' && sortDirection === 'asc'
+                          ? 'text-black'
+                          : 'text-[#4D4D4D]'
                       }`}
                     />
                     <ChevronDown
                       className={`h-3 w-3 ${
-                        sortField === "pair" && sortDirection === "desc"
-                          ? "text-black"
-                          : "text-[#4D4D4D]"
+                        sortField === 'pair' && sortDirection === 'desc'
+                          ? 'text-black'
+                          : 'text-[#4D4D4D]'
                       }`}
                     />
                   </div>
@@ -192,22 +202,46 @@ export function AllAquaberaVaults({
               <th className="py-4 px-6 cursor-pointer text-right text-[#4D4D4D]">
                 <div
                   className="flex items-center gap-2 justify-end"
-                  onClick={() => handleSort("tvl")}
+                  onClick={() => handleSort('apr')}
+                >
+                  <span>APR</span>
+                  <div className="flex flex-col">
+                    <ChevronUp
+                      className={`h-3 w-3 ${
+                        sortField === 'apr' && sortDirection === 'asc'
+                          ? 'text-black'
+                          : 'text-[#4D4D4D]'
+                      }`}
+                    />
+                    <ChevronDown
+                      className={`h-3 w-3 ${
+                        sortField === 'apr' && sortDirection === 'desc'
+                          ? 'text-black'
+                          : 'text-[#4D4D4D]'
+                      }`}
+                    />
+                  </div>
+                </div>
+              </th>
+              <th className="py-4 px-6 cursor-pointer text-right text-[#4D4D4D]">
+                <div
+                  className="flex items-center gap-2 justify-end"
+                  onClick={() => handleSort('tvl')}
                 >
                   <span>Vault TVL</span>
                   <div className="flex flex-col">
                     <ChevronUp
                       className={`h-3 w-3 ${
-                        sortField === "tvl" && sortDirection === "asc"
-                          ? "text-black"
-                          : "text-[#4D4D4D]"
+                        sortField === 'tvl' && sortDirection === 'asc'
+                          ? 'text-black'
+                          : 'text-[#4D4D4D]'
                       }`}
                     />
                     <ChevronDown
                       className={`h-3 w-3 ${
-                        sortField === "tvl" && sortDirection === "desc"
-                          ? "text-black"
-                          : "text-[#4D4D4D]"
+                        sortField === 'tvl' && sortDirection === 'desc'
+                          ? 'text-black'
+                          : 'text-[#4D4D4D]'
                       }`}
                     />
                   </div>
@@ -216,22 +250,22 @@ export function AllAquaberaVaults({
               <th className="py-4 px-6 cursor-pointer text-right text-[#4D4D4D]">
                 <div
                   className="flex items-center gap-2 justify-end"
-                  onClick={() => handleSort("volume")}
+                  onClick={() => handleSort('volume')}
                 >
                   <span>Pool 24h Volume</span>
                   <div className="flex flex-col">
                     <ChevronUp
                       className={`h-3 w-3 ${
-                        sortField === "volume" && sortDirection === "asc"
-                          ? "text-black"
-                          : "text-[#4D4D4D]"
+                        sortField === 'volume' && sortDirection === 'asc'
+                          ? 'text-black'
+                          : 'text-[#4D4D4D]'
                       }`}
                     />
                     <ChevronDown
                       className={`h-3 w-3 ${
-                        sortField === "volume" && sortDirection === "desc"
-                          ? "text-black"
-                          : "text-[#4D4D4D]"
+                        sortField === 'volume' && sortDirection === 'desc'
+                          ? 'text-black'
+                          : 'text-[#4D4D4D]'
                       }`}
                     />
                   </div>
@@ -240,22 +274,22 @@ export function AllAquaberaVaults({
               <th className="py-4 px-6 cursor-pointer text-right text-[#4D4D4D]">
                 <div
                   className="flex items-center gap-2 justify-end"
-                  onClick={() => handleSort("fees")}
+                  onClick={() => handleSort('fees')}
                 >
                   <span>Pool 24h Fees</span>
                   <div className="flex flex-col">
                     <ChevronUp
                       className={`h-3 w-3 ${
-                        sortField === "fees" && sortDirection === "asc"
-                          ? "text-black"
-                          : "text-[#4D4D4D]"
+                        sortField === 'fees' && sortDirection === 'asc'
+                          ? 'text-black'
+                          : 'text-[#4D4D4D]'
                       }`}
                     />
                     <ChevronDown
                       className={`h-3 w-3 ${
-                        sortField === "fees" && sortDirection === "desc"
-                          ? "text-black"
-                          : "text-[#4D4D4D]"
+                        sortField === 'fees' && sortDirection === 'desc'
+                          ? 'text-black'
+                          : 'text-[#4D4D4D]'
                       }`}
                     />
                   </div>
@@ -266,21 +300,13 @@ export function AllAquaberaVaults({
           <tbody className="divide-y divide-[#4D4D4D]">
             {!sortedVaults.length ? (
               <tr className="hover:bg-white border-white h-full">
-                <td
-                  colSpan={5}
-                  className="h-24 text-center text-black"
-                >
+                <td colSpan={5} className="h-24 text-center text-black">
                   No results.
                 </td>
               </tr>
             ) : (
               sortedVaults.map((vault) => {
-                return (
-                  <VaultRow
-                    key={vault.address}
-                    vault={vault}
-                  />
-                );
+                return <VaultRow key={vault.address} vault={vault} />;
               })
             )}
           </tbody>

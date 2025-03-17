@@ -1,12 +1,12 @@
-import { ConnectButton } from "@usecapsule/rainbowkit";
-import { ButtonHTMLAttributes } from "react";
-import Image from "next/image";
-import { useConnect, useConnectors } from "wagmi";
-import { BiWallet } from "react-icons/bi";
-import { BsPerson } from "react-icons/bs";
-import Link from "next/link";
-import { formatNumberWithUnit } from "@/lib/utils";
-import { mock } from "wagmi/connectors";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ButtonHTMLAttributes } from 'react';
+import Image from 'next/image';
+import { useConnect, useConnectors } from 'wagmi';
+import { BiWallet } from 'react-icons/bi';
+import { BsPerson } from 'react-icons/bs';
+import Link from 'next/link';
+import { formatNumberWithUnit } from '@/lib/utils';
+import { mock } from 'wagmi/connectors';
 
 const ConnectButtonCustom = (props: ButtonHTMLAttributes<any>) => {
   return (
@@ -41,21 +41,21 @@ export const WalletConnect = () => {
             authenticationStatus,
             mounted,
           }) => {
-            const ready = mounted && authenticationStatus !== "loading";
+            const ready = mounted && authenticationStatus !== 'loading';
             const connected =
               ready &&
               account &&
               chain &&
               (!authenticationStatus ||
-                authenticationStatus === "authenticated");
+                authenticationStatus === 'authenticated');
             return (
               <div
                 {...(!ready && {
-                  "aria-hidden": true,
+                  'aria-hidden': true,
                   style: {
                     opacity: 0,
-                    pointerEvents: "none",
-                    userSelect: "none",
+                    pointerEvents: 'none',
+                    userSelect: 'none',
                   },
                 })}
               >
@@ -76,12 +76,12 @@ export const WalletConnect = () => {
                         <div className="flex items-center">
                           <ConnectButtonCustom
                             onClick={() => {
-                              if (window.localStorage.getItem("mockAccount")) {
+                              if (window.localStorage.getItem('mockAccount')) {
                                 connect({
                                   connector: mock({
                                     accounts: [
                                       window.localStorage.getItem(
-                                        "mockAccount"
+                                        'mockAccount'
                                       ) as `0x${string}`,
                                     ],
                                   }),
@@ -121,7 +121,7 @@ export const WalletConnect = () => {
                           className="flex cursor-pointer bg-[#202020] text-white px-3 lg:px-4 py-1.5 lg:py-2 rounded-2xl gap-1.5 lg:gap-2 items-center shrink-0 text-xs sm:text-sm lg:text-base"
                         >
                           <Image
-                            src={"/images/empty-logo.png"}
+                            src={'/images/empty-logo.png'}
                             alt="icon"
                             width={18}
                             height={18}
@@ -129,7 +129,10 @@ export const WalletConnect = () => {
                           />
                           <div className="text-nowrap text-white">
                             {account.balanceFormatted ? (
-                              <span>{`${formatNumberWithUnit(Number(account.balanceFormatted), 3)} BERA`}</span>
+                              <span>{`${formatNumberWithUnit(
+                                Number(account.balanceFormatted),
+                                3
+                              )} BERA`}</span>
                             ) : (
                               <div className="h-3 lg:h-4 w-16 lg:w-20 bg-gray-700 animate-pulse rounded"></div>
                             )}

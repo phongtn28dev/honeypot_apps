@@ -1,24 +1,24 @@
-import { LoadingDisplay } from "@/components/LoadingDisplay/LoadingDisplay";
-import TokenLogo from "@/components/TokenLogo/TokenLogo";
-import { getSingleVaultDetails } from "@/lib/algebra/graphql/clients/vaults";
-import { DynamicFormatAmount } from "@/lib/algebra/utils/common/formatAmount";
-import { ICHIVaultContract } from "@/services/contract/aquabera/ICHIVault-contract";
-import { Token } from "@/services/contract/token";
-import { wallet } from "@/services/wallet";
+import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';
+import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { getSingleVaultDetails } from '@/lib/algebra/graphql/clients/vaults';
+import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
+import { Token } from '@/services/contract/token';
+import { wallet } from '@/services/wallet';
 import {
   useReadIchiVaultAllowToken0,
   useReadIchiVaultAllowToken1,
-} from "@/wagmi-generated";
-import { Skeleton } from "@nextui-org/react";
-import { observer } from "mobx-react-lite";
-import { useEffect, useMemo, useState } from "react";
+} from '@/wagmi-generated';
+import { Skeleton } from '@nextui-org/react';
+import { observer } from 'mobx-react-lite';
+import { useEffect, useMemo, useState } from 'react';
 
 export const VaultRow = observer(({ vault }: { vault: ICHIVaultContract }) => {
   const [vaultContract, setVaultContract] = useState<
     ICHIVaultContract | undefined
   >(undefined);
-  const tokenA = Token.getToken({ address: vault.token0?.address ?? "" });
-  const tokenB = Token.getToken({ address: vault.token1?.address ?? "" });
+  const tokenA = Token.getToken({ address: vault.token0?.address ?? '' });
+  const tokenB = Token.getToken({ address: vault.token1?.address ?? '' });
   const loading = useMemo(() => {
     return (
       !vaultContract ||
@@ -124,18 +124,8 @@ export const VaultRow = observer(({ vault }: { vault: ICHIVaultContract }) => {
       <td className="py-4 px-6">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1">
-            {isTokenAAllowed.data && (
-              <TokenLogo
-                token={tokenA}
-                size={24}
-              />
-            )}
-            {isTokenBAllowed.data && (
-              <TokenLogo
-                token={tokenB}
-                size={24}
-              />
-            )}
+            {isTokenAAllowed.data && <TokenLogo token={tokenA} size={24} />}
+            {isTokenBAllowed.data && <TokenLogo token={tokenB} size={24} />}
           </div>
           <div className="flex">
             <p className="text-black font-medium">
@@ -147,12 +137,15 @@ export const VaultRow = observer(({ vault }: { vault: ICHIVaultContract }) => {
       </td>
       {/* vault address */}
       {/* <td className="py-4 px-6 text-black">{vault.id}</td> */}
-      {/* tvl */}
+      {/* apr */}{' '}
+      <td className="py-4 px-6 text-right text-black">
+        {vault.apr.toFixed(2)}%
+      </td>
       <td className="py-4 px-6 text-right text-black">
         {DynamicFormatAmount({
           amount: vaultContract?.tvlUSD ?? 0,
           decimals: 3,
-          endWith: " $",
+          endWith: ' $',
         })}
       </td>
       {/* volume */}
@@ -160,7 +153,7 @@ export const VaultRow = observer(({ vault }: { vault: ICHIVaultContract }) => {
         {DynamicFormatAmount({
           amount: volume ?? 0,
           decimals: 3,
-          endWith: " $",
+          endWith: ' $',
         })}
       </td>
       {/* fees */}
@@ -168,7 +161,7 @@ export const VaultRow = observer(({ vault }: { vault: ICHIVaultContract }) => {
         {DynamicFormatAmount({
           amount: fees ?? 0,
           decimals: 3,
-          endWith: " $",
+          endWith: ' $',
         })}
       </td>
     </tr>

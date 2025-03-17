@@ -1,40 +1,38 @@
-import "@/styles/globals.css";
-import "@/styles/overrides/reactjs-popup.css";
-import "@/styles/overrides/toastify.css";
+import '@/styles/globals.css';
+import '@/styles/overrides/reactjs-popup.css';
+import '@/styles/overrides/toastify.css';
 //@ts-ignore
-import type { AppProps } from "next/app";
-import { Layout } from "@/components/layout";
-import { NextLayoutPage } from "@/types/nextjs";
-import { WagmiProvider, useWalletClient } from "wagmi";
-import { AvatarComponent, RainbowKitProvider } from "@usecapsule/rainbowkit";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-// import "@rainbow-me/rainbowkit/styles.css";
-import "@usecapsule/rainbowkit/styles.css";
-import { NextUIProvider } from "@nextui-org/react";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { config } from "@/config/wagmi";
-import { trpc, trpcQueryClient } from "../lib/trpc";
-import { useEffect, useState } from "react";
-import { wallet } from "@/services/wallet";
-import { DM_Sans, Inter } from "next/font/google";
-import { Inspector, InspectParams } from "react-dev-inspector";
-import { Analytics } from "@vercel/analytics/react";
-// import { capsuleClient, capsuleModalProps } from "@/config/wagmi/capsualWallet";
-import { ApolloProvider } from "@apollo/client";
-import { infoClient } from "@/lib/algebra/graphql/clients";
-import Image from "next/image";
-import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import ErrorBoundary from "@/components/ErrorBoundary";
-import * as Sentry from "@sentry/nextjs";
+import type { AppProps } from 'next/app';
+import { Layout } from '@/components/layout';
+import { NextLayoutPage } from '@/types/nextjs';
+import { WagmiProvider, useWalletClient } from 'wagmi';
+import { AvatarComponent, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import '@rainbow-me/rainbowkit/styles.css';
+import { NextUIProvider } from '@nextui-org/react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { config } from '@/config/wagmi';
+import { trpc, trpcQueryClient } from '../lib/trpc';
+import { useEffect, useState } from 'react';
+import { wallet } from '@/services/wallet';
+import { DM_Sans, Inter } from 'next/font/google';
+import { Inspector, InspectParams } from 'react-dev-inspector';
+import { Analytics } from '@vercel/analytics/react';
+import { ApolloProvider } from '@apollo/client';
+import { infoClient } from '@/lib/algebra/graphql/clients';
+import Image from 'next/image';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import ErrorBoundary from '@/components/ErrorBoundary';
+import * as Sentry from '@sentry/nextjs';
 
 import {
   DynamicContextProvider,
   DynamicWidget,
-} from "@dynamic-labs/sdk-react-core";
-import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
-import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
-import { deserialize, serialize } from "wagmi";
+} from '@dynamic-labs/sdk-react-core';
+import { DynamicWagmiConnector } from '@dynamic-labs/wagmi-connector';
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
+import { deserialize, serialize } from 'wagmi';
 
 // enableStaticRendering(true)
 const queryClient = new QueryClient({
@@ -49,9 +47,9 @@ const queryClient = new QueryClient({
 });
 
 const dmSans = DM_Sans({
-  weight: ["300", "400", "500", "600", "700"],
-  subsets: ["latin", "latin-ext"],
-  variable: "--dm_sans",
+  weight: ['300', '400', '500', '600', '700'],
+  subsets: ['latin', 'latin-ext'],
+  variable: '--dm_sans',
 });
 
 const Provider = ({ children }: { children: React.ReactNode }) => {
@@ -73,7 +71,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
 const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
   return (
     <Image
-      src={"/images/empty-logo.png"}
+      src={'/images/empty-logo.png'}
       alt="User avatar"
       width={size}
       height={size}
@@ -106,10 +104,7 @@ export default function App({
 
   return (
     <ErrorBoundary>
-      <trpc.Provider
-        client={trpcQueryClient}
-        queryClient={queryClient}
-      >
+      <trpc.Provider client={trpcQueryClient} queryClient={queryClient}>
         <Analytics />
         <WagmiProvider config={config}>
           <PersistQueryClientProvider
@@ -125,7 +120,7 @@ export default function App({
                 <NextUIProvider>
                   <Provider>
                     <Inspector
-                      keys={["Ctrl", "Shift", "Z"]}
+                      keys={['Ctrl', 'Shift', 'Z']}
                       onClickElement={({ codeInfo }: InspectParams) => {
                         if (!codeInfo) {
                           return;
@@ -133,7 +128,7 @@ export default function App({
 
                         window.open(
                           `cursor://file/${codeInfo.absolutePath}:${codeInfo.lineNumber}:${codeInfo.columnNumber}`,
-                          "_blank"
+                          '_blank'
                         );
                       }}
                     ></Inspector>
