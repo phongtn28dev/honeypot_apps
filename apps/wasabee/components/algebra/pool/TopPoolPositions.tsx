@@ -14,6 +14,7 @@ import {
   Pagination,
   Button,
   SortDescriptor,
+  Link,
 } from '@nextui-org/react';
 import { LoadingContainer } from '@/components/LoadingDisplay/LoadingDisplay';
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
@@ -99,9 +100,9 @@ export default function TopPoolPositions({ poolId }: { poolId: string }) {
             >
               LIQUIDITY
             </TableColumn>
-            {/* <TableColumn className="text-black w-1/4 text-center">
-              COPY
-            </TableColumn> */}
+            <TableColumn className="text-black w-1/4 text-center">
+              COPY POSITION
+            </TableColumn>
           </TableHeader>
           <TableBody>
             {positions.map((position) => (
@@ -117,12 +118,12 @@ export default function TopPoolPositions({ poolId }: { poolId: string }) {
                   ) : (
                     <>
                       {DynamicFormatAmount({
-                        amount: position.tickUpper.price0,
+                        amount: position.tickLower.price0,
                         decimals: 2,
                       })}{' '}
                       -{' '}
                       {DynamicFormatAmount({
-                        amount: position.tickUpper.price1,
+                        amount: position.tickUpper.price0,
                         decimals: 2,
                       })}{' '}
                     </>
@@ -143,15 +144,15 @@ export default function TopPoolPositions({ poolId }: { poolId: string }) {
                     endWith: position.token1.symbol,
                   })}
                 </TableCell>
-                {/* <TableCell className="text-white w-1/4 text-center">
-                  <Button
-                    variant="light"
-                    className="bg-white text-black"
-                    onPress={() => navigator.clipboard.writeText(position.id)}
+                <TableCell className="text-white w-1/4 text-center">
+                  <Link
+                    href={`/new-position/${poolId}?leftrange=${position.tickLower.price0}&rightrange=${position.tickUpper.price0}`}
                   >
-                    Copy Position
-                  </Button>
-                </TableCell> */}
+                    <Button variant="light" className="bg-white text-black">
+                      Copy Position
+                    </Button>
+                  </Link>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

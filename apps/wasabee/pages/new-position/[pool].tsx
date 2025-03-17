@@ -1,33 +1,38 @@
-import PageContainer from "@/components/algebra/common/PageContainer";
-import PageTitle from "@/components/algebra/common/PageTitle";
-import LiquidityChart from "@/components/algebra/create-position/LiquidityChart";
-import RangeSelector from "@/components/algebra/create-position/RangeSelector";
-import PresetTabs from "@/components/algebra/create-position/PresetTabs";
-import { Bound } from "@cryptoalgebra/sdk";
-import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/router";
-import { Address } from "viem";
-import AmountsSection from "@/components/algebra/create-position/AmountsSection";
-import { useCurrency } from "@/lib/algebra/hooks/common/useCurrency";
-import { ManageLiquidity } from "@/types/algebra/types/manage-liquidity";
+import PageContainer from '@/components/algebra/common/PageContainer';
+import PageTitle from '@/components/algebra/common/PageTitle';
+import LiquidityChart from '@/components/algebra/create-position/LiquidityChart';
+import RangeSelector from '@/components/algebra/create-position/RangeSelector';
+import PresetTabs from '@/components/algebra/create-position/PresetTabs';
+import { Bound } from '@cryptoalgebra/sdk';
+import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
+import { Address } from 'viem';
+import AmountsSection from '@/components/algebra/create-position/AmountsSection';
+import { useCurrency } from '@/lib/algebra/hooks/common/useCurrency';
+import { ManageLiquidity } from '@/types/algebra/types/manage-liquidity';
 import {
   useDerivedMintInfo,
   useMintActionHandlers,
   useMintState,
   useRangeHopCallbacks,
-} from "@/lib/algebra/state/mintStore";
+} from '@/lib/algebra/state/mintStore';
 import {
   useReadAlgebraPoolToken0,
   useReadAlgebraPoolToken1,
-} from "@/wagmi-generated";
-import { DynamicFormatAmount } from "@/lib/algebra/utils/common/formatAmount";
-
-type NewPositionPageParams = Record<"pool", Address>;
+} from '@/wagmi-generated';
+import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { useParams, useSearchParams } from 'next/navigation';
+type NewPositionPageParams = Record<'pool', Address>;
 
 const NewPositionPage = () => {
   const router = useRouter();
   const { pool: poolAddress } = router.query as { pool: Address };
+  const searchParams = useSearchParams();
+  const leftrange = searchParams.get('leftrange');
+  const rightrange = searchParams.get('rightrange');
   const [useNative, setUseNative] = useState(true);
+
+  console.log(leftrange, rightrange);
 
   const { data: token0 } = useReadAlgebraPoolToken0({
     address: poolAddress,
@@ -64,7 +69,7 @@ const NewPositionPage = () => {
   const currentPrice = useMemo(() => {
     if (!mintInfo.price) return;
     return DynamicFormatAmount({
-      amount: price ?? "",
+      amount: price ?? '',
       decimals: 5,
       endWith: currencyB?.symbol,
     });
@@ -96,10 +101,18 @@ const NewPositionPage = () => {
 
   useEffect(() => {
     return () => {
-      onLeftRangeInput("");
-      onRightRangeInput("");
+      onLeftRangeInput('');
+      onRightRangeInput('');
     };
   }, []);
+
+  useEffect(() => {
+    onLeftRangeInput(leftrange as string);
+  }, [leftrange]);
+
+  useEffect(() => {
+    onRightRangeInput(rightrange as string);
+  }, [rightrange]);
 
   return (
     <PageContainer>
