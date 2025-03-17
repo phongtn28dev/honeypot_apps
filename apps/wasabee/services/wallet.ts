@@ -1,22 +1,22 @@
-import { Network, networks } from "./chain";
-import BigNumber from "bignumber.js";
-import { Address, PublicClient, WalletClient, zeroAddress } from "viem";
-import { RouterV2Contract } from "./contract/dex/routerv2-contract";
-import { FactoryContract } from "./contract/dex/factory-contract";
-import { FtoFactoryContract } from "./contract/launches/fto/ftofactory-contract";
-import { FtoFacadeContract } from "./contract/launches/fto/ftofacade-contract";
-import { makeAutoObservable, reaction } from "mobx";
-import { createPublicClientByChain } from "@/lib/client";
-import { StorageState } from "./utils";
-import { MemeFactoryContract } from "@/services/contract/launches/pot2pump/memefactory-contract";
-import { MEMEFacadeContract } from "@/services/contract/launches/pot2pump/memefacade-contract";
-import { ICHIVaultFactoryContract } from "@/services/contract/aquabera/ICHIVaultFactory-contract";
-import { DEFAULT_CHAIN_ID } from "@/config/algebra/default-chain-id";
-import { ICHIVaultVolatilityCheckContract } from "./contract/aquabera/ICHIVaultVolatilityCheckContract";
+import { Network, networks } from './chain';
+import BigNumber from 'bignumber.js';
+import { Address, PublicClient, WalletClient, zeroAddress } from 'viem';
+import { RouterV2Contract } from './contract/dex/routerv2-contract';
+import { FactoryContract } from './contract/dex/factory-contract';
+import { FtoFactoryContract } from './contract/launches/fto/ftofactory-contract';
+import { FtoFacadeContract } from './contract/launches/fto/ftofacade-contract';
+import { makeAutoObservable, reaction } from 'mobx';
+import { createPublicClientByChain } from '@/lib/client';
+import { StorageState } from './utils';
+import { MemeFactoryContract } from '@/services/contract/launches/pot2pump/memefactory-contract';
+import { MEMEFacadeContract } from '@/services/contract/launches/pot2pump/memefacade-contract';
+import { ICHIVaultFactoryContract } from '@/services/contract/aquabera/ICHIVaultFactory-contract';
+import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
+import { ICHIVaultVolatilityCheckContract } from './contract/aquabera/ICHIVaultVolatilityCheckContract';
 
 export class Wallet {
-  account: string = "";
-  accountShort = "";
+  account: string = '';
+  accountShort = '';
   networks: Network[] = [];
   balance: BigNumber = new BigNumber(0);
   walletClient!: WalletClient;
@@ -34,13 +34,10 @@ export class Wallet {
   publicClient!: PublicClient;
   isInit = false;
   get networksMap() {
-    return this.networks.reduce(
-      (acc, network) => {
-        acc[network.chainId] = network;
-        return acc;
-      },
-      {} as Record<number, Network>
-    );
+    return this.networks.reduce((acc, network) => {
+      acc[network.chainId] = network;
+      return acc;
+    }, {} as Record<number, Network>);
   }
 
   get currentChain() {
@@ -63,11 +60,19 @@ export class Wallet {
     );
   }
 
+  changeChain(chainId: number) {
+    this.currentChainId = chainId;
+    this.walletClient.switchChain({
+      id: chainId,
+    });
+    this.initWallet(this.walletClient);
+  }
+
   async initWallet(walletClient?: WalletClient) {
-    console.log("initWallet");
+    console.log('initWallet');
     this.networks = networks;
     this.currentChainId = walletClient?.chain?.id || DEFAULT_CHAIN_ID;
-    const mockAccount = localStorage.getItem("mockAccount");
+    const mockAccount = localStorage.getItem('mockAccount');
     this.account = mockAccount || walletClient?.account?.address || zeroAddress;
     this.contracts = {
       routerV2: new RouterV2Contract({
@@ -98,6 +103,9 @@ export class Wallet {
     this.publicClient = createPublicClientByChain(this.currentChain.chain);
     if (walletClient) {
       this.walletClient = walletClient;
+      walletClient.switchChain({
+        id: this.currentChainId,
+      });
     }
     this.currentChain.init();
     await StorageState.sync();

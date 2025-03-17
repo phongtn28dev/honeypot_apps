@@ -1,24 +1,30 @@
-import TokenLogo from "@/components/TokenLogo/TokenLogo";
-import { getSingleVaultDetails } from "@/lib/algebra/graphql/clients/vaults";
-import { DynamicFormatAmount } from "@/lib/algebra/utils/common/formatAmount";
-import { ICHIVaultContract } from "@/services/contract/aquabera/ICHIVault-contract";
-import { Token } from "@/services/contract/token";
-import { wallet } from "@/services/wallet";
+import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { getSingleVaultDetails } from '@/lib/algebra/graphql/clients/vaults';
+import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
+import { Token } from '@/services/contract/token';
+import { wallet } from '@/services/wallet';
 import {
   useReadIchiVaultAllowToken0,
   useReadIchiVaultAllowToken1,
-} from "@/wagmi-generated";
-import { Skeleton } from "@nextui-org/react";
-import { observer } from "mobx-react-lite";
-import { useEffect, useMemo, useState } from "react";
+} from '@/wagmi-generated';
+import { Skeleton } from '@nextui-org/react';
+import { observer } from 'mobx-react-lite';
+import { useEffect, useMemo, useState } from 'react';
 
 export const MyVaultRow = observer(
   ({ vault }: { vault: ICHIVaultContract }) => {
     const [vaultContract, setVaultContract] = useState<
       ICHIVaultContract | undefined
     >(undefined);
-    const tokenA = Token.getToken({ address: vault.token0?.address ?? "" });
-    const tokenB = Token.getToken({ address: vault.token1?.address ?? "" });
+    const tokenA = Token.getToken({
+      address: vault.token0?.address ?? '',
+      chainId: wallet.currentChainId.toString(),
+    });
+    const tokenB = Token.getToken({
+      address: vault.token1?.address ?? '',
+      chainId: wallet.currentChainId.toString(),
+    });
     const loading = useMemo(() => {
       return !vaultContract || !tokenA || !tokenB || !vaultContract?.userTVLUSD;
     }, [vaultContract, tokenA, tokenB, vaultContract?.userTVLUSD]);
@@ -105,18 +111,8 @@ export const MyVaultRow = observer(
         <td className="py-4 px-6">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1">
-              {isTokenAAllowed.data && (
-                <TokenLogo
-                  token={tokenA}
-                  size={24}
-                />
-              )}
-              {isTokenBAllowed.data && (
-                <TokenLogo
-                  token={tokenB}
-                  size={24}
-                />
-              )}
+              {isTokenAAllowed.data && <TokenLogo token={tokenA} size={24} />}
+              {isTokenBAllowed.data && <TokenLogo token={tokenB} size={24} />}
             </div>
             <div className="flex">
               <p className="text-black font-medium">
@@ -133,7 +129,7 @@ export const MyVaultRow = observer(
           {DynamicFormatAmount({
             amount: vaultContract?.userTVLUSD ?? 0,
             decimals: 3,
-            endWith: " $",
+            endWith: ' $',
           })}
         </td>
       </tr>

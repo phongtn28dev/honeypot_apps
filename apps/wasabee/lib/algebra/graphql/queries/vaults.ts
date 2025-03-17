@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 export const VAULTS_SORTED_BY_HOLDERS = gql`
   query VaultsSortedByHolders($search: String) {
@@ -50,6 +50,10 @@ export const VAULT_FRAGMENT = gql`
     createdAtTimestamp
     holdersCount
     totalShares
+    feeApr_1d
+    feeApr_3d
+    feeApr_7d
+    feeApr_30d
     pool {
       ...PoolField
     }

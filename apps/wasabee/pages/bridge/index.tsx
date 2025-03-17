@@ -5,7 +5,7 @@ import rhinoLogo from '@/public/images/partners/rhino-finance-logo.svg';
 import { Tab } from '@nextui-org/react';
 import Image from 'next/image';
 import OrbiterBridge from './OrbiterBridge';
-import StargateBridge from './StargateBridge/StargateBridge';
+import StargateBridge from './StargateBridge';
 
 export default function Bridge() {
   return (

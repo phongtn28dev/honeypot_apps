@@ -137,6 +137,7 @@ export class OrbiterBridge {
       if (!this.selectedToken.isNative) {
         const fromToken = Token.getToken({
           address: this.selectedToken.address,
+          chainId: wallet.currentChainId.toString(),
         });
 
         await fromToken.approveIfNoAllowance({

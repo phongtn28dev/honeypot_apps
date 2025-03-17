@@ -10,6 +10,11 @@
 
 import { makeAutoObservable, reaction } from 'mobx';
 import { Token } from './contract/token';
+import {
+  stargateSupportedChain,
+  stargateSupportedToken,
+} from '@/config/stargateConfig';
+import { wallet } from './wallet';
 
 export class StargateBridge {
   selectedToken: Token | null = null;
@@ -23,6 +28,18 @@ export class StargateBridge {
 
   get toAmount() {
     return '0';
+  }
+
+  getAvailableTokens(): Token[] {
+    return wallet.currentChain.validatedTokens.filter((token) =>
+      stargateSupportedToken.includes(token.symbol)
+    );
+  }
+
+  swapChainIds() {
+    const temp = this.fromChainId;
+    this.fromChainId = this.toChainId;
+    this.toChainId = temp;
   }
 
   setSelectedToken(token: Token) {

@@ -1,12 +1,12 @@
-import { gql } from "@apollo/client";
-import { infoClient } from ".";
-import { PairFilter, SubgraphProjectFilter } from "@/services/launchpad";
-import { PageRequest } from "@/services/indexer/indexerTypes";
-import dayjs from "dayjs";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
-import BigNumber from "bignumber.js";
-import { Token } from "@/services/contract/token";
-import { Pot2Pump } from "../generated/graphql";
+import { gql } from '@apollo/client';
+import { infoClient } from '.';
+import { PairFilter, SubgraphProjectFilter } from '@/services/launchpad';
+import { PageRequest } from '@/services/indexer/indexerTypes';
+import dayjs from 'dayjs';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
+import BigNumber from 'bignumber.js';
+import { Token } from '@/services/contract/token';
+import { Pot2Pump } from '../generated/graphql';
 import {
   Pot2PumpPottingNearSuccessDocument,
   Pot2PumpPottingHighPriceDocument,
@@ -17,9 +17,10 @@ import {
   Pot2PumpPottingTrendingQuery,
   Pot2PumpPottingTrendingDocument,
   Pot2PumpPottingTrendingQueryVariables,
-} from "../generated/graphql";
-import { filter } from "lodash";
-import { calculateToken24hPriceChange } from "../utils/calculateToken24hChange";
+} from '../generated/graphql';
+import { filter } from 'lodash';
+import { calculateToken24hPriceChange } from '../utils/calculateToken24hChange';
+import { wallet } from '@/services/wallet';
 
 type SubgraphToken = {
   id: string;
@@ -169,9 +170,10 @@ export const pot2PumpToMemePair = (
       pot2Pump.launchToken
     );
 
-    console.log("pot2Pump.priceChangePercentage", priceChangePercentage);
+    console.log('pot2Pump.priceChangePercentage', priceChangePercentage);
 
     contract.launchedToken = Token.getToken({
+      chainId: wallet.currentChainId.toString(),
       address: pot2Pump.launchToken?.id,
       name: pot2Pump.launchToken?.name,
       symbol: pot2Pump.launchToken?.symbol,
@@ -191,6 +193,7 @@ export const pot2PumpToMemePair = (
 
   if (pot2Pump.raisedToken?.id) {
     contract.raiseToken = Token.getToken({
+      chainId: wallet.currentChainId.toString(),
       address: pot2Pump.raisedToken?.id,
       name: pot2Pump.raisedToken?.name,
       symbol: pot2Pump.raisedToken?.symbol,
@@ -226,7 +229,7 @@ export async function fetchNearSuccessPot2Pump() {
   });
 
   console.log(
-    "Pot2PumpPottingNearSuccessDocument",
+    'Pot2PumpPottingNearSuccessDocument',
     Pot2PumpPottingNearSuccessDocument
   );
 
@@ -267,7 +270,7 @@ export async function fetchPairsList({
   filter: PairFilter;
   pageRequest?: PageRequest;
 }): Promise<PairsListResponse> {
-  let whereCondition = "";
+  let whereCondition = '';
   let conditions = [];
 
   if (filter.search) {
@@ -282,13 +285,13 @@ export async function fetchPairsList({
     `);
   }
 
-  if (filter.status === "success") {
+  if (filter.status === 'success') {
     conditions.push(`raisedTokenReachingMinCap: true`);
-  } else if (filter.status === "fail") {
+  } else if (filter.status === 'fail') {
     conditions.push(
       `raisedTokenReachingMinCap: false, endTime_lte: ${dayjs().unix()}`
     );
-  } else if (filter.status === "processing") {
+  } else if (filter.status === 'processing') {
     conditions.push(
       `raisedTokenReachingMinCap: false, endTime_gt: ${dayjs().unix()}`
     );
@@ -311,25 +314,25 @@ export async function fetchPairsList({
   }
 
   if (conditions.length > 0) {
-    whereCondition = `{ ${conditions.join(", ")} }`;
+    whereCondition = `{ ${conditions.join(', ')} }`;
   }
 
   const queryParts = [
-    filter.limit ? `first: ${filter.limit}` : "",
+    filter.limit ? `first: ${filter.limit}` : '',
     pageRequest?.pageNum && filter.limit
       ? `skip: ${(pageRequest?.pageNum - 1) * filter.limit}`
-      : "",
-    pageRequest?.orderBy ? `orderBy: ${pageRequest?.orderBy}` : "",
+      : '',
+    pageRequest?.orderBy ? `orderBy: ${pageRequest?.orderBy}` : '',
     pageRequest?.orderDirection
       ? `orderDirection: ${pageRequest.orderDirection}`
-      : "",
-    whereCondition ? `where: ${whereCondition}` : "",
+      : '',
+    whereCondition ? `where: ${whereCondition}` : '',
   ].filter(Boolean);
 
   const query = `
     query PairsList {
       pot2Pumps(
-        ${queryParts.join(", ")}
+        ${queryParts.join(', ')}
       ) {
         ${pop2PumpQuery}
       }
@@ -374,13 +377,13 @@ export async function fetchPairsList({
     const pageInfo: PageInfo = {
       hasPreviousPage: false,
       hasNextPage: pairs.length === filter.limit,
-      startCursor: "",
-      endCursor: "",
+      startCursor: '',
+      endCursor: '',
     };
 
     return {
-      status: "success",
-      message: "Success",
+      status: 'success',
+      message: 'Success',
       data: {
         pairs,
         pageInfo,
@@ -447,8 +450,8 @@ export async function fetchMemetrackerList({
     }));
 
     return {
-      status: "success",
-      message: "Success",
+      status: 'success',
+      message: 'Success',
       data: {
         pairs,
       },
@@ -466,15 +469,19 @@ export async function fetchPot2PumpList({
 }): Promise<Pot2PumpListResponse> {
   let whereCondition: string[] = [];
 
-  if (filter.status === "success") {
+  if (filter.status === 'success') {
     whereCondition.push(` raisedTokenReachingMinCap: true `);
-  } else if (filter.status === "fail") {
+  } else if (filter.status === 'fail') {
     whereCondition.push(
-      ` raisedTokenReachingMinCap: false, endTime_lt: ${Math.floor(Date.now() / 1000)} `
+      ` raisedTokenReachingMinCap: false, endTime_lt: ${Math.floor(
+        Date.now() / 1000
+      )} `
     );
-  } else if (filter.status === "processing") {
+  } else if (filter.status === 'processing') {
     whereCondition.push(
-      ` raisedTokenReachingMinCap: false, endTime_gte: ${Math.floor(Date.now() / 1000)} `
+      ` raisedTokenReachingMinCap: false, endTime_gte: ${Math.floor(
+        Date.now() / 1000
+      )} `
     );
   }
 
@@ -536,7 +543,7 @@ export async function fetchPot2PumpList({
 
   const launchTokenFilter: any = {};
 
-  console.log("filter.search", filter.search);
+  console.log('filter.search', filter.search);
 
   if (filter.search) {
     launchTokenFilter.and = [
@@ -605,7 +612,7 @@ export async function fetchPot2PumpList({
   if (Object.keys(launchTokenFilter).length > 0) {
     const filterString = Object.entries(launchTokenFilter)
       .map(([key, value]) => {
-        if (key === "and" && Array.isArray(value)) {
+        if (key === 'and' && Array.isArray(value)) {
           // Handle the 'and' case specifically
           const andConditions = value
             .map((condition) => {
@@ -616,27 +623,27 @@ export async function fetchPot2PumpList({
                     (orCondition: any) =>
                       `{ ${Object.entries(orCondition)
                         .map(([k, v]) => `${k}: "${v}"`)
-                        .join(", ")} }`
+                        .join(', ')} }`
                   )
-                  .join(", ");
+                  .join(', ');
                 return `{or: [${orConditions}]}`;
               } else {
                 // Handle normal 'and' conditions
                 return `{ ${Object.entries(condition)
                   .map(([k, v]) => `${k}: "${v}"`)
-                  .join(", ")} }`;
+                  .join(', ')} }`;
               }
             })
-            .join(", ");
+            .join(', ');
           return `and: [${andConditions}]`;
         } else {
           // For other cases (e.g., txCount_gte)
           return `${key}: "${value}"`;
         }
       })
-      .join(", ");
+      .join(', ');
 
-    console.log("filterString", filterString);
+    console.log('filterString', filterString);
 
     whereCondition.push(`launchToken_: { ${filterString} }`);
   }
@@ -652,38 +659,38 @@ export async function fetchPot2PumpList({
   }
 
   const queryParts = [
-    filter.limit ? `first: ${filter.limit}` : "",
+    filter.limit ? `first: ${filter.limit}` : '',
     filter?.currentPage && filter.limit
       ? `skip: ${filter?.currentPage * filter.limit}`
-      : "",
-    filter.orderBy ? `orderBy: ${filter.orderBy}` : "",
-    filter.orderDirection ? `orderDirection: ${filter.orderDirection}` : "",
+      : '',
+    filter.orderBy ? `orderBy: ${filter.orderBy}` : '',
+    filter.orderDirection ? `orderDirection: ${filter.orderDirection}` : '',
     whereCondition.length > 0
       ? `where:{ ${whereCondition
           .map((condition) => `${condition}`)
-          .join(",\n")}}`
-      : "",
+          .join(',\n')}}`
+      : '',
   ].filter(Boolean);
 
-  const queryString = queryParts.join(",\n");
+  const queryString = queryParts.join(',\n');
 
   const query = `
     query PairsList {
-      pot2Pumps ${queryString.length > 0 ? `(${queryString})` : ""}{
+      pot2Pumps ${queryString.length > 0 ? `(${queryString})` : ''}{
         ${pop2PumpQuery}
       }
     }
   `;
 
-  console.log("Pumping query", query);
+  console.log('Pumping query', query);
 
   const { data } = await infoClient.query<Pot2PumpListData>({
     query: gql(query),
   });
 
   return {
-    status: "success",
-    message: "Success",
+    status: 'success',
+    message: 'Success',
     data: {
       pairs: await pot2PumpListToMemePairList(
         data.pot2Pumps as Partial<Pot2Pump>[]
@@ -716,19 +723,23 @@ export async function fetchPot2Pumps({
     `);
   }
 
-  if (filter.status === "success") {
+  if (filter.status === 'success') {
     whereCondition.push(` raisedTokenReachingMinCap: true `);
-  } else if (filter.status === "fail") {
+  } else if (filter.status === 'fail') {
     whereCondition.push(
-      ` raisedTokenReachingMinCap: false, endTime_lt: ${Math.floor(Date.now() / 1000)} `
+      ` raisedTokenReachingMinCap: false, endTime_lt: ${Math.floor(
+        Date.now() / 1000
+      )} `
     );
-  } else if (filter.status === "processing") {
+  } else if (filter.status === 'processing') {
     whereCondition.push(
-      ` raisedTokenReachingMinCap: false, endTime_gte: ${Math.floor(Date.now() / 1000)} `
+      ` raisedTokenReachingMinCap: false, endTime_gte: ${Math.floor(
+        Date.now() / 1000
+      )} `
     );
   }
 
-  console.log("filter", filter);
+  console.log('filter', filter);
 
   if (filter.tvl?.min !== undefined) {
     whereCondition.push(` LaunchTokenTVLUSD_gte: "${filter.tvl.min}" `);
@@ -759,23 +770,23 @@ export async function fetchPot2Pumps({
   }
 
   const queryParts = [
-    filter.limit ? `first: ${filter.limit}` : "",
+    filter.limit ? `first: ${filter.limit}` : '',
     filter?.currentPage && filter.limit
       ? `skip: ${filter?.currentPage * filter.limit}`
-      : "",
-    filter.orderBy ? `orderBy: ${filter.orderBy}` : "",
-    filter.orderDirection ? `orderDirection: ${filter.orderDirection}` : "",
+      : '',
+    filter.orderBy ? `orderBy: ${filter.orderBy}` : '',
+    filter.orderDirection ? `orderDirection: ${filter.orderDirection}` : '',
     whereCondition.length > 0
       ? `where:{ ${whereCondition
           .map((condition) => `${condition}`)
-          .join(",\n")}}`
-      : "",
+          .join(',\n')}}`
+      : '',
   ].filter(Boolean);
 
   const query = `
     query PairsList {
       pot2Pumps(
-        ${queryParts.join(",\n")}
+        ${queryParts.join(',\n')}
       ) {
         ...pot2Pump
       }

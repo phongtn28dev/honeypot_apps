@@ -1,8 +1,9 @@
-import TokenLogo from "@/components/TokenLogo/TokenLogo";
-import { Token } from "@/services/contract/token";
-import { IDerivedMintInfo } from "@/lib/algebra/state/mintStore";
-import { useMemo } from "react";
-import { zeroAddress } from "viem";
+import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { Token } from '@/services/contract/token';
+import { IDerivedMintInfo } from '@/lib/algebra/state/mintStore';
+import { useMemo } from 'react';
+import { zeroAddress } from 'viem';
+import { wallet } from '@/services/wallet';
 
 interface TokenRatioProps {
   mintInfo: IDerivedMintInfo;
@@ -22,22 +23,22 @@ const TokenRatio = ({ mintInfo }: TokenRatioProps) => {
     const left = mintInfo.lowerPrice?.toSignificant(5);
     const right = mintInfo.upperPrice?.toSignificant(5);
 
-    if (tickUpperAtLimit) return ["50", "50"];
+    if (tickUpperAtLimit) return ['50', '50'];
 
-    if (!currentPrice) return ["0", "0"];
+    if (!currentPrice) return ['0', '0'];
 
-    if (!left && !right) return ["0", "0"];
+    if (!left && !right) return ['0', '0'];
 
-    if (!left && right) return ["0", "100"];
+    if (!left && right) return ['0', '100'];
 
-    if (!right && left) return ["100", "0"];
+    if (!right && left) return ['100', '0'];
 
     if (mintInfo.depositADisabled) {
-      return ["0", "100"];
+      return ['0', '100'];
     }
 
     if (mintInfo.depositBDisabled) {
-      return ["100", "0"];
+      return ['100', '0'];
     }
 
     if (left && right && currentPrice) {
@@ -56,7 +57,7 @@ const TokenRatio = ({ mintInfo }: TokenRatioProps) => {
       }
     }
 
-    return ["0", "0"];
+    return ['0', '0'];
   }, [mintInfo, tickLowerAtLimit, tickUpperAtLimit]);
 
   return (
@@ -72,6 +73,7 @@ const TokenRatio = ({ mintInfo }: TokenRatioProps) => {
               size={24}
               token={Token.getToken({
                 address: currencyA ? currencyA.wrapped.address : zeroAddress,
+                chainId: wallet.currentChainId.toString(),
               })}
             />
             <span className="text-sm text-[rgba(32,32,32,1)] font-gliker">{`${parseFloat(
@@ -88,6 +90,7 @@ const TokenRatio = ({ mintInfo }: TokenRatioProps) => {
               size={24}
               token={Token.getToken({
                 address: currencyB ? currencyB.wrapped.address : zeroAddress,
+                chainId: wallet.currentChainId.toString(),
               })}
             />
 

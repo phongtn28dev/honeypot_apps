@@ -68,7 +68,11 @@ const PoolPage = observer(() => {
     if (!wallet.isInit) return;
     if (poolInfo?.pool?.token0.id) {
       setToken0(
-        Token.getToken({ address: poolInfo.pool.token0.id, force: true })
+        Token.getToken({
+          address: poolInfo.pool.token0.id,
+          force: true,
+          chainId: wallet.currentChainId.toString(),
+        })
       );
     }
   }, [poolInfo?.pool?.token0.id, wallet.isInit]);
@@ -77,7 +81,11 @@ const PoolPage = observer(() => {
     if (!wallet.isInit) return;
     if (poolInfo?.pool?.token1.id) {
       setToken1(
-        Token.getToken({ address: poolInfo.pool.token1.id, force: true })
+        Token.getToken({
+          address: poolInfo.pool.token1.id,
+          force: true,
+          chainId: wallet.currentChainId.toString(),
+        })
       );
     }
   }, [poolInfo?.pool?.token1.id, wallet.isInit]);

@@ -1,16 +1,16 @@
-import { BaseContract } from "./..";
-import { wallet } from "@/services/wallet";
-import { makeAutoObservable } from "mobx";
-import { Address, getContract, zeroAddress } from "viem";
-import { ICHIVaultABI } from "@/lib/abis/aquabera/ICHIVault";
-import { writeContract } from "viem/actions";
-import { ContractWrite } from "@/services/utils";
-import BigNumber from "bignumber.js";
-import { Token } from "../token";
-import { PairContract } from "../dex/liquidity/pair-contract";
-import { VaultDeposit } from "@/lib/algebra/graphql/generated/graphql";
-import { VaultWithdraw } from "@/lib/algebra/graphql/generated/graphql";
-import { VaultCollectFee } from "@/lib/algebra/graphql/generated/graphql";
+import { BaseContract } from './..';
+import { wallet } from '@/services/wallet';
+import { makeAutoObservable } from 'mobx';
+import { Address, getContract, zeroAddress } from 'viem';
+import { ICHIVaultABI } from '@/lib/abis/aquabera/ICHIVault';
+import { writeContract } from 'viem/actions';
+import { ContractWrite } from '@/services/utils';
+import BigNumber from 'bignumber.js';
+import { Token } from '../token';
+import { PairContract } from '../dex/liquidity/pair-contract';
+import { VaultDeposit } from '@/lib/algebra/graphql/generated/graphql';
+import { VaultWithdraw } from '@/lib/algebra/graphql/generated/graphql';
+import { VaultCollectFee } from '@/lib/algebra/graphql/generated/graphql';
 
 export class ICHIVaultContract implements BaseContract {
   static vaultsMap: Map<string, ICHIVaultContract> = new Map();
@@ -37,7 +37,7 @@ export class ICHIVaultContract implements BaseContract {
   }
 
   address: Address = zeroAddress;
-  name: string = "ICHIVault";
+  name: string = 'ICHIVault';
   abi = ICHIVaultABI;
   fee = 0;
   totalAmountsWithoutDecimal: { total0: bigint; total1: bigint } = {
@@ -56,6 +56,7 @@ export class ICHIVaultContract implements BaseContract {
   approvedToken0: BigInt = BigInt(0);
   approvedToken1: BigInt = BigInt(0);
   pool: PairContract | undefined = undefined;
+  apr: number = 0;
 
   recentTransactions: (VaultDeposit | VaultWithdraw | VaultCollectFee)[] = [];
 
@@ -148,7 +149,10 @@ export class ICHIVaultContract implements BaseContract {
       return;
     }
     const token0 = await this.contract.read.token0();
-    this.token0 = Token.getToken({ address: token0 });
+    this.token0 = Token.getToken({
+      address: token0,
+      chainId: wallet.currentChainId.toString(),
+    });
     return this.token0;
   }
 
@@ -157,7 +161,10 @@ export class ICHIVaultContract implements BaseContract {
       return;
     }
     const token1 = await this.contract.read.token1();
-    this.token1 = Token.getToken({ address: token1 });
+    this.token1 = Token.getToken({
+      address: token1,
+      chainId: wallet.currentChainId.toString(),
+    });
     return this.token1;
   }
 
@@ -191,7 +198,7 @@ export class ICHIVaultContract implements BaseContract {
       return;
     }
     return await new ContractWrite(this.contract.write.deposit, {
-      action: "deposit",
+      action: 'deposit',
     })
       .call([deposit0, deposit1, to as `0x${string}`])
       .finally(() => {
@@ -208,7 +215,7 @@ export class ICHIVaultContract implements BaseContract {
       return;
     }
     return await new ContractWrite(this.contract.write.withdraw, {
-      action: "withdraw",
+      action: 'withdraw',
     })
       .call([shares, to as `0x${string}`])
       .finally(() => {

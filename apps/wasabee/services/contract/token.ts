@@ -14,23 +14,29 @@ import { trpcClient } from '@/lib/trpc';
 import NetworkManager from '../network';
 import { getSingleTokenData } from '@/lib/algebra/graphql/clients/token';
 import { when } from 'mobx';
+
 export class Token implements BaseContract {
   static tokensMap: Record<string, Token> = {};
   static getToken({
     address,
+    chainId,
     force,
     ...args
   }: {
     address: string;
     force?: boolean;
+    chainId: string;
   } & Partial<Token>) {
     const lowerAddress = address.toLowerCase();
-    const key = `${lowerAddress}-${args.isNative ? 'native' : 'erc20'}`;
+    const key = `${lowerAddress}--${chainId}--${
+      args.isNative ? 'native' : 'erc20'
+    }`;
     const token = Token.tokensMap[key];
 
     if (!token) {
       Token.tokensMap[key] = new Token({
         address: lowerAddress,
+        chainId,
         ...args,
       });
     } else {
@@ -42,6 +48,7 @@ export class Token implements BaseContract {
     }
     return Token.tokensMap[key];
   }
+  chainId: string = '';
   address: string = '';
   name: string = '';
   balanceWithoutDecimals = new BigNumber(0);

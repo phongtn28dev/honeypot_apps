@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { infoClient } from ".";
+import { useQuery } from '@tanstack/react-query';
+import { infoClient } from '.';
 import {
   PoolsByTokenPairQuery,
   PoolsByTokenPairDocument,
@@ -14,19 +14,19 @@ import {
   SinglePoolQuery,
   SinglePoolQueryVariables,
   SinglePoolDocument,
-} from "../generated/graphql";
-import { Address, getContract } from "viem";
-import { algebraPositionManagerAddress } from "@/wagmi-generated";
-import { algebraPositionManagerAbi } from "@/wagmi-generated";
-import { useEffect, useState } from "react";
-import { MAX_UINT128 } from "@/config/algebra/max-uint128";
-import { wallet } from "@/services/wallet";
-import { CurrencyAmount, Token as AlgebranToken } from "@cryptoalgebra/sdk";
-import { unwrappedToken } from "@cryptoalgebra/sdk";
-import BigNumber from "bignumber.js";
-import { object } from "zod";
-import { PairContract } from "@/services/contract/dex/liquidity/pair-contract";
-import { Token } from "@/services/contract/token";
+} from '../generated/graphql';
+import { Address, getContract } from 'viem';
+import { algebraPositionManagerAddress } from '@/wagmi-generated';
+import { algebraPositionManagerAbi } from '@/wagmi-generated';
+import { useEffect, useState } from 'react';
+import { MAX_UINT128 } from '@/config/algebra/max-uint128';
+import { wallet } from '@/services/wallet';
+import { CurrencyAmount, Token as AlgebranToken } from '@cryptoalgebra/sdk';
+import { unwrappedToken } from '@cryptoalgebra/sdk';
+import BigNumber from 'bignumber.js';
+import { object } from 'zod';
+import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
+import { Token } from '@/services/contract/token';
 
 export const poolQueryToContract = (pool: Pool): PairContract => {
   const pairContract = new PairContract({
@@ -41,6 +41,7 @@ export const poolQueryToContract = (pool: Pool): PairContract => {
     decimals: pool.token0.decimals,
     name: pool.token0.name,
     symbol: pool.token0.symbol,
+    chainId: wallet.currentChainId.toString(),
   });
 
   pairContract.token1 = Token.getToken({
@@ -48,6 +49,7 @@ export const poolQueryToContract = (pool: Pool): PairContract => {
     decimals: pool.token1.decimals,
     name: pool.token1.name,
     symbol: pool.token1.symbol,
+    chainId: wallet.currentChainId.toString(),
   });
 
   return pairContract;
@@ -108,7 +110,7 @@ export const useUserPools = (userAddress: string) => {
   useEffect(() => {
     if (!data || !wallet.isInit || !algebraPositionManager.simulate) return;
     data.positions.forEach(async (position) => {
-      if (fetchedPositions.includes(position.pool.id.concat("-", position.id)))
+      if (fetchedPositions.includes(position.pool.id.concat('-', position.id)))
         return;
       try {
         const pool = position.pool;
@@ -163,7 +165,7 @@ export const useUserPools = (userAddress: string) => {
           : 0;
 
         if (
-          fetchedPositions.includes(position.pool.id.concat("-", position.id))
+          fetchedPositions.includes(position.pool.id.concat('-', position.id))
         )
           return;
 
@@ -193,7 +195,7 @@ export const useUserPools = (userAddress: string) => {
           }
         });
 
-        fetchedPositions.push(pool.id.concat("-", position.id));
+        fetchedPositions.push(pool.id.concat('-', position.id));
       } catch (error) {
         console.error(error);
       }

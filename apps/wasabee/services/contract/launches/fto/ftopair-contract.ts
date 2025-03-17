@@ -1,23 +1,23 @@
-import { BaseContract } from "../..";
-import { wallet } from "../../../wallet";
-import { getContract } from "viem";
-import { AsyncState, ContractWrite } from "../../../utils";
-import { makeAutoObservable } from "mobx";
-import { MUBAI_FTO_PAIR_ABI } from "@/lib/abis/ftoPair";
-import BigNumber from "bignumber.js";
-import { Token } from "../../token";
-import { dayjs } from "@/lib/dayjs";
-import { cn } from "@/lib/tailwindcss";
-import { trpcClient } from "@/lib/trpc";
-import { ZodError } from "zod";
-import launchpad, { statusTextToNumber } from "../../../launchpad";
-import { BaseLaunchContract } from "@/services/contract/launches/base-launch-contract";
-import { formatAmountWithAlphabetSymbol } from "@/lib/algebra/utils/common/formatAmount";
+import { BaseContract } from '../..';
+import { wallet } from '../../../wallet';
+import { getContract } from 'viem';
+import { AsyncState, ContractWrite } from '../../../utils';
+import { makeAutoObservable } from 'mobx';
+import { MUBAI_FTO_PAIR_ABI } from '@/lib/abis/ftoPair';
+import BigNumber from 'bignumber.js';
+import { Token } from '../../token';
+import { dayjs } from '@/lib/dayjs';
+import { cn } from '@/lib/tailwindcss';
+import { trpcClient } from '@/lib/trpc';
+import { ZodError } from 'zod';
+import launchpad, { statusTextToNumber } from '../../../launchpad';
+import { BaseLaunchContract } from '@/services/contract/launches/base-launch-contract';
+import { formatAmountWithAlphabetSymbol } from '@/lib/algebra/utils/common/formatAmount';
 
 export class FtoPairContract implements BaseLaunchContract {
   databaseId: number | undefined = undefined;
-  address = "";
-  name: string = "";
+  address = '';
+  name: string = '';
   abi = MUBAI_FTO_PAIR_ABI;
   raiseToken: Token | undefined = undefined;
   launchedToken: Token | undefined = undefined;
@@ -25,29 +25,29 @@ export class FtoPairContract implements BaseLaunchContract {
   depositedLaunchedTokenWithoutDecimals: BigNumber | null = null;
   launchedTokenBuyCount: BigNumber | null = null;
   launchedTokenSellCount: BigNumber | null = null;
-  endTime: string = "";
-  startTime: string = "";
+  endTime: string = '';
+  startTime: string = '';
   state: number = 3;
-  launchedTokenProvider: string = "";
+  launchedTokenProvider: string = '';
   userDepositedRaisedToken: BigNumber | null = null;
-  projectName = "";
-  description = "";
-  telegram = "";
-  twitter = "";
-  website = "";
+  projectName = '';
+  description = '';
+  telegram = '';
+  twitter = '';
+  website = '';
   isValidated = false;
   isInit = false;
-  provider = "";
+  provider = '';
   canClaimLP = false;
   socials: {
     name: string;
     link: string;
     icon: string;
   }[] = [];
-  logoUrl = "";
-  bannerUrl = "";
+  logoUrl = '';
+  bannerUrl = '';
   participantsCount = new BigNumber(0);
-  beravoteSpaceId = "";
+  beravoteSpaceId = '';
 
   constructor(args: Partial<FtoPairContract>) {
     Object.assign(this, args);
@@ -60,7 +60,7 @@ export class FtoPairContract implements BaseLaunchContract {
       ? dayjs(
           new BigNumber(this.startTime).multipliedBy(1000).toNumber()
         ).toISOString()
-      : "-";
+      : '-';
   }
 
   get endTimeDisplay() {
@@ -68,7 +68,7 @@ export class FtoPairContract implements BaseLaunchContract {
       ? dayjs(
           new BigNumber(this.endTime).multipliedBy(1000).toNumber()
         ).toISOString()
-      : "-";
+      : '-';
   }
 
   get priceChangeDisplay() {
@@ -76,13 +76,19 @@ export class FtoPairContract implements BaseLaunchContract {
       Number(this.launchedToken?.derivedUSD) &&
       this.launchedToken?.initialUSD &&
       Number(this.launchedToken.initialUSD)
-      ? `${formatAmountWithAlphabetSymbol((Number(this.launchedToken.derivedUSD) / Number(this.launchedToken.initialUSD)).toFixed(2), 2)}%`
-      : "--";
+      ? `${formatAmountWithAlphabetSymbol(
+          (
+            Number(this.launchedToken.derivedUSD) /
+            Number(this.launchedToken.initialUSD)
+          ).toFixed(2),
+          2
+        )}%`
+      : '--';
   }
 
   get depositedRaisedToken() {
     if (!this.raiseToken) {
-      console.log("token is not initialized");
+      console.log('token is not initialized');
       return undefined;
     }
 
@@ -95,7 +101,7 @@ export class FtoPairContract implements BaseLaunchContract {
 
   get depositedLaunchedToken() {
     if (!this.launchedToken) {
-      console.log("token is not initialized");
+      console.log('token is not initialized');
       return undefined;
       return;
     }
@@ -162,45 +168,45 @@ export class FtoPairContract implements BaseLaunchContract {
   get remainTime() {
     const now = dayjs();
     if (!this.endTime) {
-      return "-";
+      return '-';
     }
     //console.log("this.endTime", this.endTime);
     const targetTime = dayjs(
       new BigNumber(this.endTime).multipliedBy(1000).toNumber()
     );
     if (!targetTime.isValid()) {
-      return "Invalid Date";
+      return 'Invalid Date';
     }
 
-    const diffDays = targetTime.diff(now, "days");
+    const diffDays = targetTime.diff(now, 'days');
 
     if (Math.abs(diffDays) >= 1) {
       return `${Math.abs(diffDays)} ${
-        diffDays > 0 ? "days later" : "days ago"
+        diffDays > 0 ? 'days later' : 'days ago'
       }`;
     }
 
-    const diffHours = targetTime.diff(now, "hours");
+    const diffHours = targetTime.diff(now, 'hours');
 
     if (Math.abs(diffHours) >= 1) {
       return `${Math.abs(diffHours)} ${
-        diffHours > 0 ? "hours later" : "hours ago"
+        diffHours > 0 ? 'hours later' : 'hours ago'
       }`;
     }
 
-    const diffMinutes = targetTime.diff(now, "minutes");
+    const diffMinutes = targetTime.diff(now, 'minutes');
     if (Math.abs(diffMinutes) >= 1) {
       return `${Math.abs(diffMinutes)} ${
-        diffMinutes > 0 ? "minutes later" : "minutes ago"
+        diffMinutes > 0 ? 'minutes later' : 'minutes ago'
       }`;
     }
 
-    return "Ends in a minute";
+    return 'Ends in a minute';
   }
 
   deposit = new AsyncState(async ({ amount }: { amount: string }) => {
     if (!this.raiseToken || !this.launchedToken) {
-      throw new Error("token is not initialized");
+      throw new Error('token is not initialized');
     }
     if (this.raiseToken.isNative) {
       // @ts-ignore
@@ -236,7 +242,7 @@ export class FtoPairContract implements BaseLaunchContract {
 
   claimLP = new AsyncState(async () => {
     if (!this.raiseToken || !this.launchedToken) {
-      throw new Error("token is not initialized");
+      throw new Error('token is not initialized');
     }
 
     await this.facadeContract.claimLP.call([
@@ -249,7 +255,7 @@ export class FtoPairContract implements BaseLaunchContract {
 
   resume = new AsyncState(async () => {
     if (!this.raiseToken || !this.launchedToken) {
-      throw new Error("token is not initialized");
+      throw new Error('token is not initialized');
     }
 
     await this.fotFactoryContract.resume.call([
@@ -262,7 +268,7 @@ export class FtoPairContract implements BaseLaunchContract {
 
   pause = new AsyncState(async () => {
     if (!this.raiseToken || !this.launchedToken) {
-      throw new Error("token is not initialized");
+      throw new Error('token is not initialized');
     }
 
     await this.fotFactoryContract.pause.call([
@@ -275,7 +281,7 @@ export class FtoPairContract implements BaseLaunchContract {
 
   get withdraw() {
     return new ContractWrite(this.contract.write.withdraw, {
-      action: "Withdraw",
+      action: 'Withdraw',
     });
   }
 
@@ -283,29 +289,29 @@ export class FtoPairContract implements BaseLaunchContract {
     switch (this.state) {
       case 0:
         return {
-          status: "success",
-          color: "bg-success/20 text-success-600",
+          status: 'success',
+          color: 'bg-success/20 text-success-600',
         };
       case 1:
         return {
-          status: "Fail",
-          color: "bg-danger/20 text-danger",
+          status: 'Fail',
+          color: 'bg-danger/20 text-danger',
         };
       case 2:
         return {
-          status: "Paused",
-          color: "bg-warning/20 text-warning-600",
+          status: 'Paused',
+          color: 'bg-warning/20 text-warning-600',
         };
       case 3:
         if (this.isCompleted) {
           return {
-            status: "Completed",
-            color: "bg-[rgba(226,232,240,0.1)] text-default-foreground",
+            status: 'Completed',
+            color: 'bg-[rgba(226,232,240,0.1)] text-default-foreground',
           };
         }
         return {
-          status: "Processing",
-          color: "text-[#83C2E9] bg-[rgba(131,194,233,0.1)]",
+          status: 'Processing',
+          color: 'text-[#83C2E9] bg-[rgba(131,194,233,0.1)]',
         };
     }
   }
@@ -325,25 +331,25 @@ export class FtoPairContract implements BaseLaunchContract {
     if (res.telegram) {
       this.telegram = res.telegram;
       this.socials.push({
-        name: "telegram",
+        name: 'telegram',
         link: res.telegram,
-        icon: "/images/telegram.svg",
+        icon: '/images/telegram.svg',
       });
     }
     if (res.twitter) {
       this.twitter = res.twitter;
       this.socials.push({
-        name: "twitter",
+        name: 'twitter',
         link: res.twitter,
-        icon: "/images/twitter.svg",
+        icon: '/images/twitter.svg',
       });
     }
     if (res.website) {
       this.website = res.website;
       this.socials.push({
-        name: "website",
+        name: 'website',
         link: res.website,
-        icon: "/images/website.svg",
+        icon: '/images/website.svg',
       });
     }
     if (res.description) {
@@ -425,7 +431,7 @@ export class FtoPairContract implements BaseLaunchContract {
 
     try {
       const claimed = await this.contract.read.claimedLp([wallet.account] as [
-        `0x${string}`,
+        `0x${string}`
       ]);
 
       const claimable = await this.contract.read.claimableLP([
@@ -444,7 +450,10 @@ export class FtoPairContract implements BaseLaunchContract {
       this.raiseToken.init();
     } else {
       const res = (await this.contract.read.raisedToken()) as `0x${string}`;
-      this.raiseToken = Token.getToken({ address: res });
+      this.raiseToken = Token.getToken({
+        address: res,
+        chainId: wallet.currentChainId.toString(),
+      });
       this.raiseToken.init();
     }
   }
@@ -455,7 +464,10 @@ export class FtoPairContract implements BaseLaunchContract {
       this.launchedToken.init();
     } else {
       const res = (await this.contract.read.launchedToken()) as `0x${string}`;
-      this.launchedToken = Token.getToken({ address: res });
+      this.launchedToken = Token.getToken({
+        address: res,
+        chainId: wallet.currentChainId.toString(),
+      });
       this.launchedToken.init();
     }
   }

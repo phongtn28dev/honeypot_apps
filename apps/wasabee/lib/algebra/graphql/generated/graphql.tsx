@@ -41,6 +41,7 @@ export type Account = {
   platformTxCount: Scalars['BigInt']['output'];
   pot2PumpLaunchCount: Scalars['BigInt']['output'];
   swapCount: Scalars['BigInt']['output'];
+  totalDepositPot2pumpUSD: Scalars['BigDecimal']['output'];
   totalSpendUSD: Scalars['BigDecimal']['output'];
   transaction: Array<Transaction>;
   vaultShares?: Maybe<Array<VaultShare>>;
@@ -145,6 +146,14 @@ export type Account_Filter = {
   swapCount_lte?: InputMaybe<Scalars['BigInt']['input']>;
   swapCount_not?: InputMaybe<Scalars['BigInt']['input']>;
   swapCount_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalDepositPot2pumpUSD?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalDepositPot2pumpUSD_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalDepositPot2pumpUSD_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalDepositPot2pumpUSD_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  totalDepositPot2pumpUSD_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalDepositPot2pumpUSD_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalDepositPot2pumpUSD_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalDepositPot2pumpUSD_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
   totalSpendUSD?: InputMaybe<Scalars['BigDecimal']['input']>;
   totalSpendUSD_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
   totalSpendUSD_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
@@ -167,6 +176,7 @@ export enum Account_OrderBy {
   PlatformTxCount = 'platformTxCount',
   Pot2PumpLaunchCount = 'pot2PumpLaunchCount',
   SwapCount = 'swapCount',
+  TotalDepositPot2pumpUsd = 'totalDepositPot2pumpUSD',
   TotalSpendUsd = 'totalSpendUSD',
   Transaction = 'transaction',
   VaultShares = 'vaultShares'
@@ -1305,13 +1315,31 @@ export enum DeployIchiVault_OrderBy {
   VaultAllowTokenB = 'vault__allowTokenB',
   VaultCount = 'vault__count',
   VaultCreatedAtTimestamp = 'vault__createdAtTimestamp',
+  VaultFeeApr_1d = 'vault__feeApr_1d',
+  VaultFeeApr_3d = 'vault__feeApr_3d',
+  VaultFeeApr_7d = 'vault__feeApr_7d',
+  VaultFeeApr_30d = 'vault__feeApr_30d',
+  VaultFeePerSecond0_1d = 'vault__feePerSecond0_1d',
+  VaultFeePerSecond0_3d = 'vault__feePerSecond0_3d',
+  VaultFeePerSecond0_7d = 'vault__feePerSecond0_7d',
+  VaultFeePerSecond0_30d = 'vault__feePerSecond0_30d',
+  VaultFeePerSecond1_1d = 'vault__feePerSecond1_1d',
+  VaultFeePerSecond1_3d = 'vault__feePerSecond1_3d',
+  VaultFeePerSecond1_7d = 'vault__feePerSecond1_7d',
+  VaultFeePerSecond1_30d = 'vault__feePerSecond1_30d',
   VaultHoldersCount = 'vault__holdersCount',
   VaultId = 'vault__id',
+  VaultLastFeeUpdate = 'vault__lastFeeUpdate',
+  VaultLastPrice = 'vault__lastPrice',
+  VaultLastPriceTimestamp = 'vault__lastPriceTimestamp',
   VaultSearchString = 'vault__searchString',
   VaultSender = 'vault__sender',
   VaultTokenA = 'vault__tokenA',
   VaultTokenB = 'vault__tokenB',
-  VaultTotalShares = 'vault__totalShares'
+  VaultTotalAmount0 = 'vault__totalAmount0',
+  VaultTotalAmount1 = 'vault__totalAmount1',
+  VaultTotalShares = 'vault__totalShares',
+  VaultTotalSupply = 'vault__totalSupply'
 }
 
 export type Deposit = {
@@ -2238,6 +2266,7 @@ export enum HoldingToken_OrderBy {
   AccountPlatformTxCount = 'account__platformTxCount',
   AccountPot2PumpLaunchCount = 'account__pot2PumpLaunchCount',
   AccountSwapCount = 'account__swapCount',
+  AccountTotalDepositPot2pumpUsd = 'account__totalDepositPot2pumpUSD',
   AccountTotalSpendUsd = 'account__totalSpendUSD',
   HoldingValue = 'holdingValue',
   Id = 'id',
@@ -2272,15 +2301,33 @@ export type IchiVault = {
   allowTokenB: Scalars['Boolean']['output'];
   count: Scalars['BigInt']['output'];
   createdAtTimestamp: Scalars['BigInt']['output'];
+  feeApr_1d: Scalars['BigDecimal']['output'];
+  feeApr_3d: Scalars['BigDecimal']['output'];
+  feeApr_7d: Scalars['BigDecimal']['output'];
+  feeApr_30d: Scalars['BigDecimal']['output'];
+  feePerSecond0_1d: Scalars['BigInt']['output'];
+  feePerSecond0_3d: Scalars['BigInt']['output'];
+  feePerSecond0_7d: Scalars['BigInt']['output'];
+  feePerSecond0_30d: Scalars['BigInt']['output'];
+  feePerSecond1_1d: Scalars['BigInt']['output'];
+  feePerSecond1_3d: Scalars['BigInt']['output'];
+  feePerSecond1_7d: Scalars['BigInt']['output'];
+  feePerSecond1_30d: Scalars['BigInt']['output'];
   holdersCount: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
+  lastFeeUpdate: Scalars['BigInt']['output'];
+  lastPrice: Scalars['BigDecimal']['output'];
+  lastPriceTimestamp: Scalars['BigInt']['output'];
   maxTotalSupply: Array<MaxTotalSupply>;
   pool: Pool;
   searchString: Scalars['String']['output'];
   sender: Scalars['Bytes']['output'];
   tokenA: Scalars['Bytes']['output'];
   tokenB: Scalars['Bytes']['output'];
+  totalAmount0: Scalars['BigInt']['output'];
+  totalAmount1: Scalars['BigInt']['output'];
   totalShares: Scalars['BigDecimal']['output'];
+  totalSupply: Scalars['BigInt']['output'];
   vaultAffiliates: Array<VaultAffiliate>;
   vaultApprovals: Array<VaultApproval>;
   vaultCollectFees: Array<VaultCollectFee>;
@@ -2430,6 +2477,102 @@ export type IchiVault_Filter = {
   createdAtTimestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
   createdAtTimestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
   createdAtTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  feeApr_1d?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_1d_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_1d_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_1d_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  feeApr_1d_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_1d_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_1d_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_1d_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  feeApr_3d?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_3d_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_3d_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_3d_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  feeApr_3d_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_3d_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_3d_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_3d_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  feeApr_7d?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_7d_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_7d_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_7d_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  feeApr_7d_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_7d_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_7d_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_7d_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  feeApr_30d?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_30d_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_30d_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_30d_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  feeApr_30d_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_30d_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_30d_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  feeApr_30d_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  feePerSecond0_1d?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_1d_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_1d_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_1d_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  feePerSecond0_1d_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_1d_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_1d_not?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_1d_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  feePerSecond0_3d?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_3d_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_3d_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_3d_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  feePerSecond0_3d_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_3d_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_3d_not?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_3d_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  feePerSecond0_7d?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_7d_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_7d_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_7d_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  feePerSecond0_7d_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_7d_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_7d_not?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_7d_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  feePerSecond0_30d?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_30d_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_30d_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_30d_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  feePerSecond0_30d_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_30d_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_30d_not?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond0_30d_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  feePerSecond1_1d?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_1d_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_1d_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_1d_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  feePerSecond1_1d_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_1d_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_1d_not?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_1d_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  feePerSecond1_3d?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_3d_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_3d_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_3d_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  feePerSecond1_3d_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_3d_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_3d_not?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_3d_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  feePerSecond1_7d?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_7d_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_7d_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_7d_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  feePerSecond1_7d_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_7d_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_7d_not?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_7d_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  feePerSecond1_30d?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_30d_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_30d_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_30d_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  feePerSecond1_30d_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_30d_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_30d_not?: InputMaybe<Scalars['BigInt']['input']>;
+  feePerSecond1_30d_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   holdersCount?: InputMaybe<Scalars['Int']['input']>;
   holdersCount_gt?: InputMaybe<Scalars['Int']['input']>;
   holdersCount_gte?: InputMaybe<Scalars['Int']['input']>;
@@ -2446,6 +2589,30 @@ export type IchiVault_Filter = {
   id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_not?: InputMaybe<Scalars['ID']['input']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  lastFeeUpdate?: InputMaybe<Scalars['BigInt']['input']>;
+  lastFeeUpdate_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  lastFeeUpdate_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  lastFeeUpdate_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  lastFeeUpdate_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  lastFeeUpdate_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  lastFeeUpdate_not?: InputMaybe<Scalars['BigInt']['input']>;
+  lastFeeUpdate_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  lastPrice?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPriceTimestamp?: InputMaybe<Scalars['BigInt']['input']>;
+  lastPriceTimestamp_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  lastPriceTimestamp_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  lastPriceTimestamp_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  lastPriceTimestamp_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  lastPriceTimestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  lastPriceTimestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
+  lastPriceTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  lastPrice_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  lastPrice_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
   maxTotalSupply_?: InputMaybe<MaxTotalSupply_Filter>;
   or?: InputMaybe<Array<InputMaybe<IchiVault_Filter>>>;
   pool?: InputMaybe<Scalars['String']['input']>;
@@ -2519,6 +2686,22 @@ export type IchiVault_Filter = {
   tokenB_not?: InputMaybe<Scalars['Bytes']['input']>;
   tokenB_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
   tokenB_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  totalAmount0?: InputMaybe<Scalars['BigInt']['input']>;
+  totalAmount0_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalAmount0_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalAmount0_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalAmount0_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalAmount0_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalAmount0_not?: InputMaybe<Scalars['BigInt']['input']>;
+  totalAmount0_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalAmount1?: InputMaybe<Scalars['BigInt']['input']>;
+  totalAmount1_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalAmount1_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalAmount1_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalAmount1_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalAmount1_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalAmount1_not?: InputMaybe<Scalars['BigInt']['input']>;
+  totalAmount1_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   totalShares?: InputMaybe<Scalars['BigDecimal']['input']>;
   totalShares_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
   totalShares_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
@@ -2527,6 +2710,14 @@ export type IchiVault_Filter = {
   totalShares_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
   totalShares_not?: InputMaybe<Scalars['BigDecimal']['input']>;
   totalShares_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  totalSupply?: InputMaybe<Scalars['BigInt']['input']>;
+  totalSupply_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalSupply_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalSupply_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalSupply_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalSupply_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalSupply_not?: InputMaybe<Scalars['BigInt']['input']>;
+  totalSupply_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   vaultAffiliates_?: InputMaybe<VaultAffiliate_Filter>;
   vaultApprovals_?: InputMaybe<VaultApproval_Filter>;
   vaultCollectFees_?: InputMaybe<VaultCollectFee_Filter>;
@@ -2545,8 +2736,23 @@ export enum IchiVault_OrderBy {
   AllowTokenB = 'allowTokenB',
   Count = 'count',
   CreatedAtTimestamp = 'createdAtTimestamp',
+  FeeApr_1d = 'feeApr_1d',
+  FeeApr_3d = 'feeApr_3d',
+  FeeApr_7d = 'feeApr_7d',
+  FeeApr_30d = 'feeApr_30d',
+  FeePerSecond0_1d = 'feePerSecond0_1d',
+  FeePerSecond0_3d = 'feePerSecond0_3d',
+  FeePerSecond0_7d = 'feePerSecond0_7d',
+  FeePerSecond0_30d = 'feePerSecond0_30d',
+  FeePerSecond1_1d = 'feePerSecond1_1d',
+  FeePerSecond1_3d = 'feePerSecond1_3d',
+  FeePerSecond1_7d = 'feePerSecond1_7d',
+  FeePerSecond1_30d = 'feePerSecond1_30d',
   HoldersCount = 'holdersCount',
   Id = 'id',
+  LastFeeUpdate = 'lastFeeUpdate',
+  LastPrice = 'lastPrice',
+  LastPriceTimestamp = 'lastPriceTimestamp',
   MaxTotalSupply = 'maxTotalSupply',
   Pool = 'pool',
   PoolAprPercentage = 'pool__aprPercentage',
@@ -2590,7 +2796,10 @@ export enum IchiVault_OrderBy {
   Sender = 'sender',
   TokenA = 'tokenA',
   TokenB = 'tokenB',
+  TotalAmount0 = 'totalAmount0',
+  TotalAmount1 = 'totalAmount1',
   TotalShares = 'totalShares',
+  TotalSupply = 'totalSupply',
   VaultAffiliates = 'vaultAffiliates',
   VaultApprovals = 'vaultApprovals',
   VaultCollectFees = 'vaultCollectFees',
@@ -2748,6 +2957,7 @@ export enum LiquidatorData_OrderBy {
   AccountPlatformTxCount = 'account__platformTxCount',
   AccountPot2PumpLaunchCount = 'account__pot2PumpLaunchCount',
   AccountSwapCount = 'account__swapCount',
+  AccountTotalDepositPot2pumpUsd = 'account__totalDepositPot2pumpUSD',
   AccountTotalSpendUsd = 'account__totalSpendUSD',
   Amount0 = 'amount0',
   Amount1 = 'amount1',
@@ -2910,13 +3120,31 @@ export enum MaxTotalSupply_OrderBy {
   VaultAllowTokenB = 'vault__allowTokenB',
   VaultCount = 'vault__count',
   VaultCreatedAtTimestamp = 'vault__createdAtTimestamp',
+  VaultFeeApr_1d = 'vault__feeApr_1d',
+  VaultFeeApr_3d = 'vault__feeApr_3d',
+  VaultFeeApr_7d = 'vault__feeApr_7d',
+  VaultFeeApr_30d = 'vault__feeApr_30d',
+  VaultFeePerSecond0_1d = 'vault__feePerSecond0_1d',
+  VaultFeePerSecond0_3d = 'vault__feePerSecond0_3d',
+  VaultFeePerSecond0_7d = 'vault__feePerSecond0_7d',
+  VaultFeePerSecond0_30d = 'vault__feePerSecond0_30d',
+  VaultFeePerSecond1_1d = 'vault__feePerSecond1_1d',
+  VaultFeePerSecond1_3d = 'vault__feePerSecond1_3d',
+  VaultFeePerSecond1_7d = 'vault__feePerSecond1_7d',
+  VaultFeePerSecond1_30d = 'vault__feePerSecond1_30d',
   VaultHoldersCount = 'vault__holdersCount',
   VaultId = 'vault__id',
+  VaultLastFeeUpdate = 'vault__lastFeeUpdate',
+  VaultLastPrice = 'vault__lastPrice',
+  VaultLastPriceTimestamp = 'vault__lastPriceTimestamp',
   VaultSearchString = 'vault__searchString',
   VaultSender = 'vault__sender',
   VaultTokenA = 'vault__tokenA',
   VaultTokenB = 'vault__tokenB',
-  VaultTotalShares = 'vault__totalShares'
+  VaultTotalAmount0 = 'vault__totalAmount0',
+  VaultTotalAmount1 = 'vault__totalAmount1',
+  VaultTotalShares = 'vault__totalShares',
+  VaultTotalSupply = 'vault__totalSupply'
 }
 
 export type MemeRacer = {
@@ -3584,6 +3812,7 @@ export enum ParticipantTransactionHistory_OrderBy {
   AccountPlatformTxCount = 'account__platformTxCount',
   AccountPot2PumpLaunchCount = 'account__pot2PumpLaunchCount',
   AccountSwapCount = 'account__swapCount',
+  AccountTotalDepositPot2pumpUsd = 'account__totalDepositPot2pumpUSD',
   AccountTotalSpendUsd = 'account__totalSpendUSD',
   ActionType = 'actionType',
   ClaimLqAmount = 'claimLqAmount',
@@ -3726,6 +3955,7 @@ export enum Participant_OrderBy {
   AccountPlatformTxCount = 'account__platformTxCount',
   AccountPot2PumpLaunchCount = 'account__pot2PumpLaunchCount',
   AccountSwapCount = 'account__swapCount',
+  AccountTotalDepositPot2pumpUsd = 'account__totalDepositPot2pumpUSD',
   AccountTotalSpendUsd = 'account__totalSpendUSD',
   Amount = 'amount',
   Claimed = 'claimed',
@@ -5953,13 +6183,31 @@ export enum Pool_OrderBy {
   VaultsAllowTokenB = 'vaults__allowTokenB',
   VaultsCount = 'vaults__count',
   VaultsCreatedAtTimestamp = 'vaults__createdAtTimestamp',
+  VaultsFeeApr_1d = 'vaults__feeApr_1d',
+  VaultsFeeApr_3d = 'vaults__feeApr_3d',
+  VaultsFeeApr_7d = 'vaults__feeApr_7d',
+  VaultsFeeApr_30d = 'vaults__feeApr_30d',
+  VaultsFeePerSecond0_1d = 'vaults__feePerSecond0_1d',
+  VaultsFeePerSecond0_3d = 'vaults__feePerSecond0_3d',
+  VaultsFeePerSecond0_7d = 'vaults__feePerSecond0_7d',
+  VaultsFeePerSecond0_30d = 'vaults__feePerSecond0_30d',
+  VaultsFeePerSecond1_1d = 'vaults__feePerSecond1_1d',
+  VaultsFeePerSecond1_3d = 'vaults__feePerSecond1_3d',
+  VaultsFeePerSecond1_7d = 'vaults__feePerSecond1_7d',
+  VaultsFeePerSecond1_30d = 'vaults__feePerSecond1_30d',
   VaultsHoldersCount = 'vaults__holdersCount',
   VaultsId = 'vaults__id',
+  VaultsLastFeeUpdate = 'vaults__lastFeeUpdate',
+  VaultsLastPrice = 'vaults__lastPrice',
+  VaultsLastPriceTimestamp = 'vaults__lastPriceTimestamp',
   VaultsSearchString = 'vaults__searchString',
   VaultsSender = 'vaults__sender',
   VaultsTokenA = 'vaults__tokenA',
   VaultsTokenB = 'vaults__tokenB',
+  VaultsTotalAmount0 = 'vaults__totalAmount0',
+  VaultsTotalAmount1 = 'vaults__totalAmount1',
   VaultsTotalShares = 'vaults__totalShares',
+  VaultsTotalSupply = 'vaults__totalSupply',
   VolumeToken0 = 'volumeToken0',
   VolumeToken1 = 'volumeToken1',
   VolumeUsd = 'volumeUSD'
@@ -11345,6 +11593,7 @@ export enum Transaction_OrderBy {
   AccountPlatformTxCount = 'account__platformTxCount',
   AccountPot2PumpLaunchCount = 'account__pot2PumpLaunchCount',
   AccountSwapCount = 'account__swapCount',
+  AccountTotalDepositPot2pumpUsd = 'account__totalDepositPot2pumpUSD',
   AccountTotalSpendUsd = 'account__totalSpendUSD',
   BlockNumber = 'blockNumber',
   Burns = 'burns',
@@ -11435,13 +11684,31 @@ export enum VaultAffiliate_OrderBy {
   VaultAllowTokenB = 'vault__allowTokenB',
   VaultCount = 'vault__count',
   VaultCreatedAtTimestamp = 'vault__createdAtTimestamp',
+  VaultFeeApr_1d = 'vault__feeApr_1d',
+  VaultFeeApr_3d = 'vault__feeApr_3d',
+  VaultFeeApr_7d = 'vault__feeApr_7d',
+  VaultFeeApr_30d = 'vault__feeApr_30d',
+  VaultFeePerSecond0_1d = 'vault__feePerSecond0_1d',
+  VaultFeePerSecond0_3d = 'vault__feePerSecond0_3d',
+  VaultFeePerSecond0_7d = 'vault__feePerSecond0_7d',
+  VaultFeePerSecond0_30d = 'vault__feePerSecond0_30d',
+  VaultFeePerSecond1_1d = 'vault__feePerSecond1_1d',
+  VaultFeePerSecond1_3d = 'vault__feePerSecond1_3d',
+  VaultFeePerSecond1_7d = 'vault__feePerSecond1_7d',
+  VaultFeePerSecond1_30d = 'vault__feePerSecond1_30d',
   VaultHoldersCount = 'vault__holdersCount',
   VaultId = 'vault__id',
+  VaultLastFeeUpdate = 'vault__lastFeeUpdate',
+  VaultLastPrice = 'vault__lastPrice',
+  VaultLastPriceTimestamp = 'vault__lastPriceTimestamp',
   VaultSearchString = 'vault__searchString',
   VaultSender = 'vault__sender',
   VaultTokenA = 'vault__tokenA',
   VaultTokenB = 'vault__tokenB',
-  VaultTotalShares = 'vault__totalShares'
+  VaultTotalAmount0 = 'vault__totalAmount0',
+  VaultTotalAmount1 = 'vault__totalAmount1',
+  VaultTotalShares = 'vault__totalShares',
+  VaultTotalSupply = 'vault__totalSupply'
 }
 
 export type VaultApproval = {
@@ -11527,13 +11794,31 @@ export enum VaultApproval_OrderBy {
   VaultAllowTokenB = 'vault__allowTokenB',
   VaultCount = 'vault__count',
   VaultCreatedAtTimestamp = 'vault__createdAtTimestamp',
+  VaultFeeApr_1d = 'vault__feeApr_1d',
+  VaultFeeApr_3d = 'vault__feeApr_3d',
+  VaultFeeApr_7d = 'vault__feeApr_7d',
+  VaultFeeApr_30d = 'vault__feeApr_30d',
+  VaultFeePerSecond0_1d = 'vault__feePerSecond0_1d',
+  VaultFeePerSecond0_3d = 'vault__feePerSecond0_3d',
+  VaultFeePerSecond0_7d = 'vault__feePerSecond0_7d',
+  VaultFeePerSecond0_30d = 'vault__feePerSecond0_30d',
+  VaultFeePerSecond1_1d = 'vault__feePerSecond1_1d',
+  VaultFeePerSecond1_3d = 'vault__feePerSecond1_3d',
+  VaultFeePerSecond1_7d = 'vault__feePerSecond1_7d',
+  VaultFeePerSecond1_30d = 'vault__feePerSecond1_30d',
   VaultHoldersCount = 'vault__holdersCount',
   VaultId = 'vault__id',
+  VaultLastFeeUpdate = 'vault__lastFeeUpdate',
+  VaultLastPrice = 'vault__lastPrice',
+  VaultLastPriceTimestamp = 'vault__lastPriceTimestamp',
   VaultSearchString = 'vault__searchString',
   VaultSender = 'vault__sender',
   VaultTokenA = 'vault__tokenA',
   VaultTokenB = 'vault__tokenB',
-  VaultTotalShares = 'vault__totalShares'
+  VaultTotalAmount0 = 'vault__totalAmount0',
+  VaultTotalAmount1 = 'vault__totalAmount1',
+  VaultTotalShares = 'vault__totalShares',
+  VaultTotalSupply = 'vault__totalSupply'
 }
 
 export type VaultCollectFee = {
@@ -11542,6 +11827,7 @@ export type VaultCollectFee = {
   feeAmount0: Scalars['BigInt']['output'];
   feeAmount1: Scalars['BigInt']['output'];
   id: Scalars['ID']['output'];
+  lastPrice: Scalars['BigDecimal']['output'];
   sender: Scalars['Bytes']['output'];
   sqrtPrice: Scalars['BigInt']['output'];
   tick: Scalars['Int']['output'];
@@ -11587,6 +11873,14 @@ export type VaultCollectFee_Filter = {
   id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_not?: InputMaybe<Scalars['ID']['input']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  lastPrice?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  lastPrice_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
   or?: InputMaybe<Array<InputMaybe<VaultCollectFee_Filter>>>;
   sender?: InputMaybe<Scalars['Bytes']['input']>;
   sender_contains?: InputMaybe<Scalars['Bytes']['input']>;
@@ -11666,6 +11960,7 @@ export enum VaultCollectFee_OrderBy {
   FeeAmount0 = 'feeAmount0',
   FeeAmount1 = 'feeAmount1',
   Id = 'id',
+  LastPrice = 'lastPrice',
   Sender = 'sender',
   SqrtPrice = 'sqrtPrice',
   Tick = 'tick',
@@ -11677,13 +11972,31 @@ export enum VaultCollectFee_OrderBy {
   VaultAllowTokenB = 'vault__allowTokenB',
   VaultCount = 'vault__count',
   VaultCreatedAtTimestamp = 'vault__createdAtTimestamp',
+  VaultFeeApr_1d = 'vault__feeApr_1d',
+  VaultFeeApr_3d = 'vault__feeApr_3d',
+  VaultFeeApr_7d = 'vault__feeApr_7d',
+  VaultFeeApr_30d = 'vault__feeApr_30d',
+  VaultFeePerSecond0_1d = 'vault__feePerSecond0_1d',
+  VaultFeePerSecond0_3d = 'vault__feePerSecond0_3d',
+  VaultFeePerSecond0_7d = 'vault__feePerSecond0_7d',
+  VaultFeePerSecond0_30d = 'vault__feePerSecond0_30d',
+  VaultFeePerSecond1_1d = 'vault__feePerSecond1_1d',
+  VaultFeePerSecond1_3d = 'vault__feePerSecond1_3d',
+  VaultFeePerSecond1_7d = 'vault__feePerSecond1_7d',
+  VaultFeePerSecond1_30d = 'vault__feePerSecond1_30d',
   VaultHoldersCount = 'vault__holdersCount',
   VaultId = 'vault__id',
+  VaultLastFeeUpdate = 'vault__lastFeeUpdate',
+  VaultLastPrice = 'vault__lastPrice',
+  VaultLastPriceTimestamp = 'vault__lastPriceTimestamp',
   VaultSearchString = 'vault__searchString',
   VaultSender = 'vault__sender',
   VaultTokenA = 'vault__tokenA',
   VaultTokenB = 'vault__tokenB',
-  VaultTotalShares = 'vault__totalShares'
+  VaultTotalAmount0 = 'vault__totalAmount0',
+  VaultTotalAmount1 = 'vault__totalAmount1',
+  VaultTotalShares = 'vault__totalShares',
+  VaultTotalSupply = 'vault__totalSupply'
 }
 
 export type VaultDeposit = {
@@ -11692,6 +12005,7 @@ export type VaultDeposit = {
   amount1: Scalars['BigInt']['output'];
   createdAtTimestamp: Scalars['BigInt']['output'];
   id: Scalars['ID']['output'];
+  lastPrice: Scalars['BigDecimal']['output'];
   sender: Scalars['Bytes']['output'];
   shares: Scalars['BigInt']['output'];
   sqrtPrice: Scalars['BigInt']['output'];
@@ -11786,13 +12100,31 @@ export enum VaultDepositMax_OrderBy {
   VaultAllowTokenB = 'vault__allowTokenB',
   VaultCount = 'vault__count',
   VaultCreatedAtTimestamp = 'vault__createdAtTimestamp',
+  VaultFeeApr_1d = 'vault__feeApr_1d',
+  VaultFeeApr_3d = 'vault__feeApr_3d',
+  VaultFeeApr_7d = 'vault__feeApr_7d',
+  VaultFeeApr_30d = 'vault__feeApr_30d',
+  VaultFeePerSecond0_1d = 'vault__feePerSecond0_1d',
+  VaultFeePerSecond0_3d = 'vault__feePerSecond0_3d',
+  VaultFeePerSecond0_7d = 'vault__feePerSecond0_7d',
+  VaultFeePerSecond0_30d = 'vault__feePerSecond0_30d',
+  VaultFeePerSecond1_1d = 'vault__feePerSecond1_1d',
+  VaultFeePerSecond1_3d = 'vault__feePerSecond1_3d',
+  VaultFeePerSecond1_7d = 'vault__feePerSecond1_7d',
+  VaultFeePerSecond1_30d = 'vault__feePerSecond1_30d',
   VaultHoldersCount = 'vault__holdersCount',
   VaultId = 'vault__id',
+  VaultLastFeeUpdate = 'vault__lastFeeUpdate',
+  VaultLastPrice = 'vault__lastPrice',
+  VaultLastPriceTimestamp = 'vault__lastPriceTimestamp',
   VaultSearchString = 'vault__searchString',
   VaultSender = 'vault__sender',
   VaultTokenA = 'vault__tokenA',
   VaultTokenB = 'vault__tokenB',
-  VaultTotalShares = 'vault__totalShares'
+  VaultTotalAmount0 = 'vault__totalAmount0',
+  VaultTotalAmount1 = 'vault__totalAmount1',
+  VaultTotalShares = 'vault__totalShares',
+  VaultTotalSupply = 'vault__totalSupply'
 }
 
 export type VaultDeposit_Filter = {
@@ -11831,6 +12163,14 @@ export type VaultDeposit_Filter = {
   id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_not?: InputMaybe<Scalars['ID']['input']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  lastPrice?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  lastPrice_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
   or?: InputMaybe<Array<InputMaybe<VaultDeposit_Filter>>>;
   sender?: InputMaybe<Scalars['Bytes']['input']>;
   sender_contains?: InputMaybe<Scalars['Bytes']['input']>;
@@ -11944,6 +12284,7 @@ export enum VaultDeposit_OrderBy {
   Amount1 = 'amount1',
   CreatedAtTimestamp = 'createdAtTimestamp',
   Id = 'id',
+  LastPrice = 'lastPrice',
   Sender = 'sender',
   Shares = 'shares',
   SqrtPrice = 'sqrtPrice',
@@ -11959,13 +12300,31 @@ export enum VaultDeposit_OrderBy {
   VaultAllowTokenB = 'vault__allowTokenB',
   VaultCount = 'vault__count',
   VaultCreatedAtTimestamp = 'vault__createdAtTimestamp',
+  VaultFeeApr_1d = 'vault__feeApr_1d',
+  VaultFeeApr_3d = 'vault__feeApr_3d',
+  VaultFeeApr_7d = 'vault__feeApr_7d',
+  VaultFeeApr_30d = 'vault__feeApr_30d',
+  VaultFeePerSecond0_1d = 'vault__feePerSecond0_1d',
+  VaultFeePerSecond0_3d = 'vault__feePerSecond0_3d',
+  VaultFeePerSecond0_7d = 'vault__feePerSecond0_7d',
+  VaultFeePerSecond0_30d = 'vault__feePerSecond0_30d',
+  VaultFeePerSecond1_1d = 'vault__feePerSecond1_1d',
+  VaultFeePerSecond1_3d = 'vault__feePerSecond1_3d',
+  VaultFeePerSecond1_7d = 'vault__feePerSecond1_7d',
+  VaultFeePerSecond1_30d = 'vault__feePerSecond1_30d',
   VaultHoldersCount = 'vault__holdersCount',
   VaultId = 'vault__id',
+  VaultLastFeeUpdate = 'vault__lastFeeUpdate',
+  VaultLastPrice = 'vault__lastPrice',
+  VaultLastPriceTimestamp = 'vault__lastPriceTimestamp',
   VaultSearchString = 'vault__searchString',
   VaultSender = 'vault__sender',
   VaultTokenA = 'vault__tokenA',
   VaultTokenB = 'vault__tokenB',
-  VaultTotalShares = 'vault__totalShares'
+  VaultTotalAmount0 = 'vault__totalAmount0',
+  VaultTotalAmount1 = 'vault__totalAmount1',
+  VaultTotalShares = 'vault__totalShares',
+  VaultTotalSupply = 'vault__totalSupply'
 }
 
 export type VaultHysteresis = {
@@ -12039,13 +12398,31 @@ export enum VaultHysteresis_OrderBy {
   VaultAllowTokenB = 'vault__allowTokenB',
   VaultCount = 'vault__count',
   VaultCreatedAtTimestamp = 'vault__createdAtTimestamp',
+  VaultFeeApr_1d = 'vault__feeApr_1d',
+  VaultFeeApr_3d = 'vault__feeApr_3d',
+  VaultFeeApr_7d = 'vault__feeApr_7d',
+  VaultFeeApr_30d = 'vault__feeApr_30d',
+  VaultFeePerSecond0_1d = 'vault__feePerSecond0_1d',
+  VaultFeePerSecond0_3d = 'vault__feePerSecond0_3d',
+  VaultFeePerSecond0_7d = 'vault__feePerSecond0_7d',
+  VaultFeePerSecond0_30d = 'vault__feePerSecond0_30d',
+  VaultFeePerSecond1_1d = 'vault__feePerSecond1_1d',
+  VaultFeePerSecond1_3d = 'vault__feePerSecond1_3d',
+  VaultFeePerSecond1_7d = 'vault__feePerSecond1_7d',
+  VaultFeePerSecond1_30d = 'vault__feePerSecond1_30d',
   VaultHoldersCount = 'vault__holdersCount',
   VaultId = 'vault__id',
+  VaultLastFeeUpdate = 'vault__lastFeeUpdate',
+  VaultLastPrice = 'vault__lastPrice',
+  VaultLastPriceTimestamp = 'vault__lastPriceTimestamp',
   VaultSearchString = 'vault__searchString',
   VaultSender = 'vault__sender',
   VaultTokenA = 'vault__tokenA',
   VaultTokenB = 'vault__tokenB',
-  VaultTotalShares = 'vault__totalShares'
+  VaultTotalAmount0 = 'vault__totalAmount0',
+  VaultTotalAmount1 = 'vault__totalAmount1',
+  VaultTotalShares = 'vault__totalShares',
+  VaultTotalSupply = 'vault__totalSupply'
 }
 
 export type VaultOwnershipTransferred = {
@@ -12121,13 +12498,31 @@ export enum VaultOwnershipTransferred_OrderBy {
   VaultAllowTokenB = 'vault__allowTokenB',
   VaultCount = 'vault__count',
   VaultCreatedAtTimestamp = 'vault__createdAtTimestamp',
+  VaultFeeApr_1d = 'vault__feeApr_1d',
+  VaultFeeApr_3d = 'vault__feeApr_3d',
+  VaultFeeApr_7d = 'vault__feeApr_7d',
+  VaultFeeApr_30d = 'vault__feeApr_30d',
+  VaultFeePerSecond0_1d = 'vault__feePerSecond0_1d',
+  VaultFeePerSecond0_3d = 'vault__feePerSecond0_3d',
+  VaultFeePerSecond0_7d = 'vault__feePerSecond0_7d',
+  VaultFeePerSecond0_30d = 'vault__feePerSecond0_30d',
+  VaultFeePerSecond1_1d = 'vault__feePerSecond1_1d',
+  VaultFeePerSecond1_3d = 'vault__feePerSecond1_3d',
+  VaultFeePerSecond1_7d = 'vault__feePerSecond1_7d',
+  VaultFeePerSecond1_30d = 'vault__feePerSecond1_30d',
   VaultHoldersCount = 'vault__holdersCount',
   VaultId = 'vault__id',
+  VaultLastFeeUpdate = 'vault__lastFeeUpdate',
+  VaultLastPrice = 'vault__lastPrice',
+  VaultLastPriceTimestamp = 'vault__lastPriceTimestamp',
   VaultSearchString = 'vault__searchString',
   VaultSender = 'vault__sender',
   VaultTokenA = 'vault__tokenA',
   VaultTokenB = 'vault__tokenB',
-  VaultTotalShares = 'vault__totalShares'
+  VaultTotalAmount0 = 'vault__totalAmount0',
+  VaultTotalAmount1 = 'vault__totalAmount1',
+  VaultTotalShares = 'vault__totalShares',
+  VaultTotalSupply = 'vault__totalSupply'
 }
 
 export type VaultRebalance = {
@@ -12136,6 +12531,7 @@ export type VaultRebalance = {
   feeAmount0: Scalars['BigInt']['output'];
   feeAmount1: Scalars['BigInt']['output'];
   id: Scalars['ID']['output'];
+  lastPrice: Scalars['BigDecimal']['output'];
   sqrtPrice: Scalars['BigInt']['output'];
   tick: Scalars['Int']['output'];
   totalAmount0: Scalars['BigInt']['output'];
@@ -12180,6 +12576,14 @@ export type VaultRebalance_Filter = {
   id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_not?: InputMaybe<Scalars['ID']['input']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  lastPrice?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  lastPrice_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
   or?: InputMaybe<Array<InputMaybe<VaultRebalance_Filter>>>;
   sqrtPrice?: InputMaybe<Scalars['BigInt']['input']>;
   sqrtPrice_gt?: InputMaybe<Scalars['BigInt']['input']>;
@@ -12249,6 +12653,7 @@ export enum VaultRebalance_OrderBy {
   FeeAmount0 = 'feeAmount0',
   FeeAmount1 = 'feeAmount1',
   Id = 'id',
+  LastPrice = 'lastPrice',
   SqrtPrice = 'sqrtPrice',
   Tick = 'tick',
   TotalAmount0 = 'totalAmount0',
@@ -12259,13 +12664,31 @@ export enum VaultRebalance_OrderBy {
   VaultAllowTokenB = 'vault__allowTokenB',
   VaultCount = 'vault__count',
   VaultCreatedAtTimestamp = 'vault__createdAtTimestamp',
+  VaultFeeApr_1d = 'vault__feeApr_1d',
+  VaultFeeApr_3d = 'vault__feeApr_3d',
+  VaultFeeApr_7d = 'vault__feeApr_7d',
+  VaultFeeApr_30d = 'vault__feeApr_30d',
+  VaultFeePerSecond0_1d = 'vault__feePerSecond0_1d',
+  VaultFeePerSecond0_3d = 'vault__feePerSecond0_3d',
+  VaultFeePerSecond0_7d = 'vault__feePerSecond0_7d',
+  VaultFeePerSecond0_30d = 'vault__feePerSecond0_30d',
+  VaultFeePerSecond1_1d = 'vault__feePerSecond1_1d',
+  VaultFeePerSecond1_3d = 'vault__feePerSecond1_3d',
+  VaultFeePerSecond1_7d = 'vault__feePerSecond1_7d',
+  VaultFeePerSecond1_30d = 'vault__feePerSecond1_30d',
   VaultHoldersCount = 'vault__holdersCount',
   VaultId = 'vault__id',
+  VaultLastFeeUpdate = 'vault__lastFeeUpdate',
+  VaultLastPrice = 'vault__lastPrice',
+  VaultLastPriceTimestamp = 'vault__lastPriceTimestamp',
   VaultSearchString = 'vault__searchString',
   VaultSender = 'vault__sender',
   VaultTokenA = 'vault__tokenA',
   VaultTokenB = 'vault__tokenB',
-  VaultTotalShares = 'vault__totalShares'
+  VaultTotalAmount0 = 'vault__totalAmount0',
+  VaultTotalAmount1 = 'vault__totalAmount1',
+  VaultTotalShares = 'vault__totalShares',
+  VaultTotalSupply = 'vault__totalSupply'
 }
 
 export type VaultSetTwapPeriod = {
@@ -12339,13 +12762,31 @@ export enum VaultSetTwapPeriod_OrderBy {
   VaultAllowTokenB = 'vault__allowTokenB',
   VaultCount = 'vault__count',
   VaultCreatedAtTimestamp = 'vault__createdAtTimestamp',
+  VaultFeeApr_1d = 'vault__feeApr_1d',
+  VaultFeeApr_3d = 'vault__feeApr_3d',
+  VaultFeeApr_7d = 'vault__feeApr_7d',
+  VaultFeeApr_30d = 'vault__feeApr_30d',
+  VaultFeePerSecond0_1d = 'vault__feePerSecond0_1d',
+  VaultFeePerSecond0_3d = 'vault__feePerSecond0_3d',
+  VaultFeePerSecond0_7d = 'vault__feePerSecond0_7d',
+  VaultFeePerSecond0_30d = 'vault__feePerSecond0_30d',
+  VaultFeePerSecond1_1d = 'vault__feePerSecond1_1d',
+  VaultFeePerSecond1_3d = 'vault__feePerSecond1_3d',
+  VaultFeePerSecond1_7d = 'vault__feePerSecond1_7d',
+  VaultFeePerSecond1_30d = 'vault__feePerSecond1_30d',
   VaultHoldersCount = 'vault__holdersCount',
   VaultId = 'vault__id',
+  VaultLastFeeUpdate = 'vault__lastFeeUpdate',
+  VaultLastPrice = 'vault__lastPrice',
+  VaultLastPriceTimestamp = 'vault__lastPriceTimestamp',
   VaultSearchString = 'vault__searchString',
   VaultSender = 'vault__sender',
   VaultTokenA = 'vault__tokenA',
   VaultTokenB = 'vault__tokenB',
-  VaultTotalShares = 'vault__totalShares'
+  VaultTotalAmount0 = 'vault__totalAmount0',
+  VaultTotalAmount1 = 'vault__totalAmount1',
+  VaultTotalShares = 'vault__totalShares',
+  VaultTotalSupply = 'vault__totalSupply'
 }
 
 export type VaultShare = {
@@ -12431,6 +12872,7 @@ export enum VaultShare_OrderBy {
   UserPlatformTxCount = 'user__platformTxCount',
   UserPot2PumpLaunchCount = 'user__pot2PumpLaunchCount',
   UserSwapCount = 'user__swapCount',
+  UserTotalDepositPot2pumpUsd = 'user__totalDepositPot2pumpUSD',
   UserTotalSpendUsd = 'user__totalSpendUSD',
   Vault = 'vault',
   VaultShareBalance = 'vaultShareBalance',
@@ -12438,13 +12880,31 @@ export enum VaultShare_OrderBy {
   VaultAllowTokenB = 'vault__allowTokenB',
   VaultCount = 'vault__count',
   VaultCreatedAtTimestamp = 'vault__createdAtTimestamp',
+  VaultFeeApr_1d = 'vault__feeApr_1d',
+  VaultFeeApr_3d = 'vault__feeApr_3d',
+  VaultFeeApr_7d = 'vault__feeApr_7d',
+  VaultFeeApr_30d = 'vault__feeApr_30d',
+  VaultFeePerSecond0_1d = 'vault__feePerSecond0_1d',
+  VaultFeePerSecond0_3d = 'vault__feePerSecond0_3d',
+  VaultFeePerSecond0_7d = 'vault__feePerSecond0_7d',
+  VaultFeePerSecond0_30d = 'vault__feePerSecond0_30d',
+  VaultFeePerSecond1_1d = 'vault__feePerSecond1_1d',
+  VaultFeePerSecond1_3d = 'vault__feePerSecond1_3d',
+  VaultFeePerSecond1_7d = 'vault__feePerSecond1_7d',
+  VaultFeePerSecond1_30d = 'vault__feePerSecond1_30d',
   VaultHoldersCount = 'vault__holdersCount',
   VaultId = 'vault__id',
+  VaultLastFeeUpdate = 'vault__lastFeeUpdate',
+  VaultLastPrice = 'vault__lastPrice',
+  VaultLastPriceTimestamp = 'vault__lastPriceTimestamp',
   VaultSearchString = 'vault__searchString',
   VaultSender = 'vault__sender',
   VaultTokenA = 'vault__tokenA',
   VaultTokenB = 'vault__tokenB',
-  VaultTotalShares = 'vault__totalShares'
+  VaultTotalAmount0 = 'vault__totalAmount0',
+  VaultTotalAmount1 = 'vault__totalAmount1',
+  VaultTotalShares = 'vault__totalShares',
+  VaultTotalSupply = 'vault__totalSupply'
 }
 
 export type VaultTransfer = {
@@ -12452,6 +12912,7 @@ export type VaultTransfer = {
   createdAtTimestamp: Scalars['BigInt']['output'];
   from: Scalars['Bytes']['output'];
   id: Scalars['ID']['output'];
+  lastPrice: Scalars['BigDecimal']['output'];
   sqrtPrice: Scalars['BigInt']['output'];
   tick: Scalars['Int']['output'];
   to: Scalars['Bytes']['output'];
@@ -12492,6 +12953,14 @@ export type VaultTransfer_Filter = {
   id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_not?: InputMaybe<Scalars['ID']['input']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  lastPrice?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  lastPrice_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
   or?: InputMaybe<Array<InputMaybe<VaultTransfer_Filter>>>;
   sqrtPrice?: InputMaybe<Scalars['BigInt']['input']>;
   sqrtPrice_gt?: InputMaybe<Scalars['BigInt']['input']>;
@@ -12578,6 +13047,7 @@ export enum VaultTransfer_OrderBy {
   CreatedAtTimestamp = 'createdAtTimestamp',
   From = 'from',
   Id = 'id',
+  LastPrice = 'lastPrice',
   SqrtPrice = 'sqrtPrice',
   Tick = 'tick',
   To = 'to',
@@ -12590,13 +13060,31 @@ export enum VaultTransfer_OrderBy {
   VaultAllowTokenB = 'vault__allowTokenB',
   VaultCount = 'vault__count',
   VaultCreatedAtTimestamp = 'vault__createdAtTimestamp',
+  VaultFeeApr_1d = 'vault__feeApr_1d',
+  VaultFeeApr_3d = 'vault__feeApr_3d',
+  VaultFeeApr_7d = 'vault__feeApr_7d',
+  VaultFeeApr_30d = 'vault__feeApr_30d',
+  VaultFeePerSecond0_1d = 'vault__feePerSecond0_1d',
+  VaultFeePerSecond0_3d = 'vault__feePerSecond0_3d',
+  VaultFeePerSecond0_7d = 'vault__feePerSecond0_7d',
+  VaultFeePerSecond0_30d = 'vault__feePerSecond0_30d',
+  VaultFeePerSecond1_1d = 'vault__feePerSecond1_1d',
+  VaultFeePerSecond1_3d = 'vault__feePerSecond1_3d',
+  VaultFeePerSecond1_7d = 'vault__feePerSecond1_7d',
+  VaultFeePerSecond1_30d = 'vault__feePerSecond1_30d',
   VaultHoldersCount = 'vault__holdersCount',
   VaultId = 'vault__id',
+  VaultLastFeeUpdate = 'vault__lastFeeUpdate',
+  VaultLastPrice = 'vault__lastPrice',
+  VaultLastPriceTimestamp = 'vault__lastPriceTimestamp',
   VaultSearchString = 'vault__searchString',
   VaultSender = 'vault__sender',
   VaultTokenA = 'vault__tokenA',
   VaultTokenB = 'vault__tokenB',
-  VaultTotalShares = 'vault__totalShares'
+  VaultTotalAmount0 = 'vault__totalAmount0',
+  VaultTotalAmount1 = 'vault__totalAmount1',
+  VaultTotalShares = 'vault__totalShares',
+  VaultTotalSupply = 'vault__totalSupply'
 }
 
 export type VaultWithdraw = {
@@ -12605,6 +13093,7 @@ export type VaultWithdraw = {
   amount1: Scalars['BigInt']['output'];
   createdAtTimestamp: Scalars['BigInt']['output'];
   id: Scalars['ID']['output'];
+  lastPrice: Scalars['BigDecimal']['output'];
   sender: Scalars['Bytes']['output'];
   shares: Scalars['BigInt']['output'];
   sqrtPrice: Scalars['BigInt']['output'];
@@ -12654,6 +13143,14 @@ export type VaultWithdraw_Filter = {
   id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_not?: InputMaybe<Scalars['ID']['input']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  lastPrice?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  lastPrice_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  lastPrice_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
   or?: InputMaybe<Array<InputMaybe<VaultWithdraw_Filter>>>;
   sender?: InputMaybe<Scalars['Bytes']['input']>;
   sender_contains?: InputMaybe<Scalars['Bytes']['input']>;
@@ -12767,6 +13264,7 @@ export enum VaultWithdraw_OrderBy {
   Amount1 = 'amount1',
   CreatedAtTimestamp = 'createdAtTimestamp',
   Id = 'id',
+  LastPrice = 'lastPrice',
   Sender = 'sender',
   Shares = 'shares',
   SqrtPrice = 'sqrtPrice',
@@ -12782,13 +13280,31 @@ export enum VaultWithdraw_OrderBy {
   VaultAllowTokenB = 'vault__allowTokenB',
   VaultCount = 'vault__count',
   VaultCreatedAtTimestamp = 'vault__createdAtTimestamp',
+  VaultFeeApr_1d = 'vault__feeApr_1d',
+  VaultFeeApr_3d = 'vault__feeApr_3d',
+  VaultFeeApr_7d = 'vault__feeApr_7d',
+  VaultFeeApr_30d = 'vault__feeApr_30d',
+  VaultFeePerSecond0_1d = 'vault__feePerSecond0_1d',
+  VaultFeePerSecond0_3d = 'vault__feePerSecond0_3d',
+  VaultFeePerSecond0_7d = 'vault__feePerSecond0_7d',
+  VaultFeePerSecond0_30d = 'vault__feePerSecond0_30d',
+  VaultFeePerSecond1_1d = 'vault__feePerSecond1_1d',
+  VaultFeePerSecond1_3d = 'vault__feePerSecond1_3d',
+  VaultFeePerSecond1_7d = 'vault__feePerSecond1_7d',
+  VaultFeePerSecond1_30d = 'vault__feePerSecond1_30d',
   VaultHoldersCount = 'vault__holdersCount',
   VaultId = 'vault__id',
+  VaultLastFeeUpdate = 'vault__lastFeeUpdate',
+  VaultLastPrice = 'vault__lastPrice',
+  VaultLastPriceTimestamp = 'vault__lastPriceTimestamp',
   VaultSearchString = 'vault__searchString',
   VaultSender = 'vault__sender',
   VaultTokenA = 'vault__tokenA',
   VaultTokenB = 'vault__tokenB',
-  VaultTotalShares = 'vault__totalShares'
+  VaultTotalAmount0 = 'vault__totalAmount0',
+  VaultTotalAmount1 = 'vault__totalAmount1',
+  VaultTotalShares = 'vault__totalShares',
+  VaultTotalSupply = 'vault__totalSupply'
 }
 
 export type _Block_ = {
@@ -13207,20 +13723,20 @@ export type VaultsSortedByHoldersQueryVariables = Exact<{
 }>;
 
 
-export type VaultsSortedByHoldersQuery = { __typename?: 'Query', ichiVaults: Array<{ __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } }> };
+export type VaultsSortedByHoldersQuery = { __typename?: 'Query', ichiVaults: Array<{ __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, feeApr_1d: any, feeApr_3d: any, feeApr_7d: any, feeApr_30d: any, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } }> };
 
 export type AccountVaultSharesQueryVariables = Exact<{
   AccountId: Scalars['ID']['input'];
 }>;
 
 
-export type AccountVaultSharesQuery = { __typename?: 'Query', vaultShares: Array<{ __typename?: 'VaultShare', id: string, vaultShareBalance: any, vault: { __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } } }> };
+export type AccountVaultSharesQuery = { __typename?: 'Query', vaultShares: Array<{ __typename?: 'VaultShare', id: string, vaultShareBalance: any, vault: { __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, feeApr_1d: any, feeApr_3d: any, feeApr_7d: any, feeApr_30d: any, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } } }> };
 
 export type VaultUserFieldFragment = { __typename?: 'Account', id: string };
 
-export type VaultSharesFieldFragment = { __typename?: 'VaultShare', id: string, vaultShareBalance: any, vault: { __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } } };
+export type VaultSharesFieldFragment = { __typename?: 'VaultShare', id: string, vaultShareBalance: any, vault: { __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, feeApr_1d: any, feeApr_3d: any, feeApr_7d: any, feeApr_30d: any, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } } };
 
-export type VaultFieldFragment = { __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } };
+export type VaultFieldFragment = { __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, feeApr_1d: any, feeApr_3d: any, feeApr_7d: any, feeApr_30d: any, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } };
 
 export type PoolFieldFragment = { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> };
 
@@ -13229,7 +13745,7 @@ export type SingleVaultDetailsQueryVariables = Exact<{
 }>;
 
 
-export type SingleVaultDetailsQuery = { __typename?: 'Query', ichiVault?: { __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, vaultShares: Array<{ __typename?: 'VaultShare', id: string, vaultShareBalance: any }>, vaultDeposits: Array<{ __typename?: 'VaultDeposit', id: string, createdAtTimestamp: any, amount0: any, amount1: any, shares: any, to: any }>, vaultWithdraws: Array<{ __typename?: 'VaultWithdraw', id: string, createdAtTimestamp: any, amount0: any, amount1: any, shares: any, to: any }>, vaultCollectFees: Array<{ __typename?: 'VaultCollectFee', id: string, createdAtTimestamp: any, feeAmount0: any, feeAmount1: any, sender: any }>, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } } | null };
+export type SingleVaultDetailsQuery = { __typename?: 'Query', ichiVault?: { __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, feeApr_1d: any, feeApr_3d: any, feeApr_7d: any, feeApr_30d: any, vaultShares: Array<{ __typename?: 'VaultShare', id: string, vaultShareBalance: any }>, vaultDeposits: Array<{ __typename?: 'VaultDeposit', id: string, createdAtTimestamp: any, amount0: any, amount1: any, shares: any, to: any }>, vaultWithdraws: Array<{ __typename?: 'VaultWithdraw', id: string, createdAtTimestamp: any, amount0: any, amount1: any, shares: any, to: any }>, vaultCollectFees: Array<{ __typename?: 'VaultCollectFee', id: string, createdAtTimestamp: any, feeAmount0: any, feeAmount1: any, sender: any }>, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } } | null };
 
 export const BundleFieldsFragmentDoc = gql`
     fragment BundleFields on Bundle {
@@ -13701,6 +14217,10 @@ export const VaultFieldFragmentDoc = gql`
   createdAtTimestamp
   holdersCount
   totalShares
+  feeApr_1d
+  feeApr_3d
+  feeApr_7d
+  feeApr_30d
   pool {
     ...PoolField
   }

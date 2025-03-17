@@ -16,9 +16,7 @@ export const OrbiterBridgeButton = observer(() => {
     return (
       <Button
         onPress={() =>
-          wallet.walletClient.switchChain({
-            id: Number(orbiterBridgeService.fromChainId),
-          })
+          wallet.changeChain(Number(orbiterBridgeService.fromChainId))
         }
       >
         Change Network

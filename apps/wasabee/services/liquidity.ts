@@ -33,10 +33,12 @@ class Liquidity {
           const token0 = Token.getToken({
             ...pair.token0,
             address: pair.token0.id,
+            chainId: wallet.currentChainId.toString(),
           });
           const token1 = Token.getToken({
             ...pair.token1,
             address: pair.token1.id,
+            chainId: wallet.currentChainId.toString(),
           });
 
           const pairContract = new PairContract({
@@ -104,6 +106,7 @@ class Liquidity {
             symbol: pair.pair.token0symbol,
             derivedETH: pair.pair.token0.derivedETH,
             derivedUSD: pair.pair.token1.derivedUSD,
+            chainId: wallet.currentChainId.toString(),
           });
 
           const token1 = Token.getToken({
@@ -112,6 +115,7 @@ class Liquidity {
             symbol: pair.pair.token1symbol,
             derivedETH: pair.pair.token1.derivedETH,
             derivedUSD: pair.pair.token1.derivedUSD,
+            chainId: wallet.currentChainId.toString(),
           });
 
           const pairContract = new PairContract({
@@ -581,7 +585,11 @@ class Liquidity {
   });
 
   async initPool() {
-    if (this.isInit || !wallet.currentChain) {
+    if (
+      this.isInit ||
+      !wallet.currentChain ||
+      !wallet.currentChain.supportDEX
+    ) {
       return;
     }
 
@@ -599,6 +607,7 @@ class Liquidity {
           symbol: pair.token0.symbol,
           decimals: pair.token0.decimals,
           isRouterToken: true,
+          chainId: wallet.currentChainId.toString(),
         });
         const token1 = Token.getToken({
           address: pair.token1.id.toLowerCase(),
@@ -606,6 +615,7 @@ class Liquidity {
           symbol: pair.token1.symbol,
           decimals: pair.token1.decimals,
           isRouterToken: true,
+          chainId: wallet.currentChainId.toString(),
         });
 
         token0.init();
@@ -642,8 +652,14 @@ class Liquidity {
       if (pair) {
         const pairContract = new PairContract({
           address: pair.address,
-          token0: Token.getToken(pair.token0),
-          token1: Token.getToken(pair.token1),
+          token0: Token.getToken({
+            ...pair.token0,
+            chainId: wallet.currentChainId.toString(),
+          }),
+          token1: Token.getToken({
+            ...pair.token1,
+            chainId: wallet.currentChainId.toString(),
+          }),
         });
 
         pairContract.init();
@@ -661,8 +677,14 @@ class Liquidity {
         if (pairAdd && pairAdd !== zeroAddress) {
           const pairContract = new PairContract({
             address: pairAdd,
-            token0: Token.getToken({ address: token0Address }),
-            token1: Token.getToken({ address: token1Address }),
+            token0: Token.getToken({
+              address: token0Address,
+              chainId: wallet.currentChainId.toString(),
+            }),
+            token1: Token.getToken({
+              address: token1Address,
+              chainId: wallet.currentChainId.toString(),
+            }),
           });
 
           pairContract.init();

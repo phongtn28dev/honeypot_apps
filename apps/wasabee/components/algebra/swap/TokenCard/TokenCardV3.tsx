@@ -1,50 +1,50 @@
-import { Input } from "@/components/algebra/ui/input";
-import { formatBalance } from "@/lib/algebra/utils/common/formatBalance";
-import { formatUSD } from "@/lib//algebra/utils/common/formatUSD";
-import { Currency, Percent } from "@cryptoalgebra/sdk";
-import { ReactNode, useEffect, useMemo, useState } from "react";
-import { useAccount, useBalance, useWatchBlockNumber } from "wagmi";
-import { Address, zeroAddress } from "viem";
-import { TokenSelector } from "@/components/TokenSelector/v3";
-import { Token as AlgebraToken } from "@cryptoalgebra/sdk";
-import { wallet } from "@/services/wallet";
-import { Token } from "@/services/contract/token";
-import { Slider } from "@nextui-org/react";
-import { debounce } from "lodash";
-import NativeCurrency from "@cryptoalgebra/sdk/dist/entities/NativeCurrency";
+import { Input } from '@/components/algebra/ui/input';
+import { formatBalance } from '@/lib/algebra/utils/common/formatBalance';
+import { formatUSD } from '@/lib//algebra/utils/common/formatUSD';
+import { Currency, Percent } from '@cryptoalgebra/sdk';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { useAccount, useBalance, useWatchBlockNumber } from 'wagmi';
+import { Address, zeroAddress } from 'viem';
+import { TokenSelector } from '@/components/TokenSelector/v3';
+import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
+import { wallet } from '@/services/wallet';
+import { Token } from '@/services/contract/token';
+import { Slider } from '@nextui-org/react';
+import { debounce } from 'lodash';
+import NativeCurrency from '@cryptoalgebra/sdk/dist/entities/NativeCurrency';
 import {
   ItemSelect,
   SelectState,
   SelectItem,
-} from "@/components/ItemSelect/v3";
-import { WNATIVE_EXTENDED } from "@/config/algebra/routing";
-import { cn } from "@/lib/tailwindcss";
-import { Button } from "@/components/algebra/ui/button";
+} from '@/components/ItemSelect/v3';
+import { WNATIVE_EXTENDED } from '@/config/algebra/routing';
+import { cn } from '@/lib/tailwindcss';
+import { Button } from '@/components/algebra/ui/button';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/algebra/ui/popover";
-import { Separator } from "@/components/algebra/ui/separator";
-import { Switch } from "@/components/algebra/ui/switch";
-import CardContianer from "@/components/CardContianer/CardContianer";
-import { useUserState } from "@/lib/algebra/state/userStore";
-import { SettingsIcon } from "lucide-react";
-import BigNumber from "bignumber.js";
+} from '@/components/algebra/ui/popover';
+import { Separator } from '@/components/algebra/ui/separator';
+import { Switch } from '@/components/algebra/ui/switch';
+import CardContianer from '@/components/CardContianer/CardContianer';
+import { useUserState } from '@/lib/algebra/state/userStore';
+import { SettingsIcon } from 'lucide-react';
+import BigNumber from 'bignumber.js';
 
 // Settings Component
 const Settings = () => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant={"icon"} size={"icon"}>
+        <Button variant={'icon'} size={'icon'}>
           <SettingsIcon />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="z-[9999]">
         <CardContianer addtionalClassName="flex-col gap-2">
           <div className="text-md font-bold">Transaction Settings</div>
-          <Separator orientation={"horizontal"} className="bg-border" />
+          <Separator orientation={'horizontal'} className="bg-border" />
           <SlippageTolerance />
           <TransactionDeadline />
           <Multihop />
@@ -61,7 +61,7 @@ const SlippageTolerance = () => {
     actions: { setSlippage },
   } = useUserState();
 
-  const [slippageInput, setSlippageInput] = useState("");
+  const [slippageInput, setSlippageInput] = useState('');
   const [slippageError, setSlippageError] = useState<boolean>(false);
 
   function parseSlippageInput(value: string) {
@@ -69,13 +69,13 @@ const SlippageTolerance = () => {
     setSlippageError(false);
 
     if (value.length === 0) {
-      setSlippage("auto");
+      setSlippage('auto');
     } else {
       const parsed = Math.floor(Number.parseFloat(value) * 100);
 
       if (!Number.isInteger(parsed) || parsed < 0 || parsed > 5000) {
-        setSlippage("auto");
-        if (value !== ".") {
+        setSlippage('auto');
+        if (value !== '.') {
           setSlippageError(true);
         }
       } else {
@@ -85,41 +85,41 @@ const SlippageTolerance = () => {
   }
 
   const tooLow =
-    slippage !== "auto" && slippage.lessThan(new Percent(5, 10_000));
+    slippage !== 'auto' && slippage.lessThan(new Percent(5, 10_000));
   const tooHigh =
-    slippage !== "auto" && slippage.greaterThan(new Percent(1, 100));
+    slippage !== 'auto' && slippage.greaterThan(new Percent(1, 100));
 
-  const slippageString = slippage !== "auto" ? slippage.toFixed(2) : "auto";
+  const slippageString = slippage !== 'auto' ? slippage.toFixed(2) : 'auto';
 
   return (
     <div className="flex flex-col gap-2">
       <div className="text-md font-semibold">Slippage Tolerance</div>
       <div className="flex gap-2">
         <Button
-          variant={slippageString === "auto" ? "iconActive" : "icon"}
-          size={"sm"}
-          onClick={() => parseSlippageInput("")}
+          variant={slippageString === 'auto' ? 'iconActive' : 'icon'}
+          size={'sm'}
+          onClick={() => parseSlippageInput('')}
         >
           Auto
         </Button>
         <Button
-          variant={slippageString === "0.10" ? "iconActive" : "icon"}
-          size={"sm"}
-          onClick={() => parseSlippageInput("0.10")}
+          variant={slippageString === '0.10' ? 'iconActive' : 'icon'}
+          size={'sm'}
+          onClick={() => parseSlippageInput('0.10')}
         >
           0.1%
         </Button>
         <Button
-          variant={slippageString === "0.50" ? "iconActive" : "icon"}
-          size={"sm"}
-          onClick={() => parseSlippageInput("0.5")}
+          variant={slippageString === '0.50' ? 'iconActive' : 'icon'}
+          size={'sm'}
+          onClick={() => parseSlippageInput('0.5')}
         >
           0.5%
         </Button>
         <Button
-          variant={slippageString === "1.00" ? "iconActive" : "icon"}
-          size={"sm"}
-          onClick={() => parseSlippageInput("1")}
+          variant={slippageString === '1.00' ? 'iconActive' : 'icon'}
+          size={'sm'}
+          onClick={() => parseSlippageInput('1')}
         >
           1%
         </Button>
@@ -128,19 +128,19 @@ const SlippageTolerance = () => {
             value={
               slippageInput.length > 0
                 ? slippageInput
-                : slippage === "auto"
-                  ? ""
-                  : slippage.toFixed(2)
+                : slippage === 'auto'
+                ? ''
+                : slippage.toFixed(2)
             }
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               parseSlippageInput(e.target.value)
             }
             onBlur={() => {
-              setSlippageInput("");
+              setSlippageInput('');
               setSlippageError(false);
             }}
             className={`text-right border-none text-md font-semibold bg-card-dark rounded-l-xl rounded-r-none w-[70px]`}
-            placeholder={"0.0"}
+            placeholder={'0.0'}
           />
           <div className="bg-card-dark text-sm p-2 pt-2.5 rounded-r-xl select-none">
             %
@@ -156,8 +156,8 @@ const SlippageTolerance = () => {
           ) : (
             <div className="bg-yellow-900 text-yellow-200 px-2 py-1 rounded-xl">
               {tooLow
-                ? "Your transaction may fail"
-                : "Your transaction may be frontrun"}
+                ? 'Your transaction may fail'
+                : 'Your transaction may be frontrun'}
             </div>
           )}
         </div>
@@ -172,7 +172,7 @@ const TransactionDeadline = () => {
     actions: { setTxDeadline },
   } = useUserState();
 
-  const [deadlineInput, setDeadlineInput] = useState("");
+  const [deadlineInput, setDeadlineInput] = useState('');
   const [deadlineError, setDeadlineError] = useState<boolean>(false);
 
   function parseCustomDeadline(value: string) {
@@ -200,22 +200,22 @@ const TransactionDeadline = () => {
       <div className="text-md font-semibold">Transaction Deadline</div>
       <div className="flex">
         <Input
-          placeholder={"30"}
+          placeholder={'30'}
           value={
             deadlineInput.length > 0
               ? deadlineInput
               : txDeadline === 180
-                ? ""
-                : (txDeadline / 60).toString()
+              ? ''
+              : (txDeadline / 60).toString()
           }
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             parseCustomDeadline(e.target.value)
           }
           onBlur={() => {
-            setDeadlineInput("");
+            setDeadlineInput('');
             setDeadlineError(false);
           }}
-          color={deadlineError ? "red" : ""}
+          color={deadlineError ? 'red' : ''}
           className={`text-left border-none text-md font-semibold bg-card-dark rounded-l-xl rounded-r-none w-full`}
         />
         <div className="bg-card-dark text-sm p-2 pt-2.5 rounded-r-xl select-none">
@@ -335,15 +335,15 @@ const TokenCardV3 = ({
   }, [value]);
 
   const balanceString = useMemo(() => {
-    if (isLoading || !balance) return "Loading...";
+    if (isLoading || !balance) return 'Loading...';
     return formatBalance(balance.formatted);
   }, [balance, isLoading]);
 
   const handleInput = useMemo(
     () =>
       debounce((value: string) => {
-        if (value === ".") value = "0.";
-        console.log("value", value);
+        if (value === '.') value = '0.';
+        console.log('value', value);
         handleValueChange?.(value);
       }, 200),
     []
@@ -388,6 +388,7 @@ const TokenCardV3 = ({
                   ? Token.getToken({
                       address: currency?.wrapped.address,
                       isNative: currency.isNative,
+                      chainId: wallet.currentChainId.toString(),
                     })
                   : undefined
               }
@@ -425,37 +426,37 @@ const TokenCardV3 = ({
                   handleInput(e.target.value);
                 }}
                 className={cn(
-                  "text-right",
-                  "!bg-transparent",
-                  "[&_*]:!bg-transparent",
-                  "data-[invalid=true]:!bg-transparent"
+                  'text-right',
+                  '!bg-transparent',
+                  '[&_*]:!bg-transparent',
+                  'data-[invalid=true]:!bg-transparent'
                 )}
                 classNames={{
                   inputWrapper: cn(
-                    "!bg-transparent",
-                    "border-none",
-                    "shadow-none",
-                    "!transition-none",
-                    "data-[invalid=true]:!bg-transparent",
-                    "group-data-[invalid=true]:!bg-transparent"
+                    '!bg-transparent',
+                    'border-none',
+                    'shadow-none',
+                    '!transition-none',
+                    'data-[invalid=true]:!bg-transparent',
+                    'group-data-[invalid=true]:!bg-transparent'
                   ),
                   input: cn(
-                    "!bg-transparent",
-                    "!text-[#202020]",
-                    "text-right",
-                    "text-xl",
-                    "!pr-0",
-                    "[appearance:textfield]",
-                    "[&::-webkit-outer-spin-button]:appearance-none",
-                    "[&::-webkit-inner-spin-button]:appearance-none",
-                    "data-[invalid=true]:!bg-transparent"
+                    '!bg-transparent',
+                    '!text-[#202020]',
+                    'text-right',
+                    'text-xl',
+                    '!pr-0',
+                    '[appearance:textfield]',
+                    '[&::-webkit-outer-spin-button]:appearance-none',
+                    '[&::-webkit-inner-spin-button]:appearance-none',
+                    'data-[invalid=true]:!bg-transparent'
                   ),
                   clearButton: cn(
-                    "opacity-70",
-                    "hover:opacity-100",
-                    "!text-black",
-                    "!p-0",
-                    "end-0 start-auto"
+                    'opacity-70',
+                    'hover:opacity-100',
+                    '!text-black',
+                    '!p-0',
+                    'end-0 start-auto'
                   ),
                 }}
                 placeholder="0.0"
@@ -469,7 +470,7 @@ const TokenCardV3 = ({
         </div>
       </div>
 
-      {showInput && label?.toLowerCase() !== "to" && (
+      {showInput && label?.toLowerCase() !== 'to' && (
         <div className="p-2 space-y-4">
           <Slider
             className="w-full"
