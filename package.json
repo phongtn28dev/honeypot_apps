@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "p": "nx dev pot2pump --port 9001",
     "pot2pump": "nx dev pot2pump --port 9001",
+    "w": "nx dev wasabee --port 9002",
     "wasabee": "nx dev wasabee --port 9002",
     "bgt-market": "nx dev bgt-market --port 9003"
   },

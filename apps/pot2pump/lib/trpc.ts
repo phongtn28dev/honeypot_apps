@@ -1,14 +1,14 @@
-import { createTRPCClient, httpBatchLink } from "@trpc/client";
-import { createTRPCNext } from "@trpc/next";
-import type { AppRouter } from "@/server/_app";
-import superjson from "superjson";
-import { createTRPCReact } from "@trpc/react-query";
-import { toast } from "react-toastify";
+import { createTRPCClient, httpBatchLink } from '@trpc/client';
+import { createTRPCNext } from '@trpc/next';
+import type { AppRouter } from '@/server/_app';
+import superjson from 'superjson';
+import { createTRPCReact } from '@trpc/react-query';
+import { toast } from 'react-toastify';
 
 export function getBaseUrl() {
-  if (typeof window !== "undefined")
+  if (typeof window !== 'undefined')
     // browser should use relative path
-    return "";
+    return '';
 
   if (process.env.VERCEL_URL)
     // reference for vercel.com
@@ -67,12 +67,12 @@ export const trpcClient = createTRPCClient<AppRouter>({
       async headers() {
         const headers = {} as Record<string, string>;
         if (
-          typeof window !== "undefined" &&
-          localStorage.getItem("message") &&
-          localStorage.getItem("signature")
+          typeof window !== 'undefined' &&
+          localStorage.getItem('message') &&
+          localStorage.getItem('signature')
         ) {
-          headers["message"] = localStorage.getItem("message") as string;
-          headers["signature"] = localStorage.getItem("signature") as string;
+          headers['message'] = localStorage.getItem('message') as string;
+          headers['signature'] = localStorage.getItem('signature') as string;
         }
         return headers;
       },
@@ -86,16 +86,17 @@ export const trpcQueryClient = trpc.createClient({
     httpBatchLink({
       url: `${getBaseUrl()}/api/trpc`,
       // You can pass any HTTP headers you wish here
+
       transformer: superjson,
       async headers() {
         const headers = {} as Record<string, string>;
         if (
-          typeof window !== "undefined" &&
-          localStorage.getItem("message") &&
-          localStorage.getItem("signature")
+          typeof window !== 'undefined' &&
+          localStorage.getItem('message') &&
+          localStorage.getItem('signature')
         ) {
-          headers["message"] = localStorage.getItem("message") as string;
-          headers["signature"] = localStorage.getItem("signature") as string;
+          headers['message'] = localStorage.getItem('message') as string;
+          headers['signature'] = localStorage.getItem('signature') as string;
         }
         return headers;
       },
