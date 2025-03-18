@@ -423,9 +423,7 @@ const KlineChartComponent = observer(
             "paneProperties.backgroundType": "solid",
             "paneProperties.background": "#202020",
             "scalesProperties.lineColor": "#202020",
-            "mainSeriesProperties.candleStyle.barColorsOnPrevClose": true,
-            "mainSeriesProperties.haStyle.barColorsOnPrevClose": true,
-            "mainSeriesProperties.barStyle.barColorsOnPrevClose": true,
+
             "mainSeriesProperties.candleStyle.upColor": "#089981",
             "mainSeriesProperties.candleStyle.borderUpColor": "#089981",
             "mainSeriesProperties.candleStyle.downColor": "#F23645",
