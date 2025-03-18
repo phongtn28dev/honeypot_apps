@@ -31,7 +31,6 @@ const SwapPage = observer(() => {
 
   const isInit = wallet.isInit && liquidity;
 
-  console.log('wallet.currentChain', wallet.currentChain);
   if (!wallet.currentChain.supportDEX) {
     return (
       <div className="w-full flex items-center justify-center pb-6 sm:pb-12 overflow-x-hidden">

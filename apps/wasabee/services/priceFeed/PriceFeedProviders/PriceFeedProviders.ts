@@ -4,9 +4,9 @@ import {
   TokenCurrentPriceResponseType,
   getChartDataInputsType,
   resolutionType,
-} from "./../priceFeedTypes";
-import { getTokenCurrentPriceTypeDataType } from "./defined";
-const DEFINED_API_ENDPOINT = "https://graph.defined.fi/graphql";
+} from './../priceFeedTypes';
+import { getTokenCurrentPriceTypeDataType } from './defined';
+const DEFINED_API_ENDPOINT = 'https://graph.defined.fi/graphql';
 
 export class DefinedPriceFeed implements PriceFeedProvider {
   apiKey: string;
@@ -20,15 +20,15 @@ export class DefinedPriceFeed implements PriceFeedProvider {
   ): Promise<ApiResponseType<T>> => {
     if (!this.apiKey || !query) {
       return {
-        status: "error",
-        message: "Error: API Key or query is missing.",
+        status: 'error',
+        message: 'Error: API Key or query is missing.',
       };
     }
 
     const res = await fetch(DEFINED_API_ENDPOINT, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: this.apiKey,
       },
       body: JSON.stringify({ query: query }),
@@ -39,9 +39,9 @@ export class DefinedPriceFeed implements PriceFeedProvider {
     console.log(data);
 
     return {
-      status: "success",
+      status: 'success',
       data: data.data,
-      message: "Success",
+      message: 'Success',
     };
   };
 
@@ -61,23 +61,24 @@ export class DefinedPriceFeed implements PriceFeedProvider {
       }
     }`;
 
-    const data =
-      await this.callDefinedApi<getTokenCurrentPriceTypeDataType>(query);
+    const data = await this.callDefinedApi<getTokenCurrentPriceTypeDataType>(
+      query
+    );
 
-    if (!data || data.status === "error") {
+    if (!data || data.status === 'error') {
       return {
-        status: "error",
-        message: "Failed to fetch data.",
+        status: 'error',
+        message: 'Failed to fetch data.',
       };
     } else {
       return {
-        status: "success",
+        status: 'success',
         data: {
           address: address,
           price: data.data.getTokenPrices[0].priceUsd,
           lastUpdated: data.data.getTokenPrices[0].timestamp,
         },
-        message: "Success",
+        message: 'Success',
       };
     }
   };
@@ -100,17 +101,18 @@ export class DefinedPriceFeed implements PriceFeedProvider {
       }
     }`;
 
-    const data =
-      await this.callDefinedApi<getTokenCurrentPriceTypeDataType>(query);
+    const data = await this.callDefinedApi<getTokenCurrentPriceTypeDataType>(
+      query
+    );
 
-    if (!data || data.status === "error") {
+    if (!data || data.status === 'error') {
       return {
-        status: "error",
-        message: "Failed to fetch data.",
+        status: 'error',
+        message: 'Failed to fetch data.',
       };
     } else {
       return {
-        status: "success",
+        status: 'success',
         data: data.data.getTokenPrices.map((price, index) => {
           return {
             address: addresses[index],
@@ -118,7 +120,7 @@ export class DefinedPriceFeed implements PriceFeedProvider {
             lastUpdated: price.timestamp,
           };
         }),
-        message: "Success",
+        message: 'Success',
       };
     }
   };
@@ -153,17 +155,18 @@ export class DefinedPriceFeed implements PriceFeedProvider {
     }
 `;
 
-    const data =
-      await this.callDefinedApi<getTokenCurrentPriceTypeDataType>(query);
+    const data = await this.callDefinedApi<getTokenCurrentPriceTypeDataType>(
+      query
+    );
 
-    if (!data || data.status === "error") {
+    if (!data || data.status === 'error') {
       return {
-        status: "error",
-        message: "Failed to fetch data.",
+        status: 'error',
+        message: 'Failed to fetch data.',
       };
     } else {
       return {
-        status: "success",
+        status: 'success',
         data: data.data.getTokenPrices.map((price) => {
           return {
             address: address,
@@ -171,7 +174,7 @@ export class DefinedPriceFeed implements PriceFeedProvider {
             lastUpdated: price.timestamp,
           };
         }),
-        message: "Success",
+        message: 'Success',
       };
     }
   };
