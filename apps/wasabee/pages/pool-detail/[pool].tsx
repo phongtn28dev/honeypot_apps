@@ -251,7 +251,12 @@ const PoolPage = observer(() => {
     <PageContainer>
       <CardContainer className="gap-y-6">
         <LoadingContainer isLoading={!poolEntity}>
-          <PoolHeader pool={poolEntity} token0={token0} token1={token1} />
+          <PoolHeader
+            pool={poolEntity}
+            token0={token0}
+            token1={token1}
+            poolId={poolId ? poolId : zeroAddress}
+          />
           <div className="w-full grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-4">
             {poolInfo?.pool && <PoolChart pool={poolInfo.pool as Pool} />}
             <PoolStatsCard pool={poolInfo?.pool as Pool} />
