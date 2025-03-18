@@ -52,7 +52,6 @@ export function getBaseUrl() {
 export const trpcClient = createTRPCClient<AppRouter>({
   links: [
     httpBatchLink({
-      // FIXME: TRPCClientError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
       transformer: superjson,
       // fetch: async (input, init) => {
       //   const res = await fetch(input,init)
@@ -88,7 +87,6 @@ export const trpcQueryClient = trpc.createClient({
       url: `${getBaseUrl()}/api/trpc`,
       // You can pass any HTTP headers you wish here
 
-      // FIXME: TRPCClientError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
       transformer: superjson,
       async headers() {
         const headers = {} as Record<string, string>;
