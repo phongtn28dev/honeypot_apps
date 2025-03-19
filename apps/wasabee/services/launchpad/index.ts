@@ -687,7 +687,7 @@ class LaunchPad {
             tokenName,
             tokenSymbol,
             BigInt(new BigNumber(tokenAmount).multipliedBy(1e18).toFixed()),
-            wallet.currentChain.contracts.routerV3 as `0x${string}`,
+            wallet.currentChain.contracts.algebraRouter as `0x${string}`,
             BigInt(raisingCycle),
           ]);
         } else {
@@ -697,7 +697,7 @@ class LaunchPad {
               name: tokenName,
               symbol: tokenSymbol,
               swapHandler: wallet.currentChain.contracts
-                .routerV3 as `0x${string}`,
+                .algebraRouter as `0x${string}`,
             },
           ]);
         }

@@ -8,6 +8,7 @@ import {
   base,
   mainnet,
   berachain,
+  berachainBepolia,
 } from 'viem/chains';
 
 export const arbitrumMainnet: Chain = {
@@ -24,6 +25,11 @@ export const ethMainnet: Chain = {
 
 export const polygonMumbaiChain: Chain = {
   ...polygonMumbai,
+};
+
+export const berachainBepoliaTestnet: Chain = {
+  ...berachainBepolia,
+  testnet: true,
 };
 
 export const berachainTestnet: Chain = {

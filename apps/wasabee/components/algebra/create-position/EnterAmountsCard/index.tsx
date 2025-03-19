@@ -7,7 +7,6 @@ import { formatCurrency } from '@/lib/algebra/utils/common/formatCurrency';
 import { Token } from '@/services/contract/token';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { cn } from '@/lib/utils';
-import { NATIVE_TOKEN_WRAPPED } from '@/config/algebra/addresses';
 import { HiOutlineSwitchHorizontal, HiSwitchVertical } from 'react-icons/hi';
 import { wallet } from '@/services/wallet';
 
@@ -73,7 +72,8 @@ const EnterAmountCard = ({
           <span className="font-medium text-black font-gliker text-xl">
             {currency ? currency.symbol : 'Select a token'}
           </span>
-          {currency?.wrapped.address === NATIVE_TOKEN_WRAPPED && (
+          {currency?.wrapped.address ===
+            wallet.currentChain.nativeToken.address && (
             <HiOutlineSwitchHorizontal
               className="w-5 h-5 text-black cursor-pointer"
               onClick={() => setUseNative(!useNative)}
