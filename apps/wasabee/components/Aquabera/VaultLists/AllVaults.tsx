@@ -202,30 +202,6 @@ export function AllAquaberaVaults({
               <th className="py-4 px-6 cursor-pointer text-right text-[#4D4D4D]">
                 <div
                   className="flex items-center gap-2 justify-end"
-                  onClick={() => handleSort('apr')}
-                >
-                  <span>APR</span>
-                  <div className="flex flex-col">
-                    <ChevronUp
-                      className={`h-3 w-3 ${
-                        sortField === 'apr' && sortDirection === 'asc'
-                          ? 'text-black'
-                          : 'text-[#4D4D4D]'
-                      }`}
-                    />
-                    <ChevronDown
-                      className={`h-3 w-3 ${
-                        sortField === 'apr' && sortDirection === 'desc'
-                          ? 'text-black'
-                          : 'text-[#4D4D4D]'
-                      }`}
-                    />
-                  </div>
-                </div>
-              </th>
-              <th className="py-4 px-6 cursor-pointer text-right text-[#4D4D4D]">
-                <div
-                  className="flex items-center gap-2 justify-end"
                   onClick={() => handleSort('tvl')}
                 >
                   <span>Vault TVL</span>
@@ -288,6 +264,30 @@ export function AllAquaberaVaults({
                     <ChevronDown
                       className={`h-3 w-3 ${
                         sortField === 'fees' && sortDirection === 'desc'
+                          ? 'text-black'
+                          : 'text-[#4D4D4D]'
+                      }`}
+                    />
+                  </div>
+                </div>
+              </th>
+              <th className="py-4 px-6 cursor-pointer text-right text-[#4D4D4D]">
+                <div
+                  className="flex items-center gap-2 justify-end"
+                  onClick={() => handleSort('apr')}
+                >
+                  <span>APR</span>
+                  <div className="flex flex-col">
+                    <ChevronUp
+                      className={`h-3 w-3 ${
+                        sortField === 'apr' && sortDirection === 'asc'
+                          ? 'text-black'
+                          : 'text-[#4D4D4D]'
+                      }`}
+                    />
+                    <ChevronDown
+                      className={`h-3 w-3 ${
+                        sortField === 'apr' && sortDirection === 'desc'
                           ? 'text-black'
                           : 'text-[#4D4D4D]'
                       }`}

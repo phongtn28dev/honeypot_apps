@@ -137,10 +137,7 @@ export const VaultRow = observer(({ vault }: { vault: ICHIVaultContract }) => {
       </td>
       {/* vault address */}
       {/* <td className="py-4 px-6 text-black">{vault.id}</td> */}
-      {/* apr */}{' '}
-      <td className="py-4 px-6 text-right text-black">
-        {vault.apr.toFixed(2)}%
-      </td>
+      {/* apr */}
       <td className="py-4 px-6 text-right text-black">
         {DynamicFormatAmount({
           amount: vaultContract?.tvlUSD ?? 0,
@@ -163,6 +160,9 @@ export const VaultRow = observer(({ vault }: { vault: ICHIVaultContract }) => {
           decimals: 3,
           endWith: ' $',
         })}
+      </td>
+      <td className="py-4 px-6 text-right text-black">
+        {vault.apr.toFixed(2)}%
       </td>
     </tr>
   );
