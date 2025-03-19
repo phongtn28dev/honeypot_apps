@@ -1,22 +1,23 @@
-import { Currency, WNATIVE, tryParseAmount } from "@cryptoalgebra/sdk";
-import { useMemo } from "react";
-import { useAccount, useBalance, useChainId, useContractWrite } from "wagmi";
-import { useTransactionAwait } from "../common/useTransactionAwait";
+import { Currency, WNATIVE, tryParseAmount } from '@cryptoalgebra/sdk';
+import { useMemo } from 'react';
+import { useAccount, useBalance, useChainId, useContractWrite } from 'wagmi';
+import { useTransactionAwait } from '../common/useTransactionAwait';
 
-import { Address } from "viem";
-import { DEFAULT_NATIVE_SYMBOL } from "@/config/algebra/default-chain-id";
-import { WNATIVE_EXTENDED } from "@/config/algebra/routing";
+import { Address } from 'viem';
+import { DEFAULT_NATIVE_SYMBOL } from '@/config/algebra/default-chain-id';
+import { WNATIVE_EXTENDED } from '@/config/algebra/routing';
 import {
   useSimulateWrappedNativeDeposit,
   useSimulateWrappedNativeWithdraw,
-} from "@/wagmi-generated";
-import { TransactionType } from "../../state/pendingTransactionsStore";
-import { useToastify } from "@/lib/hooks/useContractToastify";
+} from '@/wagmi-generated';
+import { TransactionType } from '../../state/pendingTransactionsStore';
+import { useToastify } from '@/lib/hooks/useContractToastify';
+import { wallet } from '@/services/wallet';
 
 export const WrapType = {
-  NOT_APPLICABLE: "NOT_APPLICABLE",
-  WRAP: "WRAP",
-  UNWRAP: "UNWRAP",
+  NOT_APPLICABLE: 'NOT_APPLICABLE',
+  WRAP: 'WRAP',
+  UNWRAP: 'UNWRAP',
 };
 
 const NOT_APPLICABLE = { wrapType: WrapType.NOT_APPLICABLE };
@@ -41,7 +42,7 @@ export default function useWrapCallback(
   );
 
   const { data: wrapConfig } = useSimulateWrappedNativeDeposit({
-    address: WNATIVE[chainId].address as Address,
+    address: wallet.currentChain.nativeToken.address as Address,
     value: inputAmount ? BigInt(inputAmount.quotient.toString()) : undefined,
   });
 
@@ -53,12 +54,12 @@ export default function useWrapCallback(
     isSuccess: isWrapSuccess,
   } = useTransactionAwait(wrapData, {
     title: `Wrap ${inputAmount?.toSignificant(3)} ${DEFAULT_NATIVE_SYMBOL}`,
-    tokenA: WNATIVE[chainId].address as Address,
+    tokenA: wallet.currentChain.nativeToken.address as Address,
     type: TransactionType.SWAP,
   });
 
   const { data: unwrapConfig } = useSimulateWrappedNativeWithdraw({
-    address: WNATIVE[chainId].address as Address,
+    address: wallet.currentChain.nativeToken.address as Address,
     args: inputAmount ? [BigInt(inputAmount.quotient.toString())] : undefined,
   });
 
@@ -71,7 +72,7 @@ export default function useWrapCallback(
 
   const { isLoading: isUnwrapLoading } = useTransactionAwait(unwrapData, {
     title: `Unwrap ${inputAmount?.toSignificant(3)} W${DEFAULT_NATIVE_SYMBOL}`,
-    tokenA: WNATIVE[chainId].address as Address,
+    tokenA: wallet.currentChain.nativeToken.address as Address,
     type: TransactionType.SWAP,
   });
 
@@ -90,7 +91,7 @@ export default function useWrapCallback(
     const weth = WNATIVE_EXTENDED[chainId];
     if (!weth) return NOT_APPLICABLE;
 
-    const hasInputAmount = Boolean(inputAmount?.greaterThan("0"));
+    const hasInputAmount = Boolean(inputAmount?.greaterThan('0'));
     const sufficientBalance =
       inputAmount &&
       balance &&
@@ -107,8 +108,8 @@ export default function useWrapCallback(
         inputError: sufficientBalance
           ? undefined
           : hasInputAmount
-            ? `Insufficient ${DEFAULT_NATIVE_SYMBOL} balance`
-            : `Enter ${DEFAULT_NATIVE_SYMBOL} amount`,
+          ? `Insufficient ${DEFAULT_NATIVE_SYMBOL} balance`
+          : `Enter ${DEFAULT_NATIVE_SYMBOL} amount`,
         isSuccess: isWrapSuccess,
       };
     } else if (weth.equals(inputCurrency) && outputCurrency.isNative) {
@@ -122,8 +123,8 @@ export default function useWrapCallback(
         inputError: sufficientBalance
           ? undefined
           : hasInputAmount
-            ? `Insufficient W${DEFAULT_NATIVE_SYMBOL} balance`
-            : `Enter W${DEFAULT_NATIVE_SYMBOL} amount`,
+          ? `Insufficient W${DEFAULT_NATIVE_SYMBOL} balance`
+          : `Enter W${DEFAULT_NATIVE_SYMBOL} amount`,
         isSuccess: isUnwrapSuccess,
       };
     } else {

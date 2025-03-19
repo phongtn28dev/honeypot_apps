@@ -17,6 +17,10 @@ import {
   contractAddresses,
   ContractAddresses,
 } from '@/config/contractAddresses';
+import {
+  subgraphAddresses,
+  SubgraphAddresses,
+} from '@/config/subgraphEndPoint';
 
 export class Network {
   supportDEX: boolean = false;
@@ -29,6 +33,7 @@ export class Network {
     HPOT: string;
   };
   contracts!: ContractAddresses;
+  subgraphAddresses!: SubgraphAddresses;
   nativeToken!: Token;
   raisedTokenData!: {
     symbol: string;
@@ -94,6 +99,10 @@ export class Network {
 }
 
 export const berachainBepoliaNetwork = new Network({
+  supportDEX: true,
+  supportVault: true,
+  supportBridge: true,
+
   chain: berachainBepoliaTestnet,
   nativeToken: {
     address: '0x6969696969696969696969696969696969696969',
@@ -103,27 +112,13 @@ export const berachainBepoliaNetwork = new Network({
     isNative: true,
     logoURI: '/images/icons/tokens/wbera-token-icon.png',
   },
-  raisedTokenData: [
-    {
-      symbol: 'WBERA',
-      address: '0x6969696969696969696969696969696969696969',
-      amount: BigInt('4000000000000000000'),
-    },
-    {
-      symbol: 'Honey',
-      address: '0xFCBD14DC51f0A4d49d5E53C2E0950e0bC26d0Dce',
-      amount: BigInt('30000000000000000000'),
-    },
-  ],
+  raisedTokenData: [],
   platformTokenAddress: {
     HPOT: zeroAddress.toLowerCase(),
   },
   faucetTokens: [],
-  contracts: contractAddresses['default'],
-  blacklist: {
-    poolBlacklist: ['0xfF95cdfC724Ca85b8d96D5a6Ea86333AC6a4799D'.toLowerCase()],
-    memeBlacklist: [],
-  },
+  contracts: contractAddresses['80069'],
+  subgraphAddresses: subgraphAddresses['80069'],
   validatedTokensInfo: {
     //when adding a new token, make sure to add the address as lowercase
     '0x0000000000000000000000000000000000000000': {
@@ -179,7 +174,8 @@ export const berachainNetwork = new Network({
   platformTokenAddress: {
     HPOT: '0x9b37d542114070518a44e200fdcd8e4be737297f'.toLowerCase(),
   },
-  contracts: contractAddresses['80069'],
+  contracts: contractAddresses['80094'],
+  subgraphAddresses: subgraphAddresses['80094'],
   faucetTokens: [],
   validatedTokensInfo: {
     //when adding a new token, make sure to add the address as lowercase
@@ -334,6 +330,7 @@ export const movementNetWork = new Network({
   officialFaucets: [],
   nativeToken: {},
   contracts: contractAddresses['default'],
+  subgraphAddresses: subgraphAddresses['default'],
   faucetTokens: [],
   blacklist: {},
   validatedTokensInfo: {},
@@ -350,6 +347,7 @@ export const arbitrumOneNetwork = new Network({
   nativeToken: { address: zeroAddress },
 
   contracts: contractAddresses['default'],
+  subgraphAddresses: subgraphAddresses['default'],
   faucetTokens: [],
   blacklist: {},
   validatedTokensInfo: {},
@@ -366,6 +364,7 @@ export const baseNetwork = new Network({
   nativeToken: { address: zeroAddress },
 
   contracts: contractAddresses['default'],
+  subgraphAddresses: subgraphAddresses['default'],
   faucetTokens: [],
   blacklist: {},
   validatedTokensInfo: {},
@@ -381,6 +380,7 @@ export const ethNetwork = new Network({
   nativeToken: { address: zeroAddress },
 
   contracts: contractAddresses['default'],
+  subgraphAddresses: subgraphAddresses['default'],
   faucetTokens: [],
   blacklist: {},
   validatedTokensInfo: {},
@@ -397,6 +397,7 @@ export const sprotoNetWork = new Network({
   nativeToken: {},
 
   contracts: contractAddresses['default'],
+  subgraphAddresses: subgraphAddresses['default'],
   faucetTokens: [],
   blacklist: {},
   validatedTokensInfo: {},

@@ -1,5 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
-import { infoClient } from '.';
 import {
   PoolsByTokenPairQuery,
   PoolsByTokenPairDocument,
@@ -27,7 +25,7 @@ import BigNumber from 'bignumber.js';
 import { object } from 'zod';
 import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
 import { Token } from '@/services/contract/token';
-
+import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
 export const poolQueryToContract = (pool: Pool): PairContract => {
   const pairContract = new PairContract({
     address: pool.id as Address,
@@ -56,6 +54,7 @@ export const poolQueryToContract = (pool: Pool): PairContract => {
 };
 
 export const poolsByTokenPair = async (token0: string, token1: string) => {
+  const infoClient = useInfoClient();
   const { data } = await infoClient.query<
     PoolsByTokenPairQuery,
     PoolsByTokenPairQueryVariables
@@ -68,6 +67,7 @@ export const poolsByTokenPair = async (token0: string, token1: string) => {
 };
 
 export const userPools = async (userAddress: string) => {
+  const infoClient = useInfoClient();
   const { data } = await infoClient.query<
     UserActivePositionsQuery,
     UserActivePositionsQueryVariables
@@ -212,6 +212,7 @@ export const useUserPools = (userAddress: string) => {
 };
 
 export const poolExists = async (poolAddress: string) => {
+  const infoClient = useInfoClient();
   const { data } = await infoClient.query<
     SinglePoolQuery,
     SinglePoolQueryVariables

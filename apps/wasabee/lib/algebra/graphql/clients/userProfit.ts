@@ -1,12 +1,11 @@
-import { infoClient } from ".";
-import { gql } from "@apollo/client";
 import {
   LiquidatorDataDocument,
   LiquidatorDataQuery,
   LiquidatorDataQueryVariables,
   PoolDayData,
   PoolHourData,
-} from "../generated/graphql";
+} from '../generated/graphql';
+import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
 
 export interface UserPoolProfit {
   account: string;
@@ -25,6 +24,7 @@ export interface UserPoolProfit {
 export const getLiquidatorDatas = async (
   account: string
 ): Promise<UserPoolProfit[]> => {
+  const infoClient = useInfoClient();
   const liquidatorDataQuery = await infoClient.query<
     LiquidatorDataQuery,
     LiquidatorDataQueryVariables
@@ -45,7 +45,7 @@ export const getLiquidatorDatas = async (
       totalLiquidityUsd,
       pool: { totalValueLockedUSD, feesUSD, poolDayData, poolHourData },
     } = liquidatorDatas[i];
-    const [account, poolAddress] = id.split("#");
+    const [account, poolAddress] = id.split('#');
     const depositedUsd = Number(totalLiquidityUsd);
     const collectedFeesUSD = Number(feesUSD);
     const totalValueUSD = Number(totalValueLockedUSD);

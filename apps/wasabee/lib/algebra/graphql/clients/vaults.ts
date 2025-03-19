@@ -1,5 +1,5 @@
 import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
-import { infoClient } from '.';
+
 import {
   AccountVaultSharesDocument,
   AccountVaultSharesQuery,
@@ -20,7 +20,7 @@ import { Address } from 'viem';
 import { Token } from '@/services/contract/token';
 import { poolQueryToContract } from './pool';
 import BigNumber from 'bignumber.js';
-
+import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
 export const vaultQueryResToVaultContract = (
   vault: IchiVault
 ): ICHIVaultContract => {
@@ -62,6 +62,7 @@ export async function getAccountVaultsList(
   accountAddress: string
 ): Promise<AccountVaultSharesQuery> {
   console.log(AccountVaultSharesDocument);
+  const infoClient = useInfoClient();
 
   const vaults = await infoClient.query<AccountVaultSharesQuery>({
     query: AccountVaultSharesDocument,
@@ -78,7 +79,7 @@ export async function getAccountVaultsList(
 export async function getVaultPageData(
   search?: string
 ): Promise<VaultsSortedByHoldersQuery> {
-  console.log(VAULTS_SORTED_BY_HOLDERS);
+  const infoClient = useInfoClient();
   const vaults = await infoClient.query<VaultsSortedByHoldersQuery>({
     query: VaultsSortedByHoldersDocument,
     variables: {
@@ -92,6 +93,7 @@ export async function getVaultPageData(
 export async function getSingleVaultDetails(
   vaultId: string
 ): Promise<ICHIVaultContract | null> {
+  const infoClient = useInfoClient();
   try {
     const result = await infoClient.query<SingleVaultDetailsQuery>({
       query: SingleVaultDetailsDocument,

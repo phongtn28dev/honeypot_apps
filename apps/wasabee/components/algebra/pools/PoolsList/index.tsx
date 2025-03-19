@@ -1,24 +1,22 @@
 import {
   poolsColumns,
   poolsColumnsMy,
-} from "@/components/algebra/common/Table/poolsColumns";
-import { useMemo, useState } from "react";
-import { Address } from "viem";
-import PoolsTable from "@/components/algebra/common/Table/poolsTable";
-import { usePositions } from "@/lib/algebra/hooks/positions/usePositions";
-import { farmingClient } from "@/lib/algebra/graphql/clients";
+} from '@/components/algebra/common/Table/poolsColumns';
+import { useMemo, useState } from 'react';
+import { Address } from 'viem';
+import PoolsTable from '@/components/algebra/common/Table/poolsTable';
 import {
   usePoolsListQuery,
   useActiveFarmingsQuery,
   Pool_OrderBy,
-} from "@/lib/algebra/graphql/generated/graphql";
-import PoolCardList from "./PoolCardList";
-import { SortingState } from "@tanstack/react-table";
-import { useUserPools } from "@/lib/algebra/graphql/clients/pool";
-import { wallet } from "@/services/wallet";
-import BigNumber from "bignumber.js";
-import { calculatePercentageChange } from "@/lib/utils";
-
+} from '@/lib/algebra/graphql/generated/graphql';
+import PoolCardList from './PoolCardList';
+import { SortingState } from '@tanstack/react-table';
+import { useUserPools } from '@/lib/algebra/graphql/clients/pool';
+import { wallet } from '@/services/wallet';
+import BigNumber from 'bignumber.js';
+import { calculatePercentageChange } from '@/lib/utils';
+import { useFarmingClient } from '@/lib/hooks/useSubgraphClients';
 const mappingSortKeys: Record<any, Pool_OrderBy> = {
   tvlUSD: Pool_OrderBy.TotalValueLockedUsd,
   price: Pool_OrderBy.Token0Price,
@@ -30,21 +28,21 @@ const mappingSortKeys: Record<any, Pool_OrderBy> = {
   changeWeek: Pool_OrderBy.Id,
   changeMonth: Pool_OrderBy.Id,
   liquidity: Pool_OrderBy.Liquidity,
-  "marktet cap": Pool_OrderBy.Token0MarketCap,
+  'marktet cap': Pool_OrderBy.Token0MarketCap,
 };
 interface PoolsListProps {
   defaultFilter?: string;
   showOptions?: boolean;
 }
 const PoolsList = ({
-  defaultFilter = "trending",
+  defaultFilter = 'trending',
   showOptions = true,
 }: PoolsListProps) => {
   const [sorting, setSorting] = useState<SortingState>([
-    { id: "id", desc: true },
+    { id: 'id', desc: true },
   ]);
-
-  const [search, setSearch] = useState("");
+  const farmingClient = useFarmingClient();
+  const [search, setSearch] = useState('');
 
   const orderBy = mappingSortKeys[sorting[0].id];
 
@@ -53,9 +51,9 @@ const PoolsList = ({
     loading: isPoolsListLoading,
     refetch,
   } = usePoolsListQuery({
-    fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-and-network",
-    initialFetchPolicy: "cache-and-network",
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-and-network',
+    initialFetchPolicy: 'cache-and-network',
     notifyOnNetworkStatusChange: true,
     pollInterval: 10000, // Refetch every 10 seconds,
     variables: {
@@ -142,15 +140,15 @@ const PoolsList = ({
 
         //periodStartUnix
         const handleGapHour = (data: any[], end: number) => {
-          return handleGap(data, 3600, "periodStartUnix", end);
+          return handleGap(data, 3600, 'periodStartUnix', end);
         };
 
         const handleDayGap = (data: any[], end: number) => {
-          return handleGap(data, 3600 * 24, "date", end);
+          return handleGap(data, 3600 * 24, 'date', end);
         };
 
         const handleGapWeek = (data: any[], end: number) => {
-          return handleGap(data, 3600 * 24 * 7, "week", end);
+          return handleGap(data, 3600 * 24 * 7, 'week', end);
         };
 
         const filledGapHours = handleGapHour(
@@ -259,7 +257,7 @@ const PoolsList = ({
           avgVolume24to48h
         );
 
-        console.log("volumeChange24to48h", {
+        console.log('volumeChange24to48h', {
           poolHourData,
           token0: token0.symbol,
           token1: token1.symbol,
@@ -365,15 +363,15 @@ const PoolsList = ({
         //periodStartUnix
 
         const handleGapHour = (data: any[], end: number) => {
-          return handleGap(data, 3600, "periodStartUnix", end);
+          return handleGap(data, 3600, 'periodStartUnix', end);
         };
 
         const handleDayGap = (data: any[], end: number) => {
-          return handleGap(data, 3600 * 24, "date", end);
+          return handleGap(data, 3600 * 24, 'date', end);
         };
 
         const handleGapWeek = (data: any[], end: number) => {
-          return handleGap(data, 3600 * 24 * 7, "week", end);
+          return handleGap(data, 3600 * 24 * 7, 'week', end);
         };
 
         const filledGapHours = handleGapHour(
@@ -502,7 +500,7 @@ const PoolsList = ({
     }
   };
 
-  console.log("formattedPools", formattedPools);
+  console.log('formattedPools', formattedPools);
 
   return (
     <div className="w-full">
@@ -514,7 +512,7 @@ const PoolsList = ({
           userPools={formattedUserPools}
           sorting={sorting}
           setSorting={handleSort}
-          link={"pool-detail"}
+          link={'pool-detail'}
           showPagination={true}
           loading={isLoading || isUserPoolsLoading}
           defaultFilter={defaultFilter}

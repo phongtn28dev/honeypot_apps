@@ -1,5 +1,3 @@
-import { gql } from "@apollo/client";
-import { infoClient } from ".";
 import {
   GetPot2PumpDetailDocument,
   GetPot2PumpDetailQuery,
@@ -14,17 +12,19 @@ import {
   GetParticipantDetailQuery,
   GetParticipantDetailQueryVariables,
   GetPot2PumpDetailQueryVariables,
-} from "../generated/graphql";
-import { pot2PumpListToMemePairList, pot2PumpToMemePair } from "./pair";
+} from '../generated/graphql';
+import { pot2PumpListToMemePairList, pot2PumpToMemePair } from './pair';
+import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
 
 export const getPot2PumpDetail = async (id: string, accountId?: string) => {
+  const infoClient = useInfoClient();
   const res = await infoClient.query<
     GetPot2PumpDetailQuery,
     GetPot2PumpDetailQueryVariables
   >({
     query: GetPot2PumpDetailDocument,
     variables: { id, accountId: accountId },
-    fetchPolicy: "cache-first",
+    fetchPolicy: 'cache-first',
     notifyOnNetworkStatusChange: true,
   });
 
@@ -40,6 +40,7 @@ export const subgraphPot2PumpToMemePair = async (
 };
 
 export const canClaimPot2Pump = async (accountId: string) => {
+  const infoClient = useInfoClient();
   const res = await infoClient.query<
     CanClaimPot2PumpParticipantQuery,
     CanClaimPot2PumpParticipantQueryVariables
@@ -48,7 +49,7 @@ export const canClaimPot2Pump = async (accountId: string) => {
     variables: {
       accountId: accountId.toLowerCase(),
     },
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
   });
 
   const memeList = await pot2PumpListToMemePairList(
@@ -64,7 +65,7 @@ export const canClaimPot2Pump = async (accountId: string) => {
 
 export const canRefundPot2Pump = async (accountId: string) => {
   const timeNow = Math.floor(Date.now() / 1000);
-
+  const infoClient = useInfoClient();
   const res = await infoClient.query<
     CanRefundPot2PumpParticipantQuery,
     CanRefundPot2PumpParticipantQueryVariables
@@ -74,12 +75,12 @@ export const canRefundPot2Pump = async (accountId: string) => {
       accountId: accountId.toLowerCase(),
       timeNow: timeNow,
     },
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
   });
 
   if (!res.data?.participants) {
     console.error(
-      "Failed to fetch refundable pot2pump participants:",
+      'Failed to fetch refundable pot2pump participants:',
       res.error
     );
     return [];
@@ -100,6 +101,7 @@ export const getParticipantDetail = async (
   accountId: string,
   pot2PumpId: string
 ) => {
+  const infoClient = useInfoClient();
   const res = await infoClient.query<
     GetParticipantDetailQuery,
     GetParticipantDetailQueryVariables

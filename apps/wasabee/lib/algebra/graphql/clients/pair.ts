@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client';
-import { infoClient } from '.';
 import { PairFilter, SubgraphProjectFilter } from '@/services/launchpad';
 import { PageRequest } from '@/services/indexer/indexerTypes';
 import dayjs from 'dayjs';
@@ -21,7 +20,7 @@ import {
 import { filter } from 'lodash';
 import { calculateToken24hPriceChange } from '../utils/calculateToken24hChange';
 import { wallet } from '@/services/wallet';
-
+import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
 type SubgraphToken = {
   id: string;
   name: string;
@@ -221,6 +220,7 @@ export const pot2PumpToMemePair = (
 };
 
 export async function fetchNearSuccessPot2Pump() {
+  const infoClient = useInfoClient();
   const { data } = await infoClient.query<Pot2PumpPottingNearSuccessQuery>({
     query: Pot2PumpPottingNearSuccessDocument,
     variables: {
@@ -237,6 +237,7 @@ export async function fetchNearSuccessPot2Pump() {
 }
 
 export async function fetchPottingNewTokens() {
+  const infoClient = useInfoClient();
   const { data } = await infoClient.query<Pot2PumpPottingNewTokensQuery>({
     query: Pot2PumpPottingNewTokensDocument,
     variables: {
@@ -248,6 +249,7 @@ export async function fetchPottingNewTokens() {
 }
 
 export async function fetchPumpingHighPricePot2Pump() {
+  const infoClient = useInfoClient();
   const { data } = await infoClient.query<Pot2PumpPottingHighPriceQuery>({
     query: Pot2PumpPottingHighPriceDocument,
   });
@@ -256,6 +258,7 @@ export async function fetchPumpingHighPricePot2Pump() {
 }
 
 export async function fetchPottingTrendingPot2Pump() {
+  const infoClient = useInfoClient();
   const { data } = await infoClient.query<Pot2PumpPottingTrendingQuery>({
     query: Pot2PumpPottingTrendingDocument,
   });
@@ -272,7 +275,7 @@ export async function fetchPairsList({
 }): Promise<PairsListResponse> {
   let whereCondition = '';
   let conditions = [];
-
+  const infoClient = useInfoClient();
   if (filter.search) {
     conditions.push(`
       launchToken_: {
@@ -399,6 +402,7 @@ export async function fetchMemetrackerList({
 }: {
   chainId: string;
 }): Promise<MemetrackerListResponse> {
+  const infoClient = useInfoClient();
   const query = `
     query MemetrackerList {
       pot2Pumps(
@@ -468,6 +472,7 @@ export async function fetchPot2PumpList({
   filter: SubgraphProjectFilter;
 }): Promise<Pot2PumpListResponse> {
   let whereCondition: string[] = [];
+  const infoClient = useInfoClient();
 
   if (filter.status === 'success') {
     whereCondition.push(` raisedTokenReachingMinCap: true `);
@@ -682,8 +687,6 @@ export async function fetchPot2PumpList({
     }
   `;
 
-  console.log('Pumping query', query);
-
   const { data } = await infoClient.query<Pot2PumpListData>({
     query: gql(query),
   });
@@ -710,6 +713,7 @@ export async function fetchPot2Pumps({
   filter: SubgraphProjectFilter;
 }): Promise<Pot2PumpListData> {
   const whereCondition: string[] = [];
+  const infoClient = useInfoClient();
 
   if (filter.search) {
     whereCondition.push(`
