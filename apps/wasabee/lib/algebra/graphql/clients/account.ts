@@ -9,10 +9,11 @@ import {
 } from '../generated/graphql';
 import { All_Accounts, SINGLE_ACCOUNT_DETAILS } from '../queries/account';
 import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
+import { ApolloClient } from '@apollo/client';
+import { createClientHook } from '../clientUtils';
 
-export async function getAccountsPageData() {
-  const infoClient = useInfoClient();
-  const accountsQuery = await infoClient.query<AllAccountsQuery>({
+export async function getAccountsPageData(client: ApolloClient<any>) {
+  const accountsQuery = await client.query<AllAccountsQuery>({
     query: All_Accounts,
     fetchPolicy: 'network-only',
     variables: { orderBy: 'platformTxCount', orderDirection: 'desc' },
@@ -22,11 +23,11 @@ export async function getAccountsPageData() {
 }
 
 export async function getAccountSwapsWithPools(
+  client: ApolloClient<any>,
   accountId: string,
   pools: string[]
 ) {
-  const infoClient = useInfoClient();
-  const swapsQuery = await infoClient.query<
+  const swapsQuery = await client.query<
     AccountSwapsWithPoolsQuery,
     AccountSwapsWithPoolsQueryVariables
   >({
@@ -37,10 +38,12 @@ export async function getAccountSwapsWithPools(
   return swapsQuery.data;
 }
 
-export async function getSingleAccountDetails(accountId: string) {
-  const infoClient = useInfoClient();
+export async function getSingleAccountDetails(
+  client: ApolloClient<any>,
+  accountId: string
+) {
   try {
-    const accountQuery = await infoClient.query<
+    const accountQuery = await client.query<
       SingleAccountDetailsQuery,
       SingleAccountDetailsQueryVariables
     >({
@@ -59,3 +62,9 @@ export async function getSingleAccountDetails(accountId: string) {
     throw error;
   }
 }
+
+export const useAccount = createClientHook(useInfoClient, {
+  getAccountsPageData,
+  getAccountSwapsWithPools,
+  getSingleAccountDetails
+});

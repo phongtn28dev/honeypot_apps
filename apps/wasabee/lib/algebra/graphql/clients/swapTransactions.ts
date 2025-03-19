@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { ApolloClient, gql } from '@apollo/client';
 import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
 
 type SwapTransaction = {
@@ -34,13 +34,13 @@ type SwapTransactionsResponse = {
 };
 
 export async function fetchSwapTransactions(
+  client: ApolloClient<any>,
   page: number = 1,
   pageSize: number = 10,
   token1Address: string,
   token2Address: string
 ): Promise<SwapTransactionsResponse> {
   const skip = (page - 1) * pageSize;
-  const infoClient = useInfoClient();
 
   const query = `
     query GetUSDTWBERASwaps {
@@ -83,7 +83,7 @@ export async function fetchSwapTransactions(
     }
   `;
 
-  const { data } = await infoClient.query<SwapsResponse>({
+  const { data } = await client.query<SwapsResponse>({
     query: gql(query),
   });
 
@@ -94,5 +94,26 @@ export async function fetchSwapTransactions(
     pageInfo: {
       hasNextPage: data.swaps.length === pageSize,
     },
+  };
+}
+
+export function useSwapTransactions() {
+  const infoClient = useInfoClient();
+  
+  return {
+    fetchTransactions: async (
+      page: number = 1,
+      pageSize: number = 10,
+      token1Address: string,
+      token2Address: string
+    ) => {
+      return fetchSwapTransactions(
+        infoClient,
+        page,
+        pageSize,
+        token1Address,
+        token2Address
+      );
+    }
   };
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchSwapTransactions } from "@/lib/algebra/graphql/clients/swapTransactions";
+import { useSwapTransactions } from "@/lib/algebra/graphql/clients/swapTransactions";
 import { truncate } from "@/lib/format";
 import { Copy } from "@/components/Copy";
 import { VscCopy } from "react-icons/vsc";
@@ -20,6 +20,7 @@ const SwapTransactionHistory = () => {
   const pageSize = 10;
 
   const { currencies } = useDerivedSwapInfo();
+  const { fetchTransactions } = useSwapTransactions();
 
   const baseCurrency = currencies[SwapField.INPUT];
   const quoteCurrency = currencies[SwapField.OUTPUT];
@@ -28,7 +29,7 @@ const SwapTransactionHistory = () => {
     const loadTransactions = async (currentPage: number) => {
       setLoading(true);
       try {
-        const response = await fetchSwapTransactions(
+        const response = await fetchTransactions(
           currentPage,
           pageSize,
           baseCurrency?.wrapped.address ?? zeroAddress,
@@ -42,7 +43,7 @@ const SwapTransactionHistory = () => {
     };
 
     loadTransactions(page);
-  }, [baseCurrency, page, pageSize, quoteCurrency]);
+  }, [baseCurrency, page, pageSize, quoteCurrency, fetchTransactions]);
 
   const formatAmount = (amount: string) => {
     return new BigNumber(amount).toFixed(6);
