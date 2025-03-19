@@ -47,38 +47,38 @@ export const Layout = ({
     }
   }, [router.pathname]);
 
-  useEffect(() => {
-    trpcClient.metadata.getServerMetadata.query().then((res) => {
-      if (
-        res.latest_version === metadata.version ||
-        process.env.NODE_ENV === 'development'
-      )
-        return;
-      popmodal.openModal({
-        content: (
-          <div className="min-h-[300px] line-[24px]">
-            <div className="text-center  font-bold text-[30px]">
-              Announcement
-            </div>
-            <h1 className="mt-[24px]">
-              This version is outdated, please check our newest link:&nbsp;{' '}
-              <a
-                className="hover:text-orange-500 transition-all underline"
-                href={res.latest_site}
-              >
-                {res.latest_site}.
-              </a>
-            </h1>
-            <p>
-              Pls have fun with brand new features with pot2pump meme launch. we
-              will not update and maintain this version anymore so feel free to
-              migrate your assets to our new version
-            </p>
-          </div>
-        ),
-      });
-    });
-  }, []);
+  // useEffect(() => {
+  //   trpcClient.metadata.getServerMetadata.query().then((res) => {
+  //     if (
+  //       res.latest_version === metadata.version ||
+  //       process.env.NODE_ENV === 'development'
+  //     )
+  //       return;
+  //     popmodal.openModal({
+  //       content: (
+  //         <div className="min-h-[300px] line-[24px]">
+  //           <div className="text-center  font-bold text-[30px]">
+  //             Announcement
+  //           </div>
+  //           <h1 className="mt-[24px]">
+  //             This version is outdated, please check our newest link:&nbsp;{' '}
+  //             <a
+  //               className="hover:text-orange-500 transition-all underline"
+  //               href={res.latest_site}
+  //             >
+  //               {res.latest_site}.
+  //             </a>
+  //           </h1>
+  //           <p>
+  //             Pls have fun with brand new features with pot2pump meme launch. we
+  //             will not update and maintain this version anymore so feel free to
+  //             migrate your assets to our new version
+  //           </p>
+  //         </div>
+  //       ),
+  //     });
+  //   });
+  // }, []);
 
   // useEffect(() => {
   //   const inviteCode = localStorage.getItem("inviteCode");
