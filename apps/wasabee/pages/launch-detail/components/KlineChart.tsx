@@ -904,7 +904,7 @@ const KlineChartComponent = observer(
           </button>
 
           <div className="h-[20px] mx-2 w-[1px] bg-gray-600" />
-          <button
+          {/* <button
             onClick={handlePriceMCapClick}
             className={`text-xs sm:text-sm transition-colors ${
               priceType === "PRICE" ? "text-[#FFCD4D]" : "text-[#808080]"
@@ -921,7 +921,7 @@ const KlineChartComponent = observer(
           >
             MCap
           </button>
-          <div className="h-[20px] mx-2 w-[1px] bg-gray-600" />
+          <div className="h-[20px] mx-2 w-[1px] bg-gray-600" /> */}
           <button
             onClick={handleUSDBeraClick}
             className={`text-xs sm:text-sm transition-colors ${
