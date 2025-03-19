@@ -6,6 +6,8 @@ import {
   PoolHourData,
 } from '../generated/graphql';
 import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
+import { ApolloClient } from '@apollo/client';
+import { createClientHook } from '../clientUtils';
 
 export interface UserPoolProfit {
   account: string;
@@ -22,10 +24,10 @@ export interface UserPoolProfit {
 [];
 
 export const getLiquidatorDatas = async (
+  client: ApolloClient<any>,
   account: string
 ): Promise<UserPoolProfit[]> => {
-  const infoClient = useInfoClient();
-  const liquidatorDataQuery = await infoClient.query<
+  const liquidatorDataQuery = await client.query<
     LiquidatorDataQuery,
     LiquidatorDataQueryVariables
   >({
@@ -107,3 +109,8 @@ export const getLiquidatorDatas = async (
 
   return userPoolsProfit;
 };
+
+// 创建一个自定义Hook来包装获取用户收益的函数
+export const useUserProfitClient = createClientHook(useInfoClient, {
+  getLiquidatorDatas
+});

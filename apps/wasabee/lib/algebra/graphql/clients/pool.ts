@@ -26,6 +26,9 @@ import { object } from 'zod';
 import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
 import { Token } from '@/services/contract/token';
 import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
+import { ApolloClient } from '@apollo/client';
+import { createClientHook } from '../clientUtils';
+
 export const poolQueryToContract = (pool: Pool): PairContract => {
   const pairContract = new PairContract({
     address: pool.id as Address,
@@ -53,9 +56,12 @@ export const poolQueryToContract = (pool: Pool): PairContract => {
   return pairContract;
 };
 
-export const poolsByTokenPair = async (token0: string, token1: string) => {
-  const infoClient = useInfoClient();
-  const { data } = await infoClient.query<
+export const poolsByTokenPair = async (
+  client: ApolloClient<any>,
+  token0: string, 
+  token1: string
+) => {
+  const { data } = await client.query<
     PoolsByTokenPairQuery,
     PoolsByTokenPairQueryVariables
   >({
@@ -66,9 +72,11 @@ export const poolsByTokenPair = async (token0: string, token1: string) => {
   return data?.pools;
 };
 
-export const userPools = async (userAddress: string) => {
-  const infoClient = useInfoClient();
-  const { data } = await infoClient.query<
+export const userPools = async (
+  client: ApolloClient<any>,
+  userAddress: string
+) => {
+  const { data } = await client.query<
     UserActivePositionsQuery,
     UserActivePositionsQueryVariables
   >({
@@ -80,6 +88,11 @@ export const userPools = async (userAddress: string) => {
 
   return pools;
 };
+
+export const usePoolsClient = createClientHook(useInfoClient, {
+  poolsByTokenPair,
+  userPools
+});
 
 export const useUserPools = (userAddress: string) => {
   const [isLoading, setIsLoading] = useState(true);

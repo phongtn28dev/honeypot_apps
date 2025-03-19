@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
-import { getAccountVaultsList } from '@/lib/algebra/graphql/clients/vaults';
+import { getAccountVaultsList, useVaultsClient } from '@/lib/algebra/graphql/clients/vaults';
 import { AccountVaultSharesQuery } from '@/lib/algebra/graphql/generated/graphql';
 import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
 import { Token } from '@/services/contract/token';
@@ -33,6 +33,8 @@ export const MyAquaberaVaults = observer(
     const [myVaults, setMyVaults] = useState<AccountVaultSharesQuery>();
     const [sortField, setSortField] = useState<SortField>('tvl');
     const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
+    
+    const { getAccountVaultsList } = useVaultsClient();
 
     const getAllowToken = (vault: any) => {
       return vault.allowToken;
