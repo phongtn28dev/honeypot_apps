@@ -46,6 +46,11 @@ export const MemeView = observer(() => {
     chart.setTokenNumber(0);
     chart.setChartTarget(pair.launchedToken);
     chart.setChartLabel(pair.launchedToken?.displayName + "/USD");
+    
+    // Set token supply if available
+    if (pair.launchedToken) {
+      chart.setTokenSupply(pair.launchedToken.totalSupplyWithoutDecimals.div(10 ** pair.launchedToken.decimals));
+    }
   }, [pair, pair?.launchedToken]);
 
   return (

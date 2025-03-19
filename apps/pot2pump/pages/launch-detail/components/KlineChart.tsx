@@ -83,7 +83,6 @@ const KlineChartComponent = observer(
     const [currentInterval, setCurrentInterval] = useState("60");
     const chartWrapRef = useRef<HTMLDivElement>(null);
     const [chartWidth, setChartWidth] = useState(200);
-    const listener = useRef<any>(null);
     const [priceType, setPriceType] = useState<"PRICE" | "MCAP">("PRICE");
     const [currencyType, setCurrencyType] = useState<"USD" | "BERA">("USD");
     const [chartType, setChartType] = useState<ChartType>("Candles");
@@ -459,7 +458,9 @@ const KlineChartComponent = observer(
             chart.chartTarget as Token,
             chain.currentChainId,
             chart.tokenNumber,
-            chart.currencyCode
+            chart.currencyCode,
+            chart?.tokenSupply?.toString(),
+            priceType
           ),
           interval: currentInterval as any,
           container: "tv_chart_container",
@@ -584,6 +585,7 @@ const KlineChartComponent = observer(
       isMobile,
       timeZone,
       chartType,
+      priceType,
     ]);
 
     useEffect(() => {
@@ -633,11 +635,10 @@ const KlineChartComponent = observer(
 
     const handlePriceMCapClick = () => {
       const newType = priceType === "PRICE" ? "MCAP" : "PRICE";
-      savePriceType(newType); // 使用新的保存函数
-      // 切换价格/市值显示
+      savePriceType(newType); // Uses the new save function
+      // Reload the chart with the new price type
       if (window.tvWidget) {
-        // 将 PRICE 映射为 USD，将 MCAP 映射为 TOKEN
-        chart.setCurrencyCode(newType === "PRICE" ? "USD" : "TOKEN");
+        // Don't change the currency code here, just reload with new parameters
         initOnReady();
       }
     };

@@ -5,6 +5,8 @@ import { resolutionType } from '@/services/priceFeed/priceFeedTypes';
 import { priceFeedRouter } from '@/server/router/priceFeed';
 import Trpc from '../trpc/[trpc]';
 import { appRouter, caller } from '@/server/_app';
+import BigNumber from 'bignumber.js';
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
@@ -18,11 +20,15 @@ export default async function handler(
   const from = req.query.from as string;
   const to = req.query.to as string;
 
-  const symbol = ticker.split(':')[0];
-  const chain = ticker.split(':')[1];
-  const address = ticker.split(':')[2];
-  const tokenNumber = ticker.split(':')[3];
-  const currencyCode = ticker.split(':')[4];
+  const [
+    symbol,
+    chain,
+    address,
+    tokenNumber,
+    currencyCode,
+    totalSupply = '0',
+    quoteMetric = 'PRICE',
+  ] = ticker.split(':');
 
   const data = await caller.priceFeed.getChartData({
     chainId: chain,
@@ -35,14 +41,25 @@ export default async function handler(
   });
 
   if (data.status === 'success') {
-    res.status(200).json({
-      s: 'ok',
-      ...data.data.getBars,
-    });
+    // 当需要显示市值时，将价格乘以总供应量
+    if (quoteMetric === 'MCAP' && totalSupply && totalSupply !== '0') {
+      const supplyBN = new BigNumber(totalSupply);
+      const calculateMcap = (price: number) =>
+        new BigNumber(price).multipliedBy(supplyBN).toString();
+
+      res.status(200).json({
+        s: 'ok',
+        t: data.data.getBars.t,
+        o: data.data.getBars.o.map(calculateMcap),
+        h: data.data.getBars.h.map(calculateMcap),
+        l: data.data.getBars.l.map(calculateMcap),
+        c: data.data.getBars.c.map(calculateMcap),
+        v: data.data.getBars.v,
+      });
+    } else {
+      res.status(200).json({ s: 'ok', ...data.data.getBars });
+    }
   } else if (data.status === 'error') {
-    return res.status(500).json({
-      s: 'error',
-      errmsg: data.message,
-    });
+    return res.status(500).json({ s: 'error', errmsg: data.message });
   }
 }
