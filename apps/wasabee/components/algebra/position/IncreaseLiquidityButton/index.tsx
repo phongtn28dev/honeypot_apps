@@ -1,20 +1,15 @@
-import Loader from "@/components/algebra/common/Loader";
-import { Button } from "@/components/button/button-next";
-import { ALGEBRA_POSITION_MANAGER } from "@/config/algebra/addresses";
-import {
-  DEFAULT_CHAIN_ID,
-  DEFAULT_CHAIN_NAME,
-} from "@/config/algebra/default-chain-id";
-import { useApprove } from "@/lib/algebra/hooks/common/useApprove";
-import { useTransactionAwait } from "@/lib/algebra/hooks/common/useTransactionAwait";
+import Loader from '@/components/algebra/common/Loader';
+import { Button } from '@/components/button/button-next';
+import { useApprove } from '@/lib/algebra/hooks/common/useApprove';
+import { useTransactionAwait } from '@/lib/algebra/hooks/common/useTransactionAwait';
 import {
   usePosition,
   usePositions,
-} from "@/lib/algebra/hooks/positions/usePositions";
-import { IDerivedMintInfo } from "@/lib/algebra/state/mintStore";
-import { TransactionType } from "@/lib/algebra/state/pendingTransactionsStore";
-import { useUserState } from "@/lib/algebra/state/userStore";
-import { ApprovalState } from "@/types/algebra/types/approve-state";
+} from '@/lib/algebra/hooks/positions/usePositions';
+import { IDerivedMintInfo } from '@/lib/algebra/state/mintStore';
+import { TransactionType } from '@/lib/algebra/state/pendingTransactionsStore';
+import { useUserState } from '@/lib/algebra/state/userStore';
+import { ApprovalState } from '@/types/algebra/types/approve-state';
 import {
   ADDRESS_ZERO,
   Currency,
@@ -22,14 +17,15 @@ import {
   NonfungiblePositionManager,
   Percent,
   ZERO,
-} from "@cryptoalgebra/sdk";
-import { useWeb3Modal, useWeb3ModalState } from "@web3modal/wagmi/react";
-import { Address } from "viem";
-import JSBI from "jsbi";
-import { useEffect, useMemo } from "react";
-import { useAccount, useContractWrite } from "wagmi";
-import { useSimulateAlgebraPositionManagerMulticall } from "@/wagmi-generated";
-
+} from '@cryptoalgebra/sdk';
+import { useWeb3Modal, useWeb3ModalState } from '@web3modal/wagmi/react';
+import { Address } from 'viem';
+import JSBI from 'jsbi';
+import { useEffect, useMemo } from 'react';
+import { useAccount, useContractWrite } from 'wagmi';
+import { useSimulateAlgebraPositionManagerMulticall } from '@/wagmi-generated';
+import { useObserver } from 'mobx-react-lite';
+import { wallet } from '@/services/wallet';
 interface IncreaseLiquidityButtonProps {
   baseCurrency: Currency | undefined | null;
   quoteCurrency: Currency | undefined | null;
@@ -38,7 +34,7 @@ interface IncreaseLiquidityButtonProps {
   handleCloseModal?: () => void;
 }
 
-const ZERO_PERCENT = new Percent("0");
+const ZERO_PERCENT = new Percent('0');
 const DEFAULT_ADD_IN_RANGE_SLIPPAGE_TOLERANCE = new Percent(50, 10_000);
 
 export const IncreaseLiquidityButton = ({
@@ -49,6 +45,9 @@ export const IncreaseLiquidityButton = ({
   handleCloseModal,
 }: IncreaseLiquidityButtonProps) => {
   const { address: account } = useAccount();
+  const ALGEBRA_POSITION_MANAGER = useObserver(
+    () => wallet.currentChain.contracts.algebraPositionManager
+  );
   const { txDeadline } = useUserState();
 
   const { refetch: refetchAllPositions } = usePositions();
@@ -191,7 +190,7 @@ export const IncreaseLiquidityButton = ({
       }
       className="whitespace-nowrap w-full border-[0] h-[56px] rounded-[12px] !text-[18px]"
     >
-      {isIncreaseLiquidityLoading ? <Loader /> : "Add Liquidity"}
+      {isIncreaseLiquidityLoading ? <Loader /> : 'Add Liquidity'}
     </Button>
   );
 };

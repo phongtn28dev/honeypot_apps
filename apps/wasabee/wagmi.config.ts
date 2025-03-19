@@ -1,14 +1,5 @@
-import { ContractConfig, defineConfig } from "@wagmi/cli";
-import { actions, react } from "@wagmi/cli/plugins";
-import {
-  ALGEBRA_ETERNAL_FARMING,
-  ALGEBRA_FACTORY,
-  ALGEBRA_POSITION_MANAGER,
-  ALGEBRA_QUOTER,
-  ALGEBRA_QUOTER_V2,
-  ALGEBRA_ROUTER,
-  FARMING_CENTER,
-} from "./config/algebra/addresses";
+import { ContractConfig, defineConfig } from '@wagmi/cli';
+import { actions, react } from '@wagmi/cli/plugins';
 import {
   algebraFactoryABI,
   algebraPoolABI,
@@ -21,87 +12,102 @@ import {
   farmingCenterABI,
   wNativeABI,
   algebraVirtualPoolABI,
-} from "./lib/abis/algebra-contracts/ABIs";
-import { ICHIVaultABI } from "./lib/abis/aquabera/ICHIVault";
-import { ICHIVaultFactoryABI } from "./lib/abis/aquabera/ICHIVaultFactory";
-import { ERC20ABI } from "./lib/abis/erc20";
+} from './lib/abis/algebra-contracts/ABIs';
+import { ICHIVaultABI } from './lib/abis/aquabera/ICHIVault';
+import { ICHIVaultFactoryABI } from './lib/abis/aquabera/ICHIVaultFactory';
+import { ERC20ABI } from './lib/abis/erc20';
+import { networks } from './services/chain';
+import { Address } from 'viem';
 
 const contracts: ContractConfig[] = [
   {
-    address: ALGEBRA_FACTORY,
+    address: networks.reduce((acc, network) => {
+      acc[network.chain.id] = network.contracts.algebraFactory;
+      return acc;
+    }, {} as Record<number, Address>),
     abi: algebraFactoryABI,
-    name: "AlgebraFactory",
+    name: 'AlgebraFactory',
   },
   {
     abi: algebraPoolABI,
-    name: "AlgebraPool",
+    name: 'AlgebraPool',
   },
   {
     abi: algebraBasePluginABI,
-    name: "AlgebraBasePlugin",
+    name: 'AlgebraBasePlugin',
   },
   {
-    address: ALGEBRA_POSITION_MANAGER,
+    address: networks.reduce((acc, network) => {
+      acc[network.chain.id] = network.contracts.algebraPositionManager;
+      return acc;
+    }, {} as Record<number, Address>),
     abi: algebraPositionManagerABI,
-    name: "AlgebraPositionManager",
+    name: 'AlgebraPositionManager',
   },
   {
-    address: ALGEBRA_QUOTER,
+    address: networks.reduce((acc, network) => {
+      acc[network.chain.id] = network.contracts.algebraQuoter;
+      return acc;
+    }, {} as Record<number, Address>),
     abi: algebraQuoterABI,
-    name: "AlgebraQuoter",
+    name: 'AlgebraQuoter',
   },
   {
-    address: ALGEBRA_QUOTER_V2,
+    address: networks.reduce((acc, network) => {
+      acc[network.chain.id] = network.contracts.algebraQuoterV2;
+      return acc;
+    }, {} as Record<number, Address>),
     abi: algebraQuoterV2ABI,
-    name: "AlgerbaQuoterV2",
+    name: 'AlgerbaQuoterV2',
   },
   {
-    address: ALGEBRA_ROUTER,
+    address: networks.reduce((acc, network) => {
+      acc[network.chain.id] = network.contracts.algebraSwapRouter;
+      return acc;
+    }, {} as Record<number, Address>),
     abi: algebraRouterABI,
-    name: "AlgebraRouter",
+    name: 'AlgebraRouter',
   },
   {
-    address: ALGEBRA_ETERNAL_FARMING,
+    address: networks.reduce((acc, network) => {
+      acc[network.chain.id] = network.contracts.algebraEternalFarming;
+      return acc;
+    }, {} as Record<number, Address>),
     abi: algebraEternalFarmingABI,
-    name: "AlgebraEternalFarming",
+    name: 'AlgebraEternalFarming',
   },
   {
-    address: FARMING_CENTER,
+    address: networks.reduce((acc, network) => {
+      acc[network.chain.id] = network.contracts.algebraFarmingCenter;
+      return acc;
+    }, {} as Record<number, Address>),
     abi: farmingCenterABI,
-    name: "FarmingCenter",
+    name: 'FarmingCenter',
   },
   {
     abi: algebraVirtualPoolABI,
-    name: "AlgebraVirtualPool",
+    name: 'AlgebraVirtualPool',
   },
   {
     abi: wNativeABI,
-    name: "WrappedNative",
+    name: 'WrappedNative',
   },
   {
     abi: ERC20ABI,
-    name: "ERC20",
+    name: 'ERC20',
   },
   {
     abi: ICHIVaultABI,
-    name: "ICHIVault",
+    name: 'ICHIVault',
   },
   {
     abi: ICHIVaultFactoryABI,
-    name: "ICHIVaultFactory",
+    name: 'ICHIVaultFactory',
   },
 ];
 
 export default defineConfig({
-  out: "./wagmi-generated.ts",
+  out: 'lib/generated/wagmi.ts',
   contracts,
-  plugins: [
-    actions({
-      //watchContractEvent: false,
-    }),
-    react({
-      // useContractEvent: false,
-      //useContractItemEvent: false,
-    }),
-  ],
+  plugins: [react()],
 });

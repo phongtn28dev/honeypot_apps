@@ -2,15 +2,16 @@ import {
   Token,
   algebraPositionManagerABI,
   computePoolAddress,
-} from "@cryptoalgebra/sdk";
-import { useMemo } from "react";
-import { useAccount, useContractReads, useReadContracts } from "wagmi";
-import { Address } from "viem";
-import { ALGEBRA_POSITION_MANAGER } from "@/config/algebra/addresses";
-import { DEFAULT_CHAIN_ID } from "@/config/algebra/default-chain-id";
-import { farmingClient } from "../../graphql/clients";
-import { useDepositsQuery } from "../../graphql/generated/graphql";
-import { useReadAlgebraPositionManagerBalanceOf } from "@/wagmi-generated";
+} from '@cryptoalgebra/sdk';
+import { useMemo } from 'react';
+import { useAccount, useContractReads, useReadContracts } from 'wagmi';
+import { Address } from 'viem';
+import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
+import { farmingClient } from '../../graphql/clients';
+import { useDepositsQuery } from '../../graphql/generated/graphql';
+import { useReadAlgebraPositionManagerBalanceOf } from '@/wagmi-generated';
+import { useObserver } from 'mobx-react-lite';
+import { wallet } from '@/services/wallet';
 
 export interface PositionFromTokenId {
   tokenId: number;
@@ -38,6 +39,10 @@ function usePositionsFromTokenIds(tokenIds: any[] | undefined): {
     [tokenIds]
   );
 
+  const ALGEBRA_POSITION_MANAGER = useObserver(
+    () => wallet.currentChain.contracts.algebraPositionManager
+  );
+
   const {
     data: results,
     isLoading,
@@ -48,7 +53,7 @@ function usePositionsFromTokenIds(tokenIds: any[] | undefined): {
     contracts: inputs.map((x) => ({
       address: ALGEBRA_POSITION_MANAGER,
       abi: algebraPositionManagerABI,
-      functionName: "positions",
+      functionName: 'positions',
       args: [[Number(x)]],
     })),
     // cacheTime: 10_000,
@@ -102,8 +107,9 @@ function usePositionsFromTokenIds(tokenIds: any[] | undefined): {
 
 export function usePositions() {
   const { address: account } = useAccount();
-
-
+  const ALGEBRA_POSITION_MANAGER = useObserver(
+    () => wallet.currentChain.contracts.algebraPositionManager
+  );
   const { data: balanceResult, isLoading: balanceLoading } =
     useReadAlgebraPositionManagerBalanceOf({
       args: account ? [account] : undefined,
@@ -127,7 +133,7 @@ export function usePositions() {
       contracts: tokenIdsArgs.map((args) => ({
         address: ALGEBRA_POSITION_MANAGER,
         abi: algebraPositionManagerABI,
-        functionName: "tokenOfOwnerByIndex",
+        functionName: 'tokenOfOwnerByIndex',
         args,
       })),
       query: {

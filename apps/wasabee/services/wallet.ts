@@ -22,8 +22,6 @@ export class Wallet {
   walletClient!: WalletClient;
   currentChainId: number = -1;
   contracts: {
-    routerV2: RouterV2Contract;
-    factory: FactoryContract;
     ftofactory: FtoFactoryContract;
     ftofacade: FtoFacadeContract;
     memeFactory: MemeFactoryContract;
@@ -75,12 +73,6 @@ export class Wallet {
     const mockAccount = localStorage.getItem('mockAccount');
     this.account = mockAccount || walletClient?.account?.address || zeroAddress;
     this.contracts = {
-      routerV2: new RouterV2Contract({
-        address: this.currentChain.contracts.routerV2,
-      }),
-      factory: new FactoryContract({
-        address: this.currentChain.contracts.factory,
-      }),
       ftofactory: new FtoFactoryContract({
         address: this.currentChain.contracts.ftoFactory,
       }),

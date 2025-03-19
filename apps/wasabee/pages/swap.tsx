@@ -57,6 +57,7 @@ const SwapPage = observer(() => {
             </DarkContainer>
           </motion.div>
         )}
+
         <motion.div
           variants={itemPopUpVariants}
           initial="hidden"

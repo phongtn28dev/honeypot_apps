@@ -1,6 +1,5 @@
 import Loader from '@/components/algebra/common/Loader';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
-import { ALGEBRA_ROUTER } from '@/config/algebra/addresses';
 import { MAX_UINT128 } from '@/config/algebra/max-uint128';
 import { usePoolPlugins } from '@/lib/algebra/hooks/pools/usePoolPlugins';
 import useWrapCallback, {
@@ -33,7 +32,7 @@ import { ChevronDownIcon, ChevronRightIcon, ZapIcon } from 'lucide-react';
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { FaLongArrowAltRight } from 'react-icons/fa';
 import { Address } from 'viem';
-
+import { useObserver } from 'mobx-react-lite';
 const SwapParamsV3 = () => {
   const {
     tradeState,
@@ -43,7 +42,9 @@ const SwapParamsV3 = () => {
     currencies,
   } = useDerivedSwapInfo();
   const { typedValue } = useSwapState();
-
+  const ALGEBRA_ROUTER = useObserver(
+    () => wallet.currentChain.contracts.algebraSwapRouter
+  );
   const { wrapType } = useWrapCallback(
     currencies[SwapField.INPUT],
     currencies[SwapField.OUTPUT],

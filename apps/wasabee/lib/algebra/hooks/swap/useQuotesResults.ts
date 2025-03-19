@@ -2,12 +2,13 @@ import {
   Currency,
   CurrencyAmount,
   encodeRouteToPath,
-} from "@cryptoalgebra/sdk";
-import { useMemo } from "react";
-import { useContractReads } from "wagmi";
-import { useAllRoutes } from "./useAllRoutes";
-import { ALGEBRA_QUOTER_V2 } from "@/config/algebra/addresses";
-import { algebraQuoterV2ABI } from "@/lib/abis/algebra-contracts/ABIs";
+} from '@cryptoalgebra/sdk';
+import { useMemo } from 'react';
+import { useContractReads } from 'wagmi';
+import { useAllRoutes } from './useAllRoutes';
+import { algebraQuoterV2ABI } from '@/lib/abis/algebra-contracts/ABIs';
+import { useObserver } from 'mobx-react-lite';
+import { wallet } from '@/services/wallet';
 
 export function useQuotesResults({
   exactInput,
@@ -26,6 +27,9 @@ export function useQuotesResults({
     exactInput ? amountIn?.currency : currencyIn,
     !exactInput ? amountOut?.currency : currencyOut
   );
+  const ALGEBRA_QUOTER_V2 = useObserver(
+    () => wallet.currentChain.contracts.algebraQuoterV2
+  );
 
   const quoteInputs = useMemo(() => {
     return routes.map((route) => [
@@ -35,12 +39,12 @@ export function useQuotesResults({
           ? `0x${amountIn.quotient.toString(16)}`
           : undefined
         : amountOut
-          ? `0x${amountOut.quotient.toString(16)}`
-          : undefined,
+        ? `0x${amountOut.quotient.toString(16)}`
+        : undefined,
     ]);
   }, [amountIn, amountOut, routes, exactInput]);
 
-  const functionName = exactInput ? "quoteExactInput" : "quoteExactOutput";
+  const functionName = exactInput ? 'quoteExactInput' : 'quoteExactOutput';
 
   const {
     data: quotesResults,

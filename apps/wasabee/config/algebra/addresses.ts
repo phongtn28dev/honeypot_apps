@@ -1,36 +1,6 @@
 import { zeroAddress } from 'viem';
 import { Address } from 'viem';
 
-export const POOL_INIT_CODE_HASH: Address =
-  '0xb3fc09be5eb433d99b1ec89fd8435aaf5ffea75c1879e19028aa2414a14b3c85';
-
-export const ALGEBRA_FACTORY: Address =
-  '0x7d53327D78EFD0b463bd8d7dc938C52402323b95';
-
-export const ALGEBRA_POOL_DEPLOYER: Address =
-  '0x598f320907c2FFDBC715D591ffEcC3082bA14660';
-
-export const ALGEBRA_POSITION_MANAGER: Address =
-  '0xBB203aADbE36C125028a54584f5d48C1764317D0';
-
-export const ALGEBRA_NONFUNGIBLE_POSITION_DESCRIPTOR: Address =
-  '0x49719f4e6305a38685ab97bf79D4243467ea1A5d';
-
-export const ALGEBRA_ENTRY_POINT: Address =
-  '0xA1a607797893e290281e997484E8A93F3Ea8CE0B';
-
-export const ALGEBRA_TICK_LENS: Address =
-  '0x6fB8eCB54B9b3e3e1668d12d3287439E37BBfD38';
-
-export const ALGEBRA_QUOTER: Address =
-  '0x5Cb13b83814f2c7896fb65D61019Ca01eD852A73';
-
-export const ALGEBRA_QUOTER_V2: Address =
-  '0xd83aeD10ef6c7C0bcf6693E4Ce7cAA134B52bCd2';
-
-export const ALGEBRA_ROUTER: Address =
-  '0xFff605964840a5511f595EB970011EcBffa46b39';
-
 export const ALGEBRA_ETERNAL_FARMING: Address =
   '0x8554797BaE76Afe81dD5375111A2f3b0414D3B02';
 
