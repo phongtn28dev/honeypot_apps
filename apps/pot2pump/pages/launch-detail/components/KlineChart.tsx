@@ -36,23 +36,21 @@ const formatNumber = (number: number) => {
     return parseFloat(String(number)).toFixed(2).toString();
   else if (number > 1) return parseFloat(String(number)).toFixed(3).toString();
   else if (number > 1e-4)
-    return parseFloat(parseFloat(String(number)).toExponential(4)).toString();
+    return parseFloat(String(number)).toFixed(5).toString();
   else {
-    const endNumbers = Number(number)
-      .toExponential()
-      .split("e")[0]
-      .replace(".", "")
-      .substring(0, 4);
-    const zeros = -Math.floor(Math.log10(number) + 1);
-    let subNumber;
-    if (zeros > 9) {
-      subNumber =
-        String.fromCharCode(parseInt(`2081`, 16)) +
-        String.fromCharCode(parseInt(`208${zeros - 10}`, 16));
-    } else {
-      subNumber = String.fromCharCode(parseInt(`208${zeros}`, 16));
+    // For very small numbers, simplify display
+    // Show scientific notation for extremely small values
+    if (number < 1e-7) {
+      return number.toExponential(2);
     }
-    return "0.0" + subNumber + endNumbers;
+    
+    // For small values, use fewer decimal places
+    const zeros = -Math.floor(Math.log10(number) + 1);
+    if (zeros > 6) {
+      return number.toExponential(2);
+    } else {
+      return number.toFixed(6);
+    }
   }
 };
 
@@ -511,18 +509,35 @@ const KlineChartComponent = observer(
           overrides: {
             "paneProperties.backgroundType": "solid",
             "paneProperties.background": "#202020",
-            "scalesProperties.lineColor": "#202020",
+            "scalesProperties.lineColor": "#2A2A2A",
+            
+            // Make price scale font smaller and adjust scale settings
+            "scalesProperties.fontSize": 9, // Reduced font size for all scale values
+            "scalesProperties.textColor": "#808080",
+            
+            // Reduce precision to make numbers more compact
+            "mainSeriesProperties.precision": 6,
+            "mainSeriesProperties.minTick": "0.000001",
+            
+            // Adjust y-axis formatting
+            "scalesProperties.showSeriesLastValue": true,
+            "scalesProperties.showStudyLastValue": false,
+            "scalesProperties.showStudyPlotLabels": false,
 
+            // Reduce volume panel height
+            "volumePaneSize": "small", // Set volume panel to small size
+            
             "mainSeriesProperties.candleStyle.upColor": "#089981",
             "mainSeriesProperties.candleStyle.borderUpColor": "#089981",
             "mainSeriesProperties.candleStyle.downColor": "#F23645",
             "mainSeriesProperties.candleStyle.borderDownColor": "#F23645",
             "mainSeriesProperties.candleStyle.wickUpColor": "#089981",
             "mainSeriesProperties.candleStyle.wickDownColor": "#F23645",
+            
+            // Mobile-specific settings
             ...(isMobile
               ? {
-                  "scalesProperties.fontSize": 10,
-                  "scalesProperties.textColor": "#808080",
+                  "scalesProperties.fontSize": 8, // Even smaller on mobile
                   "scalesProperties.scaleSeriesOnly": true,
                   "mainSeriesProperties.priceAxisProperties.autoScale": true,
                   "mainSeriesProperties.priceAxisProperties.percentage": false,
