@@ -20,6 +20,7 @@ import Copy from '@/components/Copy/v3';
 import { HiExternalLink } from 'react-icons/hi';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { cn, Tooltip } from '@nextui-org/react';
+import { InfoIcon } from 'lucide-react';
 
 export const VaultDetail = observer(() => {
   const router = useRouter();
@@ -316,8 +317,26 @@ export const VaultDetail = observer(() => {
 
             <div className="rounded-[24px] border border-black bg-white px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D] relative">
               <h3 className="text-base text-[#202020] mb-2">APR </h3>
-              <p className={cn('text-2xl font-bold text-[#202020]')}>
+              <p
+                className={cn(
+                  'text-2xl font-bold text-[#202020] flex  items-center gap-2'
+                )}
+              >
                 {vault?.apr.toFixed(2)}%
+                <Tooltip
+                  content={
+                    <div>
+                      <p>1d: {vault?.detailedApr.feeApr_1d.toFixed(5)}%</p>
+                      <p>3d: {vault?.detailedApr.feeApr_3d.toFixed(5)}%</p>
+                      <p>7d: {vault?.detailedApr.feeApr_7d.toFixed(5)}%</p>
+                      <p>30d: {vault?.detailedApr.feeApr_30d.toFixed(5)}%</p>
+                    </div>
+                  }
+                >
+                  <span className="text-gray-500">
+                    <InfoIcon className="w-4 h-4" />
+                  </span>
+                </Tooltip>
               </p>
             </div>
             <div className="rounded-[24px] border border-black bg-white px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D] relative">

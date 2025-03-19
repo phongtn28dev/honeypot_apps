@@ -49,7 +49,13 @@ export const MyAquaberaVaults = observer(
           token0: vault.vault.tokenA,
           token1: vault.vault.tokenB,
           address: vault.vault.id as `0x${string}`,
-          apr: Number(vault.vault.feeApr_30d),
+          apr: Number(vault.vault.feeApr_1d),
+          detailedApr: {
+            feeApr_1d: Number(vault.vault.feeApr_1d),
+            feeApr_3d: Number(vault.vault.feeApr_3d),
+            feeApr_7d: Number(vault.vault.feeApr_7d),
+            feeApr_30d: Number(vault.vault.feeApr_30d),
+          },
         });
         if (vaultContract) {
           setVaultsContracts((prev) => [...prev, vaultContract]);

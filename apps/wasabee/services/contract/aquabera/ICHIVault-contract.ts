@@ -57,6 +57,17 @@ export class ICHIVaultContract implements BaseContract {
   approvedToken1: BigInt = BigInt(0);
   pool: PairContract | undefined = undefined;
   apr: number = 0;
+  detailedApr: {
+    feeApr_1d: number;
+    feeApr_3d: number;
+    feeApr_7d: number;
+    feeApr_30d: number;
+  } = {
+    feeApr_1d: 0,
+    feeApr_3d: 0,
+    feeApr_7d: 0,
+    feeApr_30d: 0,
+  };
 
   recentTransactions: (VaultDeposit | VaultWithdraw | VaultCollectFee)[] = [];
 
