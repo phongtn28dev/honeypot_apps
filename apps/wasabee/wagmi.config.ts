@@ -16,15 +16,15 @@ import {
 import { ICHIVaultABI } from './lib/abis/aquabera/ICHIVault';
 import { ICHIVaultFactoryABI } from './lib/abis/aquabera/ICHIVaultFactory';
 import { ERC20ABI } from './lib/abis/erc20';
-import { networks } from './services/chain';
+import { contractAddresses } from './config/contractAddresses';
 import { Address } from 'viem';
 
 const contracts: ContractConfig[] = [
   {
-    address: networks.reduce((acc, network) => {
-      acc[network.chain.id] = network.contracts.algebraFactory;
+    address: Object.entries(contractAddresses).reduce((acc, [key, network]) => {
+      acc[key] = network.algebraFactory;
       return acc;
-    }, {} as Record<number, Address>),
+    }, {} as Record<string, Address>),
     abi: algebraFactoryABI,
     name: 'AlgebraFactory',
   },
@@ -37,50 +37,50 @@ const contracts: ContractConfig[] = [
     name: 'AlgebraBasePlugin',
   },
   {
-    address: networks.reduce((acc, network) => {
-      acc[network.chain.id] = network.contracts.algebraPositionManager;
+    address: Object.entries(contractAddresses).reduce((acc, [key, network]) => {
+      acc[key] = network.algebraPositionManager;
       return acc;
-    }, {} as Record<number, Address>),
+    }, {} as Record<string, Address>),
     abi: algebraPositionManagerABI,
     name: 'AlgebraPositionManager',
   },
   {
-    address: networks.reduce((acc, network) => {
-      acc[network.chain.id] = network.contracts.algebraQuoter;
+    address: Object.entries(contractAddresses).reduce((acc, [key, network]) => {
+      acc[key] = network.algebraQuoter;
       return acc;
-    }, {} as Record<number, Address>),
+    }, {} as Record<string, Address>),
     abi: algebraQuoterABI,
     name: 'AlgebraQuoter',
   },
   {
-    address: networks.reduce((acc, network) => {
-      acc[network.chain.id] = network.contracts.algebraQuoterV2;
+    address: Object.entries(contractAddresses).reduce((acc, [key, network]) => {
+      acc[key] = network.algebraQuoterV2;
       return acc;
-    }, {} as Record<number, Address>),
+    }, {} as Record<string, Address>),
     abi: algebraQuoterV2ABI,
     name: 'AlgerbaQuoterV2',
   },
   {
-    address: networks.reduce((acc, network) => {
-      acc[network.chain.id] = network.contracts.algebraSwapRouter;
+    address: Object.entries(contractAddresses).reduce((acc, [key, network]) => {
+      acc[key] = network.algebraSwapRouter;
       return acc;
-    }, {} as Record<number, Address>),
+    }, {} as Record<string, Address>),
     abi: algebraRouterABI,
     name: 'AlgebraRouter',
   },
   {
-    address: networks.reduce((acc, network) => {
-      acc[network.chain.id] = network.contracts.algebraEternalFarming;
+    address: Object.entries(contractAddresses).reduce((acc, [key, network]) => {
+      acc[key] = network.algebraEternalFarming;
       return acc;
-    }, {} as Record<number, Address>),
+    }, {} as Record<string, Address>),
     abi: algebraEternalFarmingABI,
     name: 'AlgebraEternalFarming',
   },
   {
-    address: networks.reduce((acc, network) => {
-      acc[network.chain.id] = network.contracts.algebraFarmingCenter;
+    address: Object.entries(contractAddresses).reduce((acc, [key, network]) => {
+      acc[key] = network.algebraFarmingCenter;
       return acc;
-    }, {} as Record<number, Address>),
+    }, {} as Record<string, Address>),
     abi: farmingCenterABI,
     name: 'FarmingCenter',
   },
