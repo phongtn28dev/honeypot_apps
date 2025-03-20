@@ -15,6 +15,8 @@ import { Client } from 'viem';
 import { ContractWrite } from './utils';
 import { OrbiterRouterV3 } from './contract/orbiter/OrbiterRouterV3';
 import { simulateContract } from 'viem/actions';
+import Web3 from 'web3';
+import { ethAddressUtils } from '@/lib/utils';
 
 const orbiter = await OrbiterClient.create({
   apiEndpoint: ENDPOINT.MAINNET,
@@ -134,6 +136,14 @@ export class OrbiterBridge {
         this.fromAmount
       );
 
+      const str = `c=${this.router.vc}&t=${wallet.account}`;
+
+      console.log({
+        str,
+        ethAddressUtils: ethAddressUtils(Web3.utils.stringToHex(str)),
+        transaction,
+      });
+
       if (!this.selectedToken.isNative) {
         const fromToken = Token.getToken({
           address: this.selectedToken.address,
@@ -160,7 +170,7 @@ export class OrbiterBridge {
             this.router.makerAddress as `0x${string}`,
             BigInt(transaction.value),
             // @ts-ignore
-            transaction.raw.data,
+            ethAddressUtils(Web3.utils.stringToHex(str)),
           ],
         });
 
@@ -175,8 +185,7 @@ export class OrbiterBridge {
             fromToken.address,
             this.router.makerAddress,
             transaction.value,
-            // @ts-ignore
-            transaction.raw.data,
+            ethAddressUtils(Web3.utils.stringToHex(str)),
           ],
         });
       } else {
@@ -187,8 +196,7 @@ export class OrbiterBridge {
           chain: wallet.currentChain.chain,
           args: [
             this.router.makerAddress,
-            // @ts-ignore
-            transaction.raw.data,
+            ethAddressUtils(Web3.utils.stringToHex(str)),
           ],
         });
       }
