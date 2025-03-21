@@ -749,9 +749,10 @@ const KlineChartComponent = observer(
           {/* Price and Change */}
           <div className="flex items-center gap-2">
             <span className="text-white text-2xl sm:text-3xl font-bold">
-              {chart.currentPrice?.toFixed(6)}
+         
+              {chart?.currentPrice?.toFixed(6)}
             </span>
-            <span
+            { !isNaN(chart.chartPricePercentageChange) ?  <span
               className={`text-sm sm:text-base ${
                 chart.chartPricePercentageChange >= 0
                   ? "text-[#089981]"
@@ -760,7 +761,11 @@ const KlineChartComponent = observer(
             >
               {chart.chartPricePercentageChange >= 0 ? "▲" : "▼"}{" "}
               {chart.chartPricePercentageChange.toFixed(2)}%
+            </span> : 
+            <span className="text-sm sm:text-base text-[#089981]">
+               ▲ 0.00%
             </span>
+            }
           </div>
         </div>
 
