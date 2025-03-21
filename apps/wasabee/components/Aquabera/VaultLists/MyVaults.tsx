@@ -6,7 +6,6 @@ import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contra
 import { Token } from '@/services/contract/token';
 import { wallet } from '@/services/wallet';
 import { useEffect, useState } from 'react';
-import { Currency } from '@cryptoalgebra/sdk';
 import { DepositToVaultModal } from '../modals/DepositToVaultModal';
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { observer } from 'mobx-react-lite';
@@ -32,7 +31,7 @@ export const MyAquaberaVaults = observer(
       []
     );
     const [myVaults, setMyVaults] = useState<AccountVaultSharesQuery>();
-    const [sortField, setSortField] = useState<SortField>('tvl');
+    const [sortField, setSortField] = useState<SortField>('apr');
     const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
     const getAllowToken = (vault: any) => {

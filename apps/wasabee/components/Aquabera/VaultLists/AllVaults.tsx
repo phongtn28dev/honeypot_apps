@@ -1,5 +1,4 @@
 import { wallet } from '@/services/wallet';
-import { Currency } from '@cryptoalgebra/sdk';
 import { Token } from '@/services/contract/token';
 import { useEffect, useState, useMemo } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
@@ -34,7 +33,7 @@ export function AllAquaberaVaults({
     []
   );
   const [vaults, setVaults] = useState<VaultsSortedByHoldersQuery>();
-  const [sortField, setSortField] = useState<SortField>('tvl');
+  const [sortField, setSortField] = useState<SortField>('apr');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [page, setPage] = useState(1);
   const rowsPerPage = 10;
