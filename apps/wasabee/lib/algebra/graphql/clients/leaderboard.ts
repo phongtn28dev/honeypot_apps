@@ -1,5 +1,5 @@
-import { gql } from "@apollo/client";
-import { infoClient } from ".";
+import { gql } from '@apollo/client';
+import { infoClient } from '.';
 
 export const LEADERBOARD_QUERY = gql`
   query leaderboardStatus {
@@ -9,6 +9,7 @@ export const LEADERBOARD_QUERY = gql`
       totalVolumeMatic
       totalValueLockedUSD
       totalValueLockedMatic
+      totalFeesUSD
       untrackedVolumeUSD
       totalValueLockedUSDUntracked
     }
@@ -115,6 +116,7 @@ type Factory = {
   totalValueLockedMatic: string;
   untrackedVolumeUSD: string;
   totalValueLockedUSDUntracked: string;
+  totalFeesUSD: string;
 };
 
 export type FactoryData = {
@@ -148,8 +150,8 @@ export async function fetchLeaderboardData(): Promise<LeaderboardResponse> {
   });
 
   return {
-    status: "success",
-    message: "Success",
+    status: 'success',
+    message: 'Success',
     data: data.factories[0],
   };
 }

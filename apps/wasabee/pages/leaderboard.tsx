@@ -1,18 +1,18 @@
-import { useState } from "react";
-import { debounce } from "lodash";
-import { Link, Tooltip } from "@nextui-org/react";
-import { useTotalUsers } from "@/lib/hooks/useTotalUsers";
-import CardContainer from "@/components/CardContianer/v3";
-import { useLeaderboard } from "@/lib/hooks/useLeaderboard";
-import { shortenAddressString, formatVolume } from "@/lib/utils";
-import { wallet } from "@/services/wallet";
+import { useState } from 'react';
+import { debounce } from 'lodash';
+import { Link, Tooltip } from '@nextui-org/react';
+import { useTotalUsers } from '@/lib/hooks/useTotalUsers';
+import CardContainer from '@/components/CardContianer/v3';
+import { useLeaderboard } from '@/lib/hooks/useLeaderboard';
+import { shortenAddressString, formatVolume } from '@/lib/utils';
+import { wallet } from '@/services/wallet';
 import {
   useAccounts,
   useTopSwapAccounts,
   useTopPot2PumpDeployer,
   useTopParticipateAccounts,
-} from "@/lib/hooks/useAccounts";
-import { formatExtremelyLargeNumber } from "@/lib/format";
+} from '@/lib/hooks/useAccounts';
+import { formatExtremelyLargeNumber } from '@/lib/format';
 
 interface LeaderboardItem {
   rank: number;
@@ -32,7 +32,7 @@ interface StatsCard {
 }
 
 const LeaderboardPage = () => {
-  const [searchAddress, setSearchAddress] = useState("");
+  const [searchAddress, setSearchAddress] = useState('');
   const searchDebounceHandler = debounce(setSearchAddress, 500);
   const [page, setPage] = useState(1);
   const pageSize = 10;
@@ -57,8 +57,8 @@ const LeaderboardPage = () => {
 
   const statsCards: StatsCard[] = [
     {
-      title: "Users",
-      value: usersLoading ? "Loading..." : totalUsers,
+      title: 'Users',
+      value: usersLoading ? 'Loading...' : totalUsers,
       decimals: 2,
     },
     stats
@@ -67,41 +67,53 @@ const LeaderboardPage = () => {
           value: stats.totalTrades.value,
           decimals: 0,
         }
-      : { title: "Total Trades", value: "-" },
+      : { title: 'Total Trades', value: '-' },
     stats
       ? {
           title: stats.totalVolume.title,
           value: stats.totalVolume.value,
           decimals: 2,
-          subValue: "USD",
+          subValue: 'USD',
         }
-      : { title: "Total Volume", value: "-" },
+      : { title: 'Total Volume', value: '-' },
     stats
       ? {
           title: stats.tvl.title,
           value: stats.tvl.value,
           decimals: 2,
-          subValue: "USD",
+          subValue: 'USD',
         }
-      : { title: "TVL", value: "-" },
+      : { title: 'TVL', value: '-' },
+    stats
+      ? {
+          title: stats.totalFees.title,
+          value: stats.totalFees.value,
+          decimals: 2,
+          subValue: 'USD',
+        }
+      : { title: 'Total Fees', value: '-' },
   ];
 
   // 将这个变量重命名为 topStats
   const topStats = [
     {
-      title: "Top Trader",
-      address: topSwapAccounts[0]?.walletAddress ?? "-",
-      value: `${topSwapAccounts[0]?.swapCount ?? "-"} Swaps`,
+      title: 'Top Trader',
+      address: topSwapAccounts[0]?.walletAddress ?? '-',
+      value: `${topSwapAccounts[0]?.swapCount ?? '-'} Swaps`,
     },
     {
-      title: "Top Deployer",
-      address: topPot2PumpDeployerAccounts[0]?.walletAddress ?? "-",
-      value: `${topPot2PumpDeployerAccounts[0]?.pot2PumpDeployCount ?? "-"} Deploys`,
+      title: 'Top Deployer',
+      address: topPot2PumpDeployerAccounts[0]?.walletAddress ?? '-',
+      value: `${
+        topPot2PumpDeployerAccounts[0]?.pot2PumpDeployCount ?? '-'
+      } Deploys`,
     },
     {
-      title: "Top Participant",
-      address: topParticipateAccounts[0]?.walletAddress ?? "-",
-      value: `${topParticipateAccounts[0]?.participateCount ?? "-"} Participations`,
+      title: 'Top Participant',
+      address: topParticipateAccounts[0]?.walletAddress ?? '-',
+      value: `${
+        topParticipateAccounts[0]?.participateCount ?? '-'
+      } Participations`,
     },
   ];
 
@@ -110,38 +122,27 @@ const LeaderboardPage = () => {
       <div className="max-w-[1200px] w-full mx-auto">
         <div className="max-w-full xl:max-w-[1200px] mx-auto">
           {/* 顶部统计卡片 */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
             {statsCards.map((stat, index) => (
-              <div
-                key={index}
-                className="bg-[#202020] rounded-2xl p-5"
-              >
+              <div key={index} className="bg-[#202020] rounded-2xl p-5">
                 <div className="text-gray-400 text-sm mb-2">{stat.title}</div>
                 <div className="text-white text-xl font-medium">
                   {statsLoading
-                    ? "Loading..."
-                    : typeof stat.value === "string" &&
-                        stat.value.startsWith("$")
-                      ? formatExtremelyLargeNumber(
-                          stat.value.slice(1).replace(/,/g, ""),
-                          stat.decimals,
-                          { addPrefix: true }
-                        )
-                      : stat.subValue === "USD"
-                        ? formatExtremelyLargeNumber(
-                            stat.value,
-                            stat.decimals,
-                            {
-                              addPrefix: true,
-                            }
-                          )
-                        : formatExtremelyLargeNumber(
-                            stat.value,
-                            stat.decimals,
-                            {
-                              addPrefix: false,
-                            }
-                          )}
+                    ? 'Loading...'
+                    : typeof stat.value === 'string' &&
+                      stat.value.startsWith('$')
+                    ? formatExtremelyLargeNumber(
+                        stat.value.slice(1).replace(/,/g, ''),
+                        stat.decimals,
+                        { addPrefix: true }
+                      )
+                    : stat.subValue === 'USD'
+                    ? formatExtremelyLargeNumber(stat.value, stat.decimals, {
+                        addPrefix: true,
+                      })
+                    : formatExtremelyLargeNumber(stat.value, stat.decimals, {
+                        addPrefix: false,
+                      })}
                 </div>
               </div>
             ))}
@@ -187,7 +188,7 @@ const LeaderboardPage = () => {
               {searchAddress && (
                 <button
                   onClick={() => {
-                    searchDebounceHandler("");
+                    searchDebounceHandler('');
                     setPage(1);
                   }}
                   className="px-4 py-2 bg-[#2a2a2a] rounded-lg text-white hover:bg-[#3a3a3a] transition-colors"
@@ -199,10 +200,10 @@ const LeaderboardPage = () => {
             {searchAddress && (
               <div className="text-gray-400 text-sm ml-4">
                 {accountsLoading
-                  ? "Searching..."
+                  ? 'Searching...'
                   : accounts.length > 0
-                    ? `Found ${accounts.length} results`
-                    : "No results found"}
+                  ? `Found ${accounts.length} results`
+                  : 'No results found'}
               </div>
             )}
           </div>
@@ -243,10 +244,7 @@ const LeaderboardPage = () => {
                   <tbody className="text-white divide-y divide-[#5C5C5C]">
                     {accountsLoading ? (
                       <tr>
-                        <td
-                          colSpan={9}
-                          className="py-4 px-6 text-center"
-                        >
+                        <td colSpan={9} className="py-4 px-6 text-center">
                           Loading...
                         </td>
                       </tr>
