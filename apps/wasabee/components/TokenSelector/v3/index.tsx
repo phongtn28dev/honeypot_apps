@@ -105,7 +105,7 @@ export const TokenSelector = observer(
 
     useEffect(() => {
       state.filterTokensBySearch();
-    }, [state.search]);
+    }, [state.search, wallet.currentChainId]);
 
     return (
       <motion.div

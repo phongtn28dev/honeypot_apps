@@ -122,11 +122,19 @@ export const berachainBepoliaNetwork = new Network({
   subgraphAddresses: subgraphAddresses['80069'],
   validatedTokensInfo: {
     //when adding a new token, make sure to add the address as lowercase
-    '0x0000000000000000000000000000000000000000': {
-      name: 'Bera',
-      symbol: 'BERA',
+    '0x6969696969696969696969696969696969696969': {
+      name: 'Wrapped Bera',
+      symbol: 'WBERA',
       decimals: 18,
       logoURI: '/images/icons/tokens/wbera-token-icon.png',
+      isRouterToken: true,
+      isPopular: true,
+    },
+    '0xfcbd14dc51f0a4d49d5e53c2e0950e0bc26d0dce': {
+      name: 'Honey',
+      symbol: 'HONEY',
+      decimals: 18,
+      logoURI: '/images/icons/tokens/honey-token-icon.png',
       isRouterToken: true,
       isPopular: true,
     },
