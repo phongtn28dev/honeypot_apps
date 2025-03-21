@@ -1,5 +1,5 @@
 import { Token } from './contract/token';
-import { Chain } from 'viem/chains';
+import { Chain, sepolia } from 'viem/chains';
 import {
   berachainMainnet,
   berachainBartioTestnet,
@@ -10,6 +10,7 @@ import {
   baseMainnet,
   ethMainnet,
   berachainBepoliaTestnet,
+  arbitrumSepoliaTestnet,
   //sepolia,
 } from '@/lib/chain';
 import { Address, zeroAddress } from 'viem';
@@ -322,6 +323,38 @@ export const berachainNetwork = new Network({
   validatedMemeAddresses: [],
 });
 
+export const arbitrumSepoliaNetwork = new Network({
+  supportDEX: false,
+  supportVault: false,
+  supportBridge: true,
+  chain: arbitrumSepoliaTestnet,
+  officialFaucets: [],
+  nativeToken: {},
+  contracts: contractAddresses['default'],
+  subgraphAddresses: subgraphAddresses['default'],
+  faucetTokens: [],
+  blacklist: {},
+  validatedTokensInfo: {},
+  validatedFtoAddresses: [],
+  validatedMemeAddresses: [],
+});
+
+export const sepoliaNetwork = new Network({
+  supportDEX: false,
+  supportVault: false,
+  supportBridge: false,
+  chain: sepolia,
+  officialFaucets: [],
+  nativeToken: {},
+  contracts: contractAddresses['default'],
+  subgraphAddresses: subgraphAddresses['default'],
+  faucetTokens: [],
+  blacklist: {},
+  validatedTokensInfo: {},
+  validatedFtoAddresses: [],
+  validatedMemeAddresses: [],
+});
+
 export const movementNetWork = new Network({
   supportDEX: false,
   supportVault: false,
@@ -411,6 +444,8 @@ export const networks = [
   baseNetwork,
   ethNetwork,
   berachainBepoliaNetwork,
+  arbitrumSepoliaNetwork,
+  sepoliaNetwork,
   // berachainBartioTestnetNetwork,
   // movementNetWork,
   // sprotoNetWork,

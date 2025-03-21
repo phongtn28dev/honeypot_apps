@@ -20,6 +20,7 @@ import Copy from '@/components/Copy/v3';
 import { HiExternalLink } from 'react-icons/hi';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { cn, Tooltip } from '@nextui-org/react';
+import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
 
 export const VaultDetail = observer(() => {
   const router = useRouter();
@@ -31,6 +32,7 @@ export const VaultDetail = observer(() => {
   const [poolVolume24h, setPoolVolume24h] = useState<string>('0');
   const [poolFees24h, setPoolFees24h] = useState<string>('0');
   const [volatility, setVolatility] = useState<string>('0');
+  const infoclient = useInfoClient();
 
   useEffect(() => {
     if (!wallet.isInit || !wallet.account || !wallet.walletClient) return;
@@ -57,7 +59,10 @@ export const VaultDetail = observer(() => {
 
     // Fetch token addresses and pool data
     const loadVaultData = async () => {
-      const vaultContract = await getSingleVaultDetails(address as string);
+      const vaultContract = await getSingleVaultDetails(
+        infoclient,
+        address as string
+      );
 
       if (vaultContract) {
         Promise.all([
@@ -98,7 +103,7 @@ export const VaultDetail = observer(() => {
     if (!vault || !wallet.account) return;
 
     // Refresh subgraph data
-    const vaultDetails = await getSingleVaultDetails(vault.address);
+    const vaultDetails = await getSingleVaultDetails(infoclient, vault.address);
     setVault(vaultDetails);
     // Get total supply
     vaultDetails?.getTotalSupply();
@@ -368,7 +373,7 @@ export const VaultDetail = observer(() => {
                       {address}
                     </p>
                     <Link
-                      href={`https://berascan.com/address/${address}`}
+                      href={`${wallet.currentChain.chain.blockExplorers?.default.url}/address/${address}`}
                       target="_blank"
                       className="text-[#202020] hover:text-[#202020]/80"
                     >
@@ -386,7 +391,7 @@ export const VaultDetail = observer(() => {
                       {vault?.token0?.address}
                     </p>
                     <Link
-                      href={`https://berascan.com/address/${vault?.token0?.address}`}
+                      href={`${wallet.currentChain.chain.blockExplorers?.default.url}/address/${vault?.token0?.address}`}
                       target="_blank"
                       className="text-[#202020] hover:text-[#202020]/80"
                     >
@@ -401,7 +406,7 @@ export const VaultDetail = observer(() => {
                       {vault?.token1?.address}
                     </p>
                     <Link
-                      href={`https://berascan.com/address/${vault?.token1?.address}`}
+                      href={`${wallet.currentChain.chain.blockExplorers?.default.url}/address/${vault?.token1?.address}`}
                       target="_blank"
                       className="text-[#202020] hover:text-[#202020]/80"
                     >
@@ -497,7 +502,9 @@ export const VaultDetail = observer(() => {
                     <div className="text-[#202020] flex-grow">
                       <Link
                         target="_blank"
-                        href={`https://berascan.com/tx/${tx.id.split('-')[0]}`}
+                        href={`${
+                          wallet.currentChain.chain.blockExplorers?.default.url
+                        }/tx/${tx.id.split('-')[0]}`}
                         className="text-[#202020] underline hover:text-[#202020]/80"
                       >
                         {tx.id.split('-')[0]}

@@ -1,6 +1,6 @@
 'use client';
 
-import OrbiterBridgeSelectToken from './OrbiterBridgeSelectToken';
+import { OrbiterBridgeSelectToken } from './OrbiterBridgeSelectToken';
 import OrbiterBridgeSelectNetwork from './OrbiterBridgeSelectNetwork';
 import { Button } from '@nextui-org/react';
 import { ArrowLeftRight, ArrowUpDown } from 'lucide-react';

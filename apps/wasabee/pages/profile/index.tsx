@@ -1,40 +1,40 @@
-import { truncate } from "@/lib/format";
-import { wallet } from "@/services/wallet";
-import { Tab, Tabs } from "@nextui-org/react";
-import { observer } from "mobx-react-lite";
-import Link from "next/link";
-import { useEffect, useState, useRef } from "react";
-import { useAccount } from "wagmi";
-import { MyPools } from "./MyPools";
-import PortfolioTab from "./Portfolio";
-import { ProtfolioBalanceChart } from "./ProtfolioBalanceChart";
-import { portfolio } from "@/services/portfolio";
+import { truncate } from '@/lib/format';
+import { wallet } from '@/services/wallet';
+import { Tab, Tabs } from '@nextui-org/react';
+import { observer } from 'mobx-react-lite';
+import Link from 'next/link';
+import { useEffect, useState, useRef } from 'react';
+import { useAccount } from 'wagmi';
+import { MyPools } from './MyPools';
+import PortfolioTab from './Portfolio';
+import { ProtfolioBalanceChart } from './ProtfolioBalanceChart';
+import { portfolio } from '@/services/portfolio';
 import {
   getLiquidatorDatas,
   UserPoolProfit,
-  useUserProfitClient
-} from "@/lib/algebra/graphql/clients/userProfit";
-import { formatAmountWithAlphabetSymbol } from "@/lib/algebra/utils/common/formatAmount";
-import CardContainer from "@/components/CardContianer/v3";
-import Image from "next/image";
-import Copy from "@/components/Copy/v3";
-import { cn } from "@/lib/utils";
-import { useRouter } from "next/router";
-
+  useUserProfitClient,
+} from '@/lib/algebra/graphql/clients/userProfit';
+import { formatAmountWithAlphabetSymbol } from '@/lib/algebra/utils/common/formatAmount';
+import CardContainer from '@/components/CardContianer/v3';
+import Image from 'next/image';
+import Copy from '@/components/Copy/v3';
+import { cn } from '@/lib/utils';
+import { useRouter } from 'next/router';
+import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
 export const Profile = observer(() => {
   const { chainId } = useAccount();
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const [chartWidth, setChartWidth] = useState(0);
-  const [timeRange, setTimeRange] = useState<"1D" | "1W" | "1M">("1D");
+  const [timeRange, setTimeRange] = useState<'1D' | '1W' | '1M'>('1D');
   const [userPoolsProfit, setUserPoolsProfit] = useState<UserPoolProfit[]>([]);
   const router = useRouter();
   const urlParams = router.query as { tab: string };
-  
+  const infoclient = useInfoClient();
   const { getLiquidatorDatas } = useUserProfitClient();
 
   useEffect(() => {
     if (wallet.account) {
-      getLiquidatorDatas(wallet.account).then((data) => {
+      getLiquidatorDatas(infoclient, wallet.account).then((data) => {
         setUserPoolsProfit(data);
       });
     }
@@ -70,14 +70,11 @@ export const Profile = observer(() => {
                         <Link
                           target="_blank"
                           className="text-[#4D4D4D] hover:text-[#0D0D0D] hover:underline decoration-2 transition-colors"
-                          href={`https://berascan.com/address/${wallet.account}`}
+                          href={`${wallet.currentChain.chain.blockExplorers?.default.url}/address/${wallet.account}`}
                         >
                           {truncate(wallet.account, 10)}
                         </Link>
-                        <Copy
-                          value={wallet.account}
-                          copyTip="Copy address"
-                        />
+                        <Copy value={wallet.account} copyTip="Copy address" />
                       </div>
                     </div>
                   </div>
@@ -91,7 +88,7 @@ export const Profile = observer(() => {
                         {formatAmountWithAlphabetSymbol(
                           portfolio.totalBalanceFormatted,
                           2
-                        )}{" "}
+                        )}{' '}
                         USD
                       </div>
                     </span>
@@ -146,37 +143,31 @@ export const Profile = observer(() => {
 
             <Tabs
               aria-label="Options"
-              defaultSelectedKey={urlParams.tab || "portfolio"}
+              defaultSelectedKey={urlParams.tab || 'portfolio'}
               classNames={{
-                base: "relative w-full",
+                base: 'relative w-full',
                 tabList:
-                  "flex rounded-2xl border border-[#202020] bg-white p-4 shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020] py-2 px-3.5 absolute left-1/2 -translate-x-1/2 z-10 -top-5",
+                  'flex rounded-2xl border border-[#202020] bg-white p-4 shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020] py-2 px-3.5 absolute left-1/2 -translate-x-1/2 z-10 -top-5',
                 panel: cn(
-                  "flex flex-col h-full w-full gap-y-4 justify-center items-center bg-[#FFCD4D] rounded-2xl text-[#202020]",
-                  "px-8 pt-[70px] pb-[70px]",
+                  'flex flex-col h-full w-full gap-y-4 justify-center items-center bg-[#FFCD4D] rounded-2xl text-[#202020]',
+                  'px-8 pt-[70px] pb-[70px]',
                   "bg-[url('/images/card-container/honey/honey-border.png'),url('/images/card-container/dark/bottom-border.svg')]",
-                  "bg-[position:-65px_top,_-85px_bottom]",
-                  "bg-[size:auto_65px,_auto_65px]",
-                  "bg-repeat-x",
-                  "!mt-0"
+                  'bg-[position:-65px_top,_-85px_bottom]',
+                  'bg-[size:auto_65px,_auto_65px]',
+                  'bg-repeat-x',
+                  '!mt-0'
                 ),
               }}
               onSelectionChange={(key) => {
-                if (key === "portfolio") {
+                if (key === 'portfolio') {
                   portfolio.initPortfolio();
                 }
               }}
             >
-              <Tab
-                key="portfolio"
-                title="Portfolio"
-              >
+              <Tab key="portfolio" title="Portfolio">
                 <PortfolioTab />
               </Tab>
-              <Tab
-                key="my-pools"
-                title="My Pools"
-              >
+              <Tab key="my-pools" title="My Pools">
                 <MyPools />
               </Tab>
             </Tabs>

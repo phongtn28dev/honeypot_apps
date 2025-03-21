@@ -1,23 +1,23 @@
-import { Token } from "@/services/contract/token";
-import TokenLogo from "../TokenLogo/TokenLogo";
-import { Copy } from "../Copy";
-import { observer } from "mobx-react-lite";
-import CardContianer from "../CardContianer/CardContianer";
-import { RemoveLiquidity } from "../LPCard";
-import { motion } from "framer-motion";
-import Link from "next/link";
+import { Token } from '@/services/contract/token';
+import TokenLogo from '../TokenLogo/TokenLogo';
+import { Copy } from '../Copy';
+import { observer } from 'mobx-react-lite';
+import CardContianer from '../CardContianer/CardContianer';
+import { RemoveLiquidity } from '../LPCard';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
 import {
   OptionsDropdown,
   optionsPresets,
-} from "../OptionsDropdown/OptionsDropdown";
-import { IoAdd, IoRemove } from "react-icons/io5";
-import { VscArrowSwap } from "react-icons/vsc";
-import { useRouter } from "next/router";
-import { popmodal } from "@/services/popmodal";
-import { Tooltip } from "@nextui-org/react";
-import { AlgebraPoolContract } from "@/services/contract/algebra/algebra-pool-contract";
-import { removeLiquidityV3 } from "@/services/removeLoqioditiV3";
-
+} from '../OptionsDropdown/OptionsDropdown';
+import { IoAdd, IoRemove } from 'react-icons/io5';
+import { VscArrowSwap } from 'react-icons/vsc';
+import { useRouter } from 'next/router';
+import { popmodal } from '@/services/popmodal';
+import { Tooltip } from '@nextui-org/react';
+import { AlgebraPoolContract } from '@/services/contract/algebra/algebra-pool-contract';
+import { removeLiquidityV3 } from '@/services/removeLoqioditiV3';
+import { wallet } from '@/services/wallet';
 interface PoolLiquidityCardV3Props {
   pair: AlgebraPoolContract;
   autoSize?: boolean;
@@ -54,13 +54,13 @@ export const PoolLiquidityCardV3 = observer(
               <span>
                 <Tooltip content="View pool on explore">
                   <Link
-                    href={`https://berascan.com/address/${pair.address}`}
+                    href={`${wallet.currentChain.chain.blockExplorers?.default.url}/address/${pair.address}`}
                     target="_blank"
                     className=" cursor-pointer hover:text-primary "
                   >
                     <span className="inline-flex max-w-[4rem] overflow-ellipsis overflow-hidden">
                       {pair.token0.value?.symbol}
-                    </span>{" "}
+                    </span>{' '}
                     <br />
                     <span className="inline-flex max-w-[4rem] overflow-ellipsis overflow-hidden">
                       {pair.token1.value?.symbol}
@@ -111,13 +111,13 @@ export const PoolLiquidityCardV3 = observer(
                 </div> */}
               </>
             )}
-          </div>{" "}
+          </div>{' '}
           <div className="absolute w-[80px] top-[-0.5rem] left-[-0.5rem] md:relative md:flex md:justify-end md:items-center md:top-[unset] md:right-[unset]">
             <OptionsDropdown
               options={[
                 {
                   icon: <IoRemove />,
-                  display: "Remove LP",
+                  display: 'Remove LP',
                   onClick: () => {
                     removeLiquidityV3.setCurrentRemovePair(pair);
                     popmodal.openModal({
@@ -127,7 +127,7 @@ export const PoolLiquidityCardV3 = observer(
                 },
                 {
                   icon: <IoAdd />,
-                  display: "Add LP",
+                  display: 'Add LP',
                   onClick: () => {
                     router.push(
                       `/pool?inputCurrency=${pair.token0.value?.address}&outputCurrency=${pair.token1.value?.address}`
@@ -136,7 +136,7 @@ export const PoolLiquidityCardV3 = observer(
                 },
                 {
                   icon: <VscArrowSwap />,
-                  display: "Swap",
+                  display: 'Swap',
                   onClick: () => {
                     router.push(
                       `/swap?inputCurrency=${pair.token0.value?.address}&outputCurrency=${pair.token1.value?.address}`
@@ -148,7 +148,7 @@ export const PoolLiquidityCardV3 = observer(
                 }),
               ]}
             />
-          </div>{" "}
+          </div>{' '}
         </motion.div>
       </CardContianer>
     );

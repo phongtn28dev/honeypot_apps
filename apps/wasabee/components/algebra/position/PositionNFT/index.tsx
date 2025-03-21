@@ -21,7 +21,7 @@ const PositionNFT = ({ positionId }: PositionNFTProps) => {
   const json =
     uri && JSON.parse(atob(uri.slice('data:application/json;base64,'.length)));
 
-  const openSeaLink = `https://berascan.com/nft/${ALGEBRA_POSITION_MANAGER}/${positionId}`;
+  const openSeaLink = `${wallet.currentChain.chain.blockExplorers?.default.url}/nft/${ALGEBRA_POSITION_MANAGER}/${positionId}`;
 
   useEffect(() => {
     if (!imgRef?.current || !json) return;

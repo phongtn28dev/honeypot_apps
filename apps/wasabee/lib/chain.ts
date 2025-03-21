@@ -3,13 +3,19 @@ import {
   Chain,
   berachainTestnet as viemBerachainTestnet,
   polygonMumbai,
-  sepolia as viewSepolia,
+  sepolia,
   arbitrum,
   base,
   mainnet,
   berachain,
   berachainBepolia,
+  arbitrumSepolia,
 } from 'viem/chains';
+
+export const arbitrumSepoliaTestnet: Chain = {
+  ...arbitrumSepolia,
+  testnet: true,
+};
 
 export const arbitrumMainnet: Chain = {
   ...arbitrum,
@@ -135,11 +141,15 @@ export const berachainMainnet: Chain = {
 };
 
 export const chains = [
-  //sepolia,
+  sepolia,
   berachain,
   berachainTestnet,
   berachainBartioTestnet,
   polygonMumbaiChain,
+  arbitrumSepoliaTestnet,
+  arbitrumMainnet,
+  baseMainnet,
+  ethMainnet,
 ];
 
 export const chainsMap = chains.reduce((acc, chain) => {
