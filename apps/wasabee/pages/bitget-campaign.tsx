@@ -28,7 +28,7 @@ export const BitgetCampaign = observer(() => {
 
   return (
     <div className="flex flex-col gap-4 w-full justify-center items-center">
-      <HoneyContainer className="w-full px-4 sm:px-6">
+      <HoneyContainer className="w-full px-4 sm:px-6 max-w-[1200px]">
         {bitgetEventsData ? (
           <div className="flex flex-col gap-6 sm:gap-8 p-0 sm:p-8">
             {/* Header Section */}

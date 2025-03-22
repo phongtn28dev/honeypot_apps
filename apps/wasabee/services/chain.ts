@@ -722,6 +722,34 @@ export const berachainNetwork = new Network({
       decimals: 18,
       logoURI: 'https://www.berapaw.com/static/images/tokens/lbgt.svg',
     },
+    //bitget campaign
+    '0xa40e6433782ffb18c8eeb16d201e331e37abfb74': {
+      name: 'Xi BERA',
+      symbol: 'XI',
+      decimals: 18,
+      logoURI:
+        'http://localhost:3000/_next/image?url=https%3A%2F%2Fvphdxociarqnaxj6.public.blob.vercel-storage.com%2Flogo-C0TcCmUOefj7lmBfcnS3qQUAP9g5ic&w=96&q=75',
+      isBitgetCampaignToken: true,
+      isPopular: true,
+    },
+    '0x10acd894a40d8584ad74628812525ef291e16c47': {
+      name: 'Q5',
+      symbol: 'Q5',
+      decimals: 18,
+      logoURI:
+        'http://localhost:3000/_next/image?url=https%3A%2F%2Fvphdxociarqnaxj6.public.blob.vercel-storage.com%2Flogo-tobhg4UioXb1kAE96t64RDF3mfXhM8&w=96&q=75',
+      isBitgetCampaignToken: true,
+      isPopular: true,
+    },
+    '0x539aced84ebb5cbd609cfaf4047fb78b29553da9': {
+      name: 'the chain has a bear on it',
+      symbol: 'BERACHAIN',
+      decimals: 18,
+      logoURI:
+        'http://localhost:3000/_next/image?url=https%3A%2F%2Fvphdxociarqnaxj6.public.blob.vercel-storage.com%2F0x26e38c4bc788508188874cf432ca158febd14f92_logo-G8JpBc201Vzqn69q7HCzL9vTlCLaFy&w=96&q=75',
+      isBitgetCampaignToken: true,
+      isPopular: true,
+    },
   },
   validatedFtoAddresses: [],
   validatedMemeAddresses: [],
