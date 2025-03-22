@@ -32,6 +32,7 @@ export type Scalars = {
 
 export type Account = {
   __typename?: 'Account';
+  bitgetCampaignParticipants: Array<BitgetCampaignParticipant>;
   holder: Array<HoldingToken>;
   holdingPoolCount: Scalars['BigInt']['output'];
   id: Scalars['ID']['output'];
@@ -45,6 +46,15 @@ export type Account = {
   totalSpendUSD: Scalars['BigDecimal']['output'];
   transaction: Array<Transaction>;
   vaultShares?: Maybe<Array<VaultShare>>;
+};
+
+
+export type AccountBitgetCampaignParticipantsArgs = {
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<BitgetCampaignParticipant_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<BitgetCampaignParticipant_Filter>;
 };
 
 
@@ -87,6 +97,7 @@ export type Account_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<Account_Filter>>>;
+  bitgetCampaignParticipants_?: InputMaybe<BitgetCampaignParticipant_Filter>;
   holder_?: InputMaybe<HoldingToken_Filter>;
   holdingPoolCount?: InputMaybe<Scalars['BigInt']['input']>;
   holdingPoolCount_gt?: InputMaybe<Scalars['BigInt']['input']>;
@@ -167,6 +178,7 @@ export type Account_Filter = {
 };
 
 export enum Account_OrderBy {
+  BitgetCampaignParticipants = 'bitgetCampaignParticipants',
   Holder = 'holder',
   HoldingPoolCount = 'holdingPoolCount',
   Id = 'id',
@@ -279,6 +291,340 @@ export enum AlgebraDayData_OrderBy {
   VolumeMatic = 'volumeMatic',
   VolumeUsd = 'volumeUSD',
   VolumeUsdUntracked = 'volumeUSDUntracked'
+}
+
+export type BitgetCampaign = {
+  __typename?: 'BitgetCampaign';
+  eventPools: Array<BitgetCampaignEventPool>;
+  id: Scalars['ID']['output'];
+  participants: Array<BitgetCampaignParticipant>;
+  totalFinishedUserCount: Scalars['BigInt']['output'];
+  totalVolumeUSD: Scalars['BigDecimal']['output'];
+};
+
+
+export type BitgetCampaignEventPoolsArgs = {
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<BitgetCampaignEventPool_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<BitgetCampaignEventPool_Filter>;
+};
+
+
+export type BitgetCampaignParticipantsArgs = {
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<BitgetCampaignParticipant_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<BitgetCampaignParticipant_Filter>;
+};
+
+export type BitgetCampaignEventPool = {
+  __typename?: 'BitgetCampaignEventPool';
+  campaign: BitgetCampaign;
+  finishedUsers: Array<BitgetCampaignParticipant>;
+  id: Scalars['ID']['output'];
+  pool: Pool;
+  totalFinishedUserCount: Scalars['BigInt']['output'];
+  totalVolumeUSD: Scalars['BigDecimal']['output'];
+};
+
+
+export type BitgetCampaignEventPoolFinishedUsersArgs = {
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<BitgetCampaignParticipant_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<BitgetCampaignParticipant_Filter>;
+};
+
+export type BitgetCampaignEventPool_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<BitgetCampaignEventPool_Filter>>>;
+  campaign?: InputMaybe<Scalars['String']['input']>;
+  campaign_?: InputMaybe<BitgetCampaign_Filter>;
+  campaign_contains?: InputMaybe<Scalars['String']['input']>;
+  campaign_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  campaign_ends_with?: InputMaybe<Scalars['String']['input']>;
+  campaign_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  campaign_gt?: InputMaybe<Scalars['String']['input']>;
+  campaign_gte?: InputMaybe<Scalars['String']['input']>;
+  campaign_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  campaign_lt?: InputMaybe<Scalars['String']['input']>;
+  campaign_lte?: InputMaybe<Scalars['String']['input']>;
+  campaign_not?: InputMaybe<Scalars['String']['input']>;
+  campaign_not_contains?: InputMaybe<Scalars['String']['input']>;
+  campaign_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  campaign_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  campaign_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  campaign_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  campaign_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  campaign_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  campaign_starts_with?: InputMaybe<Scalars['String']['input']>;
+  campaign_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  finishedUsers_?: InputMaybe<BitgetCampaignParticipant_Filter>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_not?: InputMaybe<Scalars['ID']['input']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  or?: InputMaybe<Array<InputMaybe<BitgetCampaignEventPool_Filter>>>;
+  pool?: InputMaybe<Scalars['String']['input']>;
+  pool_?: InputMaybe<Pool_Filter>;
+  pool_contains?: InputMaybe<Scalars['String']['input']>;
+  pool_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_ends_with?: InputMaybe<Scalars['String']['input']>;
+  pool_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_gt?: InputMaybe<Scalars['String']['input']>;
+  pool_gte?: InputMaybe<Scalars['String']['input']>;
+  pool_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  pool_lt?: InputMaybe<Scalars['String']['input']>;
+  pool_lte?: InputMaybe<Scalars['String']['input']>;
+  pool_not?: InputMaybe<Scalars['String']['input']>;
+  pool_not_contains?: InputMaybe<Scalars['String']['input']>;
+  pool_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  pool_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  pool_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  pool_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_starts_with?: InputMaybe<Scalars['String']['input']>;
+  pool_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  totalFinishedUserCount?: InputMaybe<Scalars['BigInt']['input']>;
+  totalFinishedUserCount_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalFinishedUserCount_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalFinishedUserCount_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalFinishedUserCount_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalFinishedUserCount_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalFinishedUserCount_not?: InputMaybe<Scalars['BigInt']['input']>;
+  totalFinishedUserCount_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalVolumeUSD?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalVolumeUSD_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalVolumeUSD_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalVolumeUSD_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  totalVolumeUSD_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalVolumeUSD_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalVolumeUSD_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalVolumeUSD_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+};
+
+export enum BitgetCampaignEventPool_OrderBy {
+  Campaign = 'campaign',
+  CampaignId = 'campaign__id',
+  CampaignTotalFinishedUserCount = 'campaign__totalFinishedUserCount',
+  CampaignTotalVolumeUsd = 'campaign__totalVolumeUSD',
+  FinishedUsers = 'finishedUsers',
+  Id = 'id',
+  Pool = 'pool',
+  PoolAprPercentage = 'pool__aprPercentage',
+  PoolCollectedFeesToken0 = 'pool__collectedFeesToken0',
+  PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
+  PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
+  PoolCommunityFee = 'pool__communityFee',
+  PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
+  PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
+  PoolDeployer = 'pool__deployer',
+  PoolFee = 'pool__fee',
+  PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
+  PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
+  PoolFeesToken0 = 'pool__feesToken0',
+  PoolFeesToken1 = 'pool__feesToken1',
+  PoolFeesUsd = 'pool__feesUSD',
+  PoolId = 'pool__id',
+  PoolLiquidity = 'pool__liquidity',
+  PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
+  PoolObservationIndex = 'pool__observationIndex',
+  PoolPlugin = 'pool__plugin',
+  PoolPluginConfig = 'pool__pluginConfig',
+  PoolSearchString = 'pool__searchString',
+  PoolSqrtPrice = 'pool__sqrtPrice',
+  PoolTick = 'pool__tick',
+  PoolTickSpacing = 'pool__tickSpacing',
+  PoolToken0Price = 'pool__token0Price',
+  PoolToken1Price = 'pool__token1Price',
+  PoolTotalValueLockedMatic = 'pool__totalValueLockedMatic',
+  PoolTotalValueLockedToken0 = 'pool__totalValueLockedToken0',
+  PoolTotalValueLockedToken1 = 'pool__totalValueLockedToken1',
+  PoolTotalValueLockedUsd = 'pool__totalValueLockedUSD',
+  PoolTotalValueLockedUsdUntracked = 'pool__totalValueLockedUSDUntracked',
+  PoolTxCount = 'pool__txCount',
+  PoolUntrackedFeesUsd = 'pool__untrackedFeesUSD',
+  PoolUntrackedVolumeUsd = 'pool__untrackedVolumeUSD',
+  PoolVolumeToken0 = 'pool__volumeToken0',
+  PoolVolumeToken1 = 'pool__volumeToken1',
+  PoolVolumeUsd = 'pool__volumeUSD',
+  TotalFinishedUserCount = 'totalFinishedUserCount',
+  TotalVolumeUsd = 'totalVolumeUSD'
+}
+
+export type BitgetCampaignParticipant = {
+  __typename?: 'BitgetCampaignParticipant';
+  amountUSD: Scalars['BigDecimal']['output'];
+  campaign: BitgetCampaign;
+  finished: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
+  pool: BitgetCampaignEventPool;
+  user: Account;
+};
+
+export type BitgetCampaignParticipant_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  amountUSD?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amountUSD_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amountUSD_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amountUSD_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  amountUSD_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amountUSD_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amountUSD_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amountUSD_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  and?: InputMaybe<Array<InputMaybe<BitgetCampaignParticipant_Filter>>>;
+  campaign?: InputMaybe<Scalars['String']['input']>;
+  campaign_?: InputMaybe<BitgetCampaign_Filter>;
+  campaign_contains?: InputMaybe<Scalars['String']['input']>;
+  campaign_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  campaign_ends_with?: InputMaybe<Scalars['String']['input']>;
+  campaign_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  campaign_gt?: InputMaybe<Scalars['String']['input']>;
+  campaign_gte?: InputMaybe<Scalars['String']['input']>;
+  campaign_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  campaign_lt?: InputMaybe<Scalars['String']['input']>;
+  campaign_lte?: InputMaybe<Scalars['String']['input']>;
+  campaign_not?: InputMaybe<Scalars['String']['input']>;
+  campaign_not_contains?: InputMaybe<Scalars['String']['input']>;
+  campaign_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  campaign_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  campaign_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  campaign_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  campaign_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  campaign_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  campaign_starts_with?: InputMaybe<Scalars['String']['input']>;
+  campaign_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  finished?: InputMaybe<Scalars['Boolean']['input']>;
+  finished_in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+  finished_not?: InputMaybe<Scalars['Boolean']['input']>;
+  finished_not_in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_not?: InputMaybe<Scalars['ID']['input']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  or?: InputMaybe<Array<InputMaybe<BitgetCampaignParticipant_Filter>>>;
+  pool?: InputMaybe<Scalars['String']['input']>;
+  pool_?: InputMaybe<BitgetCampaignEventPool_Filter>;
+  pool_contains?: InputMaybe<Scalars['String']['input']>;
+  pool_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_ends_with?: InputMaybe<Scalars['String']['input']>;
+  pool_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_gt?: InputMaybe<Scalars['String']['input']>;
+  pool_gte?: InputMaybe<Scalars['String']['input']>;
+  pool_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  pool_lt?: InputMaybe<Scalars['String']['input']>;
+  pool_lte?: InputMaybe<Scalars['String']['input']>;
+  pool_not?: InputMaybe<Scalars['String']['input']>;
+  pool_not_contains?: InputMaybe<Scalars['String']['input']>;
+  pool_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  pool_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  pool_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  pool_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_starts_with?: InputMaybe<Scalars['String']['input']>;
+  pool_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  user?: InputMaybe<Scalars['String']['input']>;
+  user_?: InputMaybe<Account_Filter>;
+  user_contains?: InputMaybe<Scalars['String']['input']>;
+  user_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  user_ends_with?: InputMaybe<Scalars['String']['input']>;
+  user_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  user_gt?: InputMaybe<Scalars['String']['input']>;
+  user_gte?: InputMaybe<Scalars['String']['input']>;
+  user_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  user_lt?: InputMaybe<Scalars['String']['input']>;
+  user_lte?: InputMaybe<Scalars['String']['input']>;
+  user_not?: InputMaybe<Scalars['String']['input']>;
+  user_not_contains?: InputMaybe<Scalars['String']['input']>;
+  user_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  user_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  user_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  user_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  user_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  user_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  user_starts_with?: InputMaybe<Scalars['String']['input']>;
+  user_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum BitgetCampaignParticipant_OrderBy {
+  AmountUsd = 'amountUSD',
+  Campaign = 'campaign',
+  CampaignId = 'campaign__id',
+  CampaignTotalFinishedUserCount = 'campaign__totalFinishedUserCount',
+  CampaignTotalVolumeUsd = 'campaign__totalVolumeUSD',
+  Finished = 'finished',
+  Id = 'id',
+  Pool = 'pool',
+  PoolId = 'pool__id',
+  PoolTotalFinishedUserCount = 'pool__totalFinishedUserCount',
+  PoolTotalVolumeUsd = 'pool__totalVolumeUSD',
+  User = 'user',
+  UserHoldingPoolCount = 'user__holdingPoolCount',
+  UserId = 'user__id',
+  UserMemeTokenHoldingCount = 'user__memeTokenHoldingCount',
+  UserParticipateCount = 'user__participateCount',
+  UserPlatformTxCount = 'user__platformTxCount',
+  UserPot2PumpLaunchCount = 'user__pot2PumpLaunchCount',
+  UserSwapCount = 'user__swapCount',
+  UserTotalDepositPot2pumpUsd = 'user__totalDepositPot2pumpUSD',
+  UserTotalSpendUsd = 'user__totalSpendUSD'
+}
+
+export type BitgetCampaign_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<BitgetCampaign_Filter>>>;
+  eventPools_?: InputMaybe<BitgetCampaignEventPool_Filter>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_not?: InputMaybe<Scalars['ID']['input']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  or?: InputMaybe<Array<InputMaybe<BitgetCampaign_Filter>>>;
+  participants_?: InputMaybe<BitgetCampaignParticipant_Filter>;
+  totalFinishedUserCount?: InputMaybe<Scalars['BigInt']['input']>;
+  totalFinishedUserCount_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalFinishedUserCount_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalFinishedUserCount_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalFinishedUserCount_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalFinishedUserCount_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalFinishedUserCount_not?: InputMaybe<Scalars['BigInt']['input']>;
+  totalFinishedUserCount_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalVolumeUSD?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalVolumeUSD_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalVolumeUSD_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalVolumeUSD_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  totalVolumeUSD_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalVolumeUSD_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalVolumeUSD_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalVolumeUSD_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+};
+
+export enum BitgetCampaign_OrderBy {
+  EventPools = 'eventPools',
+  Id = 'id',
+  Participants = 'participants',
+  TotalFinishedUserCount = 'totalFinishedUserCount',
+  TotalVolumeUsd = 'totalVolumeUSD'
 }
 
 export type Block = {
@@ -7243,6 +7589,12 @@ export type Query = {
   accounts: Array<Account>;
   algebraDayData?: Maybe<AlgebraDayData>;
   algebraDayDatas: Array<AlgebraDayData>;
+  bitgetCampaign?: Maybe<BitgetCampaign>;
+  bitgetCampaignEventPool?: Maybe<BitgetCampaignEventPool>;
+  bitgetCampaignEventPools: Array<BitgetCampaignEventPool>;
+  bitgetCampaignParticipant?: Maybe<BitgetCampaignParticipant>;
+  bitgetCampaignParticipants: Array<BitgetCampaignParticipant>;
+  bitgetCampaigns: Array<BitgetCampaign>;
   block?: Maybe<Block>;
   blocks: Array<Block>;
   bundle?: Maybe<Bundle>;
@@ -7392,6 +7744,60 @@ export type QueryAlgebraDayDatasArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<AlgebraDayData_Filter>;
+};
+
+
+export type QueryBitgetCampaignArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryBitgetCampaignEventPoolArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryBitgetCampaignEventPoolsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<BitgetCampaignEventPool_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<BitgetCampaignEventPool_Filter>;
+};
+
+
+export type QueryBitgetCampaignParticipantArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryBitgetCampaignParticipantsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<BitgetCampaignParticipant_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<BitgetCampaignParticipant_Filter>;
+};
+
+
+export type QueryBitgetCampaignsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<BitgetCampaign_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<BitgetCampaign_Filter>;
 };
 
 
@@ -8539,6 +8945,12 @@ export type Subscription = {
   accounts: Array<Account>;
   algebraDayData?: Maybe<AlgebraDayData>;
   algebraDayDatas: Array<AlgebraDayData>;
+  bitgetCampaign?: Maybe<BitgetCampaign>;
+  bitgetCampaignEventPool?: Maybe<BitgetCampaignEventPool>;
+  bitgetCampaignEventPools: Array<BitgetCampaignEventPool>;
+  bitgetCampaignParticipant?: Maybe<BitgetCampaignParticipant>;
+  bitgetCampaignParticipants: Array<BitgetCampaignParticipant>;
+  bitgetCampaigns: Array<BitgetCampaign>;
   block?: Maybe<Block>;
   blocks: Array<Block>;
   bundle?: Maybe<Bundle>;
@@ -8688,6 +9100,60 @@ export type SubscriptionAlgebraDayDatasArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<AlgebraDayData_Filter>;
+};
+
+
+export type SubscriptionBitgetCampaignArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionBitgetCampaignEventPoolArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionBitgetCampaignEventPoolsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<BitgetCampaignEventPool_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<BitgetCampaignEventPool_Filter>;
+};
+
+
+export type SubscriptionBitgetCampaignParticipantArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionBitgetCampaignParticipantsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<BitgetCampaignParticipant_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<BitgetCampaignParticipant_Filter>;
+};
+
+
+export type SubscriptionBitgetCampaignsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<BitgetCampaign_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<BitgetCampaign_Filter>;
 };
 
 
@@ -13382,6 +13848,13 @@ export type TransactionFieldFragment = { __typename?: 'Transaction', id: string,
 
 export type TokenFieldFragment = { __typename?: 'Token', id: string, symbol: string, derivedUSD: any };
 
+export type GetBitgetEventsQueryVariables = Exact<{
+  user?: InputMaybe<Scalars['ID']['input']>;
+}>;
+
+
+export type GetBitgetEventsQuery = { __typename?: 'Query', bitgetCampaigns: Array<{ __typename?: 'BitgetCampaign', totalVolumeUSD: any, totalFinishedUserCount: any, eventPools: Array<{ __typename?: 'BitgetCampaignEventPool', totalVolumeUSD: any, totalFinishedUserCount: any, pool: { __typename?: 'Pool', id: string, fee: any, sqrtPrice: any, liquidity: any, tick: any, tickSpacing: any, totalValueLockedUSD: any, volumeUSD: any, feesUSD: any, untrackedFeesUSD: any, token0Price: any, token1Price: any, txCount: any, createdAtTimestamp: any, aprPercentage: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any, derivedUSD: any, initialUSD: any, txCount: any, holderCount: any, totalSupply: any, volumeUSD: any, totalValueLockedUSD: any, marketCap: any, poolCount: any, priceChange24hPercentage: any, pot2Pump?: { __typename?: 'Pot2Pump', id: string } | null, tokenHourData: Array<{ __typename?: 'TokenHourData', periodStartUnix: number, priceUSD: any, feesUSD: any, untrackedVolumeUSD: any }> }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any, derivedUSD: any, initialUSD: any, txCount: any, holderCount: any, totalSupply: any, volumeUSD: any, totalValueLockedUSD: any, marketCap: any, poolCount: any, priceChange24hPercentage: any, pot2Pump?: { __typename?: 'Pot2Pump', id: string } | null, tokenHourData: Array<{ __typename?: 'TokenHourData', periodStartUnix: number, priceUSD: any, feesUSD: any, untrackedVolumeUSD: any }> }, poolHourData: Array<{ __typename?: 'PoolHourData', feesUSD: any, id: string, tvlUSD: any, txCount: any, volumeUSD: any, periodStartUnix: number }>, poolDayData: Array<{ __typename?: 'PoolDayData', feesUSD: any, id: string, txCount: any, volumeUSD: any, tvlUSD: any, date: number }>, poolWeekData: Array<{ __typename?: 'PoolWeekData', feesUSD: any, tvlUSD: any, volumeUSD: any, id: string, week: number }>, poolMonthData: Array<{ __typename?: 'PoolMonthData', feesUSD: any, tvlUSD: any, volumeUSD: any, id: string, month: number }> }, top10Users: Array<{ __typename?: 'BitgetCampaignParticipant', amountUSD: any, finished: boolean, user: { __typename?: 'Account', id: string, swapCount: any, memeTokenHoldingCount: any, pot2PumpLaunchCount: any, participateCount: any, platformTxCount: any, holdingPoolCount: any, totalSpendUSD: any, vaultShares?: Array<{ __typename?: 'VaultShare', id: string, vaultShareBalance: any, vault: { __typename?: 'IchiVault', id: string } }> | null, transaction: Array<{ __typename?: 'Transaction', id: string, timestamp: any }>, holder: Array<{ __typename?: 'HoldingToken', id: string, holdingValue: any, token: { __typename?: 'Token', id: string, symbol: string, derivedUSD: any } }>, participant: Array<{ __typename?: 'Participant', id: string, pot2Pump: { __typename?: 'Pot2Pump', id: string } }> } }>, currentUser: Array<{ __typename?: 'BitgetCampaignParticipant', amountUSD: any, finished: boolean, user: { __typename?: 'Account', id: string, swapCount: any, memeTokenHoldingCount: any, pot2PumpLaunchCount: any, participateCount: any, platformTxCount: any, holdingPoolCount: any, totalSpendUSD: any, vaultShares?: Array<{ __typename?: 'VaultShare', id: string, vaultShareBalance: any, vault: { __typename?: 'IchiVault', id: string } }> | null, transaction: Array<{ __typename?: 'Transaction', id: string, timestamp: any }>, holder: Array<{ __typename?: 'HoldingToken', id: string, holdingValue: any, token: { __typename?: 'Token', id: string, symbol: string, derivedUSD: any } }>, participant: Array<{ __typename?: 'Participant', id: string, pot2Pump: { __typename?: 'Pot2Pump', id: string } }> } }> }> }> };
+
 export type EternalFarmingsQueryVariables = Exact<{
   pool?: InputMaybe<Scalars['Bytes']['input']>;
 }>;
@@ -14361,6 +14834,69 @@ export type AccountSwapsWithPoolsQueryHookResult = ReturnType<typeof useAccountS
 export type AccountSwapsWithPoolsLazyQueryHookResult = ReturnType<typeof useAccountSwapsWithPoolsLazyQuery>;
 export type AccountSwapsWithPoolsSuspenseQueryHookResult = ReturnType<typeof useAccountSwapsWithPoolsSuspenseQuery>;
 export type AccountSwapsWithPoolsQueryResult = Apollo.QueryResult<AccountSwapsWithPoolsQuery, AccountSwapsWithPoolsQueryVariables>;
+export const GetBitgetEventsDocument = gql`
+    query getBitgetEvents($user: ID) {
+  bitgetCampaigns {
+    totalVolumeUSD
+    totalFinishedUserCount
+    eventPools {
+      pool {
+        ...PoolFields
+      }
+      totalVolumeUSD
+      totalFinishedUserCount
+      top10Users: finishedUsers(orderBy: amountUSD, orderDirection: desc) {
+        user {
+          ...AccountField
+        }
+        amountUSD
+        finished
+      }
+      currentUser: finishedUsers(where: {user_: {id: $user}}) {
+        user {
+          ...AccountField
+        }
+        amountUSD
+        finished
+      }
+    }
+  }
+}
+    ${PoolFieldsFragmentDoc}
+${AccountFieldFragmentDoc}`;
+
+/**
+ * __useGetBitgetEventsQuery__
+ *
+ * To run a query within a React component, call `useGetBitgetEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBitgetEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBitgetEventsQuery({
+ *   variables: {
+ *      user: // value for 'user'
+ *   },
+ * });
+ */
+export function useGetBitgetEventsQuery(baseOptions?: Apollo.QueryHookOptions<GetBitgetEventsQuery, GetBitgetEventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetBitgetEventsQuery, GetBitgetEventsQueryVariables>(GetBitgetEventsDocument, options);
+      }
+export function useGetBitgetEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBitgetEventsQuery, GetBitgetEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetBitgetEventsQuery, GetBitgetEventsQueryVariables>(GetBitgetEventsDocument, options);
+        }
+export function useGetBitgetEventsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetBitgetEventsQuery, GetBitgetEventsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetBitgetEventsQuery, GetBitgetEventsQueryVariables>(GetBitgetEventsDocument, options);
+        }
+export type GetBitgetEventsQueryHookResult = ReturnType<typeof useGetBitgetEventsQuery>;
+export type GetBitgetEventsLazyQueryHookResult = ReturnType<typeof useGetBitgetEventsLazyQuery>;
+export type GetBitgetEventsSuspenseQueryHookResult = ReturnType<typeof useGetBitgetEventsSuspenseQuery>;
+export type GetBitgetEventsQueryResult = Apollo.QueryResult<GetBitgetEventsQuery, GetBitgetEventsQueryVariables>;
 export const EternalFarmingsDocument = gql`
     query EternalFarmings($pool: Bytes) {
   eternalFarmings(where: {pool: $pool}) {

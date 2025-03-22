@@ -64,7 +64,6 @@ const NewPositionPage = () => {
       ? mintInfo.price.invert().toSignificant(5)
       : mintInfo.price.toSignificant(5);
   }, [mintInfo]);
-  const a = 1;
 
   const currentPrice = useMemo(() => {
     if (!mintInfo.price) return;

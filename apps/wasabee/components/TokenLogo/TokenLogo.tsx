@@ -1,10 +1,10 @@
-import { cn } from "@/lib/tailwindcss";
-import { Token } from "@/services/contract/token";
-import { Tooltip } from "@nextui-org/react";
-import { observer } from "mobx-react-lite";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect } from "react";
+import { cn } from '@/lib/tailwindcss';
+import { Token } from '@/services/contract/token';
+import { Tooltip } from '@nextui-org/react';
+import { observer } from 'mobx-react-lite';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect } from 'react';
 
 interface TokenLogoProps {
   size?: number;
@@ -24,11 +24,11 @@ export const TokenLogo = observer(
     ...props
   }: TokenLogoProps) => {
     useEffect(() => {
-       token.init(true, {
+      token.init(true, {
         loadLogoURI: true,
         loadName: true,
-        loadSymbol: true
-       })
+        loadSymbol: true,
+      });
     }, [token]);
     return (
       <Tooltip
@@ -41,21 +41,22 @@ export const TokenLogo = observer(
         closeDelay={0}
       >
         <Link
-          className="shrink-0"
+          className={cn('shrink-0', disableLink && 'cursor-default')}
           href={
-            disableLink ? "#" : `https://berascan.com/address/${token.address}`
+            disableLink ? '#' : `https://berascan.com/address/${token.address}`
           }
-          target={disableLink ? "" : "_blank"}
+          target={disableLink ? '' : '_blank'}
+          aria-disabled={disableLink}
         >
           <Image
             className={cn(
-              "border border-[color:var(--card-stroke,#F7931A)] rounded-[50%] cursor-pointer aspect-square bg-white",
+              'border border-[color:var(--card-stroke,#F7931A)] rounded-[50%]  aspect-square bg-white',
               addtionalClasses
             )}
             src={
               !!token.logoURI
                 ? token.logoURI
-                : "/images/icons/tokens/unknown-token-icon.png"
+                : '/images/icons/tokens/unknown-token-icon.png'
             }
             alt=""
             width={size || 24}
