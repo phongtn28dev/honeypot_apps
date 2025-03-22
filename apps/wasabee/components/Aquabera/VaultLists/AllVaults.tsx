@@ -3,14 +3,11 @@ import { Token } from '@/services/contract/token';
 import { useEffect, useState, useMemo } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/algebra/ui/button';
-import { DepositToVaultModal } from '../modals/DepositToVaultModal';
-import {
-  getSingleVaultDetails,
-  getVaultPageData,
-} from '@/lib/algebra/graphql/clients/vaults';
+import { getVaultPageData } from '@/lib/algebra/graphql/clients/vaults';
 import { VaultsSortedByHoldersQuery } from '@/lib/algebra/graphql/generated/graphql';
 import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
 import VaultRow from './VaulltRow';
+import TokenLogo from '@/components/TokenLogo/TokenLogo';
 
 type SortField =
   | 'pair'
@@ -24,16 +21,18 @@ type SortDirection = 'asc' | 'desc';
 
 interface AllAquaberaVaultsProps {
   searchString?: string;
+  sortBy?: string;
 }
 
 export function AllAquaberaVaults({
   searchString = '',
+  sortBy = 'apr',
 }: AllAquaberaVaultsProps) {
   const [vaultsContracts, setVaultsContracts] = useState<ICHIVaultContract[]>(
     []
   );
   const [vaults, setVaults] = useState<VaultsSortedByHoldersQuery>();
-  const [sortField, setSortField] = useState<SortField>('apr');
+  const [sortField, setSortField] = useState<SortField>(sortBy as SortField);
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [page, setPage] = useState(1);
   const rowsPerPage = 10;
@@ -70,7 +69,7 @@ export function AllAquaberaVaults({
   }, [searchString]);
 
   const loadMyVaults = async (search?: string) => {
-    const vaultsQuery = getVaultPageData(search).then((res) => {
+    getVaultPageData(search).then((res) => {
       setVaults(res);
     });
   };
@@ -91,10 +90,6 @@ export function AllAquaberaVaults({
 
   const [sortedVaults, setSortedVaults] = useState<ICHIVaultContract[]>([]);
 
-  const getAllowToken = (vault: any) => {
-    return vault.allowToken;
-  };
-
   useEffect(() => {
     const getSortedVaults = () => {
       if (!vaultsContracts.length) return [];
@@ -103,7 +98,7 @@ export function AllAquaberaVaults({
         const multiplier = sortDirection === 'asc' ? 1 : -1;
 
         switch (sortField) {
-          case 'pair':
+          case 'pair': {
             const aSymbol = Token.getToken({
               address: a.token0?.address ?? '',
             }).symbol;
@@ -111,11 +106,16 @@ export function AllAquaberaVaults({
               address: b.token0?.address ?? '',
             }).symbol;
             return multiplier * aSymbol.localeCompare(bSymbol);
-          case 'allow_token':
-            return (
-              multiplier *
-              getAllowToken(a)?.symbol.localeCompare(getAllowToken(b)?.symbol)
-            );
+          }
+          case 'allow_token': {
+            const aSymbol = Token.getToken({
+              address: a.token0?.address ?? '',
+            }).symbol;
+            const bSymbol = Token.getToken({
+              address: b.token0?.address ?? '',
+            }).symbol;
+            return multiplier * aSymbol.localeCompare(bSymbol);
+          }
           case 'address':
             return multiplier * a.address.localeCompare(b.address);
           case 'tvl':
@@ -150,9 +150,133 @@ export function AllAquaberaVaults({
     setSortedVaults(sortedVaults);
   }, [vaultsContracts, sortField, sortDirection, page]);
 
+  useEffect(() => {
+    setSortField(sortBy as SortField);
+  }, [sortBy]);
+
   return (
     <div className="w-full">
-      <div className="w-full overflow-x-auto">
+      {/* Mobile view - card layout for small screens */}
+      <div className="sm:hidden ">
+        {!sortedVaults.length ? (
+          <div className="text-center py-8 text-black">No results.</div>
+        ) : (
+          sortedVaults.map((vault) => (
+            <div
+              key={vault.address}
+              className="mb-4 p-4 bg-white custom-dashed-3xl"
+            >
+              <div className="flex justify-between items-center mb-3">
+                <div className="font-medium">Token Pair</div>
+                <div className="flex items-center">
+                  <div className="flex items-center">
+                    <TokenLogo
+                      token={Token.getToken({
+                        address: vault.token0?.address ?? '',
+                      })}
+                      addtionalClasses="translate-x-[25%]"
+                      size={20}
+                    />
+                    <TokenLogo
+                      token={Token.getToken({
+                        address: vault.token1?.address ?? '',
+                      })}
+                      addtionalClasses="translate-x-[-25%]"
+                      size={20}
+                    />
+                  </div>
+                  <span className="font-bold">
+                    {
+                      Token.getToken({ address: vault.token0?.address ?? '' })
+                        .symbol
+                    }
+                    /
+                    {
+                      Token.getToken({ address: vault.token1?.address ?? '' })
+                        .symbol
+                    }
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center mb-3">
+                <div className="font-medium">Allow Token</div>
+                <div className="flex items-center gap-1">
+                  <TokenLogo
+                    token={Token.getToken({
+                      address: vault.token0?.address ?? '',
+                    })}
+                    size={20}
+                  />
+                  <span>
+                    {
+                      Token.getToken({ address: vault.token0?.address ?? '' })
+                        .symbol
+                    }
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center mb-3">
+                <div className="font-medium">Vault TVL</div>
+                <div>
+                  $
+                  {Number(vault.tvlUSD || 0).toLocaleString('en-US', {
+                    maximumFractionDigits: 2,
+                  })}
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center mb-3">
+                <div className="font-medium">24h Volume</div>
+                <div>
+                  $
+                  {Number(vault.pool?.volume_24h_USD || 0).toLocaleString(
+                    'en-US',
+                    { maximumFractionDigits: 2 }
+                  )}
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center mb-3">
+                <div className="font-medium">24h Fees</div>
+                <div>
+                  $
+                  {Number(vault.pool?.fees_24h_USD || 0).toLocaleString(
+                    'en-US',
+                    { maximumFractionDigits: 2 }
+                  )}
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center mb-3">
+                <div className="font-medium">APR</div>
+                <div className="font-bold text-green-600">
+                  {Number(vault.apr || 0).toLocaleString('en-US', {
+                    maximumFractionDigits: 2,
+                  })}
+                  %
+                </div>
+              </div>
+
+              <div className="mt-4 flex justify-center">
+                <Button
+                  className="w-full border border-[#2D2D2D] bg-[#FFCD4D] hover:bg-[#FFD56A] text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-4 py-2"
+                  onClick={() => {
+                    // Use the same action as in VaultRow component
+                    window.open(`/vault/${vault.address}`, '_blank');
+                  }}
+                >
+                  View Vault
+                </Button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Desktop view - table layout for medium screens and up */}
+      <div className="hidden sm:block w-full overflow-x-auto custom-dashed-3xl sm:p-6 sm:bg-white">
         <table className="w-full">
           <thead>
             <tr>
@@ -318,21 +442,21 @@ export function AllAquaberaVaults({
         </table>
       </div>
 
-      <div className="p-4 border-t border-[#2D2D2D]">
-        <div className="flex justify-between items-center">
-          <span className="text-black">
+      <div className="py-4">
+        <div className="flex flex-row justify-between items-center gap-4">
+          <span className="text-black text-sm">
             Page {page} of {pages}
           </span>
           <div className="flex gap-x-2">
             <Button
-              className="border border-[#2D2D2D] bg-white hover:bg-gray-50 text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-4 py-2"
+              className="border border-[#2D2D2D] bg-white hover:bg-gray-50 text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm"
               disabled={page === 1}
               onClick={() => setPage(page - 1)}
             >
               Previous
             </Button>
             <Button
-              className="border border-[#2D2D2D] bg-white hover:bg-gray-50 text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-4 py-2"
+              className="border border-[#2D2D2D] bg-white hover:bg-gray-50 text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm"
               disabled={page === pages}
               onClick={() => setPage(page + 1)}
             >

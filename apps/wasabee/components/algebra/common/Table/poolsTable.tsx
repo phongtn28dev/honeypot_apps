@@ -180,71 +180,219 @@ const PoolsTable = observer(
     return (
       <div className="flex flex-col gap-4 w-full">
         {showOptions && (
-          <div className="flex flex-col xl:flex-row gap-4 w-full xl:justify-between xl:items-center">
-            <div className="flex items-center xl:gap-x-6 w-full xl:w-fit justify-between">
-              <Tabs
-                classNames={{
-                  base: "relative w-full",
-                  tabList:
-                    "flex rounded-2xl border border-[#202020] bg-white p-4 shadow-[2px_2px_0px_0px_#000] py-2 px-3.5 ml-auto z-10",
-                  cursor:
-                    "bg-[#FFCD4D] border border-black shadow-[2px_2px_0px_0px_#000000] text-sm",
-                  panel: "w-full",
-                  tabContent: "!text-[#202020]",
-                }}
-                onSelectionChange={(key) =>
-                  setSelectedFilter(key === "all" ? "trending" : "myPools")
-                }
-                defaultSelectedKey={
-                  selectedFilter === "trending" ? "all" : "myPools"
-                }
-              >
-                <Tab
-                  key="all"
-                  title="All Pools"
-                />
-                <Tab
-                  href="/profile?tab=my-pools"
-                  key="myPools"
-                  title="My Pools"
-                />
-              </Tabs>
-              <div className="relative">
+          <div className="flex flex-col gap-4 w-full">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full">
+              <div className="flex justify-between items-center w-full sm:w-auto">
+                <Tabs
+                  classNames={{
+                    base: "relative w-auto",
+                    tabList:
+                      "flex rounded-2xl border border-[#202020] bg-white p-4 shadow-[2px_2px_0px_0px_#000] py-2 px-3.5 z-10",
+                    cursor:
+                      "bg-[#FFCD4D] border border-black shadow-[2px_2px_0px_0px_#000000] text-sm",
+                    panel: "w-full",
+                    tab: "px-2 sm:px-3 text-xs sm:text-sm",
+                    tabContent: "!text-[#202020]",
+                  }}
+                  onSelectionChange={(key) =>
+                    setSelectedFilter(key === "all" ? "trending" : "myPools")
+                  }
+                  defaultSelectedKey={
+                    selectedFilter === "trending" ? "all" : "myPools"
+                  }
+                >
+                  <Tab
+                    key="all"
+                    title="All Pools"
+                  />
+                  <Tab
+                    href="/profile?tab=my-pools"
+                    key="myPools"
+                    title="My Pools"
+                  />
+                </Tabs>
+                
+                <div className="sm:hidden">
+                  <Button
+                    className={cn(
+                      "flex items-center gap-x-1 p-2 cursor-pointer border border-[#2D2D2D] bg-[#FFCD4D] rounded-2xl shadow-[2px_2px_0px_0px_#000] hover:bg-[#FFD666] text-xs"
+                    )}
+                    onClick={() =>
+                      popmodal.openModal({
+                        content: <CreatePoolForm />,
+                        boarderLess: true,
+                        shouldCloseOnInteractOutside: false,
+                      })
+                    }
+                    disabled={!walletClient}
+                  >
+                    <Plus className="text-black h-4 w-4" />
+                    <span className="text-black">Create Pool</span>
+                  </Button>
+                </div>
+              </div>
+
+              <div className="relative w-full sm:w-[450px] md:w-[500px]">
                 <input
                   placeholder="Search"
                   value={search}
                   type="text"
                   onChange={(event) => setSearch(event.target.value)}
-                  className="border border-[#2D2D2D] bg-white text-black pl-10 pr-4 py-2 h-12 w-[319px] rounded-2xl shadow-[2px_2px_0px_0px_#000] placeholder:text-[#4D4D4D]/70 focus:outline-none"
+                  className="border border-[#2D2D2D] bg-white text-black pl-10 pr-4 py-2 h-12 w-full rounded-2xl shadow-[2px_2px_0px_0px_#000] placeholder:text-[#4D4D4D]/70 focus:outline-none"
                 />
                 <Search
                   className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4D4D4D]"
                   size={20}
                 />
               </div>
-            </div>
-            <div className="flex items-center gap-x-5">
-              <Button
-                className={cn(
-                  "flex items-center gap-x-1 p-2.5 cursor-pointer border border-[#2D2D2D] bg-[#FFCD4D] rounded-2xl shadow-[2px_2px_0px_0px_#000] hover:bg-[#FFD666]"
-                )}
-                onClick={() =>
-                  popmodal.openModal({
-                    content: <CreatePoolForm />,
-                    boarderLess: true,
-                    shouldCloseOnInteractOutside: false,
-                  })
-                }
-                disabled={!walletClient}
-              >
-                <Plus className="text-black" />
-                <span className="text-black">Create Pool</span>
-              </Button>
+              
+              <div className="hidden sm:block">
+                <Button
+                  className={cn(
+                    "flex items-center gap-x-1 p-2.5 cursor-pointer border border-[#2D2D2D] bg-[#FFCD4D] rounded-2xl shadow-[2px_2px_0px_0px_#000] hover:bg-[#FFD666]"
+                  )}
+                  onClick={() =>
+                    popmodal.openModal({
+                      content: <CreatePoolForm />,
+                      boarderLess: true,
+                      shouldCloseOnInteractOutside: false,
+                    })
+                  }
+                  disabled={!walletClient}
+                >
+                  <Plus className="text-black" />
+                  <span className="text-black">Create Pool</span>
+                </Button>
+              </div>
             </div>
           </div>
         )}
 
-        <div className="custom-dashed-3xl w-full p-6 bg-white overflow-x-auto">
+        {/* Mobile view - card layout for small screens */}
+        <div className="md:hidden w-full">
+          {!loading ? (
+            getSortedPools().length === 0 ? (
+              <div className="text-center py-8 text-black">No results.</div>
+            ) : (
+              getSortedPools().map((pool: Pool & { userTVLUSD: number }) => (
+                <div 
+                  key={pool.id} 
+                  className="mb-4 p-4 bg-white rounded-lg shadow border border-[#4D4D4D]/20"
+                  onClick={() => {
+                    if (action) {
+                      action(pool.id);
+                    } else if (link) {
+                      window.location.href = `/${link}/${pool.id}`;
+                    }
+                  }}
+                >
+                  <div className="flex justify-between items-center mb-3">
+                    <div className="font-medium">Pool</div>
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1">
+                        <TokenLogo
+                          token={Token.getToken({
+                            address: pool.pair.token0.id,
+                          })}
+                          addtionalClasses="translate-x-[25%]"
+                          size={20}
+                        />
+                        <TokenLogo
+                          token={Token.getToken({
+                            address: pool.pair.token1.id,
+                          })}
+                          addtionalClasses="translate-x-[-25%]"
+                          size={20}
+                        />
+                      </div>
+                      <div className="font-bold">
+                        {pool.pair.token0.symbol}/{pool.pair.token1.symbol}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {defaultFilter === "trending" && (
+                    <>
+                      <div className="flex justify-between items-center mb-3">
+                        <div className="font-medium">TVL</div>
+                        <div>{formatExtremelyLargeNumber(pool.tvlUSD)}</div>
+                      </div>
+                      
+                      <div className="flex justify-between items-center mb-3">
+                        <div className="font-medium">Volume 24H</div>
+                        <div className="flex flex-col items-end">
+                          <span>{formatExtremelyLargeNumber(pool.volume24USD)}</span>
+                          <span
+                            className={`text-xs ${
+                              Number(pool.change24h) > 0 &&
+                              "text-[#4ADE80]"
+                            } ${
+                              Number(pool.change24h) < 0 &&
+                              "text-[#FF5555]"
+                            }`}
+                          >
+                            {Number(pool.change24h) > 0 ? "+" : ""}
+                            {Number(pool.change24h).toFixed(2)}%
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex justify-between items-center mb-3">
+                        <div className="font-medium">Fee 24H</div>
+                        <div>{formatUSD.format(pool.fees24USD)}</div>
+                      </div>
+                    </>
+                  )}
+                  
+                  <div className="flex justify-between items-center mb-3">
+                    <div className="font-medium">APR</div>
+                    <div className="font-bold text-green-600">{Number(pool.apr24h).toFixed(2)}%</div>
+                  </div>
+                  
+                  {defaultFilter === "myPools" && (
+                    <>
+                      <div className="flex justify-between items-center mb-3">
+                        <div className="font-medium">My TVL</div>
+                        <div>{formatExtremelyLargeNumber(pool.userTVLUSD)}</div>
+                      </div>
+                      
+                      <div className="flex justify-between items-center mb-3">
+                        <div className="font-medium">Unclaimed Fees</div>
+                        <div>${Number(pool.unclaimedFees).toLocaleString()}</div>
+                      </div>
+                    </>
+                  )}
+                  
+                  <div className="mt-4 flex justify-center gap-2">
+                    <Button
+                      className="w-1/2 border border-[#2D2D2D] bg-[#FFCD4D] hover:bg-[#FFD56A] text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-2 py-2 text-xs"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.location.href = `/pool/${pool.id}`;
+                      }}
+                    >
+                      View Pool
+                    </Button>
+                    <Button
+                      className="w-1/2 border border-[#2D2D2D] bg-white hover:bg-gray-50 text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-2 py-2 text-xs"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.location.href = `/swap?inputCurrency=${pool.pair.token0.id}&outputCurrency=${pool.pair.token1.id}`;
+                      }}
+                    >
+                      Swap
+                    </Button>
+                  </div>
+                </div>
+              ))
+            )
+          ) : (
+            <LoadingDisplay />
+          )}
+        </div>
+
+        {/* Desktop view - table layout for medium screens and up */}
+        <div className="hidden md:block custom-dashed-3xl w-full p-6 bg-white overflow-x-auto">
           {!loading ? (
             <table className="w-full">
               <thead>
@@ -438,14 +586,14 @@ const PoolsTable = observer(
           )}
 
           {showPagination && tableData.length > 10 && (
-            <div className="p-4 border-t border-[#2D2D2D]">
-              <div className="flex justify-between items-center">
-                <span className="text-black">
+            <div className="py-4">
+              <div className="flex flex-row justify-between items-center gap-4">
+                <span className="text-black text-sm">
                   Page {page} of {Math.ceil(tableData.length / 10)}
                 </span>
                 <div className="flex gap-x-2">
                   <Button
-                    className="border border-[#2D2D2D] bg-white hover:bg-gray-50 text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-4 py-2"
+                    className="border border-[#2D2D2D] bg-white hover:bg-gray-50 text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm"
                     disabled={page === 1}
                     onClick={() => {
                       setPage(page - 1);
@@ -454,7 +602,7 @@ const PoolsTable = observer(
                     Previous
                   </Button>
                   <Button
-                    className="border border-[#2D2D2D] bg-white hover:bg-gray-50 text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-4 py-2"
+                    className="border border-[#2D2D2D] bg-white hover:bg-gray-50 text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm"
                     disabled={page === Math.ceil(tableData.length / 10)}
                     onClick={() => {
                       setPage(page + 1);
