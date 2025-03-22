@@ -728,8 +728,7 @@ export const berachainNetwork = new Network({
       name: 'Xi BERA',
       symbol: 'XI',
       decimals: 18,
-      logoURI:
-        'http://localhost:3000/_next/image?url=https%3A%2F%2Fvphdxociarqnaxj6.public.blob.vercel-storage.com%2Flogo-C0TcCmUOefj7lmBfcnS3qQUAP9g5ic&w=96&q=75',
+      logoURI: '/images/icons/tokens/xi.webp',
       isBitgetCampaignToken: true,
       isPopular: true,
     },
@@ -737,8 +736,7 @@ export const berachainNetwork = new Network({
       name: 'Q5',
       symbol: 'Q5',
       decimals: 18,
-      logoURI:
-        'http://localhost:3000/_next/image?url=https%3A%2F%2Fvphdxociarqnaxj6.public.blob.vercel-storage.com%2Flogo-tobhg4UioXb1kAE96t64RDF3mfXhM8&w=96&q=75',
+      logoURI: '/images/icons/tokens/q5.webp',
       isBitgetCampaignToken: true,
       isPopular: true,
     },
@@ -746,8 +744,7 @@ export const berachainNetwork = new Network({
       name: 'the chain has a bear on it',
       symbol: 'BERACHAIN',
       decimals: 18,
-      logoURI:
-        'http://localhost:3000/_next/image?url=https%3A%2F%2Fvphdxociarqnaxj6.public.blob.vercel-storage.com%2F0x26e38c4bc788508188874cf432ca158febd14f92_logo-G8JpBc201Vzqn69q7HCzL9vTlCLaFy&w=96&q=75',
+      logoURI: '/images/icons/tokens/berachain.webp',
       isBitgetCampaignToken: true,
       isPopular: true,
     },
