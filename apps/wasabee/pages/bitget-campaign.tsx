@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { observer } from 'mobx-react-lite';
 import Link from 'next/link';
 import { FaExternalLinkAlt } from 'react-icons/fa';
+import { Check, X } from 'lucide-react';
 
 const REWARD_BERA = 400;
 
@@ -134,7 +135,14 @@ export const BitgetCampaign = observer(() => {
                       </div>
                     </div>
                     {pool.currentUser[0] && (
-                      <div className="flex flex-col gap-2 bg-yellow-400 rounded-lg p-2">
+                      <div className="relative flex flex-col gap-2 bg-yellow-400 rounded-lg p-2">
+                        <div className=" bg-black rounded-full p-1 absolute top-0 right-0 translate-x-1/2 -translate-y-1/2">
+                          {pool.currentUser[0].finished ? (
+                            <Check className="w-4 h-4 font-bold text-green-500" />
+                          ) : (
+                            <X className="w-4 h-4 font-bold text-red-500" />
+                          )}
+                        </div>
                         <div className="flex flex-col lg:flex-row justify-between items-center py-2">
                           <span className="text-black">Your Volume</span>
                           <span className="text-lg font-medium text-honey-gold">
@@ -144,11 +152,6 @@ export const BitgetCampaign = observer(() => {
                               beginWith: '$',
                             })}
                           </span>
-                          {pool.currentUser[0].finished ? (
-                            <span className="text-green-500">Finished</span>
-                          ) : (
-                            <span className="text-red-500">Not Finished</span>
-                          )}
                         </div>
                         {pool.currentUser[0].finished && (
                           <div className="flex justify-between items-center py-2">
