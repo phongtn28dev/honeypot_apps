@@ -1,23 +1,31 @@
-import { Pool } from "./poolsColumns";
-import { cn } from "@/lib/tailwindcss";
-import { Search, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Tab, Tabs } from "@nextui-org/react";
-import { popmodal } from "@/services/popmodal";
-import { Token } from "@/services/contract/token";
-import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/algebra/ui/button";
-import TokenLogo from "@/components/TokenLogo/TokenLogo";
-import CreatePoolForm from "../../create-pool/CreatePoolForm";
-import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
-import { LoadingDisplay } from "@/components/LoadingDisplay/LoadingDisplay";
-import { formatExtremelyLargeNumber } from "@/lib/format";
-import { observer, useObserver } from "mobx-react-lite";
-import { wallet } from "@/services/wallet";
-import { formatUSD } from "@/lib/algebra/utils/common/formatUSD";
-import { optionsPresets } from "@/components/OptionsDropdown/OptionsDropdown";
-import { OptionsDropdown } from "@/components/OptionsDropdown/OptionsDropdown";
-import { TbSwitch, TbSwitchHorizontal } from "react-icons/tb";
+import { Pool } from './poolsColumns';
+import { cn } from '@/lib/tailwindcss';
+import { Search, Plus } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Tab, Tabs } from '@nextui-org/react';
+import { popmodal } from '@/services/popmodal';
+import { Token } from '@/services/contract/token';
+import { ColumnDef } from '@tanstack/react-table';
+import { Button } from '@/components/algebra/ui/button';
+import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import CreatePoolForm from '../../create-pool/CreatePoolForm';
+import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';
+import { formatExtremelyLargeNumber } from '@/lib/format';
+import { observer, useObserver } from 'mobx-react-lite';
+import { wallet } from '@/services/wallet';
+import { formatUSD } from '@/lib/algebra/utils/common/formatUSD';
+import { optionsPresets } from '@/components/OptionsDropdown/OptionsDropdown';
+import { OptionsDropdown } from '@/components/OptionsDropdown/OptionsDropdown';
+import { TbSwitchHorizontal } from 'react-icons/tb';
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from '@nextui-org/react';
+import { ChevronDown } from 'lucide-react';
+import { Button as NextUIButton } from '@nextui-org/react';
 
 interface PoolsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -38,14 +46,14 @@ interface PoolsTableProps<TData, TValue> {
 }
 
 type SortField =
-  | "pool"
-  | "tvl"
-  | "volume"
-  | "apr"
-  | "unclaimedFees"
-  | "feesUSD"
-  | "user_tvl";
-type SortDirection = "asc" | "desc";
+  | 'pool'
+  | 'tvl'
+  | 'volume'
+  | 'apr'
+  | 'unclaimedFees'
+  | 'feesUSD'
+  | 'user_tvl';
+type SortDirection = 'asc' | 'desc';
 
 const PoolsTable = observer(
   <TData, TValue>({
@@ -57,7 +65,7 @@ const PoolsTable = observer(
     link,
     showPagination = true,
     loading,
-    defaultFilter = "trending",
+    defaultFilter = 'trending',
     showOptions = true,
     handleSearch,
   }: PoolsTableProps<TData, TValue>) => {
@@ -65,15 +73,10 @@ const PoolsTable = observer(
       return wallet.walletClient;
     });
     const [selectedFilter, setSelectedFilter] = useState<string>(defaultFilter);
-    const [search, setSearch] = useState("");
-    const [sortField, setSortField] = useState<SortField>("tvl");
-    const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+    const [search, setSearch] = useState('');
+    const [sortField, setSortField] = useState<SortField>('tvl');
+    const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
     const [page, setPage] = useState(1);
-
-    const filters = [
-      { key: "trending", label: "All Pools" },
-      { key: "myPools", label: "My Pools" },
-    ];
 
     const [tableData, setTableData] = useState<
       (Pool & { userTVLUSD: number })[]
@@ -81,7 +84,7 @@ const PoolsTable = observer(
 
     useEffect(() => {
       if (!wallet.isInit) return;
-      if (selectedFilter === "myPools") {
+      if (selectedFilter === 'myPools') {
         setTableData(userPools as (Pool & { userTVLUSD: number })[]);
       } else {
         setTableData(data as (Pool & { userTVLUSD: number })[]);
@@ -99,38 +102,38 @@ const PoolsTable = observer(
     const handleSort = (field: SortField) => {
       setPage(1);
       if (sortField === field) {
-        setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
       } else {
         setSortField(field);
-        setSortDirection("desc");
+        setSortDirection('desc');
       }
     };
 
     const getSortedPools = () => {
       const sortedPools = [...tableData].sort((a, b) => {
-        const multiplier = sortDirection === "asc" ? 1 : -1;
+        const multiplier = sortDirection === 'asc' ? 1 : -1;
 
         switch (sortField) {
-          case "pool":
+          case 'pool':
             return (
               multiplier *
               (a.pair.token0.symbol + a.pair.token1.symbol).localeCompare(
                 b.pair.token0.symbol + b.pair.token1.symbol
               )
             );
-          case "tvl":
+          case 'tvl':
             return multiplier * (Number(a.tvlUSD) - Number(b.tvlUSD));
-          case "user_tvl":
+          case 'user_tvl':
             return multiplier * (Number(a.userTVLUSD) - Number(b.userTVLUSD));
-          case "volume":
+          case 'volume':
             return multiplier * (Number(a.volume24USD) - Number(b.volume24USD));
-          case "apr":
+          case 'apr':
             return multiplier * (Number(a.apr24h) - Number(b.apr24h));
-          case "unclaimedFees":
+          case 'unclaimedFees':
             return (
               multiplier * (Number(a.unclaimedFees) - Number(b.unclaimedFees))
             );
-          case "feesUSD":
+          case 'feesUSD':
             return multiplier * (Number(a.fees24USD) - Number(b.fees24USD));
           default:
             return 0;
@@ -143,39 +146,52 @@ const PoolsTable = observer(
     const SortHeader = ({
       field,
       label,
-      align = "right",
+      align = 'right',
     }: {
       field: SortField;
       label: string;
-      align?: "left" | "right" | "center";
+      align?: 'left' | 'right' | 'center';
     }) => (
       <th
         className={`py-4 px-6 cursor-pointer transition-colors text-[#4D4D4D]`}
         onClick={() => handleSort(field)}
       >
         <div
-          className={`flex items-center gap-2 ${align === "right" ? "justify-end" : align === "center" ? "justify-center" : ""}`}
+          className={`flex items-center gap-2 ${
+            align === 'right'
+              ? 'justify-end'
+              : align === 'center'
+              ? 'justify-center'
+              : ''
+          }`}
         >
           <span>{label}</span>
           <div className="flex flex-col">
             <ChevronUpIcon
               className={`h-3 w-3 ${
-                sortField === field && sortDirection === "asc"
-                  ? "text-black"
-                  : "text-[#4D4D4D]"
+                sortField === field && sortDirection === 'asc'
+                  ? 'text-black'
+                  : 'text-[#4D4D4D]'
               }`}
             />
             <ChevronDownIcon
               className={`h-3 w-3 ${
-                sortField === field && sortDirection === "desc"
-                  ? "text-black"
-                  : "text-[#4D4D4D]"
+                sortField === field && sortDirection === 'desc'
+                  ? 'text-black'
+                  : 'text-[#4D4D4D]'
               }`}
             />
           </div>
         </div>
       </th>
     );
+
+    const sortOptions = [
+      { key: 'tvl', label: 'TVL' },
+      { key: 'volume', label: 'Volume' },
+      { key: 'fees', label: 'Fees' },
+      { key: 'apr', label: 'APR' },
+    ];
 
     return (
       <div className="flex flex-col gap-4 w-full">
@@ -185,50 +201,76 @@ const PoolsTable = observer(
               <div className="flex justify-between items-center w-full sm:w-auto">
                 <Tabs
                   classNames={{
-                    base: "relative w-auto",
+                    base: 'relative w-auto',
                     tabList:
-                      "flex rounded-2xl border border-[#202020] bg-white p-4 shadow-[2px_2px_0px_0px_#000] py-2 px-3.5 z-10",
+                      'flex rounded-2xl border border-[#202020] bg-white p-4 shadow-[2px_2px_0px_0px_#000] py-2 px-3.5 z-10',
                     cursor:
-                      "bg-[#FFCD4D] border border-black shadow-[2px_2px_0px_0px_#000000] text-sm",
-                    panel: "w-full",
-                    tab: "px-2 sm:px-3 text-xs sm:text-sm",
-                    tabContent: "!text-[#202020]",
+                      'bg-[#FFCD4D] border border-black shadow-[2px_2px_0px_0px_#000000] text-sm',
+                    panel: 'w-full',
+                    tab: 'px-2 sm:px-3 text-xs sm:text-sm',
+                    tabContent: '!text-[#202020]',
                   }}
                   onSelectionChange={(key) =>
-                    setSelectedFilter(key === "all" ? "trending" : "myPools")
+                    setSelectedFilter(key === 'all' ? 'trending' : 'myPools')
                   }
                   defaultSelectedKey={
-                    selectedFilter === "trending" ? "all" : "myPools"
+                    selectedFilter === 'trending' ? 'all' : 'myPools'
                   }
                 >
-                  <Tab
-                    key="all"
-                    title="All Pools"
-                  />
+                  <Tab key="all" title="All Pools" />
                   <Tab
                     href="/profile?tab=my-pools"
                     key="myPools"
                     title="My Pools"
                   />
                 </Tabs>
-                
-                <div className="sm:hidden">
+
+                <div className="flex items-center gap-2">
                   <Button
-                    className={cn(
-                      "flex items-center gap-x-1 p-2 cursor-pointer border border-[#2D2D2D] bg-[#FFCD4D] rounded-2xl shadow-[2px_2px_0px_0px_#000] hover:bg-[#FFD666] text-xs"
-                    )}
-                    onClick={() =>
+                    className="sm:hidden border border-[#2D2D2D] bg-[#FFCD4D] hover:bg-[#FFD56A] text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-3 py-1.5 text-xs"
+                    onClick={() => {
                       popmodal.openModal({
                         content: <CreatePoolForm />,
                         boarderLess: true,
                         shouldCloseOnInteractOutside: false,
-                      })
-                    }
+                      });
+                    }}
                     disabled={!walletClient}
                   >
-                    <Plus className="text-black h-4 w-4" />
-                    <span className="text-black">Create Pool</span>
+                    Create Pool
                   </Button>
+
+                  <div className="sm:hidden">
+                    <Dropdown>
+                      <DropdownTrigger>
+                        <NextUIButton 
+                          className="bg-white border border-[#2D2D2D] rounded-xl shadow-[2px_2px_0px_0px_#000] px-3 py-1.5 text-xs text-black"
+                          endContent={<ChevronDown className="h-4 w-4 text-black" />}
+                        >
+                          Sort by: {sortOptions.find(option => option.key === sortField)?.label || 'TVL'}
+                        </NextUIButton>
+                      </DropdownTrigger>
+                      <DropdownMenu
+                        aria-label="Sort options"
+                        className="bg-white border border-[#2D2D2D] rounded-xl shadow-[2px_2px_0px_0px_#000] p-1"
+                        onAction={(key) => {
+                          setSortField(key.toString() as SortField);
+                          setSortDirection('desc');
+                        }}
+                      >
+                        {sortOptions.map((option) => (
+                          <DropdownItem
+                            key={option.key}
+                            className={`text-black text-sm p-2 ${
+                              sortField === option.key ? 'bg-[#FFCD4D]' : ''
+                            }`}
+                          >
+                            {option.label}
+                          </DropdownItem>
+                        ))}
+                      </DropdownMenu>
+                    </Dropdown>
+                  </div>
                 </div>
               </div>
 
@@ -245,11 +287,11 @@ const PoolsTable = observer(
                   size={20}
                 />
               </div>
-              
+
               <div className="hidden sm:block">
                 <Button
                   className={cn(
-                    "flex items-center gap-x-1 p-2.5 cursor-pointer border border-[#2D2D2D] bg-[#FFCD4D] rounded-2xl shadow-[2px_2px_0px_0px_#000] hover:bg-[#FFD666]"
+                    'flex items-center gap-x-1 p-2.5 cursor-pointer border border-[#2D2D2D] bg-[#FFCD4D] rounded-2xl shadow-[2px_2px_0px_0px_#000] hover:bg-[#FFD666]'
                   )}
                   onClick={() =>
                     popmodal.openModal({
@@ -275,8 +317,8 @@ const PoolsTable = observer(
               <div className="text-center py-8 text-black">No results.</div>
             ) : (
               getSortedPools().map((pool: Pool & { userTVLUSD: number }) => (
-                <div 
-                  key={pool.id} 
+                <div
+                  key={pool.id}
                   className="mb-4 p-4 bg-white rounded-lg shadow border border-[#4D4D4D]/20"
                   onClick={() => {
                     if (action) {
@@ -288,7 +330,7 @@ const PoolsTable = observer(
                 >
                   <div className="flex justify-between items-center mb-3">
                     <div className="font-medium">Pool</div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center">
                       <div className="flex items-center gap-1">
                         <TokenLogo
                           token={Token.getToken({
@@ -310,59 +352,63 @@ const PoolsTable = observer(
                       </div>
                     </div>
                   </div>
-                  
-                  {defaultFilter === "trending" && (
+
+                  {defaultFilter === 'trending' && (
                     <>
                       <div className="flex justify-between items-center mb-3">
                         <div className="font-medium">TVL</div>
                         <div>{formatExtremelyLargeNumber(pool.tvlUSD)}</div>
                       </div>
-                      
+
                       <div className="flex justify-between items-center mb-3">
                         <div className="font-medium">Volume 24H</div>
                         <div className="flex flex-col items-end">
-                          <span>{formatExtremelyLargeNumber(pool.volume24USD)}</span>
+                          <span>
+                            {formatExtremelyLargeNumber(pool.volume24USD)}
+                          </span>
                           <span
                             className={`text-xs ${
-                              Number(pool.change24h) > 0 &&
-                              "text-[#4ADE80]"
+                              Number(pool.change24h) > 0 && 'text-[#4ADE80]'
                             } ${
-                              Number(pool.change24h) < 0 &&
-                              "text-[#FF5555]"
+                              Number(pool.change24h) < 0 && 'text-[#FF5555]'
                             }`}
                           >
-                            {Number(pool.change24h) > 0 ? "+" : ""}
+                            {Number(pool.change24h) > 0 ? '+' : ''}
                             {Number(pool.change24h).toFixed(2)}%
                           </span>
                         </div>
                       </div>
-                      
+
                       <div className="flex justify-between items-center mb-3">
                         <div className="font-medium">Fee 24H</div>
                         <div>{formatUSD.format(pool.fees24USD)}</div>
                       </div>
                     </>
                   )}
-                  
+
                   <div className="flex justify-between items-center mb-3">
                     <div className="font-medium">APR</div>
-                    <div className="font-bold text-green-600">{Number(pool.apr24h).toFixed(2)}%</div>
+                    <div className="font-bold text-green-600">
+                      {Number(pool.apr24h).toFixed(2)}%
+                    </div>
                   </div>
-                  
-                  {defaultFilter === "myPools" && (
+
+                  {defaultFilter === 'myPools' && (
                     <>
                       <div className="flex justify-between items-center mb-3">
                         <div className="font-medium">My TVL</div>
                         <div>{formatExtremelyLargeNumber(pool.userTVLUSD)}</div>
                       </div>
-                      
+
                       <div className="flex justify-between items-center mb-3">
                         <div className="font-medium">Unclaimed Fees</div>
-                        <div>${Number(pool.unclaimedFees).toLocaleString()}</div>
+                        <div>
+                          ${Number(pool.unclaimedFees).toLocaleString()}
+                        </div>
                       </div>
                     </>
                   )}
-                  
+
                   <div className="mt-4 flex justify-center gap-2">
                     <Button
                       className="w-1/2 border border-[#2D2D2D] bg-[#FFCD4D] hover:bg-[#FFD56A] text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-2 py-2 text-xs"
@@ -397,37 +443,18 @@ const PoolsTable = observer(
             <table className="w-full">
               <thead>
                 <tr>
-                  <SortHeader
-                    field="pool"
-                    label="Pool"
-                    align="left"
-                  />
-                  {defaultFilter === "trending" && (
+                  <SortHeader field="pool" label="Pool" align="left" />
+                  {defaultFilter === 'trending' && (
                     <>
-                      <SortHeader
-                        field="tvl"
-                        label="TVL"
-                      />
-                      <SortHeader
-                        field="volume"
-                        label="Volume 24H"
-                      />
-                      <SortHeader
-                        field="feesUSD"
-                        label="Fee 24H"
-                      />
+                      <SortHeader field="tvl" label="TVL" />
+                      <SortHeader field="volume" label="Volume 24H" />
+                      <SortHeader field="feesUSD" label="Fee 24H" />
                     </>
                   )}
-                  <SortHeader
-                    field="apr"
-                    label="APR"
-                  />
-                  {defaultFilter === "myPools" && (
+                  <SortHeader field="apr" label="APR" />
+                  {defaultFilter === 'myPools' && (
                     <>
-                      <SortHeader
-                        field="user_tvl"
-                        label="My TVL"
-                      />
+                      <SortHeader field="user_tvl" label="My TVL" />
                       <SortHeader
                         field="unclaimedFees"
                         label="Unclaimed Fees"
@@ -493,7 +520,7 @@ const PoolsTable = observer(
                             </div>
                           </div>
                         </td>
-                        {defaultFilter === "trending" && (
+                        {defaultFilter === 'trending' && (
                           <>
                             <td className="py-4 px-6 text-right">
                               <div className="flex flex-col">
@@ -510,13 +537,13 @@ const PoolsTable = observer(
                                 <span
                                   className={`text-xs ${
                                     Number(pool.change24h) > 0 &&
-                                    "text-[#4ADE80]"
+                                    'text-[#4ADE80]'
                                   } ${
                                     Number(pool.change24h) < 0 &&
-                                    "text-[#FF5555]"
+                                    'text-[#FF5555]'
                                   }`}
                                 >
-                                  {Number(pool.change24h) > 0 ? "+" : ""}
+                                  {Number(pool.change24h) > 0 ? '+' : ''}
                                   {Number(pool.change24h).toFixed(2)}%
                                 </span>
                               </div>
@@ -537,7 +564,7 @@ const PoolsTable = observer(
                             </span>
                           </div>
                         </td>
-                        {defaultFilter === "myPools" && (
+                        {defaultFilter === 'myPools' && (
                           <>
                             <td className="py-4 px-6 text-right">
                               <div className="flex flex-col">
@@ -559,15 +586,15 @@ const PoolsTable = observer(
                             options={[
                               optionsPresets.copy({
                                 copyText: pool.id,
-                                displayText: "Copy Pool address",
-                                copysSuccessText: "Pool address copied",
+                                displayText: 'Copy Pool address',
+                                copysSuccessText: 'Pool address copied',
                               }),
                               optionsPresets.viewOnExplorer({
                                 address: pool.id,
                               }),
                               {
                                 icon: <TbSwitchHorizontal />,
-                                display: "Swap",
+                                display: 'Swap',
                                 onClick: () => {
                                   window.location.href = `/swap?inputCurrency=${pool.pair.token0.id}&outputCurrency=${pool.pair.token1.id}`;
                                 },
