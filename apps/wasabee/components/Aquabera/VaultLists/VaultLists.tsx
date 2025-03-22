@@ -1,8 +1,17 @@
-import { Link, Tab, Tabs, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button as NextUIButton } from '@nextui-org/react';
+import {
+  Link,
+  Tab,
+  Tabs,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Button as NextUIButton,
+} from '@nextui-org/react';
 import MyAquaberaVaults from './MyVaults';
 import AllAquaberaVaults from './AllVaults';
 import { Search, ChevronDown } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import aquabera from '@/public/images/partners/aquabera.svg';
 import Image from 'next/image';
 
@@ -10,18 +19,32 @@ export function AquaberaList() {
   const [search, setSearch] = useState('');
   const [selectedTab, setSelectedTab] = useState('all');
   const [sortField, setSortField] = useState('apr');
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   const sortOptions = [
     { key: 'apr', label: 'APR' },
     { key: 'tvl', label: 'TVL' },
     { key: 'volume', label: 'Volume' },
     { key: 'fees', label: 'Fees' },
-    { key: 'pair', label: 'Token Pair' }
+    { key: 'pair', label: 'Token Pair' },
   ];
 
   const handleSearch = (value: string) => {
     setSearch(value);
   };
+
+  const handleDataLoaded = () => {
+    setDataLoaded(true);
+  };
+
+  useEffect(() => {
+    if (dataLoaded && sortField === 'apr') {
+      const timer = setTimeout(() => {
+        setSortField('pair');
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [dataLoaded, sortField]);
 
   return (
     <div className="flex flex-col gap-4 w-full">
@@ -47,14 +70,15 @@ export function AquaberaList() {
 
         <Dropdown>
           <DropdownTrigger>
-            <NextUIButton 
+            <NextUIButton
               className="bg-white border border-[#2D2D2D] rounded-xl shadow-[2px_2px_0px_0px_#000] px-3 py-1.5 text-xs text-black"
               endContent={<ChevronDown className="h-4 w-4 text-black" />}
             >
-              Sort by: {sortOptions.find(option => option.key === sortField)?.label}
+              Sort by:{' '}
+              {sortOptions.find((option) => option.key === sortField)?.label}
             </NextUIButton>
           </DropdownTrigger>
-          <DropdownMenu 
+          <DropdownMenu
             aria-label="Sort options"
             className="bg-white border border-[#2D2D2D] rounded-xl shadow-[2px_2px_0px_0px_#000] p-1"
             onAction={(key) => {
@@ -62,9 +86,11 @@ export function AquaberaList() {
             }}
           >
             {sortOptions.map((option) => (
-              <DropdownItem 
+              <DropdownItem
                 key={option.key}
-                className={`text-black text-sm p-2 ${sortField === option.key ? 'bg-[#FFCD4D]' : ''}`}
+                className={`text-black text-sm p-2 ${
+                  sortField === option.key ? 'bg-[#FFCD4D]' : ''
+                }`}
               >
                 {option.label}
               </DropdownItem>
@@ -125,9 +151,18 @@ export function AquaberaList() {
 
       <div className="w-full">
         {selectedTab === 'all' ? (
-          <AllAquaberaVaults searchString={search} sortBy={sortField} />
+          <AllAquaberaVaults
+            searchString={search}
+            sortBy={sortField}
+            key={`all-${sortField}`}
+            onDataLoaded={handleDataLoaded}
+          />
         ) : (
-          <MyAquaberaVaults searchString={search} sortBy={sortField} />
+          <MyAquaberaVaults
+            searchString={search}
+            sortBy={sortField}
+            key={`my-${sortField}`}
+          />
         )}
       </div>
       <p className="flex text-center text-sm text-[#4D4D4D]/70 justify-center">

@@ -134,10 +134,10 @@ export const VaultDetail = observer(() => {
   return (
     <div className="container mx-auto p-4 font-gliker">
       {/* Add Back Button */}
-      <div className="mb-4">
+      <div>
         <Button
           onClick={() => router.push('/pools')}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 text-white"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -156,10 +156,10 @@ export const VaultDetail = observer(() => {
         </Button>
       </div>
 
-      <CardContainer className="px-8 justify-start">
+      <CardContainer className="px-4 md:px-8 justify-start">
         {/* Header Section */}
         <div className="flex flex-col gap-6 w-full">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               {vault?.token0 && vault?.token1 && (
                 <>
@@ -167,32 +167,33 @@ export const VaultDetail = observer(() => {
                     <TokenLogo token={vault?.token0} size={48} />
                     <TokenLogo token={vault?.token1} size={48} />
                   </div>
-                  <span className="text-2xl font-bold text-honey">
+                  <span className="text-xl md:text-2xl font-bold text-honey">
                     {vault?.token0?.symbol}/{vault?.token1?.symbol}
                   </span>
                 </>
               )}
             </div>
-            <div className="inline-flex rounded-[16px] border-2 border-black bg-white shadow-[4px_4px_0px_0px_#000] gap-x-3 p-2">
+            <div className="inline-flex flex-wrap md:flex-nowrap rounded-[16px] border-2 border-black bg-white shadow-[4px_4px_0px_0px_#000] gap-x-3 p-2 w-full md:w-auto gap-2">
               <Link
                 href={`/swap?inputCurrency=${vault?.token0?.address}&outputCurrency=${vault?.token1?.address}`}
+                className="w-full md:w-auto"
               >
-                <Button className="rounded-[8px] border border-black bg-[#FFCD4D] p-2 text-[#202020] shadow-[2px_2px_0px_0px_#000] hover:translate-y-[2px] hover:shadow-[2px_1px_0px_0px_#000] active:translate-y-[2px] active:shadow-none">
+                <Button className="w-full rounded-[8px] border border-black bg-[#FFCD4D] p-2 text-[#202020] shadow-[2px_2px_0px_0px_#000] hover:translate-y-[2px] hover:shadow-[2px_1px_0px_0px_#000] active:translate-y-[2px] active:shadow-none">
                   Swap
                 </Button>
               </Link>
               <Button
                 onClick={() => setIsDepositModalOpen(true)}
                 disabled={!wallet.account || !wallet.walletClient}
-                className="ml-[-1px] rounded-[8px] border border-black bg-[#FFCD4D] p-2 text-[#202020] shadow-[2px_2px_0px_0px_#000] hover:translate-y-[2px] hover:shadow-[2px_1px_0px_0px_#000] active:translate-y-[2px] active:shadow-none disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full md:w-auto ml-[-1px] rounded-[8px] border border-black bg-[#FFCD4D] p-2 text-[#202020] shadow-[2px_2px_0px_0px_#000] hover:translate-y-[2px] hover:shadow-[2px_1px_0px_0px_#000] active:translate-y-[2px] active:shadow-none disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {!wallet.walletClient ? 'connect wallet to deposit' : 'Deposit'}
+                {!wallet.walletClient ? 'Connect Wallet' : 'Deposit'}
               </Button>
               {hasShares && (
                 <Button
                   onClick={() => setIsWithdrawModalOpen(true)}
                   disabled={!wallet.account}
-                  className="ml-[-1px] rounded-[8px] border border-black bg-[#FFCD4D] p-2 text-[#202020] shadow-[2px_2px_0px_0px_#000] hover:translate-y-[2px] hover:shadow-[2px_1px_0px_0px_#000] active:translate-y-[2px] active:shadow-none disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full md:w-auto ml-[-1px] rounded-[8px] border border-black bg-[#FFCD4D] p-2 text-[#202020] shadow-[2px_2px_0px_0px_#000] hover:translate-y-[2px] hover:shadow-[2px_1px_0px_0px_#000] active:translate-y-[2px] active:shadow-none disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Withdraw
                 </Button>
@@ -201,19 +202,18 @@ export const VaultDetail = observer(() => {
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="rounded-[24px] border border-black bg-white px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+            <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
               <h3 className="text-base text-[#202020] mb-2">Total Supply</h3>
               <div className="space-y-1">
-                <p className="text-2xl font-bold text-[#202020]">
+                <p className="text-lg md:text-2xl font-bold text-[#202020]">
                   {DynamicFormatAmount({
                     amount: vault?.totalSupply.total0.toString() ?? 0,
-
                     decimals: 3,
                     endWith: vault?.token0?.symbol,
                   })}
                 </p>
-                <p className="text-2xl font-bold text-[#202020]">
+                <p className="text-lg md:text-2xl font-bold text-[#202020]">
                   {DynamicFormatAmount({
                     amount: vault?.totalSupply.total1.toString() ?? 0,
                     decimals: 3,
@@ -222,10 +222,10 @@ export const VaultDetail = observer(() => {
                 </p>
               </div>
             </div>
-            <div className="rounded-[24px] border border-black bg-white px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
+            <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
               <h3 className="text-base text-[#202020] mb-2">Your Asset</h3>
               <div className="space-y-1">
-                <p className="text-2xl font-bold text-[#202020] flex justify-between gap-2">
+                <p className="text-lg md:text-2xl font-bold text-[#202020] flex flex-col md:flex-row justify-between gap-2">
                   <span>
                     {DynamicFormatAmount({
                       amount: BigNumber(
@@ -245,7 +245,7 @@ export const VaultDetail = observer(() => {
                     )
                   </span>
                 </p>
-                <p className="text-2xl font-bold text-[#202020]">
+                <p className="text-lg md:text-2xl font-bold text-[#202020]">
                   {DynamicFormatAmount({
                     amount: BigNumber(
                       vault?.userTokenAmounts.total1.toString() ?? 0
@@ -256,11 +256,11 @@ export const VaultDetail = observer(() => {
                 </p>
               </div>
             </div>
-            <div className="rounded-[24px] border border-black bg-white px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
+            <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
               <h3 className="text-base text-[#202020] mb-2">
                 Your Share Percentage
               </h3>
-              <p className="text-2xl font-bold text-[#202020]">
+              <p className="text-lg md:text-2xl font-bold text-[#202020]">
                 {vault?.totalsupplyShares &&
                 vault?.totalsupplyShares > BigInt(0)
                   ? (
@@ -272,9 +272,9 @@ export const VaultDetail = observer(() => {
                 %
               </p>
             </div>
-            <div className="rounded-[24px] border border-black bg-white px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
+            <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
               <h3 className="text-base text-[#202020] mb-2">Vault TVL</h3>
-              <p className="text-2xl font-bold text-[#202020]">
+              <p className="text-lg md:text-2xl font-bold text-[#202020]">
                 {DynamicFormatAmount({
                   amount: vault?.tvlUSD ?? 0,
                   decimals: 3,
@@ -282,9 +282,9 @@ export const VaultDetail = observer(() => {
                 })}
               </p>
             </div>
-            <div className="rounded-[24px] border border-black bg-white px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
+            <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
               <h3 className="text-base text-[#202020] mb-2">Pool TVL</h3>
-              <p className="text-2xl font-bold text-[#202020]">
+              <p className="text-lg md:text-2xl font-bold text-[#202020]">
                 {DynamicFormatAmount({
                   amount: poolTvl,
                   decimals: 3,
@@ -292,11 +292,11 @@ export const VaultDetail = observer(() => {
                 })}
               </p>
             </div>
-            <div className="rounded-[24px] border border-black bg-white px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
+            <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
               <h3 className="text-base text-[#202020] mb-2">
                 24h Volume(pool)
               </h3>
-              <p className="text-2xl font-bold text-[#202020]">
+              <p className="text-lg md:text-2xl font-bold text-[#202020]">
                 {DynamicFormatAmount({
                   amount: poolVolume24h,
                   decimals: 3,
@@ -304,9 +304,9 @@ export const VaultDetail = observer(() => {
                 })}
               </p>
             </div>
-            <div className="rounded-[24px] border border-black bg-white px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
+            <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
               <h3 className="text-base text-[#202020] mb-2">24h Fees(pool)</h3>
-              <p className="text-2xl font-bold text-[#202020]">
+              <p className="text-lg md:text-2xl font-bold text-[#202020]">
                 {DynamicFormatAmount({
                   amount: poolFees24h,
                   decimals: 5,
@@ -315,11 +315,11 @@ export const VaultDetail = observer(() => {
               </p>
             </div>
 
-            <div className="rounded-[24px] border border-black bg-white px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D] relative">
+            <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D] relative">
               <h3 className="text-base text-[#202020] mb-2">APR </h3>
               <p
                 className={cn(
-                  'text-2xl font-bold text-[#202020] flex  items-center gap-2'
+                  'text-lg md:text-2xl font-bold text-[#202020] flex items-center gap-2'
                 )}
               >
                 {vault?.apr.toFixed(2)}%
@@ -339,7 +339,7 @@ export const VaultDetail = observer(() => {
                 </Tooltip>
               </p>
             </div>
-            <div className="rounded-[24px] border border-black bg-white px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D] relative">
+            <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D] relative">
               <h3 className="text-base text-[#202020] mb-2">
                 Volatility{' '}
                 <span>
@@ -350,7 +350,7 @@ export const VaultDetail = observer(() => {
               </h3>
               <p
                 className={cn(
-                  'text-2xl font-bold text-[#202020]',
+                  'text-lg md:text-2xl font-bold text-[#202020]',
                   volatility > '500' && 'text-orange-500',
                   volatility > '1000' && 'text-red-500'
                 )}
@@ -361,22 +361,22 @@ export const VaultDetail = observer(() => {
           </div>
 
           {/* Vault Info */}
-          <div className="rounded-[24px] border border-black bg-white px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
-            <h3 className="text-white text-[26px] leading-[110%] text-shadow-[1.57px_3.14px_0px_#AF7F3D] text-stroke-1.5 text-stroke-black tracking-[1.04px] font-gliker mb-4">
+          <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
+            <h3 className="text-white text-[22px] md:text-[26px] leading-[110%] text-shadow-[1.57px_3.14px_0px_#AF7F3D] text-stroke-1.5 text-stroke-black tracking-[1.04px] font-gliker mb-4">
               Vault Information
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6">
               <div>
                 <p className="text-sm text-[#202020] mb-2">Vault Address</p>
                 <div className="flex items-center justify-between rounded-[16px] border-2 border-[#5A4A4A] bg-white px-4 py-2 shadow-[2px_2px_0px_0px_#202020,2px_4px_0px_0px_#202020]">
-                  <div className="flex items-center gap-2">
-                    <p className="font-mono text-[#202020] break-all">
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <p className="font-mono text-[#202020] truncate">
                       {address}
                     </p>
                     <Link
                       href={`https://berascan.com/address/${address}`}
                       target="_blank"
-                      className="text-[#202020] hover:text-[#202020]/80"
+                      className="text-[#202020] hover:text-[#202020]/80 flex-shrink-0"
                     >
                       <HiExternalLink size={20} />
                     </Link>
@@ -387,14 +387,14 @@ export const VaultDetail = observer(() => {
               <div>
                 <p className="text-sm text-[#202020] mb-2">Token Addresses</p>
                 <div className="flex items-center justify-between rounded-[16px] border-2 border-[#5A4A4A] bg-white px-4 py-2 shadow-[2px_2px_0px_0px_#202020,2px_4px_0px_0px_#202020] mb-2">
-                  <div className="flex items-center gap-2">
-                    <p className="font-mono text-[#202020] break-all">
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <p className="font-mono text-[#202020] truncate">
                       {vault?.token0?.address}
                     </p>
                     <Link
                       href={`https://berascan.com/address/${vault?.token0?.address}`}
                       target="_blank"
-                      className="text-[#202020] hover:text-[#202020]/80"
+                      className="text-[#202020] hover:text-[#202020]/80 flex-shrink-0"
                     >
                       <HiExternalLink size={20} />
                     </Link>
@@ -402,14 +402,14 @@ export const VaultDetail = observer(() => {
                   <Copy value={vault?.token0?.address as string} />
                 </div>
                 <div className="flex items-center justify-between rounded-[16px] border-2 border-[#5A4A4A] bg-white px-4 py-2 shadow-[2px_2px_0px_0px_#202020,2px_4px_0px_0px_#202020]">
-                  <div className="flex items-center gap-2">
-                    <p className="font-mono text-[#202020] break-all">
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <p className="font-mono text-[#202020] truncate">
                       {vault?.token1?.address}
                     </p>
                     <Link
                       href={`https://berascan.com/address/${vault?.token1?.address}`}
                       target="_blank"
-                      className="text-[#202020] hover:text-[#202020]/80"
+                      className="text-[#202020] hover:text-[#202020]/80 flex-shrink-0"
                     >
                       <HiExternalLink size={20} />
                     </Link>
@@ -422,93 +422,198 @@ export const VaultDetail = observer(() => {
 
           {/* Recent Activity */}
           {vault && (
-            <div className="rounded-[24px] border border-black bg-white p-6 shadow-[4px_4px_0px_0px_#D29A0D]">
+            <div className="rounded-[24px] border border-black bg-white p-4 md:p-6 shadow-[4px_4px_0px_0px_#D29A0D]">
               <h3 className="text-base text-[#202020] mb-4">Recent Activity</h3>
-              <div className="space-y-4">
+
+              {/* Mobile View */}
+              <div className="md:hidden">
                 {vault.recentTransactions.slice(0, 10).map((tx) => (
                   <div
                     key={tx.id}
-                    className="flex justify-between items-center"
+                    className="border-l-4 border-b border-b-gray-200 last:border-b-0 mb-2"
+                    style={{
+                      borderLeftColor:
+                        tx.__typename === 'VaultDeposit'
+                          ? '#4CAF50'
+                          : '#FF9800',
+                    }}
                   >
-                    <div className="flex items-center gap-2 min-w-[100px]">
+                    <div className="pl-3 py-2">
+                      {/* Top Row: Transaction Type and Date */}
+                      <div className="flex justify-between items-center">
+                        <div>
+                          {tx.__typename === 'VaultDeposit' && (
+                            <span className="text-[#4CAF50] font-medium">
+                              Deposit
+                            </span>
+                          )}
+                          {tx.__typename === 'VaultWithdraw' && (
+                            <span className="text-[#FF9800] font-medium">
+                              Withdraw
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-sm text-[#202020]">
+                          {new Date(
+                            Number(tx.createdAtTimestamp) * 1000
+                          ).toLocaleString()}
+                        </div>
+                      </div>
+                      
+                      {/* Amount and Transaction Link in one row */}
+                      <div className="mt-1 flex justify-between items-end">
+                        <div>
+                          {tx.__typename === 'VaultDeposit' && (
+                            <div>
+                              <div className="text-sm font-medium text-[#202020]">
+                                {DynamicFormatAmount({
+                                  amount: BigNumber(tx.amount0.toString())
+                                    .div(10 ** (vault?.token0?.decimals ?? 18))
+                                    .toString(),
+                                  decimals: 3,
+                                  endWith: vault?.token0?.symbol,
+                                })}
+                              </div>
+                              <div className="text-sm font-medium text-[#202020]">
+                                {DynamicFormatAmount({
+                                  amount: BigNumber(tx.amount1.toString())
+                                    .div(10 ** (vault?.token1?.decimals ?? 18))
+                                    .toString(),
+                                  decimals: 3,
+                                  endWith: vault?.token1?.symbol,
+                                })}
+                              </div>
+                            </div>
+                          )}
+                          {tx.__typename === 'VaultWithdraw' && (
+                            <div>
+                              <div className="text-sm font-medium text-[#202020]">
+                                {DynamicFormatAmount({
+                                  amount: BigNumber(tx.amount0.toString())
+                                    .div(10 ** (vault?.token0?.decimals ?? 18))
+                                    .toString(),
+                                  decimals: 3,
+                                  endWith: vault?.token0?.symbol,
+                                })}
+                              </div>
+                              <div className="text-sm font-medium text-[#202020]">
+                                {DynamicFormatAmount({
+                                  amount: BigNumber(tx.amount1.toString())
+                                    .div(10 ** (vault?.token1?.decimals ?? 18))
+                                    .toString(),
+                                  decimals: 3,
+                                  endWith: vault?.token1?.symbol,
+                                })}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        <div>
+                          <Link
+                            target="_blank"
+                            href={`https://berascan.com/tx/${tx.id.split('-')[0]}`}
+                            className="text-gray-500 text-sm underline hover:text-gray-500/80"
+                          >
+                            View Transaction
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop View - Table Format */}
+              <div className="hidden md:block">
+                <div className="grid grid-cols-4 gap-4 font-medium text-[#202020] mb-2 px-3">
+                  <div>Type</div>
+                  <div>Amount</div>
+                  <div>Transaction</div>
+                  <div>Time</div>
+                </div>
+
+                {vault.recentTransactions.slice(0, 10).map((tx) => (
+                  <div
+                    key={tx.id}
+                    className="grid grid-cols-4 gap-4 py-3 border-b border-gray-200 last:border-b-0 px-3 items-center"
+                  >
+                    {/* Type */}
+                    <div>
                       {tx.__typename === 'VaultDeposit' && (
-                        <span className="text-[#202020] font-medium">
+                        <span className="text-[#4CAF50] font-medium">
                           Deposit
                         </span>
                       )}
                       {tx.__typename === 'VaultWithdraw' && (
-                        <span className="text-[#202020] font-medium">
+                        <span className="text-[#FF9800] font-medium">
                           Withdraw
                         </span>
                       )}
                     </div>
 
-                    <div className="text-[#202020] min-w-[200px]">
-                      <div className=" text-sm text-[#202020]">
-                        {tx.__typename === 'VaultDeposit' && (
-                          <div className="flex flex-col  gap-2">
-                            <div>
-                              <span className="text-sm text-[#202020]">
-                                {DynamicFormatAmount({
-                                  amount: BigNumber(tx.amount0.toString())
-                                    .div(10 ** (vault?.token0?.decimals ?? 18))
-                                    .toString(),
-                                  decimals: 3,
-                                  endWith: vault?.token0?.symbol,
-                                })}
-                              </span>
-                            </div>
-                            <div>
-                              <span className="text-sm text-[#202020]">
-                                {DynamicFormatAmount({
-                                  amount: BigNumber(tx.amount1.toString())
-                                    .div(10 ** (vault?.token1?.decimals ?? 18))
-                                    .toString(),
-                                  decimals: 3,
-                                  endWith: vault?.token1?.symbol,
-                                })}
-                              </span>
-                            </div>
+                    {/* Amount */}
+                    <div>
+                      {tx.__typename === 'VaultDeposit' && (
+                        <div>
+                          <div className="text-sm font-medium text-[#202020]">
+                            {DynamicFormatAmount({
+                              amount: BigNumber(tx.amount0.toString())
+                                .div(10 ** (vault?.token0?.decimals ?? 18))
+                                .toString(),
+                              decimals: 3,
+                              endWith: vault?.token0?.symbol,
+                            })}
                           </div>
-                        )}
-                        {tx.__typename === 'VaultWithdraw' && (
-                          <div className="flex flex-col gap-2">
-                            <div>
-                              <span className="text-sm text-[#202020]">
-                                {DynamicFormatAmount({
-                                  amount: BigNumber(tx.amount0.toString())
-                                    .div(10 ** (vault?.token0?.decimals ?? 18))
-                                    .toString(),
-                                  decimals: 3,
-                                  endWith: vault?.token0?.symbol,
-                                })}
-                              </span>
-                            </div>
-                            <div>
-                              <span className="text-sm text-[#202020]">
-                                {DynamicFormatAmount({
-                                  amount: BigNumber(tx.amount1.toString())
-                                    .div(10 ** (vault?.token1?.decimals ?? 18))
-                                    .toString(),
-                                  decimals: 3,
-                                  endWith: vault?.token1?.symbol,
-                                })}
-                              </span>
-                            </div>
+                          <div className="text-sm font-medium text-[#202020]">
+                            {DynamicFormatAmount({
+                              amount: BigNumber(tx.amount1.toString())
+                                .div(10 ** (vault?.token1?.decimals ?? 18))
+                                .toString(),
+                              decimals: 3,
+                              endWith: vault?.token1?.symbol,
+                            })}
                           </div>
-                        )}
-                      </div>
+                        </div>
+                      )}
+                      {tx.__typename === 'VaultWithdraw' && (
+                        <div>
+                          <div className="text-sm font-medium text-[#202020]">
+                            {DynamicFormatAmount({
+                              amount: BigNumber(tx.amount0.toString())
+                                .div(10 ** (vault?.token0?.decimals ?? 18))
+                                .toString(),
+                              decimals: 3,
+                              endWith: vault?.token0?.symbol,
+                            })}
+                          </div>
+                          <div className="text-sm font-medium text-[#202020]">
+                            {DynamicFormatAmount({
+                              amount: BigNumber(tx.amount1.toString())
+                                .div(10 ** (vault?.token1?.decimals ?? 18))
+                                .toString(),
+                              decimals: 3,
+                              endWith: vault?.token1?.symbol,
+                            })}
+                          </div>
+                        </div>
+                      )}
                     </div>
 
-                    <div className="text-[#202020] flex-grow">
+                    {/* Transaction */}
+                    <div>
                       <Link
                         target="_blank"
                         href={`https://berascan.com/tx/${tx.id.split('-')[0]}`}
-                        className="text-[#202020] underline hover:text-[#202020]/80"
+                        className="text-gray-500 text-sm underline hover:text-gray-500/80"
                       >
-                        {tx.id.split('-')[0]}
+                        {tx.id.split('-')[0].substring(0, 6)}...
+                        {tx.id
+                          .split('-')[0]
+                          .substring(tx.id.split('-')[0].length - 4)}
                       </Link>
                     </div>
+
+                    {/* Date */}
                     <div className="text-sm text-[#202020]">
                       {new Date(
                         Number(tx.createdAtTimestamp) * 1000

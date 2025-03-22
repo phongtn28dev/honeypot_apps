@@ -22,11 +22,13 @@ type SortDirection = 'asc' | 'desc';
 interface AllAquaberaVaultsProps {
   searchString?: string;
   sortBy?: string;
+  onDataLoaded?: () => void;
 }
 
 export function AllAquaberaVaults({
   searchString = '',
   sortBy = 'apr',
+  onDataLoaded,
 }: AllAquaberaVaultsProps) {
   const [vaultsContracts, setVaultsContracts] = useState<ICHIVaultContract[]>(
     []
@@ -38,10 +40,48 @@ export function AllAquaberaVaults({
   const rowsPerPage = 10;
 
   useEffect(() => {
-    if (!wallet.isInit || !vaults) {
+    const initVaults = async () => {
+      if (!wallet.isInit) return;
+      
+      try {
+        // 直接加载数据，不依赖于 searchString
+        const res = await getVaultPageData('');
+        setVaults(res);
+      } catch (error) {
+        console.error("Error loading initial vaults:", error);
+      }
+    };
+    
+    initVaults();
+  }, [wallet.isInit]);
+
+  useEffect(() => {
+    if (!wallet.isInit) return;
+    
+    // 如果是初始加载，不需要重新请求
+    if (searchString === '' && vaults) return;
+    
+    loadMyVaults(searchString);
+  }, [wallet.isInit, searchString, vaults]);
+
+  const loadMyVaults = async (search?: string) => {
+    try {
+      const res = await getVaultPageData(search);
+      setVaults(res);
+      setVaultsContracts([]);
+    } catch (error) {
+      console.error("Error loading vaults:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (!wallet.isInit || !vaults?.ichiVaults?.length) {
       return;
     }
 
+    // 清空现有合约列表
+    const newVaultsContracts: ICHIVaultContract[] = [];
+    
     vaults.ichiVaults.forEach((vault) => {
       const vaultContract = ICHIVaultContract.getVault({
         token0: vault.tokenA,
@@ -55,24 +95,17 @@ export function AllAquaberaVaults({
           feeApr_30d: Number(vault.feeApr_30d),
         },
       });
+      
       if (vaultContract) {
-        setVaultsContracts((prev) => [...prev, vaultContract]);
+        newVaultsContracts.push(vaultContract);
       }
     });
-  }, [wallet.isInit, vaults]);
-
-  useEffect(() => {
-    if (!wallet.isInit) {
-      return;
+    
+    // 只有当有新合约时才更新状态
+    if (newVaultsContracts.length > 0) {
+      setVaultsContracts(newVaultsContracts);
     }
-    loadMyVaults(searchString);
-  }, [searchString]);
-
-  const loadMyVaults = async (search?: string) => {
-    getVaultPageData(search).then((res) => {
-      setVaults(res);
-    });
-  };
+  }, [wallet.isInit, vaults]);
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -91,75 +124,82 @@ export function AllAquaberaVaults({
   const [sortedVaults, setSortedVaults] = useState<ICHIVaultContract[]>([]);
 
   useEffect(() => {
-    const getSortedVaults = () => {
-      if (!vaultsContracts.length) return [];
+    if (!vaultsContracts.length) return;
+    
+    const sortedVaults = [...vaultsContracts].sort((a, b) => {
+      const multiplier = sortDirection === 'asc' ? 1 : -1;
 
-      const sortedVaults = [...vaultsContracts].sort((a, b) => {
-        const multiplier = sortDirection === 'asc' ? 1 : -1;
-
-        switch (sortField) {
-          case 'pair': {
-            const aSymbol = Token.getToken({
-              address: a.token0?.address ?? '',
-            }).symbol;
-            const bSymbol = Token.getToken({
-              address: b.token0?.address ?? '',
-            }).symbol;
-            return multiplier * aSymbol.localeCompare(bSymbol);
-          }
-          case 'allow_token': {
-            const aSymbol = Token.getToken({
-              address: a.token0?.address ?? '',
-            }).symbol;
-            const bSymbol = Token.getToken({
-              address: b.token0?.address ?? '',
-            }).symbol;
-            return multiplier * aSymbol.localeCompare(bSymbol);
-          }
-          case 'address':
-            return multiplier * a.address.localeCompare(b.address);
-          case 'tvl':
-            return multiplier * (Number(a.tvlUSD || 0) - Number(b.tvlUSD || 0));
-          case 'volume':
-            return (
-              multiplier *
-              (Number(a.pool?.volume_24h_USD || 0) -
-                Number(b.pool?.volume_24h_USD || 0))
-            );
-          case 'fees':
-            return (
-              multiplier *
-              (Number(a.pool?.fees_24h_USD || 0) -
-                Number(b.pool?.fees_24h_USD || 0))
-            );
-          case 'apr':
-            return multiplier * (Number(a.apr || 0) - Number(b.apr || 0));
-          default:
-            return 0;
+      switch (sortField) {
+        case 'pair': {
+          const aSymbol = Token.getToken({
+            address: a.token0?.address ?? '',
+          }).symbol;
+          const bSymbol = Token.getToken({
+            address: b.token0?.address ?? '',
+          }).symbol;
+          return multiplier * aSymbol.localeCompare(bSymbol);
         }
-      });
+        case 'allow_token': {
+          const aSymbol = Token.getToken({
+            address: a.token0?.address ?? '',
+          }).symbol;
+          const bSymbol = Token.getToken({
+            address: b.token0?.address ?? '',
+          }).symbol;
+          return multiplier * aSymbol.localeCompare(bSymbol);
+        }
+        case 'address':
+          return multiplier * a.address.localeCompare(b.address);
+        case 'tvl':
+          return multiplier * (Number(a.tvlUSD || 0) - Number(b.tvlUSD || 0));
+        case 'volume':
+          return (
+            multiplier *
+            (Number(a.pool?.volume_24h_USD || 0) -
+              Number(b.pool?.volume_24h_USD || 0))
+          );
+        case 'fees':
+          return (
+            multiplier *
+            (Number(a.pool?.fees_24h_USD || 0) -
+              Number(b.pool?.fees_24h_USD || 0))
+          );
+        case 'apr':
+          return multiplier * (Number(a.apr || 0) - Number(b.apr || 0));
+        default:
+          return 0;
+      }
+    });
 
-      const start = (page - 1) * rowsPerPage;
-      const end = start + rowsPerPage;
-      const list = sortedVaults.slice(start, end);
-
-      return list;
-    };
-
-    const sortedVaults = getSortedVaults();
-    setSortedVaults(sortedVaults);
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const paginatedVaults = sortedVaults.slice(start, end);
+    
+    // 无论是否有数据，都更新排序后的列表
+    setSortedVaults(paginatedVaults);
   }, [vaultsContracts, sortField, sortDirection, page]);
 
   useEffect(() => {
     setSortField(sortBy as SortField);
   }, [sortBy]);
 
+  // 在合约数据加载完成后调用回调
+  useEffect(() => {
+    if (vaultsContracts.length > 0 && onDataLoaded) {
+      onDataLoaded();
+    }
+  }, [vaultsContracts, onDataLoaded]);
+
   return (
     <div className="w-full">
       {/* Mobile view - card layout for small screens */}
-      <div className="sm:hidden ">
-        {!sortedVaults.length ? (
-          <div className="text-center py-8 text-black">No results.</div>
+      <div className="sm:hidden">
+        {!vaults ? (
+          <div className="text-center py-8 text-black">Loading...</div>
+        ) : vaultsContracts.length === 0 ? (
+          <div className="text-center py-8 text-black">No vaults available.</div>
+        ) : !sortedVaults.length ? (
+          <div className="text-center py-8 text-black">No results match your criteria.</div>
         ) : (
           sortedVaults.map((vault) => (
             <div
