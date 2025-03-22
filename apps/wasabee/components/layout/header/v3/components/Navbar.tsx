@@ -1,18 +1,18 @@
-import React from "react";
-import { useRouter } from "next/router";
-import { cn } from "@/lib/tailwindcss";
+import React from 'react';
+import { useRouter } from 'next/router';
+import { cn } from '@/lib/tailwindcss';
 import {
   Button,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-} from "@nextui-org/react";
-import { DOMAIN_MAP, Menu } from "@/config/allAppPath";
-import Image from "next/image";
-import { Key } from "react";
-import { FaPlusCircle } from "react-icons/fa";
-import Link from "next/link";
+} from '@nextui-org/react';
+import { DOMAIN_MAP, Menu } from '@/config/allAppPath';
+import Image from 'next/image';
+import { Key } from 'react';
+import { FaPlusCircle } from 'react-icons/fa';
+import Link from 'next/link';
 interface NavbarProps {
   menuList: Menu[];
 }
@@ -46,18 +46,18 @@ export const CustomNavbar: React.FC<NavbarProps> = ({ menuList }) => {
                 key={menu.title}
                 placement="bottom-start"
                 classNames={{
-                  content: "bg-transparent p-0",
+                  content: 'bg-transparent p-0',
                 }}
               >
                 <DropdownTrigger>
                   <Button
                     className={cn(
-                      "min-h-[32px] h-8 py-0 font-bold bg-transparent text-black hover:bg-[#202020] hover:text-white",
+                      'min-h-[32px] h-8 py-0 font-bold bg-transparent text-black hover:bg-[#202020] hover:text-white',
                       (menu.path as SubMenu[]).some(
                         (item) => item.routePath === router.pathname
                       )
-                        ? "bg-[#202020] text-white"
-                        : ""
+                        ? 'bg-[#202020] text-white'
+                        : ''
                     )}
                   >
                     {menu.title}
@@ -72,10 +72,10 @@ export const CustomNavbar: React.FC<NavbarProps> = ({ menuList }) => {
                       href={subMenu.path}
                       key={subMenu.routePath}
                       className={cn(
-                        "font-bold data-[hover=true]:bg-[#202020] data-[hover=true]:text-white p-2",
+                        'font-bold data-[hover=true]:bg-[#202020] data-[hover=true]:text-white p-2',
                         router.pathname === subMenu.routePath
-                          ? "bg-[#202020] text-white"
-                          : "text-[#202020]"
+                          ? 'bg-[#202020] text-white'
+                          : 'text-[#202020]'
                       )}
                       startContent={
                         subMenu.icon && (
@@ -98,7 +98,7 @@ export const CustomNavbar: React.FC<NavbarProps> = ({ menuList }) => {
               <Link key={menu.title} href={menu.path}>
                 <Button
                   className={cn(
-                    "min-h-[32px] h-8 py-0 font-bold bg-transparent text-black hover:bg-[#202020]/70 hover:text-white"
+                    'min-h-[32px] h-8 py-0 font-bold bg-transparent text-black hover:bg-[#202020]/70 hover:text-white'
                   )}
                 >
                   {menu.title}
@@ -110,7 +110,7 @@ export const CustomNavbar: React.FC<NavbarProps> = ({ menuList }) => {
           <Dropdown>
             <DropdownTrigger
               className={cn(
-                "min-h-[32px] h-8 py-0 font-bold bg-transparent text-black hover:bg-[#202020]/70 hover:text-white rounded-full"
+                'min-h-[32px] h-8 py-0 font-bold bg-transparent text-black hover:bg-[#202020]/70 hover:text-white rounded-full'
               )}
             >
               <Button isIconOnly variant="light" className="p-0 w-8 h-8">
@@ -120,7 +120,7 @@ export const CustomNavbar: React.FC<NavbarProps> = ({ menuList }) => {
             <DropdownMenu>
               <DropdownItem
                 href={DOMAIN_MAP.POT2PUMP}
-                onPress={() => window.open(DOMAIN_MAP.POT2PUMP, "_self")}
+                onPress={() => window.open(DOMAIN_MAP.POT2PUMP, '_self')}
                 className="font-bold data-[hover=true]:bg-[#202020] data-[hover=true]:text-white p-2"
                 startContent={
                   <Image
@@ -134,6 +134,23 @@ export const CustomNavbar: React.FC<NavbarProps> = ({ menuList }) => {
                 key="pot2pump"
               >
                 Pot2Pump
+              </DropdownItem>
+              <DropdownItem
+                href={'/bitget-campaign'}
+                onPress={() => window.open('/bitget-campaign', '_self')}
+                className="font-bold data-[hover=true]:bg-[#202020] data-[hover=true]:text-white p-2"
+                startContent={
+                  <Image
+                    src="/images/bera/smoking_bera.png"
+                    alt="bitget"
+                    width={16}
+                    height={16}
+                    className="w-4 h-4 bg-white rounded-full"
+                  />
+                }
+                key="bitget-campaign"
+              >
+                Bitget Campaign
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>

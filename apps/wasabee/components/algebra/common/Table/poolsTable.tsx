@@ -2,7 +2,7 @@ import { Pool } from './poolsColumns';
 import { cn } from '@/lib/tailwindcss';
 import { Search, Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Tab, Tabs } from '@nextui-org/react';
+import { Tab, Tabs, Tooltip } from '@nextui-org/react';
 import { popmodal } from '@/services/popmodal';
 import { Token } from '@/services/contract/token';
 import { ColumnDef } from '@tanstack/react-table';
@@ -26,6 +26,9 @@ import {
 } from '@nextui-org/react';
 import { ChevronDown } from 'lucide-react';
 import { Button as NextUIButton } from '@nextui-org/react';
+import { useBitgetEvents } from '@/lib/algebra/graphql/clients/bitget_event';
+import Image from 'next/image';
+import Link from 'next/link';
 
 interface PoolsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -77,6 +80,7 @@ const PoolsTable = observer(
     const [sortField, setSortField] = useState<SortField>('tvl');
     const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
     const [page, setPage] = useState(1);
+    const bitgetEventsData = useBitgetEvents(wallet.account.toLowerCase());
 
     const [tableData, setTableData] = useState<
       (Pool & { userTVLUSD: number })[]
@@ -243,11 +247,16 @@ const PoolsTable = observer(
                   <div className="sm:hidden">
                     <Dropdown>
                       <DropdownTrigger>
-                        <NextUIButton 
+                        <NextUIButton
                           className="bg-white border border-[#2D2D2D] rounded-xl shadow-[2px_2px_0px_0px_#000] px-3 py-1.5 text-xs text-black"
-                          endContent={<ChevronDown className="h-4 w-4 text-black" />}
+                          endContent={
+                            <ChevronDown className="h-4 w-4 text-black" />
+                          }
                         >
-                          Sort by: {sortOptions.find(option => option.key === sortField)?.label || 'TVL'}
+                          Sort by:{' '}
+                          {sortOptions.find(
+                            (option) => option.key === sortField
+                          )?.label || 'TVL'}
                         </NextUIButton>
                       </DropdownTrigger>
                       <DropdownMenu
@@ -517,6 +526,29 @@ const PoolsTable = observer(
                               <p className="text-black/60 text-sm">
                                 base fee {pool.fee}%
                               </p>
+                            </div>
+                            <div>
+                              {bitgetEventsData?.eventPools.find(
+                                (eventPool) => eventPool.pool.id === pool.id
+                              ) ? (
+                                <Tooltip content="Bitget Campaign">
+                                  <Link
+                                    href={`/bitget-campaign`}
+                                    className="rounded-full p-1 z-10"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      // window.location.href = `/bitget-campaign`;
+                                    }}
+                                  >
+                                    <Image
+                                      src="/images/bera/smoking_bera.png"
+                                      alt="Bitget"
+                                      width={20}
+                                      height={20}
+                                    />
+                                  </Link>
+                                </Tooltip>
+                              ) : null}
                             </div>
                           </div>
                         </td>
