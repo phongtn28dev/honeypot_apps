@@ -715,6 +715,7 @@ export const berachainNetwork = new Network({
       decimals: 18,
       logoURI: '/images/icons/tokens/henlo.png',
       isPopular: true,
+      isBitgetCampaignToken: true,
     },
     '0xbaadcc2962417c01af99fb2b7c75706b9bd6babe': {
       name: 'Liquid BGT',
