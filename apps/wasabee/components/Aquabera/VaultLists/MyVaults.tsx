@@ -219,7 +219,7 @@ export const MyAquaberaVaults = observer(
                         size={20}
                       />
                     </div>
-                    <span className="font-bold">
+                    <span className="font-bold ml-2">
                       {Token.getToken({ address: vault.token0?.address ?? '' }).symbol}/
                       {Token.getToken({ address: vault.token1?.address ?? '' }).symbol}
                     </span>
@@ -241,9 +241,8 @@ export const MyAquaberaVaults = observer(
 
                 <div className="flex justify-between items-center mb-3">
                   <div className="font-medium">Your TVL</div>
-                  <div>
-                    $
-                    {Number(vault.userTVLUSD || 0).toLocaleString('en-US', {
+                  <div className="font-medium">
+                    ${Number(vault.userTVLUSD || 0).toLocaleString('en-US', {
                       maximumFractionDigits: 2,
                     })}
                   </div>
@@ -254,8 +253,7 @@ export const MyAquaberaVaults = observer(
                   <div className="font-bold text-green-600">
                     {Number(vault.apr || 0).toLocaleString('en-US', {
                       maximumFractionDigits: 2,
-                    })}
-                    %
+                    })}%
                   </div>
                 </div>
 
@@ -271,13 +269,10 @@ export const MyAquaberaVaults = observer(
                   <Button
                     className="w-1/2 border border-[#2D2D2D] bg-white hover:bg-gray-50 text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-2 py-2 text-xs"
                     onClick={() => {
-                      window.open(
-                        `/vault/${vault.address}?tab=withdraw`,
-                        '_blank'
-                      );
+                      window.open(`/swap?inputCurrency=${vault.token0?.address}&outputCurrency=${vault.token1?.address}`, '_blank');
                     }}
                   >
-                    Withdraw
+                    Swap
                   </Button>
                 </div>
               </div>
