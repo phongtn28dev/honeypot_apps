@@ -86,6 +86,8 @@ const PoolsTable = observer(
       (Pool & { userTVLUSD: number })[]
     >([]);
 
+    const [showSortDropdown, setShowSortDropdown] = useState(false);
+
     useEffect(() => {
       if (!wallet.isInit) return;
       if (selectedFilter === 'myPools') {
@@ -243,43 +245,45 @@ const PoolsTable = observer(
                   >
                     Create Pool
                   </Button>
+                </div>
+              </div>
 
-                  <div className="sm:hidden">
-                    <Dropdown>
-                      <DropdownTrigger>
-                        <NextUIButton
-                          className="bg-white border border-[#2D2D2D] rounded-xl shadow-[2px_2px_0px_0px_#000] px-3 py-1.5 text-xs text-black"
-                          endContent={
-                            <ChevronDown className="h-4 w-4 text-black" />
-                          }
+              <div className="sm:hidden w-full">
+                <div className="w-full relative">
+                  <button
+                    onClick={() => {
+                      const dropdownState = !showSortDropdown;
+                      setShowSortDropdown(dropdownState);
+                    }}
+                    className="bg-white border border-[#2D2D2D] rounded-xl shadow-[2px_2px_0px_0px_#000] px-3 py-1.5 text-xs text-black w-full flex justify-between items-center"
+                  >
+                    <span>
+                      Sort by:{' '}
+                      {sortOptions.find((option) => option.key === sortField)
+                        ?.label || 'TVL'}
+                    </span>
+                    <ChevronDown className="h-4 w-4 text-black" />
+                  </button>
+                  
+                  {showSortDropdown && (
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#2D2D2D] rounded-xl shadow-[2px_2px_0px_0px_#000] p-1 w-full z-50">
+                      {sortOptions.map((option) => (
+                        <div
+                          key={option.key}
+                          className={`text-black text-sm p-2 cursor-pointer w-full ${
+                            sortField === option.key ? 'bg-[#FFCD4D] rounded-lg' : ''
+                          }`}
+                          onClick={() => {
+                            setSortField(option.key as SortField);
+                            setSortDirection('desc');
+                            setShowSortDropdown(false);
+                          }}
                         >
-                          Sort by:{' '}
-                          {sortOptions.find(
-                            (option) => option.key === sortField
-                          )?.label || 'TVL'}
-                        </NextUIButton>
-                      </DropdownTrigger>
-                      <DropdownMenu
-                        aria-label="Sort options"
-                        className="bg-white border border-[#2D2D2D] rounded-xl shadow-[2px_2px_0px_0px_#000] p-1"
-                        onAction={(key) => {
-                          setSortField(key.toString() as SortField);
-                          setSortDirection('desc');
-                        }}
-                      >
-                        {sortOptions.map((option) => (
-                          <DropdownItem
-                            key={option.key}
-                            className={`text-black text-sm p-2 ${
-                              sortField === option.key ? 'bg-[#FFCD4D]' : ''
-                            }`}
-                          >
-                            {option.label}
-                          </DropdownItem>
-                        ))}
-                      </DropdownMenu>
-                    </Dropdown>
-                  </div>
+                          {option.label}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 
