@@ -8,6 +8,7 @@ import { VaultsSortedByHoldersQuery } from '@/lib/algebra/graphql/generated/grap
 import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
 import VaultRow from './VaulltRow';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import VaultCard from './VaultCard';
 
 type SortField =
   | 'pair'
@@ -42,37 +43,22 @@ export function AllAquaberaVaults({
   useEffect(() => {
     const initVaults = async () => {
       if (!wallet.isInit) return;
-      
+
       try {
-        // 直接加载数据，不依赖于 searchString
-        const res = await getVaultPageData('');
+        // Load data regardless of searchString
+        const res = await getVaultPageData(searchString);
         setVaults(res);
+
+        if (onDataLoaded) {
+          onDataLoaded();
+        }
       } catch (error) {
-        console.error("Error loading initial vaults:", error);
+        console.error('Error loading vaults:', error);
       }
     };
-    
+
     initVaults();
-  }, [wallet.isInit]);
-
-  useEffect(() => {
-    if (!wallet.isInit) return;
-    
-    // 如果是初始加载，不需要重新请求
-    if (searchString === '' && vaults) return;
-    
-    loadMyVaults(searchString);
-  }, [wallet.isInit, searchString, vaults]);
-
-  const loadMyVaults = async (search?: string) => {
-    try {
-      const res = await getVaultPageData(search);
-      setVaults(res);
-      setVaultsContracts([]);
-    } catch (error) {
-      console.error("Error loading vaults:", error);
-    }
-  };
+  }, [wallet.isInit, searchString, onDataLoaded]);
 
   useEffect(() => {
     if (!wallet.isInit || !vaults?.ichiVaults?.length) {
@@ -81,7 +67,7 @@ export function AllAquaberaVaults({
 
     // 清空现有合约列表
     const newVaultsContracts: ICHIVaultContract[] = [];
-    
+
     vaults.ichiVaults.forEach((vault) => {
       const vaultContract = ICHIVaultContract.getVault({
         token0: vault.tokenA,
@@ -95,12 +81,12 @@ export function AllAquaberaVaults({
           feeApr_30d: Number(vault.feeApr_30d),
         },
       });
-      
+
       if (vaultContract) {
         newVaultsContracts.push(vaultContract);
       }
     });
-    
+
     // 只有当有新合约时才更新状态
     if (newVaultsContracts.length > 0) {
       setVaultsContracts(newVaultsContracts);
@@ -125,7 +111,7 @@ export function AllAquaberaVaults({
 
   useEffect(() => {
     if (!vaultsContracts.length) return;
-    
+
     const sortedVaults = [...vaultsContracts].sort((a, b) => {
       const multiplier = sortDirection === 'asc' ? 1 : -1;
 
@@ -174,21 +160,10 @@ export function AllAquaberaVaults({
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const paginatedVaults = sortedVaults.slice(start, end);
-    
+
     // 无论是否有数据，都更新排序后的列表
     setSortedVaults(paginatedVaults);
   }, [vaultsContracts, sortField, sortDirection, page]);
-
-  useEffect(() => {
-    setSortField(sortBy as SortField);
-  }, [sortBy]);
-
-  // 在合约数据加载完成后调用回调
-  useEffect(() => {
-    if (vaultsContracts.length > 0 && onDataLoaded) {
-      onDataLoaded();
-    }
-  }, [vaultsContracts, onDataLoaded]);
 
   return (
     <div className="w-full">
@@ -197,120 +172,16 @@ export function AllAquaberaVaults({
         {!vaults ? (
           <div className="text-center py-8 text-black">Loading...</div>
         ) : vaultsContracts.length === 0 ? (
-          <div className="text-center py-8 text-black">No vaults available.</div>
+          <div className="text-center py-8 text-black">
+            No vaults available.
+          </div>
         ) : !sortedVaults.length ? (
-          <div className="text-center py-8 text-black">No results match your criteria.</div>
+          <div className="text-center py-8 text-black">
+            No results match your criteria.
+          </div>
         ) : (
           sortedVaults.map((vault) => (
-            <div
-              key={vault.address}
-              className="mb-4 p-4 bg-white custom-dashed-3xl"
-            >
-              <div className="flex justify-between items-center mb-3">
-                <div className="font-medium">Token Pair</div>
-                <div className="flex items-center">
-                  <div className="flex items-center">
-                    <TokenLogo
-                      token={Token.getToken({
-                        address: vault.token0?.address ?? '',
-                      })}
-                      addtionalClasses="translate-x-[25%]"
-                      size={20}
-                    />
-                    <TokenLogo
-                      token={Token.getToken({
-                        address: vault.token1?.address ?? '',
-                      })}
-                      addtionalClasses="translate-x-[-25%]"
-                      size={20}
-                    />
-                  </div>
-                  <span className="font-bold">
-                    {
-                      Token.getToken({ address: vault.token0?.address ?? '' })
-                        .symbol
-                    }
-                    /
-                    {
-                      Token.getToken({ address: vault.token1?.address ?? '' })
-                        .symbol
-                    }
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center mb-3">
-                <div className="font-medium">Allow Token</div>
-                <div className="flex items-center gap-1">
-                  <TokenLogo
-                    token={Token.getToken({
-                      address: vault.token0?.address ?? '',
-                    })}
-                    size={20}
-                  />
-                  <span>
-                    {
-                      Token.getToken({ address: vault.token0?.address ?? '' })
-                        .symbol
-                    }
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center mb-3">
-                <div className="font-medium">Vault TVL</div>
-                <div>
-                  $
-                  {Number(vault.tvlUSD || 0).toLocaleString('en-US', {
-                    maximumFractionDigits: 2,
-                  })}
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center mb-3">
-                <div className="font-medium">24h Volume</div>
-                <div>
-                  $
-                  {Number(vault.pool?.volume_24h_USD || 0).toLocaleString(
-                    'en-US',
-                    { maximumFractionDigits: 2 }
-                  )}
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center mb-3">
-                <div className="font-medium">24h Fees</div>
-                <div>
-                  $
-                  {Number(vault.pool?.fees_24h_USD || 0).toLocaleString(
-                    'en-US',
-                    { maximumFractionDigits: 2 }
-                  )}
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center mb-3">
-                <div className="font-medium">APR</div>
-                <div className="font-bold text-green-600">
-                  {Number(vault.apr || 0).toLocaleString('en-US', {
-                    maximumFractionDigits: 2,
-                  })}
-                  %
-                </div>
-              </div>
-
-              <div className="mt-4 flex justify-center">
-                <Button
-                  className="w-full border border-[#2D2D2D] bg-[#FFCD4D] hover:bg-[#FFD56A] text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-4 py-2"
-                  onClick={() => {
-                    // Use the same action as in VaultRow component
-                    window.open(`/vault/${vault.address}`, '_blank');
-                  }}
-                >
-                  View Vault
-                </Button>
-              </div>
-            </div>
+            <VaultCard key={vault.address} vault={vault} />
           ))
         )}
       </div>

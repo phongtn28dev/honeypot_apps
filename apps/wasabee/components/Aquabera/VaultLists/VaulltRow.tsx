@@ -144,7 +144,7 @@ export const VaultRow = observer(({ vault }: { vault: ICHIVaultContract }) => {
         {DynamicFormatAmount({
           amount: vaultContract?.tvlUSD ?? 0,
           decimals: 3,
-          endWith: ' $',
+          beginWith: ' $',
         })}
       </td>
       {/* volume */}
@@ -152,7 +152,7 @@ export const VaultRow = observer(({ vault }: { vault: ICHIVaultContract }) => {
         {DynamicFormatAmount({
           amount: volume ?? 0,
           decimals: 3,
-          endWith: ' $',
+          beginWith: ' $',
         })}
       </td>
       {/* fees */}
@@ -160,7 +160,7 @@ export const VaultRow = observer(({ vault }: { vault: ICHIVaultContract }) => {
         {DynamicFormatAmount({
           amount: fees ?? 0,
           decimals: 3,
-          endWith: ' $',
+          beginWith: ' $',
         })}
       </td>
       <td className="py-4 px-6 text-right text-black flex justify-end items-center gap-2">

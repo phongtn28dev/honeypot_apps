@@ -6,7 +6,7 @@ export function formatAmountWithAlphabetSymbol(
 ): string {
   if (Number(amount) === 0) return '0';
 
-  let USformatter = new Intl.NumberFormat('en-US', {
+  const USformatter = new Intl.NumberFormat('en-US', {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
     minimumSignificantDigits: decimals,
@@ -18,7 +18,7 @@ export function formatAmountWithAlphabetSymbol(
     return USformatter.format(Number(amount));
   }
 
-  let USformattedNumber = USformatter.format(Number(amount));
+  const USformattedNumber = USformatter.format(Number(amount));
   return USformattedNumber;
 }
 

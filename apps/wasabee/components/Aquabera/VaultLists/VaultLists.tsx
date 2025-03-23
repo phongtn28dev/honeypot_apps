@@ -37,15 +37,6 @@ export function AquaberaList() {
     setDataLoaded(true);
   };
 
-  useEffect(() => {
-    if (dataLoaded && sortField === 'apr') {
-      const timer = setTimeout(() => {
-        setSortField('pair');
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [dataLoaded, sortField]);
-
   return (
     <div className="flex flex-col gap-4 w-full">
       {/* 移动端布局 */}
