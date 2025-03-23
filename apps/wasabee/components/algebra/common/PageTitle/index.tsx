@@ -1,4 +1,4 @@
-import Settings from "../Settings";
+import Settings from '../Settings';
 
 interface PageTitleProps {
   title: string;
@@ -13,7 +13,7 @@ const PageTitle = ({
 }: PageTitleProps) => {
   return (
     <div className="flex w-full items-center justify-between">
-      <div className="flex items-center gap-3.5">
+      <div className="flex flex-col lg:flex-row lg:items-center gap-3.5">
         <h1 className="scroll-m-20 text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">
           {title}
         </h1>

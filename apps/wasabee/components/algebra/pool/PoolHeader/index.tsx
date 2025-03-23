@@ -54,10 +54,14 @@ const PoolHeader = observer(
             <Link
               href={`/swap?inputCurrency=${token0.address}&outputCurrency=${token1.address}`}
             >
-              <Button color="primary">Swap</Button>
+              <Button color="primary" className="w-full lg:w-auto">
+                Swap
+              </Button>
             </Link>
             <Link href={`/new-position/${poolId}`}>
-              <Button color="primary">Create Position</Button>
+              <Button color="primary" className="w-full lg:w-auto">
+                Create Position
+              </Button>
             </Link>
           </PageTitle>
         ) : (
