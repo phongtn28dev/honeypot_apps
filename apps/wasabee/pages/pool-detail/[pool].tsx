@@ -13,7 +13,7 @@ import { usePositions } from '@/lib/algebra/hooks/positions/usePositions';
 import { getPositionAPR } from '@/lib/algebra/utils/positions/getPositionAPR';
 import { getPositionFees } from '@/lib/algebra/utils/positions/getPositionFees';
 import { formatAmountWithAlphabetSymbol } from '@/lib/algebra/utils/common/formatAmount';
-import { ADDRESS_ZERO, Position, ZERO } from '@cryptoalgebra/sdk';
+import { Position, ZERO } from '@cryptoalgebra/sdk';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
@@ -235,17 +235,6 @@ const PoolPage = observer(() => {
     (!positionsLoading || !isFarmingLoading || !areDepositsLoading) &&
     positionsData.length === 0 &&
     poolEntity;
-
-  const chartData = useMemo(() => {
-    if (!poolInfo?.pool?.poolDayData) return [];
-
-    return poolInfo.pool.poolDayData
-      .map((day) => ({
-        date: new Date(day.date * 1000).toLocaleDateString(),
-        value: parseFloat(day.volumeUSD),
-      }))
-      .reverse();
-  }, [poolInfo?.pool?.poolDayData]);
 
   return (
     <PageContainer>
