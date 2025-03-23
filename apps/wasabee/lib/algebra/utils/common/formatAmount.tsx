@@ -46,9 +46,11 @@ export function DynamicFormatAmount({
   const absAmount = Math.abs(Number(amount));
   const amountStr = absAmount.toString();
   const output: ReactNode =
-    getFirstDecimalPlace(amountStr) < decimals
-      ? formatAmountWithAlphabetSymbol(amountStr, decimals)
-      : FormatSmallDecimal({ number: Number(amountStr) });
+    isNaN(Number(amountStr))
+      ? '0'
+      : getFirstDecimalPlace(amountStr) < decimals
+        ? formatAmountWithAlphabetSymbol(amountStr, decimals)
+        : FormatSmallDecimal({ number: Number(amountStr) });
 
   return (
     <span>
