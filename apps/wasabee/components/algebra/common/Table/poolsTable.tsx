@@ -427,7 +427,7 @@ const PoolsTable = observer(
                       className="w-1/2 border border-[#2D2D2D] bg-[#FFCD4D] hover:bg-[#FFD56A] text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-2 py-2 text-xs"
                       onClick={(e) => {
                         e.stopPropagation();
-                        window.location.href = `/pool/${pool.id}`;
+                        window.location.href = `/pool-detail/${pool.id}`;
                       }}
                     >
                       View Pool

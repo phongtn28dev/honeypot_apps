@@ -264,10 +264,14 @@ const PoolPage = observer(() => {
 
           <Tabs
             classNames={{
-              tabList: 'w-full',
-              tab: 'w-full',
-              tabContent: 'w-full',
+              tab: 'px-3 text-sm',
+              base: '',
+              tabList:
+                'flex rounded-2xl border border-[#202020] bg-white p-4 shadow-[2px_2px_0px_0px_#000] py-2 px-2 z-10',
+              cursor:
+                'bg-[#FFCD4D] border border-black shadow-[2px_2px_0px_0px_#000000] text-sm',
               panel: 'w-full',
+              tabContent: '!text-[#202020]',
             }}
           >
             <Tab key="top-positions" title="Top Positions">
@@ -275,7 +279,7 @@ const PoolPage = observer(() => {
             </Tab>
             <Tab key="my-positions" title="My Positions">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-0 gap-y-8 w-full lg:gap-8">
-                <div className="col-span-2">
+                <div className="col-span-3">
                   {!account ? (
                     <NoAccount />
                   ) : positionsLoading ||

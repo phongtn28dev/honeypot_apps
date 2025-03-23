@@ -116,16 +116,16 @@ const NewPositionPage = () => {
         {/* 顶部装饰边框 */}
         <div className="bg-[url('/images/pumping/outline-border.png')] bg-contain bg-repeat-x bg-left-top h-[60px] absolute -top-1 left-0 w-full"></div>
 
-        <div className="max-w-[1200px] w-full mx-auto px-6 pt-[60px] pb-[70px]">
+        <div className="max-w-[1200px] w-full mx-auto px-4 sm:px-6 pt-[40px] sm:pt-[60px] pb-[50px] sm:pb-[70px]">
           {/* <PageTitle title={"Create Position"} /> */}
-          <div className="font-gliker text-[rgba(32,32,32,1)] text-2xl">
+          <div className="font-gliker text-[rgba(32,32,32,1)] text-xl sm:text-2xl">
             Create Position
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-8 gap-x-0 gap-y-8 w-full lg:gap-8 text-left mt-6">
+          <div className="grid grid-cols-1 lg:grid-cols-8 gap-x-0 gap-y-6 sm:gap-y-8 w-full lg:gap-8 text-left mt-4 sm:mt-6">
             <div className="col-span-5">
-              <div className="flex max-md:flex-col md:items-center justify-between w-full mb-6 gap-4">
-                <h2 className="text-base text-[#202020] font-gliker">
+              <div className="flex max-md:flex-col md:items-center justify-between w-full mb-4 sm:mb-6 gap-3 sm:gap-4">
+                <h2 className="text-sm sm:text-base text-[#202020] font-gliker">
                   1. Select Range
                 </h2>
                 <PresetTabs
@@ -136,9 +136,9 @@ const NewPositionPage = () => {
               </div>
 
               <div className="flex flex-col w-full">
-                <div className="w-full rounded-[32px] bg-white space-y-4 px-6 py-8 border-[1px] border-[#000000] shadow-[4px_4px_0px_0px_rgba(210,154,13,1)]">
-                  <div className="flex w-full flex-col md:flex-row gap-4 flex-wrap">
-                    <div className="range-selector-container">
+                <div className="w-full rounded-[24px] sm:rounded-[32px] bg-white space-y-3 sm:space-y-4 px-4 sm:px-6 py-6 sm:py-8 border-[1px] border-[#000000] shadow-[4px_4px_0px_0px_rgba(210,154,13,1)]">
+                  <div className="flex w-full flex-col md:flex-row gap-3 sm:gap-4 flex-wrap">
+                    <div className="range-selector-container w-full md:w-auto">
                       <RangeSelector
                         priceLower={priceLower}
                         priceUpper={priceUpper}
@@ -155,17 +155,17 @@ const NewPositionPage = () => {
                       />
                     </div>
 
-                    <div className="md:ml-auto flex-1 flex flex-col gap-y-3 flex-shrink-0 min-w-[235px]">
-                      <div className="text-[rgba(32,32,32,1)] font-gliker text-base">
+                    <div className="md:ml-auto flex-1 flex flex-col gap-y-2 sm:gap-y-3 flex-shrink-0 min-w-[200px] sm:min-w-[235px]">
+                      <div className="text-[rgba(32,32,32,1)] font-gliker text-sm sm:text-base">
                         CURRENT PRICE
                       </div>
-                      <div className="font-bold text-xl text-black border-[1px] border-[#000000] shadow-[1px_2px_0px_0px_rgba(32,32,32,1),1px_1px_0px_0px_rgba(32,32,32,1)] rounded-[16px] px-4 h-[64px] line-[64px] leading-[64px]">
+                      <div className="font-bold text-lg sm:text-xl text-black border-[1px] border-[#000000] shadow-[1px_2px_0px_0px_rgba(32,32,32,1),1px_1px_0px_0px_rgba(32,32,32,1)] rounded-[12px] sm:rounded-[16px] px-3 sm:px-4 h-[54px] sm:h-[64px] line-[54px] sm:line-[64px] leading-[54px] sm:leading-[64px] overflow-hidden text-ellipsis">
                         {currentPrice}
                       </div>
                     </div>
                   </div>
 
-                  <div className="mt-6">
+                  <div className="mt-4 sm:mt-6">
                     <LiquidityChart
                       currencyA={currencyA}
                       currencyB={currencyB}
@@ -179,10 +179,10 @@ const NewPositionPage = () => {
             </div>
 
             <div className="flex flex-col col-span-3">
-              <div className="text-[rgba(32,32,32,1)] mb-6 leading-[44px] font-gliker text-base mt-[-10px]">
+              <div className="text-[rgba(32,32,32,1)] mb-4 sm:mb-6 leading-[36px] sm:leading-[44px] font-gliker text-sm sm:text-base mt-0 sm:mt-[-10px]">
                 2. Enter Amounts
               </div>
-              <div className="w-full rounded-[32px] bg-white space-y-4 px-6 py-8 border-[1px] border-[#000000] shadow-[4px_4px_0px_0px_rgba(210,154,13,1)]">
+              <div className="w-full rounded-[24px] sm:rounded-[32px] bg-white space-y-3 sm:space-y-4 px-4 sm:px-6 py-6 sm:py-8 border-[1px] border-[#000000] shadow-[4px_4px_0px_0px_rgba(210,154,13,1)]">
                 <AmountsSection
                   currencyA={currencyA}
                   currencyB={currencyB}
