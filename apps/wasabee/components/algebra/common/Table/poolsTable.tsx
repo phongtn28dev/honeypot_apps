@@ -332,7 +332,7 @@ const PoolsTable = observer(
               getSortedPools().map((pool: Pool & { userTVLUSD: number }) => (
                 <div
                   key={pool.id}
-                  className="mb-4 p-4 bg-white rounded-lg shadow border border-[#4D4D4D]/20"
+                  className="mb-4 p-4 bg-white rounded-lg custom-dashed-3xl"
                   onClick={() => {
                     if (action) {
                       action(pool.id);
