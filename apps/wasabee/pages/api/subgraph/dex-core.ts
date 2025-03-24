@@ -1,0 +1,44 @@
+import type { NextApiResponse, NextApiRequest, PageConfig } from 'next';
+import { infoClient } from '@/lib/algebra/graphql/clients';
+import { INFO_GRAPH } from '@/lib/algebra/graphql/clients';
+
+export default async function handler(
+  request: NextApiRequest,
+  response: NextApiResponse
+) {
+  try {
+    //   const chainId = request.query.chain;
+    //   if (!chainId) {
+    //     return response.status(400).json({
+    //       s: 'error',
+    //       errmsg: 'chainId is required',
+    //     });
+    //   }
+    if (!INFO_GRAPH) {
+      return response.status(400).json({
+        s: 'error',
+        errmsg: 'INFO_GRAPH is not defined',
+      });
+    }
+
+    return response.redirect(INFO_GRAPH);
+
+    // if (request.method === 'GET') {
+    //   console.log('INFO_GRAPH', INFO_GRAPH);
+    //   return response.redirect(INFO_GRAPH);
+    // } else if (request.method === 'POST') {
+    //   const result = await infoClient.query({
+    //     query: request.body.query,
+    //     variables: request.body.variables,
+    //   });
+
+    //   return response.status(200).json(result);
+    // }
+  } catch (error) {
+    console.error('GraphQL proxy error:', error);
+    return response.status(500).json({
+      s: 'error',
+      errmsg: 'Failed to fetch data from GraphQL endpoint',
+    });
+  }
+}
