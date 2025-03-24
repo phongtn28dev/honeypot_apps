@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { ReactNode } from 'react';
 
 export function formatAmountWithAlphabetSymbol(
@@ -43,14 +44,14 @@ export function DynamicFormatAmount({
   endWith?: ReactNode;
 }): ReactNode {
   const isNegative = Number(amount) < 0;
-  const absAmount = Math.abs(Number(amount));
+  const absAmount = new BigNumber(amount).abs().toFixed(40);
   const amountStr = absAmount.toString();
-  const output: ReactNode =
-    isNaN(Number(amountStr))
-      ? '0'
-      : getFirstDecimalPlace(amountStr) < decimals
-        ? formatAmountWithAlphabetSymbol(amountStr, decimals)
-        : FormatSmallDecimal({ number: Number(amountStr) });
+  console.log({ amountStr });
+  const output: ReactNode = isNaN(Number(amountStr))
+    ? '0'
+    : getFirstDecimalPlace(amountStr) < decimals
+    ? formatAmountWithAlphabetSymbol(amountStr, decimals)
+    : FormatSmallDecimal({ number: Number(amountStr) });
 
   return (
     <span>
@@ -73,7 +74,7 @@ export function FormatSmallDecimal({
     if (num === 0) return '0'; // Handle zero separately
     if (num >= 1) return num.toFixed(decimals);
 
-    const numStr = num.toFixed(18);
+    const numStr = num.toFixed(40);
     let firstNonZeroIndex = 0;
 
     for (let i = 0; i < numStr.length; i++) {
