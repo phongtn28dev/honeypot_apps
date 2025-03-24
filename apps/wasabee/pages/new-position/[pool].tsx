@@ -32,8 +32,6 @@ const NewPositionPage = () => {
   const rightrange = searchParams.get('rightrange');
   const [useNative, setUseNative] = useState(true);
 
-  console.log(leftrange, rightrange);
-
   const { data: token0 } = useReadAlgebraPoolToken0({
     address: poolAddress,
   });
@@ -99,16 +97,18 @@ const NewPositionPage = () => {
   const { startPriceTypedValue } = useMintState();
 
   useEffect(() => {
-    if (leftrange) {
+    if (leftrange && rightrange) {
       onLeftRangeInput(leftrange as string);
-    }
-  }, [leftrange]);
-
-  useEffect(() => {
-    if (rightrange) {
       onRightRangeInput(rightrange as string);
+    } else if (leftrange) {
+      onLeftRangeInput(leftrange as string);
+    } else if (rightrange) {
+      onRightRangeInput(rightrange as string);
+    } else if (!leftrange && !rightrange) {
+      onLeftRangeInput('0');
+      onRightRangeInput('∞');
     }
-  }, [rightrange]);
+  }, [leftrange, rightrange, mintInfo.poolState]);
 
   return (
     <PageContainer>
