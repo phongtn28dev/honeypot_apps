@@ -11,6 +11,7 @@ import {
 } from '@/lib/chain';
 import { ALGEBRA_POSITION_MANAGER } from '@/config/algebra/addresses';
 import { zeroAddress } from 'viem';
+import { ICHIVaultContract } from './contract/aquabera/ICHIVault-contract';
 
 export class Network {
   isActive: boolean = true;
@@ -58,6 +59,8 @@ export class Network {
   validatedTokensInfo: Record<string, Token> = {};
   validatedFtoAddresses: string[] = [];
   validatedMemeAddresses: string[] = [];
+  validatedVault: ({ address: `0x${string}` } & Partial<ICHIVaultContract>)[] =
+    [];
   constructor(
     args: Omit<
       Partial<Network>,
@@ -90,6 +93,9 @@ export class Network {
       token.init();
       this.validatedTokensInfo[address] = token;
       this.validatedTokens.push(token);
+    });
+    this.validatedVault.forEach((vault) => {
+      const vaultContract = ICHIVaultContract.getVault(vault);
     });
   }
 }
@@ -751,6 +757,16 @@ export const berachainNetwork = new Network({
   },
   validatedFtoAddresses: [],
   validatedMemeAddresses: [],
+  validatedVault: [
+    {
+      address: '0xb00ae8a7be63036dbcd143a842bfc14708c440bb',
+      vaultTag: {
+        tag: 'HOT 🔥',
+        color: '#FFCD4D',
+        tooltip: 'High APR, High Volume, High Liquidity',
+      },
+    },
+  ],
 });
 
 export const movementNetWork = new Network({

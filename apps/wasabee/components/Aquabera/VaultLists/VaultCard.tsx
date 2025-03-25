@@ -1,19 +1,22 @@
-import { Button } from "@/components/algebra/ui/button";
-import TokenLogo from "@/components/TokenLogo/TokenLogo";
-import { getSingleVaultDetails } from "@/lib/algebra/graphql/clients/vaults";
-import { ICHIVaultContract } from "@/services/contract/aquabera/ICHIVault-contract";
-import { Token } from "@/services/contract/token";
-import { wallet } from "@/services/wallet";
-import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
-import { Skeleton } from "@nextui-org/react";
+import { Button } from '@/components/algebra/ui/button';
+import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { getSingleVaultDetails } from '@/lib/algebra/graphql/clients/vaults';
+import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
+import { Token } from '@/services/contract/token';
+import { wallet } from '@/services/wallet';
+import { observer } from 'mobx-react-lite';
+import { useEffect, useState } from 'react';
+import { Skeleton } from '@nextui-org/react';
+import { VaultTag } from '../VaultTag';
 
 interface VaultCardProps {
   vault: ICHIVaultContract;
 }
 
 const VaultCard = observer(({ vault }: VaultCardProps) => {
-  const [vaultContract, setVaultContract] = useState<ICHIVaultContract | undefined>(undefined);
+  const [vaultContract, setVaultContract] = useState<
+    ICHIVaultContract | undefined
+  >(undefined);
   const [loading, setLoading] = useState(true);
   const tokenA = Token.getToken({ address: vault.token0?.address ?? '' });
   const tokenB = Token.getToken({ address: vault.token1?.address ?? '' });
@@ -43,11 +46,11 @@ const VaultCard = observer(({ vault }: VaultCardProps) => {
 
           tokenA.init();
           tokenB.init();
-          
+
           setVaultContract(vaultContract);
         }
       } catch (error) {
-        console.error("Error initializing vault:", error);
+        console.error('Error initializing vault:', error);
       } finally {
         setLoading(false);
       }
@@ -65,6 +68,13 @@ const VaultCard = observer(({ vault }: VaultCardProps) => {
 
   return (
     <div className="mb-4 p-4 bg-white custom-dashed-3xl">
+      {vaultContract?.vaultTag && (
+        <VaultTag
+          tag={vaultContract.vaultTag.tag}
+          color={vaultContract.vaultTag.color}
+          tooltip={vaultContract.vaultTag.tooltip}
+        />
+      )}
       <div className="flex justify-between items-center mb-3">
         <div className="font-medium">Token Pair</div>
         <div className="flex items-center">
@@ -89,10 +99,7 @@ const VaultCard = observer(({ vault }: VaultCardProps) => {
       <div className="flex justify-between items-center mb-3">
         <div className="font-medium">Allow Token</div>
         <div className="flex items-center gap-1">
-          <TokenLogo
-            token={tokenA}
-            size={20}
-          />
+          <TokenLogo token={tokenA} size={20} />
           <span>{tokenA.symbol}</span>
         </div>
       </div>
@@ -153,4 +160,4 @@ const VaultCard = observer(({ vault }: VaultCardProps) => {
   );
 });
 
-export default VaultCard; 
+export default VaultCard;

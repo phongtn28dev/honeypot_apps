@@ -13,6 +13,7 @@ import { Skeleton, Tooltip } from '@nextui-org/react';
 import { InfoIcon } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useMemo, useState } from 'react';
+import { VaultTag } from '../VaultTag';
 
 export const VaultRow = observer(({ vault }: { vault: ICHIVaultContract }) => {
   const [vaultContract, setVaultContract] = useState<
@@ -102,23 +103,32 @@ export const VaultRow = observer(({ vault }: { vault: ICHIVaultContract }) => {
     >
       {/* Token pair */}
       <td className="py-4 px-6">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1">
-            <TokenLogo
-              token={tokenA}
-              addtionalClasses="translate-x-[25%]"
-              size={24}
+        <div>
+          {vaultContract?.vaultTag && (
+            <VaultTag
+              tag={vaultContract.vaultTag.tag}
+              color={vaultContract.vaultTag.color}
+              tooltip={vaultContract.vaultTag.tooltip}
             />
-            <TokenLogo
-              token={tokenB}
-              addtionalClasses="translate-x-[-25%]"
-              size={24}
-            />
-          </div>
-          <div className="flex flex-col">
-            <p className="text-black font-medium">
-              {tokenA.symbol}/{tokenB.symbol}
-            </p>
+          )}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1">
+              <TokenLogo
+                token={tokenA}
+                addtionalClasses="translate-x-[25%]"
+                size={24}
+              />
+              <TokenLogo
+                token={tokenB}
+                addtionalClasses="translate-x-[-25%]"
+                size={24}
+              />
+            </div>
+            <div className="flex flex-col">
+              <p className="text-black font-medium">
+                {tokenA.symbol}/{tokenB.symbol}
+              </p>
+            </div>
           </div>
         </div>
       </td>
@@ -163,22 +173,24 @@ export const VaultRow = observer(({ vault }: { vault: ICHIVaultContract }) => {
           beginWith: ' $',
         })}
       </td>
-      <td className="py-4 px-6 text-right text-black flex justify-end items-center gap-2">
-        {vaultContract?.apr.toFixed(2)}%
-        <Tooltip
-          content={
-            <div>
-              <p>1d: {vaultContract?.detailedApr.feeApr_1d.toFixed(5)}%</p>
-              <p>3d: {vaultContract?.detailedApr.feeApr_3d.toFixed(5)}%</p>
-              <p>7d: {vaultContract?.detailedApr.feeApr_7d.toFixed(5)}%</p>
-              <p>30d: {vaultContract?.detailedApr.feeApr_30d.toFixed(5)}%</p>
-            </div>
-          }
-        >
-          <span className="text-gray-500">
-            <InfoIcon className="w-4 h-4" />
-          </span>
-        </Tooltip>
+      <td className="py-4 px-6 text-right text-black">
+        <div className="h-full flex justify-end items-center gap-2">
+          {vaultContract?.apr.toFixed(2)}%
+          <Tooltip
+            content={
+              <div>
+                <p>1d: {vaultContract?.detailedApr.feeApr_1d.toFixed(5)}%</p>
+                <p>3d: {vaultContract?.detailedApr.feeApr_3d.toFixed(5)}%</p>
+                <p>7d: {vaultContract?.detailedApr.feeApr_7d.toFixed(5)}%</p>
+                <p>30d: {vaultContract?.detailedApr.feeApr_30d.toFixed(5)}%</p>
+              </div>
+            }
+          >
+            <span className="text-gray-500">
+              <InfoIcon className="w-4 h-4" />
+            </span>
+          </Tooltip>
+        </div>
       </td>
     </tr>
   );

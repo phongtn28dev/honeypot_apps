@@ -12,6 +12,12 @@ import { VaultDeposit } from '@/lib/algebra/graphql/generated/graphql';
 import { VaultWithdraw } from '@/lib/algebra/graphql/generated/graphql';
 import { VaultCollectFee } from '@/lib/algebra/graphql/generated/graphql';
 
+type VaultTag = {
+  tag: string;
+  color: string;
+  tooltip?: string;
+};
+
 export class ICHIVaultContract implements BaseContract {
   static vaultsMap: Map<string, ICHIVaultContract> = new Map();
   static getVault({
@@ -29,6 +35,8 @@ export class ICHIVaultContract implements BaseContract {
       });
       this.vaultsMap.set(address.toLowerCase(), vault);
       return vault;
+    } else {
+      vault.setData(args);
     }
     return vault;
   }
@@ -68,6 +76,7 @@ export class ICHIVaultContract implements BaseContract {
     feeApr_7d: 0,
     feeApr_30d: 0,
   };
+  vaultTag: VaultTag | undefined = undefined;
 
   recentTransactions: (VaultDeposit | VaultWithdraw | VaultCollectFee)[] = [];
 
@@ -226,6 +235,10 @@ export class ICHIVaultContract implements BaseContract {
       .finally(() => {
         this.transactionPending = false;
       });
+  }
+
+  setData(args: Partial<ICHIVaultContract>) {
+    Object.assign(this, args);
   }
 
   // async getFee() {
