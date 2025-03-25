@@ -6,6 +6,10 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
   try {
     //   const chainId = request.query.chain;
     //   if (!chainId) {
