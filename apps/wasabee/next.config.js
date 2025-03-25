@@ -1,9 +1,8 @@
 //@ts-check
 
-
 const { composePlugins, withNx } = require('@nx/next');
 const { withSentryConfig } = require('@sentry/nextjs');
-const path = require("path");
+const path = require('path');
 /**
  * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
  **/
@@ -16,8 +15,8 @@ const nextConfig = {
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
-      "styled-components": path.resolve(
-        "../../node_modules/styled-components/dist/styled-components.esm.js"
+      'styled-components': path.resolve(
+        '../../node_modules/styled-components/dist/styled-components.esm.js'
       ), // alias for styled-components ESM build
     };
     return config;
@@ -25,79 +24,100 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        port: "",
-        hostname: "res.cloudinary.com",
+        protocol: 'https',
+        port: '',
+        hostname: 'res.cloudinary.com',
       },
       {
-        protocol: "https",
-        port: "",
-        hostname: "upload.wikimedia.org",
+        protocol: 'https',
+        port: '',
+        hostname: 'upload.wikimedia.org',
       },
       {
-        protocol: "https",
-        port: "",
-        hostname: "vphdxociarqnaxj6.public.blob.vercel-storage.com",
+        protocol: 'https',
+        port: '',
+        hostname: 'vphdxociarqnaxj6.public.blob.vercel-storage.com',
       },
       {
-        protocol: "https",
-        port: "",
-        hostname: "upload.wikimedia.org",
+        protocol: 'https',
+        port: '',
+        hostname: 'upload.wikimedia.org',
       },
       {
-        protocol: "http",
-        port: "3000",
-        hostname: "localhost",
+        protocol: 'http',
+        port: '3000',
+        hostname: 'localhost',
       },
       {
-        protocol: "http",
-        port: "5000",
-        hostname: "localhost",
+        protocol: 'http',
+        port: '5000',
+        hostname: 'localhost',
       },
       {
-        protocol: "https",
-        port: "",
-        hostname: "honeypotfinance.xyz",
+        protocol: 'https',
+        port: '',
+        hostname: 'honeypotfinance.xyz',
       },
       {
-        protocol: "https",
-        port: "",
-        hostname: "*.honeypotfinance.xyz",
+        protocol: 'https',
+        port: '',
+        hostname: '*.honeypotfinance.xyz',
       },
       {
-        protocol: "https",
-        port: "",
-        hostname: "images.unsplash.com",
+        protocol: 'https',
+        port: '',
+        hostname: 'images.unsplash.com',
       },
       {
-        protocol: "https",
-        port: "",
-        hostname: "cdn.alphakek.ai",
+        protocol: 'https',
+        port: '',
+        hostname: 'cdn.alphakek.ai',
       },
     ],
-    domains: ["cdn.alphakek.ai"],
+    domains: ['cdn.alphakek.ai'],
   },
 
   transpilePackages: [
-    "@usecapsule/rainbowkit-wallet",
-    "@usecapsule/rainbowkit",
-    "@usecapsule/core-components",
-    "@usecapsule/react-components",
-    "@usecapsule/react-sdk",
-    "@usecapsule/core-sdk",
-    "@usecapsule/web-sdk",
-    "@usecapsule/wagmi-v2-integration",
-    "@usecapsule/viem-v2-integration",
-    "@usecapsule/react-common",
-    "styled-components",
+    '@usecapsule/rainbowkit-wallet',
+    '@usecapsule/rainbowkit',
+    '@usecapsule/core-components',
+    '@usecapsule/react-components',
+    '@usecapsule/react-sdk',
+    '@usecapsule/core-sdk',
+    '@usecapsule/web-sdk',
+    '@usecapsule/wagmi-v2-integration',
+    '@usecapsule/viem-v2-integration',
+    '@usecapsule/react-common',
+    'styled-components',
   ],
   redirects: async () => [
     {
-      source: "/",
-      destination: "/swap",
+      source: '/',
+      destination: '/swap',
       permanent: true,
     },
   ],
+  async headers() {
+    return [
+      {
+        // matching all API routes
+        source: '/api/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Credentials', value: 'true' },
+          { key: 'Access-Control-Allow-Origin', value: '*' }, // replace this your actual origin
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET,DELETE,PATCH,POST,PUT',
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value:
+              'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 const plugins = [
@@ -106,9 +126,8 @@ const plugins = [
 ];
 
 const config = withSentryConfig(nextConfig, {
-
-  org: "honeypot-qh",
-  project: "dex",
+  org: 'honeypot-qh',
+  project: 'dex',
 
   // Only print logs for uploading source maps in CI
   silent: !process.env.CI,
@@ -128,7 +147,7 @@ const config = withSentryConfig(nextConfig, {
   // This can increase your server load as well as your hosting bill.
   // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
   // side errors will fail.
-  tunnelRoute: "/monitoring",
+  tunnelRoute: '/monitoring',
 
   // Hides source maps from generated client bundles
   hideSourceMaps: true,
@@ -142,6 +161,5 @@ const config = withSentryConfig(nextConfig, {
   // https://vercel.com/docs/cron-jobs
   automaticVercelMonitors: true,
 });
-
 
 module.exports = composePlugins(...plugins)(config);
