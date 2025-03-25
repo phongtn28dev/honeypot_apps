@@ -40,6 +40,8 @@ export function AllAquaberaVaults({
   const [page, setPage] = useState(1);
   const rowsPerPage = 10;
 
+  console.log('vaultsContracts', vaultsContracts);
+
   useEffect(() => {
     const initVaults = async () => {
       if (!wallet.isInit) return;

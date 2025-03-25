@@ -62,7 +62,7 @@ export default function TopPoolPositions({ poolId }: { poolId: string }) {
           <table className="w-full">
             <thead>
               <tr>
-                <th className="py-4 px-6 cursor-pointer text-[#4D4D4D]">
+                {/* <th className="py-4 px-6 cursor-pointer text-[#4D4D4D]">
                   <div
                     className="flex items-center gap-2"
                     onClick={() => handleSort(Position_OrderBy.Owner)}
@@ -87,7 +87,7 @@ export default function TopPoolPositions({ poolId }: { poolId: string }) {
                       />
                     </div>
                   </div>
-                </th>
+                </th> */}
                 <th className="py-4 px-6 cursor-pointer text-[#4D4D4D]">
                   <div
                     className="flex items-center gap-2"
@@ -157,10 +157,10 @@ export default function TopPoolPositions({ poolId }: { poolId: string }) {
               ) : (
                 positions.map((position) => (
                   <tr key={position.id} className="hover:bg-gray-50">
-                    <td className="py-4 px-6 truncate text-black">
+                    {/* <td className="py-4 px-6 truncate text-black">
                       {truncate(position.owner, 12)}
                       <Copy value={position.owner} />
-                    </td>
+                    </td> */}
                     <td className="py-4 px-6 text-black">
                       {Number(position.tickUpper.price0) >
                       Number.MAX_SAFE_INTEGER ? (

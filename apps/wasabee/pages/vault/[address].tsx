@@ -21,6 +21,7 @@ import { HiExternalLink } from 'react-icons/hi';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { cn, Tooltip } from '@nextui-org/react';
 import { InfoIcon } from 'lucide-react';
+import { VaultTag } from '@/components/Aquabera/VaultTag';
 
 export const VaultDetail = observer(() => {
   const router = useRouter();
@@ -203,8 +204,26 @@ export const VaultDetail = observer(() => {
 
           {/* Stats Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+            {vault?.vaultDescription && (
+              <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D] sm:col-span-2 md:col-span-3">
+                <h3 className="text-base text-[#202020] mb-2">
+                  <span className="text-sm text-gray-500">
+                    {vault?.vaultTag && (
+                      <VaultTag
+                        tag={vault?.vaultTag?.tag}
+                        bgColor={vault?.vaultTag?.bgColor}
+                        textColor={vault?.vaultTag?.textColor}
+                        tooltip={vault?.vaultTag?.tooltip}
+                      />
+                    )}
+                  </span>
+                </h3>
+                <div className="space-y-1">{vault?.vaultDescription}</div>
+              </div>
+            )}
+
             <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
-              <h3 className="text-base text-[#202020] mb-2">Total Supply</h3>
+              <h3 className="text-base text-[#202020] mb-2"></h3>
               <div className="space-y-1">
                 <p className="text-lg md:text-2xl font-bold text-[#202020]">
                   {DynamicFormatAmount({
@@ -459,7 +478,7 @@ export const VaultDetail = observer(() => {
                           ).toLocaleString()}
                         </div>
                       </div>
-                      
+
                       {/* Amount and Transaction Link in one row */}
                       <div className="mt-1 flex justify-between items-end">
                         <div>
@@ -511,7 +530,9 @@ export const VaultDetail = observer(() => {
                         <div>
                           <Link
                             target="_blank"
-                            href={`https://berascan.com/tx/${tx.id.split('-')[0]}`}
+                            href={`https://berascan.com/tx/${
+                              tx.id.split('-')[0]
+                            }`}
                             className="text-gray-500 text-sm underline hover:text-gray-500/80"
                           >
                             View Transaction

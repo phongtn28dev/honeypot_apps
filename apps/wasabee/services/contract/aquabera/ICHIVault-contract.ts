@@ -14,7 +14,8 @@ import { VaultCollectFee } from '@/lib/algebra/graphql/generated/graphql';
 
 type VaultTag = {
   tag: string;
-  color: string;
+  bgColor: string;
+  textColor: string;
   tooltip?: string;
 };
 
@@ -77,6 +78,7 @@ export class ICHIVaultContract implements BaseContract {
     feeApr_30d: 0,
   };
   vaultTag: VaultTag | undefined = undefined;
+  vaultDescription: string | undefined = undefined;
 
   recentTransactions: (VaultDeposit | VaultWithdraw | VaultCollectFee)[] = [];
 

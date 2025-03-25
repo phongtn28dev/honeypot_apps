@@ -107,7 +107,8 @@ export const VaultRow = observer(({ vault }: { vault: ICHIVaultContract }) => {
           {vaultContract?.vaultTag && (
             <VaultTag
               tag={vaultContract.vaultTag.tag}
-              color={vaultContract.vaultTag.color}
+              bgColor={vaultContract.vaultTag.bgColor}
+              textColor={vaultContract.vaultTag.textColor}
               tooltip={vaultContract.vaultTag.tooltip}
             />
           )}

@@ -4,17 +4,19 @@ import { observer } from 'mobx-react-lite';
 export const VaultTagContent = observer(
   ({
     tag,
-    color,
+    bgColor,
+    textColor,
     tooltip,
   }: {
     tag: string;
-    color: string;
+    bgColor: string;
+    textColor: string;
     tooltip?: string;
   }) => {
     return (
       <div
         className="flex items-center gap-2 rounded-full px-2 cursor-pointer"
-        style={{ backgroundColor: color }}
+        style={{ backgroundColor: bgColor, color: textColor }}
       >
         <span className="text-sm">{tag}</span>
       </div>
@@ -25,24 +27,32 @@ export const VaultTagContent = observer(
 export const VaultTag = observer(
   ({
     tag,
-    color,
+    bgColor,
+    textColor,
     tooltip,
   }: {
     tag: string;
-    color: string;
+    bgColor: string;
+    textColor: string;
     tooltip?: string;
   }) => {
     return (
       <div className="flex items-center gap-2 relative mb-2">
         <Tooltip
           content={tooltip}
-          showArrow
           placement="top"
           delay={0}
           closeDelay={0}
+          classNames={{
+            content: 'max-w-[200px]',
+          }}
         >
           <div className="cursor-pointer">
-            <VaultTagContent tag={tag} color={color} />
+            <VaultTagContent
+              tag={tag}
+              bgColor={bgColor}
+              textColor={textColor}
+            />
           </div>
         </Tooltip>
       </div>

@@ -762,9 +762,22 @@ export const berachainNetwork = new Network({
       address: '0xb00ae8a7be63036dbcd143a842bfc14708c440bb',
       vaultTag: {
         tag: 'HOT 🔥',
-        color: '#FFCD4D',
+        bgColor: '#FFCD4D',
+        textColor: 'black',
         tooltip: 'High APR, High Volume, High Liquidity',
       },
+    },
+    {
+      //WETH/WBERA
+      address: '0xec06041013b3a97c58b9ab61eae9079bc594eda3',
+      vaultTag: {
+        tag: 'ETH Jeets',
+        bgColor: '#FFCD4D',
+        textColor: 'black',
+        tooltip: 'An ETH single-side deposit vault, actively paired with BERA.',
+      },
+      vaultDescription:
+        'An ETH single-side deposit vault, actively paired with BERA, with high exposure farming on the wETH-BERA pair at Wasabee DEX and a goal of buying more BERA over time. The benchmark is compared to only holding ETH.',
     },
   ],
 });
