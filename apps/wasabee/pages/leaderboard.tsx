@@ -214,8 +214,8 @@ const LeaderboardPage = () => {
               <h2 className="text-xl text-white font-bold">Leaderboard</h2>
             </div>
             <div className="p-6">
-              <div className="border border-[#5C5C5C] rounded-lg overflow-hidden">
-                <table className="w-full">
+              <div className="border border-[#5C5C5C] rounded-lg overflow-scroll">
+                <table className="w-full ">
                   <thead className="bg-[#323232] text-white border-b border-[#5C5C5C]">
                     <tr>
                       <th className="py-4 px-6 text-left text-base font-medium whitespace-nowrap">
