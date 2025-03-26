@@ -276,7 +276,12 @@ const PoolPage = observer(() => {
                 <span className="text-xs sm:text-base">Top Positions</span>
               }
             >
-              <TopPoolPositions poolId={poolId ? poolId : zeroAddress} />
+              {poolEntity && (
+                <TopPoolPositions
+                  poolId={poolId ? poolId : zeroAddress}
+                  poolEntity={poolEntity}
+                />
+              )}
             </Tab>
             <Tab
               key="my-positions"
