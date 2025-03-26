@@ -104,13 +104,19 @@ export class ICHIVaultContract implements BaseContract {
   }
 
   get userTokenAmountsWithoutDecimal() {
+    console.log({
+      totalsupplyShares: this.totalsupplyShares,
+      userShares: this.userShares,
+      totalAmountsWithoutDecimal: this.totalAmountsWithoutDecimal,
+    });
     if (
       !this.totalsupplyShares ||
       !this.userShares ||
-      !this.totalAmountsWithoutDecimal.total0 ||
-      !this.totalAmountsWithoutDecimal.total1
+      this.totalAmountsWithoutDecimal.total0 === undefined ||
+      this.totalAmountsWithoutDecimal.total1 === undefined
     )
       return { total0: 0, total1: 0 };
+    console.log('is ok');
     return {
       total0:
         (this.totalAmountsWithoutDecimal.total0 * this.userShares) /
@@ -129,7 +135,8 @@ export class ICHIVaultContract implements BaseContract {
     );
   }
   get userTokenAmounts() {
-    if (!this.token0 || !this.token1) return { total0: 0, total1: 0 };
+    if (this.token0 === undefined || this.token1 === undefined)
+      return { total0: 0, total1: 0 };
     return {
       total0: new BigNumber(
         this.userTokenAmountsWithoutDecimal.total0.toString()

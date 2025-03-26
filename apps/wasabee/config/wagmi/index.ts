@@ -8,7 +8,7 @@ import {
   metaMaskWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 import { injected, safe } from 'wagmi/connectors';
-import { createConfig, http, cookieStorage, createStorage } from 'wagmi';
+import { createConfig, http, cookieStorage, createStorage, mock } from 'wagmi';
 // import { holdstationWallet } from "./holdstationWallet";
 // import { capsuleWallet } from "./capsualWallet";
 // import { berasigWallet } from "./berasigWallet";
