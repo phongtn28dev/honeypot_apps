@@ -264,14 +264,16 @@ const PoolsTable = observer(
                     </span>
                     <ChevronDown className="h-4 w-4 text-black" />
                   </button>
-                  
+
                   {showSortDropdown && (
                     <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#2D2D2D] rounded-xl shadow-[2px_2px_0px_0px_#000] p-1 w-full z-50">
                       {sortOptions.map((option) => (
                         <div
                           key={option.key}
                           className={`text-black text-sm p-2 cursor-pointer w-full ${
-                            sortField === option.key ? 'bg-[#FFCD4D] rounded-lg' : ''
+                            sortField === option.key
+                              ? 'bg-[#FFCD4D] rounded-lg'
+                              : ''
                           }`}
                           onClick={() => {
                             setSortField(option.key as SortField);
@@ -538,7 +540,7 @@ const PoolsTable = observer(
                                 <Tooltip content="Bitget Campaign">
                                   <Link
                                     href={`/bitget-campaign`}
-                                    className="rounded-full p-1 z-10"
+                                    className="rounded-full z-10 flex items-center justify-center"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       // window.location.href = `/bitget-campaign`;
