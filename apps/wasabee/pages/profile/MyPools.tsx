@@ -6,7 +6,7 @@ import { observer } from "mobx-react-lite";
 export const MyPools = observer(() => {
   return (
     <div className="custom-dashed-3xl w-full p-2 sm:p-6 bg-white relative">
-      <div className="flex justify-between items-center mb-4 absolute top-6 left-4 sm:left-8 sm:top-10">
+      <div className="flex justify-between items-center mb-4 absolute top-5 left-4 sm:left-8 sm:top-10">
         <div className="text-xl sm:text-2xl font-bold">My Pools</div>
       </div>
       <Tabs
