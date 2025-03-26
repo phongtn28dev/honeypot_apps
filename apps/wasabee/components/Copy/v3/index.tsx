@@ -17,7 +17,7 @@ const CopyButton: React.FC<CopyButtonProps> = ({
   copyTip = "Copy",
 }) => {
   return (
-    <div className={cn("space-y-2", className)}>
+    <div className={cn("space-y-0.5 sm:space-y-2", className)}>
       {label && (
         <div className="text-white text-sm font-medium leading-[normal]">
           {label}
@@ -28,8 +28,8 @@ const CopyButton: React.FC<CopyButtonProps> = ({
         content={copyTip}
         value={value}
         displayContent={
-          <div className="size-6 cursor-pointer flex items-center justify-center bg-white text-[#202020] border border-[#202020] rounded-md drop-shadow-[1px_1px_0px_#000] [stroke-width:0.75px] stroke-[#202020] hover:bg-[#FFCD4D]">
-            <VscCopy className="size-4" />
+          <div className="size-5 sm:size-6 cursor-pointer flex items-center justify-center bg-white text-[#202020] border border-[#202020] rounded-md drop-shadow-[1px_1px_0px_#000] [stroke-width:0.75px] stroke-[#202020] hover:bg-[#FFCD4D]">
+            <VscCopy className="size-3 sm:size-4" />
           </div>
         }
       />
