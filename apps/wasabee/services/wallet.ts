@@ -68,7 +68,8 @@ export class Wallet {
     this.networks = networks;
     this.currentChainId = walletClient?.chain?.id || DEFAULT_CHAIN_ID;
     this.account =
-      MOCK_ADDRESS || walletClient?.account?.address || zeroAddress;
+      // MOCK_ADDRESS ||
+      walletClient?.account?.address || zeroAddress;
     this.contracts = {
       routerV2: new RouterV2Contract({
         address: this.currentChain.contracts.routerV2,
