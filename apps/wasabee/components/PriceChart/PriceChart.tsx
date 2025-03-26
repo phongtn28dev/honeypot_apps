@@ -187,7 +187,7 @@ export const PriceChart = ({
         bg-[url('/images/card-container/dark/honey-border.svg')]
         bg-[position:-85px_bottom]
         bg-[size:auto_30px]
-        bg-repeat-x"
+        bg-repeat-x sm:min-w-[500px]"
       style={{ height: `${height}px` }}
     >
       <div className="flex justify-between items-center">

@@ -8,6 +8,7 @@ import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '@nextui-org/react';
 import { VaultTag } from '../VaultTag';
+import Link from 'next/link';
 
 interface VaultCardProps {
   vault: ICHIVaultContract;
@@ -148,14 +149,12 @@ const VaultCard = observer(({ vault }: VaultCardProps) => {
       </div>
 
       <div className="mt-4 flex justify-center">
-        <Button
-          className="w-full border border-[#2D2D2D] bg-[#FFCD4D] hover:bg-[#FFD56A] text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-4 py-2"
-          onClick={() => {
-            window.open(`/vault/${displayVault.address}`, '_blank');
-          }}
+        <Link
+          href={`/vault/${displayVault.address}`}
+          className="w-full border border-[#2D2D2D] bg-[#FFCD4D] hover:bg-[#FFD56A] text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-4 py-2 text-center"
         >
           View Vault
-        </Button>
+        </Link>
       </div>
     </div>
   );

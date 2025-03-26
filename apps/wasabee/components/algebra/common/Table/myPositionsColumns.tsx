@@ -16,7 +16,7 @@ export const myPositionsColumns: ColumnDef<MyPosition>[] = [
   {
     accessorKey: "id",
     header: () => <HeaderItem className="ml-2">ID</HeaderItem>,
-    cell: ({ getValue }) => <span className="ml-4">{`#${getValue()}`}</span>,
+    cell: ({ getValue }) => <span className="font-medium">{`#${getValue()}`}</span>,
   },
   {
     accessorKey: "liquidityUSD",
@@ -28,7 +28,7 @@ export const myPositionsColumns: ColumnDef<MyPosition>[] = [
         Liquidity
       </HeaderItem>
     ),
-    cell: ({ getValue }) => formatUSD.format(getValue() as number),
+    cell: ({ getValue }) => <span className="font-medium">${(getValue() as number).toFixed(2)}</span>,
   },
   {
     accessorKey: "feesUSD",
@@ -40,12 +40,15 @@ export const myPositionsColumns: ColumnDef<MyPosition>[] = [
         Fees
       </HeaderItem>
     ),
-    cell: ({ getValue }) =>
-      DynamicFormatAmount({
-        amount: (getValue() as number).toString(),
-        decimals: 6,
-        beginWith: "$",
-      }),
+    cell: ({ getValue }) => (
+      <span className="font-medium">
+        ${DynamicFormatAmount({
+          amount: (getValue() as number).toString(),
+          decimals: 10,
+          endWith: "",
+        })}
+      </span>
+    ),
   },
   {
     accessorKey: "outOfRange",
@@ -60,15 +63,17 @@ export const myPositionsColumns: ColumnDef<MyPosition>[] = [
     ),
     cell: ({ getValue }) =>
       getValue() ? (
-        <span className="text-yellow-400">Out of range</span>
+        <span className="px-3 py-1 rounded-md bg-yellow-50 text-yellow-600 text-sm font-medium">Out of range</span>
       ) : (
-        <span className="text-green-400">In range</span>
+        <span className="px-3 py-1 rounded-md bg-green-50 text-green-500 text-sm font-medium">In range</span>
       ),
   },
   {
     accessorKey: "range",
-    header: () => <HeaderItem className="min-w-[180px]">Range</HeaderItem>,
-    cell: ({ getValue }) => getValue() as string,
+    header: () => <HeaderItem className="min-w-[250px]">Range</HeaderItem>,
+    cell: ({ getValue }) => (
+      <span className="font-mono text-sm text-gray-700">{getValue() as string}</span>
+    ),
   },
   {
     accessorKey: "apr",
@@ -80,6 +85,6 @@ export const myPositionsColumns: ColumnDef<MyPosition>[] = [
         APR
       </HeaderItem>
     ),
-    cell: ({ getValue }) => `${(getValue() as number)?.toFixed(2)}%`,
+    cell: ({ getValue }) => <span className="font-medium text-[#F7931A]">{(getValue() as number)?.toFixed(2)}%</span>,
   },
 ];

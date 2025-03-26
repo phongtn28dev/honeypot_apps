@@ -253,20 +253,23 @@ const PoolPage = observer(() => {
 
           <Tabs
             classNames={{
-              tab: 'px-3 text-sm',
-              base: '',
+              tab: 'px-2 sm:px-3 sm:h-10 text-xs sm:text-sm',
+              base: 'relative w-full',
               tabList:
-                'flex rounded-2xl border border-[#202020] bg-white p-4 shadow-[2px_2px_0px_0px_#000] py-2 px-2 z-10',
-              cursor:
-                'bg-[#FFCD4D] border border-black shadow-[2px_2px_0px_0px_#000000] text-sm',
-              panel: 'w-full',
-              tabContent: '!text-[#202020]',
+                'flex rounded-[16px] border border-[#202020] bg-white shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020] p-2 sm:p-3 z-10 max-w-[90%] sm:max-w-none mx-auto absolute left-1/2 -translate-x-1/2 z-10',
+              cursor: 'bg-[#202020] !text-white/80 px-2 py-3',
+              panel: cn(
+                'flex flex-col h-full w-full gap-y-4 items-center rounded-2xl text-[#202020]',
+                '!mt-0',
+                'h-auto'
+              ),
+              tabContent: 'text-[#202020] text-sm sm:text-base',
             }}
           >
-            <Tab key="top-positions" title="Top Positions">
+            <Tab key="top-positions" title={<span className="text-xs sm:text-base">Top Positions</span>}>
               <TopPoolPositions poolId={poolId ? poolId : zeroAddress} />
             </Tab>
-            <Tab key="my-positions" title="My Positions">
+            <Tab key="my-positions" title={<span className="text-xs sm:text-base">My Positions</span>}>
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-0 gap-y-8 w-full lg:gap-8">
                 <div className="col-span-3">
                   {!account ? (
@@ -279,10 +282,10 @@ const PoolPage = observer(() => {
                     <NoPositions poolId={poolId ? poolId : zeroAddress} />
                   ) : (
                     <>
-                      <MyPositionsToolbar
+                      {/* <MyPositionsToolbar
                         positionsData={positionsData}
                         poolId={poolId ? poolId : zeroAddress}
-                      />
+                      /> */}
                       <MyPositions
                         positions={positionsData}
                         poolId={poolId ? poolId : zeroAddress}
@@ -329,7 +332,7 @@ const PoolPage = observer(() => {
 });
 
 const NoPositions = ({ poolId }: { poolId: Address }) => (
-  <div className="flex flex-col items-start animate-fade-in font-bold p-8 rounded-[24px] border border-black bg-white shadow-[4px_4px_0px_0px_#D29A0D]">
+  <div className="flex flex-col items-start animate-fade-in font-bold px-8 py-16 rounded-[24px] border border-black bg-white shadow-[4px_4px_0px_0px_#D29A0D]">
     <h2 className="text-2xl font-bold">
       {`You don't have positions for this pool`}
     </h2>

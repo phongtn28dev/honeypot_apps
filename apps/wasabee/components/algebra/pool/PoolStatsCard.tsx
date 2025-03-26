@@ -3,8 +3,6 @@ import {
   useActiveFarmingsQuery,
 } from '@/lib/algebra/graphql/generated/graphql';
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
-import { cn } from '@/lib/tailwindcss';
-import { Card } from '@/components/algebra/ui/card';
 import { useMemo } from 'react';
 import { calculatePercentageChange } from '@/lib/utils';
 import { farmingClient } from '@/lib/algebra/graphql/clients';
@@ -17,13 +15,14 @@ interface PoolStatsCardProps {
 }
 
 export default function PoolStatsCard({ pool }: PoolStatsCardProps) {
-  if (!pool) return null;
-  const { data: activeFarmings, loading: isFarmingsLoading } =
-    useActiveFarmingsQuery({
-      client: farmingClient,
-    });
+  // Hooks need to be called unconditionally at the top
+  const { data: activeFarmings } = useActiveFarmingsQuery({
+    client: farmingClient,
+  });
 
   const derivedPoolInfo = useMemo(() => {
+    if (!pool) return null;
+
     const {
       id,
       token0,
@@ -54,7 +53,7 @@ export default function PoolStatsCard({ pool }: PoolStatsCardProps) {
     ) {
       data?.sort((a, b) => a[field] - b[field]);
 
-      let startTime = data[0]?.[field];
+      const startTime = data[0]?.[field];
 
       let currentTimestamp = startTime;
       const filledData = [];
@@ -229,84 +228,89 @@ export default function PoolStatsCard({ pool }: PoolStatsCardProps) {
     };
   }, [pool, activeFarmings]);
 
-  console.log(pool, derivedPoolInfo);
+  if (!pool || !derivedPoolInfo) return null;
+  
   return (
-    <Card className="h-[400px] p-6 flex flex-col gap-4 bg-white text-black">
-      <h2 className="text-xl font-bold">Stats</h2>
+    <div className="h-[400px] p-6 flex flex-col gap-6 bg-white border border-black rounded-[24px] shadow-[4px_4px_0px_0px_#D29A0D] text-[#202020] animate-fade-in">
+      <div className="flex items-center">
+        <h2 className="text-xl font-bold">Pool Stats</h2>
+        <div className="ml-auto px-3 py-1 bg-[#FFCD4D] text-xs font-semibold rounded-full border border-[#202020] shadow-[1px_1px_0px_0px_#000]">
+          {derivedPoolInfo.fee}% Fee
+        </div>
+      </div>
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         <div>
-          <h3 className="mb-2">Tokens Locked</h3>
-          <div className="space-y-2 grid grid-cols-2 justify-between items-center">
+          <h3 className="text-base font-semibold mb-3 pb-1 border-b border-gray-200">Tokens</h3>
+          <div className="grid grid-cols-2 gap-2">
             <div
               key={derivedPoolInfo.pair.token0.symbol}
-              className="w-full h-full flex items-center justify-between mt-0"
+              className="flex items-center p-3 rounded-xl bg-gray-50 border border-gray-200"
             >
-              <div className="flex w-full h-full items-center gap-2">
-                <TokenLogo token={derivedPoolInfo.pair.token0} />
-                <span>{derivedPoolInfo.pair.token0.symbol}</span>
-              </div>
+              <TokenLogo token={derivedPoolInfo.pair.token0} size={24} addtionalClasses="w-6 h-6" />
+              <span className="ml-2 font-semibold">{derivedPoolInfo.pair.token0.symbol}</span>
             </div>
             <div
               key={derivedPoolInfo.pair.token1.symbol}
-              className="flex items-center w-full h-full  justify-between !mt-0"
+              className="flex items-center p-3 rounded-xl bg-gray-50 border border-gray-200"
             >
-              <div className="flex items-center gap-2 mt-0">
-                <TokenLogo token={derivedPoolInfo.pair.token1} />
-                <span>{derivedPoolInfo.pair.token1.symbol}</span>
-              </div>
+              <TokenLogo token={derivedPoolInfo.pair.token1} size={24} addtionalClasses="w-6 h-6" />
+              <span className="ml-2 font-semibold">{derivedPoolInfo.pair.token1.symbol}</span>
             </div>
           </div>
         </div>
 
-        <div className="space-y-4 grid grid-cols-2 gap-4 justify-between items-end">
-          <div>
-            <h3 className="text-black mb-1">TVL</h3>
-            <span className="text-lg font-semibold">
-              $
-              {DynamicFormatAmount({
-                amount: derivedPoolInfo.tvlUSD,
-                decimals: 2,
-              })}
-            </span>
-          </div>
-
-          <div>
-            <h3 className="text-black mb-1">APR (24h)</h3>
-            <div className="flex items-center">
-              <span className="text-lg font-semibold">
+        <div>
+          <h3 className="text-base font-semibold mb-3 pb-1 border-b border-gray-200">Performance</h3>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-5">
+            <div className="flex flex-col">
+              <h4 className="text-sm text-gray-600 mb-1">TVL</h4>
+              <span className="text-lg font-bold">
+                $
                 {DynamicFormatAmount({
-                  amount: derivedPoolInfo.apr24h,
+                  amount: derivedPoolInfo.tvlUSD,
                   decimals: 2,
                 })}
-                %
+              </span>
+            </div>
+
+            <div className="flex flex-col">
+              <h4 className="text-sm text-gray-600 mb-1">APR (24h)</h4>
+              <div className="flex items-center">
+                <span className="text-lg font-bold">
+                  {DynamicFormatAmount({
+                    amount: derivedPoolInfo.apr24h,
+                    decimals: 2,
+                  })}
+                  %
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col">
+              <h4 className="text-sm text-gray-600 mb-1">Volume (24h)</h4>
+              <span className="text-lg font-bold">
+                $
+                {DynamicFormatAmount({
+                  amount: derivedPoolInfo.volume24USD,
+                  decimals: 2,
+                })}
+              </span>
+            </div>
+
+            <div className="flex flex-col">
+              <h4 className="text-sm text-gray-600 mb-1">Fees (24h)</h4>
+              <span className="text-lg font-bold">
+                $
+                {DynamicFormatAmount({
+                  amount: derivedPoolInfo.fees24USD,
+                  decimals: 2,
+                })}
               </span>
             </div>
           </div>
-
-          <div>
-            <h3 className="text-black mb-1">Volume (24h)</h3>
-            <span className="text-lg font-semibold">
-              $
-              {DynamicFormatAmount({
-                amount: derivedPoolInfo.volume24USD,
-                decimals: 2,
-              })}
-            </span>
-          </div>
-
-          <div>
-            <h3 className="text-black mb-1">Fees (24h)</h3>
-            <span className="text-lg font-semibold">
-              $
-              {DynamicFormatAmount({
-                amount: derivedPoolInfo.fees24USD,
-                decimals: 2,
-              })}
-            </span>
-          </div>
         </div>
       </div>
-    </Card>
+    </div>
   );
 }

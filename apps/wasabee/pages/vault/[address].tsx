@@ -133,12 +133,12 @@ export const VaultDetail = observer(() => {
   };
 
   return (
-    <div className="container mx-auto p-4 font-gliker">
+    <div className="container mx-auto px-4 font-gliker">
       {/* Add Back Button */}
       <div>
         <Button
           onClick={() => router.push('/pools')}
-          className="flex items-center gap-2 text-white"
+          className="flex items-center gap-2 text-white text-xl"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -153,7 +153,7 @@ export const VaultDetail = observer(() => {
           >
             <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
-          Back to Vaults
+          <span>Back to Vaults</span>
         </Button>
       </div>
 
@@ -203,7 +203,7 @@ export const VaultDetail = observer(() => {
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {vault?.vaultDescription && (
               <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D] sm:col-span-2 md:col-span-3">
                 <h3 className="text-base text-[#202020] mb-2">
@@ -223,16 +223,16 @@ export const VaultDetail = observer(() => {
             )}
 
             <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
-              <h3 className="text-base text-[#202020] mb-2"></h3>
+              <h3 className="text-base text-[#202020] mb-2">Total Supply</h3>
               <div className="space-y-1">
-                <p className="text-lg md:text-xl font-bold text-[#202020]">
+                <p className="text-xs md:text-xl font-bold text-[#202020]">
                   {DynamicFormatAmount({
                     amount: vault?.totalSupply.total0.toString() ?? 0,
                     decimals: 3,
                     endWith: vault?.token0?.symbol,
                   })}
                 </p>
-                <p className="text-lg md:text-xl font-bold text-[#202020]">
+                <p className="text-xs md:text-xl font-bold text-[#202020]">
                   {DynamicFormatAmount({
                     amount: vault?.totalSupply.total1.toString() ?? 0,
                     decimals: 3,
@@ -255,7 +255,7 @@ export const VaultDetail = observer(() => {
                 </span>
               </h3>
               <div className="space-y-1">
-                <p className="text-lg md:text-xl font-bold text-[#202020] flex flex-col md:flex-row justify-between gap-2">
+                <p className="text-xs md:text-xl font-bold text-[#202020] flex flex-col md:flex-row justify-between gap-2">
                   <span>
                     {DynamicFormatAmount({
                       amount: BigNumber(
@@ -266,7 +266,7 @@ export const VaultDetail = observer(() => {
                     })}
                   </span>
                 </p>
-                <p className="text-lg md:text-xl font-bold text-[#202020]">
+                <p className="text-xs md:text-xl font-bold text-[#202020]">
                   {DynamicFormatAmount({
                     amount: BigNumber(
                       vault?.userTokenAmounts.total1.toString() ?? 0
@@ -281,7 +281,7 @@ export const VaultDetail = observer(() => {
               <h3 className="text-base text-[#202020] mb-2">
                 Your Share Percentage
               </h3>
-              <p className="text-lg md:text-xl font-bold text-[#202020]">
+              <p className="text-xs md:text-xl font-bold text-[#202020]">
                 {vault?.totalsupplyShares &&
                 vault?.totalsupplyShares > BigInt(0)
                   ? (
@@ -295,7 +295,7 @@ export const VaultDetail = observer(() => {
             </div>
             <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
               <h3 className="text-base text-[#202020] mb-2">Vault TVL</h3>
-              <p className="text-lg md:text-xl font-bold text-[#202020]">
+              <p className="text-xs md:text-xl font-bold text-[#202020]">
                 {DynamicFormatAmount({
                   amount: vault?.tvlUSD ?? 0,
                   decimals: 3,
@@ -305,7 +305,7 @@ export const VaultDetail = observer(() => {
             </div>
             <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
               <h3 className="text-base text-[#202020] mb-2">Pool TVL</h3>
-              <p className="text-lg md:text-xl font-bold text-[#202020]">
+              <p className="text-xs md:text-xl font-bold text-[#202020]">
                 {DynamicFormatAmount({
                   amount: poolTvl,
                   decimals: 3,
@@ -317,7 +317,7 @@ export const VaultDetail = observer(() => {
               <h3 className="text-base text-[#202020] mb-2">
                 24h Volume(pool)
               </h3>
-              <p className="text-lg md:text-xl font-bold text-[#202020]">
+              <p className="text-xs md:text-xl font-bold text-[#202020]">
                 {DynamicFormatAmount({
                   amount: poolVolume24h,
                   decimals: 3,
@@ -327,7 +327,7 @@ export const VaultDetail = observer(() => {
             </div>
             <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
               <h3 className="text-base text-[#202020] mb-2">24h Fees(pool)</h3>
-              <p className="text-lg md:text-xl font-bold text-[#202020]">
+              <p className="text-xs md:text-xl font-bold text-[#202020]">
                 {DynamicFormatAmount({
                   amount: poolFees24h,
                   decimals: 5,
@@ -340,7 +340,7 @@ export const VaultDetail = observer(() => {
               <h3 className="text-base text-[#202020] mb-2">APR </h3>
               <p
                 className={cn(
-                  'text-lg md:text-xl font-bold text-[#202020] flex items-center gap-2'
+                  'text-xs md:text-xl font-bold text-[#202020] flex items-center gap-2'
                 )}
               >
                 {vault?.apr.toFixed(2)}%
@@ -371,7 +371,7 @@ export const VaultDetail = observer(() => {
               </h3>
               <p
                 className={cn(
-                  'text-lg md:text-xl font-bold text-[#202020]',
+                  'text-xs md:text-xl font-bold text-[#202020]',
                   volatility > '500' && 'text-orange-500',
                   volatility > '1000' && 'text-red-500'
                 )}
