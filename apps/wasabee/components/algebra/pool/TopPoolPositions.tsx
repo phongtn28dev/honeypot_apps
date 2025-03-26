@@ -2,16 +2,27 @@ import {
   useTopPoolPositionsQuery,
   Position_OrderBy,
   OrderDirection,
+  Position,
 } from '@/lib/algebra/graphql/generated/graphql';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Button, Link } from '@nextui-org/react';
 import { LoadingContainer } from '@/components/LoadingDisplay/LoadingDisplay';
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
 import { Copy } from '@/components/Copy';
 import { truncate } from '@/lib/format';
 import { ChevronUp, ChevronDown } from 'lucide-react';
+import BigNumber from 'bignumber.js';
+import { usePosition } from '@/lib/algebra/hooks/positions/usePositions';
+import { Position as PositionEntity } from '@cryptoalgebra/sdk';
+import { Pool } from '@cryptoalgebra/sdk';
 
-export default function TopPoolPositions({ poolId }: { poolId: string }) {
+export default function TopPoolPositions({
+  poolId,
+  poolEntity,
+}: {
+  poolId: string;
+  poolEntity: Pool;
+}) {
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [sortField, setSortField] = useState<Position_OrderBy>(
@@ -156,54 +167,11 @@ export default function TopPoolPositions({ poolId }: { poolId: string }) {
                 </tr>
               ) : (
                 positions.map((position) => (
-                  <tr key={position.id} className="hover:bg-gray-50">
-                    {/* <td className="py-4 px-6 truncate text-black">
-                      {truncate(position.owner, 12)}
-                      <Copy value={position.owner} />
-                    </td> */}
-                    <td className="py-4 px-6 text-black">
-                      {Number(position.tickUpper.price0) >
-                      Number.MAX_SAFE_INTEGER ? (
-                        'FULL RANGE'
-                      ) : (
-                        <>
-                          {DynamicFormatAmount({
-                            amount: position.tickLower.price0,
-                            decimals: 2,
-                          })}{' '}
-                          -{' '}
-                          {DynamicFormatAmount({
-                            amount: position.tickUpper.price0,
-                            decimals: 2,
-                          })}{' '}
-                        </>
-                      )}
-                      <br />
-                      {position.token0.symbol}/{position.token1.symbol}
-                    </td>
-                    <td className="py-4 px-6 text-black">
-                      {DynamicFormatAmount({
-                        amount: position.depositedToken0,
-                        decimals: 2,
-                        endWith: position.token0.symbol,
-                      })}
-                      <br />
-                      {DynamicFormatAmount({
-                        amount: position.depositedToken1,
-                        decimals: 2,
-                        endWith: position.token1.symbol,
-                      })}
-                    </td>
-                    <td className="py-4 px-6 text-black text-center">
-                      <Link
-                        href={`/new-position/${poolId}?leftrange=${position.tickLower.price0}&rightrange=${position.tickUpper.price0}`}
-                      >
-                        <Button className="border border-[#2D2D2D] bg-[#FFCD4D] hover:bg-[#FFD56A] text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-3 py-1.5 text-xs">
-                          Copy Position
-                        </Button>
-                      </Link>
-                    </td>
-                  </tr>
+                  <PositionRow
+                    key={position.id}
+                    position={position as Position}
+                    poolEntity={poolEntity}
+                  />
                 ))
               )}
             </tbody>
@@ -243,3 +211,75 @@ export default function TopPoolPositions({ poolId }: { poolId: string }) {
     </LoadingContainer>
   );
 }
+
+export const PositionRow = ({
+  position,
+  poolEntity,
+}: {
+  position: Position;
+  poolEntity: Pool;
+}) => {
+  const { position: positionData, loading } = usePosition(position.id);
+  const positionEntity = useMemo(() => {
+    if (!positionData) return null;
+
+    return new PositionEntity({
+      pool: poolEntity,
+      tickLower: Number(positionData?.tickLower),
+      tickUpper: Number(positionData?.tickUpper),
+      liquidity: positionData?.liquidity.toString(),
+    });
+  }, [positionData, poolEntity]);
+
+  return (
+    <tr key={position.id} className="hover:bg-gray-50">
+      {/* <td className="py-4 px-6 truncate text-black">
+      {truncate(position.owner, 12)}
+      <Copy value={position.owner} />
+    </td> */}
+      <td className="py-4 px-6 text-black">
+        {Number(position.tickUpper.price0) > Number.MAX_SAFE_INTEGER ? (
+          'FULL RANGE'
+        ) : (
+          <>
+            {DynamicFormatAmount({
+              amount: positionEntity?.token0PriceLower.toFixed(18) ?? '0',
+              decimals: 5,
+            })}{' '}
+            -{' '}
+            {DynamicFormatAmount({
+              amount: positionEntity?.token0PriceUpper.toFixed(18) ?? '0',
+              decimals: 5,
+            })}{' '}
+          </>
+        )}
+        <br />
+        {position.token0.symbol}/{position.token1.symbol}
+      </td>
+      <td className="py-4 px-6 text-black">
+        {DynamicFormatAmount({
+          amount: position.depositedToken0,
+          decimals: 3,
+          endWith: position.token0.symbol,
+        })}
+        <br />
+        {DynamicFormatAmount({
+          amount: position.depositedToken1,
+          decimals: 3,
+          endWith: position.token1.symbol,
+        })}
+      </td>
+      <td className="py-4 px-6 text-black text-center">
+        <Link
+          href={`/new-position/${position.pool.id}?leftrange=${
+            positionEntity?.token0PriceLower.toFixed(18) ?? '0'
+          }&rightrange=${positionEntity?.token0PriceUpper.toFixed(18) ?? '0'}`}
+        >
+          <Button className="border border-[#2D2D2D] bg-[#FFCD4D] hover:bg-[#FFD56A] text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-3 py-1.5 text-xs">
+            Copy Position
+          </Button>
+        </Link>
+      </td>
+    </tr>
+  );
+};

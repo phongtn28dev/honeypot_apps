@@ -38,6 +38,7 @@ import PoolChart from '@/components/algebra/pool/PoolChart';
 import { Tab, Tabs } from '@nextui-org/react';
 import TopPoolPositions from '@/components/algebra/pool/TopPoolPositions';
 import PoolStatsCard from '@/components/algebra/pool/PoolStatsCard';
+
 const PoolPage = observer(() => {
   const { address: account } = useAccount();
   const [token0, setToken0] = useState<Token | null>(null);
@@ -101,6 +102,8 @@ const PoolPage = observer(() => {
 
   const filteredPositions = useMemo(() => {
     if (!positions || !poolEntity || !poolId) return [];
+
+    console.log(positions);
 
     return positions
       .filter(({ pool }) => pool.toLowerCase() === poolId?.toLowerCase())
@@ -246,6 +249,7 @@ const PoolPage = observer(() => {
             token1={token1}
             poolId={poolId ? poolId : zeroAddress}
           />
+
           <div className="w-full grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-4">
             {poolInfo?.pool && <PoolChart pool={poolInfo.pool as Pool} />}
             <PoolStatsCard pool={poolInfo?.pool as Pool} />
@@ -264,7 +268,12 @@ const PoolPage = observer(() => {
             }}
           >
             <Tab key="top-positions" title="Top Positions">
-              <TopPoolPositions poolId={poolId ? poolId : zeroAddress} />
+              {poolEntity && (
+                <TopPoolPositions
+                  poolId={poolId ? poolId : zeroAddress}
+                  poolEntity={poolEntity}
+                />
+              )}
             </Tab>
             <Tab key="my-positions" title="My Positions">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-0 gap-y-8 w-full lg:gap-8">
