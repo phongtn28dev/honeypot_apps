@@ -32,6 +32,7 @@ import {
 } from '@/components/BGT-Vault/OrdersList';
 import PostOrderModal from './new-order';
 import { UserBgtVaults } from '@/components/BGT-Vault/UserBgtVaults';
+import { Example } from '@honeypot/shared';
 
 const HomePage: NextLayoutPage = observer(() => {
   return (
@@ -46,6 +47,8 @@ const HomePage: NextLayoutPage = observer(() => {
           <SellOrdersList />
           <BuyOrdersList />
         </CardContainer>
+
+        <Example />
       </div>
     </div>
   );
