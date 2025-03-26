@@ -641,12 +641,6 @@ export const berachainNetwork = new Network({
       logoURI: '/images/icons/tokens/weth-token-icon.png',
       isRouterToken: true,
     },
-    // "0x5c43a5fef2b056934478373a53d1cb08030fd382": {
-    //   name: "Berally Token",
-    //   symbol: "BRLY",
-    //   decimals: 18,
-    //   logoURI: "/images/icons/tokens/berally.png",
-    // },
     '0x1ce0a25d13ce4d52071ae7e02cf1f6606f4c79d3': {
       name: 'NECT',
       symbol: 'NECT',
@@ -753,6 +747,18 @@ export const berachainNetwork = new Network({
       logoURI: '/images/icons/tokens/berachain.webp',
       isBitgetCampaignToken: true,
       isPopular: true,
+    },
+    '0xab7e0f3d69de8061aa46d7c9964dbc11878468eb': {
+      name: 'Berally Token',
+      symbol: 'BRLY',
+      decimals: 18,
+      logoURI: '/images/icons/tokens/berally.png',
+    },
+    '0x18878df23e2a36f81e820e4b47b4a40576d3159c': {
+      name: 'Olympus',
+      symbol: 'OHM',
+      decimals: 18,
+      logoURI: 'https://berascan.com/token/images/olympusdao2_32.png',
     },
   },
   validatedFtoAddresses: [],
