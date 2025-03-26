@@ -122,11 +122,13 @@ const LeaderboardPage = () => {
       <div className="max-w-[1200px] w-full mx-auto">
         <div className="max-w-full xl:max-w-[1200px] mx-auto">
           {/* 顶部统计卡片 */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 mb-6">
             {statsCards.map((stat, index) => (
-              <div key={index} className="bg-[#202020] rounded-2xl p-5">
-                <div className="text-gray-400 text-sm mb-2">{stat.title}</div>
-                <div className="text-white text-xl font-medium">
+              <div key={index} className="bg-[#202020] rounded-2xl p-3 md:p-5">
+                <div className="text-gray-400 text-xs sm:text-sm mb-1 md:mb-2">
+                  {stat.title}
+                </div>
+                <div className="text-white text-sm sm:text-base md:text-xl font-medium truncate">
                   {statsLoading
                     ? 'Loading...'
                     : typeof stat.value === 'string' &&
@@ -176,14 +178,14 @@ const LeaderboardPage = () => {
           </div> */}
 
           {/* 搜索栏 */}
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex gap-2 flex-1 max-w-md">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+            <div className="flex gap-2 flex-1 w-full sm:max-w-md">
               <input
                 type="text"
                 value={searchAddress}
                 onChange={(e) => searchDebounceHandler(e.target.value)}
                 placeholder="Search by address"
-                className="w-full bg-[#1a1b1f] border border-gray-700 rounded-lg px-4 py-2 text-white"
+                className="w-full bg-[#1a1b1f] border border-gray-700 rounded-lg px-3 py-2 text-white text-sm md:text-base"
               />
               {searchAddress && (
                 <button
@@ -191,14 +193,14 @@ const LeaderboardPage = () => {
                     searchDebounceHandler('');
                     setPage(1);
                   }}
-                  className="px-4 py-2 bg-[#2a2a2a] rounded-lg text-white hover:bg-[#3a3a3a] transition-colors"
+                  className="px-3 py-2 bg-[#2a2a2a] rounded-lg text-white hover:bg-[#3a3a3a] transition-colors text-sm md:text-base whitespace-nowrap"
                 >
                   Clear
                 </button>
               )}
             </div>
             {searchAddress && (
-              <div className="text-gray-400 text-sm ml-4">
+              <div className="text-gray-400 text-xs sm:text-sm sm:ml-4">
                 {accountsLoading
                   ? 'Searching...'
                   : accounts.length > 0
@@ -210,41 +212,37 @@ const LeaderboardPage = () => {
 
           {/* 交易数据表格 */}
           <div className="bg-[#202020] rounded-2xl overflow-hidden">
-            <div className="px-6 py-4 border-b border-[#5C5C5C]">
-              <h2 className="text-xl text-white font-bold">Leaderboard</h2>
+            <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-[#5C5C5C]">
+              <h2 className="text-lg sm:text-xl text-white font-bold">
+                Leaderboard
+              </h2>
             </div>
-            <div className="p-6">
-              <div className="border border-[#5C5C5C] rounded-lg overflow-scroll">
-                <table className="w-full ">
+            <div className="p-3 sm:p-6">
+              <div className="border border-[#5C5C5C] rounded-lg overflow-auto">
+                <table className="w-full">
                   <thead className="bg-[#323232] text-white border-b border-[#5C5C5C]">
                     <tr>
-                      <th className="py-4 px-6 text-left text-base font-medium whitespace-nowrap">
-                        <div className="flex items-center gap-2">
-                          <div className="w-4 h-4 bg-[#FFCD4D] rounded"></div>
-                          Address
+                      <th className="py-3 sm:py-4 px-2 sm:px-6 text-left text-xs sm:text-sm md:text-base font-medium">
+                        <div className="flex items-center gap-1 sm:gap-2">
+                          <div className="hidden sm:block w-3 h-3 md:w-4 md:h-4 bg-[#FFCD4D] rounded"></div>
+                          <span className="whitespace-nowrap">Address</span>
                         </div>
                       </th>
-                      <th className="py-4 px-6 text-left text-base font-medium whitespace-nowrap">
-                        Volume
+                      <th className="py-3 sm:py-4 px-2 sm:px-6 text-left text-xs sm:text-sm md:text-base font-medium">
+                        <span className="whitespace-nowrap">Volume</span>
                       </th>
-                      <th className="py-4 px-6 text-center text-base font-medium whitespace-nowrap">
-                        Swaps
+                      <th className="py-3 sm:py-4 px-2 sm:px-6 text-center text-xs sm:text-sm md:text-base font-medium">
+                        <span className="whitespace-nowrap">Swaps</span>
                       </th>
-                      {/* <th className="py-4 px-6 text-center text-base font-medium whitespace-nowrap">
-                          Holding Pools
-                        </th> */}
-                      {/* <th className="py-4 px-6 text-center text-base font-medium whitespace-nowrap">
-                        Meme Tokens
-                      </th>
-                      <th className="py-4 px-6 text-center text-base font-medium whitespace-nowrap">
-                        P2P Participations
-                      </th> */}
                     </tr>
                   </thead>
                   <tbody className="text-white divide-y divide-[#5C5C5C]">
                     {accountsLoading ? (
                       <tr>
-                        <td colSpan={9} className="py-4 px-6 text-center">
+                        <td
+                          colSpan={9}
+                          className="py-3 sm:py-4 px-2 sm:px-6 text-center"
+                        >
                           Loading...
                         </td>
                       </tr>
@@ -254,9 +252,9 @@ const LeaderboardPage = () => {
                           key={item.walletAddress}
                           className="hover:bg-[#2a2a2a] transition-colors"
                         >
-                          <td className="py-4 px-6 text-base font-mono text-blue-400">
-                            <div className="flex items-center gap-2">
-                              <div className="w-4 h-4 bg-[#FFCD4D] rounded"></div>
+                          <td className="py-3 sm:py-4 px-2 sm:px-6 text-xs sm:text-sm md:text-base font-mono text-blue-400">
+                            <div className="flex items-center gap-1 sm:gap-2">
+                              <div className="hidden sm:block w-3 h-3 md:w-4 md:h-4 bg-[#FFCD4D] rounded"></div>
                               <Tooltip
                                 content={item.walletAddress}
                                 placement="top"
@@ -264,28 +262,19 @@ const LeaderboardPage = () => {
                                 <Link
                                   href={`https://berascan.com/address/${item.walletAddress}`}
                                   target="_blank"
-                                  className="text-blue-400"
+                                  className="text-blue-400 text-xs sm:text-sm md:text-base"
                                 >
                                   {shortenAddressString(item.walletAddress)}
                                 </Link>
                               </Tooltip>
                             </div>
                           </td>
-                          <td className="py-4 px-6 text-base">
+                          <td className="py-3 sm:py-4 px-2 sm:px-6 text-xs sm:text-sm md:text-base">
                             {formatVolume(item.totalSpend)}
                           </td>
-                          <td className="py-4 px-6 text-center text-base">
+                          <td className="py-3 sm:py-4 px-2 sm:px-6 text-center text-xs sm:text-sm md:text-base">
                             {item.swapCount}
                           </td>
-                          {/* <td className="py-4 px-6 text-center text-base">
-                              {item.poolHoldingCount}
-                            </td> */}
-                          {/* <td className="py-4 px-6 text-center text-base">
-                            {item.memeTokenCount}
-                          </td>
-                          <td className="py-4 px-6 text-center text-base">
-                            {item.participateCount}
-                          </td> */}
                         </tr>
                       ))
                     )}
@@ -293,16 +282,16 @@ const LeaderboardPage = () => {
                 </table>
               </div>
             </div>
-            <div className="px-6 py-4 flex justify-end border-t border-gray-700">
-              <div className="flex items-center gap-6 max-w-[400px]">
-                <div className="flex items-center gap-4">
+            <div className="px-3 sm:px-6 py-3 sm:py-4 border-t border-gray-700">
+              <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-end gap-3">
+                <div className="flex items-center gap-2 sm:gap-4 w-full sm:w-auto justify-between sm:justify-start">
                   <button
                     onClick={() => setPage((p) => Math.max(1, p - 1))}
                     disabled={page === 1}
-                    className="flex items-center gap-2 px-4 py-2 bg-[#2a2a2a] rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#3a3a3a] transition-colors"
+                    className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-[#2a2a2a] rounded-lg text-white text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#3a3a3a] transition-colors"
                   >
                     <svg
-                      className="w-4 h-4"
+                      className="w-3 h-3 sm:w-4 sm:h-4"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -314,11 +303,11 @@ const LeaderboardPage = () => {
                         d="M15 19l-7-7 7-7"
                       />
                     </svg>
-                    Previous
+                    <span className="sm:inline hidden">Previous</span>
                   </button>
                   <div className="flex items-center gap-2">
-                    <span className="text-gray-400">Page</span>
-                    <span className="px-3 py-1 bg-[#1a1a1a] rounded text-white min-w-[40px] text-center">
+                    <span className="text-gray-400 text-sm">Page</span>
+                    <span className="px-2 sm:px-3 py-1 bg-[#1a1a1a] rounded text-white min-w-[32px] sm:min-w-[40px] text-center text-sm">
                       {page}
                     </span>
                   </div>
@@ -329,11 +318,11 @@ const LeaderboardPage = () => {
                       }
                     }}
                     disabled={!hasMore || accountsLoading}
-                    className="flex items-center gap-2 px-4 py-2 bg-[#2a2a2a] rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#3a3a3a] transition-colors"
+                    className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-[#2a2a2a] rounded-lg text-white text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#3a3a3a] transition-colors"
                   >
-                    Next
+                    <span className="sm:inline hidden">Next</span>
                     <svg
-                      className="w-4 h-4"
+                      className="w-3 h-3 sm:w-4 sm:h-4"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -349,9 +338,9 @@ const LeaderboardPage = () => {
                 </div>
 
                 {accountsLoading && (
-                  <div className="flex items-center gap-2 text-gray-400">
+                  <div className="flex items-center gap-2 text-gray-400 text-sm">
                     <svg
-                      className="animate-spin h-4 w-4"
+                      className="animate-spin h-3 w-3 sm:h-4 sm:w-4"
                       fill="none"
                       viewBox="0 0 24 24"
                     >

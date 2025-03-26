@@ -1,15 +1,16 @@
 import React from "react";
 
 interface CardProps {
-    children: React.ReactNode
+    children: React.ReactNode;
+    className?: string;
 }
 
-const Card = ({ children }: CardProps) => {
-
-    return <div className="bg-card-gradient border border-card-border rounded-2xl">
-        {children}
-    </div>
-    
+const Card = ({ children, className = "" }: CardProps) => {
+    return (
+        <div className={`bg-white text-black rounded-3xl shadow-sm hover:shadow-md transition-all border border-[#F7931A10] hover:border-[#F7931A] duration-300 ${className}`}>
+            {children}
+        </div>
+    );
 }
 
 export default Card;

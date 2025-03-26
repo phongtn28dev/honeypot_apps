@@ -44,43 +44,43 @@ export const Profile = observer(() => {
   }, []);
 
   return (
-    <div className="w-full max-w-[1200px] mx-auto px-4 xl:px-0 font-gliker">
-      <div className="flex flex-col gap-6">
+    <div className="w-full max-w-[1200px] mx-auto px-2 sm:px-4 xl:px-0 font-gliker">
+      <div className="flex flex-col gap-4 sm:gap-6">
         {wallet.isInit && (
-          <div className="space-y-16">
+          <div className="space-y-8 sm:space-y-16">
             <CardContainer showBottomBorder={false}>
-              <div className="flex flex-col md:flex-row justify-between items-start w-full py-5 px-4 md:px-8">
-                <div className="flex md:flex-col gap-8 justify-between w-full">
-                  <div className="flex items-center gap-4">
+              <div className="flex flex-col md:flex-row justify-between items-start w-full sm:py-5 sm:px-4 md:px-8">
+                <div className="flex md:flex-col gap-4 sm:gap-8 justify-between w-full">
+                  <div className="flex items-center gap-2 sm:gap-4">
                     <Image
                       width={72}
                       height={72}
                       alt="avatar"
                       src="/images/v3/avatar.svg"
-                      className="stroke-1 stroke-black drop-shadow-[0_1px_0_#000] w-16 h-16 md:w-[72px] md:h-[72px]"
+                      className="stroke-1 stroke-black drop-shadow-[0_1px_0_#000] w-11 h-11 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-[72px] lg:h-[72px]"
                     />
-                    <div className="flex flex-col gap-1">
-                      <p className="text-2xl md:text-3xl text-[#0D0D0D] text-shadow-[1px_2px_0_#AF7F3D] text-stroke-0.5 text-stroke-white">
+                    <div className="flex flex-col gap-0.5 sm:gap-1">
+                      <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-[#0D0D0D] text-shadow-[1px_2px_0_#AF7F3D] text-stroke-0.5 text-stroke-white">
                         My Account
                       </p>
-                      <div className="flex items-center justify-between w-full text-[#4D4D4D]">
+                      <div className="flex items-center gap-1 sm:gap-2 w-full text-[#4D4D4D]">
                         <Link
                           target="_blank"
-                          className="text-[#4D4D4D] hover:text-[#0D0D0D] hover:underline decoration-2 transition-colors text-sm md:text-base"
+                          className="text-[#4D4D4D] hover:text-[#0D0D0D] hover:underline decoration-2 transition-colors text-xs sm:text-sm md:text-base"
                           href={`https://berascan.com/address/${wallet.account}`}
                         >
-                          {truncate(wallet.account, 10)}
+                          {truncate(wallet.account, 8)}
                         </Link>
                         <Copy value={wallet.account} copyTip="Copy address" />
                       </div>
                     </div>
                   </div>
 
-                  <span className="flex flex-col items-start p-2">
-                    <span className="text-[#0D0D0D] text-sm md:text-base mb-2 md:mb-4">
+                  <span className="flex flex-col items-start p-1 sm:p-2">
+                    <span className="text-[#0D0D0D] text-xs sm:text-sm md:text-base mb-1 sm:mb-2 md:mb-4">
                       Token Value
                     </span>
-                    <div className="text-white text-xl md:text-[24px] leading-none text-shadow-[1.081px_2.162px_0px_#AF7F3D] text-stroke-1.5 text-stroke-black">
+                    <div className="text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-none text-shadow-[1.081px_2.162px_0px_#AF7F3D] text-stroke-1.5 text-stroke-black">
                       {formatAmountWithAlphabetSymbol(
                         portfolio.totalBalanceFormatted,
                         2
