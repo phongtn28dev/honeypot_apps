@@ -56,6 +56,9 @@ You must add this this import in every app you want to use this library.
 
 "@honeypot/shared": ["../../libs/shared/src/index.ts"]
 
+#use
+import { Example } from '@honeypot/shared';
+
 ```
 
 ## add or update env in github
