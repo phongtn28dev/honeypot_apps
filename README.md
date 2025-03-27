@@ -17,7 +17,7 @@ npx nx dev <app-name>
 To create a production bundle:
 
 ```sh
-npx nx build <app-name>
+npx nx build <app-name> --prod
 ```
 
 To see all available targets to run for a project, run:
@@ -25,6 +25,8 @@ To see all available targets to run for a project, run:
 ```sh
 npx nx show project apps/<app-name>
 ```
+
+## To generate a new app, use:
 
 ```sh
 npx nx g @nx/next:app apps/<app-name>
@@ -36,13 +38,27 @@ npx nx g @nx/next:app apps/<app-name>
 ✔ Would you like to use `src/` directory? (Y/n) · false
 ```
 
-To generate a new library, use:
+## To generate a new library, use:
 
 ```sh
-npx nx g @nx/react:lib <lib-name>
+npx nx generate @nrwl/react:lib libs/<lib-name>
+
 ```
 
-## add env in github
+## Import library in app:
+
+In the history reason, we need add paths value in every app tsconfig.json, and the tsconfig.base.json will override by app's tsconfig.json path value.
+You must add this this import in every app you want to use this library.
+
+```
+#example add this line in apps/wasabee/tsconfig.json -> compilerOptions.paths
+#@honeypot/shared this just for example, you can set other name for this import
+
+"@honeypot/shared": ["../../libs/shared/src/index.ts"]
+
+```
+
+## add or update env in github
 
 1. open https://github.com/Honeypot-Finance/honeypot_apps/settings/secrets/actions
 2. Click 'Add repository secret'
