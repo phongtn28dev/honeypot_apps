@@ -240,111 +240,136 @@ const PoolPage = observer(() => {
     poolEntity;
 
   return (
-    <PageContainer>
-      <CardContainer className="gap-y-6">
-        <LoadingContainer isLoading={!poolEntity}>
-          <PoolHeader
-            pool={poolEntity}
-            token0={token0}
-            token1={token1}
-            poolId={poolId ? poolId : zeroAddress}
-          />
-
-          <div className="w-full grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-4">
-            {poolInfo?.pool && <PoolChart pool={poolInfo.pool as Pool} />}
-            <PoolStatsCard pool={poolInfo?.pool as Pool} />
-          </div>
-
-          <Tabs
-            classNames={{
-              tab: 'px-2 sm:px-3 sm:h-10 text-xs sm:text-sm',
-              base: 'relative w-full',
-              tabList:
-                'flex rounded-[16px] border border-[#202020] bg-white shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020] p-2 sm:p-3 z-10 max-w-[90%] sm:max-w-none mx-auto absolute left-1/2 -translate-x-1/2 z-10',
-              cursor: 'bg-[#202020] !text-white/80 px-2 py-3',
-              panel: cn(
-                'flex flex-col h-full w-full gap-y-4 items-center rounded-2xl text-[#202020]',
-                '!mt-0',
-                'h-auto'
-              ),
-              tabContent: 'text-[#202020] text-sm sm:text-base',
-            }}
+    <div className="container mx-auto font-gliker">
+      <div className='px-2 sm:px-4 md:px-8'>
+        <Button
+          onClick={() => router.push('/pools')}
+          className="flex items-center gap-2 text-white text-xl px-0"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
-            <Tab
-              key="top-positions"
-              title={
-                <span className="text-xs sm:text-base">Top Positions</span>
-              }
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          <span>Back to Pools</span>
+        </Button>
+      </div>
+      <PageContainer>
+        <CardContainer className="gap-y-6">
+          <LoadingContainer isLoading={!poolEntity}>
+            <PoolHeader
+              pool={poolEntity}
+              token0={token0}
+              token1={token1}
+              poolId={poolId ? poolId : zeroAddress}
+            />
+
+            <div className="w-full grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-4">
+              {poolInfo?.pool && <PoolChart pool={poolInfo.pool as Pool} />}
+              <PoolStatsCard pool={poolInfo?.pool as Pool} />
+            </div>
+
+            <Tabs
+              classNames={{
+                tab: 'px-2 sm:px-3 sm:h-10 text-xs sm:text-sm',
+                base: 'relative w-full',
+                tabList:
+                  'flex rounded-[16px] border border-[#202020] bg-white shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020] p-2 sm:p-3 z-10 max-w-[90%] sm:max-w-none mx-auto absolute left-1/2 -translate-x-1/2 z-10',
+                cursor: 'bg-[#202020] !text-white/80 px-2 py-3',
+                panel: cn(
+                  'flex flex-col h-full w-full gap-y-4 items-center rounded-2xl text-[#202020]',
+                  '!mt-0',
+                  'h-auto'
+                ),
+                tabContent: 'text-[#202020] text-sm sm:text-base',
+              }}
             >
-              {poolEntity && (
-                <TopPoolPositions
-                  poolId={poolId ? poolId : zeroAddress}
-                  poolEntity={poolEntity}
-                />
-              )}
-            </Tab>
-            <Tab
-              key="my-positions"
-              title={<span className="text-xs sm:text-base">My Positions</span>}
-            >
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-0 gap-y-8 w-full lg:gap-8">
-                <div className="col-span-3">
-                  {!account ? (
-                    <NoAccount />
-                  ) : positionsLoading ||
-                    isFarmingLoading ||
-                    areDepositsLoading ? (
-                    <LoadingState />
-                  ) : noPositions ? (
-                    <NoPositions poolId={poolId ? poolId : zeroAddress} />
-                  ) : (
-                    <>
-                      {/* <MyPositionsToolbar
+              <Tab
+                key="top-positions"
+                title={
+                  <span className="text-xs sm:text-base">Top Positions</span>
+                }
+              >
+                {poolEntity && (
+                  <TopPoolPositions
+                    poolId={poolId ? poolId : zeroAddress}
+                    poolEntity={poolEntity}
+                  />
+                )}
+              </Tab>
+              <Tab
+                key="my-positions"
+                title={
+                  <span className="text-xs sm:text-base">My Positions</span>
+                }
+              >
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-0 gap-y-8 w-full lg:gap-8">
+                  <div className="col-span-3">
+                    {!account ? (
+                      <NoAccount />
+                    ) : positionsLoading ||
+                      isFarmingLoading ||
+                      areDepositsLoading ? (
+                      <LoadingState />
+                    ) : noPositions ? (
+                      <NoPositions poolId={poolId ? poolId : zeroAddress} />
+                    ) : (
+                      <>
+                        {/* <MyPositionsToolbar
                         positionsData={positionsData}
                         poolId={poolId ? poolId : zeroAddress}
                       /> */}
-                      <MyPositions
-                        positions={positionsData}
-                        poolId={poolId ? poolId : zeroAddress}
-                        selectedPosition={selectedPosition?.id}
-                        selectPosition={(positionId) =>
-                          selectPosition((prev) =>
-                            prev === positionId ? null : positionId
-                          )
-                        }
-                      />
-                      {farmingInfo &&
-                        deposits &&
-                        !isFarmingLoading &&
-                        !areDepositsLoading && (
-                          <div>
-                            <h2 className="font-semibold text-xl text-left mt-12">
-                              Farming
-                            </h2>
-                            <ActiveFarming
-                              deposits={deposits && deposits.deposits}
-                              farming={farmingInfo}
-                              positionsData={positionsData}
-                            />
-                          </div>
-                        )}
-                    </>
-                  )}
-                </div>
+                        <MyPositions
+                          positions={positionsData}
+                          poolId={poolId ? poolId : zeroAddress}
+                          selectedPosition={selectedPosition?.id}
+                          selectPosition={(positionId) =>
+                            selectPosition((prev) =>
+                              prev === positionId ? null : positionId
+                            )
+                          }
+                        />
+                        {farmingInfo &&
+                          deposits &&
+                          !isFarmingLoading &&
+                          !areDepositsLoading && (
+                            <div>
+                              <h2 className="font-semibold text-xl text-left mt-12">
+                                Farming
+                              </h2>
+                              <ActiveFarming
+                                deposits={deposits && deposits.deposits}
+                                farming={farmingInfo}
+                                positionsData={positionsData}
+                              />
+                            </div>
+                          )}
+                      </>
+                    )}
+                  </div>
 
-                <div className="flex flex-col gap-8 w-full h-full">
-                  <PositionCard
-                    farming={farmingInfo}
-                    closedFarmings={closedFarmings}
-                    selectedPosition={selectedPosition}
-                  />
+                  <div className="flex flex-col gap-8 w-full h-full">
+                    <PositionCard
+                      farming={farmingInfo}
+                      closedFarmings={closedFarmings}
+                      selectedPosition={selectedPosition}
+                    />
+                  </div>
                 </div>
-              </div>
-            </Tab>
-          </Tabs>
-        </LoadingContainer>
-      </CardContainer>
-    </PageContainer>
+              </Tab>
+            </Tabs>
+          </LoadingContainer>
+        </CardContainer>
+      </PageContainer>
+    </div>
   );
 });
 
