@@ -172,7 +172,7 @@ export class HeyBgtOrder {
   }
 
   async getOrderDetails() {
-    console.log(this.orderType);
+    if (!wallet.contracts.heyBgt) return;
     if (this.orderType === OrderType.BuyBgt) {
       const res = await wallet.contracts.heyBgt.getBuyBgtOrder(
         BigInt(this.orderId)

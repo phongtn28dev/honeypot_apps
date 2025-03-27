@@ -17,6 +17,7 @@ export class HeyBgtContract implements BaseContract {
   address: Address = zeroAddress;
   name: string = 'HeyBgt';
   abi = HeyBGTABI;
+  beraprice: number = 0;
 
   constructor(args: Partial<HeyBgtContract>) {
     Object.assign(this, args);
@@ -31,7 +32,7 @@ export class HeyBgtContract implements BaseContract {
     });
   }
 
-  async postSellOrder(price: bigint, vaultAddress: `0x${string}`) {
+  async postSellOrder(price: number, vaultAddress: `0x${string}`) {
     if (!wallet.account || !wallet.walletClient) {
       return;
     }
@@ -47,6 +48,9 @@ export class HeyBgtContract implements BaseContract {
         wallet.currentChain.contracts.heyBgt as Address
       );
 
+      const beraPrice = await this.getBeraPrice();
+      const formattedPrice = BigInt(Math.floor((beraPrice / price) * 10000));
+
       const res = await wallet.publicClient.simulateContract({
         address: wallet.contracts.heyBgt.address,
         abi: wallet.contracts.heyBgt.abi,
@@ -54,19 +58,15 @@ export class HeyBgtContract implements BaseContract {
         account: wallet.account as Address,
         args: [
           (vaultAddress ?? zeroAddress) as Address,
-          price,
+          formattedPrice,
           BigInt(NODE_ID),
         ],
       });
 
-      console.log(res);
-
       return new ContractWrite(this.contract.write.openSellBgtOrder, {
         action: 'Post Order',
-      }).call([vaultAddress, price, BigInt(NODE_ID)]);
+      }).call([vaultAddress, formattedPrice, BigInt(NODE_ID)]);
     } catch (error) {
-      console.error(error);
-
       if (String(error).includes('too less bgt')) {
         WrappedToastify.error({
           title: 'Too less BGT',
@@ -243,5 +243,12 @@ export class HeyBgtContract implements BaseContract {
   async getBuyBgtOrder(orderId: bigint) {
     const res = await this.contract.read.getBuyBgtOrder([orderId]);
     return res;
+  }
+
+  async getBeraPrice() {
+    const res = await this.contract.read.getBeraPrice();
+    const price = Number(res[0]) / 10 ** Number(res[1]);
+    this.beraprice = price;
+    return price;
   }
 }

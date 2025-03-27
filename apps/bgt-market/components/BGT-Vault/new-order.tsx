@@ -11,7 +11,7 @@ import { SelectItem } from '@nextui-org/react';
 import { wallet } from '@/services/wallet';
 import { Address, formatEther, parseEther, zeroAddress } from 'viem';
 import { simulateContract } from 'viem/actions';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ValidatedVaultAddresses } from '@/config/validatedVaultAddresses';
 import { useUserBgtVaults } from '@/lib/hooks/useUserBgtVaults';
 import { WrappedToastify } from '@/lib/wrappedToastify';
@@ -207,14 +207,14 @@ export const HeyBgtPostOrderModal: NextLayoutPage = observer(() => {
     try {
       if (OrderType.BuyBgt === data.orderType) {
         const orderTransaction = wallet.contracts.heyBgt.postBuyOrder(
-          BigInt(parseEther(data.orderBuyValue ?? '0')),
-          BigInt(parseEther(Number(data.price).toFixed(18)))
+          BigInt(parseEther(Number(data.price).toFixed(18))),
+          BigInt(parseEther(data.orderBuyValue ?? '0'))
         );
 
         await orderTransaction;
       } else {
         const orderTransaction = wallet.contracts.heyBgt.postSellOrder(
-          BigInt(parseEther(Number(data.price).toFixed(18))),
+          Number(data.price),
           (data.vaultAddress ?? zeroAddress) as Address
         );
         await orderTransaction;
@@ -230,6 +230,12 @@ export const HeyBgtPostOrderModal: NextLayoutPage = observer(() => {
 
     setBuyOrSellLoading(false);
   };
+
+  useEffect(() => {
+    if (wallet.contracts.heyBgt) {
+      wallet.contracts.heyBgt.getBeraPrice();
+    }
+  }, [wallet.contracts.heyBgt]);
 
   return (
     <div className="w-full h-full">
@@ -252,7 +258,6 @@ export const HeyBgtPostOrderModal: NextLayoutPage = observer(() => {
             selectorIcon={<></>}
             selectionMode="single"
             onSelectionChange={(e) => {
-              console.log(e);
               if ((e.currentKey as OrderType) === buyOrSell) {
                 setBuyOrSell(undefined);
               } else {
@@ -279,7 +284,9 @@ export const HeyBgtPostOrderModal: NextLayoutPage = observer(() => {
                 className={
                   'w-full bg-white rounded-[12px] md:rounded-[16px] px-3 md:px-4 py-2 md:py-[18px] text-black outline-none border border-black shadow-[0px_332px_93px_0px_rgba(0,0,0,0.00),0px_212px_85px_0px_rgba(0,0,0,0.01),0px_119px_72px_0px_rgba(0,0,0,0.05),0px_53px_53px_0px_rgba(0,0,0,0.09),0px_13px_29px_0px_rgba(0,0,0,0.10)] placeholder:text-black/50 text-sm md:text-base font-medium h-[40px] md:h-[60px]'
                 }
-                placeholder="Enter Price(>=1.0000)"
+                placeholder={`Enter Price(>=${wallet.contracts.heyBgt?.beraprice?.toFixed(
+                  4
+                )})`}
               />
               {errors.price && (
                 <span className="text-red-500 text-sm">Price is required</span>

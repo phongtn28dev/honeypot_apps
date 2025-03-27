@@ -133,8 +133,7 @@ export const HeyBgtBuyOrderListRow = observer(
         </td>
         <td className="py-2 px-2 sm:px-4 text-sm sm:text-base font-mono whitespace-nowrap hidden md:table-cell">
           <div className="flex items-center gap-2">
-            {order.SaleBGT}{' '}
-            {wallet?.currentChain?.nativeToken?.symbol ?? 'HONEY'}
+            {order.SaleBGT} {'HONEY'}
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
@@ -155,8 +154,8 @@ export const HeyBgtBuyOrderListRow = observer(
                   disabled={!wallet.walletClient}
                   isDisabled={!wallet.walletClient}
                   onPress={() => {
-                    wallet.contracts.bgtMarket
-                      .closeOrder(BigInt(order.orderId))
+                    wallet.contracts.heyBgt
+                      .closeOrder(BigInt(order.orderId), 'BuyBGT')
                       ?.then(() => {
                         order.status = OrderStatus.Closed;
                         actionCallBack?.();
@@ -217,8 +216,7 @@ export const HeyBgtSellOrderListRow = observer(
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
           <div className="flex flex-col sm:flex-row justify-end items-end gap-1">
-            {order.totalPriceString}{' '}
-            {wallet?.currentChain?.nativeToken?.symbol ?? 'HONEY'}
+            {order.totalPriceString} HONEY
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap hidden sm:table-cell">
@@ -229,8 +227,8 @@ export const HeyBgtSellOrderListRow = observer(
                   disabled={!wallet.walletClient || !wallet.isInit}
                   isDisabled={!wallet.walletClient || !wallet.isInit}
                   onPress={() => {
-                    wallet.contracts.bgtMarket
-                      .closeOrder(BigInt(order.orderId))
+                    wallet.contracts.heyBgt
+                      .closeOrder(BigInt(order.orderId), 'SellBGT')
                       ?.then(() => actionCallBack);
                   }}
                 >
