@@ -9,7 +9,10 @@ import { UserBgtVaults } from '@/components/BGT-Vault/UserBgtVaults';
 import { globalService } from '@/services/global';
 import { SellOrdersListHeyBgt } from '@/components/BGT-Vault/OrdersList/SellOrdersListHeyBgt';
 import { BuyOrderListHeyBgt } from '@/components/BGT-Vault/OrdersList/BuyOrderListHeyBgt';
-import { HeyBgtPostOrderModal, BgtMarketPostOrderModal } from './new-order';
+import {
+  HeyBgtPostOrderModal,
+  BgtMarketPostOrderModal,
+} from '../components/BGT-Vault/new-order';
 
 const HomePage: NextLayoutPage = observer(() => {
   return (
