@@ -19,9 +19,9 @@ import {
 } from '@/lib/algebra/graphql/generated/graphql';
 import { BGTVault } from '../contract/bgt-market/bgt-vault';
 
-export class BgtOrder {
-  static gqlOrderToBgtOrder(order: Order): BgtOrder {
-    return BgtOrder.getBgtOrder({
+export class HeyBgtOrder {
+  static gqlOrderToBgtOrder(order: Order): HeyBgtOrder {
+    return HeyBgtOrder.getBgtOrder({
       orderId: order.id.toString(),
       dealerId: order.dealer.id as Address,
       price: order.price.toString(),
@@ -33,27 +33,27 @@ export class BgtOrder {
       status: order.status,
     });
   }
-  static bgtOrderMap: Record<string, BgtOrder> = {};
+  static bgtOrderMap: Record<string, HeyBgtOrder> = {};
   static getBgtOrder({
     orderId,
     dealerId,
     ...args
   }: {
     orderId: string;
-  } & Partial<BgtOrder>) {
+  } & Partial<HeyBgtOrder>) {
     const key = orderId;
-    const order = BgtOrder.bgtOrderMap[key];
+    const order = HeyBgtOrder.bgtOrderMap[key];
 
     if (!order) {
-      BgtOrder.bgtOrderMap[key] = new BgtOrder({
+      HeyBgtOrder.bgtOrderMap[key] = new HeyBgtOrder({
         orderId: orderId,
         dealerId: dealerId as Address,
         ...args,
       });
     } else {
-      BgtOrder.bgtOrderMap[key].setData(args);
+      HeyBgtOrder.bgtOrderMap[key].setData(args);
     }
-    return BgtOrder.bgtOrderMap[key];
+    return HeyBgtOrder.bgtOrderMap[key];
   }
 
   orderId: string;
@@ -144,7 +144,10 @@ export class BgtOrder {
     }
   }
 
-  constructor({ orderId, ...args }: Partial<BgtOrder> & { orderId: string }) {
+  constructor({
+    orderId,
+    ...args
+  }: Partial<HeyBgtOrder> & { orderId: string }) {
     this.setData(args);
     this.orderId = orderId;
     makeAutoObservable(this);
@@ -161,7 +164,7 @@ export class BgtOrder {
       });
   }
 
-  setData({ ...args }: Partial<BgtOrder>) {
+  setData({ ...args }: Partial<HeyBgtOrder>) {
     runInAction(() => {
       Object.assign(this, args);
     });

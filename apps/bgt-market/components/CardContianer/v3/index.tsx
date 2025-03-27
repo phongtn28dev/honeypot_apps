@@ -39,7 +39,7 @@ function CardContainer({
   return (
     <div
       className={cn(
-        'flex flex-col w-full gap-y-2 justify-center items-center rounded-2xl text-[#202020]',
+        'flex flex-col w-full gap-y-2 justify-center items-center rounded-2xl text-[#202020] transition-all duration-300',
         type === 'primary'
           ? 'bg-[#FFCD4D]'
           : bordered

@@ -13,6 +13,7 @@ import { MEMEFacadeContract } from '@/services/contract/launches/pot2pump/memefa
 import { ICHIVaultFactoryContract } from '@/services/contract/aquabera/ICHIVaultFactory-contract';
 import { BGTMarketContract } from './contract/bgt-market/bgt-market';
 import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
+import { HeyBgtContract } from './contract/bgt-market/hey-bgt';
 
 export class Wallet {
   account: string = '';
@@ -30,6 +31,7 @@ export class Wallet {
     memeFacade: MEMEFacadeContract;
     vaultFactory: ICHIVaultFactoryContract;
     bgtMarket: BGTMarketContract;
+    heyBgt: HeyBgtContract;
   } = {} as any;
   publicClient: PublicClient = createPublicClientByChain(
     this.currentChain.chain
@@ -99,6 +101,9 @@ export class Wallet {
       }),
       bgtMarket: new BGTMarketContract({
         address: this.currentChain.contracts.bgtMarket as Address,
+      }),
+      heyBgt: new HeyBgtContract({
+        address: this.currentChain.contracts.heyBgt as Address,
       }),
     };
     this.publicClient = createPublicClientByChain(this.currentChain.chain);

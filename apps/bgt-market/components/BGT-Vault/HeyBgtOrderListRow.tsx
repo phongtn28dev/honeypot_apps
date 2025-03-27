@@ -20,13 +20,14 @@ import { usePollingBlockNumber } from '@/lib/hooks/useBlockNumber';
 import { UserBgtVaults } from './UserBgtVaults';
 import { useUserBgtVaults } from '@/lib/hooks/useUserBgtVaults';
 import { BgtMarketOrder } from '@/services/bgt-market/bgtMarketOrder';
+import { HeyBgtOrder } from '@/services/bgt-market/heyBgtOrder';
 
-export const UserOrderListRow = observer(
+export const HeyBgtUserOrderListRow = observer(
   ({
     order,
     actionCallBack,
   }: {
-    order: BgtMarketOrder;
+    order: HeyBgtOrder;
     actionCallBack?: () => void;
   }) => {
     const { block } = usePollingBlockNumber();

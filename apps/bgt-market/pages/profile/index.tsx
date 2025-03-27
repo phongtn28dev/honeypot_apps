@@ -16,8 +16,9 @@ import Copy from '@/components/Copy/v3';
 import { cn } from '@/lib/utils';
 import { notificationService } from '@/services/notification';
 import { Notification } from '@/components/atoms/Notification/Notification';
-import { BuyOrdersList } from '@/components/BGT-Vault/OrdersList';
-import { UserOrdersList } from '@/components/BGT-Vault/OrdersList/UserOrderList';
+import { UserOrderListHeyBgt } from '@/components/BGT-Vault/OrdersList/UserOrderListHeyBgt';
+import { globalService } from '@/services/global';
+import { UserOrderListBgtMarket } from '@/components/BGT-Vault/OrdersList/UserOrderListBgtMarket';
 export const Profile = observer(() => {
   const [notify, setNotify] = useState(false);
   useEffect(() => {
@@ -91,7 +92,11 @@ export const Profile = observer(() => {
               }}
             >
               <Tab key="my-orders" title="My Orders">
-                <UserOrdersList />
+                {globalService.BgtMarketBaseToken === 'HONEY' ? (
+                  <UserOrderListHeyBgt />
+                ) : (
+                  <UserOrderListBgtMarket />
+                )}
               </Tab>
               {/* <Tab key="transaction-history" title="Fill History"></Tab> */}
             </Tabs>
