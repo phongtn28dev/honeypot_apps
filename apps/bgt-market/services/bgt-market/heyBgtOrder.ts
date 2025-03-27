@@ -19,41 +19,41 @@ import {
 } from '@/lib/algebra/graphql/generated/graphql';
 import { BGTVault } from '../contract/bgt-market/bgt-vault';
 
-export class BgtOrder {
-  static gqlOrderToBgtOrder(order: Order): BgtOrder {
-    return BgtOrder.getBgtOrder({
-      orderId: order.id.toString(),
+export class HeyBgtOrder {
+  static gqlOrderToBgtOrder(order: Order): HeyBgtOrder {
+    return HeyBgtOrder.getBgtOrder({
+      orderId: order.id.toString().split('-')[1],
       dealerId: order.dealer.id as Address,
-      price: order.price.toString(),
+      //price: order.price.toString(),
       vaultAddress: order.vaultAddress as Address,
-      balance: order.balance.toString(),
-      spentBalance: order.spentBalance.toString(),
+      //balance: order.balance.toString(),
+      //spentBalance: order.spentBalance.toString(),
       height: order.height.toString(),
       orderType: order.orderType,
       status: order.status,
     });
   }
-  static bgtOrderMap: Record<string, BgtOrder> = {};
+  static bgtOrderMap: Record<string, HeyBgtOrder> = {};
   static getBgtOrder({
     orderId,
     dealerId,
     ...args
   }: {
     orderId: string;
-  } & Partial<BgtOrder>) {
+  } & Partial<HeyBgtOrder>) {
     const key = orderId;
-    const order = BgtOrder.bgtOrderMap[key];
+    const order = HeyBgtOrder.bgtOrderMap[key];
 
     if (!order) {
-      BgtOrder.bgtOrderMap[key] = new BgtOrder({
+      HeyBgtOrder.bgtOrderMap[key] = new HeyBgtOrder({
         orderId: orderId,
         dealerId: dealerId as Address,
         ...args,
       });
     } else {
-      BgtOrder.bgtOrderMap[key].setData(args);
+      HeyBgtOrder.bgtOrderMap[key].setData(args);
     }
-    return BgtOrder.bgtOrderMap[key];
+    return HeyBgtOrder.bgtOrderMap[key];
   }
 
   orderId: string;
@@ -77,7 +77,8 @@ export class BgtOrder {
   }
 
   get pricePerBgtString() {
-    return (this.price / 10000).toFixed(4);
+    console.log(this.price);
+    return Number(this.price).toFixed(4);
   }
 
   get rewardVault() {
@@ -144,7 +145,10 @@ export class BgtOrder {
     }
   }
 
-  constructor({ orderId, ...args }: Partial<BgtOrder> & { orderId: string }) {
+  constructor({
+    orderId,
+    ...args
+  }: Partial<HeyBgtOrder> & { orderId: string }) {
     this.setData(args);
     this.orderId = orderId;
     makeAutoObservable(this);
@@ -161,9 +165,41 @@ export class BgtOrder {
       });
   }
 
-  setData({ ...args }: Partial<BgtOrder>) {
+  setData({ ...args }: Partial<HeyBgtOrder>) {
     runInAction(() => {
       Object.assign(this, args);
     });
+  }
+
+  async getOrderDetails() {
+    console.log(this.orderType);
+    if (this.orderType === OrderType.BuyBgt) {
+      const res = await wallet.contracts.heyBgt.getBuyBgtOrder(
+        BigInt(this.orderId)
+      );
+      console.log(res);
+
+      console.log(formatEther(res.price));
+      runInAction(() => {
+        this.setData({
+          price: 1 / Number(formatEther(res.price)),
+          balance: res.amount,
+          spentBalance: res.filledAmount,
+        });
+      });
+      return res;
+    } else {
+      const res = await wallet.contracts.heyBgt.getSellBgtOrder(
+        BigInt(this.orderId)
+      );
+      runInAction(() => {
+        this.setData({
+          price: 1 / Number(res.premiumRate),
+          vaultAddress: res.rewardVault,
+          spentBalance: res.filledAmount,
+        });
+      });
+      return res;
+    }
   }
 }

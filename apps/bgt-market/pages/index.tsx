@@ -2,11 +2,14 @@ import { observer } from 'mobx-react-lite';
 import { NextLayoutPage } from '@/types/nextjs';
 import CardContainer from '@/components/CardContianer/v3';
 import {
-  BuyOrdersList,
-  SellOrdersList,
+  BuyOrderListBgtMarket,
+  SellOrdersListBgtMarket,
 } from '@/components/BGT-Vault/OrdersList';
-import PostOrderModal from './new-order';
 import { UserBgtVaults } from '@/components/BGT-Vault/UserBgtVaults';
+import { globalService } from '@/services/global';
+import { SellOrdersListHeyBgt } from '@/components/BGT-Vault/OrdersList/SellOrdersListHeyBgt';
+import { BuyOrderListHeyBgt } from '@/components/BGT-Vault/OrdersList/BuyOrderListHeyBgt';
+import { HeyBgtPostOrderModal, BgtMarketPostOrderModal } from './new-order';
 
 const HomePage: NextLayoutPage = observer(() => {
   return (
@@ -14,12 +17,27 @@ const HomePage: NextLayoutPage = observer(() => {
       <div className="lg:grid grid-cols-[1fr_400px] gap-2">
         <CardContainer className="col-start-2 lg:grid grid-cols-1 grid-rows-[1fr_1fr]">
           <UserBgtVaults />
-          <PostOrderModal />
+          {globalService.BgtMarketBaseToken === 'BERA' && (
+            <BgtMarketPostOrderModal />
+          )}
+          {globalService.BgtMarketBaseToken === 'HONEY' && (
+            <HeyBgtPostOrderModal />
+          )}
         </CardContainer>
 
         <CardContainer className="row-start-1 lg:grid grid-cols-1 grid-rows-[1fr_1fr]">
-          <SellOrdersList />
-          <BuyOrdersList />
+          {globalService.BgtMarketBaseToken === 'BERA' && (
+            <>
+              <SellOrdersListBgtMarket />
+              <BuyOrderListBgtMarket />
+            </>
+          )}
+          {globalService.BgtMarketBaseToken === 'HONEY' && (
+            <>
+              <SellOrdersListHeyBgt />
+              <BuyOrderListHeyBgt />
+            </>
+          )}
         </CardContainer>
       </div>
     </div>

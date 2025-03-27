@@ -91,9 +91,7 @@ export class BGTVault implements BaseContract {
     const isBgtMarketContractApproved =
       operator === wallet.currentChain.contracts.bgtMarket;
 
-    console.log(isBgtMarketContractApproved);
     if (isBgtMarketContractApproved) {
-      console.log(this.name);
       runInAction(() => {
         this.bgtVaultApproved = true;
       });

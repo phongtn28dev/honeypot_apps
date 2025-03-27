@@ -1,4 +1,4 @@
-import { BaseContract } from './..';
+import { BaseContract } from '..';
 import { wallet } from '@/services/wallet';
 import { makeAutoObservable } from 'mobx';
 import { Address, getContract, parseEther, zeroAddress } from 'viem';
@@ -8,13 +8,17 @@ import { BGTMarketABI } from '@/lib/abis/bgt-market/BGTMarketABI';
 import { BGTVault } from './bgt-vault';
 import { simulateContract } from 'viem/actions';
 import { WrappedToastify } from '@/lib/wrappedToastify';
+import { HeyBGTABI } from '@/lib/abis/bgt-market/HeyBGTABI';
+import { Token } from '../token';
 
-export class BGTMarketContract implements BaseContract {
+const NODE_ID = 1;
+
+export class HeyBgtContract implements BaseContract {
   address: Address = zeroAddress;
-  name: string = 'BGTMarket';
-  abi = BGTMarketABI;
+  name: string = 'HeyBgt';
+  abi = HeyBGTABI;
 
-  constructor(args: Partial<BGTMarketContract>) {
+  constructor(args: Partial<HeyBgtContract>) {
     Object.assign(this, args);
     makeAutoObservable(this);
   }
@@ -40,22 +44,26 @@ export class BGTMarketContract implements BaseContract {
 
       await rewardVault.setOperatorIfNot(
         wallet.account as Address,
-        wallet.currentChain.contracts.bgtMarket as Address
+        wallet.currentChain.contracts.heyBgt as Address
       );
 
       const res = await wallet.publicClient.simulateContract({
-        address: wallet.contracts.bgtMarket.address,
-        abi: wallet.contracts.bgtMarket.abi,
-        functionName: 'postOrder',
+        address: wallet.contracts.heyBgt.address,
+        abi: wallet.contracts.heyBgt.abi,
+        functionName: 'openSellBgtOrder',
         account: wallet.account as Address,
-        args: [BigInt(price), (vaultAddress ?? zeroAddress) as Address],
+        args: [
+          (vaultAddress ?? zeroAddress) as Address,
+          price,
+          BigInt(NODE_ID),
+        ],
       });
 
       console.log(res);
 
-      return new ContractWrite(this.contract.write.postOrder, {
+      return new ContractWrite(this.contract.write.openSellBgtOrder, {
         action: 'Post Order',
-      }).call([price, vaultAddress]);
+      }).call([vaultAddress, price, BigInt(NODE_ID)]);
     } catch (error) {
       console.error(error);
 
@@ -80,21 +88,30 @@ export class BGTMarketContract implements BaseContract {
       return;
     }
 
+    const HoneyToken = Token.getToken({
+      address: wallet.currentChain.validatedTokens.find(
+        (token) => token.symbol === 'HONEY'
+      )?.address as `0x${string}`,
+    });
+
+    //approve honey if not approved
+    await HoneyToken.approveIfNoAllowance({
+      spender: wallet.contracts.heyBgt.address,
+      amount: value.toString(),
+    });
+
     try {
       const res = await wallet.publicClient.simulateContract({
-        address: wallet.contracts.bgtMarket.address,
-        abi: wallet.contracts.bgtMarket.abi,
-        functionName: 'postOrder',
+        address: wallet.contracts.heyBgt.address,
+        abi: wallet.contracts.heyBgt.abi,
+        functionName: 'openBuyBgtOrder',
         account: wallet.account as Address,
-        args: [BigInt(price)],
-        value: value,
+        args: [BigInt(price), value, BigInt(NODE_ID)],
       });
 
-      return new ContractWrite(this.contract.write.postOrder, {
+      return new ContractWrite(this.contract.write.openBuyBgtOrder, {
         action: 'Post Order',
-      }).call([price], {
-        value: value,
-      });
+      }).call([price, value, BigInt(NODE_ID)]);
     } catch (error) {
       console.error(error);
 
@@ -113,13 +130,19 @@ export class BGTMarketContract implements BaseContract {
     return;
   }
 
-  closeOrder(orderId: bigint) {
+  closeOrder(orderId: bigint, orderType: 'BuyBGT' | 'SellBGT') {
     if (!wallet.account || !wallet.walletClient) {
       return;
     }
-    return new ContractWrite(this.contract.write.closeOrder, {
-      action: 'Close Order',
-    }).call([orderId]);
+    if (orderType === 'BuyBGT') {
+      return new ContractWrite(this.contract.write.closeBuyBgtOrder, {
+        action: 'Close Order',
+      }).call([orderId]);
+    } else {
+      return new ContractWrite(this.contract.write.closeSellBgtOrder, {
+        action: 'Close Order',
+      }).call([orderId]);
+    }
   }
 
   async fillSellOrder(orderId: bigint, value: bigint) {
@@ -127,19 +150,30 @@ export class BGTMarketContract implements BaseContract {
       return;
     }
 
+    const HoneyToken = Token.getToken({
+      address: wallet.currentChain.validatedTokens.find(
+        (token) => token.symbol === 'HONEY'
+      )?.address as `0x${string}`,
+    });
+
+    //approve honey if not approved
+    await HoneyToken.approveIfNoAllowance({
+      spender: wallet.contracts.heyBgt.address,
+      amount: value.toString(),
+    });
+
     try {
       const res = await wallet.publicClient.simulateContract({
-        address: wallet.contracts.bgtMarket.address,
-        abi: wallet.contracts.bgtMarket.abi,
-        functionName: 'fillOrder',
+        address: wallet.contracts.heyBgt.address,
+        abi: wallet.contracts.heyBgt.abi,
+        functionName: 'fillSellBgtOrder',
         account: wallet.account as Address,
-        args: [orderId],
-        value: value,
+        args: [orderId, BigInt(NODE_ID)],
       });
 
-      return new ContractWrite(this.contract.write.fillOrder, {
+      return new ContractWrite(this.contract.write.fillSellBgtOrder, {
         action: 'Fill Order',
-      }).call([orderId], { value: value });
+      }).call([orderId, BigInt(NODE_ID)]);
     } catch (e) {
       console.error(e);
 
@@ -169,20 +203,20 @@ export class BGTMarketContract implements BaseContract {
 
       await rewardVault.setOperatorIfNot(
         wallet.account as Address,
-        wallet.currentChain.contracts.bgtMarket as Address
+        wallet.currentChain.contracts.heyBgt as Address
       );
 
       const res = await wallet.publicClient.simulateContract({
-        address: wallet.contracts.bgtMarket.address,
-        abi: wallet.contracts.bgtMarket.abi,
-        functionName: 'fillOrder',
+        address: wallet.contracts.heyBgt.address,
+        abi: wallet.contracts.heyBgt.abi,
+        functionName: 'fillBuyBgtOrder',
         account: wallet.account as Address,
-        args: [orderId, vaultAddress],
+        args: [orderId, vaultAddress, BigInt(NODE_ID)],
       });
 
-      return new ContractWrite(this.contract.write.fillOrder, {
+      return new ContractWrite(this.contract.write.fillBuyBgtOrder, {
         action: 'Fill Order',
-      }).call([orderId, vaultAddress]);
+      }).call([orderId, vaultAddress, BigInt(NODE_ID)]);
     } catch (e) {
       console.error(e);
 
@@ -199,5 +233,15 @@ export class BGTMarketContract implements BaseContract {
         });
       }
     }
+  }
+
+  async getSellBgtOrder(orderId: bigint) {
+    const res = await this.contract.read.getSellBgtOrder([orderId]);
+    return res;
+  }
+
+  async getBuyBgtOrder(orderId: bigint) {
+    const res = await this.contract.read.getBuyBgtOrder([orderId]);
+    return res;
   }
 }

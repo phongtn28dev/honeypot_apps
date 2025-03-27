@@ -12,6 +12,7 @@ import { Address, formatEther, parseEther, zeroAddress } from 'viem';
 import { HoneyContainer } from '@/components/CardContianer';
 import {
   Order,
+  OrderContract,
   OrderStatus,
   useRecentBuyOrdersQuery,
   useRecentSellOrdersQuery,
@@ -24,33 +25,34 @@ import { observer } from 'mobx-react-lite';
 import { cn } from '@/lib/tailwindcss';
 import { BuyOrderListRow, SellOrderListRow } from '../OrderListRow';
 import { usePollingBlockNumber } from '@/lib/hooks/useBlockNumber';
-import { BgtOrder } from '@/services/bgt-market/bgtOrder';
+import { BgtMarketOrder } from '@/services/bgt-market/bgtMarketOrder';
+import { HeyBgtOrder } from '@/services/bgt-market/heyBgtOrder';
+import { HeyBgtBuyOrderListRow } from '../HeyBgtOrderListRow';
 
-export const SellOrdersList = observer(() => {
-  const [onlyshowPendingSellOrders, setShowOnlyPendingSellOrders] =
+export const BuyOrderListHeyBgt = observer(() => {
+  const [onlyShowPendingBuyOrders, setShowOnlyPendingBuyOrders] =
     useState<boolean>(true);
-
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
   const pageSize = 10;
   const {
-    data: recentSellOrders,
-    refetch: refetchSellOrders,
+    data: recentBuyOrders,
+    refetch: refetchBuyOrders,
     loading,
-  } = useRecentSellOrdersQuery({
+  } = useRecentBuyOrdersQuery({
     variables: {
-      status_in: onlyshowPendingSellOrders
+      status_in: onlyShowPendingBuyOrders
         ? [OrderStatus.Pending]
         : [OrderStatus.Pending, OrderStatus.Closed, OrderStatus.Filled],
-      // skip: pageSize * (page - 1),
-      // first: pageSize,
+      contract: OrderContract.HeyBgt,
+      //   skip: pageSize * (page - 1),
+      //   first: pageSize,
     },
   });
 
   const { block } = usePollingBlockNumber();
-
   useEffect(() => {
-    refetchSellOrders();
+    refetchBuyOrders();
   }, [block]);
 
   return (
@@ -58,28 +60,27 @@ export const SellOrdersList = observer(() => {
       <div className="bg-[#202020] rounded-2xl overflow-hidden w-full h-full">
         <div className="p-2 sm:p-6 w-full">
           <div className="border border-[#5C5C5C] rounded-2xl overflow-scroll overflow-x-auto w-full [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-[#323232] [&::-webkit-scrollbar-thumb]:bg-[#FFCD4D] [&::-webkit-scrollbar-thumb]:rounded-full [scrollbar-color:#FFCD4D_#323232] [scrollbar-width:thin]">
-            <table className="w-full h-full">
+            <table className="w-full">
               <thead className="bg-[#323232] text-white">
                 <tr>
                   <th className="py-2 px-2 sm:px-4 text-left text-sm sm:text-base font-medium w-[160px] sm:w-[200px]">
                     Order
                   </th>
                   <th className="py-2 px-2 sm:px-4 text-left text-sm sm:text-base font-medium w-[160px] hidden md:table-cell">
-                    BGT
+                    Total Balance
                   </th>
                   <th className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base font-medium">
                     Price per BGT
                   </th>
                   <th className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base font-medium">
-                    Total Price
+                    Filled
                   </th>{' '}
                   <th className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base font-medium">
-                    {/* {' '}
-                    <Switch
+                    {/* <Switch
                       defaultSelected
-                      onValueChange={setShowOnlyPendingSellOrders}
+                      onValueChange={setShowOnlyPendingBuyOrders}
                     >
-                      <span>only show pending</span>
+                      <span className="">only show pending</span>
                     </Switch> */}
                   </th>
                 </tr>
@@ -91,22 +92,22 @@ export const SellOrdersList = observer(() => {
                       Loading...
                     </td>
                   </tr>
-                ) : recentSellOrders?.orders.length === 0 ? (
+                ) : recentBuyOrders?.orders.length === 0 ? (
                   <tr>
                     <td colSpan={7} className="py-2 px-4 text-center">
                       No transactions found
                     </td>
                   </tr>
                 ) : (
-                  Object.values(recentSellOrders?.orders ?? [])
+                  Object.values(recentBuyOrders?.orders ?? [])
                     ?.sort((a, b) => Number(b.price) - Number(a.price))
-                    .map((order) => (
-                      <SellOrderListRow
+                    ?.map((order) => (
+                      <HeyBgtBuyOrderListRow
                         key={order.id}
-                        order={BgtOrder.getBgtOrder(
-                          BgtOrder.gqlOrderToBgtOrder(order as Order)
+                        order={HeyBgtOrder.getBgtOrder(
+                          HeyBgtOrder.gqlOrderToBgtOrder(order as Order)
                         )}
-                        actionCallBack={refetchSellOrders}
+                        actionCallBack={refetchBuyOrders}
                       />
                     ))
                 )}

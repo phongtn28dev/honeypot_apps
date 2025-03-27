@@ -66,11 +66,9 @@ export const Layout = observer(
           className
         )}
       >
-        {showInviteModal && (
+        {/* {showInviteModal && (
           <InvitationCodeModal onSubmit={handleInviteCodeSubmit} />
-        )}
-        <ChatWidget />
-
+        )} */}
         <ConfettiComponent />
         <PopOverModal />
         <Header />

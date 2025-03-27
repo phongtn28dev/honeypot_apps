@@ -1,4 +1,9 @@
-import { BuyOrdersList } from './BuyOrderList';
-import { SellOrdersList } from './SellOrderList';
+import { BuyOrderListBgtMarket } from './BuyOrderListBgtMarket';
+import { SellOrdersListBgtMarket } from './SellOrdersListBgtMarket';
+import { UserOrderListBgtMarket } from './UserOrderListBgtMarket';
 
-export { BuyOrdersList, SellOrdersList };
+export {
+  BuyOrderListBgtMarket,
+  SellOrdersListBgtMarket,
+  UserOrderListBgtMarket,
+};

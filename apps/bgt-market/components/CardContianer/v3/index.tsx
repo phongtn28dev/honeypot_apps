@@ -2,7 +2,8 @@ import Image from 'next/image';
 import { ReactNode } from 'react';
 import { cn } from '@/lib/tailwindcss';
 import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';
-
+import { globalService } from '@/services/global';
+import { useObserver } from 'mobx-react-lite';
 interface HoneyContainerProps {
   empty?: boolean;
   loading?: boolean;
@@ -32,10 +33,13 @@ function CardContainer({
   showTopBorder = true,
   showBottomBorder = true,
 }: HoneyContainerProps) {
+  const bgtMarketBaseToken = useObserver(
+    () => globalService.BgtMarketBaseToken
+  );
   return (
     <div
       className={cn(
-        'flex flex-col w-full gap-y-2 justify-center items-center rounded-2xl text-[#202020]',
+        'flex flex-col w-full gap-y-2 justify-center items-center rounded-2xl text-[#202020] transition-all duration-300',
         type === 'primary'
           ? 'bg-[#FFCD4D]'
           : bordered
@@ -78,7 +82,9 @@ function CardContainer({
             .flat()
             .filter(Boolean)
             .join(' '),
-        className
+        className,
+        bgtMarketBaseToken === 'BERA' && 'bg-[#453100] text-white',
+        bgtMarketBaseToken === 'HONEY' && 'bg-[#FFCD4D] text-black'
       )}
     >
       {loading ? (
