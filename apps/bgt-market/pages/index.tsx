@@ -1,31 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { NextLayoutPage } from '@/types/nextjs';
 import CardContainer from '@/components/CardContianer/v3';
-import Button from '@/components/button/v3';
-import {
-  Order,
-  OrderStatus,
-  useRecentBuyOrdersQuery,
-  useRecentOrdersQuery,
-  useRecentSellOrdersQuery,
-} from '@/lib/algebra/graphql/generated/graphql';
-import Link from 'next/link';
-import { wallet } from '@/services/wallet';
-import { useBlockNumber } from 'wagmi';
-import { useEffect, useState } from 'react';
-import { watchBlockNumber } from 'viem/actions';
-import { Address, zeroAddress } from 'viem';
-import { ValidatedVaultAddresses } from '@/config/validatedVaultAddresses';
-import {
-  DropdownItem,
-  DropdownTrigger,
-  SelectItem,
-  Switch,
-} from '@nextui-org/react';
-import { popmodal } from '@/services/popmodal';
-import { PressEvent } from '@react-types/shared';
-import { WarppedNextSelect } from '@/components/wrappedNextUI/Select/Select';
-import SwapTransactionHistory from '@/components/SwapTransactionHistory';
 import {
   BuyOrdersList,
   SellOrdersList,

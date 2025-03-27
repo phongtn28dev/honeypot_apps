@@ -138,7 +138,7 @@ export const VaultDetail = observer(() => {
       <div>
         <Button
           onClick={() => router.push('/pools')}
-          className="flex items-center gap-2 text-white text-xl"
+          className="flex items-center gap-2 text-white text-xl px-0"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
