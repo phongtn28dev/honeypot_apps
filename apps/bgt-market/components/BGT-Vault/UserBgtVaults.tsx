@@ -30,7 +30,7 @@ export const UserBgtVaults = observer(() => {
             .filter((vault) => Number(vault.userBgtInVault) > 0)
             .map((vault) => (
               <div
-                className="flex justify-between items-center m-1 p-2 rounded-md bg-black/10  text-center"
+                className="flex justify-between items-center m-1 p-2 rounded-md bg-black/10 text-black text-center"
                 key={vault.address}
               >
                 <span>{vault.name.replace('|', '')}</span>{' '}

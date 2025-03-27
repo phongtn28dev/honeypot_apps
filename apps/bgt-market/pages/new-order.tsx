@@ -86,7 +86,7 @@ const PostOrderModal: NextLayoutPage = observer(() => {
         </div>
 
         <div className="flex flex-col gap-2">
-          <label>Order Type</label>
+          <label className="text-black">Order Type</label>
           <WarppedNextSelect
             isRequired
             items={Object.entries(OrderType)}
@@ -114,7 +114,7 @@ const PostOrderModal: NextLayoutPage = observer(() => {
         {buyOrSell !== undefined && (
           <>
             <div className="flex flex-col gap-1 pt-[15px]">
-              <label>Price BERA Per BGT</label>
+              <label className="text-black">Price BERA Per BGT</label>
               <input
                 type="text"
                 {...register('price', { required: true })}
@@ -130,7 +130,7 @@ const PostOrderModal: NextLayoutPage = observer(() => {
 
             {buyOrSell === OrderType.BuyBgt && (
               <div className="flex flex-col gap-1 pt-[15px]">
-                <label>Buying Amount(Bera)</label>
+                <label className="text-black">Buying Amount(Bera)</label>
                 <input
                   type="text"
                   {...register('orderBuyValue', { required: true })}
@@ -147,7 +147,7 @@ const PostOrderModal: NextLayoutPage = observer(() => {
 
             {buyOrSell === OrderType.SellBgt && (
               <div className="flex flex-col gap-1 pt-[15px]">
-                <label>Vault</label>
+                <label className="text-black">Vault</label>
                 <WarppedNextSelect
                   isRequired
                   items={bgtVaults}
