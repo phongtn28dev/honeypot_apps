@@ -765,6 +765,7 @@ export const berachainNetwork = new Network({
   validatedMemeAddresses: [],
   validatedVault: [
     {
+      //WBERA/HONEY
       address: '0xb00ae8a7be63036dbcd143a842bfc14708c440bb',
       vaultTag: {
         tag: 'HOT 🔥',
@@ -784,6 +785,15 @@ export const berachainNetwork = new Network({
       },
       vaultDescription:
         'An ETH single-side deposit vault, actively paired with BERA, with high exposure farming on the wETH-BERA pair at Wasabee DEX and a goal of buying more BERA over time. The benchmark is compared to only holding ETH.',
+    },
+    {
+      //WBERA/HONEY
+      address: '0xba29bbb78825a72c5dcc3d217ca2011bd95b97c7',
+      vaultTag: {
+        tag: 'LONG $BERA',
+        bgColor: '#FFCD4D',
+        textColor: 'black',
+      },
     },
   ],
 });
