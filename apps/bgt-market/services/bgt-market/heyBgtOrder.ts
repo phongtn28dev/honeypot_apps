@@ -22,12 +22,12 @@ import { BGTVault } from '../contract/bgt-market/bgt-vault';
 export class HeyBgtOrder {
   static gqlOrderToBgtOrder(order: Order): HeyBgtOrder {
     return HeyBgtOrder.getBgtOrder({
-      orderId: order.id.toString(),
+      orderId: order.id.toString().split('-')[1],
       dealerId: order.dealer.id as Address,
-      price: order.price.toString(),
+      //price: order.price.toString(),
       vaultAddress: order.vaultAddress as Address,
-      balance: order.balance.toString(),
-      spentBalance: order.spentBalance.toString(),
+      //balance: order.balance.toString(),
+      //spentBalance: order.spentBalance.toString(),
       height: order.height.toString(),
       orderType: order.orderType,
       status: order.status,
@@ -178,9 +178,11 @@ export class HeyBgtOrder {
         BigInt(this.orderId)
       );
       console.log(res);
+
+      console.log(formatEther(res.price));
       runInAction(() => {
         this.setData({
-          price: Number(res.price),
+          price: 1 / Number(formatEther(res.price)),
           balance: res.amount,
           spentBalance: res.filledAmount,
         });
@@ -192,7 +194,7 @@ export class HeyBgtOrder {
       );
       runInAction(() => {
         this.setData({
-          price: Number(res.premiumRate),
+          price: 1 / Number(res.premiumRate),
           vaultAddress: res.rewardVault,
           spentBalance: res.filledAmount,
         });

@@ -34,6 +34,7 @@ export const HeyBgtUserOrderListRow = observer(
 
     useEffect(() => {
       order.updateOrderVaultBgt();
+      const orderDetails = order.getOrderDetails();
     }, [block]);
 
     return (
@@ -93,7 +94,7 @@ export const HeyBgtUserOrderListRow = observer(
 
             {!(order.dealerId.toLowerCase() === wallet.account.toLowerCase()) &&
               order.status === 'Pending' && (
-                <FillBuyOrderModalButton order={order} />
+                <HeyBgtFillBuyOrderModalButton order={order} />
               )}
           </div>
         </td>
@@ -102,7 +103,7 @@ export const HeyBgtUserOrderListRow = observer(
   }
 );
 
-export const BuyOrderListRow = observer(
+export const HeyBgtBuyOrderListRow = observer(
   ({
     order,
     actionCallBack,
@@ -113,15 +114,8 @@ export const BuyOrderListRow = observer(
     const { block } = usePollingBlockNumber();
 
     useEffect(() => {
-      console.log(block);
       const orderDetails = order.getOrderDetails();
-      console.log(orderDetails);
     }, [block]);
-
-    useEffect(() => {
-      const orderDetails = order.getOrderDetails();
-      console.log(orderDetails);
-    }, []);
 
     return (
       <tr key={order.orderId} className="hover:bg-[#2a2a2a] transition-colors">
@@ -175,7 +169,7 @@ export const BuyOrderListRow = observer(
 
             {!(order.dealerId.toLowerCase() === wallet.account.toLowerCase()) &&
               order.status === 'Pending' && (
-                <FillBuyOrderModalButton order={order} />
+                <HeyBgtFillBuyOrderModalButton order={order} />
               )}
           </div>
         </td>
@@ -184,7 +178,7 @@ export const BuyOrderListRow = observer(
   }
 );
 
-export const SellOrderListRow = observer(
+export const HeyBgtSellOrderListRow = observer(
   ({
     order,
     actionCallBack,
@@ -272,7 +266,7 @@ export const SellOrderListRow = observer(
   }
 );
 
-const FillBuyOrderModalButton = observer(
+const HeyBgtFillBuyOrderModalButton = observer(
   ({
     order,
     actionCallBack,
@@ -286,7 +280,10 @@ const FillBuyOrderModalButton = observer(
     const handleClick = (e: PressEvent) => {
       popmodal.openModal({
         content: (
-          <FillBuyOrderModal order={order} actionCallBack={actionCallBack} />
+          <HeyBgtFillBuyOrderModal
+            order={order}
+            actionCallBack={actionCallBack}
+          />
         ),
         boarderLess: true,
       });
@@ -306,7 +303,7 @@ const FillBuyOrderModalButton = observer(
   }
 );
 
-const FillBuyOrderModal = ({
+const HeyBgtFillBuyOrderModal = ({
   order,
   actionCallBack,
 }: {
