@@ -18,14 +18,7 @@ import { formatUSD } from '@/lib/algebra/utils/common/formatUSD';
 import { optionsPresets } from '@/components/OptionsDropdown/OptionsDropdown';
 import { OptionsDropdown } from '@/components/OptionsDropdown/OptionsDropdown';
 import { TbSwitchHorizontal } from 'react-icons/tb';
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-} from '@nextui-org/react';
 import { ChevronDown } from 'lucide-react';
-import { Button as NextUIButton } from '@nextui-org/react';
 import { useBitgetEvents } from '@/lib/algebra/graphql/clients/bitget_event';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -216,16 +209,38 @@ const PoolsTable = observer(
                     tab: 'px-2 sm:px-3 text-xs sm:text-sm',
                     tabContent: '!text-[#202020]',
                   }}
-                  onSelectionChange={(key) =>
-                    setSelectedFilter(key === 'all' ? 'trending' : 'myPools')
-                  }
+                  onSelectionChange={(key) => {
+                    if (key === 'myPools' && !wallet.account) {
+                      popmodal.openModal({
+                        content: (
+                          <div className="p-6 bg-white rounded-2xl">
+                            <h2 className="text-xl font-bold mb-4 text-black">Connect Wallet</h2>
+                            <p className="text-black mb-4">Please connect your wallet to view your pools.</p>
+                            <div className="flex justify-end">
+                              <Button
+                                className="border border-[#2D2D2D] bg-[#FFCD4D] hover:bg-[#FFD56A] text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-4 py-2"
+                                onClick={() => {
+                                  popmodal.closeModal();
+                                  window.location.href = '/login';
+                                }}
+                              >
+                                Connect Wallet
+                              </Button>
+                            </div>
+                          </div>
+                        ),
+                        boarderLess: true,
+                      });
+                      return;
+                    }
+                    setSelectedFilter(key === 'all' ? 'trending' : 'myPools');
+                  }}
                   defaultSelectedKey={
                     selectedFilter === 'trending' ? 'all' : 'myPools'
                   }
                 >
                   <Tab key="all" title="All Pools" />
                   <Tab
-                    href="/profile?tab=my-pools"
                     key="myPools"
                     title="My Pools"
                   />
@@ -329,7 +344,12 @@ const PoolsTable = observer(
         <div className="md:hidden w-full">
           {!loading ? (
             getSortedPools().length === 0 ? (
-              <div className="text-center py-8 text-black">No results.</div>
+              <div className="text-center py-8 text-black">
+                {selectedFilter === 'myPools' && wallet.account 
+                  ? "You don't have any pools yet. Create a pool to get started."
+                  : "No results found."
+                }
+              </div>
             ) : (
               getSortedPools().map((pool: Pool & { userTVLUSD: number }) => (
                 <div
@@ -489,7 +509,10 @@ const PoolsTable = observer(
                       colSpan={columns.length}
                       className="h-24 text-center text-black"
                     >
-                      No results.
+                      {selectedFilter === 'myPools' && wallet.account 
+                        ? "You don't have any pools yet. Create a pool to get started."
+                        : "No results found."
+                      }
                     </td>
                   </tr>
                 ) : (

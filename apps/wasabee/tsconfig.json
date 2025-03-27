@@ -26,7 +26,8 @@
       "@/utils/*": ["./lib/utils/*"],
       "@/ui/*": ["./components/ui/*"],
       "@/public/*": ["./public/*"],
-      "@/public/images/*": ["./public/images/*"]
+      "@/public/images/*": ["./public/images/*"],
+      "@honeypot/shared": ["../../libs/shared/src/index.ts"]
     }
   },
   "include": [
