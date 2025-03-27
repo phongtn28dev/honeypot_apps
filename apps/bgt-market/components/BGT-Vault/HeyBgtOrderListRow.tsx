@@ -52,18 +52,18 @@ export const HeyBgtUserOrderListRow = observer(
         </td>
         <td className="py-2 px-2 sm:px-4 text-sm sm:text-base font-mono whitespace-nowrap hidden md:table-cell">
           <div className="flex items-center gap-2">
-            {order.SaleBGT} {order.orderType === OrderType.BuyBgt && 'BERA'}
+            {order.SaleBGT} {order.orderType === OrderType.BuyBgt && 'HONEY'}
             {order.orderType === OrderType.SellBgt && 'BGT'}
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
           <div className="flex flex-col sm:flex-row justify-end items-end gap-1">
-            {order.pricePerBgtString} BERA
+            {order.pricePerBgtString} HONEY
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
           <div className="flex flex-col sm:flex-row justify-end items-end gap-1">
-            {order.totalPriceString} BERA
+            {order.totalPriceString} HONEY
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
@@ -107,9 +107,22 @@ export const BuyOrderListRow = observer(
     order,
     actionCallBack,
   }: {
-    order: BgtMarketOrder;
+    order: HeyBgtOrder;
     actionCallBack?: () => void;
   }) => {
+    const { block } = usePollingBlockNumber();
+
+    useEffect(() => {
+      console.log(block);
+      const orderDetails = order.getOrderDetails();
+      console.log(orderDetails);
+    }, [block]);
+
+    useEffect(() => {
+      const orderDetails = order.getOrderDetails();
+      console.log(orderDetails);
+    }, []);
+
     return (
       <tr key={order.orderId} className="hover:bg-[#2a2a2a] transition-colors">
         <td className="py-2 px-2 sm:px-4 text-sm sm:text-base font-mono whitespace-nowrap">
@@ -127,12 +140,12 @@ export const BuyOrderListRow = observer(
         <td className="py-2 px-2 sm:px-4 text-sm sm:text-base font-mono whitespace-nowrap hidden md:table-cell">
           <div className="flex items-center gap-2">
             {order.SaleBGT}{' '}
-            {wallet?.currentChain?.nativeToken?.symbol ?? 'BERA'}
+            {wallet?.currentChain?.nativeToken?.symbol ?? 'HONEY'}
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
           <div className="flex flex-col sm:flex-row justify-end items-end gap-1">
-            {order.pricePerBgtString} BERA
+            {order.pricePerBgtString} HONEY
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
@@ -176,13 +189,14 @@ export const SellOrderListRow = observer(
     order,
     actionCallBack,
   }: {
-    order: BgtMarketOrder;
+    order: HeyBgtOrder;
     actionCallBack?: () => void;
   }) => {
     const { block } = usePollingBlockNumber();
 
     useEffect(() => {
       order.updateOrderVaultBgt();
+      order.getOrderDetails();
     }, [block]);
 
     return (
@@ -204,13 +218,13 @@ export const SellOrderListRow = observer(
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
           <div className="flex flex-col sm:flex-row justify-end items-end gap-1">
-            {order.pricePerBgtString} BERA
+            {order.pricePerBgtString} HONEY
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
           <div className="flex flex-col sm:flex-row justify-end items-end gap-1">
             {order.totalPriceString}{' '}
-            {wallet?.currentChain?.nativeToken?.symbol ?? 'BERA'}
+            {wallet?.currentChain?.nativeToken?.symbol ?? 'HONEY'}
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap hidden sm:table-cell">

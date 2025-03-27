@@ -26,6 +26,8 @@ import { cn } from '@/lib/tailwindcss';
 import { BuyOrderListRow, SellOrderListRow } from '../OrderListRow';
 import { usePollingBlockNumber } from '@/lib/hooks/useBlockNumber';
 import { BgtMarketOrder } from '@/services/bgt-market/bgtMarketOrder';
+import { HeyBgtOrder } from '@/services/bgt-market/heyBgtOrder';
+import { HeyBgtUserOrderListRow } from '../HeyBgtOrderListRow';
 
 export const SellOrdersListHeyBgt = observer(() => {
   const [onlyshowPendingSellOrders, setShowOnlyPendingSellOrders] =
@@ -103,10 +105,10 @@ export const SellOrdersListHeyBgt = observer(() => {
                   Object.values(recentSellOrders?.orders ?? [])
                     ?.sort((a, b) => Number(b.price) - Number(a.price))
                     .map((order) => (
-                      <SellOrderListRow
+                      <HeyBgtUserOrderListRow
                         key={order.id}
-                        order={BgtMarketOrder.getBgtOrder(
-                          BgtMarketOrder.gqlOrderToBgtOrder(order as Order)
+                        order={HeyBgtOrder.getBgtOrder(
+                          HeyBgtOrder.gqlOrderToBgtOrder(order as Order)
                         )}
                         actionCallBack={refetchSellOrders}
                       />

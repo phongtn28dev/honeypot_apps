@@ -234,4 +234,14 @@ export class HeyBgtContract implements BaseContract {
       }
     }
   }
+
+  async getSellBgtOrder(orderId: bigint) {
+    const res = await this.contract.read.getSellBgtOrder([orderId]);
+    return res;
+  }
+
+  async getBuyBgtOrder(orderId: bigint) {
+    const res = await this.contract.read.getBuyBgtOrder([orderId]);
+    return res;
+  }
 }

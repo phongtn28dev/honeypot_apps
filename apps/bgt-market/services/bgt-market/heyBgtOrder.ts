@@ -77,7 +77,8 @@ export class HeyBgtOrder {
   }
 
   get pricePerBgtString() {
-    return (this.price / 10000).toFixed(4);
+    console.log(this.price);
+    return Number(this.price).toFixed(4);
   }
 
   get rewardVault() {
@@ -168,5 +169,35 @@ export class HeyBgtOrder {
     runInAction(() => {
       Object.assign(this, args);
     });
+  }
+
+  async getOrderDetails() {
+    console.log(this.orderType);
+    if (this.orderType === OrderType.BuyBgt) {
+      const res = await wallet.contracts.heyBgt.getBuyBgtOrder(
+        BigInt(this.orderId)
+      );
+      console.log(res);
+      runInAction(() => {
+        this.setData({
+          price: Number(res.price),
+          balance: res.amount,
+          spentBalance: res.filledAmount,
+        });
+      });
+      return res;
+    } else {
+      const res = await wallet.contracts.heyBgt.getSellBgtOrder(
+        BigInt(this.orderId)
+      );
+      runInAction(() => {
+        this.setData({
+          price: Number(res.premiumRate),
+          vaultAddress: res.rewardVault,
+          spentBalance: res.filledAmount,
+        });
+      });
+      return res;
+    }
   }
 }

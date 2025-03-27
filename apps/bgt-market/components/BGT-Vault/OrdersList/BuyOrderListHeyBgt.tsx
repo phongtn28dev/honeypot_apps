@@ -27,6 +27,7 @@ import { BuyOrderListRow, SellOrderListRow } from '../OrderListRow';
 import { usePollingBlockNumber } from '@/lib/hooks/useBlockNumber';
 import { BgtMarketOrder } from '@/services/bgt-market/bgtMarketOrder';
 import { HeyBgtOrder } from '@/services/bgt-market/heyBgtOrder';
+import { HeyBgtUserOrderListRow } from '../HeyBgtOrderListRow';
 
 export const BuyOrderListHeyBgt = observer(() => {
   const [onlyShowPendingBuyOrders, setShowOnlyPendingBuyOrders] =
@@ -101,7 +102,7 @@ export const BuyOrderListHeyBgt = observer(() => {
                   Object.values(recentBuyOrders?.orders ?? [])
                     ?.sort((a, b) => Number(b.price) - Number(a.price))
                     ?.map((order) => (
-                      <BuyOrderListRow
+                      <HeyBgtUserOrderListRow
                         key={order.id}
                         order={HeyBgtOrder.getBgtOrder(
                           HeyBgtOrder.gqlOrderToBgtOrder(order as Order)
