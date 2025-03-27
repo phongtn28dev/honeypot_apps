@@ -328,16 +328,17 @@ export const PositionRow = ({
         </div>
         
         <div className="mt-4 flex justify-center">
-          <Link
-            href={`/new-position/${position.pool.id}?leftrange=${
-              positionEntity?.token0PriceLower.toFixed(18) ?? '0'
-            }&rightrange=${positionEntity?.token0PriceUpper.toFixed(18) ?? '0'}`}
-            className="w-full"
+          <Button 
+            className="w-full border border-[#2D2D2D] bg-[#FFCD4D] hover:bg-[#FFD56A] text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-3 py-2 text-sm font-medium"
+            onPress={() => {
+              const url = `/new-position/${position.pool.id}?leftrange=${
+                positionEntity?.token0PriceLower.toFixed(18) ?? '0'
+              }&rightrange=${positionEntity?.token0PriceUpper.toFixed(18) ?? '0'}`;
+              window.location.href = url;
+            }}
           >
-            <Button className="w-full border border-[#2D2D2D] bg-[#FFCD4D] hover:bg-[#FFD56A] text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-3 py-2 text-sm font-medium">
-              Copy Position
-            </Button>
-          </Link>
+            Copy Position
+          </Button>
         </div>
       </div>
     );
@@ -378,15 +379,17 @@ export const PositionRow = ({
         })}
       </td>
       <td className="py-4 px-6 text-black text-center">
-        <Link
-          href={`/new-position/${position.pool.id}?leftrange=${
-            positionEntity?.token0PriceLower.toFixed(18) ?? '0'
-          }&rightrange=${positionEntity?.token0PriceUpper.toFixed(18) ?? '0'}`}
+        <Button 
+          className="border border-[#2D2D2D] bg-[#FFCD4D] hover:bg-[#FFD56A] text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-3 py-1.5 text-xs"
+          onClick={() => {
+            const url = `/new-position/${position.pool.id}?leftrange=${
+              positionEntity?.token0PriceLower.toFixed(18) ?? '0'
+            }&rightrange=${positionEntity?.token0PriceUpper.toFixed(18) ?? '0'}`;
+            window.location.href = url;
+          }}
         >
-          <Button className="border border-[#2D2D2D] bg-[#FFCD4D] hover:bg-[#FFD56A] text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-3 py-1.5 text-xs">
-            Copy Position
-          </Button>
-        </Link>
+          Copy Position
+        </Button>
       </td>
     </tr>
   );
