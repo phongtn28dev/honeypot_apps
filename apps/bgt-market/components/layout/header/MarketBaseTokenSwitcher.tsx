@@ -22,6 +22,7 @@ const MarketBaseTokenSwitcher = observer(() => {
                     (token) => token.symbol === 'WBERA'
                   ) as Token
                 }
+                disableTooltip
                 size={20}
               />
             )}
@@ -41,6 +42,7 @@ const MarketBaseTokenSwitcher = observer(() => {
                     (token) => token.symbol === 'HONEY'
                   ) as Token
                 }
+                disableTooltip
                 size={20}
               />
             )}
