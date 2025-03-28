@@ -241,16 +241,16 @@ export const HeyBgtSellOrderListRow = observer(
                 <Button
                   disabled={!wallet.walletClient}
                   isDisabled={!wallet.walletClient}
-                  onPress={() => {
-                    wallet.contracts.bgtMarket
-                      .fillSellOrder(
-                        BigInt(order.orderId),
-                        BigInt(
-                          (order.price / 10000) *
-                            Number(order.orderVaultBgt) *
-                            1.1
-                        )
-                      )
+                  onPress={async () => {
+                    const beraPrice =
+                      await wallet.contracts.heyBgt.getBeraPrice();
+                    const vaultBgt =
+                      await order.rewardVault?.readAddressBgtInVault(
+                        order.dealerId
+                      );
+                    const value = beraPrice * Number(vaultBgt) * 1.1;
+                    wallet.contracts.heyBgt
+                      .fillSellOrder(BigInt(order.orderId), BigInt(value))
                       ?.then(() => actionCallBack);
                   }}
                 >

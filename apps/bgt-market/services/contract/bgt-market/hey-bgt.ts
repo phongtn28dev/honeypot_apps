@@ -149,7 +149,6 @@ export class HeyBgtContract implements BaseContract {
     if (!wallet.walletClient) {
       return;
     }
-
     const HoneyToken = Token.getToken({
       address: wallet.currentChain.validatedTokens.find(
         (token) => token.symbol === 'HONEY'
