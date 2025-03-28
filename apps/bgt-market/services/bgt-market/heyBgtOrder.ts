@@ -25,7 +25,7 @@ export class HeyBgtOrder {
       orderId: order.id.toString().split('-')[1],
       dealerId: order.dealer.id as Address,
       //price: order.price.toString(),
-      vaultAddress: order.vaultAddress as Address,
+      //vaultAddress: order.vaultAddress as Address,
       //balance: order.balance.toString(),
       //spentBalance: order.spentBalance.toString(),
       height: order.height.toString(),
@@ -156,6 +156,7 @@ export class HeyBgtOrder {
 
   updateOrderVaultBgt() {
     if (!this.rewardVault || this.rewardVault.address === zeroAddress) return;
+
     this.rewardVault
       .readAddressBgtInVault(this.dealerId as Address)
       .then((res) => {
@@ -177,9 +178,7 @@ export class HeyBgtOrder {
       const res = await wallet.contracts.heyBgt.getBuyBgtOrder(
         BigInt(this.orderId)
       );
-      console.log(res);
 
-      console.log(formatEther(res.price));
       runInAction(() => {
         this.setData({
           price: 1 / Number(formatEther(res.price)),
@@ -194,7 +193,9 @@ export class HeyBgtOrder {
       );
       runInAction(() => {
         this.setData({
-          price: 1 / Number(res.premiumRate),
+          price:
+            (Number(res.premiumRate) / 10000) *
+            wallet.contracts.heyBgt.beraprice,
           vaultAddress: res.rewardVault,
           spentBalance: res.filledAmount,
         });

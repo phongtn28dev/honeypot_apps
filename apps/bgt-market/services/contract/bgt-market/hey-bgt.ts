@@ -49,7 +49,7 @@ export class HeyBgtContract implements BaseContract {
       );
 
       const beraPrice = await this.getBeraPrice();
-      const formattedPrice = BigInt(Math.floor((beraPrice / price) * 10000));
+      const formattedPrice = BigInt(Math.floor((price / beraPrice) * 10000));
 
       const res = await wallet.publicClient.simulateContract({
         address: wallet.contracts.heyBgt.address,
@@ -113,8 +113,6 @@ export class HeyBgtContract implements BaseContract {
         action: 'Post Order',
       }).call([price, value, BigInt(NODE_ID)]);
     } catch (error) {
-      console.error(error);
-
       if (String(error).includes('small order')) {
         WrappedToastify.error({
           title: 'Buying amount too small',

@@ -13,8 +13,19 @@ import {
   HeyBgtPostOrderModal,
   BgtMarketPostOrderModal,
 } from '../components/BGT-Vault/new-order';
+import { usePollingBlockNumber } from '@/lib/hooks/useBlockNumber';
+import { useEffect } from 'react';
+import { wallet } from '@/services/wallet';
 
 const HomePage: NextLayoutPage = observer(() => {
+  const { block } = usePollingBlockNumber();
+
+  useEffect(() => {
+    if (wallet.contracts.heyBgt) {
+      wallet.contracts.heyBgt.getBeraPrice();
+    }
+  }, [block, wallet.contracts.heyBgt]);
+
   return (
     <div className="w-screen h-full p-2">
       <div className="lg:grid grid-cols-[1fr_400px] gap-2">
