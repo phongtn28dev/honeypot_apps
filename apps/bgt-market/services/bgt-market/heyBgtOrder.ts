@@ -92,9 +92,7 @@ export class HeyBgtOrder {
   get totalPriceString() {
     switch (this.orderType) {
       case OrderType.BuyBgt:
-        return (
-          Number(this.pricePerBgtString) * Number(formatEther(this.balance))
-        );
+        return Number(formatEther(this.balance));
       case OrderType.SellBgt:
         return (Number(this.pricePerBgtString) * Number(this.SaleBGT)).toFixed(
           4
