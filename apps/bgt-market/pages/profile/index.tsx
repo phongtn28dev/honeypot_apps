@@ -19,8 +19,19 @@ import { Notification } from '@/components/atoms/Notification/Notification';
 import { UserOrderListHeyBgt } from '@/components/BGT-Vault/OrdersList/UserOrderListHeyBgt';
 import { globalService } from '@/services/global';
 import { UserOrderListBgtMarket } from '@/components/BGT-Vault/OrdersList/UserOrderListBgtMarket';
+import { usePollingBlockNumber } from '@/lib/hooks/useBlockNumber';
+
 export const Profile = observer(() => {
   const [notify, setNotify] = useState(false);
+
+  const { block } = usePollingBlockNumber();
+
+  useEffect(() => {
+    if (wallet.contracts.heyBgt) {
+      wallet.contracts.heyBgt.getBeraPrice();
+    }
+  }, [block, wallet.contracts.heyBgt]);
+
   useEffect(() => {
     setNotify(
       notificationService.isClaimableProject ||

@@ -31,6 +31,8 @@ import {
 } from '../OrderListRow';
 import { usePollingBlockNumber } from '@/lib/hooks/useBlockNumber';
 import { BgtMarketOrder } from '@/services/bgt-market/bgtMarketOrder';
+import { HeyBgtOrder } from '@/services/bgt-market/heyBgtOrder';
+import { HeyBgtUserOrderListRow } from '../HeyBgtOrderListRow';
 
 export const UserOrderListHeyBgt = observer(() => {
   const [onlyPendingOrders, setOnlyPendingOrders] = useState<boolean>(true);
@@ -110,10 +112,10 @@ export const UserOrderListHeyBgt = observer(() => {
                   </tr>
                 ) : (
                   orders?.orders.map((order) => (
-                    <UserOrderListRow
+                    <HeyBgtUserOrderListRow
                       key={order.id}
-                      order={BgtMarketOrder.getBgtOrder(
-                        BgtMarketOrder.gqlOrderToBgtOrder(order as Order)
+                      order={HeyBgtOrder.getBgtOrder(
+                        HeyBgtOrder.gqlOrderToBgtOrder(order as Order)
                       )}
                       actionCallBack={refetchOrders}
                     />

@@ -34,7 +34,7 @@ export const HeyBgtUserOrderListRow = observer(
 
     useEffect(() => {
       order.updateOrderVaultBgt();
-      const orderDetails = order.getOrderDetails();
+      order.getOrderDetails();
     }, [block]);
 
     return (
@@ -53,8 +53,8 @@ export const HeyBgtUserOrderListRow = observer(
         </td>
         <td className="py-2 px-2 sm:px-4 text-sm sm:text-base font-mono whitespace-nowrap hidden md:table-cell">
           <div className="flex items-center gap-2">
-            {order.SaleBGT} {order.orderType === OrderType.BuyBgt && 'HONEY'}
-            {order.orderType === OrderType.SellBgt && 'BGT'}
+            {order.SaleBGT}{' '}
+            {order.orderType === OrderType.BuyBgt ? 'HONEY' : 'BGT'}
           </div>
         </td>
         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
@@ -77,11 +77,11 @@ export const HeyBgtUserOrderListRow = observer(
             {order.dealerId.toLowerCase() === wallet.account.toLowerCase() &&
               order.status === 'Pending' && (
                 <Button
-                  disabled={!wallet.walletClient}
-                  isDisabled={!wallet.walletClient}
+                  disabled={!wallet.walletClient || !wallet.isInit}
+                  isDisabled={!wallet.walletClient || !wallet.isInit}
                   onPress={() => {
-                    wallet.contracts.bgtMarket
-                      .closeOrder(BigInt(order.orderId))
+                    wallet.contracts.heyBgt
+                      .closeOrder(BigInt(order.orderId), order.orderType)
                       ?.then(() => {
                         order.status = OrderStatus.Closed;
                         actionCallBack?.();
@@ -93,9 +93,32 @@ export const HeyBgtUserOrderListRow = observer(
               )}
 
             {!(order.dealerId.toLowerCase() === wallet.account.toLowerCase()) &&
-              order.status === 'Pending' && (
-                <HeyBgtFillBuyOrderModalButton order={order} />
-              )}
+              order.status === 'Pending' &&
+              (order.orderType === OrderType.BuyBgt ? (
+                <HeyBgtFillBuyOrderModalButton
+                  order={order}
+                  actionCallBack={actionCallBack}
+                />
+              ) : (
+                <Button
+                  disabled={!wallet.walletClient}
+                  isDisabled={!wallet.walletClient}
+                  onPress={async () => {
+                    const beraPrice =
+                      await wallet.contracts.heyBgt.getBeraPrice();
+                    const vaultBgt =
+                      await order.rewardVault?.readAddressBgtInVault(
+                        order.dealerId
+                      );
+                    const value = beraPrice * Number(vaultBgt) * 1.1;
+                    wallet.contracts.heyBgt
+                      .fillSellOrder(BigInt(order.orderId), BigInt(value))
+                      ?.then(() => actionCallBack?.());
+                  }}
+                >
+                  {!wallet.walletClient ? 'Connect Wallet' : 'Buy'}
+                </Button>
+              ))}
           </div>
         </td>
       </tr>
