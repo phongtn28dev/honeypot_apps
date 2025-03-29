@@ -137,10 +137,11 @@ const SwapPairV3 = ({
     maxInputAmount && onUserInput(SwapField.INPUT, maxInputAmount.toExact());
   }, [maxInputAmount, onUserInput]);
 
+  console.log('parsedAmounts', parsedAmounts);
   const fiatValueInputFormatted = useUSDCValue(
     tryParseAmount(
       parsedAmounts[SwapField.INPUT]?.toSignificant(
-        (parsedAmounts[SwapField.INPUT]?.currency.decimals || 6) / 2
+        parsedAmounts[SwapField.INPUT]?.currency.decimals || 6
       ),
       baseCurrency
     )
@@ -149,7 +150,7 @@ const SwapPairV3 = ({
   const fiatValueOutputFormatted = useUSDCValue(
     tryParseAmount(
       parsedAmounts[SwapField.OUTPUT]?.toSignificant(
-        (parsedAmounts[SwapField.OUTPUT]?.currency.decimals || 6) / 2
+        parsedAmounts[SwapField.OUTPUT]?.currency.decimals || 6
       ),
       quoteCurrency
     )
@@ -162,8 +163,8 @@ const SwapPairV3 = ({
           independentField as keyof typeof parsedAmounts
         ]?.toExact() ?? ''
       : parsedAmounts[dependentField as keyof typeof parsedAmounts]?.toFixed(
-          (parsedAmounts[dependentField as keyof typeof parsedAmounts]?.currency
-            .decimals || 6) / 2
+          parsedAmounts[dependentField as keyof typeof parsedAmounts]?.currency
+            .decimals || 6
         ) ?? '',
   };
 

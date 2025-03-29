@@ -761,6 +761,12 @@ export const berachainNetwork = new Network({
       decimals: 18,
       logoURI: 'https://berascan.com/token/images/olympusdao2_32.png',
     },
+    '0x6536cead649249cae42fc9bfb1f999429b3ec755': {
+      name: 'NavFinance',
+      symbol: 'NAV',
+      decimals: 18,
+      logoURI: 'https://images.oogabooga.io/nav.png',
+    },
   },
   validatedFtoAddresses: [],
   validatedMemeAddresses: [],
