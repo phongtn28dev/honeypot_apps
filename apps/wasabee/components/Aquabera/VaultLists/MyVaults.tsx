@@ -209,40 +209,77 @@ export const MyAquaberaVaults = observer(
                   <div className="flex items-center">
                     <div className="flex items-center">
                       <TokenLogo
-                        token={Token.getToken({ address: vault.token0?.address ?? '' })}
+                        token={Token.getToken({
+                          address: vault.token0?.address ?? '',
+                        })}
                         addtionalClasses="translate-x-[25%]"
                         size={20}
                       />
                       <TokenLogo
-                        token={Token.getToken({ address: vault.token1?.address ?? '' })}
+                        token={Token.getToken({
+                          address: vault.token1?.address ?? '',
+                        })}
                         addtionalClasses="translate-x-[-25%]"
                         size={20}
                       />
                     </div>
                     <span className="font-bold ml-2">
-                      {Token.getToken({ address: vault.token0?.address ?? '' }).symbol}/
-                      {Token.getToken({ address: vault.token1?.address ?? '' }).symbol}
+                      {
+                        Token.getToken({ address: vault.token0?.address ?? '' })
+                          .symbol
+                      }
+                      /
+                      {
+                        Token.getToken({ address: vault.token1?.address ?? '' })
+                          .symbol
+                      }
                     </span>
                   </div>
                 </div>
 
                 <div className="flex justify-between items-center mb-3">
                   <div className="font-medium">Allow Token</div>
-                  <div className="flex items-center gap-1">
-                    <TokenLogo 
-                      token={Token.getToken({ address: vault.token0?.address ?? '' })} 
-                      size={20} 
-                    />
-                    <span>
-                      {Token.getToken({ address: vault.token0?.address ?? '' }).symbol}
-                    </span>
-                  </div>
+                  {vault.allowToken0 && (
+                    <div className="flex items-center gap-1">
+                      <TokenLogo
+                        token={Token.getToken({
+                          address: vault.token0?.address ?? '',
+                        })}
+                        size={20}
+                      />
+                      <span>
+                        {
+                          Token.getToken({
+                            address: vault.token0?.address ?? '',
+                          }).symbol
+                        }
+                      </span>
+                    </div>
+                  )}
+                  {vault.allowToken1 && (
+                    <div className="flex items-center gap-1">
+                      <TokenLogo
+                        token={Token.getToken({
+                          address: vault.token1?.address ?? '',
+                        })}
+                        size={20}
+                      />
+                      <span>
+                        {
+                          Token.getToken({
+                            address: vault.token1?.address ?? '',
+                          }).symbol
+                        }
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex justify-between items-center mb-3">
                   <div className="font-medium">Your TVL</div>
                   <div className="font-medium">
-                    ${Number(vault.userTVLUSD || 0).toLocaleString('en-US', {
+                    $
+                    {Number(vault.userTVLUSD || 0).toLocaleString('en-US', {
                       maximumFractionDigits: 2,
                     })}
                   </div>
@@ -253,7 +290,8 @@ export const MyAquaberaVaults = observer(
                   <div className="font-bold text-green-600">
                     {Number(vault.apr || 0).toLocaleString('en-US', {
                       maximumFractionDigits: 2,
-                    })}%
+                    })}
+                    %
                   </div>
                 </div>
 
@@ -269,7 +307,10 @@ export const MyAquaberaVaults = observer(
                   <Button
                     className="w-1/2 border border-[#2D2D2D] bg-white hover:bg-gray-50 text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-2 py-2 text-xs"
                     onClick={() => {
-                      window.open(`/swap?inputCurrency=${vault.token0?.address}&outputCurrency=${vault.token1?.address}`, '_blank');
+                      window.open(
+                        `/swap?inputCurrency=${vault.token0?.address}&outputCurrency=${vault.token1?.address}`,
+                        '_blank'
+                      );
                     }}
                   >
                     Swap

@@ -100,10 +100,18 @@ const VaultCard = observer(({ vault }: VaultCardProps) => {
 
       <div className="flex justify-between items-center mb-3">
         <div className="font-medium">Allow Token</div>
-        <div className="flex items-center gap-1">
-          <TokenLogo token={tokenA} size={20} />
-          <span>{tokenA.symbol}</span>
-        </div>
+        {vault.allowToken0 && (
+          <div className="flex items-center gap-1">
+            <TokenLogo token={tokenA} size={20} />
+            <span>{tokenA.symbol}</span>
+          </div>
+        )}
+        {vault.allowToken1 && (
+          <div className="flex items-center gap-1">
+            <TokenLogo token={tokenB} size={20} />
+            <span>{tokenB.symbol}</span>
+          </div>
+        )}
       </div>
 
       <div className="flex justify-between items-center mb-3">
