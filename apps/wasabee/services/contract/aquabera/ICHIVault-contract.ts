@@ -11,7 +11,7 @@ import { PairContract } from '../dex/liquidity/pair-contract';
 import { VaultDeposit } from '@/lib/algebra/graphql/generated/graphql';
 import { VaultWithdraw } from '@/lib/algebra/graphql/generated/graphql';
 import { VaultCollectFee } from '@/lib/algebra/graphql/generated/graphql';
-
+import { ReactNode } from 'react';
 type VaultTag = {
   tag: string;
   bgColor: string;
@@ -78,7 +78,7 @@ export class ICHIVaultContract implements BaseContract {
     feeApr_30d: 0,
   };
   vaultTag: VaultTag | undefined = undefined;
-  vaultDescription: string | undefined = undefined;
+  vaultDescription: string | ReactNode | undefined = undefined;
 
   recentTransactions: (VaultDeposit | VaultWithdraw | VaultCollectFee)[] = [];
 

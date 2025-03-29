@@ -12,6 +12,7 @@ import {
 import { ALGEBRA_POSITION_MANAGER } from '@/config/algebra/addresses';
 import { zeroAddress } from 'viem';
 import { ICHIVaultContract } from './contract/aquabera/ICHIVault-contract';
+import Link from 'next/link';
 
 export class Network {
   isActive: boolean = true;
@@ -783,8 +784,28 @@ export const berachainNetwork = new Network({
         textColor: 'black',
         tooltip: 'An ETH single-side deposit vault, actively paired with BERA.',
       },
-      vaultDescription:
-        'An ETH single-side deposit vault, actively paired with BERA, with high exposure farming on the wETH-BERA pair at Wasabee DEX and a goal of buying more BERA over time. The benchmark is compared to only holding ETH.',
+      vaultDescription: (
+        <>
+          An ETH single-side deposit vault, actively paired with BERA, with high
+          exposure farming on the wETH-BERA pair at Wasabee DEX and a goal of
+          buying more BERA over time. The benchmark is compared to only holding
+          ETH.
+          <br />
+          <br />
+          This strategy is implemented based on{' '}
+          <a
+            href="https://docs.ichi.org/home/yieldiq-strategy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500"
+          >
+            YieldIQ
+          </a>
+          , with the ETH inventory ratio being reduced as the running time
+          increases. HPOT&Aquabera will review the strategy parameters
+          regularly.
+        </>
+      ),
     },
     {
       //WBERA/HONEY
