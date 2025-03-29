@@ -792,10 +792,10 @@ export const berachainNetwork = new Network({
       },
       vaultDescription: (
         <>
-          An ETH single-side deposit vault, actively paired with BERA, with high
-          exposure farming on the wETH-BERA pair at Wasabee DEX and a goal of
-          buying more BERA over time. The benchmark is compared to only holding
-          ETH.
+          An ETH single-side deposit vault paired with BERA, actively farming
+          the WETH-BERA pair on Wasabee DEX for a solid high APY. It runs a
+          slick strategy that stacks more BERA over time. benchmarked against
+          just holding ETH Position.
           <br />
           <br />
           This strategy is implemented based on{' '}
