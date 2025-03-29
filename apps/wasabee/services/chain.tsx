@@ -816,6 +816,74 @@ export const berachainNetwork = new Network({
         textColor: 'black',
       },
     },
+    {
+      //WBERA/wgBERA
+      address: '0xac04b1abadf214b57f7ade1dd905ab7acac23a6b',
+      vaultTag: {
+        tag: '$wgBERA Hodl',
+        bgColor: '#FFCD4D',
+        textColor: 'black',
+        tooltip:
+          'A wgBERA single-side deposit vault, actively paired with BERA.',
+      },
+      vaultDescription: (
+        <>
+          A single-sided BERA deposits vault to accumulate wgBERA at the dip,
+          while actively providing liquidity and farming on the wgBERA-BERA
+          token pair through Wasabee DEX. Which helps restore and maintain the
+          wgBERA peg as well.
+          <br />
+          The strategy is implemented based on the{' '}
+          <a
+            href="https://docs.ichi.org/home/ascend-strategy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500"
+          >
+            Ascend-Strategy
+          </a>
+          , with a dynamic peg adjustment mechanism that progressively elevates
+          the peg target as wgBERA appreciates in value.
+          <br />
+          The strategy undergoes periodic review and optimization by HPOT and
+          Aquabera to ensure optimal performance.
+        </>
+      ),
+    },
+    {
+      //WBERA/iBERA
+      address: '0xe57d868d244d2cf2e9679eaba2a3048e58674565',
+      vaultTag: {
+        tag: '$iBERA Hodl',
+        bgColor: '#FFCD4D',
+        textColor: 'black',
+        tooltip:
+          'An iBERA single-side deposit vault, actively paired with BERA.',
+      },
+      vaultDescription: (
+        <>
+          iBERA/BERA - BERA deposit: A single-sided BERA deposits vault to
+          accumulate iBERA at the dip, while actively providing liquidity and
+          farming on the iBERA token pair through Wasabee DEX. Which helps
+          restore and maintain the iBERA peg as well.
+          <br />
+          The strategy is implemented based on the{' '}
+          <a
+            href="https://docs.ichi.org/home/ascend-strategy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500"
+          >
+            Ascend-Strategy
+          </a>
+          , with a dynamic peg adjustment mechanism that progressively elevates
+          the peg target as iBERA appreciates in value.
+          <br />
+          The strategy undergoes periodic review and optimization by HPOT and
+          Aquabera to ensure optimal performance.
+        </>
+      ),
+    },
   ],
 });
 
