@@ -16,7 +16,7 @@ export const UserBgtVaults = observer(() => {
   const { bgtVaults, loading } = useUserBgtVaults();
 
   return (
-    <div className="w-full h-full rounded-[24px]  bg-white p-5">
+    <div className="w-full h-full rounded-[24px]  bg-white p-5 overflow-hidden">
       <div className="flex items-center gap-2">
         <span className="w-full text-black text-base md:text-xl font-bold text-center">
           My Vaults
@@ -27,7 +27,7 @@ export const UserBgtVaults = observer(() => {
           <LoadingDisplay />
         </div>
       ) : (
-        <div>
+        <div className="flex flex-col gap-2 overflow-y-scroll h-[calc(100%-20px)]">
           {bgtVaults
             .filter((vault) => Number(vault.userBgtInVault) > 0)
             .map((vault) => (
