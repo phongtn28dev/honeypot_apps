@@ -106,13 +106,14 @@ export class HeyBgtContract implements BaseContract {
         abi: wallet.contracts.heyBgt.abi,
         functionName: 'openBuyBgtOrder',
         account: wallet.account as Address,
-        args: [BigInt(price), value, BigInt(NODE_ID)],
+        args: [price, value, BigInt(NODE_ID)],
       });
 
       return new ContractWrite(this.contract.write.openBuyBgtOrder, {
         action: 'Post Order',
       }).call([price, value, BigInt(NODE_ID)]);
     } catch (error) {
+      console.error(error);
       if (String(error).includes('small order')) {
         WrappedToastify.error({
           title: 'Buying amount too small',

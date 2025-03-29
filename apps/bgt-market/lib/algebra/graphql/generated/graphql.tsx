@@ -8092,6 +8092,8 @@ export type Query = {
   refund?: Maybe<Refund>;
   refunds: Array<Refund>;
   reward?: Maybe<Reward>;
+  rewardVault?: Maybe<RewardVault>;
+  rewardVaults: Array<RewardVault>;
   rewards: Array<Reward>;
   swap?: Maybe<Swap>;
   swaps: Array<Swap>;
@@ -8886,6 +8888,24 @@ export type QueryRewardArgs = {
 };
 
 
+export type QueryRewardVaultArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryRewardVaultsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<RewardVault_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<RewardVault_Filter>;
+};
+
+
 export type QueryRewardsArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -9371,6 +9391,80 @@ export type Reward = {
   rewardAddress: Scalars['Bytes']['output'];
 };
 
+export type RewardVault = {
+  __typename?: 'RewardVault';
+  id: Scalars['ID']['output'];
+  stakingToken: Token;
+  vaultAddress: Scalars['String']['output'];
+};
+
+export type RewardVault_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<RewardVault_Filter>>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_not?: InputMaybe<Scalars['ID']['input']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  or?: InputMaybe<Array<InputMaybe<RewardVault_Filter>>>;
+  stakingToken?: InputMaybe<Scalars['String']['input']>;
+  stakingToken_?: InputMaybe<Token_Filter>;
+  stakingToken_contains?: InputMaybe<Scalars['String']['input']>;
+  stakingToken_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  stakingToken_ends_with?: InputMaybe<Scalars['String']['input']>;
+  stakingToken_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  stakingToken_gt?: InputMaybe<Scalars['String']['input']>;
+  stakingToken_gte?: InputMaybe<Scalars['String']['input']>;
+  stakingToken_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  stakingToken_lt?: InputMaybe<Scalars['String']['input']>;
+  stakingToken_lte?: InputMaybe<Scalars['String']['input']>;
+  stakingToken_not?: InputMaybe<Scalars['String']['input']>;
+  stakingToken_not_contains?: InputMaybe<Scalars['String']['input']>;
+  stakingToken_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  stakingToken_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  stakingToken_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  stakingToken_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  stakingToken_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  stakingToken_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  stakingToken_starts_with?: InputMaybe<Scalars['String']['input']>;
+  stakingToken_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  vaultAddress?: InputMaybe<Scalars['String']['input']>;
+  vaultAddress_contains?: InputMaybe<Scalars['String']['input']>;
+  vaultAddress_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  vaultAddress_ends_with?: InputMaybe<Scalars['String']['input']>;
+  vaultAddress_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  vaultAddress_gt?: InputMaybe<Scalars['String']['input']>;
+  vaultAddress_gte?: InputMaybe<Scalars['String']['input']>;
+  vaultAddress_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  vaultAddress_lt?: InputMaybe<Scalars['String']['input']>;
+  vaultAddress_lte?: InputMaybe<Scalars['String']['input']>;
+  vaultAddress_not?: InputMaybe<Scalars['String']['input']>;
+  vaultAddress_not_contains?: InputMaybe<Scalars['String']['input']>;
+  vaultAddress_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  vaultAddress_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  vaultAddress_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  vaultAddress_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  vaultAddress_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  vaultAddress_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  vaultAddress_starts_with?: InputMaybe<Scalars['String']['input']>;
+  vaultAddress_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum RewardVault_OrderBy {
+  Id = 'id',
+  StakingToken = 'stakingToken',
+  StakingTokenDecimals = 'stakingToken__decimals',
+  StakingTokenId = 'stakingToken__id',
+  StakingTokenName = 'stakingToken__name',
+  StakingTokenSymbol = 'stakingToken__symbol',
+  StakingTokenTotalSupply = 'stakingToken__totalSupply',
+  VaultAddress = 'vaultAddress'
+}
+
 export type Reward_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
@@ -9508,6 +9602,8 @@ export type Subscription = {
   refund?: Maybe<Refund>;
   refunds: Array<Refund>;
   reward?: Maybe<Reward>;
+  rewardVault?: Maybe<RewardVault>;
+  rewardVaults: Array<RewardVault>;
   rewards: Array<Reward>;
   swap?: Maybe<Swap>;
   swaps: Array<Swap>;
@@ -10299,6 +10395,24 @@ export type SubscriptionRewardArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID']['input'];
   subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionRewardVaultArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionRewardVaultsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<RewardVault_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<RewardVault_Filter>;
 };
 
 
@@ -14425,6 +14539,11 @@ export type RecentSellOrdersQuery = { __typename?: 'Query', orders: Array<{ __ty
 
 export type OrderFieldsFragment = { __typename?: 'Order', id: string, price: any, vaultAddress: string, balance: any, spentBalance: any, height: any, orderType: OrderType, status: OrderStatus, dealer: { __typename?: 'Account', id: string } };
 
+export type GetBgtVaultsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetBgtVaultsQuery = { __typename?: 'Query', rewardVaults: Array<{ __typename?: 'RewardVault', vaultAddress: string, stakingToken: { __typename?: 'Token', symbol: string } }> };
+
 export type EternalFarmingsQueryVariables = Exact<{
   pool?: InputMaybe<Scalars['Bytes']['input']>;
 }>;
@@ -15580,6 +15699,48 @@ export type RecentSellOrdersQueryHookResult = ReturnType<typeof useRecentSellOrd
 export type RecentSellOrdersLazyQueryHookResult = ReturnType<typeof useRecentSellOrdersLazyQuery>;
 export type RecentSellOrdersSuspenseQueryHookResult = ReturnType<typeof useRecentSellOrdersSuspenseQuery>;
 export type RecentSellOrdersQueryResult = Apollo.QueryResult<RecentSellOrdersQuery, RecentSellOrdersQueryVariables>;
+export const GetBgtVaultsDocument = gql`
+    query GetBGTVaults {
+  rewardVaults(first: 1000) {
+    vaultAddress
+    stakingToken {
+      symbol
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetBgtVaultsQuery__
+ *
+ * To run a query within a React component, call `useGetBgtVaultsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBgtVaultsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBgtVaultsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetBgtVaultsQuery(baseOptions?: Apollo.QueryHookOptions<GetBgtVaultsQuery, GetBgtVaultsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetBgtVaultsQuery, GetBgtVaultsQueryVariables>(GetBgtVaultsDocument, options);
+      }
+export function useGetBgtVaultsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBgtVaultsQuery, GetBgtVaultsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetBgtVaultsQuery, GetBgtVaultsQueryVariables>(GetBgtVaultsDocument, options);
+        }
+export function useGetBgtVaultsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetBgtVaultsQuery, GetBgtVaultsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetBgtVaultsQuery, GetBgtVaultsQueryVariables>(GetBgtVaultsDocument, options);
+        }
+export type GetBgtVaultsQueryHookResult = ReturnType<typeof useGetBgtVaultsQuery>;
+export type GetBgtVaultsLazyQueryHookResult = ReturnType<typeof useGetBgtVaultsLazyQuery>;
+export type GetBgtVaultsSuspenseQueryHookResult = ReturnType<typeof useGetBgtVaultsSuspenseQuery>;
+export type GetBgtVaultsQueryResult = Apollo.QueryResult<GetBgtVaultsQuery, GetBgtVaultsQueryVariables>;
 export const EternalFarmingsDocument = gql`
     query EternalFarmings($pool: Bytes) {
   eternalFarmings(where: {pool: $pool}) {

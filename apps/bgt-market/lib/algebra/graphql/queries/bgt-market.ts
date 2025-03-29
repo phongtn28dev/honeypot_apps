@@ -81,3 +81,14 @@ export const BUNDLE_FRAGMENT = gql`
     status
   }
 `;
+
+export const GET_BGTVAULTS = gql`
+  query GetBGTVaults {
+    rewardVaults(first: 1000) {
+      vaultAddress
+      stakingToken {
+        symbol
+      }
+    }
+  }
+`;

@@ -179,7 +179,7 @@ export class HeyBgtOrder {
 
       runInAction(() => {
         this.setData({
-          price: 1 / Number(formatEther(res.price)),
+          price: Number(formatEther(res.price)),
           balance: res.amount,
           spentBalance: res.filledAmount,
         });

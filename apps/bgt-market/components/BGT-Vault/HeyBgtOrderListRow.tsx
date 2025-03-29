@@ -1,4 +1,3 @@
-import { ValidatedVaultAddresses } from '@/config/validatedVaultAddresses';
 import {
   Order,
   OrderStatus,

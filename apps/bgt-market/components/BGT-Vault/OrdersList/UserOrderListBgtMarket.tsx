@@ -1,15 +1,4 @@
 import { useEffect, useState } from 'react';
-import { fetchSwapTransactions } from '@/lib/algebra/graphql/clients/swapTransactions';
-import { truncate } from '@/lib/format';
-import { Copy } from '@/components/Copy';
-import { VscCopy } from 'react-icons/vsc';
-import { ExternalLink } from 'lucide-react';
-import dayjs from 'dayjs';
-import BigNumber from 'bignumber.js';
-import { SwapField } from '@/types/algebra/types/swap-field';
-import { useDerivedSwapInfo } from '@/lib/algebra/state/swapStore';
-import { Address, formatEther, parseEther, zeroAddress } from 'viem';
-import { HoneyContainer } from '@/components/CardContianer';
 import {
   Order,
   OrderContract,

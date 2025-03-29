@@ -1,15 +1,4 @@
 import { useEffect, useState } from 'react';
-import { fetchSwapTransactions } from '@/lib/algebra/graphql/clients/swapTransactions';
-import { truncate } from '@/lib/format';
-import { Copy } from '@/components/Copy';
-import { VscCopy } from 'react-icons/vsc';
-import { ExternalLink } from 'lucide-react';
-import dayjs from 'dayjs';
-import BigNumber from 'bignumber.js';
-import { SwapField } from '@/types/algebra/types/swap-field';
-import { useDerivedSwapInfo } from '@/lib/algebra/state/swapStore';
-import { Address, formatEther, parseEther, zeroAddress } from 'viem';
-import { HoneyContainer } from '@/components/CardContianer';
 import {
   Order,
   OrderContract,
@@ -17,10 +6,6 @@ import {
   useRecentBuyOrdersQuery,
   useRecentSellOrdersQuery,
 } from '@/lib/algebra/graphql/generated/graphql';
-import { wallet } from '@/services/wallet';
-import { watchBlockNumber } from 'viem/actions';
-import { Button } from '../../button/v3';
-import { Switch } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { cn } from '@/lib/tailwindcss';
 import { BuyOrderListRow, SellOrderListRow } from '../OrderListRow';
