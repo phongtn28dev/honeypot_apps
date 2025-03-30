@@ -137,6 +137,7 @@ export const berachainBepoliaNetwork = new Network({
       logoURI: '/images/icons/tokens/honey-token-icon.png',
       isRouterToken: true,
       isPopular: true,
+      isStableCoin: true,
     },
   },
 });
@@ -210,6 +211,7 @@ export const berachainNetwork = new Network({
       logoURI: '/images/icons/tokens/honey-token-icon.png',
       isRouterToken: true,
       isPopular: true,
+      isStableCoin: true,
     },
     '0x9b37d542114070518a44e200fdcd8e4be737297f': {
       name: 'Honeypot Finance',
@@ -224,6 +226,7 @@ export const berachainNetwork = new Network({
       decimals: 6,
       logoURI: '/images/icons/tokens/usdc-token-icon.png',
       isRouterToken: true,
+      isStableCoin: true,
     },
     '0x0555e30da8f98308edb960aa94c0db47230d2b9c': {
       name: 'WBTC',
@@ -251,6 +254,7 @@ export const berachainNetwork = new Network({
       decimals: 18,
       logoURI: '/images/icons/tokens/nect-token.jpg',
       isPopular: true,
+      isStableCoin: true,
     },
     '0x467aa1bfa3dcc714f7c16b3d779200431f6a833b': {
       name: '3BC',
@@ -270,6 +274,7 @@ export const berachainNetwork = new Network({
       symbol: 'USD₮0',
       decimals: 6,
       logoURI: '/images/icons/tokens/usdt-token-icon.png',
+      isStableCoin: true,
     },
     '0xbc665a196220043b738de189aef05250e2acc700': {
       name: 'Boyz',

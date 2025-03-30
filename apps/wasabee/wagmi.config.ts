@@ -107,7 +107,7 @@ const contracts: ContractConfig[] = [
 ];
 
 export default defineConfig({
-  out: 'lib/generated/wagmi.ts',
+  out: './apps/wasabee/wagmi-generated.ts',
   contracts,
   plugins: [react()],
 });

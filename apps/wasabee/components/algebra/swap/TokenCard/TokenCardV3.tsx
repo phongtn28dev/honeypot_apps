@@ -17,7 +17,6 @@ import {
   SelectState,
   SelectItem,
 } from '@/components/ItemSelect/v3';
-import { WNATIVE_EXTENDED } from '@/config/algebra/routing';
 import { cn } from '@/lib/tailwindcss';
 import { Button } from '@/components/algebra/ui/button';
 import {
@@ -384,7 +383,7 @@ const TokenCardV3 = ({
             <TokenSelector
               staticTokenList={staticTokenList}
               value={
-                currency?.wrapped.address
+                currency?.wrapped?.address
                   ? Token.getToken({
                       address: currency?.wrapped.address,
                       isNative: currency.isNative,

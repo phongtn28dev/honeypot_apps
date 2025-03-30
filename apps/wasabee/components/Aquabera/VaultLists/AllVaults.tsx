@@ -12,6 +12,7 @@ import {
 import { VaultsSortedByHoldersQuery } from '@/lib/algebra/graphql/generated/graphql';
 import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
 import VaultRow from './VaulltRow';
+import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
 
 type SortField = 'pair' | 'allow_token' | 'address' | 'tvl' | 'volume' | 'fees';
 type SortDirection = 'asc' | 'desc';
@@ -31,6 +32,7 @@ export function AllAquaberaVaults({
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [page, setPage] = useState(1);
   const rowsPerPage = 10;
+  const infoClient = useInfoClient();
 
   useEffect(() => {
     if (!wallet.isInit || !vaults) {
@@ -57,7 +59,7 @@ export function AllAquaberaVaults({
   }, [searchString]);
 
   const loadMyVaults = async (search?: string) => {
-    const vaultsQuery = getVaultPageData(search).then((res) => {
+    const vaultsQuery = getVaultPageData(infoClient, search).then((res) => {
       setVaults(res);
     });
   };

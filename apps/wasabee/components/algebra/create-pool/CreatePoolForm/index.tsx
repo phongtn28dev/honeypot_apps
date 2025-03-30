@@ -13,7 +13,6 @@ import { Address, getContract, maxInt256 } from 'viem';
 import Loader from '@/components/algebra/common/Loader';
 import { PoolState, usePool } from '@/lib/algebra/hooks/pools/usePool';
 import SelectPair from '../SelectPair';
-import { STABLECOINS } from '@/config/algebra/tokens';
 import {
   useMintState,
   useDerivedMintInfo,
@@ -24,13 +23,12 @@ import {
   useSwapState,
 } from '@/lib/algebra/state/swapStore';
 import { SwapField } from '@/types/algebra/types/swap-field';
-import {
-  simulateAlgebraPositionManagerMulticall,
-  useSimulateAlgebraPositionManagerMulticall,
-} from '@/wagmi-generated';
+import { useSimulateAlgebraPositionManagerMulticall } from '@/wagmi-generated';
 import { useToastify } from '@/lib/hooks/useContractToastify';
 import { Input } from '@/components/algebra/ui/input';
 import HoneyContainer from '@/components/CardContianer/HoneyContainer';
+import { wallet } from '@/services/wallet';
+import { useObserver } from 'mobx-react-lite';
 
 const FEE_TIERS = [
   { value: 100, label: '0.01%', description: 'Best for stable pairs' },
@@ -42,6 +40,12 @@ const FEE_TIERS = [
 const CreatePoolForm = () => {
   const router = useRouter();
   const { currencies } = useDerivedSwapInfo();
+
+  const { currentChain } = useObserver(() => {
+    return {
+      currentChain: wallet.currentChain,
+    };
+  });
 
   const {
     actions: { selectCurrency },
@@ -140,7 +144,11 @@ const CreatePoolForm = () => {
 
     return () => {
       selectCurrency(SwapField.INPUT, ADDRESS_ZERO);
-      selectCurrency(SwapField.OUTPUT, STABLECOINS.HONEY.address);
+      selectCurrency(
+        SwapField.OUTPUT,
+        currentChain.validatedTokens.filter((token) => token.isStableCoin)[0]
+          .address
+      );
       typeStartPriceInput('');
     };
   }, []);

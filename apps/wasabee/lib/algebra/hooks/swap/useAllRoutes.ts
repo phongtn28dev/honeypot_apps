@@ -5,12 +5,14 @@ import {
   Pool,
   Route,
   Token,
-} from "@cryptoalgebra/sdk";
-import { useMemo } from "react";
-import { useSwapPools } from "./useSwapPools";
-import { useChainId } from "wagmi";
-import { Address } from "viem";
-import { useUserState } from "../../state/userStore";
+} from '@cryptoalgebra/sdk';
+import { useMemo } from 'react';
+import { useSwapPools } from './useSwapPools';
+import { useChainId } from 'wagmi';
+import { Address } from 'viem';
+import { useUserState } from '../../state/userStore';
+import { useObserver } from 'mobx-react-lite';
+import { wallet } from '@/services/wallet';
 
 /**
  * Returns true if poolA is equivalent to poolB
@@ -46,15 +48,15 @@ function computeAllRoutes(
   const tokenIn = currencyIn?.wrapped;
   const tokenOut = currencyOut?.wrapped;
 
-  if (!tokenIn || !tokenOut) throw new Error("Missing tokenIn/tokenOut");
+  if (!tokenIn || !tokenOut) throw new Error('Missing tokenIn/tokenOut');
 
   for (const pool of pools) {
     const [tokenA, tokenB] = pool.tokens;
 
     const { liquidity, price, tick, fee } = pool.pool;
-    if (price === "0" || liquidity === "0") continue;
+    if (price === '0' || liquidity === '0') continue;
 
-    console.log("newPool args", {
+    console.log('newPool args', {
       tokenA,
       tokenB,
       fee,
@@ -65,20 +67,25 @@ function computeAllRoutes(
       DEFAULT_TICK_SPACING,
     });
 
-    const newPool = new Pool(
-      tokenA,
-      tokenB,
-      Number(fee),
-      Number(price),
-      ADDRESS_ZERO,
-      Number(liquidity),
-      Number(tick),
-      DEFAULT_TICK_SPACING
-    );
-
-    console.log("newPool", newPool);
+    let newPool: Pool | undefined;
+    try {
+      newPool = new Pool(
+        tokenA,
+        tokenB,
+        Number(fee),
+        String(price),
+        ADDRESS_ZERO,
+        String(liquidity),
+        Number(tick),
+        DEFAULT_TICK_SPACING
+      );
+    } catch (error) {
+      console.log('error', error);
+    }
+    console.log('newPool', newPool);
 
     if (
+      !newPool ||
       !newPool.involvesToken(tokenIn) ||
       currentPath.find((pathPool) => poolEquals(newPool, pathPool))
     )
@@ -117,7 +124,9 @@ export function useAllRoutes(
   currencyIn?: Currency,
   currencyOut?: Currency
 ): { loading: boolean; routes: Route<Currency, Currency>[] } {
-  const chainId = useChainId();
+  const { currentChainId } = useObserver(() => ({
+    currentChainId: wallet.currentChainId,
+  }));
 
   const { pools, loading: poolsLoading } = useSwapPools(
     currencyIn,
@@ -127,7 +136,13 @@ export function useAllRoutes(
   const { isMultihop } = useUserState();
 
   return useMemo(() => {
-    if (poolsLoading || !chainId || !pools || !currencyIn || !currencyOut)
+    if (
+      poolsLoading ||
+      !currentChainId ||
+      !pools ||
+      !currencyIn ||
+      !currencyOut
+    )
       return {
         loading: true,
         routes: [],
@@ -140,7 +155,7 @@ export function useAllRoutes(
       currencyIn,
       currencyOut,
       pools,
-      chainId,
+      currentChainId,
       [],
       [],
       currencyIn,
@@ -148,5 +163,12 @@ export function useAllRoutes(
     );
 
     return { loading: false, routes };
-  }, [chainId, currencyIn, currencyOut, pools, poolsLoading, isMultihop]);
+  }, [
+    currentChainId,
+    currencyIn,
+    currencyOut,
+    pools,
+    poolsLoading,
+    isMultihop,
+  ]);
 }

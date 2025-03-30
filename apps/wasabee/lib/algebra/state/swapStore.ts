@@ -1,4 +1,3 @@
-import { STABLECOINS } from '@/config/algebra/tokens';
 import { useCurrency } from '@/lib/algebra/hooks/common/useCurrency';
 import {
   useBestTradeExactIn,
@@ -27,6 +26,7 @@ import { Address, parseUnits } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import { useNeedAllowance } from '../hooks/common/useNeedAllowance';
 import { create } from 'zustand';
+import { wallet } from '@/services/wallet';
 
 interface SwapState {
   readonly independentField: SwapFieldType;
@@ -56,7 +56,9 @@ export const useSwapState = create<SwapState>((set, get) => ({
     currencyId: ADDRESS_ZERO,
   },
   [SwapField.OUTPUT]: {
-    currencyId: STABLECOINS.HONEY.address as Address,
+    currencyId: wallet.currentChain?.validatedTokens.filter(
+      (token) => token.isStableCoin
+    )[0].address as Address,
   },
   wasInverted: false,
   lastFocusedField: SwapField.INPUT,
@@ -214,15 +216,6 @@ export function useDerivedSwapInfo(): {
   );
 
   const trade = (isExactIn ? bestTradeExactIn : bestTradeExactOut) ?? undefined;
-
-  console.log(
-    'trade.trade?.inputAmount.toSignificant(2)',
-    trade.trade?.inputAmount.toSignificant(2)
-  );
-  console.log(
-    'trade.trade?.outputAmount.toSignificant(2)',
-    trade.trade?.outputAmount.toSignificant(2)
-  );
 
   const [addressA, addressB] = [
     inputCurrency?.isNative ? undefined : inputCurrency?.address || '',

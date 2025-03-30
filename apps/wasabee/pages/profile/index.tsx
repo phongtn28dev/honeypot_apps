@@ -12,7 +12,6 @@ import { portfolio } from '@/services/portfolio';
 import {
   getLiquidatorDatas,
   UserPoolProfit,
-  useUserProfitClient,
 } from '@/lib/algebra/graphql/clients/userProfit';
 import { formatAmountWithAlphabetSymbol } from '@/lib/algebra/utils/common/formatAmount';
 import CardContainer from '@/components/CardContianer/v3';
@@ -30,7 +29,6 @@ export const Profile = observer(() => {
   const router = useRouter();
   const urlParams = router.query as { tab: string };
   const infoclient = useInfoClient();
-  const { getLiquidatorDatas } = useUserProfitClient();
 
   useEffect(() => {
     if (wallet.account) {

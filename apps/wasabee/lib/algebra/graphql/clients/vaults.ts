@@ -122,5 +122,5 @@ export async function getSingleVaultDetails(
 export const useVaultsClient = createClientHook(useInfoClient, {
   getAccountVaultsList,
   getVaultPageData,
-  getSingleVaultDetails
+  getSingleVaultDetails,
 });

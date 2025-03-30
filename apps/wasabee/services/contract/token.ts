@@ -76,6 +76,7 @@ export class Token implements BaseContract {
   priceChange = '';
   priceChange24hPercentage = '';
   pot2pumpAddress: Address | undefined | null = undefined;
+  isStableCoin = false;
 
   // determines the order of the token in the list
   get priority() {
@@ -402,10 +403,12 @@ export class Token implements BaseContract {
       return cachedPot2PumpAddress;
     }
 
-    const pot2pumpAddress =
-      await wallet.contracts.memeFactory.contract.read.getPair([
-        this.address as Address,
-      ]);
+    const pot2pumpAddress = await wallet.contracts.memeFactory.contract.read
+      .getPair([this.address as Address])
+      .catch((e) => {
+        console.error(e);
+        return zeroAddress;
+      });
 
     if (pot2pumpAddress === zeroAddress) {
       this.pot2pumpAddress = null;

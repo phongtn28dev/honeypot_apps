@@ -20,7 +20,7 @@ export class Wallet {
   networks: Network[] = [];
   balance: BigNumber = new BigNumber(0);
   walletClient!: WalletClient;
-  currentChainId: number = -1;
+  currentChainId: number = DEFAULT_CHAIN_ID;
   contracts: {
     ftofactory: FtoFactoryContract;
     ftofacade: FtoFacadeContract;

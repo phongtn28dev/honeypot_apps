@@ -5,6 +5,7 @@ import {
   CurrencyAmount,
   maxAmountSpend,
   tryParseAmount,
+  WNATIVE,
 } from '@cryptoalgebra/sdk';
 import { useCallback, useMemo, useEffect } from 'react';
 import TokenCard from '../TokenCard';
@@ -282,6 +283,8 @@ const SwapPairV3 = ({
       });
     } else if (baseCurrency) {
       chart.setChartLabel(`${baseCurrency.symbol}`);
+      console.log('baseCurrency', baseCurrency);
+      console.log('WNATIVE', WNATIVE);
       Token.getToken({
         address: baseCurrency.wrapped.address,
         chainId: wallet.currentChainId.toString(),

@@ -27,6 +27,7 @@ export const getLiquidatorDatas = async (
   client: ApolloClient<any>,
   account: string
 ): Promise<UserPoolProfit[]> => {
+  console.log('getLiquidatorDatas', account, client);
   const liquidatorDataQuery = await client.query<
     LiquidatorDataQuery,
     LiquidatorDataQueryVariables
@@ -109,8 +110,3 @@ export const getLiquidatorDatas = async (
 
   return userPoolsProfit;
 };
-
-// 创建一个自定义Hook来包装获取用户收益的函数
-export const useUserProfitClient = createClientHook(useInfoClient, {
-  getLiquidatorDatas
-});

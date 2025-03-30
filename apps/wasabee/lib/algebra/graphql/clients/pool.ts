@@ -28,6 +28,7 @@ import { Token } from '@/services/contract/token';
 import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
 import { ApolloClient } from '@apollo/client';
 import { createClientHook } from '../clientUtils';
+import { useObserver } from 'mobx-react-lite';
 
 export const poolQueryToContract = (pool: Pool): PairContract => {
   const pairContract = new PairContract({
@@ -58,7 +59,7 @@ export const poolQueryToContract = (pool: Pool): PairContract => {
 
 export const poolsByTokenPair = async (
   client: ApolloClient<any>,
-  token0: string, 
+  token0: string,
   token1: string
 ) => {
   const { data } = await client.query<
@@ -91,13 +92,16 @@ export const userPools = async (
 
 export const usePoolsClient = createClientHook(useInfoClient, {
   poolsByTokenPair,
-  userPools
+  userPools,
 });
 
 export const useUserPools = (userAddress: string) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
   const [fetchedPositions, setFetchedPositions] = useState<string[]>([]);
+  const { currentChainId } = useObserver(() => ({
+    currentChainId: wallet.currentChainId,
+  }));
   const { data, loading, refetch } = useUserActivePositionsQuery({
     variables: { account: userAddress.toLowerCase() },
     //fetchPolicy: "cache-and-network",
@@ -115,7 +119,10 @@ export const useUserPools = (userAddress: string) => {
   >({});
 
   const algebraPositionManager = getContract({
-    address: algebraPositionManagerAddress,
+    address:
+      algebraPositionManagerAddress[
+        currentChainId as keyof typeof algebraPositionManagerAddress
+      ],
     abi: algebraPositionManagerAbi,
     client: { public: wallet.publicClient, wallet: wallet.walletClient },
   });

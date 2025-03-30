@@ -12,8 +12,8 @@ importers:
         specifier: ^3.13.1
         version: 3.13.1(@types/react@18.3.18)(graphql-ws@6.0.4(graphql@16.10.0)(ws@8.18.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(graphql@16.10.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@cryptoalgebra/sdk':
-        specifier: npm:@hongming-wang/algebra-sdk@^1.4.0
-        version: '@hongming-wang/algebra-sdk@1.4.0'
+        specifier: npm:@hongming-wang/algebra-sdk@^1.5.0
+        version: '@hongming-wang/algebra-sdk@1.5.0'
       '@dynamic-labs/sdk-react-core':
         specifier: ^4.8.2
         version: 4.8.2(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react-native@0.78.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.18)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)
@@ -2407,8 +2407,8 @@ packages:
     peerDependencies:
       react: '>= 16 || ^19.0.0-rc'
 
-  '@hongming-wang/algebra-sdk@1.4.0':
-    resolution: {integrity: sha512-mL/pZdvKsUHIxJQO2wqio+cv13O7wGDZuAo412j6ZBQI3htHN8TiCcAgQjf477J3XCgKjQnjq6BNpe2VqDbj/Q==}
+  '@hongming-wang/algebra-sdk@1.5.0':
+    resolution: {integrity: sha512-BV0mcM6hqZ2p1TBGitnprKlhNnae0+bnv2ZDDUNO3fvGfl5hQmxAbRBiou9hGaxre9+25MpO4FFBPxKLWPdjqA==}
     engines: {node: '>=10'}
 
   '@hookform/resolvers@3.10.0':
@@ -19069,7 +19069,7 @@ snapshots:
     dependencies:
       react: 18.3.1
 
-  '@hongming-wang/algebra-sdk@1.4.0':
+  '@hongming-wang/algebra-sdk@1.5.0':
     dependencies:
       '@ethersproject/abi': 5.8.0
       '@ethersproject/address': 5.8.0

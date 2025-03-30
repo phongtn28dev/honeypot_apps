@@ -1,11 +1,16 @@
-import { Currency, WNATIVE, tryParseAmount } from '@cryptoalgebra/sdk';
+import {
+  Currency,
+  ExtendedNative,
+  Native,
+  Token,
+  tryParseAmount,
+} from '@cryptoalgebra/sdk';
 import { useMemo } from 'react';
 import { useAccount, useBalance, useChainId, useContractWrite } from 'wagmi';
 import { useTransactionAwait } from '../common/useTransactionAwait';
 
 import { Address } from 'viem';
 import { DEFAULT_NATIVE_SYMBOL } from '@/config/algebra/default-chain-id';
-import { WNATIVE_EXTENDED } from '@/config/algebra/routing';
 import {
   useSimulateWrappedNativeDeposit,
   useSimulateWrappedNativeWithdraw,
@@ -13,7 +18,7 @@ import {
 import { TransactionType } from '../../state/pendingTransactionsStore';
 import { useToastify } from '@/lib/hooks/useContractToastify';
 import { wallet } from '@/services/wallet';
-
+import { useObserver } from 'mobx-react-lite';
 export const WrapType = {
   NOT_APPLICABLE: 'NOT_APPLICABLE',
   WRAP: 'WRAP',
@@ -33,7 +38,6 @@ export default function useWrapCallback(
   inputError?: string;
   isSuccess?: boolean;
 } {
-  const chainId = useChainId();
   const { address: account } = useAccount();
 
   const inputAmount = useMemo(
@@ -47,6 +51,11 @@ export default function useWrapCallback(
   });
 
   const { data: wrapData, writeContract: wrap } = useContractWrite();
+  const { currentChain } = useObserver(() => {
+    return {
+      currentChain: wallet.currentChain,
+    };
+  });
 
   const {
     isLoading: isWrapLoading,
@@ -87,8 +96,13 @@ export default function useWrapCallback(
   });
 
   return useMemo(() => {
-    if (!chainId || !inputCurrency || !outputCurrency) return NOT_APPLICABLE;
-    const weth = WNATIVE_EXTENDED[chainId];
+    if (!currentChain || !inputCurrency || !outputCurrency)
+      return NOT_APPLICABLE;
+    const weth = ExtendedNative.onChain(
+      currentChain.chainId,
+      currentChain.nativeToken.symbol,
+      currentChain.nativeToken.name
+    );
     if (!weth) return NOT_APPLICABLE;
 
     const hasInputAmount = Boolean(inputAmount?.greaterThan('0'));
@@ -131,7 +145,7 @@ export default function useWrapCallback(
       return NOT_APPLICABLE;
     }
   }, [
-    chainId,
+    currentChain,
     inputCurrency,
     outputCurrency,
     inputAmount,
