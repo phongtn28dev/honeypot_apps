@@ -10,8 +10,6 @@ import {
   useActiveFarmingsQuery,
   Pool_OrderBy,
 } from '@/lib/algebra/graphql/generated/graphql';
-import PoolCardList from './PoolCardList';
-import { farmingClient } from '@/lib/algebra/graphql/clients';
 import { SortingState } from '@tanstack/react-table';
 import { useUserPools } from '@/lib/algebra/graphql/clients/pool';
 import { wallet } from '@/services/wallet';

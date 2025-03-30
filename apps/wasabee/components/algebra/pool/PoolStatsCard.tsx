@@ -5,11 +5,11 @@ import {
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
 import { useMemo } from 'react';
 import { calculatePercentageChange } from '@/lib/utils';
-import { farmingClient } from '@/lib/algebra/graphql/clients';
 import { Address } from 'viem';
 import { Token } from '@/services/contract/token';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { wallet } from '@/services/wallet';
+import { useFarmingClient } from '@/lib/hooks/useSubgraphClients';
 
 interface PoolStatsCardProps {
   pool: Pool | null | undefined;
@@ -17,6 +17,7 @@ interface PoolStatsCardProps {
 
 export default function PoolStatsCard({ pool }: PoolStatsCardProps) {
   // Hooks need to be called unconditionally at the top
+  const farmingClient = useFarmingClient();
   const { data: activeFarmings } = useActiveFarmingsQuery({
     client: farmingClient,
   });

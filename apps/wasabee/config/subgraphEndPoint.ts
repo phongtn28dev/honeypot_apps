@@ -13,7 +13,7 @@ export const subgraphAddresses: Record<string, SubgraphAddresses> = {
   // berachain mainnet
   '80094': {
     algebra_info:
-      'https://api.goldsky.com/api/public/project_cm78242tjtmme01uvcbkaay27/subgraphs/hpot-algebra-core/2.3.0/gn',
+      'https://api.goldsky.com/api/public/project_cm78242tjtmme01uvcbkaay27/subgraphs/hpot-algebra-core/2.4.0/gn',
     algebra_farming:
       'https://api.goldsky.com/api/public/project_cm78242tjtmme01uvcbkaay27/subgraphs/hpot-algebra-farming/2.0.0/gn',
     bgt_market:

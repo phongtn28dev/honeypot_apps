@@ -26,6 +26,16 @@ export const BitgetCampaign = observer(() => {
     '0xc1014c1b2b131f87d4dd6ddfd9e3b0ab68fcd631': 'WBERA/Henlo',
   };
 
+  if (wallet.currentChainId !== 80094) {
+    return (
+      <div className="flex flex-col gap-4 w-full justify-center items-center">
+        <HoneyContainer className="w-full px-4 sm:px-6 max-w-[1200px]">
+          <div>This campaign is only available on Berachain Mainnet.</div>
+        </HoneyContainer>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-4 w-full justify-center items-center">
       <HoneyContainer className="w-full px-4 sm:px-6 max-w-[1200px]">
@@ -86,6 +96,7 @@ export const BitgetCampaign = observer(() => {
                         <TokenLogo
                           token={Token.getToken({
                             address: pool.pool.token0.id,
+                            chainId: wallet.currentChainId.toString(),
                           })}
                           size={24}
                           disableLink
@@ -93,6 +104,7 @@ export const BitgetCampaign = observer(() => {
                         <TokenLogo
                           token={Token.getToken({
                             address: pool.pool.token1.id,
+                            chainId: wallet.currentChainId.toString(),
                           })}
                           size={24}
                           disableLink
