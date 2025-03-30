@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { chart } from '@/services/chart';
 import { observer } from 'mobx-react-lite';
 import { wallet } from '@/services/wallet';
-import { liquidity } from '@/services/liquidity';
 import { useSearchParams } from 'next/navigation';
 import { itemPopUpVariants } from '@/lib/animation';
 import { DarkContainer } from '@/components/CardContianer';
@@ -15,20 +14,10 @@ import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';
 import SwapTransactionHistory from '@/components/SwapTransactionHistory';
 
 const SwapPage = observer(() => {
-  useEffect(() => {
-    observe(chart, 'chartTarget', () => {});
-  }, []);
-
-  useEffect(() => {
-    if (wallet.isInit) {
-      liquidity.initPool();
-    }
-  }, [wallet.isInit]);
-
   const inputCurrency = useSearchParams().get('inputCurrency');
   const outputCurrency = useSearchParams().get('outputCurrency');
 
-  const isInit = wallet.isInit && liquidity;
+  const isInit = wallet.isInit;
 
   if (!wallet.currentChain.supportDEX) {
     return (

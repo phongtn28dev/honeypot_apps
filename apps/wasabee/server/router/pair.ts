@@ -1,18 +1,18 @@
-import { factoryABI } from "@/lib/abis/factory";
+import { factoryABI } from '@/lib/abis/factory';
 
-import { publicProcedure, router } from "../trpc";
-import z from "zod";
-import { pairByTokensLoader, tokenLoader } from "@/lib/dataloader/pair";
-import { Address, getContract } from "viem";
-import { createPublicClientByChain } from "@/lib/client";
-import IUniswapV2Pair from "@uniswap/v2-core/build/IUniswapV2Pair.json";
-import PQueue from "p-queue";
-import { networksMap } from "@/services/chain";
-import { kv } from "@/lib/kv";
-import { pairQueryOutput } from "@/types/pair";
-import { indexer } from "@/services/indexer/indexer";
-import { cacheProvider, getCacheKey } from "@/lib/server/cache";
-import { getCacheKey as getKvCacheKey } from "@/lib/cache";
+import { publicProcedure, router } from '../trpc';
+import z from 'zod';
+import { pairByTokensLoader, tokenLoader } from '@/lib/dataloader/pair';
+import { Address, getContract } from 'viem';
+import { createPublicClientByChain } from '@/lib/client';
+import IUniswapV2Pair from '@uniswap/v2-core/build/IUniswapV2Pair.json';
+import PQueue from 'p-queue';
+import { networksMap } from '@/services/chain';
+import { kv } from '@/lib/kv';
+import { pairQueryOutput } from '@/types/pair';
+import { indexer } from '@/services/indexer/indexer';
+import { cacheProvider, getCacheKey } from '@/lib/server/cache';
+import { getCacheKey as getKvCacheKey } from '@/lib/cache';
 
 interface Pair {
   id: string;
@@ -41,33 +41,35 @@ export const pairRouter = router({
       })
     )
     .output(
-      z.object({
-        address: z.string(),
-        token0: z.object({
+      z
+        .object({
           address: z.string(),
-          name: z.string(),
-          symbol: z.string(),
-          decimals: z.number(),
-        }),
-        token1: z.object({
-          address: z.string(),
-          name: z.string(),
-          symbol: z.string(),
-          decimals: z.number(),
-        }),
-        reserve0: z.string(),
-        reserve1: z.string(),
-      }).optional()
+          token0: z.object({
+            address: z.string(),
+            name: z.string(),
+            symbol: z.string(),
+            decimals: z.number(),
+          }),
+          token1: z.object({
+            address: z.string(),
+            name: z.string(),
+            symbol: z.string(),
+            decimals: z.number(),
+          }),
+          reserve0: z.string(),
+          reserve1: z.string(),
+        })
+        .optional()
     )
     .query(async ({ input }) => {
       return cacheProvider.getOrSet(
-        getCacheKey("getPairByTokens", input),
+        getCacheKey('getPairByTokens', input),
         async () => {
           const { token0Address, token1Address } = input;
           const res = await indexer.getPairByTokens({
             token0: token0Address,
             token1: token1Address,
-          })
+          });
           return res;
         }
       );
@@ -76,17 +78,17 @@ export const pairRouter = router({
     .input(
       z.object({
         chainId: z.number(),
-        blackListAddress: z.array(z.string().startsWith("0x")).optional(),
+        blackListAddress: z.array(z.string().startsWith('0x')).optional(),
       })
     )
     .query(async ({ input }): Promise<pairQueryOutput> => {
       return cacheProvider.getOrSet(
-        getCacheKey("getPairs", input),
+        getCacheKey('getPairs', input),
         async () => {
           const { chainId } = input;
           const currentNetwork = networksMap[chainId];
           const factoryContract = getContract({
-            address: currentNetwork.contracts.factory as `0x${string}`,
+            address: currentNetwork.contracts.algebraFactory as `0x${string}`,
             abi: factoryABI,
             // 1a. Insert a single client
             client: {
@@ -103,7 +105,7 @@ export const pairRouter = router({
           // await kv.del(getCacheKey(chainId, 'allPairs'));
           const allPairs =
             (await kv.get<Record<string, any>>(
-              getKvCacheKey(chainId, "allPairs")
+              getKvCacheKey(chainId, 'allPairs')
             )) || {};
           // console.log(getCacheKey(chainId, 'allPairs'), allPairs)
           Array.from({ length: Number(length) }).forEach(async (_, index) => {
@@ -160,7 +162,7 @@ export const pairRouter = router({
             });
           });
           await queue.onIdle();
-          await kv.set(getKvCacheKey(chainId, "allPairs"), allPairs);
+          await kv.set(getKvCacheKey(chainId, 'allPairs'), allPairs);
 
           return allPairs;
         }

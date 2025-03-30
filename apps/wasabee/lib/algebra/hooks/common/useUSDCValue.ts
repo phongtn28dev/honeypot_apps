@@ -1,17 +1,16 @@
-import { STABLECOINS } from "@/config/algebra/tokens";
 import {
   ADDRESS_ZERO,
   Currency,
   CurrencyAmount,
   Price,
   tryParseAmount,
-} from "@cryptoalgebra/sdk";
-import { useMemo } from "react";
+} from '@cryptoalgebra/sdk';
+import { useMemo } from 'react';
 import {
   useNativePriceQuery,
   useSingleTokenQuery,
-} from "../../graphql/generated/graphql";
-import { DynamicFormatAmount } from "../../utils/common/formatAmount";
+} from '../../graphql/generated/graphql';
+import { DynamicFormatAmount } from '../../utils/common/formatAmount';
 
 export function useUSDCPrice(currency: Currency | undefined) {
   const { data: bundles } = useNativePriceQuery();
@@ -41,7 +40,7 @@ export function useUSDCValue(
   return useMemo(() => {
     return DynamicFormatAmount({
       amount: Number(currencyAmount?.toSignificant()) * priceDisplay,
-      endWith: " $",
+      endWith: ' $',
     });
   }, [currencyAmount, priceDisplay]);
 }

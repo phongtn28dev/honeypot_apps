@@ -1,6 +1,9 @@
 import { put } from '@vercel/blob';
 import type { NextApiResponse, NextApiRequest, PageConfig } from 'next';
 import { getAccountSwapsWithPools } from '@/lib/algebra/graphql/clients/account';
+import { getInfoClientByChainId } from '@/lib/hooks/useSubgraphClients';
+import { wallet } from '@/services/wallet';
+import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
 
 export default async function handler(
   request: NextApiRequest,
@@ -9,6 +12,7 @@ export default async function handler(
   const accountId = request.query.accountid as string;
   let totalAmountUsdTraded = 0;
   let totalSwaps = 0;
+  const infoClient = getInfoClientByChainId(DEFAULT_CHAIN_ID.toString());
   const amountUsdTradedForEachPool: Record<
     string,
     { pair: string; amountUsd: number; swaps: number }
@@ -46,9 +50,7 @@ export default async function handler(
     '0x96890cf58bc607cfad45b61d607e5d9f4f247502', // BM / WBERA
   ];
 
-  const swaps = await getAccountSwapsWithPools(accountId, pools);
-
-  console.log('swaps', swaps);
+  const swaps = await getAccountSwapsWithPools(infoClient, accountId, pools);
 
   swaps.account?.transaction.map((transaction) => {
     transaction.swaps.map((swap) => {

@@ -4,14 +4,11 @@ import {
   Token as OrbiterToken,
   TradePair,
   Router,
-  TransactionParams,
 } from '@orbiter-finance/bridge-sdk';
 import { Token } from '@/services/contract/token';
 import { action, makeAutoObservable, reaction } from 'mobx';
 import { wallet } from './wallet';
 import BigNumber from 'bignumber.js';
-import { clientToProvider } from '@/hooks/useEthersProvider';
-import { Client } from 'viem';
 import { ContractWrite } from './utils';
 import { OrbiterRouterV3 } from './contract/orbiter/OrbiterRouterV3';
 import { simulateContract } from 'viem/actions';

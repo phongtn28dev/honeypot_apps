@@ -1,13 +1,13 @@
 'use client';
 
-import { OrbiterBridgeSelectToken } from './OrbiterBridgeSelectToken';
-import OrbiterBridgeSelectNetwork from './OrbiterBridgeSelectNetwork';
+import { OrbiterBridgeSelectToken } from '../../../components/Bridge/OrbiterBridge/OrbiterBridgeSelectToken';
+import OrbiterBridgeSelectNetwork from '../../../components/Bridge/OrbiterBridge/OrbiterBridgeSelectNetwork';
 import { Button } from '@nextui-org/react';
 import { ArrowLeftRight, ArrowUpDown } from 'lucide-react';
 import { orbiterBridgeService } from '@/services/orbiterBridge';
-import OrbiterBridgeAmountInput from './OrbiterBridgeAmountInput';
-import OrbiterBridgeParams from './OrbiterBridgeParams';
-import OrbiterBridgeButton from './OrbiterBridgeButton';
+import OrbiterBridgeAmountInput from '../../../components/Bridge/OrbiterBridge/OrbiterBridgeAmountInput';
+import OrbiterBridgeParams from '../../../components/Bridge/OrbiterBridge/OrbiterBridgeParams';
+import OrbiterBridgeButton from '../../../components/Bridge/OrbiterBridge/OrbiterBridgeButton';
 
 export default function OrbiterBridge() {
   const handleSwapNetworks = () => {

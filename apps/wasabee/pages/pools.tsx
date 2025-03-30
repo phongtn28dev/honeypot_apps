@@ -3,66 +3,12 @@ import { observer } from 'mobx-react-lite';
 import { wallet } from '@/services/wallet';
 import { Tab, Tabs } from '@nextui-org/react';
 import { NextLayoutPage } from '@/types/nextjs';
-import { liquidity } from '@/services/liquidity';
 import { useCallback, useEffect, useState } from 'react';
 import PoolsList from '@/components/algebra/pools/PoolsList';
 import AquaberaList from '@/components/Aquabera/VaultLists/VaultLists';
 
 const PoolsPage: NextLayoutPage = observer(() => {
-  const [loading, setLoading] = useState(true);
   const [currentTab, setCurrentTab] = useState<'all' | 'my'>('all');
-
-  useEffect(() => {
-    if (!wallet.isInit) {
-      return;
-    }
-    liquidity.initPool();
-  }, [wallet.isInit]);
-
-  useEffect(() => {
-    if (wallet.isInit && liquidity.isInit) {
-      setLoading(false);
-      liquidity.pairPage.reloadPage();
-      liquidity.myPairPage.reloadPage();
-    }
-  }, [wallet.isInit, liquidity.isInit]);
-
-  const searchStringChangeHandler = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (currentTab === 'all') {
-        liquidity.pairPage.updateFilter({
-          searchString: e.target.value,
-        });
-      } else {
-        liquidity.myPairPage.updateFilter({
-          searchString: e.target.value,
-        });
-      }
-    },
-    [currentTab]
-  );
-
-  const clearSearchString = useCallback(() => {
-    if (currentTab === 'all') {
-      liquidity.pairPage.updateFilter({
-        searchString: '',
-      });
-    } else {
-      liquidity.myPairPage.updateFilter({
-        searchString: '',
-      });
-    }
-  }, [currentTab]);
-
-  const tabChangeHandler = (key: string) => {
-    if (key === 'all') {
-      setCurrentTab('all');
-      clearSearchString();
-    } else {
-      setCurrentTab('my');
-      clearSearchString();
-    }
-  };
 
   if (!wallet.currentChain.supportDEX) {
     return (

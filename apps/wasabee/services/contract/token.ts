@@ -405,7 +405,7 @@ export class Token implements BaseContract {
 
     const pot2pumpAddress = await wallet.contracts.memeFactory.contract.read
       .getPair([this.address as Address])
-      .catch((e) => {
+      .catch((e: any) => {
         console.error(e);
         return zeroAddress;
       });

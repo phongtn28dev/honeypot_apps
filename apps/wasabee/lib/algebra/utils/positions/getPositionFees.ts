@@ -1,16 +1,13 @@
-import { MAX_UINT128 } from "@/config/algebra/max-uint128";
-import { wallet } from "@/services/wallet";
-import {
-  algebraPositionManagerAbi,
-  algebraPositionManagerAddress,
-} from "@/wagmi-generated";
-import { CurrencyAmount, Pool, unwrappedToken } from "@cryptoalgebra/sdk";
-import { getContract } from "viem";
+import { MAX_UINT128 } from '@/config/algebra/max-uint128';
+import { wallet } from '@/services/wallet';
+import { algebraPositionManagerAbi } from '@/wagmi-generated';
+import { CurrencyAmount, Pool, unwrappedToken } from '@cryptoalgebra/sdk';
+import { getContract } from 'viem';
 
 export async function getPositionFees(pool: Pool, positionId: number) {
   try {
     const algebraPositionManager = getContract({
-      address: algebraPositionManagerAddress,
+      address: wallet.currentChain.contracts.algebraPositionManager,
       abi: algebraPositionManagerAbi,
       client: { public: wallet.publicClient, wallet: wallet.walletClient },
     });

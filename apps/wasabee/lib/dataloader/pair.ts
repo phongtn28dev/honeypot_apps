@@ -1,13 +1,13 @@
-import DataLoader from "dataloader";
+import DataLoader from 'dataloader';
 
-import { getContract } from "viem";
-import { ethers } from "ethers";
-import { createPublicClientByChain } from "../client";
-import { getCacheKey } from "../cache";
-import { networksMap } from "@/services/chain";
-import { factoryABI } from "../abis/factory";
-import { ERC20ABI } from "../abis/erc20";
-import { kv } from "../kv";
+import { getContract } from 'viem';
+import { ethers } from 'ethers';
+import { createPublicClientByChain } from '../client';
+import { getCacheKey } from '../cache';
+import { networksMap } from '@/services/chain';
+import { factoryABI } from '../abis/factory';
+import { ERC20ABI } from '../abis/erc20';
+import { kv } from '../kv';
 
 // 2. Set up your client with desired chain & transport.
 
@@ -26,7 +26,7 @@ export const tokenLoader = new DataLoader<
   const chainId = addresses[0].chainId;
   const currentNetwork = networksMap[chainId];
   const tokensMap =
-    (await kv.get<Record<string, any>>(getCacheKey(chainId, "tokens"))) || {};
+    (await kv.get<Record<string, any>>(getCacheKey(chainId, 'tokens'))) || {};
   const res = await Promise.all(
     addresses.map(async (addressChainId) => {
       const { chainId, address } = addressChainId;
@@ -55,7 +55,7 @@ export const tokenLoader = new DataLoader<
       return token;
     })
   );
-  await kv.set("tokens", tokensMap);
+  await kv.set('tokens', tokensMap);
   return res;
 });
 
@@ -71,11 +71,11 @@ export const pairByTokensLoader = new DataLoader<
   // kv.del(getCacheKey(chainId, "pairsByTokens"));
   const pairsMap =
     (await kv.get<Record<string, any>>(
-      getCacheKey(chainId, "pairsByTokens")
+      getCacheKey(chainId, 'pairsByTokens')
     )) || {};
   const currentNetwork = networksMap[chainId];
   const factoryContract = getContract({
-    address: currentNetwork.contracts.factory as `0x${string}`,
+    address: currentNetwork.contracts.algebraFactory as `0x${string}`,
     abi: factoryABI,
     // 1a. Insert a single client
     client: {
@@ -84,7 +84,7 @@ export const pairByTokensLoader = new DataLoader<
   });
   const pairs = await Promise.all(
     tokens.map(async (t) => {
-      let pair = pairsMap?.[t.token0Address + "-" + t.token1Address];
+      let pair = pairsMap?.[t.token0Address + '-' + t.token1Address];
       if (!pair) {
         const { token0Address, token1Address } = t;
         const pairAddress = await factoryContract.read.getPair([
@@ -110,11 +110,11 @@ export const pairByTokensLoader = new DataLoader<
           token0,
           token1,
         };
-        pairsMap[t.token0Address + "-" + t.token1Address] = pair;
+        pairsMap[t.token0Address + '-' + t.token1Address] = pair;
       }
       return pair;
     })
   );
-  await kv.set("pairsByTokens", pairsMap);
+  await kv.set('pairsByTokens', pairsMap);
   return pairs;
 });

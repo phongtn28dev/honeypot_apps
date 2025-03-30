@@ -2,6 +2,7 @@ import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { getSingleVaultDetails } from '@/lib/algebra/graphql/clients/vaults';
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
 import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
 import { Token } from '@/services/contract/token';
 import { wallet } from '@/services/wallet';
@@ -17,6 +18,7 @@ export const VaultRow = observer(({ vault }: { vault: ICHIVaultContract }) => {
   const [vaultContract, setVaultContract] = useState<
     ICHIVaultContract | undefined
   >(undefined);
+  const infoClient = useInfoClient();
   const tokenA = Token.getToken({
     address: vault.token0?.address ?? '',
     chainId: wallet.currentChainId.toString(),
@@ -57,7 +59,10 @@ export const VaultRow = observer(({ vault }: { vault: ICHIVaultContract }) => {
 
     async function getVaultsContracts() {
       if (!vault) return;
-      const vaultContract = await getSingleVaultDetails(vault.address);
+      const vaultContract = await getSingleVaultDetails(
+        infoClient,
+        vault.address
+      );
 
       if (vaultContract) {
         Promise.all([

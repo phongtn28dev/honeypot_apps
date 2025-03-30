@@ -1,8 +1,6 @@
 import { Network, networks } from './chain';
 import BigNumber from 'bignumber.js';
 import { Address, PublicClient, WalletClient, zeroAddress } from 'viem';
-import { RouterV2Contract } from './contract/dex/routerv2-contract';
-import { FactoryContract } from './contract/dex/factory-contract';
 import { FtoFactoryContract } from './contract/launches/fto/ftofactory-contract';
 import { FtoFacadeContract } from './contract/launches/fto/ftofacade-contract';
 import { makeAutoObservable, reaction } from 'mobx';

@@ -23,7 +23,6 @@ import TokenCardV3 from '../TokenCard/TokenCardV3';
 import { ExchangeSvg } from '@/components/svg/exchange';
 import { chart } from '@/services/chart';
 import { Token } from '@/services/contract/token';
-import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
 import { wallet } from '@/services/wallet';
 import { AlgebraPoolContract } from '@/services/contract/algebra/algebra-pool-contract';

@@ -1,6 +1,6 @@
 import { stargateBridgeService } from '@/services/stargateBridge';
 import { ArrowLeftRight } from 'lucide-react';
-import StargateBridgeSelectToken from './StargateBridgeSelectToken';
+import StargateBridgeSelectToken from '../../../components/Bridge/StargateBridge/StargateBridgeSelectToken';
 
 export default function StargateBridge() {
   return (
