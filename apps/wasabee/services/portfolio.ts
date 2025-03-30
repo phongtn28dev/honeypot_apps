@@ -17,6 +17,18 @@ class Portfolio {
 
   constructor() {
     makeAutoObservable(this);
+    reaction(
+      () => wallet.account,
+      () => {
+        this.initPortfolio();
+      }
+    );
+    reaction(
+      () => wallet.currentChainId,
+      () => {
+        this.initPortfolio();
+      }
+    );
   }
 
   get totalBalance() {
@@ -26,7 +38,7 @@ class Portfolio {
   }
 
   async initPortfolio() {
-    if (this.isInit || !wallet.isInit) return;
+    if (!wallet.isInit) return;
 
     const infoClient = getInfoClientByChainId(wallet.currentChainId.toString());
 
@@ -52,7 +64,10 @@ class Portfolio {
       console.log('accountHoldingTokenIds', accountHoldingTokenIds);
       const allTokenIds = [...tokenIds, ...(accountHoldingTokenIds || [])];
       console.log('allTokenIds', allTokenIds);
-      const tokensData = await getMultipleTokensData(allTokenIds);
+      const tokensData = await getMultipleTokensData(
+        allTokenIds,
+        wallet.currentChainId.toString()
+      );
       console.log('tokensData', tokensData);
       const tokens = tokensData?.tokens.map((token) => {
         //remove marketCap from token

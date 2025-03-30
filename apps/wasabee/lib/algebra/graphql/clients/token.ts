@@ -10,7 +10,10 @@ import {
   MultipleTokensQueryVariables,
   MultipleTokensDocument,
 } from '../generated/graphql';
-import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
+import {
+  getInfoClientByChainId,
+  useInfoClient,
+} from '@/lib/hooks/useSubgraphClients';
 
 export async function getTokenTop10Holders(tokenId: string) {
   const infoClient = useInfoClient();
@@ -39,9 +42,12 @@ export async function getSingleTokenData(tokenId: string) {
   return tokenQuery.data;
 }
 
-export async function getMultipleTokensData(tokenIds: string[]) {
+export async function getMultipleTokensData(
+  tokenIds: string[],
+  chainId: string
+) {
   if (!tokenIds || tokenIds.length === 0) return;
-  const infoClient = useInfoClient();
+  const infoClient = getInfoClientByChainId(chainId);
   const tokenQuery = await infoClient.query<
     MultipleTokensQuery,
     MultipleTokensQueryVariables
