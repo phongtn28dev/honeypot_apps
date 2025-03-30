@@ -12,6 +12,8 @@ import { ICHIVaultFactoryContract } from '@/services/contract/aquabera/ICHIVault
 import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
 import { ICHIVaultVolatilityCheckContract } from './contract/aquabera/ICHIVaultVolatilityCheckContract';
 
+const MOCK_ADDRESS = process.env.NEXT_PUBLIC_MOCK_ADDRESS || undefined;
+
 export class Wallet {
   account: string = '';
   accountShort = '';

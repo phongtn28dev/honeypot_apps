@@ -105,14 +105,14 @@ const MyPositionsTable = <TData, TValue>({
             <TableRow
               key={row.id}
               data-state={row.getIsSelected() && "selected"}
-              className={`border-[#D9D7E4]/5 ${
-                isSelected ? "bg-muted-primary/60" : "bg-card-dark"
+              className={`border-b border-gray-100 ${
+                isSelected ? "bg-gray-50" : ""
               } ${(action || link) && "cursor-pointer"} ${
                 action || link
                   ? isSelected
-                    ? "hover:bg-muted-primary"
-                    : "hover:bg-card-hover"
-                  : "hover:bg-card-dark"
+                    ? "hover:bg-gray-100"
+                    : "hover:bg-gray-50"
+                  : ""
               } ${
                 isStatusActive && !expandActive && "collapse border-0 opacity-0"
               } ${
@@ -129,13 +129,12 @@ const MyPositionsTable = <TData, TValue>({
                 if (action) {
                   action(row.original.id);
                 } else if (link) {
-                  //navigate(`/${link}/${row.original.id}`);
                   window.location.href = `/${link}/${row.original.id}`;
                 }
               }}
             >
               {row.getVisibleCells().map((cell: any) => (
-                <TableCell key={cell.id} className="text-left">
+                <TableCell key={cell.id} className="px-6 py-4 text-left">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>
               ))}
@@ -168,7 +167,7 @@ const MyPositionsTable = <TData, TValue>({
             {headerGroup.headers.map((header) => (
               <TableHead
                 key={header.id}
-                className="rounded-xl text-black font-semibold [&_svg]:mt-auto"
+                className="px-6 py-4 rounded-xl text-black font-semibold [&_svg]:mt-auto"
               >
                 {header.isPlaceholder
                   ? null
@@ -181,7 +180,7 @@ const MyPositionsTable = <TData, TValue>({
           </TableRow>
         ))}
       </TableHeader>
-      <TableBody className="[&_tr]:border-opacity-30 bg-yellow-200 hover:bg-transparent text-[16px] transition-all">
+      <TableBody className="[&_tr]:border-opacity-30 text-[16px] transition-all">
         {table.getRowModel().rows?.length === 0 ||
         (!filterStatus.Open &&
           !filterStatus.Closed &&

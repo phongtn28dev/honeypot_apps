@@ -1,4 +1,5 @@
 import { networks } from '@/services/chain';
+import { connectorsForWallets, getDefaultConfig } from '@rainbow-me/rainbowkit';
 import {
   rainbowWallet,
   bitgetWallet,
@@ -7,8 +8,7 @@ import {
   metaMaskWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 import { injected, safe } from 'wagmi/connectors';
-import { createConfig, http, cookieStorage, createStorage } from 'wagmi';
-import { connectorsForWallets, getDefaultConfig } from '@rainbow-me/rainbowkit';
+import { createConfig, http, cookieStorage, createStorage, mock } from 'wagmi';
 // import { holdstationWallet } from "./holdstationWallet";
 // import { capsuleWallet } from "./capsualWallet";
 // import { berasigWallet } from "./berasigWallet";
@@ -21,6 +21,8 @@ let customWallets = [
   walletConnectWallet,
   bitgetWallet,
   okxWallet,
+  // holdstationWallet,
+  // berasigWallet,
 ];
 
 // if(!window.bitkeep){

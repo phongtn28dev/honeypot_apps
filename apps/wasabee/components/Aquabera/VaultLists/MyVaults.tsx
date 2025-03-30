@@ -12,6 +12,7 @@ import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { observer } from 'mobx-react-lite';
 import MyVaultRow from './MyVaultRow';
 import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
+import { Button } from '@/components/algebra/ui/button';
 
 type SortField =
   | 'pair'
@@ -20,15 +21,17 @@ type SortField =
   | 'volume'
   | 'fees'
   | 'shares'
-  | 'user_tvl';
+  | 'user_tvl'
+  | 'apr';
 type SortDirection = 'asc' | 'desc';
 
 interface MyAquaberaVaultsProps {
   searchString?: string;
+  sortBy?: string;
 }
 
 export const MyAquaberaVaults = observer(
-  ({ searchString = '' }: MyAquaberaVaultsProps) => {
+  ({ searchString = '', sortBy = 'apr' }: MyAquaberaVaultsProps) => {
     const [vaultsContracts, setVaultsContracts] = useState<ICHIVaultContract[]>(
       []
     );
@@ -51,6 +54,13 @@ export const MyAquaberaVaults = observer(
           token0: vault.vault.tokenA,
           token1: vault.vault.tokenB,
           address: vault.vault.id as `0x${string}`,
+          apr: Number(vault.vault.feeApr_1d),
+          detailedApr: {
+            feeApr_1d: Number(vault.vault.feeApr_1d),
+            feeApr_3d: Number(vault.vault.feeApr_3d),
+            feeApr_7d: Number(vault.vault.feeApr_7d),
+            feeApr_30d: Number(vault.vault.feeApr_30d),
+          },
         });
         if (vaultContract) {
           setVaultsContracts((prev) => [...prev, vaultContract]);
@@ -107,11 +117,12 @@ export const MyAquaberaVaults = observer(
         const multiplier = sortDirection === 'asc' ? 1 : -1;
 
         switch (sortField) {
-          case 'pair':
+          case 'pair': {
             return (
               multiplier *
               (a.token0?.symbol?.localeCompare(b.token0?.symbol ?? '') ?? 0)
             );
+          }
           case 'allow_token':
             return (
               multiplier *
@@ -135,6 +146,8 @@ export const MyAquaberaVaults = observer(
             return multiplier * (Number(a.userShares) - Number(b.userShares));
           case 'user_tvl':
             return multiplier * (Number(a.userTVLUSD) - Number(b.userTVLUSD));
+          case 'apr':
+            return multiplier * (Number(a.apr) - Number(b.apr));
           default:
             return 0;
         }
@@ -186,34 +199,182 @@ export const MyAquaberaVaults = observer(
       </th>
     );
 
+    const sortedVaults = getSortedVaults();
+
+    // 当 sortBy 变化时更新排序字段
+    useEffect(() => {
+      setSortField(sortBy as SortField);
+    }, [sortBy]);
+
     return (
-      <div className="w-full overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr>
-              <SortHeader field="pair" label="Token Pair" align="left" />
-              <SortHeader
-                field="allow_token"
-                label="Allow Token"
-                align="left"
-              />
-              <SortHeader field="user_tvl" label="Your TVL" />
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-[#4D4D4D]">
-            {!getSortedVaults().length ? (
-              <tr className="hover:bg-white border-white h-full">
-                <td colSpan={6} className="h-24 text-center text-black">
-                  No results.
-                </td>
+      <div className="w-full">
+        {/* Mobile view - card layout for small screens */}
+        <div className="sm:hidden">
+          {!sortedVaults.length ? (
+            <div className="text-center py-8 text-black">No results.</div>
+          ) : (
+            sortedVaults.map((vault) => (
+              <div
+                key={vault.address}
+                className="mb-4 p-4 bg-white custom-dashed-3xl"
+              >
+                <div className="flex justify-between items-center mb-3">
+                  <div className="font-medium">Token Pair</div>
+                  <div className="flex items-center">
+                    <div className="flex items-center">
+                      <TokenLogo
+                        token={Token.getToken({
+                          address: vault.token0?.address ?? '',
+                          chainId: wallet.currentChainId.toString(),
+                        })}
+                        addtionalClasses="translate-x-[25%]"
+                        size={20}
+                      />
+                      <TokenLogo
+                        token={Token.getToken({
+                          address: vault.token1?.address ?? '',
+                          chainId: wallet.currentChainId.toString(),
+                        })}
+                        addtionalClasses="translate-x-[-25%]"
+                        size={20}
+                      />
+                    </div>
+                    <span className="font-bold ml-2">
+                      {
+                        Token.getToken({
+                          address: vault.token0?.address ?? '',
+                          chainId: wallet.currentChainId.toString(),
+                        }).symbol
+                      }
+                      /
+                      {
+                        Token.getToken({
+                          address: vault.token1?.address ?? '',
+                          chainId: wallet.currentChainId.toString(),
+                        }).symbol
+                      }
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-center mb-3">
+                  <div className="font-medium">Allow Token</div>
+                  {vault.allowToken0 && (
+                    <div className="flex items-center gap-1">
+                      <TokenLogo
+                        token={Token.getToken({
+                          address: vault.token0?.address ?? '',
+                          chainId: wallet.currentChainId.toString(),
+                        })}
+                        size={20}
+                      />
+                      <span>
+                        {
+                          Token.getToken({
+                            address: vault.token0?.address ?? '',
+                            chainId: wallet.currentChainId.toString(),
+                          }).symbol
+                        }
+                      </span>
+                    </div>
+                  )}
+                  {vault.allowToken1 && (
+                    <div className="flex items-center gap-1">
+                      <TokenLogo
+                        token={Token.getToken({
+                          address: vault.token1?.address ?? '',
+                          chainId: wallet.currentChainId.toString(),
+                        })}
+                        size={20}
+                      />
+                      <span>
+                        {
+                          Token.getToken({
+                            address: vault.token1?.address ?? '',
+                            chainId: wallet.currentChainId.toString(),
+                          }).symbol
+                        }
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex justify-between items-center mb-3">
+                  <div className="font-medium">Your TVL</div>
+                  <div className="font-medium">
+                    $
+                    {Number(vault.userTVLUSD || 0).toLocaleString('en-US', {
+                      maximumFractionDigits: 2,
+                    })}
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-center mb-3">
+                  <div className="font-medium">APR</div>
+                  <div className="font-bold text-green-600">
+                    {Number(vault.apr || 0).toLocaleString('en-US', {
+                      maximumFractionDigits: 2,
+                    })}
+                    %
+                  </div>
+                </div>
+
+                <div className="mt-4 flex justify-center gap-2">
+                  <Button
+                    className="w-1/2 border border-[#2D2D2D] bg-[#FFCD4D] hover:bg-[#FFD56A] text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-2 py-2 text-xs"
+                    onClick={() => {
+                      window.open(`/vault/${vault.address}`, '_blank');
+                    }}
+                  >
+                    View Vault
+                  </Button>
+                  <Button
+                    className="w-1/2 border border-[#2D2D2D] bg-white hover:bg-gray-50 text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-2 py-2 text-xs"
+                    onClick={() => {
+                      window.open(
+                        `/swap?inputCurrency=${vault.token0?.address}&outputCurrency=${vault.token1?.address}`,
+                        '_blank'
+                      );
+                    }}
+                  >
+                    Swap
+                  </Button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Desktop view - table layout for medium screens and up */}
+        <div className="hidden sm:block w-full overflow-x-auto custom-dashed-3xl sm:p-6 sm:bg-white">
+          <table className="w-full">
+            <thead>
+              <tr>
+                <SortHeader field="pair" label="Token Pair" align="left" />
+                <SortHeader
+                  field="allow_token"
+                  label="Allow Token"
+                  align="left"
+                />
+                <SortHeader field="user_tvl" label="Your TVL" />
+                <SortHeader field="apr" label="APR" />
               </tr>
-            ) : (
-              getSortedVaults().map((vault) => {
-                return <MyVaultRow key={vault.address} vault={vault} />;
-              })
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-[#4D4D4D]">
+              {!sortedVaults.length ? (
+                <tr className="hover:bg-white border-white h-full">
+                  <td colSpan={6} className="h-24 text-center text-black">
+                    No results.
+                  </td>
+                </tr>
+              ) : (
+                sortedVaults.map((vault) => {
+                  return <MyVaultRow key={vault.address} vault={vault} />;
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   }

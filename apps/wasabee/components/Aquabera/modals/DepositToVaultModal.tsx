@@ -1,22 +1,22 @@
-import { Modal, ModalContent, ModalHeader, ModalBody } from "@nextui-org/modal";
-import { Button } from "@/components/button/button-next";
-import { useCallback, useState } from "react";
-import { ICHIVaultContract } from "@/services/contract/aquabera/ICHIVault-contract";
-import { Token } from "@/services/contract/token";
-import { Address, maxInt256 } from "viem";
-import TokenCardV3 from "@/components/algebra/swap/TokenCard/TokenCardV3";
-import { wallet } from "@/services/wallet";
-import { Currency, tryParseAmount } from "@cryptoalgebra/sdk";
-import { useBalance } from "wagmi";
+import { Modal, ModalContent, ModalHeader, ModalBody } from '@nextui-org/modal';
+import { Button } from '@/components/button/button-next';
+import { useCallback, useState } from 'react';
+import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
+import { Token } from '@/services/contract/token';
+import { Address, maxInt256 } from 'viem';
+import TokenCardV3 from '@/components/algebra/swap/TokenCard/TokenCardV3';
+import { wallet } from '@/services/wallet';
+import { Currency, tryParseAmount } from '@cryptoalgebra/sdk';
+import { useBalance } from 'wagmi';
 import {
   useReadErc20Allowance,
   useReadErc20BalanceOf,
   useReadIchiVaultAllowToken0,
   useReadIchiVaultAllowToken1,
-} from "@/wagmi-generated";
-import { ContractWrite } from "@/services/utils";
-import BigNumber from "bignumber.js";
-import { observer } from "mobx-react-lite";
+} from '@/wagmi-generated';
+import { ContractWrite } from '@/services/utils';
+import BigNumber from 'bignumber.js';
+import { observer } from 'mobx-react-lite';
 
 interface DepositToVaultModalProps {
   isOpen: boolean;
@@ -34,8 +34,8 @@ export const DepositToVaultModal = observer(
     tokenA: propTokenA,
     tokenB: propTokenB,
   }: DepositToVaultModalProps) => {
-    const [amountA, setAmountA] = useState("");
-    const [amountB, setAmountB] = useState("");
+    const [amountA, setAmountA] = useState('');
+    const [amountB, setAmountB] = useState('');
     const [tokenA, setTokenA] = useState<Currency>(propTokenA);
     const [tokenB, setTokenB] = useState<Currency>(propTokenB);
 
@@ -74,17 +74,19 @@ export const DepositToVaultModal = observer(
     }, []);
 
     const handleMaxA = useCallback(async () => {
-      const balance = new BigNumber(tokenABalance.data?.toString() ?? 0)
-        .dividedBy(10 ** tokenA.decimals)
-        .toFixed(0);
+      const balance = new BigNumber(
+        tokenABalance.data?.toString() ?? 0
+      ).dividedBy(10 ** tokenA.decimals);
+
       if (!balance) return;
       setAmountA(balance.toString());
     }, [tokenABalance]);
 
     const handleMaxB = useCallback(async () => {
-      const balance = new BigNumber(tokenBBalance.data?.toString() ?? 0)
-        .dividedBy(10 ** tokenB.decimals)
-        .toFixed(0);
+      const balance = new BigNumber(
+        tokenBBalance.data?.toString() ?? 0
+      ).dividedBy(10 ** tokenB.decimals);
+
       if (!balance) return;
       setAmountB(balance.toString());
     }, [tokenBBalance]);
@@ -92,7 +94,7 @@ export const DepositToVaultModal = observer(
     const handleDeposit = async () => {
       if (!wallet.walletClient?.account?.address) return;
       if (!vault.token0 || !vault.token1) {
-        console.error("Vault tokens not initialized");
+        console.error('Vault tokens not initialized');
         return;
       }
 
@@ -123,7 +125,7 @@ export const DepositToVaultModal = observer(
         tokenAAllowance.data < BigInt(parsedAmountA)
       ) {
         await new ContractWrite(vault.token0.contract.write.approve, {
-          action: "Approve",
+          action: 'Approve',
         }).call([vault.address as `0x${string}`, BigInt(maxInt256)]);
       }
 
@@ -133,13 +135,13 @@ export const DepositToVaultModal = observer(
         tokenBAllowance.data < BigInt(parsedAmountB)
       ) {
         await new ContractWrite(vault.token1.contract.write.approve, {
-          action: "Approve",
+          action: 'Approve',
         }).call([vault.address as `0x${string}`, BigInt(maxInt256)]);
       }
 
       console.log(
-        BigInt(parsedAmountA?.toString() || "0"),
-        BigInt(parsedAmountB?.toString() || "0"),
+        BigInt(parsedAmountA?.toString() || '0'),
+        BigInt(parsedAmountB?.toString() || '0'),
         wallet.account
       );
       // Perform deposit
@@ -148,17 +150,17 @@ export const DepositToVaultModal = observer(
           return;
         }
         await new ContractWrite(vault.contract.write.deposit, {
-          action: "Deposit",
+          action: 'Deposit',
           isSuccessEffect: true,
         }).call([
-          BigInt(parsedAmountA?.toString() || "0"),
-          BigInt(parsedAmountB?.toString() || "0"),
+          BigInt(parsedAmountA?.toString() || '0'),
+          BigInt(parsedAmountB?.toString() || '0'),
           wallet.account as `0x${string}`,
         ]);
 
         onClose(); // Close modal after successful transaction
       } catch (error) {
-        console.error("Deposit failed:", error);
+        console.error('Deposit failed:', error);
       }
     };
 
@@ -168,10 +170,10 @@ export const DepositToVaultModal = observer(
         onClose={onClose}
         size="2xl"
         classNames={{
-          base: "bg-transparent",
-          wrapper: "bg-transparent",
+          base: 'bg-transparent',
+          wrapper: 'bg-transparent',
           closeButton:
-            "absolute right-4 top-6 z-50 text-white w-8 h-8 flex items-center justify-center rounded-full",
+            'absolute right-4 top-6 z-50 text-white w-8 h-8 flex items-center justify-center rounded-full',
         }}
       >
         <ModalContent className="bg-[#FFCD4D] relative overflow-hidden">

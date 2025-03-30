@@ -14,9 +14,10 @@ export const GET_USER_ORDERS = gql`
     $skip: Int
     $first: Int
     $status_in: [OrderStatus!]
+    $contract: OrderContract
   ) {
     orders(
-      where: { dealer: $user, status_in: $status_in }
+      where: { dealer: $user, status_in: $status_in, contract: $contract }
       first: $first
       skip: $skip
       orderBy: id
@@ -28,9 +29,14 @@ export const GET_USER_ORDERS = gql`
 `;
 
 export const GET_RECENT_BUY_ORDERS = gql`
-  query RecentBuyOrders($status_in: [OrderStatus!], $skip: Int, $first: Int) {
+  query RecentBuyOrders(
+    $status_in: [OrderStatus!]
+    $skip: Int
+    $first: Int
+    $contract: OrderContract
+  ) {
     orders(
-      where: { orderType: BuyBGT, status_in: $status_in }
+      where: { orderType: BuyBGT, status_in: $status_in, contract: $contract }
       skip: $skip
       first: $first
       orderBy: price
@@ -42,9 +48,14 @@ export const GET_RECENT_BUY_ORDERS = gql`
 `;
 
 export const GET_RECENT_SELL_ORDERS = gql`
-  query RecentSellOrders($status_in: [OrderStatus!], $skip: Int, $first: Int) {
+  query RecentSellOrders(
+    $status_in: [OrderStatus!]
+    $skip: Int
+    $first: Int
+    $contract: OrderContract
+  ) {
     orders(
-      where: { orderType: SellBGT, status_in: $status_in }
+      where: { orderType: SellBGT, status_in: $status_in, contract: $contract }
       skip: $skip
       first: $first
       orderBy: price
@@ -68,5 +79,16 @@ export const BUNDLE_FRAGMENT = gql`
     height
     orderType
     status
+  }
+`;
+
+export const GET_BGTVAULTS = gql`
+  query GetBGTVaults {
+    rewardVaults(first: 1000) {
+      vaultAddress
+      stakingToken {
+        symbol
+      }
+    }
   }
 `;

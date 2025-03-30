@@ -5,7 +5,7 @@ import '@/styles/overrides/toastify.css';
 import type { AppProps } from 'next/app';
 import { Layout } from '@/components/layout';
 import { NextLayoutPage } from '@/types/nextjs';
-import { WagmiProvider, useWalletClient } from 'wagmi';
+import { Config, WagmiProvider, useWalletClient } from 'wagmi';
 import { AvatarComponent, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import '@rainbow-me/rainbowkit/styles.css';
@@ -45,7 +45,7 @@ const dmSans = DM_Sans({
 
 const Provider = ({ children }: { children: React.ReactNode }) => {
   const { data: walletClient } = useWalletClient({
-    config,
+    config: config as Config,
   });
 
   useEffect(() => {
@@ -104,7 +104,7 @@ export default function App({
     <trpc.Provider client={trpcQueryClient} queryClient={queryClient}>
       <Analytics />
       <QueryClientProvider client={queryClient}>
-        <WagmiProvider config={config}>
+        <WagmiProvider config={config as Config}>
           <SafeProvider>
             <RainbowKitProvider
               avatar={CustomAvatar}

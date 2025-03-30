@@ -33,6 +33,7 @@ import { DynamicWagmiConnector } from '@dynamic-labs/wagmi-connector';
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 import { deserialize, serialize } from 'wagmi';
 import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
+
 // enableStaticRendering(true)
 const queryClient = new QueryClient({
   defaultOptions: {

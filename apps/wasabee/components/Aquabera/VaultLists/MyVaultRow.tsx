@@ -9,12 +9,14 @@ import {
   useReadIchiVaultAllowToken0,
   useReadIchiVaultAllowToken1,
 } from '@/wagmi-generated';
-import { Skeleton } from '@nextui-org/react';
+import { Skeleton, Tooltip } from '@nextui-org/react';
+import { InfoIcon } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useMemo, useState } from 'react';
 
 export const MyVaultRow = observer(
   ({ vault }: { vault: ICHIVaultContract }) => {
+    console.log(vault);
     const [vaultContract, setVaultContract] = useState<
       ICHIVaultContract | undefined
     >(undefined);
@@ -136,6 +138,24 @@ export const MyVaultRow = observer(
             decimals: 3,
             endWith: ' $',
           })}
+        </td>
+        {/* apr */}
+        <td className="py-4 px-6 text-right text-black flex justify-end items-center gap-2">
+          {vaultContract?.apr.toFixed(2)}%
+          <Tooltip
+            content={
+              <div>
+                <p>1d: {vaultContract?.detailedApr.feeApr_1d.toFixed(5)}%</p>
+                <p>3d: {vaultContract?.detailedApr.feeApr_3d.toFixed(5)}%</p>
+                <p>7d: {vaultContract?.detailedApr.feeApr_7d.toFixed(5)}%</p>
+                <p>30d: {vaultContract?.detailedApr.feeApr_30d.toFixed(5)}%</p>
+              </div>
+            }
+          >
+            <span className="text-gray-500">
+              <InfoIcon className="w-4 h-4" />
+            </span>
+          </Tooltip>
         </td>
       </tr>
     );

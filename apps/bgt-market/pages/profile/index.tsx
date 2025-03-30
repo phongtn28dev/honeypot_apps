@@ -16,10 +16,22 @@ import Copy from '@/components/Copy/v3';
 import { cn } from '@/lib/utils';
 import { notificationService } from '@/services/notification';
 import { Notification } from '@/components/atoms/Notification/Notification';
-import { BuyOrdersList } from '@/components/BGT-Vault/OrdersList';
-import { UserOrdersList } from '@/components/BGT-Vault/OrdersList/UserOrderList';
+import { UserOrderListHeyBgt } from '@/components/BGT-Vault/OrdersList/UserOrderListHeyBgt';
+import { globalService } from '@/services/global';
+import { UserOrderListBgtMarket } from '@/components/BGT-Vault/OrdersList/UserOrderListBgtMarket';
+import { usePollingBlockNumber } from '@/lib/hooks/useBlockNumber';
+
 export const Profile = observer(() => {
   const [notify, setNotify] = useState(false);
+
+  const { block } = usePollingBlockNumber();
+
+  useEffect(() => {
+    if (wallet.contracts.heyBgt) {
+      wallet.contracts.heyBgt.getBeraPrice();
+    }
+  }, [block, wallet.contracts.heyBgt]);
+
   useEffect(() => {
     setNotify(
       notificationService.isClaimableProject ||
@@ -78,7 +90,7 @@ export const Profile = observer(() => {
               classNames={{
                 base: 'relative w-full',
                 tabList:
-                  'flex rounded-2xl border border-[#202020] bg-white p-2 sm:p-4 shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020] py-1.5 sm:py-2 px-2.5 sm:px-3.5 absolute left-1/2 -translate-x-1/2 z-10 -top-5 text-sm sm:text-base',
+                  'flex rounded-2xl border border-[#202020] bg-white p-2 sm:p-4 shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020] py-1.5 sm:py-2 px-2.5 sm:px-3.5 absolute left-1/2 -translate-x-1/2 z-10 -top-5 text-sm sm:text-base transition-all duration-300',
                 panel: cn(
                   'flex flex-col h-full w-full gap-y-4 justify-center items-center bg-[#FFCD4D] rounded-2xl text-[#202020]',
                   'px-4 sm:px-8 pt-[50px] sm:pt-[70px] pb-[50px] sm:pb-[70px]',
@@ -86,12 +98,21 @@ export const Profile = observer(() => {
                   'bg-[position:-65px_top,_-85px_bottom]',
                   'bg-[size:auto_65px,_auto_65px]',
                   'bg-repeat-x',
-                  '!mt-0'
+                  '!mt-0',
+
+                  globalService.BgtMarketBaseToken === 'BERA' &&
+                    'bg-[#453100] text-white',
+                  globalService.BgtMarketBaseToken === 'HONEY' &&
+                    'bg-[#FFCD4D] text-black'
                 ),
               }}
             >
               <Tab key="my-orders" title="My Orders">
-                <UserOrdersList />
+                {globalService.BgtMarketBaseToken === 'HONEY' ? (
+                  <UserOrderListHeyBgt />
+                ) : (
+                  <UserOrderListBgtMarket />
+                )}
               </Tab>
               {/* <Tab key="transaction-history" title="Fill History"></Tab> */}
             </Tabs>

@@ -23,11 +23,11 @@ import { wallet } from '@/services/wallet';
 import TokenLogo from '../../TokenLogo/TokenLogo';
 import TruncateMarkup from 'react-truncate-markup';
 import { motion } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Info } from 'lucide-react';
 import Image from 'next/image';
 import pot2pumpIcon from '@/public/images/bera/smoking_bera.png';
 import { DOMAIN_MAP } from '@/config/allAppPath';
-
+import bitgetCampaignIcon from '@/public/images/partners/bitget_global_logo.jpeg';
 type TokenSelectorProps = {
   onSelect: (token: Token) => void;
   value?: Token | null;
@@ -176,25 +176,21 @@ export const TokenSelector = observer(
               {() => (
                 <div className="w-full">
                   <SpinnerContainer isLoading={state.filterLoading}>
-                    {(!disableSearch || !staticTokenList) && (
-                      <>
-                        <Input
-                          placeholder="Search token by symbol or address"
-                          // className=" bg-transparent"
-                          onClear={() => {
-                            state.setSearch('');
-                          }}
-                          onChange={(e) => {
-                            state.setSearch(e.target.value);
-                          }}
-                          isClearable={true}
-                          // labelPlacement="outside"
-                          startContent={<IoSearchOutline></IoSearchOutline>}
-                          endContent={<IoClose></IoClose>}
-                        />
-                        <Divider className="my-4" />
-                      </>
-                    )}
+                    <Input
+                      placeholder="Search token by symbol or address"
+                      // className=" bg-transparent"
+                      onClear={() => {
+                        state.setSearch('');
+                      }}
+                      onChange={(e) => {
+                        state.setSearch(e.target.value);
+                      }}
+                      isClearable={true}
+                      // labelPlacement="outside"
+                      startContent={<IoSearchOutline></IoSearchOutline>}
+                      endContent={<IoClose></IoClose>}
+                    />
+                    <Divider className="my-4" />
                     <div>
                       {staticTokenList ? (
                         staticTokenList.length ? (
@@ -256,6 +252,24 @@ export const TokenSelector = observer(
                                         <p className="text-[rgba(255,255,255)] [font-kerning:none] [font-feature-settings:'calt'_off] [font-family:Inter] text-xs font-normal leading-[14px]">
                                           {token.symbol}
                                         </p>
+                                        {token.isBitgetCampaignToken && (
+                                          <Tooltip
+                                            content={
+                                              'this token is in Bitget Campaign'
+                                            }
+                                          >
+                                            <Link
+                                              href={`/bitget-campaign`}
+                                              target="_blank"
+                                            >
+                                              <Image
+                                                src={bitgetCampaignIcon}
+                                                alt="bitget campaign"
+                                                className="size-4 rounded-full"
+                                              />
+                                            </Link>
+                                          </Tooltip>
+                                        )}
                                       </Button>
                                     );
                                   })
@@ -287,6 +301,24 @@ export const TokenSelector = observer(
                                       <div className="text-[rgba(255,255,255,0.50)] [font-kerning:none] [font-feature-settings:'calt'_off] [font-family:Inter] text-xs font-normal leading-[14px]">
                                         {token.symbol}
                                       </div>
+                                      {token.isBitgetCampaignToken && (
+                                        <Tooltip
+                                          content={
+                                            'this token is in Bitget Campaign'
+                                          }
+                                        >
+                                          <Link
+                                            href={`/bitget-campaign`}
+                                            target="_blank"
+                                          >
+                                            <Image
+                                              src={bitgetCampaignIcon}
+                                              alt="bitget campaign"
+                                              className="size-4 rounded-full"
+                                            />
+                                          </Link>
+                                        </Tooltip>
+                                      )}
                                     </div>
                                     <div>{token.balanceFormatted}</div>
                                   </div>
@@ -331,6 +363,17 @@ export const TokenSelector = observer(
                     src={pot2pumpIcon}
                     alt="pot2pump"
                     className="size-4 cursor-pointer"
+                  />
+                </Link>
+              </Tooltip>
+            )}
+            {value.isBitgetCampaignToken && (
+              <Tooltip content="This token is in Bitget Campaign">
+                <Link href={`/bitget-campaign`} target="_blank">
+                  <Image
+                    src={bitgetCampaignIcon}
+                    alt="bitget campaign"
+                    className="size-4 rounded-full"
                   />
                 </Link>
               </Tooltip>

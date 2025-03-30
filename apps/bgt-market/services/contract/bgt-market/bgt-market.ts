@@ -40,7 +40,7 @@ export class BGTMarketContract implements BaseContract {
 
       await rewardVault.setOperatorIfNot(
         wallet.account as Address,
-        wallet.currentChain.contracts.bgtMarket as Address,
+        wallet.currentChain.contracts.bgtMarket as Address
       );
 
       const res = await wallet.publicClient.simulateContract({
@@ -169,7 +169,7 @@ export class BGTMarketContract implements BaseContract {
 
       await rewardVault.setOperatorIfNot(
         wallet.account as Address,
-        wallet.currentChain.contracts.bgtMarket as Address,
+        wallet.currentChain.contracts.bgtMarket as Address
       );
 
       const res = await wallet.publicClient.simulateContract({
@@ -199,20 +199,5 @@ export class BGTMarketContract implements BaseContract {
         });
       }
     }
-  }
-
-  /// @notice Struct representing an order.
-  // struct Order {
-  //     address dealer;        // Address of the dealer who created the order
-  //     uint256 price;         // Price of 1 BGT in $BERA
-  //     uint256 balance;       // Balance of $BERA for buying BGT
-  //     uint256 spentBalance;  // Spent balance of $BERA for buying BGT
-  //     address vaultAddress;  // Address of the vault
-  //     uint256 height;        // Block number when the order was created
-  //     OrderType orderType;   // Type of the order (SellBGT or BuyBGT)
-  //     OrderStatus status;    // Status of the order (Closed, Pending, or Filled)
-  // }
-  getOrder(orderId: bigint) {
-    return this.contract.read.getOrder;
   }
 }

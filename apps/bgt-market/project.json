@@ -8,6 +8,12 @@
   "targets": {
     "codegen": {
       "command": "npx graphql-codegen --config {projectRoot}/algebra_codegen.ts"
+    },
+    "build": {
+      "executor": "@nrwl/next:build",
+      "options": {
+        "outputPath": "apps/bgt-market/"
+      }
     }
   }
 }

@@ -25,59 +25,11 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        port: '',
-        hostname: 'res.cloudinary.com',
-      },
-      {
-        protocol: 'https',
-        port: '',
-        hostname: 'upload.wikimedia.org',
-      },
-      {
-        protocol: 'https',
-        port: '',
-        hostname: 'vphdxociarqnaxj6.public.blob.vercel-storage.com',
-      },
-      {
-        protocol: 'https',
-        port: '',
-        hostname: 'upload.wikimedia.org',
-      },
-      {
-        protocol: 'http',
-        port: '3000',
-        hostname: 'localhost',
-      },
-      {
-        protocol: 'http',
-        port: '5000',
-        hostname: 'localhost',
-      },
-      {
-        protocol: 'https',
-        port: '',
-        hostname: 'honeypotfinance.xyz',
-      },
-      {
-        protocol: 'https',
-        port: '',
-        hostname: '*.honeypotfinance.xyz',
-      },
-      {
-        protocol: 'https',
-        port: '',
-        hostname: 'images.unsplash.com',
-      },
-      {
-        protocol: 'https',
-        port: '',
-        hostname: 'cdn.alphakek.ai',
+        hostname: '**',
       },
     ],
-    domains: ['cdn.alphakek.ai'],
   },
 
-  transpilePackages: ['styled-components'],
   redirects: async () => [
     {
       source: '/',
@@ -85,6 +37,30 @@ const nextConfig = {
       permanent: true,
     },
   ],
+  async headers() {
+    return [
+      {
+        // matching all API routes
+        source: '/api/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Credentials', value: 'true' },
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: 'https://wasabee.honeypotfinance.xyz',
+          },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET,DELETE,PATCH,POST,PUT',
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value:
+              'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 const plugins = [

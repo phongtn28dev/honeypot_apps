@@ -54,7 +54,7 @@ class ChatService {
 
   findRelatedQuestionsByPath(path: string) {
     let questions: questionTitles[] | undefined = undefined;
-    let paths = path.split("/");
+    const paths = path.split("/");
 
     while (paths.length > 0) {
       const currentPath = paths.join("/");
@@ -118,7 +118,7 @@ export const presetQuestions: Record<questionTitles, presetQuestionType> = {
     answer: (
       <div className="flex flex-col gap-2">
         <h2 className="text-lg font-bold">How to Swap Tokens?</h2>
-        <ol className="list-decimal ml-5">
+        <ol className="list-decimal list-inside">
           <li>
             Select &quot;From&quot; Token: Choose the token you want to sell
             from the dropdown menu.
@@ -150,7 +150,7 @@ export const presetQuestions: Record<questionTitles, presetQuestionType> = {
       <div className="flex flex-col gap-2">
         <div>
           <h2 className="text-lg font-bold">Tips for Liquidity Pools</h2>
-          <ol className="list-decimal m-5">
+          <ol className="list-decimal m-5 list-inside">
             <li>
               Understanding Liquidity Pools: Liquidity pools allow you to earn
               rewards by providing pairs of tokens (e.g., Token A and Token B).
@@ -174,7 +174,7 @@ export const presetQuestions: Record<questionTitles, presetQuestionType> = {
       <div className="flex flex-col gap-2">
         <h2 className="text-lg font-bold">Pot2Pump Processing State</h2>
         <div>
-          <ol className="list-decimal *:ml-5">
+          <ol className="list-decimal list-inside">
             <li>
               During this phase, users can deposit the raise token (e.g., ETH,
               USDT) into the project. into the project.
@@ -201,7 +201,7 @@ export const presetQuestions: Record<questionTitles, presetQuestionType> = {
     answer: (
       <div className="flex flex-col gap-2">
         <h2 className="text-lg font-bold">Pot2Pump Success State</h2>
-        <ol className="list-decimal ml-5">
+        <ol className="list-decimal list-inside">
           <li>
             Once the project hits its minimum cap, the state changes to
             &quot;Success.&quot;
@@ -223,7 +223,7 @@ export const presetQuestions: Record<questionTitles, presetQuestionType> = {
     answer: (
       <div className="flex flex-col gap-2">
         <h2 className="text-lg font-bold">Pot2Pump Failed State</h2>
-        <ol className="list-decimal ml-5">
+        <ol className="list-decimal list-inside">
           <li>
             If the project does not meet its minimum cap before the end time,
             the launch moves to the &quot;Failed&quot; state.
@@ -292,7 +292,7 @@ function HowToLaunchMemeTokenGuide() {
           height={500}
         />
       </div>
-      <ul className="list-disc ml-5">
+      <ul className="list-disc list-inside">
         <li>Token Logo: Upload a logo for your Meme Token</li>
         <li>Token Name: Full name of the Meme Token</li>
         <li>Token Symbol: Symbol/Ticker of the Meme Token</li>

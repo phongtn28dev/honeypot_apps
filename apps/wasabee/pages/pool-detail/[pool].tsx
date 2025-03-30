@@ -13,7 +13,7 @@ import { usePositions } from '@/lib/algebra/hooks/positions/usePositions';
 import { getPositionAPR } from '@/lib/algebra/utils/positions/getPositionAPR';
 import { getPositionFees } from '@/lib/algebra/utils/positions/getPositionFees';
 import { formatAmountWithAlphabetSymbol } from '@/lib/algebra/utils/common/formatAmount';
-import { ADDRESS_ZERO, Position, ZERO } from '@cryptoalgebra/sdk';
+import { Position, ZERO } from '@cryptoalgebra/sdk';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
@@ -37,6 +37,8 @@ import { LoadingContainer } from '@/components/LoadingDisplay/LoadingDisplay';
 import PoolChart from '@/components/algebra/pool/PoolChart';
 import { Tab, Tabs } from '@nextui-org/react';
 import TopPoolPositions from '@/components/algebra/pool/TopPoolPositions';
+import PoolStatsCard from '@/components/algebra/pool/PoolStatsCard';
+
 const PoolPage = observer(() => {
   const { address: account } = useAccount();
   const [token0, setToken0] = useState<Token | null>(null);
@@ -108,6 +110,8 @@ const PoolPage = observer(() => {
 
   const filteredPositions = useMemo(() => {
     if (!positions || !poolEntity || !poolId) return [];
+
+    console.log(positions);
 
     return positions
       .filter(({ pool }) => pool.toLowerCase() === poolId?.toLowerCase())
@@ -243,99 +247,142 @@ const PoolPage = observer(() => {
     positionsData.length === 0 &&
     poolEntity;
 
-  const chartData = useMemo(() => {
-    if (!poolInfo?.pool?.poolDayData) return [];
-
-    return poolInfo.pool.poolDayData
-      .map((day) => ({
-        date: new Date(day.date * 1000).toLocaleDateString(),
-        value: parseFloat(day.volumeUSD),
-      }))
-      .reverse();
-  }, [poolInfo?.pool?.poolDayData]);
-
   return (
-    <PageContainer>
-      <CardContainer className="gap-y-6">
-        <LoadingContainer isLoading={!poolEntity}>
-          <PoolHeader pool={poolEntity} token0={token0} token1={token1} />
-          {poolInfo?.pool && <PoolChart pool={poolInfo.pool as Pool} />}
-
-          <Tabs
-            classNames={{
-              tabList: 'w-full',
-              tab: 'w-full',
-              tabContent: 'w-full',
-              panel: 'w-full',
-            }}
+    <div className="container mx-auto font-gliker">
+      <div className='px-2 sm:px-4 md:px-8'>
+        <Button
+          onClick={() => router.push('/pools')}
+          className="flex items-center gap-2 text-white text-xl px-0"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
-            <Tab key="top-positions" title="Top Positions">
-              <TopPoolPositions poolId={poolId ? poolId : zeroAddress} />
-            </Tab>
-            <Tab key="my-positions" title="My Positions">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-0 gap-y-8 w-full lg:gap-8">
-                <div className="col-span-2">
-                  {!account ? (
-                    <NoAccount />
-                  ) : positionsLoading ||
-                    isFarmingLoading ||
-                    areDepositsLoading ? (
-                    <LoadingState />
-                  ) : noPositions ? (
-                    <NoPositions poolId={poolId ? poolId : zeroAddress} />
-                  ) : (
-                    <>
-                      <MyPositionsToolbar
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          <span>Back to Pools</span>
+        </Button>
+      </div>
+      <PageContainer>
+        <CardContainer className="gap-y-6">
+          <LoadingContainer isLoading={!poolEntity}>
+            <PoolHeader
+              pool={poolEntity}
+              token0={token0}
+              token1={token1}
+              poolId={poolId ? poolId : zeroAddress}
+            />
+
+            <div className="w-full grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-4">
+              {poolInfo?.pool && <PoolChart pool={poolInfo.pool as Pool} />}
+              <PoolStatsCard pool={poolInfo?.pool as Pool} />
+            </div>
+
+            <Tabs
+              classNames={{
+                tab: 'px-2 sm:px-3 sm:h-10 text-xs sm:text-sm',
+                base: 'relative w-full',
+                tabList:
+                  'flex rounded-[16px] border border-[#202020] bg-white shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020] p-2 sm:p-3 z-10 max-w-[90%] sm:max-w-none mx-auto absolute left-1/2 -translate-x-1/2 z-10',
+                cursor: 'bg-[#202020] !text-white/80 px-2 py-3',
+                panel: cn(
+                  'flex flex-col h-full w-full gap-y-4 items-center rounded-2xl text-[#202020]',
+                  '!mt-0',
+                  'h-auto'
+                ),
+                tabContent: 'text-[#202020] text-sm sm:text-base',
+              }}
+            >
+              <Tab
+                key="top-positions"
+                title={
+                  <span className="text-xs sm:text-base">Top Positions</span>
+                }
+              >
+                {poolEntity && (
+                  <TopPoolPositions
+                    poolId={poolId ? poolId : zeroAddress}
+                    poolEntity={poolEntity}
+                  />
+                )}
+              </Tab>
+              <Tab
+                key="my-positions"
+                title={
+                  <span className="text-xs sm:text-base">My Positions</span>
+                }
+              >
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-0 gap-y-8 w-full lg:gap-8">
+                  <div className="col-span-3">
+                    {!account ? (
+                      <NoAccount />
+                    ) : positionsLoading ||
+                      isFarmingLoading ||
+                      areDepositsLoading ? (
+                      <LoadingState />
+                    ) : noPositions ? (
+                      <NoPositions poolId={poolId ? poolId : zeroAddress} />
+                    ) : (
+                      <>
+                        {/* <MyPositionsToolbar
                         positionsData={positionsData}
                         poolId={poolId ? poolId : zeroAddress}
-                      />
-                      <MyPositions
-                        positions={positionsData}
-                        poolId={poolId ? poolId : zeroAddress}
-                        selectedPosition={selectedPosition?.id}
-                        selectPosition={(positionId) =>
-                          selectPosition((prev) =>
-                            prev === positionId ? null : positionId
-                          )
-                        }
-                      />
-                      {farmingInfo &&
-                        deposits &&
-                        !isFarmingLoading &&
-                        !areDepositsLoading && (
-                          <div>
-                            <h2 className="font-semibold text-xl text-left mt-12">
-                              Farming
-                            </h2>
-                            <ActiveFarming
-                              deposits={deposits && deposits.deposits}
-                              farming={farmingInfo}
-                              positionsData={positionsData}
-                            />
-                          </div>
-                        )}
-                    </>
-                  )}
-                </div>
+                      /> */}
+                        <MyPositions
+                          positions={positionsData}
+                          poolId={poolId ? poolId : zeroAddress}
+                          selectedPosition={selectedPosition?.id}
+                          selectPosition={(positionId) =>
+                            selectPosition((prev) =>
+                              prev === positionId ? null : positionId
+                            )
+                          }
+                        />
+                        {farmingInfo &&
+                          deposits &&
+                          !isFarmingLoading &&
+                          !areDepositsLoading && (
+                            <div>
+                              <h2 className="font-semibold text-xl text-left mt-12">
+                                Farming
+                              </h2>
+                              <ActiveFarming
+                                deposits={deposits && deposits.deposits}
+                                farming={farmingInfo}
+                                positionsData={positionsData}
+                              />
+                            </div>
+                          )}
+                      </>
+                    )}
+                  </div>
 
-                <div className="flex flex-col gap-8 w-full h-full">
-                  <PositionCard
-                    farming={farmingInfo}
-                    closedFarmings={closedFarmings}
-                    selectedPosition={selectedPosition}
-                  />
+                  <div className="flex flex-col gap-8 w-full h-full">
+                    <PositionCard
+                      farming={farmingInfo}
+                      closedFarmings={closedFarmings}
+                      selectedPosition={selectedPosition}
+                    />
+                  </div>
                 </div>
-              </div>
-            </Tab>
-          </Tabs>
-        </LoadingContainer>
-      </CardContainer>
-    </PageContainer>
+              </Tab>
+            </Tabs>
+          </LoadingContainer>
+        </CardContainer>
+      </PageContainer>
+    </div>
   );
 });
 
 const NoPositions = ({ poolId }: { poolId: Address }) => (
-  <div className="flex flex-col items-start animate-fade-in font-bold p-8 rounded-[24px] border border-black bg-white shadow-[4px_4px_0px_0px_#D29A0D]">
+  <div className="flex flex-col items-start animate-fade-in font-bold px-8 py-16 rounded-[24px] border border-black bg-white shadow-[4px_4px_0px_0px_#D29A0D]">
     <h2 className="text-2xl font-bold">
       {`You don't have positions for this pool`}
     </h2>

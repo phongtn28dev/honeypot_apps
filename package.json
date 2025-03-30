@@ -3,8 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "p": "nx dev pot2pump --port 9001",
     "pot2pump": "nx dev pot2pump --port 9001",
     "w": "nx dev wasabee --port 9002",
+    "wb": "nx build wasabee",
     "wasabee": "nx dev wasabee --port 9002",
     "bgt-market": "nx dev bgt-market --port 9003"
   },
@@ -163,6 +165,7 @@
     "@eslint/eslintrc": "^2.1.4",
     "@eslint/js": "^9.21.0",
     "@locator/babel-jsx": "^0.4.4",
+    "@nrwl/next": "^19.8.4",
     "@nx/eslint": "20.4.6",
     "@nx/eslint-plugin": "20.4.6",
     "@nx/jest": "20.4.6",

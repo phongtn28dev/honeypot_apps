@@ -15,6 +15,7 @@ import { BiLink, BiWallet } from 'react-icons/bi';
 import { popmodal } from '@/services/popmodal';
 import { WrappedToastify } from '@/lib/wrappedToastify';
 import { wallet } from '@/services/wallet';
+
 type optionItem = {
   icon: JSX.Element;
   display: string | JSX.Element;

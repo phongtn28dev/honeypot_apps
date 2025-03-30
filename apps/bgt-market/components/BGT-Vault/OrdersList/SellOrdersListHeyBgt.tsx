@@ -12,10 +12,10 @@ import { Address, formatEther, parseEther, zeroAddress } from 'viem';
 import { HoneyContainer } from '@/components/CardContianer';
 import {
   Order,
+  OrderContract,
   OrderStatus,
   useRecentBuyOrdersQuery,
   useRecentSellOrdersQuery,
-  useUserOrdersQuery,
 } from '@/lib/algebra/graphql/generated/graphql';
 import { wallet } from '@/services/wallet';
 import { watchBlockNumber } from 'viem/actions';
@@ -23,56 +23,56 @@ import { Button } from '../../button/v3';
 import { Switch } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { cn } from '@/lib/tailwindcss';
-import {
-  BuyOrderListRow,
-  SellOrderListRow,
-  UserOrderListRow,
-} from './../OrderListRow';
+import { BuyOrderListRow, SellOrderListRow } from '../OrderListRow';
 import { usePollingBlockNumber } from '@/lib/hooks/useBlockNumber';
-import { BgtOrder } from '@/services/bgt-market/bgtOrder';
+import { BgtMarketOrder } from '@/services/bgt-market/bgtMarketOrder';
+import { HeyBgtOrder } from '@/services/bgt-market/heyBgtOrder';
+import {
+  HeyBgtSellOrderListRow,
+  HeyBgtUserOrderListRow,
+} from '../HeyBgtOrderListRow';
 
-export const UserOrdersList = observer(() => {
-  const [onlyPendingOrders, setOnlyPendingOrders] = useState<boolean>(true);
+export const SellOrdersListHeyBgt = observer(() => {
+  const [onlyshowPendingSellOrders, setShowOnlyPendingSellOrders] =
+    useState<boolean>(true);
 
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
   const pageSize = 10;
-
   const {
-    data: orders,
-    refetch: refetchOrders,
+    data: recentSellOrders,
+    refetch: refetchSellOrders,
     loading,
-  } = useUserOrdersQuery({
+  } = useRecentSellOrdersQuery({
     variables: {
-      user: wallet.account.toLowerCase(),
-      status_in: onlyPendingOrders
+      status_in: onlyshowPendingSellOrders
         ? [OrderStatus.Pending]
         : [OrderStatus.Pending, OrderStatus.Closed, OrderStatus.Filled],
-      skip: pageSize * (page - 1),
-      first: pageSize,
+      contract: OrderContract.HeyBgt,
+      // skip: pageSize * (page - 1),
+      // first: pageSize,
     },
-    skip: !wallet.account,
   });
 
   const { block } = usePollingBlockNumber();
 
   useEffect(() => {
-    refetchOrders();
+    refetchSellOrders();
   }, [block]);
 
   return (
     <div className="p-2 sm:p-6 w-full h-full">
       <div className="bg-[#202020] rounded-2xl overflow-hidden w-full h-full">
         <div className="p-2 sm:p-6 w-full">
-          <div className="border border-[#5C5C5C] rounded-2xl overflow-hidden overflow-x-auto w-full [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-[#323232] [&::-webkit-scrollbar-thumb]:bg-[#FFCD4D] [&::-webkit-scrollbar-thumb]:rounded-full [scrollbar-color:#FFCD4D_#323232] [scrollbar-width:thin]">
-            <table className="w-full">
+          <div className="border border-[#5C5C5C] rounded-2xl overflow-scroll overflow-x-auto w-full [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-[#323232] [&::-webkit-scrollbar-thumb]:bg-[#FFCD4D] [&::-webkit-scrollbar-thumb]:rounded-full [scrollbar-color:#FFCD4D_#323232] [scrollbar-width:thin]">
+            <table className="w-full h-full">
               <thead className="bg-[#323232] text-white">
                 <tr>
                   <th className="py-2 px-2 sm:px-4 text-left text-sm sm:text-base font-medium w-[160px] sm:w-[200px]">
                     Order
                   </th>
                   <th className="py-2 px-2 sm:px-4 text-left text-sm sm:text-base font-medium w-[160px] hidden md:table-cell">
-                    Deal Amount
+                    BGT
                   </th>
                   <th className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base font-medium">
                     Price per BGT
@@ -81,16 +81,13 @@ export const UserOrdersList = observer(() => {
                     Total Price
                   </th>{' '}
                   <th className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base font-medium">
-                    Filled
-                  </th>{' '}
-                  <th className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base font-medium">
+                    {/* {' '}
                     <Switch
                       defaultSelected
-                      onValueChange={setOnlyPendingOrders}
-                      onClick={() => refetchOrders}
+                      onValueChange={setShowOnlyPendingSellOrders}
                     >
-                      <span className="">only show pending</span>
-                    </Switch>
+                      <span>only show pending</span>
+                    </Switch> */}
                   </th>
                 </tr>
               </thead>
@@ -101,28 +98,30 @@ export const UserOrdersList = observer(() => {
                       Loading...
                     </td>
                   </tr>
-                ) : orders?.orders.length === 0 ? (
+                ) : recentSellOrders?.orders.length === 0 ? (
                   <tr>
                     <td colSpan={7} className="py-2 px-4 text-center">
                       No transactions found
                     </td>
                   </tr>
                 ) : (
-                  orders?.orders.map((order) => (
-                    <UserOrderListRow
-                      key={order.id}
-                      order={BgtOrder.getBgtOrder(
-                        BgtOrder.gqlOrderToBgtOrder(order as Order)
-                      )}
-                      actionCallBack={refetchOrders}
-                    />
-                  ))
+                  Object.values(recentSellOrders?.orders ?? [])
+                    ?.sort((a, b) => Number(b.price) - Number(a.price))
+                    .map((order) => (
+                      <HeyBgtSellOrderListRow
+                        key={order.id}
+                        order={HeyBgtOrder.getBgtOrder(
+                          HeyBgtOrder.gqlOrderToBgtOrder(order as Order)
+                        )}
+                        actionCallBack={refetchSellOrders}
+                      />
+                    ))
                 )}
               </tbody>
             </table>
           </div>
 
-          <div className="mt-4 sm:mt-6 flex justify-end w-full">
+          {/* <div className="mt-4 sm:mt-6 flex justify-end w-full">
             <div className="flex items-center gap-1 sm:gap-6">
               <div className="flex items-center gap-1 sm:gap-4">
                 <button
@@ -175,7 +174,7 @@ export const UserOrdersList = observer(() => {
                 </button>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

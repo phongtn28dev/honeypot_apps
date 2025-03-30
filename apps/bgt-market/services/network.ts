@@ -21,6 +21,7 @@ export class Network {
     memeFacade: string;
     vaultFactory: string;
     bgtMarket: string;
+    heyBgt: string;
     ftoTokens: Partial<Token>[];
   };
   nativeToken!: Token;
@@ -147,7 +148,8 @@ export const berachainNetwork = new Network({
     memeFactory: '0xC38eF79A6cA9b3EfBe20F3dD3b99B3e25d09F52B',
     memeFacade: '0xAAD87033d81bB4c6a3A08aD77323530FF9dB8f5C',
     vaultFactory: '0x1bf5e51eCacdfEA65ae9276fd228bB8719ffcA7E',
-    bgtMarket: '0x53458cE30b71a7f306BDd1ACD8790B91Bd45bFD0',
+    bgtMarket: '0x35249377829876127A8C33C303cC6712b002e3Fc',
+    heyBgt: '0x5f8a463334E29635Bdaca9c01B76313395462430',
     ftoTokens: [
       {
         address: '0xfc5e3743E9FAC8BB60408797607352E24Db7d65E'.toLowerCase(),

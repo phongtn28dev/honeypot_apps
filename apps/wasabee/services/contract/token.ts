@@ -14,7 +14,6 @@ import { trpcClient } from '@/lib/trpc';
 import NetworkManager from '../network';
 import { getSingleTokenData } from '@/lib/algebra/graphql/clients/token';
 import { when } from 'mobx';
-
 export class Token implements BaseContract {
   static tokensMap: Record<string, Token> = {};
   static getToken({
@@ -77,6 +76,7 @@ export class Token implements BaseContract {
   priceChange24hPercentage = '';
   pot2pumpAddress: Address | undefined | null = undefined;
   isStableCoin = false;
+  isBitgetCampaignToken = false;
 
   // determines the order of the token in the list
   get priority() {

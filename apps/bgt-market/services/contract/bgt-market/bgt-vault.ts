@@ -19,15 +19,15 @@ export class BGTVault implements BaseContract {
   } & Partial<BGTVault>) {
     const lowerAddress = address.toLowerCase() as Address;
     const key = lowerAddress;
-    const token = BGTVault.bgtVaultMap[key];
+    const vault = BGTVault.bgtVaultMap[key];
 
-    if (!token) {
+    if (!vault) {
       BGTVault.bgtVaultMap[key] = new BGTVault({
         address: lowerAddress,
         ...args,
       });
     } else {
-      BGTVault.bgtVaultMap[key].setData(args);
+      vault.setData(args);
     }
 
     return BGTVault.bgtVaultMap[key];
@@ -37,6 +37,7 @@ export class BGTVault implements BaseContract {
   abi = RewardVaultABI;
   userBgtInVault = '0';
   bgtVaultApproved = false;
+  logoURI: string = '';
 
   constructor(args: Partial<BGTVault>) {
     Object.assign(this, args);
@@ -77,6 +78,7 @@ export class BGTVault implements BaseContract {
     const userBgt = await this.contract.read.earned([
       wallet.account as Address,
     ]);
+
     runInAction(() => {
       this.userBgtInVault = userBgt.toString();
     });
@@ -91,9 +93,7 @@ export class BGTVault implements BaseContract {
     const isBgtMarketContractApproved =
       operator === wallet.currentChain.contracts.bgtMarket;
 
-    console.log(isBgtMarketContractApproved);
     if (isBgtMarketContractApproved) {
-      console.log(this.name);
       runInAction(() => {
         this.bgtVaultApproved = true;
       });

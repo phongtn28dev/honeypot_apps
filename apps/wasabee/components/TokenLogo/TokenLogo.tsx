@@ -42,7 +42,7 @@ export const TokenLogo = observer(
         closeDelay={0}
       >
         <Link
-          className="shrink-0"
+          className={cn('shrink-0', disableLink && 'cursor-default')}
           href={
             disableLink
               ? '#'

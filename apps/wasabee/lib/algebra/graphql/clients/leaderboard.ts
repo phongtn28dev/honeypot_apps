@@ -1,5 +1,9 @@
 import { gql } from '@apollo/client';
-import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
+import {
+  getInfoClientByChainId,
+  useInfoClient,
+} from '@/lib/hooks/useSubgraphClients';
+import { wallet } from '@/services/wallet';
 
 export const LEADERBOARD_QUERY = gql`
   query leaderboardStatus {
@@ -9,6 +13,7 @@ export const LEADERBOARD_QUERY = gql`
       totalVolumeMatic
       totalValueLockedUSD
       totalValueLockedMatic
+      totalFeesUSD
       untrackedVolumeUSD
       totalValueLockedUSDUntracked
     }
@@ -115,6 +120,7 @@ type Factory = {
   totalValueLockedMatic: string;
   untrackedVolumeUSD: string;
   totalValueLockedUSDUntracked: string;
+  totalFeesUSD: string;
 };
 
 export type FactoryData = {
@@ -143,7 +149,7 @@ type LeaderboardResponse = {
 };
 
 export async function fetchLeaderboardData(): Promise<LeaderboardResponse> {
-  const infoClient = useInfoClient();
+  const infoClient = getInfoClientByChainId(wallet.currentChainId.toString());
   const { data } = await infoClient.query<FactoryData>({
     query: LEADERBOARD_QUERY,
   });

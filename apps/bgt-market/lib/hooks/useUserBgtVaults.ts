@@ -1,10 +1,10 @@
-import { ValidatedVaultAddresses } from '@/config/validatedVaultAddresses';
 import { BGTVault } from '@/services/contract/bgt-market/bgt-vault';
 import { useEffect, useState } from 'react';
 import { Address } from 'viem';
 import { usePollingBlockNumber } from './useBlockNumber';
 import { wallet } from '@/services/wallet';
 import { useObserver } from 'mobx-react-lite';
+import { useBGTVaults } from '../algebra/graphql/clients/bgt-market';
 
 export function useUserBgtVaults() {
   const [bgtVaults, setBgtVaults] = useState<BGTVault[]>([]);
@@ -14,13 +14,20 @@ export function useUserBgtVaults() {
     return wallet.account;
   });
 
+  const { data: ValidatedVaultAddresses, loading: bgtVaultsLoading } =
+    useBGTVaults();
+
   useEffect(() => {
     if (bgtVaults.length > 0) return;
-    const vaultList = Object.entries(ValidatedVaultAddresses).map(
-      ([key, value]) => {
-        return BGTVault.getBgtVault({ address: key as Address, name: value });
-      }
-    );
+    const vaultList = ValidatedVaultAddresses.map((vault) => {
+      return BGTVault.getBgtVault({
+        address: vault.address as Address,
+        name: vault.metadata.name,
+        logoURI: vault.metadata.logoURI,
+      });
+    });
+
+    console.log('vaultList', vaultList);
 
     setBgtVaults(vaultList);
   }, [ValidatedVaultAddresses]);
@@ -30,8 +37,10 @@ export function useUserBgtVaults() {
       return;
     }
 
+    console.log('bgtVaults', bgtVaults);
+
     Promise.all([
-      ...bgtVaults.map(async (vault) => {
+      bgtVaults.map(async (vault) => {
         await vault.updateCurrentUserBgtInVault();
         await vault.updateCurrentUserBgtVaultAppoveState();
       }),

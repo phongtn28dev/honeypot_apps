@@ -23,6 +23,7 @@ import TokenCardV3 from '../TokenCard/TokenCardV3';
 import { ExchangeSvg } from '@/components/svg/exchange';
 import { chart } from '@/services/chart';
 import { Token } from '@/services/contract/token';
+import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
 import { wallet } from '@/services/wallet';
 import { AlgebraPoolContract } from '@/services/contract/algebra/algebra-pool-contract';
@@ -133,13 +134,15 @@ const SwapPairV3 = ({
   );
 
   const handleMaxInput = useCallback(() => {
+    console.log('maxInputAmount', maxInputAmount);
     maxInputAmount && onUserInput(SwapField.INPUT, maxInputAmount.toExact());
   }, [maxInputAmount, onUserInput]);
 
+  console.log('parsedAmounts', parsedAmounts);
   const fiatValueInputFormatted = useUSDCValue(
     tryParseAmount(
       parsedAmounts[SwapField.INPUT]?.toSignificant(
-        (parsedAmounts[SwapField.INPUT]?.currency.decimals || 6) / 2
+        parsedAmounts[SwapField.INPUT]?.currency.decimals || 6
       ),
       baseCurrency
     )
@@ -148,7 +151,7 @@ const SwapPairV3 = ({
   const fiatValueOutputFormatted = useUSDCValue(
     tryParseAmount(
       parsedAmounts[SwapField.OUTPUT]?.toSignificant(
-        (parsedAmounts[SwapField.OUTPUT]?.currency.decimals || 6) / 2
+        parsedAmounts[SwapField.OUTPUT]?.currency.decimals || 6
       ),
       quoteCurrency
     )
@@ -161,8 +164,8 @@ const SwapPairV3 = ({
           independentField as keyof typeof parsedAmounts
         ]?.toExact() ?? ''
       : parsedAmounts[dependentField as keyof typeof parsedAmounts]?.toFixed(
-          (parsedAmounts[dependentField as keyof typeof parsedAmounts]?.currency
-            .decimals || 6) / 2
+          parsedAmounts[dependentField as keyof typeof parsedAmounts]?.currency
+            .decimals || 6
         ) ?? '',
   };
 

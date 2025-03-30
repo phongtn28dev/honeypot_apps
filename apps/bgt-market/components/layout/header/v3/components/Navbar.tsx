@@ -135,6 +135,9 @@ export const CustomNavbar: React.FC<NavbarProps> = ({ menuList }) => {
             <DropdownMenu>
               <DropdownItem
                 href={DOMAIN_MAP.WASABEE_DEX}
+                onPress={() => {
+                  router.push(DOMAIN_MAP.WASABEE_DEX);
+                }}
                 startContent={
                   <Image
                     src="/images/wasabee_pot.webp"

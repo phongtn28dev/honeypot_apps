@@ -4,13 +4,13 @@ import {
   useEffect,
   useMemo,
   useState,
-} from "react";
-import { Price, Token } from "@cryptoalgebra/sdk";
-import { useMintState } from "@/lib/algebra/state/mintStore";
-import { Button } from "@/components/algebra/ui/button";
-import { Input } from "@/components/algebra/ui/input";
-import { cn } from "@/lib/utils";
-import { debounce } from "lodash";
+} from 'react';
+import { Price, Token } from '@cryptoalgebra/sdk';
+import { useMintState } from '@/lib/algebra/state/mintStore';
+import { Button } from '@/components/algebra/ui/button';
+import { Input } from '@/components/algebra/ui/input';
+import { cn } from '@/lib/utils';
+import { debounce } from 'lodash';
 
 export interface RangeSelectorPartProps {
   value: string;
@@ -38,8 +38,8 @@ const RangeSelectorPart = ({
   disabled,
   title,
 }: RangeSelectorPartProps) => {
-  const [localUSDValue, setLocalUSDValue] = useState("");
-  const [localTokenValue, setLocalTokenValue] = useState("");
+  const [localUSDValue, setLocalUSDValue] = useState('');
+  const [localTokenValue, setLocalTokenValue] = useState('');
   const handleUserInputDebounce = useMemo(
     () => debounce(onUserInput, 500),
     [onUserInput]
@@ -69,19 +69,15 @@ const RangeSelectorPart = ({
   useEffect(() => {
     if (value) {
       setLocalTokenValue(value);
-      if (value === "∞") {
+      if (value === '∞') {
         setLocalUSDValue(value);
         return;
       }
-    } else if (value === "") {
-      setLocalTokenValue("");
-      setLocalUSDValue("");
+    } else if (value === '') {
+      setLocalTokenValue('');
+      setLocalUSDValue('');
     }
   }, [initialTokenPrice, value]);
-
-  useEffect(() => {
-    return () => updateSelectedPreset(null);
-  }, []);
 
   return (
     <div className="flex-1 w-full flex flex-col gap-y-3  ">
@@ -91,7 +87,7 @@ const RangeSelectorPart = ({
 
       <div className="w-full  h-[64px] rounded-2xl border bg-card-dark border-[rgba(90,74,74,1)] shadow-[1px_2px_0px_0px_rgba(32,32,32,1),1px_1px_0px_0px_rgba(32,32,32,1)]  flex items-center justify-between px-4 py-2.5 gap-x-2">
         <Button
-          variant={"ghost"}
+          variant={'ghost'}
           onClick={handleDecrement}
           disabled={decrementDisabled || disabled}
           className="min-w-[40px] h-[40px] rounded-xl bg-[rgba(255,230,163,1)] hover:bg-[#ffd666] text-black border-none font-bold text-xl disabled:opacity-50"
@@ -100,7 +96,7 @@ const RangeSelectorPart = ({
         </Button>
 
         <Input
-          type={"text"}
+          type={'text'}
           value={localTokenValue}
           id={title}
           onBlur={handleOnBlur}
@@ -109,43 +105,43 @@ const RangeSelectorPart = ({
             setLocalTokenValue(v);
             updateSelectedPreset(null);
           }}
-          placeholder={"0.00"}
+          placeholder={'0.00'}
           className={cn(
-            "text-right",
-            "!bg-transparent",
-            "[&_*]:!bg-transparent",
-            "data-[invalid=true]:!bg-transparent",
-            "border-none",
-            "text-black",
-            "text-xl",
-            "font-medium"
+            'text-right',
+            '!bg-transparent',
+            '[&_*]:!bg-transparent',
+            'data-[invalid=true]:!bg-transparent',
+            'border-none',
+            'text-black',
+            'text-xl',
+            'font-medium'
           )}
           classNames={{
             inputWrapper: cn(
-              "!bg-transparent",
-              "border-none",
-              "shadow-none",
-              "!transition-none",
-              "data-[invalid=true]:!bg-transparent",
-              "group-data-[invalid=true]:!bg-transparent",
-              "pr-5"
+              '!bg-transparent',
+              'border-none',
+              'shadow-none',
+              '!transition-none',
+              'data-[invalid=true]:!bg-transparent',
+              'group-data-[invalid=true]:!bg-transparent',
+              'pr-5'
             ),
             input: cn(
-              "!bg-transparent",
-              "!text-[#202020]",
-              "text-right",
-              "text-xl",
-              "!pr-0",
-              "[appearance:textfield]",
-              "[&::-webkit-outer-spin-button]:appearance-none",
-              "[&::-webkit-inner-spin-button]:appearance-none",
-              "data-[invalid=true]:!bg-transparent"
+              '!bg-transparent',
+              '!text-[#202020]',
+              'text-right',
+              'text-xl',
+              '!pr-0',
+              '[appearance:textfield]',
+              '[&::-webkit-outer-spin-button]:appearance-none',
+              '[&::-webkit-inner-spin-button]:appearance-none',
+              'data-[invalid=true]:!bg-transparent'
             ),
           }}
         />
 
         <Button
-          variant={"ghost"}
+          variant={'ghost'}
           onClick={handleIncrement}
           disabled={incrementDisabled || disabled}
           className="min-w-[40px] h-[40px] rounded-xl bg-[rgba(255,230,163,1)] hover:bg-[#ffd666] text-black border-none font-bold text-xl disabled:opacity-50"

@@ -19,14 +19,14 @@ import { WarppedNextSelect } from '../wrappedNextUI/Select/Select';
 import { usePollingBlockNumber } from '@/lib/hooks/useBlockNumber';
 import { UserBgtVaults } from './UserBgtVaults';
 import { useUserBgtVaults } from '@/lib/hooks/useUserBgtVaults';
-import { BgtOrder } from '@/services/bgt-market/bgtOrder';
+import { BgtMarketOrder } from '@/services/bgt-market/bgtMarketOrder';
 
 export const UserOrderListRow = observer(
   ({
     order,
     actionCallBack,
   }: {
-    order: BgtOrder;
+    order: BgtMarketOrder;
     actionCallBack?: () => void;
   }) => {
     const { block } = usePollingBlockNumber();
@@ -106,7 +106,7 @@ export const BuyOrderListRow = observer(
     order,
     actionCallBack,
   }: {
-    order: BgtOrder;
+    order: BgtMarketOrder;
     actionCallBack?: () => void;
   }) => {
     return (
@@ -175,7 +175,7 @@ export const SellOrderListRow = observer(
     order,
     actionCallBack,
   }: {
-    order: BgtOrder;
+    order: BgtMarketOrder;
     actionCallBack?: () => void;
   }) => {
     const { block } = usePollingBlockNumber();
@@ -262,7 +262,7 @@ const FillBuyOrderModalButton = observer(
     order,
     actionCallBack,
   }: {
-    order: BgtOrder;
+    order: BgtMarketOrder;
     actionCallBack?: () => void;
   }) => {
     const isWallet = useMemo(() => {
@@ -295,7 +295,7 @@ const FillBuyOrderModal = ({
   order,
   actionCallBack,
 }: {
-  order: BgtOrder;
+  order: BgtMarketOrder;
   actionCallBack?: () => void;
 }) => {
   const [selectedVault, setSelectedVault] = useState<Address | undefined>(

@@ -20,7 +20,7 @@ import {
 } from '@/lib/algebra/graphql/generated/graphql';
 import { BGTVault } from '../contract/bgt-market/bgt-vault';
 
-export class BgtFillActions {
+export class BgtMarketFillActions {
   // static gqlOrderFilledToBgtFillActions(order: OrderFilled): BgtFillActions {
   //   return BgtFillActions.getBgtFillActions({
   //     // orderId: order.id.toString(),
@@ -34,37 +34,37 @@ export class BgtFillActions {
   //     // status: order.status,
   //   });
   // }
-  static bgtFillActionsMap: Record<string, BgtFillActions> = {};
+  static bgtFillActionsMap: Record<string, BgtMarketFillActions> = {};
   static getBgtFillActions({
     id,
 
     ...args
   }: {
     id: string;
-  } & Partial<BgtFillActions>) {
+  } & Partial<BgtMarketFillActions>) {
     const key = id;
-    const order = BgtFillActions.bgtFillActionsMap[key];
+    const order = BgtMarketFillActions.bgtFillActionsMap[key];
 
     if (!order) {
-      BgtFillActions.bgtFillActionsMap[key] = new BgtFillActions({
+      BgtMarketFillActions.bgtFillActionsMap[key] = new BgtMarketFillActions({
         id: id,
         ...args,
       });
     } else {
-      BgtFillActions.bgtFillActionsMap[key].setData(args);
+      BgtMarketFillActions.bgtFillActionsMap[key].setData(args);
     }
-    return BgtFillActions.bgtFillActionsMap[key];
+    return BgtMarketFillActions.bgtFillActionsMap[key];
   }
 
   id: string;
 
-  constructor({ id, ...args }: Partial<BgtFillActions> & { id: string }) {
+  constructor({ id, ...args }: Partial<BgtMarketFillActions> & { id: string }) {
     this.setData(args);
     this.id = id;
     makeAutoObservable(this);
   }
 
-  setData({ ...args }: Partial<BgtFillActions>) {
+  setData({ ...args }: Partial<BgtMarketFillActions>) {
     Object.assign(this, args);
   }
 }

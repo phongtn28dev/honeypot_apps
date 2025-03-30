@@ -150,7 +150,7 @@ export const Layout = ({
 
       <AnnouncementBar slogans={slogans} interval={5000} />
       {/* <GuideModal /> */}
-      <ChatWidget />
+      {/* <ChatWidget /> */}
 
       <ConfettiComponent />
       <PopOverModal />

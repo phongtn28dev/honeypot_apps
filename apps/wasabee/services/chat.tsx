@@ -292,7 +292,7 @@ function HowToLaunchMemeTokenGuide() {
           height={500}
         />
       </div>
-      <ul className="list-disc ml-5">
+      <ul className="list-disc list-inside">
         <li>Token Logo: Upload a logo for your Meme Token</li>
         <li>Token Name: Full name of the Meme Token</li>
         <li>Token Symbol: Symbol/Ticker of the Meme Token</li>

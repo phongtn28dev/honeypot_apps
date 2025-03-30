@@ -33,7 +33,13 @@ export const vaultQueryResToVaultContract = (
     allowToken1: vault.allowTokenB,
     holderCount: BigInt(vault.holdersCount),
     isInitialized: true,
-    apr: vault.feeApr_30d,
+    apr: Number(vault.feeApr_1d),
+    detailedApr: {
+      feeApr_1d: Number(vault.feeApr_1d),
+      feeApr_3d: Number(vault.feeApr_3d),
+      feeApr_7d: Number(vault.feeApr_7d),
+      feeApr_30d: Number(vault.feeApr_30d),
+    },
   });
 
   if (!vaultContract) {

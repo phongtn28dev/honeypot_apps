@@ -11,6 +11,13 @@ import { PairContract } from '../dex/liquidity/pair-contract';
 import { VaultDeposit } from '@/lib/algebra/graphql/generated/graphql';
 import { VaultWithdraw } from '@/lib/algebra/graphql/generated/graphql';
 import { VaultCollectFee } from '@/lib/algebra/graphql/generated/graphql';
+import { ReactNode } from 'react';
+type VaultTag = {
+  tag: string;
+  bgColor: string;
+  textColor: string;
+  tooltip?: string;
+};
 
 export class ICHIVaultContract implements BaseContract {
   static vaultsMap: Map<string, ICHIVaultContract> = new Map();
@@ -29,6 +36,8 @@ export class ICHIVaultContract implements BaseContract {
       });
       this.vaultsMap.set(address.toLowerCase(), vault);
       return vault;
+    } else {
+      vault.setData(args);
     }
     return vault;
   }
@@ -57,6 +66,19 @@ export class ICHIVaultContract implements BaseContract {
   approvedToken1: BigInt = BigInt(0);
   pool: PairContract | undefined = undefined;
   apr: number = 0;
+  detailedApr: {
+    feeApr_1d: number;
+    feeApr_3d: number;
+    feeApr_7d: number;
+    feeApr_30d: number;
+  } = {
+    feeApr_1d: 0,
+    feeApr_3d: 0,
+    feeApr_7d: 0,
+    feeApr_30d: 0,
+  };
+  vaultTag: VaultTag | undefined = undefined;
+  vaultDescription: string | ReactNode | undefined = undefined;
 
   recentTransactions: (VaultDeposit | VaultWithdraw | VaultCollectFee)[] = [];
 
@@ -82,13 +104,19 @@ export class ICHIVaultContract implements BaseContract {
   }
 
   get userTokenAmountsWithoutDecimal() {
+    console.log({
+      totalsupplyShares: this.totalsupplyShares,
+      userShares: this.userShares,
+      totalAmountsWithoutDecimal: this.totalAmountsWithoutDecimal,
+    });
     if (
       !this.totalsupplyShares ||
       !this.userShares ||
-      !this.totalAmountsWithoutDecimal.total0 ||
-      !this.totalAmountsWithoutDecimal.total1
+      this.totalAmountsWithoutDecimal.total0 === undefined ||
+      this.totalAmountsWithoutDecimal.total1 === undefined
     )
       return { total0: 0, total1: 0 };
+    console.log('is ok');
     return {
       total0:
         (this.totalAmountsWithoutDecimal.total0 * this.userShares) /
@@ -107,7 +135,8 @@ export class ICHIVaultContract implements BaseContract {
     );
   }
   get userTokenAmounts() {
-    if (!this.token0 || !this.token1) return { total0: 0, total1: 0 };
+    if (this.token0 === undefined || this.token1 === undefined)
+      return { total0: 0, total1: 0 };
     return {
       total0: new BigNumber(
         this.userTokenAmountsWithoutDecimal.total0.toString()
@@ -221,6 +250,10 @@ export class ICHIVaultContract implements BaseContract {
       .finally(() => {
         this.transactionPending = false;
       });
+  }
+
+  setData(args: Partial<ICHIVaultContract>) {
+    Object.assign(this, args);
   }
 
   // async getFee() {

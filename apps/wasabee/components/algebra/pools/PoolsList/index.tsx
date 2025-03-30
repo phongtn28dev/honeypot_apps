@@ -11,6 +11,7 @@ import {
   Pool_OrderBy,
 } from '@/lib/algebra/graphql/generated/graphql';
 import PoolCardList from './PoolCardList';
+import { farmingClient } from '@/lib/algebra/graphql/clients';
 import { SortingState } from '@tanstack/react-table';
 import { useUserPools } from '@/lib/algebra/graphql/clients/pool';
 import { wallet } from '@/services/wallet';
@@ -30,6 +31,7 @@ const mappingSortKeys: Record<any, Pool_OrderBy> = {
   liquidity: Pool_OrderBy.Liquidity,
   'marktet cap': Pool_OrderBy.Token0MarketCap,
 };
+
 interface PoolsListProps {
   defaultFilter?: string;
   showOptions?: boolean;
@@ -46,11 +48,7 @@ const PoolsList = ({
 
   const orderBy = mappingSortKeys[sorting[0].id];
 
-  const {
-    data: pools,
-    loading: isPoolsListLoading,
-    refetch,
-  } = usePoolsListQuery({
+  const { data: pools, loading: isPoolsListLoading } = usePoolsListQuery({
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-and-network',
     initialFetchPolicy: 'cache-and-network',
@@ -61,11 +59,9 @@ const PoolsList = ({
     },
   });
 
-  const {
-    data: userPools,
-    loading: isUserPoolsLoading,
-    refetch: refetchUserPools,
-  } = useUserPools(wallet.account);
+  const { data: userPools, loading: isUserPoolsLoading } = useUserPools(
+    wallet.account
+  );
 
   const { data: activeFarmings, loading: isFarmingsLoading } =
     useActiveFarmingsQuery({
@@ -93,16 +89,12 @@ const PoolsList = ({
         poolDayData,
         poolWeekData,
         feesUSD,
-        poolMonthData,
         txCount,
         volumeUSD,
         token0Price,
         createdAtTimestamp,
         liquidity,
-        aprPercentage,
       }) => {
-        const currentPool = poolDayData[0];
-        const lastDate = currentPool ? currentPool.date * 1000 : 0;
         const currentDate = new Date().getTime();
 
         function handleGap(
@@ -113,7 +105,7 @@ const PoolsList = ({
         ) {
           data?.sort((a, b) => a[field] - b[field]);
 
-          let startTime = data[0]?.[field];
+          const startTime = data[0]?.[field];
 
           let currentTimestamp = startTime;
           const filledData = [];
@@ -198,7 +190,6 @@ const PoolsList = ({
         );
 
         /* time difference calculations here to ensure that the graph provides information for the last 24 hours */
-        const timeDifference = currentDate - lastDate;
         const msIn24Hours = 24 * 60 * 60 * 1000;
         const msIn48Hours = 48 * 60 * 60 * 1000;
         const activeFarming = activeFarmings?.eternalFarmings.find(
@@ -256,16 +247,6 @@ const PoolsList = ({
           avgVolume24h,
           avgVolume24to48h
         );
-
-        console.log('volumeChange24to48h', {
-          poolHourData,
-          token0: token0.symbol,
-          token1: token1.symbol,
-          total24to48hVolume,
-          avgVolume24h,
-          avgVolume24to48h,
-          volumeChange24to48h,
-        });
 
         return {
           id: id as Address,
@@ -335,7 +316,7 @@ const PoolsList = ({
         ) {
           data?.sort((a, b) => a[field] - b[field]);
 
-          let startTime = data[0]?.[field];
+          const startTime = data[0]?.[field];
 
           let currentTimestamp = startTime;
           const filledData = [];
@@ -421,7 +402,7 @@ const PoolsList = ({
         );
 
         /* time difference calculations here to ensure that the graph provides information for the last 24 hours */
-        const timeDifference = currentDate - lastDate;
+        // const timeDifference = currentDate - lastDate;
         const msIn24Hours = 24 * 60 * 60 * 1000;
 
         const activeFarming = activeFarmings?.eternalFarmings.find(

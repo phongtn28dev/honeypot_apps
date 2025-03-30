@@ -32,8 +32,8 @@ export default async function handler(
       swaps: 0,
       amountUsd: 0,
     },
-    '0x96890cf58bc607cfad45b61d607e5d9f4f247502': {
-      pair: 'BM / WBERA',
+    '0xc1014c1b2b131f87d4dd6ddfd9e3b0ab68fcd631': {
+      pair: 'WBERA / HENLO',
       swaps: 0,
       amountUsd: 0,
     },
@@ -47,7 +47,7 @@ export default async function handler(
     '0xa61d8220f35947cce2f6bfc0405dbfca167336da', // XI / HONEY
     '0xb228eefe1c9fecd615a242fd3ea99a4e129e5a78', // BERACHAIN / WBERA
     '0xe86c89a85e9d1b2d514477fee05d61603681f53a', // Q5 / WBERA
-    '0x96890cf58bc607cfad45b61d607e5d9f4f247502', // BM / WBERA
+    '0xc1014c1b2b131f87d4dd6ddfd9e3b0ab68fcd631', // WBERA / HENLO
   ];
 
   const swaps = await getAccountSwapsWithPools(infoClient, accountId, pools);

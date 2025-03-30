@@ -476,7 +476,9 @@ const TokenCardV3 = ({
             size="sm"
             maxValue={Number(balance?.formatted)}
             minValue={0}
-            onChange={(value) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            onChange={(value:any) => {
+              if (isNaN(value)) return;
               const maxValue = BigNumber(balance?.value.toString() ?? 0).div(
                 10 ** (balance?.decimals ?? 18)
               );
