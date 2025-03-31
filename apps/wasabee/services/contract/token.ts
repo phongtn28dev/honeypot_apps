@@ -115,6 +115,7 @@ export class Token implements BaseContract {
       client: { public: wallet.publicClient, wallet: wallet.walletClient },
     });
   }
+
   get contract() {
     return getContract({
       address: this.address as `0x${string}`,
@@ -127,12 +128,6 @@ export class Token implements BaseContract {
     this.setData(args);
     makeAutoObservable(this);
     this.getIsRouterToken();
-    reaction(
-      () => wallet?.account,
-      () => {
-        this.getBalance();
-      }
-    );
   }
 
   get faucet() {

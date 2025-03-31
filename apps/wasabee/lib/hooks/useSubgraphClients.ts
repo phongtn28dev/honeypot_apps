@@ -30,7 +30,13 @@ export function getFarmingClientByChainId(chainId: string) {
   return new ApolloClient({
     uri: FARMING_GRAPH,
     ssrMode: true,
+    queryDeduplication: false,
     cache: new InMemoryCache(),
+    defaultOptions: {
+      query: {
+        errorPolicy: 'all',
+      },
+    },
   });
 }
 
@@ -40,6 +46,12 @@ export function getInfoClientByChainId(chainId: string) {
   return new ApolloClient({
     uri: INFO_GRAPH,
     ssrMode: true,
+    queryDeduplication: false,
     cache: new InMemoryCache(),
+    defaultOptions: {
+      query: {
+        errorPolicy: 'all',
+      },
+    },
   });
 }
