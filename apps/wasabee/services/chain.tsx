@@ -767,6 +767,12 @@ export const berachainNetwork = new Network({
       decimals: 18,
       logoURI: 'https://images.oogabooga.io/nav.png',
     },
+    '0x28e0e3b9817012b356119df9e217c25932d609c2': {
+      name: 'Burr Governance Token',
+      symbol: 'BURR',
+      decimals: 18,
+      logoURI: '/images/icons/tokens/burr_bear_logo.webp',
+    },
   },
   validatedFtoAddresses: [],
   validatedMemeAddresses: [],
