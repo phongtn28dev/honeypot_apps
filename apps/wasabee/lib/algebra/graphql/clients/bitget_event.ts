@@ -4,6 +4,9 @@ import {
   GetBitgetEventsParticipantListDocument,
   GetBitgetEventsParticipantListQuery,
   GetBitgetEventsParticipantListQueryVariables,
+  GetSingleBitgetParticipantInfoDocument,
+  GetSingleBitgetParticipantInfoQuery,
+  GetSingleBitgetParticipantInfoQueryVariables,
   useGetBitgetEventsQuery,
 } from '../generated/graphql';
 import { isAddress } from 'viem';
@@ -57,25 +60,40 @@ export async function getFullBitgetEventsParticipantList() {
   participants.forEach((participant) => {
     if (!output[participant.user.id]) {
       output[participant.user.id] = {
-        participatedAmountUsd: participant.amountUSD,
+        participatedAmountUsd: Number(participant.amountUSD),
         eachPoolParticipatedAmountUsd: {
-          [participant.pool.id]: participant.amountUSD,
+          [participant.pool.id]: Number(participant.amountUSD),
         },
         rewardAmountBERA:
-          (participant.amountUSD / participant.pool.totalVolumeUSD) *
+          (Number(participant.amountUSD) /
+            Number(participant.pool.totalVolumeUSD)) *
           EVENT_REWARD_EACH_POOL,
       };
     } else {
-      output[participant.user.id].participatedAmountUsd +=
-        participant.amountUSD;
+      output[participant.user.id].participatedAmountUsd += Number(
+        participant.amountUSD
+      );
       output[participant.user.id].eachPoolParticipatedAmountUsd[
         participant.pool.id
-      ] = participant.amountUSD;
+      ] = Number(participant.amountUSD);
       output[participant.user.id].rewardAmountBERA +=
-        (participant.amountUSD / participant.pool.totalVolumeUSD) *
+        (Number(participant.amountUSD) /
+          Number(participant.pool.totalVolumeUSD)) *
         EVENT_REWARD_EACH_POOL;
     }
   });
 
   return output;
+}
+
+export async function getSingleBitgetParticipantInfo(user: string) {
+  const tokenQuery = await infoClient.query<
+    GetSingleBitgetParticipantInfoQuery,
+    GetSingleBitgetParticipantInfoQueryVariables
+  >({
+    query: GetSingleBitgetParticipantInfoDocument,
+    variables: { user },
+  });
+
+  return tokenQuery.data?.bitgetCampaignParticipants;
 }

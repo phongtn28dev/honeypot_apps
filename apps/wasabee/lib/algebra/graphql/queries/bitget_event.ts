@@ -30,6 +30,21 @@ export const GET_BITGET_EVENTS_INFO = gql`
   }
 `;
 
+export const GET_SINGLE_BITGET_PARTICIPANT_INFO = gql`
+  query getSingleBitgetParticipantInfo($user: String!) {
+    bitgetCampaignParticipants(where: { user: $user }) {
+      user {
+        id
+      }
+      amountUSD
+      pool {
+        id
+        totalVolumeUSD
+      }
+    }
+  }
+`;
+
 export const GET_BITGET_EVENTS_PARTICIPANT_LIST = gql`
   query getBitgetEventsParticipantList($skip: Int, $first: Int) {
     bitgetCampaignParticipants(
@@ -39,9 +54,6 @@ export const GET_BITGET_EVENTS_PARTICIPANT_LIST = gql`
       orderBy: amountUSD
       orderDirection: desc
     ) {
-      campaign {
-        totalVolumeUSD
-      }
       pool {
         id
         totalVolumeUSD

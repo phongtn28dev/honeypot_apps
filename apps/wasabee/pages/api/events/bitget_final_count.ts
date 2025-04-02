@@ -14,5 +14,7 @@ export default async function handler(
     0
   );
 
+  console.log('checkTotalBeraReward', checkTotalBeraReward);
+
   return response.status(200).json(participants);
 }

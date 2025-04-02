@@ -1,6 +1,7 @@
 import { put } from '@vercel/blob';
 import type { NextApiResponse, NextApiRequest, PageConfig } from 'next';
 import { getAccountSwapsWithPools } from '@/lib/algebra/graphql/clients/account';
+import { getSingleBitgetParticipantInfo } from '@/lib/algebra/graphql/clients/bitget_event';
 
 export default async function handler(
   request: NextApiRequest,
@@ -47,20 +48,25 @@ export default async function handler(
   ];
 
   const swaps = await getAccountSwapsWithPools(accountId, pools);
+  const bitgetParticipantInfo = await getSingleBitgetParticipantInfo(accountId);
 
   console.log('swaps', swaps);
+  console.log('bitgetParticipantInfo', bitgetParticipantInfo);
 
   swaps.account?.transaction.map((transaction) => {
     transaction.swaps.map((swap) => {
-      console.log('swap.pool.id ', swap.pool.id);
       const swapPool = amountUsdTradedForEachPool[swap.pool.id.toLowerCase()];
       if (swapPool) {
-        totalAmountUsdTraded += Number(swap.amountUSD);
         totalSwaps += 1;
-        swapPool.amountUsd += Number(swap.amountUSD);
         swapPool.swaps += 1;
       }
     });
+  });
+
+  bitgetParticipantInfo?.map((participant) => {
+    totalAmountUsdTraded += Number(participant.amountUSD);
+    amountUsdTradedForEachPool[participant.pool.id.toLowerCase()].amountUsd +=
+      Number(participant.amountUSD);
   });
 
   return response.status(200).json({
