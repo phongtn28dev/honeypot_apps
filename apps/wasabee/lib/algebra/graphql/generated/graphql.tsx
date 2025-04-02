@@ -8951,8 +8951,6 @@ export type Subscription = {
   bitgetCampaignParticipant?: Maybe<BitgetCampaignParticipant>;
   bitgetCampaignParticipants: Array<BitgetCampaignParticipant>;
   bitgetCampaigns: Array<BitgetCampaign>;
-  block?: Maybe<Block>;
-  blocks: Array<Block>;
   bundle?: Maybe<Bundle>;
   bundles: Array<Bundle>;
   burn?: Maybe<Burn>;
@@ -9154,24 +9152,6 @@ export type SubscriptionBitgetCampaignsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<BitgetCampaign_Filter>;
-};
-
-
-export type SubscriptionBlockArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionBlocksArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Block_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Block_Filter>;
 };
 
 
@@ -13855,6 +13835,14 @@ export type GetBitgetEventsQueryVariables = Exact<{
 
 export type GetBitgetEventsQuery = { __typename?: 'Query', bitgetCampaigns: Array<{ __typename?: 'BitgetCampaign', totalVolumeUSD: any, totalFinishedUserCount: any, eventPools: Array<{ __typename?: 'BitgetCampaignEventPool', totalVolumeUSD: any, totalFinishedUserCount: any, pool: { __typename?: 'Pool', id: string, fee: any, sqrtPrice: any, liquidity: any, tick: any, tickSpacing: any, totalValueLockedUSD: any, volumeUSD: any, feesUSD: any, untrackedFeesUSD: any, token0Price: any, token1Price: any, txCount: any, createdAtTimestamp: any, aprPercentage: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any, derivedUSD: any, initialUSD: any, txCount: any, holderCount: any, totalSupply: any, volumeUSD: any, totalValueLockedUSD: any, marketCap: any, poolCount: any, priceChange24hPercentage: any, pot2Pump?: { __typename?: 'Pot2Pump', id: string } | null, tokenHourData: Array<{ __typename?: 'TokenHourData', periodStartUnix: number, priceUSD: any, feesUSD: any, untrackedVolumeUSD: any }> }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any, derivedUSD: any, initialUSD: any, txCount: any, holderCount: any, totalSupply: any, volumeUSD: any, totalValueLockedUSD: any, marketCap: any, poolCount: any, priceChange24hPercentage: any, pot2Pump?: { __typename?: 'Pot2Pump', id: string } | null, tokenHourData: Array<{ __typename?: 'TokenHourData', periodStartUnix: number, priceUSD: any, feesUSD: any, untrackedVolumeUSD: any }> }, poolHourData: Array<{ __typename?: 'PoolHourData', feesUSD: any, id: string, tvlUSD: any, txCount: any, volumeUSD: any, periodStartUnix: number }>, poolDayData: Array<{ __typename?: 'PoolDayData', feesUSD: any, id: string, txCount: any, volumeUSD: any, tvlUSD: any, date: number }>, poolWeekData: Array<{ __typename?: 'PoolWeekData', feesUSD: any, tvlUSD: any, volumeUSD: any, id: string, week: number }>, poolMonthData: Array<{ __typename?: 'PoolMonthData', feesUSD: any, tvlUSD: any, volumeUSD: any, id: string, month: number }> }, top10Users: Array<{ __typename?: 'BitgetCampaignParticipant', amountUSD: any, finished: boolean, user: { __typename?: 'Account', id: string, swapCount: any, memeTokenHoldingCount: any, pot2PumpLaunchCount: any, participateCount: any, platformTxCount: any, holdingPoolCount: any, totalSpendUSD: any, vaultShares?: Array<{ __typename?: 'VaultShare', id: string, vaultShareBalance: any, vault: { __typename?: 'IchiVault', id: string } }> | null, transaction: Array<{ __typename?: 'Transaction', id: string, timestamp: any }>, holder: Array<{ __typename?: 'HoldingToken', id: string, holdingValue: any, token: { __typename?: 'Token', id: string, symbol: string, derivedUSD: any } }>, participant: Array<{ __typename?: 'Participant', id: string, pot2Pump: { __typename?: 'Pot2Pump', id: string } }> } }>, currentUser: Array<{ __typename?: 'BitgetCampaignParticipant', amountUSD: any, finished: boolean, user: { __typename?: 'Account', id: string, swapCount: any, memeTokenHoldingCount: any, pot2PumpLaunchCount: any, participateCount: any, platformTxCount: any, holdingPoolCount: any, totalSpendUSD: any, vaultShares?: Array<{ __typename?: 'VaultShare', id: string, vaultShareBalance: any, vault: { __typename?: 'IchiVault', id: string } }> | null, transaction: Array<{ __typename?: 'Transaction', id: string, timestamp: any }>, holder: Array<{ __typename?: 'HoldingToken', id: string, holdingValue: any, token: { __typename?: 'Token', id: string, symbol: string, derivedUSD: any } }>, participant: Array<{ __typename?: 'Participant', id: string, pot2Pump: { __typename?: 'Pot2Pump', id: string } }> } }> }> }> };
 
+export type GetBitgetEventsParticipantListQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetBitgetEventsParticipantListQuery = { __typename?: 'Query', bitgetCampaignParticipants: Array<{ __typename?: 'BitgetCampaignParticipant', amountUSD: any, campaign: { __typename?: 'BitgetCampaign', totalVolumeUSD: any }, pool: { __typename?: 'BitgetCampaignEventPool', id: string, totalVolumeUSD: any }, user: { __typename?: 'Account', id: string } }> };
+
 export type EternalFarmingsQueryVariables = Exact<{
   pool?: InputMaybe<Scalars['Bytes']['input']>;
 }>;
@@ -14897,6 +14885,63 @@ export type GetBitgetEventsQueryHookResult = ReturnType<typeof useGetBitgetEvent
 export type GetBitgetEventsLazyQueryHookResult = ReturnType<typeof useGetBitgetEventsLazyQuery>;
 export type GetBitgetEventsSuspenseQueryHookResult = ReturnType<typeof useGetBitgetEventsSuspenseQuery>;
 export type GetBitgetEventsQueryResult = Apollo.QueryResult<GetBitgetEventsQuery, GetBitgetEventsQueryVariables>;
+export const GetBitgetEventsParticipantListDocument = gql`
+    query getBitgetEventsParticipantList($skip: Int, $first: Int) {
+  bitgetCampaignParticipants(
+    skip: $skip
+    first: $first
+    where: {amountUSD_gt: 10}
+    orderBy: amountUSD
+    orderDirection: desc
+  ) {
+    campaign {
+      totalVolumeUSD
+    }
+    pool {
+      id
+      totalVolumeUSD
+    }
+    user {
+      id
+    }
+    amountUSD
+  }
+}
+    `;
+
+/**
+ * __useGetBitgetEventsParticipantListQuery__
+ *
+ * To run a query within a React component, call `useGetBitgetEventsParticipantListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBitgetEventsParticipantListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBitgetEventsParticipantListQuery({
+ *   variables: {
+ *      skip: // value for 'skip'
+ *      first: // value for 'first'
+ *   },
+ * });
+ */
+export function useGetBitgetEventsParticipantListQuery(baseOptions?: Apollo.QueryHookOptions<GetBitgetEventsParticipantListQuery, GetBitgetEventsParticipantListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetBitgetEventsParticipantListQuery, GetBitgetEventsParticipantListQueryVariables>(GetBitgetEventsParticipantListDocument, options);
+      }
+export function useGetBitgetEventsParticipantListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBitgetEventsParticipantListQuery, GetBitgetEventsParticipantListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetBitgetEventsParticipantListQuery, GetBitgetEventsParticipantListQueryVariables>(GetBitgetEventsParticipantListDocument, options);
+        }
+export function useGetBitgetEventsParticipantListSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetBitgetEventsParticipantListQuery, GetBitgetEventsParticipantListQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetBitgetEventsParticipantListQuery, GetBitgetEventsParticipantListQueryVariables>(GetBitgetEventsParticipantListDocument, options);
+        }
+export type GetBitgetEventsParticipantListQueryHookResult = ReturnType<typeof useGetBitgetEventsParticipantListQuery>;
+export type GetBitgetEventsParticipantListLazyQueryHookResult = ReturnType<typeof useGetBitgetEventsParticipantListLazyQuery>;
+export type GetBitgetEventsParticipantListSuspenseQueryHookResult = ReturnType<typeof useGetBitgetEventsParticipantListSuspenseQuery>;
+export type GetBitgetEventsParticipantListQueryResult = Apollo.QueryResult<GetBitgetEventsParticipantListQuery, GetBitgetEventsParticipantListQueryVariables>;
 export const EternalFarmingsDocument = gql`
     query EternalFarmings($pool: Bytes) {
   eternalFarmings(where: {pool: $pool}) {
