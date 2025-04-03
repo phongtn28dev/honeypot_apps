@@ -14,7 +14,18 @@ export default async function handler(
     0
   );
 
-  console.log('checkTotalBeraReward', checkTotalBeraReward);
+  const checkTotalParticipantCount = Object.values(participants).reduce(
+    (acc, participant) => acc + 1,
+    0
+  );
 
+  const checkTotalAmountUsdTraded = Object.values(participants).reduce(
+    (acc, participant) => acc + participant.participatedAmountUsd,
+    0
+  );
+
+  console.log('checkTotalBeraReward', checkTotalBeraReward);
+  console.log('checkTotalParticipantCount', checkTotalParticipantCount);
+  console.log('checkTotalAmountUsdTraded', checkTotalAmountUsdTraded);
   return response.status(200).json(participants);
 }

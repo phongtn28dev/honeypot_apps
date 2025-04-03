@@ -58,7 +58,7 @@ export const BitgetCampaign = observer(() => {
                   })}
                 </p>
                 <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 text-black">
-                  Total Participants
+                  Total Participate Count
                 </h2>
                 <p className="text-3xl sm:text-4xl font-bold text-honey-gold">
                   {DynamicFormatAmount({
