@@ -158,7 +158,7 @@ export const Layout = ({
       {!showInviteModal ? (
         currentChain ? (
           currentChain?.isActive ? (
-            <div className="flex-1 flex">{children}</div>
+            <div className="flex-1 flex w-full">{children}</div>
           ) : (
             <div className="flex-1 flex items-center justify-center">
               <div className="text-center">
