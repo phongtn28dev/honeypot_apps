@@ -5,12 +5,12 @@ import {
   Pool,
   Route,
   Token,
-} from "@cryptoalgebra/sdk";
-import { useMemo } from "react";
-import { useSwapPools } from "./useSwapPools";
-import { useChainId } from "wagmi";
-import { Address } from "viem";
-import { useUserState } from "../../state/userStore";
+} from '@cryptoalgebra/sdk';
+import { useMemo } from 'react';
+import { useSwapPools } from './useSwapPools';
+import { useChainId } from 'wagmi';
+import { Address } from 'viem';
+import { useUserState } from '../../state/userStore';
 
 /**
  * Returns true if poolA is equivalent to poolB
@@ -46,15 +46,15 @@ function computeAllRoutes(
   const tokenIn = currencyIn?.wrapped;
   const tokenOut = currencyOut?.wrapped;
 
-  if (!tokenIn || !tokenOut) throw new Error("Missing tokenIn/tokenOut");
+  if (!tokenIn || !tokenOut) throw new Error('Missing tokenIn/tokenOut');
 
   for (const pool of pools) {
     const [tokenA, tokenB] = pool.tokens;
 
     const { liquidity, price, tick, fee } = pool.pool;
-    if (price === "0" || liquidity === "0") continue;
+    if (price === '0' || liquidity === '0') continue;
 
-    console.log("newPool args", {
+    console.log('newPool args', {
       tokenA,
       tokenB,
       fee,
@@ -69,14 +69,14 @@ function computeAllRoutes(
       tokenA,
       tokenB,
       Number(fee),
-      Number(price),
+      String(price),
       ADDRESS_ZERO,
-      Number(liquidity),
+      String(liquidity),
       Number(tick),
-      DEFAULT_TICK_SPACING
+      Number(DEFAULT_TICK_SPACING)
     );
 
-    console.log("newPool", newPool);
+    console.log('newPool', newPool);
 
     if (
       !newPool.involvesToken(tokenIn) ||
