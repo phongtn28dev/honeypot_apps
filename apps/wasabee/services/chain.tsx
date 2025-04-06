@@ -716,7 +716,6 @@ export const berachainNetwork = new Network({
       decimals: 18,
       logoURI: '/images/icons/tokens/henlo.png',
       isPopular: true,
-      isBitgetCampaignToken: true,
     },
     '0xbaadcc2962417c01af99fb2b7c75706b9bd6babe': {
       name: 'Liquid BGT',
@@ -730,7 +729,6 @@ export const berachainNetwork = new Network({
       symbol: 'XI',
       decimals: 18,
       logoURI: '/images/icons/tokens/xi.webp',
-      isBitgetCampaignToken: true,
       isPopular: true,
     },
     '0x10acd894a40d8584ad74628812525ef291e16c47': {
@@ -738,7 +736,6 @@ export const berachainNetwork = new Network({
       symbol: 'Q5',
       decimals: 18,
       logoURI: '/images/icons/tokens/q5.webp',
-      isBitgetCampaignToken: true,
       isPopular: true,
     },
     '0x539aced84ebb5cbd609cfaf4047fb78b29553da9': {
@@ -746,7 +743,6 @@ export const berachainNetwork = new Network({
       symbol: 'BERACHAIN',
       decimals: 18,
       logoURI: '/images/icons/tokens/berachain.webp',
-      isBitgetCampaignToken: true,
       isPopular: true,
     },
     '0xab7e0f3d69de8061aa46d7c9964dbc11878468eb': {
