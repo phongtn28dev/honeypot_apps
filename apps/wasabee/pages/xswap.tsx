@@ -20,11 +20,12 @@ import BigNumber from 'bignumber.js';
 import { observer } from 'mobx-react-lite';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { zeroAddress } from 'viem';
-
+import { useAccount } from 'wagmi';
 const XSwapPage = observer(() => {
   const [xSwapTokens, setXSwapTokens] = useState<Token[] | undefined>(
     undefined
   );
+  const { address } = useAccount();
 
   useEffect(() => {
     console.log(xSwapTokens);
@@ -46,6 +47,16 @@ const XSwapPage = observer(() => {
 
   if (!wallet.isInit) {
     return <LoadingDisplay />;
+  }
+
+  if (!address) {
+    return (
+      <HoneyContainer className="w-full max-w-[1240px] mx-auto">
+        <div className="w-full flex flex-col gap-4 justify-center items-center h-full min-h-[50vh] ">
+          <div className="text-2xl">Connect Wallet to use XSwap</div>
+        </div>
+      </HoneyContainer>
+    );
   }
 
   return (
