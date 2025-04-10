@@ -13,6 +13,7 @@ const PoolsPage: NextLayoutPage = observer(() => {
     if (!wallet.isInit) {
       return;
     }
+
     liquidity.initPool();
   }, [wallet.isInit]);
 
@@ -47,10 +48,18 @@ const PoolsPage: NextLayoutPage = observer(() => {
         }}
         aria-label="Pool options"
       >
-        <Tab key="aquabera" title={<span className="text-xs sm:text-base">POGE Vault</span>}>
+        <Tab
+          key="aquabera"
+          title={<span className="text-xs sm:text-base">POGE Vault</span>}
+        >
           <AquaberaList />
         </Tab>
-        <Tab key="algebra" title={<span className="text-xs sm:text-base">Concentrated Liquidity</span>}>
+        <Tab
+          key="algebra"
+          title={
+            <span className="text-xs sm:text-base">Concentrated Liquidity</span>
+          }
+        >
           <PoolsList />
         </Tab>
       </Tabs>

@@ -34,6 +34,7 @@ type TokenSelectorProps = {
   value?: Token | null;
   disableSelection?: boolean;
   staticTokenList?: Token[];
+  disableTools?: boolean;
 };
 
 export const TokenSelector = observer(
@@ -42,7 +43,9 @@ export const TokenSelector = observer(
     value,
     disableSelection,
     staticTokenList,
+    disableTools,
   }: TokenSelectorProps) => {
+    console.log('disableSelection', disableSelection);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const state = useLocalObservable(() => ({
       search: '',
@@ -334,7 +337,7 @@ export const TokenSelector = observer(
             </Observer>
           </PopoverContent>
         </Popover>
-        {value && (
+        {value && !disableTools && (
           <div className="text-black flex items-center gap-x-2 z-10">
             <Link
               href={`${wallet.currentChain?.chain.blockExplorers?.default.url}/token/${value.address}`}

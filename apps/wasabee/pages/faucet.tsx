@@ -1,5 +1,4 @@
 import { Button } from '@/components/button';
-import { Copy } from '@/components/Copy';
 import { NoData } from '@/components/table';
 import { wallet } from '@/services/wallet';
 import { NextLayoutPage } from '@/types/nextjs';
@@ -7,14 +6,10 @@ import { observer } from 'mobx-react-lite';
 import Image from 'next/image';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { amountFormatted } from '../lib/format';
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
-import TokenBalanceCard from '@/components/TokenBalanceCard/TokenBalanceCard';
 import CardContianer from '@/components/CardContianer/CardContianer';
 import { useAccount, useBalance, UseBalanceReturnType } from 'wagmi';
 import Link from 'next/link';
 import { Modal, ModalContent, ModalHeader, Tooltip } from '@nextui-org/react';
-import { ControlledToolTip } from '@/components/molecule/ControlledToolTip/ControlledToolTip';
-import { NativeFaucetContract } from '@/services/contract/faucet-contract';
 import { faucet } from '@/services/faucet';
 import {
   OptionsDropdown,
@@ -22,8 +17,6 @@ import {
 } from '@/components/OptionsDropdown/OptionsDropdown';
 import { VscHome } from 'react-icons/vsc';
 import { FaDonate } from 'react-icons/fa';
-import { sendTransaction } from 'viem/actions';
-import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 import Countdown from 'react-countdown';
 import { WrappedToastify } from '@/lib/wrappedToastify';

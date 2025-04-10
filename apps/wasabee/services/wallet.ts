@@ -5,7 +5,7 @@ import { RouterV2Contract } from './contract/dex/routerv2-contract';
 import { FactoryContract } from './contract/dex/factory-contract';
 import { FtoFactoryContract } from './contract/launches/fto/ftofactory-contract';
 import { FtoFacadeContract } from './contract/launches/fto/ftofacade-contract';
-import { makeAutoObservable, reaction } from 'mobx';
+import { makeAutoObservable, reaction, runInAction } from 'mobx';
 import { createPublicClientByChain } from '@/lib/client';
 import { StorageState } from './utils';
 import { MemeFactoryContract } from '@/services/contract/launches/pot2pump/memefactory-contract';
@@ -13,7 +13,8 @@ import { MEMEFacadeContract } from '@/services/contract/launches/pot2pump/memefa
 import { ICHIVaultFactoryContract } from '@/services/contract/aquabera/ICHIVaultFactory-contract';
 import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
 import { ICHIVaultVolatilityCheckContract } from './contract/aquabera/ICHIVaultVolatilityCheckContract';
-
+import { AlgebraSwapRouterContract } from './contract/algebra/algebra-swap-router';
+import { ALGEBRA_ROUTER } from '@/config/algebra/addresses';
 const MOCK_ADDRESS = process.env.NEXT_PUBLIC_MOCK_ADDRESS || undefined;
 
 export class Wallet {
@@ -32,6 +33,7 @@ export class Wallet {
     memeFacade: MEMEFacadeContract;
     vaultFactory: ICHIVaultFactoryContract;
     vaultVolatilityCheck: ICHIVaultVolatilityCheckContract;
+    algebraSwapRouter: AlgebraSwapRouterContract;
   } = {} as any;
   publicClient!: PublicClient;
   isInit = false;
@@ -71,6 +73,9 @@ export class Wallet {
       // MOCK_ADDRESS ||
       walletClient?.account?.address || zeroAddress;
     this.contracts = {
+      algebraSwapRouter: new AlgebraSwapRouterContract({
+        address: this.currentChain.contracts.algebraSwapRouter as `0x${string}`,
+      }),
       routerV2: new RouterV2Contract({
         address: this.currentChain.contracts.routerV2,
       }),
@@ -102,7 +107,10 @@ export class Wallet {
     }
     this.currentChain.init();
     await StorageState.sync();
-    this.isInit = true;
+
+    runInAction(() => {
+      this.isInit = true;
+    });
   }
 }
 

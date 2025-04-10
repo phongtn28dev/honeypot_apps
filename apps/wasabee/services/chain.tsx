@@ -9,10 +9,14 @@ import {
   sprotoTestnet,
   //sepolia,
 } from '@/lib/chain';
-import { ALGEBRA_POSITION_MANAGER } from '@/config/algebra/addresses';
+import {
+  ALGEBRA_POSITION_MANAGER,
+  ALGEBRA_ROUTER,
+} from '@/config/algebra/addresses';
 import { zeroAddress } from 'viem';
 import { ICHIVaultContract } from './contract/aquabera/ICHIVault-contract';
-import Link from 'next/link';
+import { getMultipleTokensData } from '@/lib/algebra/graphql/clients/token';
+import { Token as IndexerToken } from '@/lib/algebra/graphql/generated/graphql';
 
 export class Network {
   isActive: boolean = true;
@@ -23,6 +27,7 @@ export class Network {
     HPOT: string;
   };
   contracts!: {
+    algebraSwapRouter: string;
     routerV3: string;
     routerV2: string;
     factory: string;
@@ -78,23 +83,32 @@ export class Network {
   }
   init() {
     this.nativeToken = Token.getToken(this.nativeToken);
-    this.nativeToken.init().then(() => {
-      console.log('this.nativeToken', this.nativeToken.name);
+    this.nativeToken.init(true, { loadIndexerTokenData: true }).then(() => {
+      console.log('this.nativeToken', this.nativeToken);
     });
-    this.faucetTokens = this.faucetTokens.map((t) => {
-      const token = Token.getToken(t);
-      token.init();
-      return token;
-    });
+
+    this.validatedTokens = [];
+
     Object.entries(this.validatedTokensInfo).forEach(([address, t]) => {
       const token = Token.getToken({
         ...t,
         address,
       });
-      token.init();
       this.validatedTokensInfo[address] = token;
       this.validatedTokens.push(token);
     });
+
+    getMultipleTokensData(
+      this.validatedTokens.map((t) => t.address.toLowerCase())
+    ).then((tokenData) => {
+      tokenData?.tokens.forEach((t) => {
+        const token = Token.getToken({
+          address: t.id,
+        });
+        token.assignIndexerTokenData(t as IndexerToken);
+      });
+    });
+
     this.validatedVault.forEach((vault) => {
       const vaultContract = ICHIVaultContract.getVault(vault);
     });
@@ -155,6 +169,7 @@ export const berachainBartioTestnetNetwork = new Network({
     HPOT: '0xfc5e3743e9fac8bb60408797607352e24db7d65e'.toLowerCase(),
   },
   contracts: {
+    algebraSwapRouter: ALGEBRA_ROUTER,
     vaultVolatilityCheck: '0x0000000000000000000000000000000000000000',
     routerV3: ALGEBRA_POSITION_MANAGER,
     routerV2: '0x8aBc3a7bAC442Ae449B07fd0C2152364C230DA9A',
@@ -560,6 +575,7 @@ export const berachainNetwork = new Network({
     HPOT: '0x9b37d542114070518a44e200fdcd8e4be737297f'.toLowerCase(),
   },
   contracts: {
+    algebraSwapRouter: ALGEBRA_ROUTER,
     routerV3: ALGEBRA_POSITION_MANAGER,
     routerV2: '0x8aBc3a7bAC442Ae449B07fd0C2152364C230DA9A',
     factory: '0x7d53327D78EFD0b463bd8d7dc938C52402323b95',
@@ -901,6 +917,7 @@ export const movementNetWork = new Network({
   officialFaucets: [],
   nativeToken: {},
   contracts: {
+    algebraSwapRouter: ALGEBRA_ROUTER,
     routerV3: ALGEBRA_POSITION_MANAGER,
     routerV2: zeroAddress,
     factory: zeroAddress,
@@ -925,6 +942,7 @@ export const sprotoNetWork = new Network({
   officialFaucets: [],
   nativeToken: {},
   contracts: {
+    algebraSwapRouter: ALGEBRA_ROUTER,
     routerV3: ALGEBRA_POSITION_MANAGER,
     routerV2: zeroAddress,
     factory: zeroAddress,

@@ -5,7 +5,6 @@ import { useTotalUsers } from '@/lib/hooks/useTotalUsers';
 import CardContainer from '@/components/CardContianer/v3';
 import { useLeaderboard } from '@/lib/hooks/useLeaderboard';
 import { shortenAddressString, formatVolume } from '@/lib/utils';
-import { wallet } from '@/services/wallet';
 import {
   useAccounts,
   useTopSwapAccounts,

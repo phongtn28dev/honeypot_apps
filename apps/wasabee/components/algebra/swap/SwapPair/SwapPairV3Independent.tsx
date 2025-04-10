@@ -16,6 +16,7 @@ import {
   useDerivedSwapInfo,
   useSwapState,
   useSwapActionHandlers,
+  useDerivedSwapInfoWithoutSwapState,
 } from '@/lib/algebra/state/swapStore';
 import { SwapField, SwapFieldType } from '@/types/algebra/types/swap-field';
 import TokenCardV3 from '../TokenCard/TokenCardV3';
@@ -26,6 +27,8 @@ import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
 import { wallet } from '@/services/wallet';
 import { AlgebraPoolContract } from '@/services/contract/algebra/algebra-pool-contract';
+import { Address } from 'viem';
+import TokenCardV3Independent from '../TokenCard/TokenCardVIndependent';
 
 interface SwapPairV3Props {
   fromTokenAddress?: string;
@@ -38,9 +41,18 @@ interface SwapPairV3Props {
   isOutputNative?: boolean;
   disableFromSelection?: boolean;
   disableToSelection?: boolean;
+  inputCurrency?: Currency;
+  outputCurrency?: Currency;
+  independentField: SwapFieldType;
+  setInputCurrency: (currency: Currency | undefined) => void;
+  setOutputCurrency: (currency: Currency | undefined) => void;
+  setIndependentField: (field: SwapFieldType) => void;
+  typedValue: string;
+  setTypedValue: (value: string) => void;
+  onUserInput: (field: SwapFieldType, value: string) => void;
 }
 
-const SwapPairV3 = ({
+const SwapPairV3Independent = ({
   fromTokenAddress,
   toTokenAddress,
   disableSelection,
@@ -51,36 +63,46 @@ const SwapPairV3 = ({
   isOutputNative,
   disableFromSelection,
   disableToSelection,
+  inputCurrency,
+  outputCurrency,
+  independentField,
+  typedValue,
+  setInputCurrency,
+  setOutputCurrency,
+  setIndependentField,
+  setTypedValue,
+  onUserInput,
 }: SwapPairV3Props) => {
   const {
     toggledTrade: trade,
     currencyBalances,
     parsedAmount,
     currencies,
-  } = useDerivedSwapInfo();
+  } = useDerivedSwapInfoWithoutSwapState({
+    inputCurrencyId: fromTokenAddress as Address,
+    outputCurrencyId: toTokenAddress as Address,
+    independentField: independentField,
+    typedValue: typedValue,
+  });
 
   const baseCurrency = currencies[SwapField.INPUT];
   const quoteCurrency = currencies[SwapField.OUTPUT];
 
-  const { independentField, typedValue } = useSwapState();
   const dependentField: SwapFieldType =
     independentField === SwapField.INPUT ? SwapField.OUTPUT : SwapField.INPUT;
 
-  const { onSwitchTokens, onCurrencySelection, onUserInput } =
-    useSwapActionHandlers();
-
   const handleInputSelect = useCallback(
     (inputCurrency: Currency) => {
-      onCurrencySelection(SwapField.INPUT, inputCurrency);
+      setInputCurrency(inputCurrency);
     },
-    [onCurrencySelection]
+    [setInputCurrency]
   );
 
   const handleOutputSelect = useCallback(
     (outputCurrency: Currency) => {
-      onCurrencySelection(SwapField.OUTPUT, outputCurrency);
+      setOutputCurrency(outputCurrency);
     },
-    [onCurrencySelection]
+    [setOutputCurrency]
   );
 
   const handleTypeInput = useCallback(
@@ -95,6 +117,23 @@ const SwapPairV3 = ({
     },
     [onUserInput]
   );
+
+  const onSwitchTokens = useCallback(() => {
+    const tempInputCurrency = inputCurrency;
+    const tempOutputCurrency = outputCurrency;
+    setInputCurrency(tempOutputCurrency);
+    setOutputCurrency(tempInputCurrency);
+    setIndependentField(
+      independentField === SwapField.INPUT ? SwapField.OUTPUT : SwapField.INPUT
+    );
+    setTypedValue('');
+  }, [
+    independentField,
+    setIndependentField,
+    setTypedValue,
+    inputCurrency,
+    outputCurrency,
+  ]);
 
   const { wrapType } = useWrapCallback(
     currencies[SwapField.INPUT],
@@ -302,7 +341,7 @@ const SwapPairV3 = ({
 
   return (
     <div className="flex flex-col gap-1 relative bg-white custom-dashed px-[18px] py-6 w-full">
-      <TokenCardV3
+      <TokenCardV3Independent
         staticTokenList={staticFromTokenList}
         value={formattedAmounts[SwapField.INPUT] || ''}
         currency={baseCurrency}
@@ -328,7 +367,7 @@ const SwapPairV3 = ({
         <div className=" h-px flex-[1_0_0] bg-[#363636]/30 rounded-[100px]"></div>
       </div>
 
-      <TokenCardV3
+      <TokenCardV3Independent
         staticTokenList={staticToTokenList}
         value={formattedAmounts[SwapField.OUTPUT] || ''}
         currency={quoteCurrency}
@@ -345,4 +384,4 @@ const SwapPairV3 = ({
   );
 };
 
-export default SwapPairV3;
+export default SwapPairV3Independent;
