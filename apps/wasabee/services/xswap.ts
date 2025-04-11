@@ -9,10 +9,12 @@ import { SwapCallEstimate } from '@/lib/algebra/hooks/swap/useSwapCallback';
 import { SuccessfulCall } from '@/lib/algebra/hooks/swap/useSwapCallback';
 import { ContractWrite } from './utils';
 import { ALGEBRA_ROUTER } from '@/config/algebra/addresses';
+import { Token as IndexerToken } from '@/lib/algebra/graphql/generated/graphql';
 import {
   ApprovalState,
   ApprovalStateType,
 } from '@/types/algebra/types/approve-state';
+import { getMultipleTokensData } from '@/lib/algebra/graphql/clients/token';
 
 export interface XChildSwap {
   fromToken: Token;
@@ -34,6 +36,16 @@ class XSwap {
 
   constructor() {
     makeAutoObservable(this);
+
+    reaction(
+      () => wallet.currentChain,
+      () => {
+        this.xSwapTokens = [
+          ...wallet.currentChain?.validatedTokens,
+          wallet.currentChain?.nativeToken,
+        ];
+      }
+    );
   }
 
   selectAllTokens() {
@@ -53,9 +65,25 @@ class XSwap {
     });
   }
 
+  reset() {
+    //reset swaps state
+    this.swaps.forEach((swap) => {
+      swap.setIsSelected(false);
+      swap.setTypedValue('0');
+    });
+
+    //reload balances
+    this.xSwapTokens.forEach((t) => {
+      t.getBalance();
+    });
+  }
+
   async handleSwap() {
     const multicallArgs = Object.values(
-      this.swaps.filter((swap) => swap.isSelected).map((swap) => swap.bestCall)
+      this.swaps
+        .filter((swap) => swap.isSelected)
+        .filter((swap) => swap.approvalState === ApprovalState.APPROVED)
+        .map((swap) => swap.bestCall)
     )
       .filter((call): call is SuccessfulCall => call !== undefined)
       .map((call) => ({
@@ -132,7 +160,10 @@ class XSwap {
     return this.swaps
       .filter((swap) => swap.isSelected)
       .some((swap) => {
-        return swap.approvalState !== ApprovalState.APPROVED;
+        return (
+          swap.approvalState !== ApprovalState.APPROVED &&
+          swap.approvalState !== ApprovalState.UNKNOWN
+        );
       });
   }
 

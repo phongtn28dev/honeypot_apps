@@ -128,8 +128,6 @@ const XSwapParams = ({
                 { account: address as Address }
               )
               .then((v) => v.result as [string, number, number]);
-
-            console.log('beforeSwap', beforeSwap);
           } catch (error) {
             beforeSwap = ['', 0, 0];
           }
@@ -155,7 +153,6 @@ const XSwapParams = ({
   }, [trade, tradeState.fee]);
 
   const { realizedLPFee, priceImpact } = useMemo(() => {
-    // console.log("trade", trade?.priceImpact);
     try {
       if (
         !trade ||
@@ -190,14 +187,6 @@ const XSwapParams = ({
   const routeNotFound = !trade?.route;
 
   if (wrapType !== WrapType.NOT_APPLICABLE) return;
-
-  console.log('routeNotFound', {
-    inputCurrency: inputCurrency?.symbol,
-    trade,
-    userHasSpecifiedInputOutput,
-    parsedAmounts,
-    typedValue,
-  });
 
   if (routeNotFound && typedValue)
     return (

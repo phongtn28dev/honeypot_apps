@@ -91,7 +91,6 @@ export function FormatSmallDecimal({
       2 + firstNonZeroIndex
     );
 
-    console.log({ numStr, first2digit, compressedCount, first2NonZero });
     return (
       <>
         {first2digit}

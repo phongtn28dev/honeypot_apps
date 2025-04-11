@@ -45,7 +45,6 @@ export const TokenSelector = observer(
     staticTokenList,
     disableTools,
   }: TokenSelectorProps) => {
-    console.log('disableSelection', disableSelection);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const state = useLocalObservable(() => ({
       search: '',

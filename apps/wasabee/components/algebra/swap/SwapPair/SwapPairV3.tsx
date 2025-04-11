@@ -133,11 +133,9 @@ const SwapPairV3 = ({
   );
 
   const handleMaxInput = useCallback(() => {
-    console.log('maxInputAmount', maxInputAmount);
     maxInputAmount && onUserInput(SwapField.INPUT, maxInputAmount.toExact());
   }, [maxInputAmount, onUserInput]);
 
-  console.log('parsedAmounts', parsedAmounts);
   const fiatValueInputFormatted = useUSDCValue(
     tryParseAmount(
       parsedAmounts[SwapField.INPUT]?.toSignificant(

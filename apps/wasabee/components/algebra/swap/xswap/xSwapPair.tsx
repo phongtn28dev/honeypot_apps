@@ -141,7 +141,6 @@ const XSwapPair = observer(
 
     const handleOutputSelect = useCallback(
       (outputCurrency: Currency) => {
-        console.log('outputCurrency', outputCurrency);
         setOutputCurrency(outputCurrency);
       },
       [setOutputCurrency]
@@ -199,7 +198,6 @@ const XSwapPair = observer(
     );
 
     const handleMaxInput = useCallback(() => {
-      console.log('maxInputAmount', maxInputAmount);
       maxInputAmount && onUserInput(SwapField.INPUT, maxInputAmount.toExact());
     }, [maxInputAmount, onUserInput]);
 
@@ -544,6 +542,7 @@ const XSwapPair = observer(
                 isDisabled={approvalState !== ApprovalState.NOT_APPROVED}
                 disabled={approvalState !== ApprovalState.NOT_APPROVED}
                 onPress={() => approvalCallback && approvalCallback()}
+                className="bg-[#FFCD4D] border border-black shadow-[2px_2px_0px_0px_#000000] text-sm text-black hover:bg-[#fff6e0] hover:border-black hover:shadow-[2px_2px_0px_0px_#000000] transition-all duration-300"
               >
                 {approvalState === ApprovalState.PENDING ? (
                   <Loader />
@@ -559,6 +558,10 @@ const XSwapPair = observer(
 
         {isMobile && !mobileExpanded && (
           <div className="flex flex-col gap-4 justify-between items-center">
+            <div className="w-full flex justify-center items-center">
+              <span className="mr-2"> Swap This Asset: </span>
+              <Checkbox isSelected={isSelected} onValueChange={setIsSelected} />
+            </div>
             <div className="flex flex-row gap-4 justify-between items-center">
               <TokenSelector
                 staticTokenList={staticFromTokenList}

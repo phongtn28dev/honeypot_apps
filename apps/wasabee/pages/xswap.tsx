@@ -7,6 +7,7 @@ import { ALGEBRA_ROUTER } from '@/config/algebra/addresses';
 import { STABLECOINS } from '@/config/algebra/tokens';
 import { algebraRouterABI } from '@/lib/abis/algebra-contracts/ABIs';
 import { Multicall3ABI } from '@/lib/abis/Multicall3';
+import { useMediaQuery } from '@/lib/algebra/hooks/common/useMediaQuery';
 import { SuccessfulCall } from '@/lib/algebra/hooks/swap/useSwapCallback';
 import { SwapCallEstimate } from '@/lib/algebra/hooks/swap/useSwapCallback';
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
@@ -21,11 +22,13 @@ import { observer } from 'mobx-react-lite';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { zeroAddress } from 'viem';
 import { useAccount } from 'wagmi';
+
 const XSwapPage = observer(() => {
   const [xSwapTokens, setXSwapTokens] = useState<Token[] | undefined>(
     undefined
   );
   const { address } = useAccount();
+  const isMobile = useMediaQuery('(max-width: 1024px)');
 
   useEffect(() => {
     console.log(xSwapTokens);
@@ -59,27 +62,44 @@ const XSwapPage = observer(() => {
     );
   }
 
+  if (sortedTokens?.length === 0) {
+    return (
+      <HoneyContainer className="w-full max-w-[1240px] mx-auto">
+        <div className="w-full flex flex-col gap-4 justify-center items-center h-full min-h-[50vh] ">
+          <div className="text-2xl">No tokens to swap</div>
+        </div>
+      </HoneyContainer>
+    );
+  }
+
   return (
     <div className="w-full px-4 py-4 flex gap-4 justify-start items-start ">
       <HoneyContainer className="w-full max-w-[1240px] mx-auto">
-        <div className="md:grid hidden w-full  grid-cols-12  bg-white p-2 rounded-lg items-center justify-center text-center">
-          <div className="col-span-1">
-            <Button onPress={() => xSwap.selectAllTokens()}>Select All</Button>
-          </div>
-          <div className="col-span-2">Asset</div>
+        {!isMobile && (
+          <div className="md:grid hidden w-full  grid-cols-12  bg-white p-2 rounded-lg items-center justify-center text-center">
+            <div className="col-span-1">
+              <Button
+                onPress={() => xSwap.selectAllTokens()}
+                className="bg-[#FFCD4D] border border-black shadow-[2px_2px_0px_0px_#000000] text-sm text-black hover:bg-[#fff6e0] hover:border-black hover:shadow-[2px_2px_0px_0px_#000000] transition-all duration-300"
+              >
+                Select All
+              </Button>
+            </div>
+            <div className="col-span-2">Asset</div>
 
-          <div className="col-span-1">Input</div>
-          <div className="col-span-3">
-            <Button
-              className="w-full bg-black text-white"
-              onPress={() => xSwap.maxAllTokens()}
-            >
-              Max All
-            </Button>
-          </div>
+            <div className="col-span-1">Input</div>
+            <div className="col-span-3">
+              <Button
+                className="w-full bg-[#FFCD4D] border border-black shadow-[2px_2px_0px_0px_#000000] text-sm text-black hover:bg-[#fff6e0] hover:border-black hover:shadow-[2px_2px_0px_0px_#000000] transition-all duration-300"
+                onPress={() => xSwap.maxAllTokens()}
+              >
+                Max All
+              </Button>
+            </div>
 
-          <div className="col-span-5">OutPut</div>
-        </div>
+            <div className="col-span-5">OutPut</div>
+          </div>
+        )}
         <div className="w-full flex flex-col gap-4  max-h-[70vh]  overflow-y-auto">
           {sortedTokens?.map((token, idx) => (
             <XSwapCard
@@ -105,31 +125,35 @@ const XSwapPage = observer(() => {
             />
           ))}
         </div>
-        <div className="w-full flex gap-4 justify-end items-center">
-          <div className="w-full col-span-1">
-            <span className="text-sm">
-              Total Amount In:
-              {DynamicFormatAmount({
-                amount: xSwap.totalAmountIn,
-                decimals: 4,
-                endWith: '$',
-              })}
-            </span>
+        <div className="w-full flex lg:flex-row flex-col gap-4 justify-end items-center">
+          <div className="w-full flex gap-4 justify-center items-center text-center">
+            <div className="w-full col-span-1">
+              <span className="text-sm">
+                Total Amount In: <br />
+                {DynamicFormatAmount({
+                  amount: xSwap.totalAmountIn,
+                  decimals: 4,
+                  endWith: '$',
+                })}
+              </span>
+            </div>
+            <div className="w-full col-span-1">
+              <span className="text-sm">
+                Total Amount Out: <br />
+                {DynamicFormatAmount({
+                  amount: xSwap.totalAmountOut,
+                  decimals: 4,
+                  endWith: '$',
+                })}
+              </span>
+            </div>
           </div>
-          <div className="w-full col-span-1">
-            <span className="text-sm">Total Amount Out:</span>
-            {DynamicFormatAmount({
-              amount: xSwap.totalAmountOut,
-              decimals: 4,
-              endWith: '$',
-            })}
-          </div>{' '}
           {xSwap.needsApproval ? (
             <Button
               onPress={() => {
                 xSwap.approveAllTokens();
               }}
-              className="w-full"
+              className="w-full bg-[#FFCD4D] border border-black shadow-[2px_2px_0px_0px_#000000] text-sm text-black hover:bg-[#fff6e0] hover:border-black hover:shadow-[2px_2px_0px_0px_#000000] transition-all duration-300"
             >
               Approve All
             </Button>
@@ -137,9 +161,11 @@ const XSwapPage = observer(() => {
             <Button
               isDisabled={Number(xSwap.totalAmountIn) === 0}
               onPress={() => {
-                xSwap.handleSwap();
+                xSwap.handleSwap().then(() => {
+                  xSwap.reset();
+                });
               }}
-              className="w-full"
+              className="w-full bg-[#FFCD4D] border border-black shadow-[2px_2px_0px_0px_#000000] text-sm text-black hover:bg-[#fff6e0] hover:border-black hover:shadow-[2px_2px_0px_0px_#000000] transition-all duration-300"
             >
               Swap
             </Button>

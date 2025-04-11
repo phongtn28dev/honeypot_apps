@@ -137,8 +137,6 @@ export function useSwapCallback(
     swapCalldata && findBestCall();
   }, [swapCalldata, approvalState, account]);
 
-  console.log('useSimulateAlgebraRouterMulticall', bestCall);
-
   const { data: swapConfig } = useSimulateAlgebraRouterMulticall({
     args: bestCall && ([bestCall.calldata] as any),
     value: BigInt(bestCall?.value || 0),
