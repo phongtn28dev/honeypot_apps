@@ -51,6 +51,7 @@ export const VaultDetail = observer(() => {
       !address ||
       !isAddress(address as string) ||
       address === zeroAddress ||
+      wallet.account === zeroAddress ||
       vault
     )
       return;
@@ -91,7 +92,7 @@ export const VaultDetail = observer(() => {
     };
 
     loadVaultData();
-  }, [address, wallet.isInit]);
+  }, [address, wallet.isInit, wallet.account]);
 
   const hasShares = vault?.userShares ?? BigInt(0) > BigInt(0);
 
