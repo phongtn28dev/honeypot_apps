@@ -104,7 +104,7 @@ export class Network {
       this.validatedTokens.map((t) => t.address.toLowerCase()),
       this.chainId.toString()
     ).then((tokenData) => {
-      tokenData?.tokens.forEach((t) => {
+      tokenData.forEach((t) => {
         const token = Token.getToken({
           address: t.id,
           chainId: this.chainId.toString(),

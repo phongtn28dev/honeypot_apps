@@ -43,6 +43,7 @@ export const BitgetCampaign = observer(() => {
       </HoneyContainer>
     </div>
   );
+
   return (
     <div className="flex flex-col gap-4 w-full justify-center items-center">
       <HoneyContainer className="w-full px-4 sm:px-6 max-w-[1200px]">

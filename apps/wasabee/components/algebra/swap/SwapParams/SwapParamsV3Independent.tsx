@@ -1,6 +1,5 @@
 import Loader from '@/components/algebra/common/Loader';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
-import { ALGEBRA_ROUTER } from '@/config/algebra/addresses';
 import { MAX_UINT128 } from '@/config/algebra/max-uint128';
 import { usePoolPlugins } from '@/lib/algebra/hooks/pools/usePoolPlugins';
 import useWrapCallback, {
@@ -18,6 +17,7 @@ import {
 import { AlgebraBasePluginContract } from '@/services/contract/algebra/algebra-base-plugin';
 import { AlgebraPoolContract } from '@/services/contract/algebra/algebra-pool-contract';
 import { Token } from '@/services/contract/token';
+import { wallet } from '@/services/wallet';
 import { SwapField, SwapFieldType } from '@/types/algebra/types/swap-field';
 import { TradeState } from '@/types/algebra/types/trade-state';
 import {
@@ -97,7 +97,7 @@ const SwapParamsV3Independent = ({
             beforeSwap = await pluginContract.contract.simulate
               .beforeSwap(
                 [
-                  ALGEBRA_ROUTER,
+                  wallet.currentChain.contracts.algebraSwapRouter,
                   ADDRESS_ZERO,
                   //isZeroToOne,
                   false,
@@ -272,6 +272,7 @@ const SwapRoute = ({
               <TokenLogo
                 token={Token.getToken({
                   address: token.address,
+                  chainId: wallet.currentChainId.toString(),
                 })}
               />
             </div>

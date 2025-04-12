@@ -122,10 +122,12 @@ const XSwapPair = observer(
     const quoteCurrency = currencies[SwapField.OUTPUT];
     const baseToken = Token.getToken({
       address: baseCurrency?.wrapped.address ?? '',
+      chainId: wallet.currentChainId.toString(),
       isNative: baseCurrency?.isNative ?? false,
     });
     const quoteToken = Token.getToken({
       address: quoteCurrency?.wrapped.address ?? '',
+      chainId: wallet.currentChainId.toString(),
       isNative: quoteCurrency?.isNative ?? false,
     });
 
@@ -247,6 +249,7 @@ const XSwapPair = observer(
         if (fromTokenAddress) {
           const token = Token.getToken({
             address: fromTokenAddress,
+            chainId: wallet.currentChainId.toString(),
             isNative: isInputNative,
           });
           // await token.init(false, {
@@ -278,6 +281,7 @@ const XSwapPair = observer(
         if (toTokenAddress) {
           const token = Token.getToken({
             address: toTokenAddress,
+            chainId: wallet.currentChainId.toString(),
             isNative: isOutputNative,
           });
           // await token.init(false, {
@@ -327,7 +331,10 @@ const XSwapPair = observer(
         baseCurrency?.wrapped.address == quoteCurrency?.wrapped.address
       ) {
         chart.setChartLabel(`${baseCurrency.wrapped.symbol}`);
-        Token.getToken({ address: baseCurrency.wrapped.address })
+        Token.getToken({
+          address: baseCurrency.wrapped.address,
+          chainId: wallet.currentChainId.toString(),
+        })
           .init()
           .then((token) => {
             chart.setChartTarget(token);
@@ -353,7 +360,10 @@ const XSwapPair = observer(
         });
       } else if (baseCurrency) {
         chart.setChartLabel(`${baseCurrency.symbol}`);
-        Token.getToken({ address: baseCurrency.wrapped.address })
+        Token.getToken({
+          address: baseCurrency.wrapped.address,
+          chainId: wallet.currentChainId.toString(),
+        })
           .init()
           .then((token) => {
             chart.setCurrencyCode('USD');
@@ -361,7 +371,10 @@ const XSwapPair = observer(
           });
       } else if (quoteCurrency) {
         chart.setChartLabel(`${quoteCurrency.symbol}`);
-        Token.getToken({ address: quoteCurrency.wrapped.address })
+        Token.getToken({
+          address: quoteCurrency.wrapped.address,
+          chainId: wallet.currentChainId.toString(),
+        })
           .init()
           .then((token) => {
             chart.setCurrencyCode('USD');
@@ -402,6 +415,7 @@ const XSwapPair = observer(
                   baseCurrency?.wrapped.address
                     ? Token.getToken({
                         address: baseCurrency?.wrapped.address,
+                        chainId: wallet.currentChainId.toString(),
                         isNative: baseCurrency.isNative,
                       })
                     : undefined
@@ -445,6 +459,7 @@ const XSwapPair = observer(
                         BigNumber(
                           Token.getToken({
                             address: baseCurrency?.wrapped.address ?? '',
+                            chainId: wallet.currentChainId.toString(),
                             isNative: baseCurrency?.isNative ?? false,
                           })?.balance
                         )
@@ -457,6 +472,7 @@ const XSwapPair = observer(
                             BigNumber(
                               Token.getToken({
                                 address: baseCurrency?.wrapped.address ?? '',
+                                chainId: wallet.currentChainId.toString(),
                                 isNative: baseCurrency?.isNative ?? false,
                               })?.balance
                             )
@@ -511,6 +527,7 @@ const XSwapPair = observer(
                     quoteCurrency?.wrapped.address
                       ? Token.getToken({
                           address: quoteCurrency?.wrapped.address,
+                          chainId: wallet.currentChainId.toString(),
                           isNative: quoteCurrency.isNative,
                         })
                       : undefined
@@ -569,6 +586,7 @@ const XSwapPair = observer(
                   baseCurrency?.wrapped.address
                     ? Token.getToken({
                         address: baseCurrency?.wrapped.address,
+                        chainId: wallet.currentChainId.toString(),
                         isNative: baseCurrency.isNative,
                       })
                     : undefined
@@ -600,6 +618,7 @@ const XSwapPair = observer(
                   quoteCurrency?.wrapped.address
                     ? Token.getToken({
                         address: quoteCurrency?.wrapped.address,
+                        chainId: wallet.currentChainId.toString(),
                         isNative: quoteCurrency.isNative,
                       })
                     : undefined

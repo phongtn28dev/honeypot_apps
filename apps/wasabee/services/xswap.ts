@@ -8,7 +8,6 @@ import { Currency } from '@cryptoalgebra/sdk';
 import { SwapCallEstimate } from '@/lib/algebra/hooks/swap/useSwapCallback';
 import { SuccessfulCall } from '@/lib/algebra/hooks/swap/useSwapCallback';
 import { ContractWrite } from './utils';
-import { ALGEBRA_ROUTER } from '@/config/algebra/addresses';
 import { Token as IndexerToken } from '@/lib/algebra/graphql/generated/graphql';
 import {
   ApprovalState,
@@ -59,7 +58,7 @@ class XSwap {
       swap.setTypedValue(
         Token.getToken({
           address: swap.fromToken.address,
-          isNative: swap.fromToken.isNative,
+          chainId: wallet.currentChainId.toString(),
         })?.balance.toString()
       );
     });
@@ -87,7 +86,7 @@ class XSwap {
     )
       .filter((call): call is SuccessfulCall => call !== undefined)
       .map((call) => ({
-        target: ALGEBRA_ROUTER, // or wherever the calldata is targeting
+        target: wallet.currentChain.contracts.algebraSwapRouter, // or wherever the calldata is targeting
         callData: call.calldata,
         allowFailure: true,
         value: call.value,
@@ -134,7 +133,7 @@ class XSwap {
             amount: new BigNumber(swap.typedValue)
               .times(10 ** swap.fromToken.decimals)
               .toFixed(0),
-            spender: ALGEBRA_ROUTER,
+            spender: wallet.currentChain.contracts.algebraSwapRouter,
           })
           .then(() => {
             swap.approvalState = ApprovalState.APPROVED;

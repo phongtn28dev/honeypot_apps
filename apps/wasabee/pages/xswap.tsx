@@ -3,8 +3,6 @@ import V3SwapCardIndependent from '@/components/algebra/swap/V3SwapCardIndepende
 import XSwapCard from '@/components/algebra/swap/xSwapCard';
 import { HoneyContainer } from '@/components/CardContianer';
 import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';
-import { ALGEBRA_ROUTER } from '@/config/algebra/addresses';
-import { STABLECOINS } from '@/config/algebra/tokens';
 import { algebraRouterABI } from '@/lib/abis/algebra-contracts/ABIs';
 import { Multicall3ABI } from '@/lib/abis/Multicall3';
 import { useMediaQuery } from '@/lib/algebra/hooks/common/useMediaQuery';
@@ -108,10 +106,14 @@ const XSwapPage = observer(() => {
               staticToTokenList={[
                 wallet.currentChain.nativeToken,
                 Token.getToken({
-                  address: '0x6969696969696969696969696969696969696969',
+                  address: wallet.currentChain.nativeToken.address,
+                  chainId: wallet.currentChainId.toString(),
                 }),
                 Token.getToken({
-                  address: '0xfcbd14dc51f0a4d49d5e53c2e0950e0bc26d0dce',
+                  address: wallet.currentChain.validatedTokens.filter(
+                    (token) => token.isStableCoin
+                  )[0].address,
+                  chainId: wallet.currentChainId.toString(),
                 }),
               ]}
               fromToken={token}
@@ -119,7 +121,10 @@ const XSwapPage = observer(() => {
                 token.address !== wallet.currentChain.nativeToken.address
                   ? wallet.currentChain.nativeToken
                   : Token.getToken({
-                      address: '0xfcbd14dc51f0a4d49d5e53c2e0950e0bc26d0dce',
+                      address: wallet.currentChain.validatedTokens.filter(
+                        (token) => token.isStableCoin
+                      )[0].address,
+                      chainId: wallet.currentChainId.toString(),
                     })
               }
             />

@@ -15,6 +15,8 @@ import {
   useInfoClient,
 } from '@/lib/hooks/useSubgraphClients';
 import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
+import { wallet } from '@/services/wallet';
+import { ApolloClient } from '@apollo/client';
 
 const EVENT_REWARD_EACH_POOL = 400; //BERA
 
@@ -31,7 +33,9 @@ export function useBitgetEvents(user: string) {
   return tokenQuery.data?.bitgetCampaigns[0];
 }
 
-export async function getFullBitgetEventsParticipantList() {
+export async function getFullBitgetEventsParticipantList(
+  client: ApolloClient<any>
+) {
   let hasMore = true;
   let skip = 0;
   const participants: BitgetCampaignParticipant[] = [];
@@ -45,7 +49,7 @@ export async function getFullBitgetEventsParticipantList() {
   > = {};
 
   while (hasMore) {
-    const tokenQuery = await infoClient.query<
+    const tokenQuery = await client.query<
       GetBitgetEventsParticipantListQuery,
       GetBitgetEventsParticipantListQueryVariables
     >({
@@ -95,8 +99,11 @@ export async function getFullBitgetEventsParticipantList() {
   return output;
 }
 
-export async function getSingleBitgetParticipantInfo(user: string) {
-  const tokenQuery = await infoClient.query<
+export async function getSingleBitgetParticipantInfo(
+  client: ApolloClient<any>,
+  user: string
+) {
+  const tokenQuery = await client.query<
     GetSingleBitgetParticipantInfoQuery,
     GetSingleBitgetParticipantInfoQueryVariables
   >({

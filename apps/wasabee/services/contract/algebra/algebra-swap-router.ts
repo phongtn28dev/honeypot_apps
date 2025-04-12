@@ -7,11 +7,10 @@ import BigNumber from 'bignumber.js';
 import { makeAutoObservable } from 'mobx';
 import { get } from 'http';
 import { getContract } from 'viem';
-import { ALGEBRA_ROUTER } from '@/config/algebra/addresses';
 import { algebraRouterABI } from '@/lib/abis/algebra-contracts/ABIs';
 
 export class AlgebraSwapRouterContract implements BaseContract {
-  address = ALGEBRA_ROUTER;
+  address = wallet.currentChain.contracts.algebraSwapRouter;
   name: string = 'AlgebraSwapRouter';
   abi = algebraRouterABI;
 

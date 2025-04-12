@@ -12,6 +12,7 @@ import {
   useTopParticipateAccounts,
 } from '@/lib/hooks/useAccounts';
 import { formatExtremelyLargeNumber } from '@/lib/format';
+import { wallet } from '@/services/wallet';
 
 interface LeaderboardItem {
   rank: number;
@@ -259,7 +260,7 @@ const LeaderboardPage = () => {
                                 placement="top"
                               >
                                 <Link
-                                  href={`${wallet.currentChain.chain.blockExplorers?.default.url}/address/${item.walletAddress}`}
+                                  href={`${wallet.currentChain.chain.blockExplorers?.default.url}address/${item.walletAddress}`}
                                   target="_blank"
                                   className="text-blue-400 text-xs sm:text-sm md:text-base"
                                 >

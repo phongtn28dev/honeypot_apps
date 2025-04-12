@@ -15,6 +15,7 @@ import {
 import { wallet } from '@/services/wallet';
 import { SwapField } from '@/types/algebra/types/swap-field';
 import { useSwapActionHandlers } from '../../state/swapStore';
+import { useObserver } from 'mobx-react-lite';
 
 export interface SwapCallEstimate {
   calldata: string | string[];

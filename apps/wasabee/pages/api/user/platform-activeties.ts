@@ -50,8 +50,11 @@ export default async function handler(
     '0xc1014c1b2b131f87d4dd6ddfd9e3b0ab68fcd631', // WBERA / HENLO
   ];
 
-  const swaps = await getAccountSwapsWithPools(accountId, pools);
-  const bitgetParticipantInfo = await getSingleBitgetParticipantInfo(accountId);
+  const swaps = await getAccountSwapsWithPools(infoClient, accountId, pools);
+  const bitgetParticipantInfo = await getSingleBitgetParticipantInfo(
+    infoClient,
+    accountId
+  );
 
   console.log('swaps', swaps);
   console.log('bitgetParticipantInfo', bitgetParticipantInfo);
@@ -66,7 +69,7 @@ export default async function handler(
     });
   });
 
-  bitgetParticipantInfo?.map((participant) => {
+  bitgetParticipantInfo?.map((participant: any) => {
     totalAmountUsdTraded += Number(participant.amountUSD);
     amountUsdTradedForEachPool[participant.pool.id.toLowerCase()].amountUsd +=
       Number(participant.amountUSD);
