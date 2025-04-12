@@ -30,8 +30,8 @@ export const MyVaultRow = observer(
       chainId: wallet.currentChainId.toString(),
     });
     const loading = useMemo(() => {
-      return !vaultContract || !tokenA || !tokenB || !vaultContract?.userTVLUSD;
-    }, [vaultContract, tokenA, tokenB, vaultContract?.userTVLUSD]);
+      return !vaultContract || !tokenA || !tokenB;
+    }, [vaultContract, tokenA, tokenB]);
 
     const isTokenAAllowed = useReadIchiVaultAllowToken0({
       address: vault.address,

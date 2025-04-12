@@ -60,9 +60,9 @@ export class ICHIVaultContract implements BaseContract {
   token1: Token | undefined = undefined;
   allowToken0: boolean = false;
   allowToken1: boolean = false;
-  totalsupplyShares: bigint = BigInt(0);
-  userShares: bigint = BigInt(0);
-  holderCount: bigint = BigInt(0);
+  totalsupplyShares: bigint | undefined = undefined;
+  userShares: bigint | undefined = undefined;
+  holderCount: bigint | undefined = undefined;
   isInitialized: boolean = false;
   transactionPending: boolean = false;
   approvedToken0: BigInt = BigInt(0);
@@ -187,6 +187,7 @@ export class ICHIVaultContract implements BaseContract {
     if (!this.contract) {
       return;
     }
+    if (this.token0 !== undefined) return this.token0;
     const token0 = await this.contract.read.token0();
     this.token0 = Token.getToken({
       address: token0,
@@ -199,6 +200,7 @@ export class ICHIVaultContract implements BaseContract {
     if (!this.contract) {
       return;
     }
+    if (this.token1 !== undefined) return this.token1;
     const token1 = await this.contract.read.token1();
     this.token1 = Token.getToken({
       address: token1,

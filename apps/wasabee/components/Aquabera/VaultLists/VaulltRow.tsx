@@ -30,14 +30,7 @@ export const VaultRow = observer(({ vault }: { vault: ICHIVaultContract }) => {
     chainId: wallet.currentChainId.toString(),
   });
   const loading = useMemo(() => {
-    return (
-      !vaultContract ||
-      !tokenA ||
-      !tokenB ||
-      !vaultContract?.tvlUSD ||
-      !vaultContract?.pool?.volume_24h_USD ||
-      !vaultContract?.pool?.fees_24h_USD
-    );
+    return !vaultContract || !tokenA || !tokenB;
   }, [
     vaultContract,
     tokenA,
