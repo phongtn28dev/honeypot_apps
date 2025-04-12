@@ -374,25 +374,6 @@ export const VaultDetail = observer(() => {
                 </Tooltip>
               </p>
             </div>
-            <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D] relative">
-              <h3 className="text-base text-[#202020] mb-2">
-                Volatility{' '}
-                <span>
-                  <Tooltip content="higher the volatility, higher the slippage">
-                    <QuestionMarkCircleIcon className="w-4 h-4 inline-block" />
-                  </Tooltip>
-                </span>
-              </h3>
-              <p
-                className={cn(
-                  'text-2xl font-bold text-[#202020]',
-                  volatility > '500' && 'text-orange-500',
-                  volatility > '1000' && 'text-red-500'
-                )}
-              >
-                {vault?.apr.toFixed(2)}%
-              </p>
-            </div>
             <div className="rounded-[24px] border border-black bg-white px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D] relative">
               <h3 className="text-base text-[#202020] mb-2">
                 Volatility{' '}

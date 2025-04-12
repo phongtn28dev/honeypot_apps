@@ -49,9 +49,12 @@ export class ICHIVaultContract implements BaseContract {
   name: string = 'ICHIVault';
   abi = ICHIVaultABI;
   fee = 0;
-  totalAmountsWithoutDecimal: { total0: bigint; total1: bigint } = {
-    total0: BigInt(0),
-    total1: BigInt(0),
+  totalAmountsWithoutDecimal: {
+    total0: bigint | undefined;
+    total1: bigint | undefined;
+  } = {
+    total0: undefined,
+    total1: undefined,
   };
   token0: Token | undefined = undefined;
   token1: Token | undefined = undefined;
@@ -165,6 +168,13 @@ export class ICHIVaultContract implements BaseContract {
   }
 
   async getTotalAmounts() {
+    if (
+      this.totalAmountsWithoutDecimal.total0 !== undefined &&
+      this.totalAmountsWithoutDecimal.total1 !== undefined
+    ) {
+      return this.totalAmountsWithoutDecimal;
+    }
+
     const totalAmounts = await this.contract.read.getTotalAmounts();
     this.totalAmountsWithoutDecimal = {
       total0: BigInt(totalAmounts[0]),
@@ -198,6 +208,7 @@ export class ICHIVaultContract implements BaseContract {
   }
 
   async getTotalSupply() {
+    if (this.totalsupplyShares !== undefined) return this.totalsupplyShares;
     if (!this.contract) {
       return;
     }
@@ -208,6 +219,7 @@ export class ICHIVaultContract implements BaseContract {
 
   // Example function using ABI
   async getBalanceOf(account: string) {
+    if (this.userShares !== undefined) return this.userShares;
     if (!this.contract) {
       return;
     }

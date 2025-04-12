@@ -34,6 +34,8 @@ export class PairContract implements BaseContract {
   TVL_USD: number = 0;
   volume_24h_USD: number = 0;
   fees_24h_USD: number = 0;
+  apr_24h: number = 0;
+  volumeChange24h: number = 0;
 
   get isNativeWrapPair() {
     return this.address === zeroAddress;
