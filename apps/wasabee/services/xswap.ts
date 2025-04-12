@@ -29,7 +29,6 @@ export interface XChildSwap {
 }
 
 class XSwap {
-  xSwapTokens: Token[] = [];
   isInitialized = false;
   swaps: XChildSwap[] = [];
 
@@ -39,10 +38,7 @@ class XSwap {
     reaction(
       () => wallet.currentChain,
       () => {
-        this.xSwapTokens = [
-          ...wallet.currentChain?.validatedTokens,
-          wallet.currentChain?.nativeToken,
-        ];
+        this.reset();
       }
     );
   }
@@ -72,7 +68,7 @@ class XSwap {
     });
 
     //reload balances
-    this.xSwapTokens.forEach((t) => {
+    wallet.currentChain?.validatedTokens.forEach((t) => {
       t.getBalance();
     });
   }
@@ -139,6 +135,17 @@ class XSwap {
             swap.approvalState = ApprovalState.APPROVED;
           });
       });
+  }
+
+  get sortedTokens() {
+    return wallet.currentChain?.validatedTokens
+      ?.filter((token) => token.balance.gt(0))
+      ?.sort(
+        (a, b) =>
+          Number(b.balance.toNumber() * Number(b.derivedUSD)) -
+          Number(a.balance.toNumber() * Number(a.derivedUSD))
+      )
+      .slice();
   }
 
   get totalAmountIn() {

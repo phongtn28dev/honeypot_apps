@@ -15,6 +15,7 @@ import NetworkManager from '../network';
 import { getSingleTokenData } from '@/lib/algebra/graphql/clients/token';
 import { when } from 'mobx';
 import { Token as IndexerToken } from '@/lib/algebra/graphql/generated/graphql';
+
 export class Token implements BaseContract {
   static tokensMap: Record<string, Token> = {};
   static getToken({
@@ -428,10 +429,6 @@ export class Token implements BaseContract {
   }
 
   async getBalance() {
-    if (!wallet.isInit || !wallet.walletClient) {
-      console.log('wallet not init');
-      return new BigNumber(0);
-    }
     try {
       const balance =
         this.isNative || this.address === zeroAddress

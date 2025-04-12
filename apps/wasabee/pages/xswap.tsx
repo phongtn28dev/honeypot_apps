@@ -22,29 +22,8 @@ import { zeroAddress } from 'viem';
 import { useAccount } from 'wagmi';
 
 const XSwapPage = observer(() => {
-  const [xSwapTokens, setXSwapTokens] = useState<Token[] | undefined>(
-    undefined
-  );
   const { address } = useAccount();
   const isMobile = useMediaQuery('(max-width: 1024px)');
-
-  useEffect(() => {
-    console.log(xSwapTokens);
-  }, [xSwapTokens, ...(xSwapTokens?.map((token) => token.balance) || [])]);
-
-  useEffect(() => {
-    if (!wallet.isInit) {
-      return;
-    }
-    setXSwapTokens(wallet.currentChain?.validatedTokens || []);
-  }, [wallet.currentChain, wallet.isInit]);
-
-  const sortedTokens = useMemo(() => {
-    return xSwapTokens
-      ?.filter((token) => token.balance.gt(0))
-      ?.sort((a, b) => b.balance.toNumber() - a.balance.toNumber())
-      .slice();
-  }, [xSwapTokens, ...(xSwapTokens?.map((token) => token.balance) || [])]);
 
   if (!wallet.isInit) {
     return <LoadingDisplay />;
@@ -60,7 +39,7 @@ const XSwapPage = observer(() => {
     );
   }
 
-  if (sortedTokens?.length === 0) {
+  if (xSwap.sortedTokens?.length === 0) {
     return (
       <HoneyContainer className="w-full max-w-[1240px] mx-auto">
         <div className="w-full flex flex-col gap-4 justify-center items-center h-full min-h-[50vh] ">
@@ -99,7 +78,7 @@ const XSwapPage = observer(() => {
           </div>
         )}
         <div className="w-full flex flex-col gap-4  max-h-[70vh]  overflow-y-auto">
-          {sortedTokens?.map((token, idx) => (
+          {xSwap.sortedTokens?.map((token, idx) => (
             <XSwapCard
               key={token.address}
               disableFromSelection={true}
