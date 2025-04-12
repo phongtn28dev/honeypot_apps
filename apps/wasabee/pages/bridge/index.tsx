@@ -9,7 +9,7 @@ import StargateBridge from './StargateBridge';
 
 export default function Bridge() {
   return (
-    <div className="max-w-[1200px] mx-auto px-4 xl:px-0 font-gliker w-full">
+    <div className="max-w-[1200px] mt-[100px] mx-auto px-4 xl:px-0 font-gliker w-full">
       {/* TODO: Add pool bg img */}
       <Tabs
         classNames={{
@@ -35,9 +35,9 @@ export default function Bridge() {
         <Tab key="orbiter" title="Orbiter">
           <OrbiterBridge />
         </Tab>
-        <Tab key="stargate" title="Stargate">
+        {/* <Tab key="stargate" title="Stargate">
           <StargateBridge />
-        </Tab>
+        </Tab> */}
         <Tab
           key="rhino"
           href="https://app.rhino.fi/bridge/?refId=DeFi_HPOT&token=USDC&chainOut=BERACHAIN&chainIn=ETHEREUM"

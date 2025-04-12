@@ -165,6 +165,7 @@ const SwapButtonV3Independent = ({
     if (isWrapSuccessMemo) {
       Token.getToken({
         address: wallet.currentChain.nativeToken.address,
+        chainId: wallet.currentChainId.toString(),
       }).getBalance();
     }
   }, [isWrapSuccessMemo]);
@@ -174,10 +175,12 @@ const SwapButtonV3Independent = ({
       trade?.inputAmount.currency.wrapped.address &&
         Token.getToken({
           address: trade?.inputAmount.currency.wrapped.address,
+          chainId: wallet.currentChainId.toString(),
         }).getBalance();
       trade?.outputAmount.currency.wrapped.address &&
         Token.getToken({
           address: trade?.outputAmount.currency.wrapped.address,
+          chainId: wallet.currentChainId.toString(),
         }).getBalance();
 
       if (onSwapSuccess) {

@@ -33,9 +33,8 @@ export function useBitgetEvents(user: string) {
   return tokenQuery.data?.bitgetCampaigns[0];
 }
 
-export async function getFullBitgetEventsParticipantList(
-  client: ApolloClient<any>
-) {
+export async function getFullBitgetEventsParticipantList(chainId: string) {
+  const client = getInfoClientByChainId(chainId);
   let hasMore = true;
   let skip = 0;
   const participants: BitgetCampaignParticipant[] = [];

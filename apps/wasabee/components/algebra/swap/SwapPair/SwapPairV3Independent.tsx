@@ -217,6 +217,7 @@ const SwapPairV3Independent = ({
         const token = Token.getToken({
           address: fromTokenAddress,
           isNative: isInputNative,
+          chainId: wallet.currentChainId.toString(),
         });
         // await token.init(false, {
         //   loadIndexerTokenData: true,
@@ -248,6 +249,7 @@ const SwapPairV3Independent = ({
         const token = Token.getToken({
           address: toTokenAddress,
           isNative: isOutputNative,
+          chainId: wallet.currentChainId.toString(),
         });
         // await token.init(false, {
         //   loadIndexerTokenData: true,
@@ -296,7 +298,10 @@ const SwapPairV3Independent = ({
       baseCurrency?.wrapped.address == quoteCurrency?.wrapped.address
     ) {
       chart.setChartLabel(`${baseCurrency.wrapped.symbol}`);
-      Token.getToken({ address: baseCurrency.wrapped.address })
+      Token.getToken({
+        address: baseCurrency.wrapped.address,
+        chainId: wallet.currentChainId.toString(),
+      })
         .init()
         .then((token) => {
           chart.setChartTarget(token);
@@ -322,7 +327,10 @@ const SwapPairV3Independent = ({
       });
     } else if (baseCurrency) {
       chart.setChartLabel(`${baseCurrency.symbol}`);
-      Token.getToken({ address: baseCurrency.wrapped.address })
+      Token.getToken({
+        address: baseCurrency.wrapped.address,
+        chainId: wallet.currentChainId.toString(),
+      })
         .init()
         .then((token) => {
           chart.setCurrencyCode('USD');
@@ -330,7 +338,10 @@ const SwapPairV3Independent = ({
         });
     } else if (quoteCurrency) {
       chart.setChartLabel(`${quoteCurrency.symbol}`);
-      Token.getToken({ address: quoteCurrency.wrapped.address })
+      Token.getToken({
+        address: quoteCurrency.wrapped.address,
+        chainId: wallet.currentChainId.toString(),
+      })
         .init()
         .then((token) => {
           chart.setCurrencyCode('USD');

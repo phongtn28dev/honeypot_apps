@@ -69,7 +69,7 @@ class Portfolio {
         wallet.currentChainId.toString()
       );
       console.log('tokensData', tokensData);
-      const tokens = tokensData?.tokens.map((token) => {
+      const tokens = tokensData?.map((token) => {
         //remove marketCap from token
         const { marketCap, ...rest } = token;
 

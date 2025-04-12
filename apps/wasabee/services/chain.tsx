@@ -85,9 +85,7 @@ export class Network {
   }
   init() {
     this.nativeToken = Token.getToken(this.nativeToken);
-    this.nativeToken.init(true, { loadIndexerTokenData: true }).then(() => {
-      console.log('this.nativeToken', this.nativeToken);
-    });
+    this.nativeToken.init();
 
     this.validatedTokens = [];
 
