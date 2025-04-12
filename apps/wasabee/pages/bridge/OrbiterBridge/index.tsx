@@ -8,8 +8,9 @@ import { orbiterBridgeService } from '@/services/orbiterBridge';
 import OrbiterBridgeAmountInput from '../../../components/Bridge/OrbiterBridge/OrbiterBridgeAmountInput';
 import OrbiterBridgeParams from '../../../components/Bridge/OrbiterBridge/OrbiterBridgeParams';
 import OrbiterBridgeButton from '../../../components/Bridge/OrbiterBridge/OrbiterBridgeButton';
+import { observer } from 'mobx-react-lite';
 
-export default function OrbiterBridge() {
+export const OrbiterBridge = observer(() => {
   const handleSwapNetworks = () => {
     const fromChainId = orbiterBridgeService.fromChainId;
     const toChainId = orbiterBridgeService.toChainId;
@@ -40,9 +41,16 @@ export default function OrbiterBridge() {
           <OrbiterBridgeSelectNetwork type="to" />
           <OrbiterBridgeAmountInput type="to" />
         </div>
+        {orbiterBridgeService.bridgeErrorText && (
+          <div className="text-red-500 text-sm">
+            {orbiterBridgeService.bridgeErrorText}
+          </div>
+        )}
         <OrbiterBridgeParams />
         <OrbiterBridgeButton />
       </div>
     </div>
   );
-}
+});
+
+export default OrbiterBridge;

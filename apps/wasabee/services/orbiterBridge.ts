@@ -53,6 +53,33 @@ export class OrbiterBridge {
     );
   }
 
+  get bridgeErrorText(): string | undefined {
+    console.log(
+      this.selectedToken,
+      this.fromChainId,
+      this.toChainId,
+      this.router
+    );
+
+    console.log(
+      !!this.selectedToken,
+      !!this.fromChainId,
+      !!this.toChainId,
+      !this.router
+    );
+
+    if (
+      !!this.selectedToken &&
+      !!this.fromChainId &&
+      !!this.toChainId &&
+      !this.router
+    ) {
+      return 'No trade pairs found';
+    }
+
+    return undefined;
+  }
+
   get toAmount() {
     if (!this.router || !this.fromAmount) {
       return '0';
@@ -84,9 +111,8 @@ export class OrbiterBridge {
           pair.dstChainId === this.toChainId
       );
 
-    console.log(tradePair);
-
     if (!tradePair) {
+      this.router = null;
       return;
     }
 
