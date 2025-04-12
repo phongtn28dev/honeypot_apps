@@ -99,13 +99,20 @@ export class OrbiterBridge {
     const tokens: OrbiterToken[] = orbiter.getAvailableTokens(chainId);
 
     return tokens.map((token) => {
-      return new Token({
+      const outToken = Token.getToken({
         address: token.address,
         decimals: token.decimals,
         symbol: token.symbol,
         name: token.name,
         isNative: token.isNative,
+        chainId: chainId,
       });
+
+      if (outToken.isNative) {
+        outToken.logoURI = wallet.currentChain.nativeToken.logoURI;
+      }
+
+      return outToken;
     });
   }
 

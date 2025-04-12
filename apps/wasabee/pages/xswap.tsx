@@ -25,6 +25,16 @@ const XSwapPage = observer(() => {
   const { address } = useAccount();
   const isMobile = useMediaQuery('(max-width: 1024px)');
 
+  if (!wallet.currentChain.supportDEX) {
+    return (
+      <div className="w-full flex items-center justify-center pb-6 sm:pb-12 overflow-x-hidden">
+        <div className="text-center">
+          <p className="text-lg">DEX is not supported on this chain</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!wallet.isInit) {
     return <LoadingDisplay />;
   }

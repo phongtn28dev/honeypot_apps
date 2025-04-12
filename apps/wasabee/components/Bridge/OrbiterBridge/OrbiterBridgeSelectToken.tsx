@@ -15,6 +15,7 @@ export const OrbiterBridgeSelectToken = observer(() => {
       );
       setTokens(tokens);
       orbiterBridgeService.setSelectedToken(tokens[0]);
+      console.log(tokens);
     }
   }, [wallet.currentChainId]);
 
