@@ -98,18 +98,20 @@ export class Network {
       this.validatedTokens.push(token);
     });
 
-    getMultipleTokensData(
-      this.validatedTokens.map((t) => t.address.toLowerCase()),
-      this.chainId.toString()
-    ).then((tokenData) => {
-      tokenData.forEach((t) => {
-        const token = Token.getToken({
-          address: t.id,
-          chainId: this.chainId.toString(),
+    if (this.supportDEX) {
+      getMultipleTokensData(
+        this.validatedTokens.map((t) => t.address.toLowerCase()),
+        this.chainId.toString()
+      ).then((tokenData) => {
+        tokenData.forEach((t) => {
+          const token = Token.getToken({
+            address: t.id,
+            chainId: this.chainId.toString(),
+          });
+          token.assignIndexerTokenData(t as IndexerToken);
         });
-        token.assignIndexerTokenData(t as IndexerToken);
       });
-    });
+    }
 
     this.validatedVault.forEach((vault) => {
       const vaultContract = ICHIVaultContract.getVault(vault);
@@ -164,7 +166,6 @@ export const berachainNetwork = new Network({
   supportDEX: true,
   supportVault: true,
   supportBridge: true,
-
   chain: berachainMainnet,
   officialFaucets: [
     {
@@ -544,12 +545,27 @@ export const arbitrumSepoliaNetwork = new Network({
   supportBridge: true,
   chain: arbitrumSepoliaTestnet,
   officialFaucets: [],
-  nativeToken: {},
+  nativeToken: {
+    address: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+    name: 'ETH',
+    symbol: 'ETH',
+    decimals: 18,
+    isNative: true,
+    logoURI: '/images/icons/tokens/weth-token-icon.png',
+  },
   contracts: contractAddresses['default'],
   subgraphAddresses: subgraphAddresses['default'],
   faucetTokens: [],
   blacklist: {},
-  validatedTokensInfo: {},
+  validatedTokensInfo: {
+    '0x82af49447d8a07e3bd95bd0d56f35241523fbab1': {
+      address: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+      name: 'WETH',
+      symbol: 'WETH',
+      decimals: 18,
+      logoURI: '/images/icons/tokens/weth-token-icon.png',
+    },
+  },
   validatedFtoAddresses: [],
   validatedMemeAddresses: [],
 });
@@ -560,12 +576,27 @@ export const sepoliaNetwork = new Network({
   supportBridge: false,
   chain: sepolia,
   officialFaucets: [],
-  nativeToken: {},
+  nativeToken: {
+    address: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+    name: 'ETH',
+    symbol: 'ETH',
+    decimals: 18,
+    isNative: true,
+    logoURI: '/images/icons/tokens/weth-token-icon.png',
+  },
   contracts: contractAddresses['default'],
   subgraphAddresses: subgraphAddresses['default'],
   faucetTokens: [],
   blacklist: {},
-  validatedTokensInfo: {},
+  validatedTokensInfo: {
+    '0x82af49447d8a07e3bd95bd0d56f35241523fbab1': {
+      address: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+      name: 'WETH',
+      symbol: 'WETH',
+      decimals: 18,
+      logoURI: '/images/icons/tokens/weth-token-icon.png',
+    },
+  },
   validatedFtoAddresses: [],
   validatedMemeAddresses: [],
 });
@@ -581,7 +612,16 @@ export const movementNetWork = new Network({
   subgraphAddresses: subgraphAddresses['default'],
   faucetTokens: [],
   blacklist: {},
-  validatedTokensInfo: {},
+  validatedTokensInfo: {
+    '0x82af49447d8a07e3bd95bd0d56f35241523fbab1': {
+      address: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+      name: 'WETH',
+      symbol: 'WETH',
+      decimals: 18,
+      isNative: true,
+      logoURI: '/images/icons/tokens/weth-token-icon.png',
+    },
+  },
   validatedFtoAddresses: [],
   validatedMemeAddresses: [],
 });
@@ -592,13 +632,27 @@ export const arbitrumOneNetwork = new Network({
   supportBridge: true,
   chain: arbitrumMainnet,
   officialFaucets: [],
-  nativeToken: { address: zeroAddress },
-
+  nativeToken: {
+    address: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+    name: 'ETH',
+    symbol: 'ETH',
+    decimals: 18,
+    isNative: true,
+    logoURI: '/images/icons/tokens/weth-token-icon.png',
+  },
   contracts: contractAddresses['default'],
   subgraphAddresses: subgraphAddresses['default'],
   faucetTokens: [],
   blacklist: {},
-  validatedTokensInfo: {},
+  validatedTokensInfo: {
+    '0x82af49447d8a07e3bd95bd0d56f35241523fbab1': {
+      address: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+      name: 'WETH',
+      symbol: 'WETH',
+      decimals: 18,
+      logoURI: '/images/icons/tokens/weth-token-icon.png',
+    },
+  },
   validatedFtoAddresses: [],
   validatedMemeAddresses: [],
 });
@@ -609,13 +663,28 @@ export const baseNetwork = new Network({
   supportBridge: true,
   chain: baseMainnet,
   officialFaucets: [],
-  nativeToken: { address: zeroAddress },
+  nativeToken: {
+    address: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+    name: 'ETH',
+    symbol: 'ETH',
+    decimals: 18,
+    isNative: true,
+    logoURI: '/images/icons/tokens/weth-token-icon.png',
+  },
 
   contracts: contractAddresses['default'],
   subgraphAddresses: subgraphAddresses['default'],
   faucetTokens: [],
   blacklist: {},
-  validatedTokensInfo: {},
+  validatedTokensInfo: {
+    '0x82af49447d8a07e3bd95bd0d56f35241523fbab1': {
+      address: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+      name: 'WETH',
+      symbol: 'WETH',
+      decimals: 18,
+      logoURI: '/images/icons/tokens/weth-token-icon.png',
+    },
+  },
   validatedFtoAddresses: [],
   validatedMemeAddresses: [],
 });
@@ -625,13 +694,28 @@ export const ethNetwork = new Network({
   supportBridge: true,
   chain: ethMainnet,
   officialFaucets: [],
-  nativeToken: { address: zeroAddress },
+  nativeToken: {
+    address: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+    name: 'ETH',
+    symbol: 'ETH',
+    decimals: 18,
+    isNative: true,
+    logoURI: '/images/icons/tokens/weth-token-icon.png',
+  },
 
   contracts: contractAddresses['default'],
   subgraphAddresses: subgraphAddresses['default'],
   faucetTokens: [],
   blacklist: {},
-  validatedTokensInfo: {},
+  validatedTokensInfo: {
+    '0x82af49447d8a07e3bd95bd0d56f35241523fbab1': {
+      address: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+      name: 'WETH',
+      symbol: 'WETH',
+      decimals: 18,
+      logoURI: '/images/icons/tokens/weth-token-icon.png',
+    },
+  },
   validatedFtoAddresses: [],
   validatedMemeAddresses: [],
 });
