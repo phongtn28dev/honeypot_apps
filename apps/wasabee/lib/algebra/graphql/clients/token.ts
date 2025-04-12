@@ -44,7 +44,7 @@ const bulkGetTokenDebounce = async (tokenId: string): Promise<Token[]> => {
         r(multipleTokenData);
       }
       tokenRequestResolvers = [];
-    }, 500);
+    }, 100);
   });
 };
 

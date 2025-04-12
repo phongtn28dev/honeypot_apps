@@ -55,7 +55,7 @@ const bulkGetVaultDebounce = async (
       }
 
       vaultRequestResolvers = [];
-    }, 500);
+    }, 100);
   });
 };
 
