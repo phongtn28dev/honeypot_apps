@@ -8,7 +8,6 @@ import { ApprovalStateType } from '@/types/algebra/types/approve-state';
 import { SwapCallbackState } from '@/types/algebra/types/swap-state';
 import { TransactionType } from '../../state/pendingTransactionsStore';
 import { formatBalance } from '../../utils/common/formatBalance';
-import { ALGEBRA_ROUTER } from '@/config/algebra/addresses';
 import {
   algebraRouterAbi,
   useSimulateAlgebraRouterMulticall,
@@ -48,6 +47,10 @@ export function useSwapCallback(
   const swapCalldata = useSwapCallArguments(trade, allowedSlippage);
 
   const { onUserInput } = useSwapActionHandlers();
+
+  const ALGEBRA_ROUTER = useObserver(
+    () => wallet.currentChain.contracts.algebraSwapRouter
+  );
 
   useEffect(() => {
     async function findBestCall() {

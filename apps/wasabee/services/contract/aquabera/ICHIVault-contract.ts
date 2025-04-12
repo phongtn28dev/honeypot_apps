@@ -178,7 +178,10 @@ export class ICHIVaultContract implements BaseContract {
       return;
     }
     const token0 = await this.contract.read.token0();
-    this.token0 = Token.getToken({ address: token0 });
+    this.token0 = Token.getToken({
+      address: token0,
+      chainId: wallet.currentChainId.toString(),
+    });
     return this.token0;
   }
 
@@ -187,7 +190,10 @@ export class ICHIVaultContract implements BaseContract {
       return;
     }
     const token1 = await this.contract.read.token1();
-    this.token1 = Token.getToken({ address: token1 });
+    this.token1 = Token.getToken({
+      address: token1,
+      chainId: wallet.currentChainId.toString(),
+    });
     return this.token1;
   }
 

@@ -1,5 +1,4 @@
-import { isAddress } from "viem";
-import { infoClient } from ".";
+import { isAddress } from 'viem';
 import {
   TokenTop10HoldersDocument,
   TokenTop10HoldersQuery,
@@ -10,9 +9,13 @@ import {
   MultipleTokensQuery,
   MultipleTokensQueryVariables,
   MultipleTokensDocument,
-} from "../generated/graphql";
+} from '../generated/graphql';
+
+import { wallet } from '@/services/wallet';
+import { getInfoClientByChainId } from '@/lib/hooks/useSubgraphClients';
 
 export async function getTokenTop10Holders(tokenId: string) {
+  const infoClient = getInfoClientByChainId(wallet.currentChainId.toString());
   const tokenQuery = await infoClient.query<
     TokenTop10HoldersQuery,
     TokenTop10HoldersQueryVariables
@@ -26,6 +29,7 @@ export async function getTokenTop10Holders(tokenId: string) {
 
 export async function getSingleTokenData(tokenId: string) {
   if (!tokenId || !isAddress(tokenId)) return;
+  const infoClient = getInfoClientByChainId(wallet.currentChainId.toString());
   const tokenQuery = await infoClient.query<
     SingleTokenQuery,
     SingleTokenQueryVariables
@@ -37,8 +41,12 @@ export async function getSingleTokenData(tokenId: string) {
   return tokenQuery.data;
 }
 
-export async function getMultipleTokensData(tokenIds: string[]) {
+export async function getMultipleTokensData(
+  tokenIds: string[],
+  chainId: string
+) {
   if (!tokenIds || tokenIds.length === 0) return;
+  const infoClient = getInfoClientByChainId(chainId);
   const tokenQuery = await infoClient.query<
     MultipleTokensQuery,
     MultipleTokensQueryVariables

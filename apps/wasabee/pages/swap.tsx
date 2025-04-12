@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { chart } from '@/services/chart';
 import { observer } from 'mobx-react-lite';
 import { wallet } from '@/services/wallet';
-import { liquidity } from '@/services/liquidity';
 import { useSearchParams } from 'next/navigation';
 import { itemPopUpVariants } from '@/lib/animation';
 import { DarkContainer } from '@/components/CardContianer';
@@ -13,23 +12,22 @@ import V3SwapCard from '@/components/algebra/swap/V3SwapCard';
 import KlineChart from './launch-detail/components/KlineChart';
 import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';
 import SwapTransactionHistory from '@/components/SwapTransactionHistory';
-import { STABLECOINS } from '@/config/algebra/tokens';
 
 const SwapPage = observer(() => {
-  useEffect(() => {
-    observe(chart, 'chartTarget', () => {});
-  }, []);
-
-  useEffect(() => {
-    if (wallet.isInit) {
-      liquidity.initPool();
-    }
-  }, [wallet.isInit]);
-
   const inputCurrency = useSearchParams().get('inputCurrency');
   const outputCurrency = useSearchParams().get('outputCurrency');
 
-  const isInit = wallet.isInit && liquidity;
+  const isInit = wallet.isInit;
+
+  if (!wallet.currentChain.supportDEX) {
+    return (
+      <div className="w-full flex items-center justify-center pb-6 sm:pb-12 overflow-x-hidden">
+        <div className="text-center">
+          <p className="text-lg">DEX is not supported on this chain</p>
+        </div>
+      </div>
+    );
+  }
 
   return isInit ? (
     <div className="w-full flex items-center justify-center pb-6 sm:pb-12 overflow-x-hidden">
@@ -47,6 +45,7 @@ const SwapPage = observer(() => {
             </DarkContainer>
           </motion.div>
         )}
+
         <motion.div
           variants={itemPopUpVariants}
           initial="hidden"
@@ -56,7 +55,10 @@ const SwapPage = observer(() => {
           <V3SwapCard
             fromTokenAddress={inputCurrency ?? undefined}
             toTokenAddress={
-              outputCurrency ?? STABLECOINS.HONEY.address.toLowerCase()
+              outputCurrency ??
+              wallet.currentChain.validatedTokens.filter(
+                (token) => token.isStableCoin
+              )[0].address
             }
             isUpdatingPriceChart={true}
           />

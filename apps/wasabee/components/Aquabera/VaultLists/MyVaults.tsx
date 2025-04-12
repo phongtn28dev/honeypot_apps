@@ -1,14 +1,18 @@
+import { useRouter } from 'next/router';
+import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { getAccountVaultsList } from '@/lib/algebra/graphql/clients/vaults';
 import { AccountVaultSharesQuery } from '@/lib/algebra/graphql/generated/graphql';
 import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
 import { Token } from '@/services/contract/token';
 import { wallet } from '@/services/wallet';
 import { useEffect, useState } from 'react';
+import { Currency } from '@cryptoalgebra/sdk';
+import { DepositToVaultModal } from '../modals/DepositToVaultModal';
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { observer } from 'mobx-react-lite';
 import MyVaultRow from './MyVaultRow';
+import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
 import { Button } from '@/components/algebra/ui/button';
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
 
 type SortField =
   | 'pair'
@@ -32,8 +36,9 @@ export const MyAquaberaVaults = observer(
       []
     );
     const [myVaults, setMyVaults] = useState<AccountVaultSharesQuery>();
-    const [sortField, setSortField] = useState<SortField>(sortBy as SortField);
+    const [sortField, setSortField] = useState<SortField>('tvl');
     const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
+    const infoClient = useInfoClient();
 
     const getAllowToken = (vault: any) => {
       return vault.allowToken;
@@ -69,7 +74,10 @@ export const MyAquaberaVaults = observer(
     }, [wallet.isInit]);
 
     const loadMyVaults = async (accountAddress: string) => {
-      const myVaultsQuery = await getAccountVaultsList(accountAddress);
+      const myVaultsQuery = await getAccountVaultsList(
+        infoClient,
+        accountAddress
+      );
       setMyVaults(myVaultsQuery);
     };
 
@@ -88,8 +96,14 @@ export const MyAquaberaVaults = observer(
       const filteredVaults = vaultsContracts.filter((vault) => {
         if (!searchString) return true;
 
-        const tokenA = Token.getToken({ address: vault.token0?.address ?? '' });
-        const tokenB = Token.getToken({ address: vault.token1?.address ?? '' });
+        const tokenA = Token.getToken({
+          address: vault.token0?.address ?? '',
+          chainId: wallet.currentChainId.toString(),
+        });
+        const tokenB = Token.getToken({
+          address: vault.token1?.address ?? '',
+          chainId: wallet.currentChainId.toString(),
+        });
 
         const searchLower = searchString.toLowerCase();
         return (
@@ -211,6 +225,7 @@ export const MyAquaberaVaults = observer(
                       <TokenLogo
                         token={Token.getToken({
                           address: vault.token0?.address ?? '',
+                          chainId: wallet.currentChainId.toString(),
                         })}
                         addtionalClasses="translate-x-[25%]"
                         size={20}
@@ -218,6 +233,7 @@ export const MyAquaberaVaults = observer(
                       <TokenLogo
                         token={Token.getToken({
                           address: vault.token1?.address ?? '',
+                          chainId: wallet.currentChainId.toString(),
                         })}
                         addtionalClasses="translate-x-[-25%]"
                         size={20}
@@ -225,13 +241,17 @@ export const MyAquaberaVaults = observer(
                     </div>
                     <span className="font-bold ml-2">
                       {
-                        Token.getToken({ address: vault.token0?.address ?? '' })
-                          .symbol
+                        Token.getToken({
+                          address: vault.token0?.address ?? '',
+                          chainId: wallet.currentChainId.toString(),
+                        }).symbol
                       }
                       /
                       {
-                        Token.getToken({ address: vault.token1?.address ?? '' })
-                          .symbol
+                        Token.getToken({
+                          address: vault.token1?.address ?? '',
+                          chainId: wallet.currentChainId.toString(),
+                        }).symbol
                       }
                     </span>
                   </div>
@@ -244,6 +264,7 @@ export const MyAquaberaVaults = observer(
                       <TokenLogo
                         token={Token.getToken({
                           address: vault.token0?.address ?? '',
+                          chainId: wallet.currentChainId.toString(),
                         })}
                         size={20}
                       />
@@ -251,6 +272,7 @@ export const MyAquaberaVaults = observer(
                         {
                           Token.getToken({
                             address: vault.token0?.address ?? '',
+                            chainId: wallet.currentChainId.toString(),
                           }).symbol
                         }
                       </span>
@@ -261,6 +283,7 @@ export const MyAquaberaVaults = observer(
                       <TokenLogo
                         token={Token.getToken({
                           address: vault.token1?.address ?? '',
+                          chainId: wallet.currentChainId.toString(),
                         })}
                         size={20}
                       />
@@ -268,6 +291,7 @@ export const MyAquaberaVaults = observer(
                         {
                           Token.getToken({
                             address: vault.token1?.address ?? '',
+                            chainId: wallet.currentChainId.toString(),
                           }).symbol
                         }
                       </span>

@@ -1,12 +1,12 @@
-import { useContractWrite, useSimulateContract } from "wagmi";
-import { encodeFunctionData } from "viem";
-import { useTransactionAwait } from "../common/useTransactionAwait";
-import { Address } from "viem";
-import { FARMING_CENTER } from "@/config/algebra/addresses";
-import { farmingCenterABI } from "@/lib/abis/algebra-contracts/ABIs";
-import { Deposit } from "../../graphql/generated/graphql";
-import { TransactionType } from "../../state/pendingTransactionsStore";
-import { getRewardsCalldata } from "../../utils/farming/getRewardsCalldata";
+import { useContractWrite, useSimulateContract } from 'wagmi';
+import { encodeFunctionData } from 'viem';
+import { useTransactionAwait } from '../common/useTransactionAwait';
+import { Address } from 'viem';
+import { farmingCenterABI } from '@/lib/abis/algebra-contracts/ABIs';
+import { Deposit } from '../../graphql/generated/graphql';
+import { TransactionType } from '../../state/pendingTransactionsStore';
+import { getRewardsCalldata } from '../../utils/farming/getRewardsCalldata';
+import { wallet } from '@/services/wallet';
 
 export function useFarmHarvest({
   tokenId,
@@ -33,9 +33,12 @@ export function useFarmHarvest({
   });
 
   const { data: config } = useSimulateContract({
-    address: account && tokenId ? FARMING_CENTER : undefined,
+    address:
+      account && tokenId
+        ? wallet.currentChain.contracts.algebraFarmingCenter
+        : undefined,
     abi: farmingCenterABI,
-    functionName: "multicall",
+    functionName: 'multicall',
     args: [calldata],
   });
 
@@ -85,7 +88,7 @@ export function useFarmHarvestAll(
 
       const calldata = encodeFunctionData({
         abi: farmingCenterABI,
-        functionName: "multicall",
+        functionName: 'multicall',
         args: [rewardsCalldata],
       });
       calldatas.push(calldata);
@@ -93,9 +96,9 @@ export function useFarmHarvestAll(
   });
 
   const { data: config } = useSimulateContract({
-    address: FARMING_CENTER,
+    address: wallet.currentChain.contracts.algebraFarmingCenter,
     abi: farmingCenterABI,
-    functionName: "multicall",
+    functionName: 'multicall',
     args: [calldatas],
   });
 
@@ -104,7 +107,7 @@ export function useFarmHarvestAll(
   const { isLoading, isSuccess } = useTransactionAwait(data, {
     title: `Harvest All Positions`,
     type: TransactionType.FARM,
-    tokenId: "0",
+    tokenId: '0',
   });
 
   return {

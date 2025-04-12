@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
-import { fetchSwapTransactions } from "@/lib/algebra/graphql/clients/swapTransactions";
-import { truncate } from "@/lib/format";
-import { Copy } from "@/components/Copy";
-import { VscCopy } from "react-icons/vsc";
-import { ExternalLink } from "lucide-react";
-import dayjs from "dayjs";
-import BigNumber from "bignumber.js";
-import { SwapField } from "@/types/algebra/types/swap-field";
-import { useDerivedSwapInfo } from "@/lib/algebra/state/swapStore";
-import { zeroAddress } from "viem";
-import { HoneyContainer } from "@/components/CardContianer";
-
+import { useEffect, useState } from 'react';
+import { fetchSwapTransactions } from '@/lib/algebra/graphql/clients/swapTransactions';
+import { truncate } from '@/lib/format';
+import { Copy } from '@/components/Copy';
+import { VscCopy } from 'react-icons/vsc';
+import { ExternalLink } from 'lucide-react';
+import dayjs from 'dayjs';
+import BigNumber from 'bignumber.js';
+import { SwapField } from '@/types/algebra/types/swap-field';
+import { useDerivedSwapInfo } from '@/lib/algebra/state/swapStore';
+import { zeroAddress } from 'viem';
+import { HoneyContainer } from '@/components/CardContianer';
+import { wallet } from '@/services/wallet';
 const SwapTransactionHistory = () => {
   const [transactions, setTransactions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -98,7 +98,7 @@ const SwapTransactionHistory = () => {
                         <td className="py-2 px-2 sm:px-4 text-sm sm:text-base font-mono whitespace-nowrap">
                           <div className="flex items-center gap-2">
                             <a
-                              href={`https://berascan.com/tx/${tx.transaction.id}`}
+                              href={`${wallet.currentChain.chain.blockExplorers?.default.url}/tx/${tx.transaction.id}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="hover:text-[#FFCD4D] flex items-center gap-1"
@@ -118,7 +118,7 @@ const SwapTransactionHistory = () => {
                         <td className="py-2 px-2 sm:px-4 text-sm sm:text-base font-mono whitespace-nowrap hidden md:table-cell">
                           <div className="flex items-center gap-2">
                             <a
-                              href={`https://berascan.com/address/${tx.recipient}`}
+                              href={`${wallet.currentChain.chain.blockExplorers?.default.url}/address/${tx.recipient}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="hover:text-[#FFCD4D] flex items-center gap-1"
@@ -156,7 +156,7 @@ const SwapTransactionHistory = () => {
                         </td>
                         <td className="py-2 px-2 sm:px-4 text-right text-sm sm:text-base whitespace-nowrap">
                           {dayjs(parseInt(tx.timestamp) * 1000).format(
-                            "MM-DD HH:mm"
+                            'MM-DD HH:mm'
                           )}
                         </td>
                       </tr>

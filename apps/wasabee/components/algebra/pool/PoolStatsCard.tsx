@@ -5,10 +5,11 @@ import {
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
 import { useMemo } from 'react';
 import { calculatePercentageChange } from '@/lib/utils';
-import { farmingClient } from '@/lib/algebra/graphql/clients';
 import { Address } from 'viem';
 import { Token } from '@/services/contract/token';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { wallet } from '@/services/wallet';
+import { useFarmingClient } from '@/lib/hooks/useSubgraphClients';
 
 interface PoolStatsCardProps {
   pool: Pool | null | undefined;
@@ -16,6 +17,7 @@ interface PoolStatsCardProps {
 
 export default function PoolStatsCard({ pool }: PoolStatsCardProps) {
   // Hooks need to be called unconditionally at the top
+  const farmingClient = useFarmingClient();
   const { data: activeFarmings } = useActiveFarmingsQuery({
     client: farmingClient,
   });
@@ -198,9 +200,11 @@ export default function PoolStatsCard({ pool }: PoolStatsCardProps) {
       pair: {
         token0: Token.getToken({
           address: token0.id,
+          chainId: wallet.currentChainId.toString(),
         }),
         token1: Token.getToken({
           address: token1.id,
+          chainId: wallet.currentChainId.toString(),
         }),
       },
       fee: Number(fee) / 10_000,
@@ -229,7 +233,7 @@ export default function PoolStatsCard({ pool }: PoolStatsCardProps) {
   }, [pool, activeFarmings]);
 
   if (!pool || !derivedPoolInfo) return null;
-  
+
   return (
     <div className="h-[400px] p-6 flex flex-col gap-6 bg-white border border-black rounded-[24px] shadow-[4px_4px_0px_0px_#D29A0D] text-[#202020] animate-fade-in">
       <div className="flex items-center">
@@ -241,27 +245,43 @@ export default function PoolStatsCard({ pool }: PoolStatsCardProps) {
 
       <div className="space-y-6">
         <div>
-          <h3 className="text-base font-semibold mb-3 pb-1 border-b border-gray-200">Tokens</h3>
+          <h3 className="text-base font-semibold mb-3 pb-1 border-b border-gray-200">
+            Tokens
+          </h3>
           <div className="grid grid-cols-2 gap-2">
             <div
               key={derivedPoolInfo.pair.token0.symbol}
               className="flex items-center p-3 rounded-xl bg-gray-50 border border-gray-200"
             >
-              <TokenLogo token={derivedPoolInfo.pair.token0} size={24} addtionalClasses="w-6 h-6" />
-              <span className="ml-2 font-semibold">{derivedPoolInfo.pair.token0.symbol}</span>
+              <TokenLogo
+                token={derivedPoolInfo.pair.token0}
+                size={24}
+                addtionalClasses="w-6 h-6"
+              />
+              <span className="ml-2 font-semibold">
+                {derivedPoolInfo.pair.token0.symbol}
+              </span>
             </div>
             <div
               key={derivedPoolInfo.pair.token1.symbol}
               className="flex items-center p-3 rounded-xl bg-gray-50 border border-gray-200"
             >
-              <TokenLogo token={derivedPoolInfo.pair.token1} size={24} addtionalClasses="w-6 h-6" />
-              <span className="ml-2 font-semibold">{derivedPoolInfo.pair.token1.symbol}</span>
+              <TokenLogo
+                token={derivedPoolInfo.pair.token1}
+                size={24}
+                addtionalClasses="w-6 h-6"
+              />
+              <span className="ml-2 font-semibold">
+                {derivedPoolInfo.pair.token1.symbol}
+              </span>
             </div>
           </div>
         </div>
 
         <div>
-          <h3 className="text-base font-semibold mb-3 pb-1 border-b border-gray-200">Performance</h3>
+          <h3 className="text-base font-semibold mb-3 pb-1 border-b border-gray-200">
+            Performance
+          </h3>
           <div className="grid grid-cols-2 gap-x-4 gap-y-5">
             <div className="flex flex-col">
               <h4 className="text-sm text-gray-600 mb-1">TVL</h4>

@@ -1,5 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
-import { infoClient } from ".";
 import {
   PoolsByTokenPairQuery,
   PoolsByTokenPairDocument,
@@ -14,19 +12,23 @@ import {
   SinglePoolQuery,
   SinglePoolQueryVariables,
   SinglePoolDocument,
-} from "../generated/graphql";
-import { Address, getContract } from "viem";
-import { algebraPositionManagerAddress } from "@/wagmi-generated";
-import { algebraPositionManagerAbi } from "@/wagmi-generated";
-import { useEffect, useState } from "react";
-import { MAX_UINT128 } from "@/config/algebra/max-uint128";
-import { wallet } from "@/services/wallet";
-import { CurrencyAmount, Token as AlgebranToken } from "@cryptoalgebra/sdk";
-import { unwrappedToken } from "@cryptoalgebra/sdk";
-import BigNumber from "bignumber.js";
-import { object } from "zod";
-import { PairContract } from "@/services/contract/dex/liquidity/pair-contract";
-import { Token } from "@/services/contract/token";
+} from '../generated/graphql';
+import { Address, getContract } from 'viem';
+import { algebraPositionManagerAddress } from '@/wagmi-generated';
+import { algebraPositionManagerAbi } from '@/wagmi-generated';
+import { useEffect, useState } from 'react';
+import { MAX_UINT128 } from '@/config/algebra/max-uint128';
+import { wallet } from '@/services/wallet';
+import { CurrencyAmount, Token as AlgebranToken } from '@cryptoalgebra/sdk';
+import { unwrappedToken } from '@cryptoalgebra/sdk';
+import BigNumber from 'bignumber.js';
+import { object } from 'zod';
+import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
+import { Token } from '@/services/contract/token';
+import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
+import { ApolloClient } from '@apollo/client';
+import { createClientHook } from '../clientUtils';
+import { useObserver } from 'mobx-react-lite';
 
 export const poolQueryToContract = (pool: Pool): PairContract => {
   const pairContract = new PairContract({
@@ -41,6 +43,7 @@ export const poolQueryToContract = (pool: Pool): PairContract => {
     decimals: pool.token0.decimals,
     name: pool.token0.name,
     symbol: pool.token0.symbol,
+    chainId: wallet.currentChainId.toString(),
   });
 
   pairContract.token1 = Token.getToken({
@@ -48,13 +51,18 @@ export const poolQueryToContract = (pool: Pool): PairContract => {
     decimals: pool.token1.decimals,
     name: pool.token1.name,
     symbol: pool.token1.symbol,
+    chainId: wallet.currentChainId.toString(),
   });
 
   return pairContract;
 };
 
-export const poolsByTokenPair = async (token0: string, token1: string) => {
-  const { data } = await infoClient.query<
+export const poolsByTokenPair = async (
+  client: ApolloClient<any>,
+  token0: string,
+  token1: string
+) => {
+  const { data } = await client.query<
     PoolsByTokenPairQuery,
     PoolsByTokenPairQueryVariables
   >({
@@ -65,8 +73,11 @@ export const poolsByTokenPair = async (token0: string, token1: string) => {
   return data?.pools;
 };
 
-export const userPools = async (userAddress: string) => {
-  const { data } = await infoClient.query<
+export const userPools = async (
+  client: ApolloClient<any>,
+  userAddress: string
+) => {
+  const { data } = await client.query<
     UserActivePositionsQuery,
     UserActivePositionsQueryVariables
   >({
@@ -79,10 +90,18 @@ export const userPools = async (userAddress: string) => {
   return pools;
 };
 
+export const usePoolsClient = createClientHook(useInfoClient, {
+  poolsByTokenPair,
+  userPools,
+});
+
 export const useUserPools = (userAddress: string) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
   const [fetchedPositions, setFetchedPositions] = useState<string[]>([]);
+  const { currentChainId } = useObserver(() => ({
+    currentChainId: wallet.currentChainId,
+  }));
   const { data, loading, refetch } = useUserActivePositionsQuery({
     variables: { account: userAddress.toLowerCase() },
     //fetchPolicy: "cache-and-network",
@@ -100,7 +119,10 @@ export const useUserPools = (userAddress: string) => {
   >({});
 
   const algebraPositionManager = getContract({
-    address: algebraPositionManagerAddress,
+    address:
+      algebraPositionManagerAddress[
+        currentChainId as keyof typeof algebraPositionManagerAddress
+      ],
     abi: algebraPositionManagerAbi,
     client: { public: wallet.publicClient, wallet: wallet.walletClient },
   });
@@ -108,7 +130,7 @@ export const useUserPools = (userAddress: string) => {
   useEffect(() => {
     if (!data || !wallet.isInit || !algebraPositionManager.simulate) return;
     data.positions.forEach(async (position) => {
-      if (fetchedPositions.includes(position.pool.id.concat("-", position.id)))
+      if (fetchedPositions.includes(position.pool.id.concat('-', position.id)))
         return;
       try {
         const pool = position.pool;
@@ -163,7 +185,7 @@ export const useUserPools = (userAddress: string) => {
           : 0;
 
         if (
-          fetchedPositions.includes(position.pool.id.concat("-", position.id))
+          fetchedPositions.includes(position.pool.id.concat('-', position.id))
         )
           return;
 
@@ -193,7 +215,7 @@ export const useUserPools = (userAddress: string) => {
           }
         });
 
-        fetchedPositions.push(pool.id.concat("-", position.id));
+        fetchedPositions.push(pool.id.concat('-', position.id));
       } catch (error) {
         console.error(error);
       }
@@ -210,6 +232,7 @@ export const useUserPools = (userAddress: string) => {
 };
 
 export const poolExists = async (poolAddress: string) => {
+  const infoClient = useInfoClient();
   const { data } = await infoClient.query<
     SinglePoolQuery,
     SinglePoolQueryVariables

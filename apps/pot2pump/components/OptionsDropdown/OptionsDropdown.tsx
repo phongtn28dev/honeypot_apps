@@ -14,6 +14,7 @@ import { Token } from '@/services/contract/token';
 import { BiLink, BiWallet } from 'react-icons/bi';
 import { popmodal } from '@/services/popmodal';
 import { WrappedToastify } from '@/lib/wrappedToastify';
+import { wallet } from '@/services/wallet';
 
 type optionItem = {
   icon: JSX.Element;
@@ -135,7 +136,10 @@ export const optionsPresets = {
       icon: <BiLink size={18} />,
       display: displayText ?? 'View on explorer',
       onClick: () => {
-        window.open(`https://berascan.com/address/${address}`, '_blank');
+        window.open(
+          `${wallet.currentChain.chain.blockExplorers?.default.url}/address/${address}`,
+          '_blank'
+        );
       },
     };
   },

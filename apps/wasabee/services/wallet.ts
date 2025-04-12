@@ -1,8 +1,6 @@
 import { Network, networks } from './chain';
 import BigNumber from 'bignumber.js';
 import { Address, PublicClient, WalletClient, zeroAddress } from 'viem';
-import { RouterV2Contract } from './contract/dex/routerv2-contract';
-import { FactoryContract } from './contract/dex/factory-contract';
 import { FtoFactoryContract } from './contract/launches/fto/ftofactory-contract';
 import { FtoFacadeContract } from './contract/launches/fto/ftofacade-contract';
 import { makeAutoObservable, reaction, runInAction } from 'mobx';
@@ -14,7 +12,6 @@ import { ICHIVaultFactoryContract } from '@/services/contract/aquabera/ICHIVault
 import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
 import { ICHIVaultVolatilityCheckContract } from './contract/aquabera/ICHIVaultVolatilityCheckContract';
 import { AlgebraSwapRouterContract } from './contract/algebra/algebra-swap-router';
-import { ALGEBRA_ROUTER } from '@/config/algebra/addresses';
 const MOCK_ADDRESS = process.env.NEXT_PUBLIC_MOCK_ADDRESS || undefined;
 
 export class Wallet {
@@ -23,10 +20,8 @@ export class Wallet {
   networks: Network[] = [];
   balance: BigNumber = new BigNumber(0);
   walletClient!: WalletClient;
-  currentChainId: number = -1;
+  currentChainId: number = DEFAULT_CHAIN_ID;
   contracts: {
-    routerV2: RouterV2Contract;
-    factory: FactoryContract;
     ftofactory: FtoFactoryContract;
     ftofacade: FtoFacadeContract;
     memeFactory: MemeFactoryContract;
@@ -64,23 +59,23 @@ export class Wallet {
     );
   }
 
+  changeChain(chainId: number) {
+    this.currentChainId = chainId;
+    this.walletClient.switchChain({
+      id: chainId,
+    });
+    this.initWallet(this.walletClient);
+  }
+
   async initWallet(walletClient?: WalletClient) {
-    console.log('initWallet', walletClient);
-    console.log('MOCK_ADDRESS', MOCK_ADDRESS);
+    console.log('initWallet');
     this.networks = networks;
     this.currentChainId = walletClient?.chain?.id || DEFAULT_CHAIN_ID;
-    this.account =
-      // MOCK_ADDRESS ||
-      walletClient?.account?.address || zeroAddress;
+    const mockAccount = localStorage.getItem('mockAccount');
+    this.account = mockAccount || walletClient?.account?.address || zeroAddress;
     this.contracts = {
       algebraSwapRouter: new AlgebraSwapRouterContract({
         address: this.currentChain.contracts.algebraSwapRouter as `0x${string}`,
-      }),
-      routerV2: new RouterV2Contract({
-        address: this.currentChain.contracts.routerV2,
-      }),
-      factory: new FactoryContract({
-        address: this.currentChain.contracts.factory,
       }),
       ftofactory: new FtoFactoryContract({
         address: this.currentChain.contracts.ftoFactory,
@@ -104,6 +99,9 @@ export class Wallet {
     this.publicClient = createPublicClientByChain(this.currentChain.chain);
     if (walletClient) {
       this.walletClient = walletClient;
+      walletClient.switchChain({
+        id: this.currentChainId,
+      });
     }
     this.currentChain.init();
     await StorageState.sync();

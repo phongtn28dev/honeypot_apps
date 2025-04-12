@@ -5,6 +5,7 @@ import rhinoLogo from '@/public/images/partners/rhino-finance-logo.svg';
 import { Tab } from '@nextui-org/react';
 import Image from 'next/image';
 import OrbiterBridge from './OrbiterBridge';
+import StargateBridge from './StargateBridge';
 
 export default function Bridge() {
   return (
@@ -34,6 +35,9 @@ export default function Bridge() {
         <Tab key="orbiter" title="Orbiter">
           <OrbiterBridge />
         </Tab>
+        <Tab key="stargate" title="Stargate">
+          <StargateBridge />
+        </Tab>
         <Tab
           key="rhino"
           href="https://app.rhino.fi/bridge/?refId=DeFi_HPOT&token=USDC&chainOut=BERACHAIN&chainIn=ETHEREUM"
@@ -41,7 +45,7 @@ export default function Bridge() {
           title={
             <div className="flex items-center gap-2">
               <Image src={rhinoLogo} alt="Rhino" width={100} height={100} />
-              <span>Rhino Finance</span>
+              <span>Rhino</span>
             </div>
           }
         ></Tab>

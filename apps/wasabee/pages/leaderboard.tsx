@@ -259,7 +259,7 @@ const LeaderboardPage = () => {
                                 placement="top"
                               >
                                 <Link
-                                  href={`https://berascan.com/address/${item.walletAddress}`}
+                                  href={`${wallet.currentChain.chain.blockExplorers?.default.url}/address/${item.walletAddress}`}
                                   target="_blank"
                                   className="text-blue-400 text-xs sm:text-sm md:text-base"
                                 >

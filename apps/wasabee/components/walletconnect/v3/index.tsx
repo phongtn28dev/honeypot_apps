@@ -132,7 +132,7 @@ export const WalletConnect = () => {
                               <span>{`${formatNumberWithUnit(
                                 Number(account.balanceFormatted),
                                 3
-                              )} BERA`}</span>
+                              )} ${account.balanceSymbol}`}</span>
                             ) : (
                               <div className="h-3 lg:h-4 w-16 lg:w-20 bg-gray-700 animate-pulse rounded"></div>
                             )}

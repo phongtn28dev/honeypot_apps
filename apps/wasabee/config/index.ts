@@ -1,11 +1,8 @@
-import remoteConfig from "../generate/config.json";
+// import remoteConfig from "../generate/config.json";
 
-
-const localConfig = {}
+const localConfig = {};
 
 export const config = {
-  ...remoteConfig,
+  // ...remoteConfig,
   ...localConfig,
-}
-
-
+};

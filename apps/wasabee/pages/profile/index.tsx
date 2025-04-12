@@ -19,6 +19,7 @@ import Image from 'next/image';
 import Copy from '@/components/Copy/v3';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/router';
+import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
 
 export const Profile = observer(() => {
   const { chainId } = useAccount();
@@ -28,14 +29,15 @@ export const Profile = observer(() => {
   const [userPoolsProfit, setUserPoolsProfit] = useState<UserPoolProfit[]>([]);
   const router = useRouter();
   const urlParams = router.query as { tab: string };
+  const infoclient = useInfoClient();
 
   useEffect(() => {
     if (wallet.account) {
-      getLiquidatorDatas(wallet.account).then((data) => {
+      getLiquidatorDatas(infoclient, wallet.account).then((data) => {
         setUserPoolsProfit(data);
       });
     }
-  }, [wallet.account]);
+  }, [wallet.account, getLiquidatorDatas]);
 
   useEffect(() => {
     if (chartContainerRef.current) {
@@ -66,8 +68,8 @@ export const Profile = observer(() => {
                       <div className="flex items-center gap-1 sm:gap-2 w-full text-[#4D4D4D]">
                         <Link
                           target="_blank"
-                          className="text-[#4D4D4D] hover:text-[#0D0D0D] hover:underline decoration-2 transition-colors text-xs sm:text-sm md:text-base"
-                          href={`https://berascan.com/address/${wallet.account}`}
+                          className="text-[#4D4D4D] hover:text-[#0D0D0D] hover:underline decoration-2 transition-colors"
+                          href={`${wallet.currentChain.chain.blockExplorers?.default.url}/address/${wallet.account}`}
                         >
                           {truncate(wallet.account, 8)}
                         </Link>

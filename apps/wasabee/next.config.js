@@ -94,7 +94,7 @@ const config = withSentryConfig(nextConfig, {
 
   // Hides source maps from generated client bundles
   sourcemaps: {
-    hideSourceMaps: true,
+    deleteSourcemapsAfterUpload: true,
   },
 
   // Automatically tree-shake Sentry logger statements to reduce bundle size

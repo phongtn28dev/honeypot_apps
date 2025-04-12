@@ -1,6 +1,7 @@
+import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
+import { getInfoClientByChainId } from '@/lib/hooks/useSubgraphClients';
+import { networksMap } from '@/services/chain';
 import type { NextApiResponse, NextApiRequest, PageConfig } from 'next';
-import { infoClient } from '@/lib/algebra/graphql/clients';
-import { INFO_GRAPH } from '@/lib/algebra/graphql/clients';
 
 export default async function handler(
   request: NextApiRequest,
@@ -9,6 +10,9 @@ export default async function handler(
   response.setHeader('Access-Control-Allow-Origin', '*');
   response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  const INFO_GRAPH =
+    networksMap[DEFAULT_CHAIN_ID].subgraphAddresses.algebra_info;
 
   try {
     //   const chainId = request.query.chain;

@@ -1,24 +1,24 @@
-import Loader from "@/components/algebra/common/Loader";
-import TokenLogo from "@/components/TokenLogo/TokenLogo";
-import { ALGEBRA_ROUTER } from "@/config/algebra/addresses";
-import { MAX_UINT128 } from "@/config/algebra/max-uint128";
-import { usePoolPlugins } from "@/lib/algebra/hooks/pools/usePoolPlugins";
+import Loader from '@/components/algebra/common/Loader';
+import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { MAX_UINT128 } from '@/config/algebra/max-uint128';
+import { usePoolPlugins } from '@/lib/algebra/hooks/pools/usePoolPlugins';
 import useWrapCallback, {
   WrapType,
-} from "@/lib/algebra/hooks/swap/useWrapCallback";
+} from '@/lib/algebra/hooks/swap/useWrapCallback';
 import {
   useDerivedSwapInfo,
   useSwapState,
-} from "@/lib/algebra/state/swapStore";
+} from '@/lib/algebra/state/swapStore';
 import {
   computeRealizedLPFeePercent,
   warningSeverity,
-} from "@/lib/algebra/utils/swap/prices";
-import { AlgebraBasePluginContract } from "@/services/contract/algebra/algebra-base-plugin";
-import { AlgebraPoolContract } from "@/services/contract/algebra/algebra-pool-contract";
-import { Token } from "@/services/contract/token";
-import { SwapField } from "@/types/algebra/types/swap-field";
-import { TradeState } from "@/types/algebra/types/trade-state";
+} from '@/lib/algebra/utils/swap/prices';
+import { AlgebraBasePluginContract } from '@/services/contract/algebra/algebra-base-plugin';
+import { AlgebraPoolContract } from '@/services/contract/algebra/algebra-pool-contract';
+import { Token } from '@/services/contract/token';
+import { wallet } from '@/services/wallet';
+import { SwapField } from '@/types/algebra/types/swap-field';
+import { TradeState } from '@/types/algebra/types/trade-state';
 import {
   ADDRESS_ZERO,
   computePoolAddress,
@@ -27,12 +27,12 @@ import {
   Trade,
   TradeType,
   unwrappedToken,
-} from "@cryptoalgebra/sdk";
-import { ChevronDownIcon, ChevronRightIcon, ZapIcon } from "lucide-react";
-import { Fragment, useEffect, useMemo, useState } from "react";
-import { FaLongArrowAltRight } from "react-icons/fa";
-import { Address } from "viem";
-
+} from '@cryptoalgebra/sdk';
+import { ChevronDownIcon, ChevronRightIcon, ZapIcon } from 'lucide-react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
+import { FaLongArrowAltRight } from 'react-icons/fa';
+import { Address } from 'viem';
+import { useObserver } from 'mobx-react-lite';
 const SwapParamsV3 = () => {
   const {
     tradeState,
@@ -42,7 +42,9 @@ const SwapParamsV3 = () => {
     currencies,
   } = useDerivedSwapInfo();
   const { typedValue } = useSwapState();
-
+  const ALGEBRA_ROUTER = useObserver(
+    () => wallet.currentChain.contracts.algebraSwapRouter
+  );
   const { wrapType } = useWrapCallback(
     currencies[SwapField.INPUT],
     currencies[SwapField.OUTPUT],
@@ -88,22 +90,22 @@ const SwapParamsV3 = () => {
                   false,
                   BigInt(
                     trade!.tradeType === TradeType.EXACT_INPUT
-                      ? (trade?.inputAmount?.toExact() ?? 0)
-                      : (trade?.outputAmount?.toExact() ?? 0)
+                      ? trade?.inputAmount?.toExact() ?? 0
+                      : trade?.outputAmount?.toExact() ?? 0
                   ),
                   MAX_UINT128,
                   false,
-                  "0x",
+                  '0x',
                 ],
                 { account: address as Address }
               )
               .then((v) => v.result as [string, number, number]);
 
-            console.log("beforeSwap", beforeSwap);
+            console.log('beforeSwap', beforeSwap);
           } catch (error) {
-            beforeSwap = ["", 0, 0];
+            beforeSwap = ['', 0, 0];
           }
-          const [, overrideFee, pluginFee] = beforeSwap || ["", 0, 0];
+          const [, overrideFee, pluginFee] = beforeSwap || ['', 0, 0];
 
           if (overrideFee) {
             fees.push(overrideFee + pluginFee);
@@ -141,14 +143,14 @@ const SwapParamsV3 = () => {
       const priceImpact = trade.priceImpact.subtract(realizedLpFeePercent);
       return { priceImpact, realizedLPFee };
     } catch (error) {
-      console.error("Error calculating fees:", error);
+      console.error('Error calculating fees:', error);
       return { realizedLPFee: undefined, priceImpact: undefined };
     }
   }, [trade]);
 
   const LPFeeString = realizedLPFee
     ? `${realizedLPFee.toSignificant(4)} ${realizedLPFee.currency.symbol}`
-    : "-";
+    : '-';
 
   if (wrapType !== WrapType.NOT_APPLICABLE) return;
 
@@ -177,7 +179,7 @@ const SwapParamsV3 = () => {
             </div>
             <ChevronDownIcon
               className={`w-6 h-6 text-black transition-transform duration-300 ${
-                isExpanded ? "rotate-180" : ""
+                isExpanded ? 'rotate-180' : ''
               }`}
             />
           </div>
@@ -192,13 +194,21 @@ const SwapParamsV3 = () => {
               <div className="flex items-center py-3 justify-between">
                 <span className="text-black text-sm font-medium">
                   {trade.tradeType === TradeType.EXACT_INPUT
-                    ? "Minimum received"
-                    : "Maximum sent"}
+                    ? 'Minimum received'
+                    : 'Maximum sent'}
                 </span>
                 <span className="text-black text-sm font-medium">
                   {trade.tradeType === TradeType.EXACT_INPUT
-                    ? `${trade.minimumAmountOut(allowedSlippage).toSignificant(6)} ${trade.outputAmount.currency.symbol}`
-                    : `${trade.maximumAmountIn(allowedSlippage).toSignificant(6)} ${trade.inputAmount.currency.symbol}`}
+                    ? `${trade
+                        .minimumAmountOut(allowedSlippage)
+                        .toSignificant(6)} ${
+                        trade.outputAmount.currency.symbol
+                      }`
+                    : `${trade
+                        .maximumAmountIn(allowedSlippage)
+                        .toSignificant(6)} ${
+                        trade.inputAmount.currency.symbol
+                      }`}
                 </span>
               </div>
 
@@ -249,6 +259,7 @@ const SwapRoute = ({
               <TokenLogo
                 token={Token.getToken({
                   address: token.address,
+                  chainId: wallet.currentChainId.toString(),
                 })}
               />
             </div>
@@ -268,14 +279,14 @@ const PriceImpact = ({ priceImpact }: { priceImpact: Percent | undefined }) => {
 
   const color =
     severity === 3 || severity === 4
-      ? "text-[#FF5449]"
+      ? 'text-[#FF5449]'
       : severity === 2
-        ? "text-orange-600"
-        : "text-black";
+      ? 'text-orange-600'
+      : 'text-black';
 
   return (
     <span className={`${color} text-sm font-medium`}>
-      {priceImpact ? `${priceImpact.multiply(-1).toFixed(2)}%` : "-"}
+      {priceImpact ? `${priceImpact.multiply(-1).toFixed(2)}%` : '-'}
     </span>
   );
 };

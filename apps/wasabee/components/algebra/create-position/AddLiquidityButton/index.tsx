@@ -1,12 +1,11 @@
-import Loader from "@/components/algebra/common/Loader";
-import { Button } from "@/components/button/button-next";
-import { ALGEBRA_POSITION_MANAGER } from "@/config/algebra/addresses";
-import { useApprove } from "@/lib/algebra/hooks/common/useApprove";
-import { useTransactionAwait } from "@/lib/algebra/hooks/common/useTransactionAwait";
-import { IDerivedMintInfo } from "@/lib/algebra/state/mintStore";
-import { TransactionType } from "@/lib/algebra/state/pendingTransactionsStore";
-import { useUserState } from "@/lib/algebra/state/userStore";
-import { ApprovalState } from "@/types/algebra/types/approve-state";
+import Loader from '@/components/algebra/common/Loader';
+import { Button } from '@/components/button/button-next';
+import { useApprove } from '@/lib/algebra/hooks/common/useApprove';
+import { useTransactionAwait } from '@/lib/algebra/hooks/common/useTransactionAwait';
+import { IDerivedMintInfo } from '@/lib/algebra/state/mintStore';
+import { TransactionType } from '@/lib/algebra/state/pendingTransactionsStore';
+import { useUserState } from '@/lib/algebra/state/userStore';
+import { ApprovalState } from '@/types/algebra/types/approve-state';
 import {
   Percent,
   Currency,
@@ -15,15 +14,15 @@ import {
   ZERO,
   ADDRESS_ZERO,
   algebraPositionManagerABI,
-} from "@cryptoalgebra/sdk";
-import { Address, getContract } from "viem";
-import JSBI from "jsbi";
-import { useMemo } from "react";
-import { useAccount, useContractWrite } from "wagmi";
-import { useSimulateAlgebraPositionManagerMulticall } from "@/wagmi-generated";
-import { wallet } from "@/services/wallet";
-import { ContractWrite } from "@/services/utils";
-
+} from '@cryptoalgebra/sdk';
+import { Address, getContract } from 'viem';
+import JSBI from 'jsbi';
+import { useMemo } from 'react';
+import { useAccount, useContractWrite } from 'wagmi';
+import { useSimulateAlgebraPositionManagerMulticall } from '@/wagmi-generated';
+import { wallet } from '@/services/wallet';
+import { ContractWrite } from '@/services/utils';
+import { useObserver } from 'mobx-react-lite';
 interface AddLiquidityButtonProps {
   baseCurrency: Currency | undefined | null;
   quoteCurrency: Currency | undefined | null;
@@ -31,7 +30,7 @@ interface AddLiquidityButtonProps {
   poolAddress: Address | undefined;
 }
 
-const ZERO_PERCENT = new Percent("0");
+const ZERO_PERCENT = new Percent('0');
 const DEFAULT_ADD_IN_RANGE_SLIPPAGE_TOLERANCE = new Percent(50, 10_000);
 
 export const AddLiquidityButton = ({
@@ -41,6 +40,9 @@ export const AddLiquidityButton = ({
   poolAddress,
 }: AddLiquidityButtonProps) => {
   const { address: account } = useAccount();
+  const ALGEBRA_POSITION_MANAGER = useObserver(
+    () => wallet.currentChain.contracts.algebraPositionManager
+  );
 
   const { txDeadline } = useUserState();
 
@@ -51,7 +53,7 @@ export const AddLiquidityButton = ({
     : undefined;
 
   const { calldata, value } = useMemo(() => {
-    console.log("mintInfo", mintInfo);
+    console.log('mintInfo', mintInfo);
     if (
       !account ||
       !mintInfo.position ||
@@ -118,7 +120,7 @@ export const AddLiquidityButton = ({
   const { isLoading: isAddingLiquidityLoading, data } = useTransactionAwait(
     addLiquidityData,
     {
-      title: "Add liquidity",
+      title: 'Add liquidity',
       tokenA: baseCurrency?.wrapped.address as Address,
       tokenB: quoteCurrency?.wrapped.address as Address,
       type: TransactionType.POOL,
@@ -126,7 +128,7 @@ export const AddLiquidityButton = ({
     `/pool-detail/${poolAddress}`
   );
 
-  console.log("data", data);
+  console.log('data', data);
 
   if (mintInfo.errorMessage)
     return (
@@ -174,12 +176,12 @@ export const AddLiquidityButton = ({
     <Button
       disabled={!isReady}
       onPress={async () => {
-        console.log("addLiquidityConfig", addLiquidityConfig);
+        console.log('addLiquidityConfig', addLiquidityConfig);
         addLiquidityConfig && addLiquidity(addLiquidityConfig.request);
       }}
       className="whitespace-nowrap w-full border-[0] h-[56px] rounded-[12px] !text-[18px]"
     >
-      {isAddingLiquidityLoading ? <Loader /> : "Create Position"}
+      {isAddingLiquidityLoading ? <Loader /> : 'Create Position'}
     </Button>
   );
 };

@@ -1,4 +1,3 @@
-import { STABLECOINS } from '@/config/algebra/tokens';
 import {
   ADDRESS_ZERO,
   Currency,

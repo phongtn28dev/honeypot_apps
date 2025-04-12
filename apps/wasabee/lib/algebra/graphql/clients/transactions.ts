@@ -1,4 +1,3 @@
-import { infoClient } from ".";
 import {
   SwapsQuery,
   SwapsDocument,
@@ -11,8 +10,8 @@ import {
   TransactionsQueryVariables,
   TransactionType,
   Transaction,
-} from "../generated/graphql";
-
+} from '../generated/graphql';
+import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
 type ParticipantTransaction = {
   id: string;
   account: {
@@ -53,6 +52,7 @@ export async function fetchPot2PumpTransactions(
     hasNextPage: boolean;
   };
 }> {
+  const infoClient = useInfoClient();
   const skip = (page - 1) * pageSize;
 
   const { data } = await infoClient.query<
@@ -86,12 +86,12 @@ export async function fetchPot2PumpTransactions(
       first: pageSize,
       skip,
     },
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
   });
 
   return {
-    status: "success",
-    message: "Success",
+    status: 'success',
+    message: 'Success',
     data: data,
     pageInfo: {
       hasNextPage: data.transactions.length === pageSize,

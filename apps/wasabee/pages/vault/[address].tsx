@@ -20,6 +20,7 @@ import Copy from '@/components/Copy/v3';
 import { HiExternalLink } from 'react-icons/hi';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { cn, Tooltip } from '@nextui-org/react';
+import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
 import { InfoIcon } from 'lucide-react';
 import { VaultTag } from '@/components/Aquabera/VaultTag';
 
@@ -33,6 +34,7 @@ export const VaultDetail = observer(() => {
   const [poolVolume24h, setPoolVolume24h] = useState<string>('0');
   const [poolFees24h, setPoolFees24h] = useState<string>('0');
   const [volatility, setVolatility] = useState<string>('0');
+  const infoclient = useInfoClient();
 
   useEffect(() => {
     if (!wallet.isInit || !wallet.account || !wallet.walletClient) return;
@@ -59,7 +61,10 @@ export const VaultDetail = observer(() => {
 
     // Fetch token addresses and pool data
     const loadVaultData = async () => {
-      const vaultContract = await getSingleVaultDetails(address as string);
+      const vaultContract = await getSingleVaultDetails(
+        infoclient,
+        address as string
+      );
 
       if (vaultContract) {
         Promise.all([
@@ -100,7 +105,7 @@ export const VaultDetail = observer(() => {
     if (!vault || !wallet.account) return;
 
     // Refresh subgraph data
-    const vaultDetails = await getSingleVaultDetails(vault.address);
+    const vaultDetails = await getSingleVaultDetails(infoclient, vault.address);
     setVault(vaultDetails);
     // Get total supply
     vaultDetails?.getTotalSupply();
@@ -265,6 +270,15 @@ export const VaultDetail = observer(() => {
                       endWith: vault?.token0?.symbol,
                     })}
                   </span>
+                  <span>
+                    (
+                    {DynamicFormatAmount({
+                      amount: vault?.userTVLUSD ?? 0,
+                      decimals: 3,
+                      endWith: '$',
+                    })}
+                    )
+                  </span>
                 </p>
                 <p className="text-xs md:text-xl font-bold text-[#202020]">
                   {DynamicFormatAmount({
@@ -371,7 +385,26 @@ export const VaultDetail = observer(() => {
               </h3>
               <p
                 className={cn(
-                  'text-xs md:text-xl font-bold text-[#202020]',
+                  'text-2xl font-bold text-[#202020]',
+                  volatility > '500' && 'text-orange-500',
+                  volatility > '1000' && 'text-red-500'
+                )}
+              >
+                {vault?.apr.toFixed(2)}%
+              </p>
+            </div>
+            <div className="rounded-[24px] border border-black bg-white px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D] relative">
+              <h3 className="text-base text-[#202020] mb-2">
+                Volatility{' '}
+                <span>
+                  <Tooltip content="higher the volatility, higher the slippage">
+                    <QuestionMarkCircleIcon className="w-4 h-4 inline-block" />
+                  </Tooltip>
+                </span>
+              </h3>
+              <p
+                className={cn(
+                  'text-2xl font-bold text-[#202020]',
                   volatility > '500' && 'text-orange-500',
                   volatility > '1000' && 'text-red-500'
                 )}
@@ -395,7 +428,7 @@ export const VaultDetail = observer(() => {
                       {address}
                     </p>
                     <Link
-                      href={`https://berascan.com/address/${address}`}
+                      href={`${wallet.currentChain.chain.blockExplorers?.default.url}/address/${address}`}
                       target="_blank"
                       className="text-[#202020] hover:text-[#202020]/80 flex-shrink-0"
                     >
@@ -413,7 +446,7 @@ export const VaultDetail = observer(() => {
                       {vault?.token0?.address}
                     </p>
                     <Link
-                      href={`https://berascan.com/address/${vault?.token0?.address}`}
+                      href={`${wallet.currentChain.chain.blockExplorers?.default.url}/address/${vault?.token0?.address}`}
                       target="_blank"
                       className="text-[#202020] hover:text-[#202020]/80 flex-shrink-0"
                     >
@@ -428,7 +461,7 @@ export const VaultDetail = observer(() => {
                       {vault?.token1?.address}
                     </p>
                     <Link
-                      href={`https://berascan.com/address/${vault?.token1?.address}`}
+                      href={`${wallet.currentChain.chain.blockExplorers?.default.url}/address/${vault?.token1?.address}`}
                       target="_blank"
                       className="text-[#202020] hover:text-[#202020]/80 flex-shrink-0"
                     >

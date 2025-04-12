@@ -6,8 +6,8 @@ import type { AppProps } from 'next/app';
 import { Layout } from '@/components/layout';
 import { NextLayoutPage } from '@/types/nextjs';
 import { WagmiProvider, useWalletClient } from 'wagmi';
-import { AvatarComponent, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { AvatarComponent, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import { NextUIProvider } from '@nextui-org/react';
 import { ToastContainer } from 'react-toastify';
@@ -20,7 +20,6 @@ import { DM_Sans, Inter } from 'next/font/google';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { Analytics } from '@vercel/analytics/react';
 import { ApolloProvider } from '@apollo/client';
-import { infoClient } from '@/lib/algebra/graphql/clients';
 import Image from 'next/image';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -33,6 +32,7 @@ import {
 import { DynamicWagmiConnector } from '@dynamic-labs/wagmi-connector';
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 import { deserialize, serialize } from 'wagmi';
+import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
 
 // enableStaticRendering(true)
 const queryClient = new QueryClient({
@@ -94,6 +94,7 @@ export default function App({
 }: AppProps & {
   Component: NextLayoutPage;
 }) {
+  const infoClient = useInfoClient();
   const ComponentLayout = Component.Layout || Layout;
 
   const persister = createSyncStoragePersister({

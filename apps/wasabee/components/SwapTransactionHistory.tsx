@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
-import { fetchSwapTransactions } from "@/lib/algebra/graphql/clients/swapTransactions";
-import { truncate } from "@/lib/format";
-import { Copy } from "@/components/Copy";
-import { VscCopy } from "react-icons/vsc";
-import { ExternalLink } from "lucide-react";
-import dayjs from "dayjs";
-import BigNumber from "bignumber.js";
-import { SwapField } from "@/types/algebra/types/swap-field";
-import { useDerivedSwapInfo } from "@/lib/algebra/state/swapStore";
-import { zeroAddress } from "viem";
-import CardContainer from "@/components/CardContianer/v3";
-import { cn } from "@/lib/utils";
-
+import { useEffect, useState } from 'react';
+import { useSwapTransactions } from '@/lib/algebra/graphql/clients/swapTransactions';
+import { truncate } from '@/lib/format';
+import { Copy } from '@/components/Copy';
+import { VscCopy } from 'react-icons/vsc';
+import { ExternalLink } from 'lucide-react';
+import dayjs from 'dayjs';
+import BigNumber from 'bignumber.js';
+import { SwapField } from '@/types/algebra/types/swap-field';
+import { useDerivedSwapInfo } from '@/lib/algebra/state/swapStore';
+import { zeroAddress } from 'viem';
+import CardContainer from '@/components/CardContianer/v3';
+import { cn } from '@/lib/utils';
+import { wallet } from '@/services/wallet';
 const SwapTransactionHistory = () => {
   const [transactions, setTransactions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -20,6 +20,7 @@ const SwapTransactionHistory = () => {
   const pageSize = 10;
 
   const { currencies } = useDerivedSwapInfo();
+  const { fetchTransactions } = useSwapTransactions();
 
   const baseCurrency = currencies[SwapField.INPUT];
   const quoteCurrency = currencies[SwapField.OUTPUT];
@@ -28,7 +29,7 @@ const SwapTransactionHistory = () => {
     const loadTransactions = async (currentPage: number) => {
       setLoading(true);
       try {
-        const response = await fetchSwapTransactions(
+        const response = await fetchTransactions(
           currentPage,
           pageSize,
           baseCurrency?.wrapped.address ?? zeroAddress,
@@ -42,7 +43,7 @@ const SwapTransactionHistory = () => {
     };
 
     loadTransactions(page);
-  }, [baseCurrency, page, pageSize, quoteCurrency]);
+  }, [baseCurrency, page, pageSize, quoteCurrency, fetchTransactions]);
 
   const formatAmount = (amount: string) => {
     return new BigNumber(amount).toFixed(6);
@@ -103,7 +104,7 @@ const SwapTransactionHistory = () => {
                     <td className="py-1 px-1.5 sm:py-2 sm:px-4 font-mono whitespace-nowrap">
                       <div className="flex items-center gap-1 sm:gap-2">
                         <a
-                          href={`https://berascan.com/tx/${tx.transaction.id}`}
+                          href={`${wallet.currentChain.chain.blockExplorers?.default.url}/tx/${tx.transaction.id}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="hover:text-[#FFCD4D] flex items-center gap-0.5 sm:gap-1"
@@ -124,7 +125,7 @@ const SwapTransactionHistory = () => {
                       <div className="flex items-center gap-1 sm:gap-2">
                         {console.log(tx) === undefined && <></>}
                         <a
-                          href={`https://berascan.com/address/${tx.origin}`}
+                          href={`${wallet.currentChain.chain.blockExplorers?.default.url}/address/${tx.origin}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="hover:text-[#FFCD4D] flex items-center gap-0.5 sm:gap-1"
@@ -146,12 +147,12 @@ const SwapTransactionHistory = () => {
                         <span
                           className={cn(
                             tx.amount0 * -1 < 0
-                              ? "text-[#ef4444]"
-                              : "text-[#22c55e]"
+                              ? 'text-[#ef4444]'
+                              : 'text-[#22c55e]'
                           )}
                         >
-                          {tx.amount0 * -1 < 0 && "Sell "}
-                          {tx.amount0 * -1 > 0 && "Buy "}
+                          {tx.amount0 * -1 < 0 && 'Sell '}
+                          {tx.amount0 * -1 > 0 && 'Buy '}
                           {formatAmount(Math.abs(tx.amount0).toString())}
                         </span>
                         <span className="text-gray-400">
@@ -164,12 +165,12 @@ const SwapTransactionHistory = () => {
                         <span
                           className={cn(
                             tx.amount1 * -1 < 0
-                              ? "text-[#ef4444]"
-                              : "text-[#22c55e]"
+                              ? 'text-[#ef4444]'
+                              : 'text-[#22c55e]'
                           )}
                         >
-                          {tx.amount1 * -1 < 0 && "Sell "}
-                          {tx.amount1 * -1 > 0 && "Buy "}
+                          {tx.amount1 * -1 < 0 && 'Sell '}
+                          {tx.amount1 * -1 > 0 && 'Buy '}
                           {formatAmount(Math.abs(tx.amount1).toString())}
                         </span>
                         <span className="text-gray-400">
@@ -182,7 +183,7 @@ const SwapTransactionHistory = () => {
                     </td>
                     <td className="py-1 px-1.5 sm:py-2 sm:px-4 text-right whitespace-nowrap">
                       {dayjs(parseInt(tx.timestamp) * 1000).format(
-                        "MM-DD HH:mm"
+                        'MM-DD HH:mm'
                       )}
                     </td>
                   </tr>

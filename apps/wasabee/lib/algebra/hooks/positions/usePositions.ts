@@ -6,11 +6,11 @@ import {
 import { useMemo } from 'react';
 import { useAccount, useContractReads, useReadContracts } from 'wagmi';
 import { Address } from 'viem';
-import { ALGEBRA_POSITION_MANAGER } from '@/config/algebra/addresses';
-import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
-import { farmingClient } from '../../graphql/clients';
 import { useDepositsQuery } from '../../graphql/generated/graphql';
 import { useReadAlgebraPositionManagerBalanceOf } from '@/wagmi-generated';
+import { useObserver } from 'mobx-react-lite';
+import { wallet } from '@/services/wallet';
+import { useFarmingClient } from '@/lib/hooks/useSubgraphClients';
 
 export interface PositionFromTokenId {
   tokenId: number;
@@ -36,6 +36,9 @@ function usePositionsFromTokenIds(tokenIds: any[] | undefined): {
   const inputs = useMemo(
     () => (tokenIds ? tokenIds.map((tokenId) => tokenId) : []),
     [tokenIds]
+  );
+  const ALGEBRA_POSITION_MANAGER = useObserver(
+    () => wallet.currentChain.contracts.algebraPositionManager
   );
 
   const {
@@ -66,8 +69,8 @@ function usePositionsFromTokenIds(tokenIds: any[] | undefined): {
           const result = call.result as any;
 
           const pool = computePoolAddress({
-            tokenA: new Token(DEFAULT_CHAIN_ID, result[2], 18),
-            tokenB: new Token(DEFAULT_CHAIN_ID, result[3], 18),
+            tokenA: new Token(wallet.currentChainId, result[2], 18),
+            tokenB: new Token(wallet.currentChainId, result[3], 18),
           }) as Address;
 
           return {
@@ -102,7 +105,9 @@ function usePositionsFromTokenIds(tokenIds: any[] | undefined): {
 
 export function usePositions() {
   const { address: account } = useAccount();
-
+  const ALGEBRA_POSITION_MANAGER = useObserver(
+    () => wallet.currentChain.contracts.algebraPositionManager
+  );
   const { data: balanceResult, isLoading: balanceLoading } =
     useReadAlgebraPositionManagerBalanceOf({
       args: account ? [account] : undefined,
@@ -136,13 +141,10 @@ export function usePositions() {
     });
 
   const tokenIds = useMemo(() => {
-    if (account) {
-      return tokenIdResults
-        ?.map(({ result }) => result)
-        .filter((result) => !!result)
-        .map((result) => result);
-    }
-    return [];
+    if (!account || !tokenIdResults) return [];
+    return tokenIdResults
+      .map(({ result }) => result)
+      .filter((result): result is bigint => !!result);
   }, [account, tokenIdResults]);
 
   const {
@@ -182,6 +184,7 @@ export function usePosition(tokenId: string | number | undefined): {
 
 export function usePositionInFarming(tokenId: string | number | undefined) {
   const { position } = usePosition(tokenId);
+  const farmingClient = useFarmingClient();
 
   const { address: account } = useAccount();
 

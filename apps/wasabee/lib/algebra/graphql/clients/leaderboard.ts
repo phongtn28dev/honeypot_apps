@@ -1,5 +1,9 @@
 import { gql } from '@apollo/client';
-import { infoClient } from '.';
+import {
+  getInfoClientByChainId,
+  useInfoClient,
+} from '@/lib/hooks/useSubgraphClients';
+import { wallet } from '@/services/wallet';
 
 export const LEADERBOARD_QUERY = gql`
   query leaderboardStatus {
@@ -145,6 +149,7 @@ type LeaderboardResponse = {
 };
 
 export async function fetchLeaderboardData(): Promise<LeaderboardResponse> {
+  const infoClient = getInfoClientByChainId(wallet.currentChainId.toString());
   const { data } = await infoClient.query<FactoryData>({
     query: LEADERBOARD_QUERY,
   });

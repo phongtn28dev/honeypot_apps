@@ -11,6 +11,8 @@ import { useSwapPools } from './useSwapPools';
 import { useChainId } from 'wagmi';
 import { Address } from 'viem';
 import { useUserState } from '../../state/userStore';
+import { useObserver } from 'mobx-react-lite';
+import { wallet } from '@/services/wallet';
 
 /**
  * Returns true if poolA is equivalent to poolB
@@ -66,6 +68,7 @@ function computeAllRoutes(
     );
 
     if (
+      !newPool ||
       !newPool.involvesToken(tokenIn) ||
       currentPath.find((pathPool) => poolEquals(newPool, pathPool))
     )
@@ -104,7 +107,9 @@ export function useAllRoutes(
   currencyIn?: Currency,
   currencyOut?: Currency
 ): { loading: boolean; routes: Route<Currency, Currency>[] } {
-  const chainId = useChainId();
+  const { currentChainId } = useObserver(() => ({
+    currentChainId: wallet.currentChainId,
+  }));
 
   const { pools, loading: poolsLoading } = useSwapPools(
     currencyIn,
@@ -114,7 +119,13 @@ export function useAllRoutes(
   const { isMultihop } = useUserState();
 
   return useMemo(() => {
-    if (poolsLoading || !chainId || !pools || !currencyIn || !currencyOut)
+    if (
+      poolsLoading ||
+      !currentChainId ||
+      !pools ||
+      !currencyIn ||
+      !currencyOut
+    )
       return {
         loading: true,
         routes: [],
@@ -127,7 +138,7 @@ export function useAllRoutes(
       currencyIn,
       currencyOut,
       pools,
-      chainId,
+      currentChainId,
       [],
       [],
       currencyIn,
@@ -135,5 +146,12 @@ export function useAllRoutes(
     );
 
     return { loading: false, routes };
-  }, [chainId, currencyIn, currencyOut, pools, poolsLoading, isMultihop]);
+  }, [
+    currentChainId,
+    currencyIn,
+    currencyOut,
+    pools,
+    poolsLoading,
+    isMultihop,
+  ]);
 }

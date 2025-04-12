@@ -19,19 +19,24 @@ export class Token implements BaseContract {
   static tokensMap: Record<string, Token> = {};
   static getToken({
     address,
+    chainId,
     force,
     ...args
   }: {
     address: string;
     force?: boolean;
+    chainId: string;
   } & Partial<Token>) {
     const lowerAddress = address.toLowerCase();
-    const key = `${lowerAddress}-${args.isNative ? 'native' : 'erc20'}`;
+    const key = `${lowerAddress}--${chainId}--${
+      args.isNative ? 'native' : 'erc20'
+    }`;
     const token = Token.tokensMap[key];
 
     if (!token) {
       Token.tokensMap[key] = new Token({
         address: lowerAddress,
+        chainId,
         ...args,
       });
     } else {
@@ -43,6 +48,7 @@ export class Token implements BaseContract {
     }
     return Token.tokensMap[key];
   }
+  chainId: string = '';
   address: string = '';
   name: string = '';
   balanceWithoutDecimals = new BigNumber(0);
@@ -70,6 +76,7 @@ export class Token implements BaseContract {
   priceChange = '';
   priceChange24hPercentage = '';
   pot2pumpAddress: Address | undefined | null = undefined;
+  isStableCoin = false;
   isBitgetCampaignToken = false;
 
   // determines the order of the token in the list
@@ -109,6 +116,7 @@ export class Token implements BaseContract {
       client: { public: wallet.publicClient, wallet: wallet.walletClient },
     });
   }
+
   get contract() {
     return getContract({
       address: this.address as `0x${string}`,
@@ -121,12 +129,6 @@ export class Token implements BaseContract {
     this.setData(args);
     makeAutoObservable(this);
     this.getIsRouterToken();
-    reaction(
-      () => wallet?.account,
-      () => {
-        this.getBalance();
-      }
-    );
   }
 
   get faucet() {
@@ -397,10 +399,12 @@ export class Token implements BaseContract {
       return cachedPot2PumpAddress;
     }
 
-    const pot2pumpAddress =
-      await wallet.contracts.memeFactory.contract.read.getPair([
-        this.address as Address,
-      ]);
+    const pot2pumpAddress = await wallet.contracts.memeFactory.contract.read
+      .getPair([this.address as Address])
+      .catch((e: any) => {
+        console.error(e);
+        return zeroAddress;
+      });
 
     if (pot2pumpAddress === zeroAddress) {
       this.pot2pumpAddress = null;

@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { Skeleton } from '@nextui-org/react';
 import { VaultTag } from '../VaultTag';
 import Link from 'next/link';
+import { getInfoClientByChainId } from '@/lib/hooks/useSubgraphClients';
 
 interface VaultCardProps {
   vault: ICHIVaultContract;
@@ -19,8 +20,15 @@ const VaultCard = observer(({ vault }: VaultCardProps) => {
     ICHIVaultContract | undefined
   >(undefined);
   const [loading, setLoading] = useState(true);
-  const tokenA = Token.getToken({ address: vault.token0?.address ?? '' });
-  const tokenB = Token.getToken({ address: vault.token1?.address ?? '' });
+  const tokenA = Token.getToken({
+    address: vault.token0?.address ?? '',
+    chainId: wallet.currentChainId.toString(),
+  });
+  const tokenB = Token.getToken({
+    address: vault.token1?.address ?? '',
+    chainId: wallet.currentChainId.toString(),
+  });
+  const infoClient = getInfoClientByChainId(wallet.currentChainId.toString());
 
   useEffect(() => {
     if (!vault) return;
@@ -28,7 +36,10 @@ const VaultCard = observer(({ vault }: VaultCardProps) => {
     async function initializeVault() {
       try {
         setLoading(true);
-        const vaultContract = await getSingleVaultDetails(vault.address);
+        const vaultContract = await getSingleVaultDetails(
+          infoClient,
+          vault.address
+        );
 
         if (vaultContract) {
           await Promise.all([

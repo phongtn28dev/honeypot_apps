@@ -1,5 +1,5 @@
 import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
-import { infoClient } from '.';
+
 import {
   AccountVaultSharesDocument,
   AccountVaultSharesQuery,
@@ -20,6 +20,9 @@ import { Address } from 'viem';
 import { Token } from '@/services/contract/token';
 import { poolQueryToContract } from './pool';
 import BigNumber from 'bignumber.js';
+import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
+import { ApolloClient } from '@apollo/client';
+import { createClientHook } from '../clientUtils';
 
 export const vaultQueryResToVaultContract = (
   vault: IchiVault
@@ -65,11 +68,12 @@ export const vaultQueryResToVaultContract = (
 };
 
 export async function getAccountVaultsList(
+  client: ApolloClient<any>,
   accountAddress: string
 ): Promise<AccountVaultSharesQuery> {
   console.log(AccountVaultSharesDocument);
 
-  const vaults = await infoClient.query<AccountVaultSharesQuery>({
+  const vaults = await client.query<AccountVaultSharesQuery>({
     query: AccountVaultSharesDocument,
     variables: {
       AccountId: accountAddress.toLowerCase(),
@@ -82,10 +86,10 @@ export async function getAccountVaultsList(
 }
 
 export async function getVaultPageData(
+  client: ApolloClient<any>,
   search?: string
 ): Promise<VaultsSortedByHoldersQuery> {
-  console.log(VAULTS_SORTED_BY_HOLDERS);
-  const vaults = await infoClient.query<VaultsSortedByHoldersQuery>({
+  const vaults = await client.query<VaultsSortedByHoldersQuery>({
     query: VaultsSortedByHoldersDocument,
     variables: {
       search: search ?? '',
@@ -96,10 +100,11 @@ export async function getVaultPageData(
 }
 
 export async function getSingleVaultDetails(
+  client: ApolloClient<any>,
   vaultId: string
 ): Promise<ICHIVaultContract | null> {
   try {
-    const result = await infoClient.query<SingleVaultDetailsQuery>({
+    const result = await client.query<SingleVaultDetailsQuery>({
       query: SingleVaultDetailsDocument,
       variables: {
         vaultId: vaultId.toLowerCase(),
@@ -118,3 +123,10 @@ export async function getSingleVaultDetails(
     return null;
   }
 }
+
+// 创建一个自定义Hook来包装这些函数
+export const useVaultsClient = createClientHook(useInfoClient, {
+  getAccountVaultsList,
+  getVaultPageData,
+  getSingleVaultDetails,
+});

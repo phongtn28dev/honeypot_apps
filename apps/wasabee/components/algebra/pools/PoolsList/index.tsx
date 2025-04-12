@@ -5,16 +5,30 @@ import {
 import { useMemo, useState } from 'react';
 import { Address } from 'viem';
 import PoolsTable from '@/components/algebra/common/Table/poolsTable';
-import { farmingClient } from '@/lib/algebra/graphql/clients';
 import {
   usePoolsListQuery,
   useActiveFarmingsQuery,
+  Pool_OrderBy,
 } from '@/lib/algebra/graphql/generated/graphql';
 import { SortingState } from '@tanstack/react-table';
 import { useUserPools } from '@/lib/algebra/graphql/clients/pool';
 import { wallet } from '@/services/wallet';
 import BigNumber from 'bignumber.js';
 import { calculatePercentageChange } from '@/lib/utils';
+import { useFarmingClient } from '@/lib/hooks/useSubgraphClients';
+const mappingSortKeys: Record<any, Pool_OrderBy> = {
+  tvlUSD: Pool_OrderBy.TotalValueLockedUsd,
+  price: Pool_OrderBy.Token0Price,
+  age: Pool_OrderBy.CreatedAtTimestamp,
+  txns: Pool_OrderBy.TxCount,
+  volume: Pool_OrderBy.VolumeUsd,
+  changeHour: Pool_OrderBy.Id,
+  change24h: Pool_OrderBy.Id,
+  changeWeek: Pool_OrderBy.Id,
+  changeMonth: Pool_OrderBy.Id,
+  liquidity: Pool_OrderBy.Liquidity,
+  'marktet cap': Pool_OrderBy.Token0MarketCap,
+};
 
 interface PoolsListProps {
   defaultFilter?: string;
@@ -27,8 +41,10 @@ const PoolsList = ({
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'id', desc: true },
   ]);
-
+  const farmingClient = useFarmingClient();
   const [search, setSearch] = useState('');
+
+  const orderBy = mappingSortKeys[sorting[0].id];
 
   const { data: pools, loading: isPoolsListLoading } = usePoolsListQuery({
     fetchPolicy: 'cache-and-network',

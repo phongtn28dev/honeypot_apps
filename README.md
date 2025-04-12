@@ -89,3 +89,9 @@ vercel env pull .env.local --environment production
 cd apps/<app-name>
 npx graphql-codegen --config algebra_codegen.ts
 ```
+
+## generate wagmi client
+
+```sh
+sudo pnpm wagmi generate --root apps/<app-name>
+```

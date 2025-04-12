@@ -1,4 +1,3 @@
-import { infoClient } from ".";
 import {
   AllAccountsQuery,
   SingleAccountDetailsDocument,
@@ -7,24 +6,28 @@ import {
   AccountSwapsWithPoolsDocument,
   AccountSwapsWithPoolsQuery,
   AccountSwapsWithPoolsQueryVariables,
-} from "../generated/graphql";
-import { All_Accounts, SINGLE_ACCOUNT_DETAILS } from "../queries/account";
+} from '../generated/graphql';
+import { All_Accounts, SINGLE_ACCOUNT_DETAILS } from '../queries/account';
+import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
+import { ApolloClient } from '@apollo/client';
+import { createClientHook } from '../clientUtils';
 
-export async function getAccountsPageData() {
-  const accountsQuery = await infoClient.query<AllAccountsQuery>({
+export async function getAccountsPageData(client: ApolloClient<any>) {
+  const accountsQuery = await client.query<AllAccountsQuery>({
     query: All_Accounts,
-    fetchPolicy: "network-only",
-    variables: { orderBy: "platformTxCount", orderDirection: "desc" },
+    fetchPolicy: 'network-only',
+    variables: { orderBy: 'platformTxCount', orderDirection: 'desc' },
   });
 
   return accountsQuery.data;
 }
 
 export async function getAccountSwapsWithPools(
+  client: ApolloClient<any>,
   accountId: string,
   pools: string[]
 ) {
-  const swapsQuery = await infoClient.query<
+  const swapsQuery = await client.query<
     AccountSwapsWithPoolsQuery,
     AccountSwapsWithPoolsQueryVariables
   >({
@@ -35,24 +38,33 @@ export async function getAccountSwapsWithPools(
   return swapsQuery.data;
 }
 
-export async function getSingleAccountDetails(accountId: string) {
+export async function getSingleAccountDetails(
+  client: ApolloClient<any>,
+  accountId: string
+) {
   try {
-    const accountQuery = await infoClient.query<
+    const accountQuery = await client.query<
       SingleAccountDetailsQuery,
       SingleAccountDetailsQueryVariables
     >({
       query: SingleAccountDetailsDocument,
       variables: { accountId: accountId.toLowerCase() },
-      fetchPolicy: "network-only",
+      fetchPolicy: 'network-only',
     });
 
     if (!accountQuery.data) {
-      throw new Error("No data returned from single account query");
+      throw new Error('No data returned from single account query');
     }
 
     return accountQuery.data;
   } catch (error) {
-    console.error("Error fetching single account details:", error);
+    console.error('Error fetching single account details:', error);
     throw error;
   }
 }
+
+export const useAccount = createClientHook(useInfoClient, {
+  getAccountsPageData,
+  getAccountSwapsWithPools,
+  getSingleAccountDetails
+});

@@ -1,51 +1,51 @@
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/button/button-next";
-import { useEffect, useMemo, useState } from "react";
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/button/button-next';
+import { useEffect, useMemo, useState } from 'react';
 import {
   ADDRESS_ZERO,
   NonfungiblePositionManager,
   algebraPositionManagerABI,
   computePoolAddress,
-} from "@cryptoalgebra/sdk";
-import { useTransactionAwait } from "@/lib/algebra/hooks/common/useTransactionAwait";
-import { useContractWrite, useWriteContract } from "wagmi";
-import { Address, getContract, maxInt256 } from "viem";
-import Loader from "@/components/algebra/common/Loader";
-import { PoolState, usePool } from "@/lib/algebra/hooks/pools/usePool";
-import SelectPair from "../SelectPair";
-import { STABLECOINS } from "@/config/algebra/tokens";
+} from '@cryptoalgebra/sdk';
+import { useTransactionAwait } from '@/lib/algebra/hooks/common/useTransactionAwait';
+import { useContractWrite, useWriteContract } from 'wagmi';
+import { Address, getContract, maxInt256 } from 'viem';
+import Loader from '@/components/algebra/common/Loader';
+import { PoolState, usePool } from '@/lib/algebra/hooks/pools/usePool';
+import SelectPair from '../SelectPair';
 import {
   useMintState,
   useDerivedMintInfo,
-} from "@/lib/algebra/state/mintStore";
-import { TransactionType } from "@/lib/algebra/state/pendingTransactionsStore";
+} from '@/lib/algebra/state/mintStore';
+import { TransactionType } from '@/lib/algebra/state/pendingTransactionsStore';
 import {
   useDerivedSwapInfo,
   useSwapState,
-} from "@/lib/algebra/state/swapStore";
-import { SwapField } from "@/types/algebra/types/swap-field";
-import {
-  simulateAlgebraPositionManagerMulticall,
-  useSimulateAlgebraPositionManagerMulticall,
-} from "@/wagmi-generated";
-import { useToastify } from "@/lib/hooks/useContractToastify";
-import { Input } from "@/components/algebra/ui/input";
-import HoneyContainer from "@/components/CardContianer/HoneyContainer";
-import { ContractWrite } from "@/services/utils";
-import { Contract } from "ethers";
-import { ALGEBRA_POSITION_MANAGER } from "@/config/algebra/addresses";
-import { wallet } from "@/services/wallet";
+} from '@/lib/algebra/state/swapStore';
+import { SwapField } from '@/types/algebra/types/swap-field';
+import { useSimulateAlgebraPositionManagerMulticall } from '@/wagmi-generated';
+import { useToastify } from '@/lib/hooks/useContractToastify';
+import { Input } from '@/components/algebra/ui/input';
+import HoneyContainer from '@/components/CardContianer/HoneyContainer';
+import { wallet } from '@/services/wallet';
+import { useObserver } from 'mobx-react-lite';
 
 const FEE_TIERS = [
-  { value: 100, label: "0.01%", description: "Best for stable pairs" },
-  { value: 500, label: "0.05%", description: "Best for stable pairs" },
-  { value: 3000, label: "0.3%", description: "Best for most pairs" },
-  { value: 10000, label: "1%", description: "Best for exotic pairs" },
+  { value: 100, label: '0.01%', description: 'Best for stable pairs' },
+  { value: 500, label: '0.05%', description: 'Best for stable pairs' },
+  { value: 3000, label: '0.3%', description: 'Best for most pairs' },
+  { value: 10000, label: '1%', description: 'Best for exotic pairs' },
 ];
 
 const CreatePoolForm = () => {
   const router = useRouter();
   const { currencies } = useDerivedSwapInfo();
+
+  const { currentChain } = useObserver(() => {
+    return {
+      currentChain: wallet.currentChain,
+    };
+  });
 
   const {
     actions: { selectCurrency },
@@ -116,12 +116,12 @@ const CreatePoolForm = () => {
     }
   );
 
-  console.log("config", { createPoolConfig, calldata, value, mintInfo });
+  console.log('config', { createPoolConfig, calldata, value, mintInfo });
 
   const { isLoading, isError, isSuccess } = useTransactionAwait(
     createPoolData,
     {
-      title: "Create Pool",
+      title: 'Create Pool',
       tokenA: currencyA?.wrapped.address as Address,
       tokenB: currencyB?.wrapped.address as Address,
       type: TransactionType.POOL,
@@ -130,22 +130,26 @@ const CreatePoolForm = () => {
   );
 
   useToastify({
-    title: "Create Pool",
+    title: 'Create Pool',
     isLoading,
     isSuccess,
     isError,
-    message: isLoading ? "Pending" : isSuccess ? "Success" : "Failed",
+    message: isLoading ? 'Pending' : isSuccess ? 'Success' : 'Failed',
   });
 
   useEffect(() => {
     selectCurrency(SwapField.INPUT, undefined);
     selectCurrency(SwapField.OUTPUT, undefined);
-    typeStartPriceInput("");
+    typeStartPriceInput('');
 
     return () => {
       selectCurrency(SwapField.INPUT, ADDRESS_ZERO);
-      selectCurrency(SwapField.OUTPUT, STABLECOINS.HONEY.address);
-      typeStartPriceInput("");
+      selectCurrency(
+        SwapField.OUTPUT,
+        currentChain.validatedTokens.filter((token) => token.isStableCoin)[0]
+          .address
+      );
+      typeStartPriceInput('');
     };
   }, []);
 
@@ -205,12 +209,12 @@ const CreatePoolForm = () => {
                 placeholder="0.0"
                 value={startPriceTypedValue}
                 onChange={(e: { target: { value: string } }) => {
-                  console.log("e", e.target.value);
+                  console.log('e', e.target.value);
                   typeStartPriceInput(e.target.value);
                 }}
                 className="bg-white  rounded-md"
                 classNames={{
-                  input: "!text-black",
+                  input: '!text-black',
                 }}
               />
               <p className="text-xs text-black">
@@ -218,7 +222,7 @@ const CreatePoolForm = () => {
                   ? `1 ${currencyB?.symbol} = ${
                       1 / Number(startPriceTypedValue)
                     } ${currencyA?.symbol}`
-                  : "Enter the initial price"}
+                  : 'Enter the initial price'}
               </p>
             </div>
           </>
@@ -243,15 +247,15 @@ const CreatePoolForm = () => {
           {isLoading ? (
             <Loader />
           ) : isSameToken ? (
-            "Select another pair"
+            'Select another pair'
           ) : !areCurrenciesSelected ? (
-            "Select currencies"
+            'Select currencies'
           ) : !startPriceTypedValue && !isPoolExists ? (
-            "Enter initial price"
+            'Enter initial price'
           ) : isPoolExists ? (
-            "View Existing Pool"
+            'View Existing Pool'
           ) : (
-            "Create Pool"
+            'Create Pool'
           )}
         </Button>
       </div>

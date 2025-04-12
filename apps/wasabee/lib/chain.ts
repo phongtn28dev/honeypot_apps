@@ -3,15 +3,39 @@ import {
   Chain,
   berachainTestnet as viemBerachainTestnet,
   polygonMumbai,
-  sepolia as viewSepolia,
+  sepolia,
+  arbitrum,
+  base,
+  mainnet,
+  berachain,
+  berachainBepolia,
+  arbitrumSepolia,
 } from 'viem/chains';
+
+export const arbitrumSepoliaTestnet: Chain = {
+  ...arbitrumSepolia,
+  testnet: true,
+};
+
+export const arbitrumMainnet: Chain = {
+  ...arbitrum,
+};
+
+export const baseMainnet: Chain = {
+  ...base,
+};
+
+export const ethMainnet: Chain = {
+  ...mainnet,
+};
+
 export const polygonMumbaiChain: Chain = {
   ...polygonMumbai,
-  rpcUrls: {
-    default: {
-      http: ['https://polygon-mumbai-pokt.nodies.app'],
-    },
-  },
+};
+
+export const berachainBepoliaTestnet: Chain = {
+  ...berachainBepolia,
+  testnet: true,
 };
 
 export const berachainTestnet: Chain = {
@@ -86,7 +110,8 @@ export const berachainBartioTestnet: Chain = {
   },
 };
 
-export const berachain: Chain = {
+export const berachainMainnet: Chain = {
+  ...berachain,
   id: 80094,
   name: 'Berachain',
   nativeCurrency: {
@@ -116,11 +141,15 @@ export const berachain: Chain = {
 };
 
 export const chains = [
-  //sepolia,
+  sepolia,
   berachain,
   berachainTestnet,
   berachainBartioTestnet,
   polygonMumbaiChain,
+  arbitrumSepoliaTestnet,
+  arbitrumMainnet,
+  baseMainnet,
+  ethMainnet,
 ];
 
 export const chainsMap = chains.reduce((acc, chain) => {
