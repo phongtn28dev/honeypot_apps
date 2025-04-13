@@ -71,7 +71,7 @@ export const MyAquaberaVaults = observer(
     useEffect(() => {
       if (!wallet.isInit) return;
       loadMyVaults(wallet.account);
-    }, [wallet.isInit]);
+    }, [wallet.isInit, wallet.account]);
 
     const loadMyVaults = async (accountAddress: string) => {
       const myVaultsQuery = await getAccountVaultsList(

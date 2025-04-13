@@ -53,6 +53,7 @@ export const VaultDetail = observer(() => {
       !address ||
       !isAddress(address as string) ||
       address === zeroAddress ||
+      wallet.account === zeroAddress ||
       vault
     )
       return;
@@ -96,13 +97,13 @@ export const VaultDetail = observer(() => {
     };
 
     loadVaultData();
-  }, [address, wallet.isInit]);
+  }, [address, wallet.isInit, wallet.account]);
 
   const hasShares = vault?.userShares ?? BigInt(0) > BigInt(0);
 
   // Add a function to refresh vault data
   const refreshVaultData = useCallback(async () => {
-    if (!vault || !wallet.account) return;
+    if (!vault || !wallet.account || wallet.account === zeroAddress) return;
 
     // Refresh subgraph data
     const vaultDetails = await getSingleVaultDetails(infoclient, vault.address);
@@ -114,28 +115,10 @@ export const VaultDetail = observer(() => {
     vaultDetails?.getBalanceOf(wallet.account);
 
     vaultDetails?.getTotalAmounts();
-  }, [vault, wallet.isInit]);
-
-  // Format number with 18 decimals
-  const formatShares = (value: bigint) => {
-    const divisor = BigInt(10 ** 18); // Always use 18 decimals for shares
-    const integerPart = value / divisor;
-    const fractionalPart = value % divisor;
-
-    // Convert to string and pad with zeros if needed
-    const fractionalStr = fractionalPart.toString().padStart(18, '0');
-
-    // Show up to 6 decimal places for better readability
-    const displayDecimals = 18;
-    const formattedFractional = fractionalStr.slice(0, displayDecimals);
-
-    // Remove trailing zeros
-    const trimmedFractional = formattedFractional.replace(/0+$/, '');
-
-    return trimmedFractional
-      ? `${integerPart}.${trimmedFractional}`
-      : integerPart.toString();
-  };
+    console.log({
+      vaultDetails,
+    });
+  }, [vault, wallet.isInit, wallet.account]);
 
   return (
     <div className="container mx-auto px-4 font-gliker">
@@ -269,15 +252,6 @@ export const VaultDetail = observer(() => {
                       decimals: 3,
                       endWith: vault?.token0?.symbol,
                     })}
-                  </span>
-                  <span>
-                    (
-                    {DynamicFormatAmount({
-                      amount: vault?.userTVLUSD ?? 0,
-                      decimals: 3,
-                      endWith: '$',
-                    })}
-                    )
                   </span>
                 </p>
                 <p className="text-xs md:text-xl font-bold text-[#202020]">

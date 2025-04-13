@@ -221,7 +221,6 @@ export class ICHIVaultContract implements BaseContract {
 
   // Example function using ABI
   async getBalanceOf(account: string) {
-    if (this.userShares !== undefined) return this.userShares;
     if (!this.contract) {
       return;
     }
