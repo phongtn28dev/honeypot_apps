@@ -532,7 +532,9 @@ export class Token implements BaseContract {
     const indexerTokenData = await getSingleTokenData(
       this.address.toLowerCase()
     );
-    console.log('indexerTokenData', indexerTokenData);
+    if (this.isNative) {
+      console.log('native indexerTokenData', indexerTokenData);
+    }
 
     if (!indexerTokenData) {
       return;
@@ -540,6 +542,10 @@ export class Token implements BaseContract {
 
     if (indexerTokenData) {
       this.assignIndexerTokenData(indexerTokenData);
+    }
+
+    if (this.isNative) {
+      console.log('native indexerTokenData after', this);
     }
 
     this.indexerDataLoaded = true;

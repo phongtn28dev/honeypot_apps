@@ -54,20 +54,6 @@ export class OrbiterBridge {
   }
 
   get bridgeErrorText(): string | undefined {
-    console.log(
-      this.selectedToken,
-      this.fromChainId,
-      this.toChainId,
-      this.router
-    );
-
-    console.log(
-      !!this.selectedToken,
-      !!this.fromChainId,
-      !!this.toChainId,
-      !this.router
-    );
-
     if (
       !!this.selectedToken &&
       !!this.fromChainId &&

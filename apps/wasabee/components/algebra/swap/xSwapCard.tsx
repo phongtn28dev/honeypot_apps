@@ -89,8 +89,12 @@ export function XSwapCard({
     currencies,
     allowedSlippage,
   } = useDerivedSwapInfoWithoutSwapState({
-    inputCurrencyId: fromToken.address as Address,
-    outputCurrencyId: toToken.address as Address,
+    inputCurrencyId: fromToken.isNative
+      ? zeroAddress
+      : (fromToken.address as Address),
+    outputCurrencyId: toToken.isNative
+      ? zeroAddress
+      : (toToken.address as Address),
     independentField: independentField,
     typedValue: typedValue,
   });

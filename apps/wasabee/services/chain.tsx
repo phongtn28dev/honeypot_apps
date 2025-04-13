@@ -33,6 +33,7 @@ export class Network {
   supportVault: boolean = false;
   supportBridge: boolean = false;
   isActive: boolean = true;
+  iconUrl: string = '';
   get chainId() {
     return this.chain.id;
   }
@@ -84,8 +85,11 @@ export class Network {
     }
   }
   init() {
-    this.nativeToken = Token.getToken(this.nativeToken);
-    this.nativeToken.init();
+    this.nativeToken = Token.getToken({
+      ...this.nativeToken,
+      isNative: true,
+      chainId: this.chainId.toString(),
+    });
 
     this.validatedTokens = [];
 
@@ -93,6 +97,7 @@ export class Network {
       const token = Token.getToken({
         ...t,
         address,
+        chainId: this.chainId.toString(),
       });
       this.validatedTokensInfo[address] = token;
       this.validatedTokens.push(token);
@@ -111,6 +116,11 @@ export class Network {
           token.assignIndexerTokenData(t as IndexerToken);
         });
       });
+
+      this.nativeToken.init(false, {
+        loadBalance: true,
+        loadIndexerTokenData: true,
+      });
     }
 
     this.validatedVault.forEach((vault) => {
@@ -123,7 +133,7 @@ export const berachainBepoliaNetwork = new Network({
   supportDEX: true,
   supportVault: true,
   supportBridge: true,
-
+  iconUrl: '/images/icons/chains/berachain.png',
   chain: berachainBepoliaTestnet,
   nativeToken: {
     address: '0x6969696969696969696969696969696969696969',
@@ -132,6 +142,7 @@ export const berachainBepoliaNetwork = new Network({
     decimals: 18,
     isNative: true,
     logoURI: '/images/icons/tokens/wbera-token-icon.png',
+    chainId: '80069',
   },
   raisedTokenData: [],
   platformTokenAddress: {
@@ -166,6 +177,7 @@ export const berachainNetwork = new Network({
   supportDEX: true,
   supportVault: true,
   supportBridge: true,
+  iconUrl: '/images/icons/chains/berachain.png',
   chain: berachainMainnet,
   officialFaucets: [
     {
@@ -183,6 +195,7 @@ export const berachainNetwork = new Network({
     isNative: true,
     logoURI: '/images/icons/tokens/wbera-token-icon.png',
     isPopular: true,
+    chainId: '80094',
   },
   raisedTokenData: [
     {
@@ -545,6 +558,7 @@ export const arbitrumSepoliaNetwork = new Network({
   supportBridge: true,
   chain: arbitrumSepoliaTestnet,
   officialFaucets: [],
+  iconUrl: '/images/icons/chains/arbitrum.png',
   nativeToken: {
     address: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
     name: 'ETH',
@@ -552,6 +566,7 @@ export const arbitrumSepoliaNetwork = new Network({
     decimals: 18,
     isNative: true,
     logoURI: '/images/icons/tokens/weth-token-icon.png',
+    chainId: '421614',
   },
   contracts: contractAddresses['default'],
   subgraphAddresses: subgraphAddresses['default'],
@@ -576,6 +591,7 @@ export const sepoliaNetwork = new Network({
   supportBridge: false,
   chain: sepolia,
   officialFaucets: [],
+  iconUrl: '/images/icons/chains/ethereum.png',
   nativeToken: {
     address: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
     name: 'ETH',
@@ -583,6 +599,7 @@ export const sepoliaNetwork = new Network({
     decimals: 18,
     isNative: true,
     logoURI: '/images/icons/tokens/weth-token-icon.png',
+    chainId: '11155111',
   },
   contracts: contractAddresses['default'],
   subgraphAddresses: subgraphAddresses['default'],
@@ -608,6 +625,7 @@ export const movementNetWork = new Network({
   chain: movementTestnet,
   officialFaucets: [],
   nativeToken: {},
+  iconUrl: '/images/icons/chains/ethereum.png',
   contracts: contractAddresses['default'],
   subgraphAddresses: subgraphAddresses['default'],
   faucetTokens: [],
@@ -620,6 +638,7 @@ export const movementNetWork = new Network({
       decimals: 18,
       isNative: true,
       logoURI: '/images/icons/tokens/weth-token-icon.png',
+      chainId: '3073',
     },
   },
   validatedFtoAddresses: [],
@@ -631,6 +650,7 @@ export const arbitrumOneNetwork = new Network({
   supportVault: false,
   supportBridge: true,
   chain: arbitrumMainnet,
+  iconUrl: '/images/icons/chains/arbitrum.png',
   officialFaucets: [],
   nativeToken: {
     address: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
@@ -639,6 +659,7 @@ export const arbitrumOneNetwork = new Network({
     decimals: 18,
     isNative: true,
     logoURI: '/images/icons/tokens/weth-token-icon.png',
+    chainId: '42161',
   },
   contracts: contractAddresses['default'],
   subgraphAddresses: subgraphAddresses['default'],
@@ -684,6 +705,7 @@ export const baseNetwork = new Network({
   supportBridge: true,
   chain: baseMainnet,
   officialFaucets: [],
+  iconUrl: '/images/icons/chains/base.png',
   nativeToken: {
     address: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
     name: 'ETH',
@@ -691,6 +713,7 @@ export const baseNetwork = new Network({
     decimals: 18,
     isNative: true,
     logoURI: '/images/icons/tokens/weth-token-icon.png',
+    chainId: '8453',
   },
 
   contracts: contractAddresses['default'],
@@ -728,6 +751,7 @@ export const ethNetwork = new Network({
   supportVault: false,
   supportBridge: true,
   chain: ethMainnet,
+  iconUrl: '/images/icons/chains/ethereum.png',
   officialFaucets: [],
   nativeToken: {
     address: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
@@ -736,6 +760,7 @@ export const ethNetwork = new Network({
     decimals: 18,
     isNative: true,
     logoURI: '/images/icons/tokens/weth-token-icon.png',
+    chainId: '1',
   },
 
   contracts: contractAddresses['default'],

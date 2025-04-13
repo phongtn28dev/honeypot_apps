@@ -32,7 +32,7 @@ export const Profile = observer(() => {
   const infoclient = useInfoClient();
 
   useEffect(() => {
-    if (wallet.account) {
+    if (wallet.account && wallet.currentChain.supportDEX) {
       getLiquidatorDatas(infoclient, wallet.account).then((data) => {
         setUserPoolsProfit(data);
       });
@@ -78,66 +78,72 @@ export const Profile = observer(() => {
                     </div>
                   </div>
 
-                  <span className="flex flex-col items-start p-1 sm:p-2">
-                    <span className="text-[#0D0D0D] text-xs sm:text-sm md:text-base mb-1 sm:mb-2 md:mb-4">
-                      Token Value
+                  {wallet.currentChain.supportDEX && (
+                    <span className="flex flex-col items-start p-1 sm:p-2">
+                      <span className="text-[#0D0D0D] text-xs sm:text-sm md:text-base mb-1 sm:mb-2 md:mb-4">
+                        Token Value
+                      </span>
+                      <div className="text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-none text-shadow-[1.081px_2.162px_0px_#AF7F3D] text-stroke-1.5 text-stroke-black">
+                        {formatAmountWithAlphabetSymbol(
+                          portfolio.totalBalanceFormatted,
+                          2
+                        )}{' '}
+                        USD
+                      </div>
                     </span>
-                    <div className="text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-none text-shadow-[1.081px_2.162px_0px_#AF7F3D] text-stroke-1.5 text-stroke-black">
-                      {formatAmountWithAlphabetSymbol(
-                        portfolio.totalBalanceFormatted,
-                        2
-                      )}{' '}
-                      USD
-                    </div>
-                  </span>
+                  )}
                 </div>
 
-                <div className="w-full md:w-[511px] flex-col gap-2 mt-6 md:mt-0">
-                  <div
-                    className="h-30 w-full rounded-lg overflow-hidden"
-                    ref={chartContainerRef}
-                  >
-                    <ProtfolioBalanceChart
-                      userPoolsProfits={userPoolsProfit}
-                      timeRange={timeRange}
-                      onTimeRangeChange={setTimeRange}
-                    />
+                {wallet.currentChain.supportDEX && (
+                  <div className="w-full md:w-[511px] flex-col gap-2 mt-6 md:mt-0">
+                    <div
+                      className="h-30 w-full rounded-lg overflow-hidden"
+                      ref={chartContainerRef}
+                    >
+                      <ProtfolioBalanceChart
+                        userPoolsProfits={userPoolsProfit}
+                        timeRange={timeRange}
+                        onTimeRangeChange={setTimeRange}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </CardContainer>
 
-            <Tabs
-              aria-label="Options"
-              defaultSelectedKey={urlParams.tab || 'portfolio'}
-              classNames={{
-                base: 'relative w-full',
-                tabList:
-                  'flex rounded-2xl border border-[#202020] bg-white p-2 md:p-4 shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020] py-1 md:py-2 px-2 md:px-3.5 absolute left-1/2 -translate-x-1/2 z-10 -top-5',
-                tab: 'text-sm md:text-base px-2 md:px-3 py-1 md:py-2',
-                panel: cn(
-                  'flex flex-col h-full w-full gap-y-4 justify-center items-center bg-[#FFCD4D] rounded-2xl text-[#202020]',
-                  'px-4 md:px-8 pt-[70px] pb-[70px]',
-                  "bg-[url('/images/card-container/honey/honey-border.png'),url('/images/card-container/dark/bottom-border.svg')]",
-                  'bg-[position:-65px_top,_-85px_bottom]',
-                  'bg-[size:auto_65px,_auto_65px]',
-                  'bg-repeat-x',
-                  '!mt-0'
-                ),
-              }}
-              onSelectionChange={(key) => {
-                if (key === 'portfolio') {
-                  portfolio.initPortfolio();
-                }
-              }}
-            >
-              <Tab key="portfolio" title="Portfolio">
-                <PortfolioTab />
-              </Tab>
-              <Tab key="my-pools" title="My Pools">
-                <MyPools />
-              </Tab>
-            </Tabs>
+            {wallet.currentChain.supportDEX && (
+              <Tabs
+                aria-label="Options"
+                defaultSelectedKey={urlParams.tab || 'portfolio'}
+                classNames={{
+                  base: 'relative w-full',
+                  tabList:
+                    'flex rounded-2xl border border-[#202020] bg-white p-2 md:p-4 shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020] py-1 md:py-2 px-2 md:px-3.5 absolute left-1/2 -translate-x-1/2 z-10 -top-5',
+                  tab: 'text-sm md:text-base px-2 md:px-3 py-1 md:py-2',
+                  panel: cn(
+                    'flex flex-col h-full w-full gap-y-4 justify-center items-center bg-[#FFCD4D] rounded-2xl text-[#202020]',
+                    'px-4 md:px-8 pt-[70px] pb-[70px]',
+                    "bg-[url('/images/card-container/honey/honey-border.png'),url('/images/card-container/dark/bottom-border.svg')]",
+                    'bg-[position:-65px_top,_-85px_bottom]',
+                    'bg-[size:auto_65px,_auto_65px]',
+                    'bg-repeat-x',
+                    '!mt-0'
+                  ),
+                }}
+                onSelectionChange={(key) => {
+                  if (key === 'portfolio') {
+                    portfolio.initPortfolio();
+                  }
+                }}
+              >
+                <Tab key="portfolio" title="Portfolio">
+                  <PortfolioTab />
+                </Tab>
+                <Tab key="my-pools" title="My Pools">
+                  <MyPools />
+                </Tab>
+              </Tabs>
+            )}
           </div>
         )}
       </div>

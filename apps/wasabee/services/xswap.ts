@@ -14,6 +14,7 @@ import {
   ApprovalStateType,
 } from '@/types/algebra/types/approve-state';
 import { getMultipleTokensData } from '@/lib/algebra/graphql/clients/token';
+import { zeroAddress } from 'viem';
 
 export interface XChildSwap {
   fromToken: Token;
@@ -41,6 +42,12 @@ class XSwap {
         this.reset();
       }
     );
+    reaction(
+      () => wallet.account,
+      () => {
+        this.reset();
+      }
+    );
   }
 
   selectAllTokens() {
@@ -61,6 +68,7 @@ class XSwap {
   }
 
   reset() {
+    if (!wallet.currentChain || wallet.account === zeroAddress) return;
     //reset swaps state
     this.swaps.forEach((swap) => {
       swap.setIsSelected(false);
@@ -69,7 +77,9 @@ class XSwap {
 
     //reload balances
     wallet.currentChain?.validatedTokens.forEach((t) => {
-      t.getBalance();
+      t.getBalance().then(() => {
+        console.log(`${t.symbol} ${t.balance.toFixed(18)}`);
+      });
     });
   }
 
@@ -138,6 +148,11 @@ class XSwap {
   }
 
   get sortedTokens() {
+    console.log({
+      tokens: wallet.currentChain?.validatedTokens.map(
+        (t) => `${t.symbol} ${t.balance.toNumber()}`
+      ),
+    });
     return wallet.currentChain?.validatedTokens
       ?.filter((token) => token.balance.gt(0))
       ?.sort(
@@ -149,6 +164,9 @@ class XSwap {
   }
 
   get totalAmountIn() {
+    console.log({
+      swaps: this.swaps.filter((swap) => swap.isSelected),
+    });
     return this.swaps
       .filter((swap) => swap.isSelected)
       .reduce(
