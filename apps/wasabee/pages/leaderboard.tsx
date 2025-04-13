@@ -116,6 +116,15 @@ const LeaderboardPage = () => {
       } Participations`,
     },
   ];
+  if (!wallet.currentChain.supportDEX) {
+    return (
+      <div className="w-full flex items-center justify-center pb-6 sm:pb-12 overflow-x-hidden">
+        <div className="text-center">
+          <p className="text-lg">DEX is not supported on this chain</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <CardContainer className="xl:max-w-[1200px] mx-auto w-[calc(100%-32px)]">
