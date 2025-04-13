@@ -58,8 +58,6 @@ export const VaultDetail = observer(() => {
     )
       return;
 
-    console.log('address', address);
-
     // Fetch token addresses and pool data
     const loadVaultData = async () => {
       const vaultContract = await getSingleVaultDetails(
@@ -115,9 +113,6 @@ export const VaultDetail = observer(() => {
     vaultDetails?.getBalanceOf(wallet.account);
 
     vaultDetails?.getTotalAmounts();
-    console.log({
-      vaultDetails,
-    });
   }, [vault, wallet.isInit, wallet.account]);
 
   return (
@@ -244,15 +239,13 @@ export const VaultDetail = observer(() => {
               </h3>
               <div className="space-y-1">
                 <p className="text-xs md:text-xl font-bold text-[#202020] flex flex-col md:flex-row justify-between gap-2">
-                  <span>
-                    {DynamicFormatAmount({
-                      amount: BigNumber(
-                        vault?.userTokenAmounts.total0.toString() ?? 0
-                      ).toString(),
-                      decimals: 3,
-                      endWith: vault?.token0?.symbol,
-                    })}
-                  </span>
+                  {DynamicFormatAmount({
+                    amount: BigNumber(
+                      vault?.userTokenAmounts.total0.toString() ?? 0
+                    ).toString(),
+                    decimals: 3,
+                    endWith: vault?.token0?.symbol,
+                  })}
                 </p>
                 <p className="text-xs md:text-xl font-bold text-[#202020]">
                   {DynamicFormatAmount({

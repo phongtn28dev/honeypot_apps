@@ -107,11 +107,6 @@ export class ICHIVaultContract implements BaseContract {
   }
 
   get userTokenAmountsWithoutDecimal() {
-    console.log({
-      totalsupplyShares: this.totalsupplyShares,
-      userShares: this.userShares,
-      totalAmountsWithoutDecimal: this.totalAmountsWithoutDecimal,
-    });
     if (
       !this.totalsupplyShares ||
       !this.userShares ||
@@ -119,7 +114,7 @@ export class ICHIVaultContract implements BaseContract {
       this.totalAmountsWithoutDecimal.total1 === undefined
     )
       return { total0: 0, total1: 0 };
-    console.log('is ok');
+
     return {
       total0:
         (this.totalAmountsWithoutDecimal.total0 * this.userShares) /

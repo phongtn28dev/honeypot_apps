@@ -243,6 +243,7 @@ const PoolsTable = observer(
                       return;
                     }
                     setSelectedFilter(key === 'all' ? 'trending' : 'myPools');
+                    setPage(1);
                   }}
                   defaultSelectedKey={
                     selectedFilter === 'trending' ? 'all' : 'myPools'

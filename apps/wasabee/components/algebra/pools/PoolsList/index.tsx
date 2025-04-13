@@ -422,9 +422,10 @@ const PoolsList = ({
             total24hDataCount++;
             total24hVolume += Number(hour.volumeUSD);
           });
-
-        const avgFees24h = total24hFees / total24hDataCount;
-        const avgVolume24h = total24hVolume / total24hDataCount;
+        const avgFees24h =
+          total24hDataCount > 0 ? total24hFees / total24hDataCount : 0;
+        const avgVolume24h =
+          total24hDataCount > 0 ? total24hVolume / total24hDataCount : 0;
 
         const avgAPR24h =
           (avgFees24h / Number(totalValueLockedUSD)) * 365 * 100;
@@ -478,8 +479,6 @@ const PoolsList = ({
       setSorting([]);
     }
   };
-
-  console.log('formattedPools', formattedPools);
 
   return (
     <div className="w-full">
