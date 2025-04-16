@@ -58,7 +58,7 @@ export function XSwapCard({
       : new AlgebraToken(
           wallet.currentChainId,
           fromToken.address,
-          fromToken.decimals,
+          Number(fromToken.decimals),
           fromToken.symbol,
           fromToken.name
         )
@@ -73,7 +73,7 @@ export function XSwapCard({
       : new AlgebraToken(
           wallet.currentChainId,
           toToken.address,
-          toToken.decimals,
+          Number(toToken.decimals),
           toToken.symbol,
           toToken.name
         )
