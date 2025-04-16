@@ -17,7 +17,7 @@ import {
 import { AlgebraBasePluginContract } from '@/services/contract/algebra/algebra-base-plugin';
 import { AlgebraPoolContract } from '@/services/contract/algebra/algebra-pool-contract';
 
-import { Token } from '@honeypot/shared';
+import { Token, wallet } from '@honeypot/shared';
 import { SwapField } from '@/types/algebra/types/swap-field';
 import { TradeState } from '@/types/algebra/types/trade-state';
 import {
@@ -258,6 +258,7 @@ const SwapRoute = ({
               <TokenLogo
                 token={Token.getToken({
                   address: token.address,
+                  chainId: wallet.currentChainId.toString(),
                 })}
               />
             </div>

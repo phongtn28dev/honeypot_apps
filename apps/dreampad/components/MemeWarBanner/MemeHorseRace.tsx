@@ -16,7 +16,7 @@ import {
   useDisclosure,
 } from '@nextui-org/react';
 import { useSpring, animated } from 'react-spring';
-import { getTokenTop10Holders } from '@/lib/algebra/graphql/clients/token';
+import { getTokenTop10Holders } from '@honeypot/shared';
 import { TokenTop10HoldersQuery } from '@/lib/algebra/graphql/generated/graphql';
 import BigNumber from 'bignumber.js';
 import { truncateEthAddress } from '@usecapsule/rainbowkit-wallet';
@@ -517,7 +517,10 @@ export const MemeHorseRace = observer(
           if (wallet.isInit) {
             const tokenMap: Record<string, Token> = {};
             for (const racer of initialRacers) {
-              const token = Token.getToken({ address: racer.tokenAddress });
+              const token = Token.getToken({
+                address: racer.tokenAddress,
+                chainId: wallet.currentChainId.toString(),
+              });
               await token.init();
               tokenMap[racer.tokenAddress] = token;
             }

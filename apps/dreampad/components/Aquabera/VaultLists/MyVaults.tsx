@@ -55,8 +55,14 @@ export const MyAquaberaVaults = observer(
       const filteredVaults = myVaults.vaultShares.filter((vaultShare) => {
         if (!searchString) return true;
 
-        const tokenA = Token.getToken({ address: vaultShare.vault.tokenA });
-        const tokenB = Token.getToken({ address: vaultShare.vault.tokenB });
+        const tokenA = Token.getToken({
+          address: vaultShare.vault.tokenA,
+          chainId: wallet.currentChainId.toString(),
+        });
+        const tokenB = Token.getToken({
+          address: vaultShare.vault.tokenB,
+          chainId: wallet.currentChainId.toString(),
+        });
 
         const searchLower = searchString.toLowerCase();
         return (
@@ -177,10 +183,12 @@ export const MyAquaberaVaults = observer(
               getSortedVaults().map((vaultShare) => {
                 const tokenA = Token.getToken({
                   address: vaultShare.vault.tokenA,
+                  chainId: wallet.currentChainId.toString(),
                 });
 
                 const tokenB = Token.getToken({
                   address: vaultShare.vault.tokenB,
+                  chainId: wallet.currentChainId.toString(),
                 });
 
                 tokenA.init();

@@ -82,6 +82,7 @@ const TokenCard = ({
             currency?.wrapped.address
               ? Token.getToken({
                   address: currency?.wrapped.address,
+                  chainId: wallet.currentChainId.toString(),
                 })
               : undefined
           }

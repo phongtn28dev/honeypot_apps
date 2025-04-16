@@ -188,6 +188,7 @@ export const pot2PumpToMemePair = (
 
     contract.launchedToken = Token.getToken({
       address: pot2Pump.launchToken?.id,
+      chainId: wallet.currentChainId.toString(),
       name: pot2Pump.launchToken?.name,
       symbol: pot2Pump.launchToken?.symbol,
       decimals: Number(pot2Pump.launchToken?.decimals),
@@ -207,6 +208,7 @@ export const pot2PumpToMemePair = (
   if (pot2Pump.raisedToken?.id) {
     contract.raiseToken = Token.getToken({
       address: pot2Pump.raisedToken?.id,
+      chainId: wallet.currentChainId.toString(),
       name: pot2Pump.raisedToken?.name,
       symbol: pot2Pump.raisedToken?.symbol,
       decimals: Number(pot2Pump.raisedToken?.decimals),

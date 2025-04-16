@@ -15,7 +15,7 @@ import { TokenFieldsFragment } from '@/lib/algebra/graphql/generated/graphql';
 import { ReactNode } from 'react';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
 
-import { Token } from '@honeypot/shared';
+import { Token, wallet } from '@honeypot/shared';
 import {
   DynamicFormatAmount,
   formatAmountWithAlphabetSymbol,
@@ -81,6 +81,7 @@ const PoolPair = observer(({ pair, fee }: Pool) => {
             size={30}
             token={Token.getToken({
               address: token0Address,
+              chainId: wallet.currentChainId.toString(),
             })}
           />
         </div>
@@ -89,6 +90,7 @@ const PoolPair = observer(({ pair, fee }: Pool) => {
             size={30}
             token={Token.getToken({
               address: token1Address,
+              chainId: wallet.currentChainId.toString(),
             })}
           />
         </div>

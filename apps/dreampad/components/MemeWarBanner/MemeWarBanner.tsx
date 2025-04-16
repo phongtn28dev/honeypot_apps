@@ -137,6 +137,7 @@ export const MemeWarBanner = observer((props: Props) => {
     T_HPOT_TOKEN: new AsyncState(async () => {
       const token = await Token.getToken({
         address: tHpotAddress,
+        chainId: wallet.currentChainId.toString(),
       });
       await token.init();
       return token;

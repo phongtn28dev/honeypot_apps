@@ -13,10 +13,16 @@ import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
 
 export const CreateAquaberaVault = observer(() => {
   const [tokenA, setTokenA] = useState<Token>(
-    Token.getToken({ address: wallet.currentChain.validatedTokens[0].address })
+    Token.getToken({
+      address: wallet.currentChain.validatedTokens[0].address,
+      chainId: wallet.currentChainId.toString(),
+    })
   );
   const [tokenB, setTokenB] = useState<Token>(
-    Token.getToken({ address: wallet.currentChain.validatedTokens[1].address })
+    Token.getToken({
+      address: wallet.currentChain.validatedTokens[1].address,
+      chainId: wallet.currentChainId.toString(),
+    })
   );
 
   const poolAddress =

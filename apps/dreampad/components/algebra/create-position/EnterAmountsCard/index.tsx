@@ -5,7 +5,7 @@ import { useAccount, useBalance } from 'wagmi';
 import { Address } from 'viem';
 import { formatCurrency } from '@/lib/algebra/utils/common/formatCurrency';
 
-import { Token } from '@honeypot/shared';
+import { Token, wallet } from '@honeypot/shared';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { cn } from '@/lib/utils';
 
@@ -57,6 +57,7 @@ const EnterAmountCard = ({
               addtionalClasses="w-8 h-8"
               token={Token.getToken({
                 address: currency.wrapped.address,
+                chainId: wallet.currentChainId.toString(),
               })}
             />
           )}

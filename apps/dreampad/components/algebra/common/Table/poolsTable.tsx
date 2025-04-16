@@ -10,8 +10,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { Tab, Tabs } from '@nextui-org/react';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
-
-import { Token } from '@honeypot/shared';
+import { Token, wallet } from '@honeypot/shared';
 
 interface PoolsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -265,6 +264,7 @@ const PoolsTable = <TData, TValue>({
                           <TokenLogo
                             token={Token.getToken({
                               address: pool.pair.token0.id,
+                              chainId: wallet.currentChainId.toString(),
                             })}
                             addtionalClasses="translate-x-[25%]"
                             size={24}
@@ -272,6 +272,7 @@ const PoolsTable = <TData, TValue>({
                           <TokenLogo
                             token={Token.getToken({
                               address: pool.pair.token1.id,
+                              chainId: wallet.currentChainId.toString(),
                             })}
                             addtionalClasses="translate-x-[-25%]"
                             size={24}

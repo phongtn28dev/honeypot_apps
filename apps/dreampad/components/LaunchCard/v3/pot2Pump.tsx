@@ -1,4 +1,3 @@
-import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
 import { observer } from 'mobx-react-lite';
 import { Button } from '@/components/button/button-next';
 import Link from 'next/link';
@@ -11,14 +10,13 @@ import {
 } from '../../OptionsDropdown/OptionsDropdown';
 import { motion } from 'framer-motion';
 import { itemPopUpVariants } from '@/lib/animation';
-import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
 import ProgressBar from '../../atoms/ProgressBar/ProgressBar';
 import { AmountFormat } from '../../AmountFormat';
 import Countdown from 'react-countdown';
 import BigNumber from 'bignumber.js';
 import { Pot2Pump } from '@/lib/algebra/graphql/clients/type';
 
-import { Token } from '@honeypot/shared';
+import { Token, wallet } from '@honeypot/shared';
 import { useProjectInfo } from '@/hooks/useProjectInfo';
 
 type launchCardVariants = 'list' | 'detail' | 'trending';
@@ -324,7 +322,10 @@ const DetailLaunchCard = observer(
               copysSuccessText: 'Token address copied',
             }),
             optionsPresets.importTokenToWallet({
-              token: Token.getToken({ address: pair?.launchToken?.id }),
+              token: Token.getToken({
+                address: pair?.launchToken?.id,
+                chainId: wallet.currentChainId.toString(),
+              }),
             }),
             optionsPresets.share({
               shareUrl: `${window.location.origin}/launch-detail/${pair?.id}`,

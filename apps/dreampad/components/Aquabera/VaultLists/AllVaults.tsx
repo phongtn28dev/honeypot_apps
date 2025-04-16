@@ -69,8 +69,14 @@ export function AllAquaberaVaults({
 
       switch (sortField) {
         case 'pair':
-          const aSymbol = Token.getToken({ address: a.tokenA }).symbol;
-          const bSymbol = Token.getToken({ address: b.tokenA }).symbol;
+          const aSymbol = Token.getToken({
+            address: a.tokenA,
+            chainId: wallet.currentChainId.toString(),
+          }).symbol;
+          const bSymbol = Token.getToken({
+            address: b.tokenA,
+            chainId: wallet.currentChainId.toString(),
+          }).symbol;
           return multiplier * aSymbol.localeCompare(bSymbol);
         case 'address':
           return multiplier * a.id.localeCompare(b.id);
@@ -238,8 +244,14 @@ export function AllAquaberaVaults({
             </tr>
           ) : (
             getSortedVaults().map((vault) => {
-              const tokenA = Token.getToken({ address: vault.tokenA });
-              const tokenB = Token.getToken({ address: vault.tokenB });
+              const tokenA = Token.getToken({
+                address: vault.tokenA,
+                chainId: wallet.currentChainId.toString(),
+              });
+              const tokenB = Token.getToken({
+                address: vault.tokenB,
+                chainId: wallet.currentChainId.toString(),
+              });
 
               tokenA.init();
               tokenB.init();
