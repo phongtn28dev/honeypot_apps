@@ -30,6 +30,7 @@ const nextConfig = {
     ],
   },
 
+  productionBrowserSourceMaps: true,
   redirects: async () => [
     {
       source: '/',
