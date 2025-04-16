@@ -52,7 +52,6 @@ export class FtoPairContract implements BaseLaunchContract {
 
   constructor(args: Partial<FtoPairContract>) {
     Object.assign(this, args);
-    this.getIsValidated();
     makeAutoObservable(this);
   }
 

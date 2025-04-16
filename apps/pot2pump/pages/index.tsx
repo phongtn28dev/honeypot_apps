@@ -1,13 +1,13 @@
-import { motion } from "framer-motion";
-import { observer } from "mobx-react-lite";
-import { NextLayoutPage } from "@/types/nextjs";
-import { useEffect, useState } from "react";
-import { LaunchCardV3 } from "@/components/LaunchCard/v3";
-import { itemPopUpVariants } from "@/lib/animation";
-import { pot2PumpListToMemePairList } from "@/lib/algebra/graphql/clients/pair";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
-import { Button } from "@/components/button";
-import Link from "next/link";
+import { motion } from 'framer-motion';
+import { observer } from 'mobx-react-lite';
+import { NextLayoutPage } from '@/types/nextjs';
+import { useEffect, useState } from 'react';
+import { LaunchCardV3 } from '@/components/LaunchCard/v3';
+import { itemPopUpVariants } from '@/lib/animation';
+import { pot2PumpListToMemePairList } from '@/lib/algebra/graphql/clients/pair';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
+import { Button } from '@/components/button';
+import Link from 'next/link';
 import {
   Pot2Pump,
   usePot2PumpPottingHighPriceQuery,
@@ -17,37 +17,46 @@ import {
   usePot2PumpPottingMarketCapQuery,
   usePot2PumpPottingNewTokensByEndtimeQuery,
   usePot2PumpPumpingPopularQuery,
-} from "@/lib/algebra/graphql/generated/graphql";
-import { LoadingDisplay } from "honeypot-ui";
-import CardContainer from "@/components/CardContianer/v3";
-import { NetworkStatus } from "@apollo/client";
-import Image from "next/image";
-import { cn } from "@/lib/utils";
-import { Tab, Tabs } from "@nextui-org/react";
+} from '@/lib/algebra/graphql/generated/graphql';
+import { LoadingDisplay } from 'honeypot-ui';
+import CardContainer from '@/components/CardContianer/v3';
+import { NetworkStatus } from '@apollo/client';
+import Image from 'next/image';
+import { cn } from '@/lib/utils';
+import { Tab, Tabs } from '@nextui-org/react';
 import dynamic from 'next/dynamic';
-import { CarouselApi } from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
-import { CartoonButton } from "@/components/atoms/CartoonButton/CartoonButton";
-import { chain } from "@/services/chain";
+import { CarouselApi } from '@/components/ui/carousel';
+import Autoplay from 'embla-carousel-autoplay';
+import { CartoonButton } from '@/components/atoms/CartoonButton/CartoonButton';
+import { wallet } from '@/services/wallet';
 // 在组件外部定义常量
 
 const POT_TABS = {
-  NEW: "New POTs",
-  ALMOST: "Almost",
-  MOON: "Moon 🚀",
-  TRENDING: "Trending",
-  POPULAR: "Popular",
-  NEW_PUMPS: "New Pumps",
+  NEW: 'New POTs',
+  ALMOST: 'Almost',
+  MOON: 'Moon 🚀',
+  TRENDING: 'Trending',
+  POPULAR: 'Popular',
+  NEW_PUMPS: 'New Pumps',
 } as const;
 
 type TabType = (typeof POT_TABS)[keyof typeof POT_TABS];
 
-const STORAGE_KEY = "pot2pump_selected_tabs";
+const STORAGE_KEY = 'pot2pump_selected_tabs';
 
 // Dynamically import carousel components to avoid SSR hydration issues
-const Carousel = dynamic(() => import('@/components/ui/carousel').then(mod => mod.Carousel), { ssr: false });
-const CarouselContent = dynamic(() => import('@/components/ui/carousel').then(mod => mod.CarouselContent), { ssr: false });
-const CarouselItem = dynamic(() => import('@/components/ui/carousel').then(mod => mod.CarouselItem), { ssr: false });
+const Carousel = dynamic(
+  () => import('@/components/ui/carousel').then((mod) => mod.Carousel),
+  { ssr: false }
+);
+const CarouselContent = dynamic(
+  () => import('@/components/ui/carousel').then((mod) => mod.CarouselContent),
+  { ssr: false }
+);
+const CarouselItem = dynamic(
+  () => import('@/components/ui/carousel').then((mod) => mod.CarouselItem),
+  { ssr: false }
+);
 
 const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
   const [newTokensList, setNewTokensList] = useState<MemePairContract[]>([]);
@@ -71,12 +80,16 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
   const [currentTime, setCurrentTime] = useState(() => {
     return Math.floor(Date.now() / 1000);
   });
-  const [selectedTabs, setSelectedTabs] = useState<TabType[]>([POT_TABS.NEW, POT_TABS.ALMOST, POT_TABS.NEW_PUMPS]);
+  const [selectedTabs, setSelectedTabs] = useState<TabType[]>([
+    POT_TABS.NEW,
+    POT_TABS.ALMOST,
+    POT_TABS.NEW_PUMPS,
+  ]);
 
   // Load saved tabs from localStorage after component mounts (client-side only)
   useEffect(() => {
     try {
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
           const Json = JSON.parse(saved);
@@ -92,7 +105,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
         }
       }
     } catch (error) {
-      console.error("Error loading saved tabs:", error);
+      console.error('Error loading saved tabs:', error);
     }
   }, []);
 
@@ -108,9 +121,9 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
       variables: {
         endTime: currentTime,
       },
-      fetchPolicy: "network-only",
+      fetchPolicy: 'network-only',
       notifyOnNetworkStatusChange: true,
-      skip: typeof window === 'undefined' ? true : !chain.isInit,
+      skip: wallet.isInit,
     });
 
   const isNewTokensInitialLoading =
@@ -123,9 +136,9 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
     variables: {
       endTime: currentTime,
     },
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
-    skip: typeof window === 'undefined' ? true : !chain.isInit,
+    skip: wallet.isInit,
   });
 
   const isNearSuccessInitialLoading =
@@ -135,10 +148,10 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
     data: pottingHighPriceTokens,
     networkStatus: highPriceNetworkStatus,
   } = usePot2PumpPottingHighPriceQuery({
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
     pollInterval: 5000,
-    skip: typeof window === 'undefined' ? true : !chain.isInit,
+    skip: wallet.isInit,
   });
 
   const isHighPriceInitialLoading =
@@ -146,10 +159,10 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
 
   const { data: pottingTrendingTokens, networkStatus: trendingNetworkStatus } =
     usePot2PumpPottingTrendingQuery({
-      fetchPolicy: "network-only",
+      fetchPolicy: 'network-only',
       notifyOnNetworkStatusChange: true,
       pollInterval: 5000,
-      skip: typeof window === 'undefined' ? true : !chain.isInit,
+      skip: wallet.isInit,
     });
 
   const isTrendingInitialLoading =
@@ -159,10 +172,10 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
     data: pumpingPopularTokens,
     networkStatus: pumpingPopularNetworkStatus,
   } = usePot2PumpPumpingPopularQuery({
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
     pollInterval: 5000,
-    skip: typeof window === 'undefined' ? true : !chain.isInit,
+    skip: wallet.isInit,
   });
 
   const isPumpingPopularInitialLoading =
@@ -175,9 +188,9 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
     variables: {
       endTime: currentTime,
     },
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
-    skip: typeof window === 'undefined' ? true : !chain.isInit,
+    skip: wallet.isInit,
   });
 
   const isNewTokensByEndtimeInitialLoading =
@@ -468,7 +481,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
     setCount(api.scrollSnapList().length);
     setCurrentSlide(api.selectedScrollSnap() + 1);
 
-    api.on("select", () => {
+    api.on('select', () => {
       setCurrentSlide(api.selectedScrollSnap() + 1);
     });
   }, [api, highPriceTokensList]);
@@ -495,7 +508,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
                       }),
                     ]}
                     opts={{
-                      align: "start",
+                      align: 'start',
                       loop: true,
                     }}
                   >
@@ -532,9 +545,9 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
                     className={`w-2 h-2 rounded-full`}
                     style={{
                       backgroundColor:
-                        currentSlide === index + 1 ? "black" : "#FEF6C7",
-                      width: currentSlide === index + 1 ? "48px" : "24px",
-                      height: "16px",
+                        currentSlide === index + 1 ? 'black' : '#FEF6C7',
+                      width: currentSlide === index + 1 ? '48px' : '24px',
+                      height: '16px',
                     }}
                     onClick={() => {
                       if (api) {
@@ -564,29 +577,26 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
           <Tabs
             aria-label="Options"
             classNames={{
-              base: "relative w-full sm:hidden",
+              base: 'relative w-full sm:hidden',
               tabList:
-                "flex rounded-2xl border border-[#202020] bg-white p-4 shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020] py-1 px-2 absolute left-1/2 -translate-x-1/2 z-10 -top-5 overflow-x-auto max-w-[90vw]",
-              tab: "px-1.5 py-1 rounded-lg whitespace-nowrap",
-              tabContent: "group-data-[selected=true]:text-white text-xs",
+                'flex rounded-2xl border border-[#202020] bg-white p-4 shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020] py-1 px-2 absolute left-1/2 -translate-x-1/2 z-10 -top-5 overflow-x-auto max-w-[90vw]',
+              tab: 'px-1.5 py-1 rounded-lg whitespace-nowrap',
+              tabContent: 'group-data-[selected=true]:text-white text-xs',
               cursor:
-                "bg-[#020202] border border-black shadow-[2px_2px_0px_0px_#000000]",
+                'bg-[#020202] border border-black shadow-[2px_2px_0px_0px_#000000]',
               panel: cn(
-                "flex flex-col h-full w-full gap-y-4 justify-center items-center bg-[#FFCD4D] rounded-2xl text-[#202020]",
-                "px-4 pt-[60px] pb-[60px]",
+                'flex flex-col h-full w-full gap-y-4 justify-center items-center bg-[#FFCD4D] rounded-2xl text-[#202020]',
+                'px-4 pt-[60px] pb-[60px]',
                 "bg-[url('/images/card-container/honey/honey-border.png'),url('/images/card-container/dark/bottom-border.svg')]",
-                "bg-[position:-65px_top,_-85px_bottom]",
-                "bg-[size:auto_65px,_auto_65px]",
-                "bg-repeat-x",
-                "!mt-0",
-                "sm:hidden"
+                'bg-[position:-65px_top,_-85px_bottom]',
+                'bg-[size:auto_65px,_auto_65px]',
+                'bg-repeat-x',
+                '!mt-0',
+                'sm:hidden'
               ),
             }}
           >
-            <Tab
-              key="new"
-              title="New POTs"
-            >
+            <Tab key="new" title="New POTs">
               <div className="bg-white rounded-3xl p-4 border border-black shadow-[4px_4px_0px_0px_#D29A0D] w-full  max-h-[600px] flex flex-col">
                 <CardContainer
                   className="h-full flex-1"
@@ -599,10 +609,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
                     {newTokensList
                       .sort((a, b) => Number(b.startTime) - Number(a.startTime))
                       ?.map((pot2pump, index) => (
-                        <motion.div
-                          key={index}
-                          variants={itemPopUpVariants}
-                        >
+                        <motion.div key={index} variants={itemPopUpVariants}>
                           <LaunchCardV3
                             type="simple"
                             pair={pot2pump}
@@ -615,10 +622,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
                 </CardContainer>
               </div>
             </Tab>
-            <Tab
-              key="almost"
-              title="Almost"
-            >
+            <Tab key="almost" title="Almost">
               <div className="bg-white rounded-3xl p-4 border border-black shadow-[4px_4px_0px_0px_#D29A0D] w-full  max-h-[600px] flex flex-col">
                 <CardContainer
                   className="h-full flex-1"
@@ -635,10 +639,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
                           Number(a.pottingPercentageNumber)
                       )
                       ?.map((pot2pump, index) => (
-                        <motion.div
-                          key={index}
-                          variants={itemPopUpVariants}
-                        >
+                        <motion.div key={index} variants={itemPopUpVariants}>
                           <LaunchCardV3
                             type="simple"
                             pair={pot2pump}
@@ -651,10 +652,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
                 </CardContainer>
               </div>
             </Tab>
-            <Tab
-              key="moon"
-              title="Moon 🚀"
-            >
+            <Tab key="moon" title="Moon 🚀">
               <div className="bg-white rounded-3xl p-4 border border-black shadow-[4px_4px_0px_0px_#D29A0D] w-full  max-h-[600px] flex flex-col">
                 <CardContainer
                   className="h-full flex-1"
@@ -671,10 +669,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
                           Number(a.launchedToken?.derivedUSD)
                       )
                       ?.map((pot2pump, index) => (
-                        <motion.div
-                          key={index}
-                          variants={itemPopUpVariants}
-                        >
+                        <motion.div key={index} variants={itemPopUpVariants}>
                           <LaunchCardV3
                             type="simple"
                             pair={pot2pump}
@@ -687,10 +682,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
                 </CardContainer>
               </div>
             </Tab>
-            <Tab
-              key="trending"
-              title="Trending"
-            >
+            <Tab key="trending" title="Trending">
               <div className="bg-white rounded-3xl p-4 border border-black shadow-[4px_4px_0px_0px_#D29A0D] w-full ma x-h-[400px] flex flex-col">
                 <CardContainer
                   className="h-full flex-1"
@@ -707,10 +699,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
                           Number(a.launchedToken?.priceChange24hPercentage)
                       )
                       ?.map((pot2pump, index) => (
-                        <motion.div
-                          key={index}
-                          variants={itemPopUpVariants}
-                        >
+                        <motion.div key={index} variants={itemPopUpVariants}>
                           <LaunchCardV3
                             type="simple"
                             pair={pot2pump}
@@ -723,10 +712,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
                 </CardContainer>
               </div>
             </Tab>
-            <Tab
-              key="popular"
-              title="Popular"
-            >
+            <Tab key="popular" title="Popular">
               <div className="bg-white rounded-3xl p-4 border border-black shadow-[4px_4px_0px_0px_#D29A0D] w-full  max-h-[600px] flex flex-col">
                 <CardContainer
                   className="h-full flex-1"
@@ -743,10 +729,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
                           Number(a.launchedToken?.holderCount)
                       )
                       ?.map((pot2pump, index) => (
-                        <motion.div
-                          key={index}
-                          variants={itemPopUpVariants}
-                        >
+                        <motion.div key={index} variants={itemPopUpVariants}>
                           <LaunchCardV3
                             type="simple"
                             pair={pot2pump}
@@ -759,10 +742,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
                 </CardContainer>
               </div>
             </Tab>
-            <Tab
-              key="new-pumps"
-              title="New Pumps"
-            >
+            <Tab key="new-pumps" title="New Pumps">
               <div className="bg-white rounded-3xl p-4 border border-black shadow-[4px_4px_0px_0px_#D29A0D] w-full  max-h-[600px] flex flex-col">
                 <CardContainer
                   className="h-full flex-1"
@@ -775,10 +755,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
                     {endTimeTokensList
                       ?.sort((a, b) => Number(a.endTime) - Number(b.endTime))
                       ?.map((pot2pump, index) => (
-                        <motion.div
-                          key={index}
-                          variants={itemPopUpVariants}
-                        >
+                        <motion.div key={index} variants={itemPopUpVariants}>
                           <LaunchCardV3
                             type="simple"
                             pair={pot2pump}
@@ -808,10 +785,10 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
                       onClick={() => !isDisabled && handleTabClick(tab)}
                       className={`px-3 py-1.5 rounded-lg whitespace-nowrap text-sm flex items-center gap-1 ${
                         isSelected
-                          ? "bg-[#020202] text-white border border-black shadow-[2px_2px_0px_0px_#000000]"
+                          ? 'bg-[#020202] text-white border border-black shadow-[2px_2px_0px_0px_#000000]'
                           : isDisabled
-                            ? "text-gray-400 cursor-not-allowed"
-                            : "text-default-500 hover:bg-gray-100"
+                          ? 'text-gray-400 cursor-not-allowed'
+                          : 'text-default-500 hover:bg-gray-100'
                       }`}
                     >
                       {tab}
@@ -837,9 +814,11 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
                     width={250}
                     height={250}
                     alt="No Data"
-                    src={"/images/honey-stick.svg"}
+                    src={'/images/honey-stick.svg'}
                   />
-                  <p className="text-[#FFCD4D] text-5xl">Please select a pool</p>
+                  <p className="text-[#FFCD4D] text-5xl">
+                    Please select a pool
+                  </p>
                 </div>
               ) : (
                 <>
@@ -869,7 +848,8 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
                                     {newTokensList
                                       .sort(
                                         (a, b) =>
-                                          Number(b.startTime) - Number(a.startTime)
+                                          Number(b.startTime) -
+                                          Number(a.startTime)
                                       )
                                       ?.map((pot2pump, index) => (
                                         <motion.div

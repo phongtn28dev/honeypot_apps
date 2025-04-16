@@ -76,7 +76,6 @@ export class MemePairContract implements BaseLaunchContract {
 
   constructor(args: Partial<MemePairContract>) {
     Object.assign(this, args);
-    this.getIsValidated();
     makeAutoObservable(this);
   }
 
@@ -196,7 +195,7 @@ export class MemePairContract implements BaseLaunchContract {
   }
 
   get contract() {
-    if (!chain.isInit) {
+    if (!wallet.isInit) {
       throw new Error('Get contract failed, please select a chain first');
     }
     return getContract({
@@ -379,7 +378,7 @@ export class MemePairContract implements BaseLaunchContract {
   }
 
   async getProjectInfo(force?: boolean) {
-    if (!chain.isInit) {
+    if (!wallet.isInit) {
       throw new Error('Get project info failed, please select a chain first');
     }
 
@@ -518,7 +517,7 @@ export class MemePairContract implements BaseLaunchContract {
       this.getVaultBalance(),
       //this.getParticipantDetail(),
     ]).catch((error) => {
-      if (!chain.isInit) {
+      if (!wallet.isInit) {
         throw new Error('Init meme pair failed, please select a chain first');
       }
       console.error(error, `init-memepair-error-${this.address}`);
@@ -600,7 +599,7 @@ export class MemePairContract implements BaseLaunchContract {
   }
 
   getIsValidated() {
-    if (!chain.isInit) {
+    if (!wallet.isInit) {
       throw new Error('Get isValidated failed, please select a chain first');
     }
     // 优先使用 chain.currentChain，如果不存在则使用 wallet.currentChain

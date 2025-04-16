@@ -1,31 +1,31 @@
-import Link from "next/link";
-import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
-import { Tab, Tabs } from "@nextui-org/react";
-import { NextLayoutPage } from "@/types/nextjs";
-import { Button } from "@/components/button/v3";
-import Pagination from "@/components/Pagination/Pagination";
-import { LaunchCardV3 } from "@/components/LaunchCard/v3";
-import { Filter } from "@/components/pot2pump/FilterModal";
-import { Pot2PumpTracker } from "@/components/MemeWarBanner/Pot2PumpTracker";
-import { Pot2PumpPumpingService } from "@/services/launchpad/pot2pump/pumping";
-import { WrappedNextInputSearchBar } from "@/components/wrappedNextUI/SearchBar/WrappedInputSearchBar";
-import { FilterState } from "@/constants/pot2pump.type";
-import { defaultFilterState } from "@/constants/pot2pump";
-import HoneyContainer from "@/components/CardContianer/HoneyContainer";
-import { hasValue } from "@/lib/utils";
-import { PAGE_LIMIT } from "@/services/launchpad";
-import { chain } from "@/services/chain";
+import Link from 'next/link';
+import { observer } from 'mobx-react-lite';
+import { useEffect, useState } from 'react';
+import { Tab, Tabs } from '@nextui-org/react';
+import { NextLayoutPage } from '@/types/nextjs';
+import { Button } from '@/components/button/v3';
+import Pagination from '@/components/Pagination/Pagination';
+import { LaunchCardV3 } from '@/components/LaunchCard/v3';
+import { Filter } from '@/components/pot2pump/FilterModal';
+import { Pot2PumpTracker } from '@/components/MemeWarBanner/Pot2PumpTracker';
+import { Pot2PumpPumpingService } from '@/services/launchpad/pot2pump/pumping';
+import { WrappedNextInputSearchBar } from '@/components/wrappedNextUI/SearchBar/WrappedInputSearchBar';
+import { FilterState } from '@/constants/pot2pump.type';
+import { defaultFilterState } from '@/constants/pot2pump';
+import HoneyContainer from '@/components/CardContianer/HoneyContainer';
+import { hasValue } from '@/lib/utils';
+import { PAGE_LIMIT } from '@/services/launchpad';
+import { wallet } from '@/services/wallet';
 
 const MemeLaunchPage: NextLayoutPage = observer(() => {
   const [pumpingProjects, setPumpingProjects] =
     useState<Pot2PumpPumpingService>();
   const [filters, setFilters] = useState<FilterState>(defaultFilterState);
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
-    if (!chain.isInit) {
+    if (!wallet.isInit) {
       return;
     }
     // launchpad.setCurrentLaunchpadType("meme");
@@ -40,7 +40,7 @@ const MemeLaunchPage: NextLayoutPage = observer(() => {
     const newPumpingProjects = new Pot2PumpPumpingService();
     setPumpingProjects(newPumpingProjects);
     newPumpingProjects.projectsPage.reloadPage();
-  }, [chain.isInit]);
+  }, [wallet.isInit]);
 
   const onChangeFilter = (data: any) => {
     setFilters(data);
@@ -48,27 +48,27 @@ const MemeLaunchPage: NextLayoutPage = observer(() => {
 
   useEffect(() => {
     if (pumpingProjects) {
-      console.log("hasValue(filters)", hasValue(filters), filters);
+      console.log('hasValue(filters)', hasValue(filters), filters);
       if (hasValue(filters)) {
         pumpingProjects.projectsPage.updateFilter({
           search: search.length > 0 ? search : undefined,
           currentPage: 0,
-          status: "success",
+          status: 'success',
           limit: PAGE_LIMIT,
           hasNextPage: true,
-          orderBy: "endTime",
-          orderDirection: "desc",
+          orderBy: 'endTime',
+          orderDirection: 'desc',
           ...filters,
         });
       } else {
         pumpingProjects.projectsPage.updateFilter({
           search: search.length > 0 ? search : undefined,
           currentPage: 0,
-          status: "success",
+          status: 'success',
           limit: PAGE_LIMIT,
           hasNextPage: true,
-          orderBy: "endTime",
-          orderDirection: "desc",
+          orderBy: 'endTime',
+          orderDirection: 'desc',
           ...defaultFilterState,
         });
       }
@@ -102,43 +102,43 @@ const MemeLaunchPage: NextLayoutPage = observer(() => {
               filtersList={[
                 {
                   key: 0,
-                  label: "TVL (USD)",
-                  category: "tvl",
+                  label: 'TVL (USD)',
+                  category: 'tvl',
                 },
                 {
                   key: 3,
-                  label: "Market cap",
-                  category: "marketcap",
+                  label: 'Market cap',
+                  category: 'marketcap',
                 },
                 {
                   key: 4,
-                  label: "24H txns",
-                  category: "daytxns",
+                  label: '24H txns',
+                  category: 'daytxns',
                 },
                 {
                   key: 5,
-                  label: "24H buys",
-                  category: "daybuys",
+                  label: '24H buys',
+                  category: 'daybuys',
                 },
                 {
                   key: 6,
-                  label: "24H sells",
-                  category: "daysells",
+                  label: '24H sells',
+                  category: 'daysells',
                 },
                 {
                   key: 7,
-                  label: "24H volume",
-                  category: "dayvolume",
+                  label: '24H volume',
+                  category: 'dayvolume',
                 },
                 {
                   key: 8,
-                  label: "24H change (%)",
-                  category: "daychange",
+                  label: '24H change (%)',
+                  category: 'daychange',
                 },
                 {
                   key: 9,
-                  label: "Raised Token",
-                  category: "raiseToken",
+                  label: 'Raised Token',
+                  category: 'raiseToken',
                 },
               ]}
               filters={filters}
@@ -157,20 +157,17 @@ const MemeLaunchPage: NextLayoutPage = observer(() => {
             // destroyInactiveTabPanel={false}
             aria-label="Options"
             classNames={{
-              tabList: "bg-transparent",
-              tab: "flex flex-col items-center gap-2.5 border-0  backdrop-blur-[100px] p-2.5 rounded-[10px]",
+              tabList: 'bg-transparent',
+              tab: 'flex flex-col items-center gap-2.5 border-0  backdrop-blur-[100px] p-2.5 rounded-[10px]',
             }}
             className="next-tab"
             onSelectionChange={(key) => {
-              if (key === "all") {
+              if (key === 'all') {
                 pumpingProjects?.projectsPage.reloadPage();
               }
             }}
           >
-            <Tab
-              key="all"
-              title="All MEMEs"
-            >
+            <Tab key="all" title="All MEMEs">
               {pumpingProjects && (
                 <Pagination
                   paginationState={pumpingProjects.projectsPage}
@@ -184,7 +181,7 @@ const MemeLaunchPage: NextLayoutPage = observer(() => {
                   )}
                   classNames={{
                     itemsContainer:
-                      "grid gap-8 grid-cols-1 md:grid-cols-2 xl:gap-6 xl:grid-cols-3",
+                      'grid gap-8 grid-cols-1 md:grid-cols-2 xl:gap-6 xl:grid-cols-3',
                   }}
                 />
               )}

@@ -50,18 +50,11 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
   });
 
   useEffect(() => {
-    if (walletClient) {
-      wallet.initWallet(walletClient);
-
-      if (walletClient.chain?.id) {
-        chain.initChain(walletClient.chain.id);
-      }
-    }
+    wallet.initWallet(walletClient);
   }, [walletClient]);
 
-  // Initial chain setup - will use default chain if wallet not connected
   useEffect(() => {
-    chain.initChain();
+    wallet.initWallet();
   }, []);
 
   return children;

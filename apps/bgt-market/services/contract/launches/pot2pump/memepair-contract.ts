@@ -76,7 +76,6 @@ export class MemePairContract implements BaseLaunchContract {
 
   constructor(args: Partial<MemePairContract>) {
     Object.assign(this, args);
-    this.getIsValidated();
     makeAutoObservable(this);
   }
 
@@ -600,11 +599,11 @@ export class MemePairContract implements BaseLaunchContract {
   }
 
   getIsValidated() {
-    if (!chain.isInit) {
+    if (!wallet.isInit) {
       throw new Error('Get isValidated failed, please select a chain first');
     }
     // 优先使用 chain.currentChain，如果不存在则使用 wallet.currentChain
-    const currentChain = chain.currentChain || wallet.currentChain;
+    const currentChain = wallet.currentChain;
     this.isValidated =
       currentChain?.validatedFtoAddresses.includes(
         this.address.toLowerCase()
@@ -641,7 +640,10 @@ export class MemePairContract implements BaseLaunchContract {
       //this.raiseToken.init();
     } else {
       const res = (await this.contract.read.raisedToken()) as `0x${string}`;
-      this.raiseToken = Token.getToken({ address: res, force });
+      this.raiseToken = Token.getToken({
+        address: res,
+        chainId: wallet.currentChainId,
+      });
     }
   }
 

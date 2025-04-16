@@ -177,7 +177,7 @@ const DetailLaunchCard = observer(
                     {DynamicFormatAmount({
                       amount: pair.userDepositedRaisedToken?.toString() ?? '0',
                       decimals: 2,
-                      // endWith: pair.raiseToken?.symbol,
+                      endWith: pair.raiseToken?.symbol,
                     })}
                   </span>{' '}
                   (

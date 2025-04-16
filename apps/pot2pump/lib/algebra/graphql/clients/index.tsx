@@ -1,4 +1,4 @@
-import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 
 const createProxiedClient = (endpoint: string) => {
   return new ApolloClient({
