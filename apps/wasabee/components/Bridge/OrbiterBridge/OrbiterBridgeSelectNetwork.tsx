@@ -3,7 +3,7 @@ import { Select, SelectItem } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { orbiterNetworks } from '@/config/orbiterConfig';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 interface Props {
   type: 'from' | 'to';
 }

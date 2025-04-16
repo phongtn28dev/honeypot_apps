@@ -1,21 +1,21 @@
-import { Button } from "@/components/button/button-next";
-import { SelectState, ItemSelect } from "@/components/ItemSelect";
-import TokenLogo from "@/components/TokenLogo/TokenLogo";
-import { FtoPairContract } from "@/services/contract/launches/fto/ftopair-contract";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
-import { cn, SelectItem } from "@nextui-org/react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { Input } from "@/components/input";
-import { TokenSelector } from "@/components/TokenSelector/v3";
-import { WNATIVE_EXTENDED } from "@/config/algebra/routing";
-import { wallet } from "@/services/wallet";
-import { Token } from "@/services/contract/token";
-import { useEffect, useState } from "react";
-import TokenCardV3 from "@/components/algebra/swap/TokenCard/TokenCardV3";
-import { Address } from "viem";
-import { useBalance } from "wagmi";
-import BigNumber from "bignumber.js";
-import { ContractWrite } from "@/services/utils";
+import { Button } from '@/components/button/button-next';
+import { SelectState, ItemSelect } from '@/components/ItemSelect';
+import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
+import { cn, SelectItem } from '@nextui-org/react';
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import { Input } from '@/components/input';
+import { TokenSelector } from '@/components/TokenSelector/v3';
+import { WNATIVE_EXTENDED } from '@/config/algebra/routing';
+import { wallet } from '@honeypot/shared';
+import { Token } from '@/services/contract/token';
+import { useEffect, useState } from 'react';
+import TokenCardV3 from '@/components/algebra/swap/TokenCard/TokenCardV3';
+import { Address } from 'viem';
+import { useBalance } from 'wagmi';
+import BigNumber from 'bignumber.js';
+import { ContractWrite } from '@/services/utils';
 
 export const PottingModal = observer(
   ({
@@ -32,21 +32,21 @@ export const PottingModal = observer(
         pair.raiseToken.address.toLowerCase() ===
           wallet?.currentChain.nativeToken.address.toLowerCase()
         ? wallet.currentChain.nativeToken
-        : (pair.raiseToken ?? null)
+        : pair.raiseToken ?? null
     );
 
     useEffect(() => {
       if (pair.raiseToken) {
         pair.raiseToken.init();
         if (pair.raiseToken.isNative) {
-          console.log("init native token");
+          console.log('init native token');
           wallet.currentChain.nativeToken.init();
         }
       }
     }, [pair]);
 
     const state = useLocalObservable(() => ({
-      depositAmount: "",
+      depositAmount: '',
       setDepositAmount(val: string) {
         this.depositAmount = val;
       },
@@ -56,8 +56,8 @@ export const PottingModal = observer(
       () =>
         new SelectState({
           onSelectChange: (value) => {
-            if (value === "max") {
-              state.setDepositAmount(selectedToken?.balance.toFixed() ?? "0");
+            if (value === 'max') {
+              state.setDepositAmount(selectedToken?.balance.toFixed() ?? '0');
               selectedToken?.getBalance();
             } else {
               state.setDepositAmount(value.toString());
@@ -70,8 +70,8 @@ export const PottingModal = observer(
       pair.raiseToken && (
         <div
           className={cn(
-            "flex flex-col w-full  items-center gap-2 bg-[#FFCD4D] rounded-2xl px-4 py-3 relative pt-4 md:pt-12 pb-[90px] text-black",
-            boarderLess && "border-none"
+            'flex flex-col w-full  items-center gap-2 bg-[#FFCD4D] rounded-2xl px-4 py-3 relative pt-4 md:pt-12 pb-[90px] text-black',
+            boarderLess && 'border-none'
           )}
         >
           <div className="bg-[url('/images/pumping/outline-border.png')] bg-left-top bg-contain bg-repeat-x h-4 md:h-12 absolute top-0 left-0 w-full rounded-t-2xl"></div>
@@ -88,7 +88,7 @@ export const PottingModal = observer(
                     className="cursor-pointer text-[#63b4ff]"
                     onClick={() => {
                       state.setDepositAmount(
-                        pair.raiseToken?.balance.toFixed() ?? "0"
+                        pair.raiseToken?.balance.toFixed() ?? '0'
                       );
                       pair.raiseToken?.getBalance();
                     }}
@@ -118,9 +118,9 @@ export const PottingModal = observer(
                   className="flex-1 text-right !bg-transparent [&_*]:!bg-transparent data-[invalid=true]:!bg-transparent"
                   classNames={{
                     inputWrapper:
-                      "!bg-transparent border-none shadow-none !transition-none data-[invalid=true]:!bg-transparent group-data-[invalid=true]:!bg-transparent",
+                      '!bg-transparent border-none shadow-none !transition-none data-[invalid=true]:!bg-transparent group-data-[invalid=true]:!bg-transparent',
                     input:
-                      "!bg-transparent !text-[#202020] text-right text-xl !pr-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none data-[invalid=true]:!bg-transparent",
+                      '!bg-transparent !text-[#202020] text-right text-xl !pr-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none data-[invalid=true]:!bg-transparent',
                   }}
                   value={state.depositAmount}
                   placeholder="0.0"
@@ -144,33 +144,21 @@ export const PottingModal = observer(
                 className="grid grid-cols-[repeat(4,auto)] gap-4 w-full mt-4 justify-content-end"
               >
                 {selectedToken?.balance.gte(10) && (
-                  <SelectItem
-                    key="10"
-                    value="10"
-                  >
+                  <SelectItem key="10" value="10">
                     10 {selectedToken?.symbol}
                   </SelectItem>
                 )}
                 {selectedToken?.balance.gte(100) && (
-                  <SelectItem
-                    key="100"
-                    value="100"
-                  >
+                  <SelectItem key="100" value="100">
                     100 {selectedToken?.symbol}
                   </SelectItem>
                 )}
                 {selectedToken?.balance.gte(1000) && (
-                  <SelectItem
-                    key="1000"
-                    value="1000"
-                  >
+                  <SelectItem key="1000" value="1000">
                     1000 {selectedToken?.symbol}
                   </SelectItem>
                 )}
-                <SelectItem
-                  key="max"
-                  value="max"
-                >
+                <SelectItem key="max" value="max">
                   Max
                 </SelectItem>
               </ItemSelect>
@@ -193,7 +181,7 @@ export const PottingModal = observer(
                       wallet.currentChain.nativeToken.address.toLowerCase() &&
                     selectedToken.isNative
                   ) {
-                    console.log("amount", amount);
+                    console.log('amount', amount);
                     // @ts-ignore
                     await new ContractWrite(
                       wallet.currentChain.nativeToken.contract.write.deposit
@@ -208,7 +196,7 @@ export const PottingModal = observer(
                     amount: state.depositAmount,
                   });
 
-                  state.setDepositAmount("");
+                  state.setDepositAmount('');
                   selectedToken?.getBalance();
                   pair.getDepositedRaisedToken().then((res) => {
                     if (
@@ -224,7 +212,7 @@ export const PottingModal = observer(
 
                   onSuccess?.();
                 } catch (error) {
-                  console.error("Deposit failed:", error);
+                  console.error('Deposit failed:', error);
                 }
               }}
             >

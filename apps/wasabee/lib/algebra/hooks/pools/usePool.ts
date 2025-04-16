@@ -10,7 +10,7 @@ import {
   useReadAlgebraPoolToken1,
 } from '@/wagmi-generated';
 import { getCode } from 'viem/actions';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 
 export const PoolState = {
   LOADING: 'LOADING',

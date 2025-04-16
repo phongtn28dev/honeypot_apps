@@ -7,7 +7,7 @@ import { formatPercent } from '@/lib/algebra/utils/common/formatPercent';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 
 type TokenAsset = {
   __typename?: string;

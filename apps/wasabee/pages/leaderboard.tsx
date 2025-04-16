@@ -12,7 +12,7 @@ import {
   useTopParticipateAccounts,
 } from '@/lib/hooks/useAccounts';
 import { formatExtremelyLargeNumber } from '@/lib/format';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 
 interface LeaderboardItem {
   rank: number;

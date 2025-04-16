@@ -3,7 +3,7 @@ import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { getSingleVaultDetails } from '@/lib/algebra/graphql/clients/vaults';
 import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
 import { Token } from '@/services/contract/token';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '@nextui-org/react';

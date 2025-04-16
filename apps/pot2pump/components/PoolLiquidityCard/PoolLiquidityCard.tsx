@@ -24,7 +24,7 @@ import { popmodal } from '@/services/popmodal';
 import { Tooltip, Button as NextButton } from '@nextui-org/react';
 import { toCompactLocaleString } from '@/lib/utils';
 import Image from 'next/image';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 interface PoolLiquidityCardProps {
   pair: PairContract;
   autoSize?: boolean;

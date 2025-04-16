@@ -25,7 +25,7 @@ import { useEffect, useMemo } from 'react';
 import { useAccount, useContractWrite } from 'wagmi';
 import { useSimulateAlgebraPositionManagerMulticall } from '@/wagmi-generated';
 import { useObserver } from 'mobx-react-lite';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 interface IncreaseLiquidityButtonProps {
   baseCurrency: Currency | undefined | null;
   quoteCurrency: Currency | undefined | null;

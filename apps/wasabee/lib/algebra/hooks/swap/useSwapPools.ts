@@ -7,7 +7,7 @@ import {
   useMultiplePoolsLazyQuery,
 } from '../../graphql/generated/graphql';
 import { networksMap } from '@/services/chain';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { useObserver } from 'mobx-react-lite';
 
 /**

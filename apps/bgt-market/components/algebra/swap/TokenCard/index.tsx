@@ -1,14 +1,14 @@
-import { Input } from "@/components/algebra/ui/input";
-import { formatBalance } from "@/lib/algebra/utils/common/formatBalance";
-import { formatUSD } from "@/lib//algebra/utils/common/formatUSD";
-import { Currency, Percent } from "@cryptoalgebra/sdk";
-import { useCallback, useMemo } from "react";
-import { useAccount, useBalance, useWatchBlockNumber } from "wagmi";
-import { Address } from "viem";
-import { TokenSelector } from "@/components/TokenSelector";
-import { Token as AlgebraToken } from "@cryptoalgebra/sdk";
-import { wallet } from "@/services/wallet";
-import { Token } from "@/services/contract/token";
+import { Input } from '@/components/algebra/ui/input';
+import { formatBalance } from '@/lib/algebra/utils/common/formatBalance';
+import { formatUSD } from '@/lib//algebra/utils/common/formatUSD';
+import { Currency, Percent } from '@cryptoalgebra/sdk';
+import { useCallback, useMemo } from 'react';
+import { useAccount, useBalance, useWatchBlockNumber } from 'wagmi';
+import { Address } from 'viem';
+import { TokenSelector } from '@/components/TokenSelector';
+import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
+import { wallet } from '@honeypot/shared';
+import { Token } from '@/services/contract/token';
 
 interface TokenSwapCardProps {
   handleTokenSelection: (currency: Currency) => void;
@@ -60,13 +60,13 @@ const TokenCard = ({
   });
 
   const balanceString = useMemo(() => {
-    if (isLoading || !balance) return "Loading...";
+    if (isLoading || !balance) return 'Loading...';
 
     return formatBalance(balance.formatted);
   }, [balance, isLoading]);
 
   const handleInput = useCallback((value: string) => {
-    if (value === ".") value = "0.";
+    if (value === '.') value = '0.';
     handleValueChange?.(value);
   }, []);
 
@@ -98,7 +98,7 @@ const TokenCard = ({
           }}
         />
         {currency && account && (
-          <div className={"flex text-sm whitespace-nowrap"}>
+          <div className={'flex text-sm whitespace-nowrap'}>
             {showBalance && (
               <div>
                 <span className="font-semibold">Balance: </span>
@@ -117,12 +117,12 @@ const TokenCard = ({
         <div className="flex flex-col items-end w-full">
           <Input
             disabled={disabled}
-            type={"text"}
+            type={'text'}
             value={value}
             id={`amount-${currency?.symbol}`}
             onUserInput={(v: string) => handleInput(v)}
             className={`text-right border border-[rgba(225,138,32,0.40)] bg-[rgba(225,138,32,0.40)] placeholder:text-[#9E9DA3] text-xl font-bold w-9/12 p-2 disabled:cursor-default disabled:text-white`}
-            placeholder={"0.0"}
+            placeholder={'0.0'}
             maxDecimals={currency?.decimals}
           />
           {showBalance && (

@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { wallet } from "@/services/wallet";
-import { ViewSvg } from "@/components/svg/View";
+import Link from 'next/link';
+import { wallet } from '@honeypot/shared';
+import { ViewSvg } from '@/components/svg/View';
 
 // FIXME: update toastify style
 
@@ -13,13 +13,13 @@ export default function TransactionPendingToastify({
 }) {
   return (
     <div>
-      <div>{action || "Transaction"} Pending</div>
+      <div>{action || 'Transaction'} Pending</div>
       <div className="m-2 text-right">
         <Link
           className="flex justify-end text-right items-center gap-2 text-white"
           href={
             wallet?.currentChain?.chain?.blockExplorers?.default.url +
-            "tx/" +
+            'tx/' +
             hash
           }
           target="_blank"
@@ -41,13 +41,13 @@ export function TransactionSuccessToastify({
 }) {
   return (
     <div>
-      <div>{action || "Transaction"} Success!</div>
+      <div>{action || 'Transaction'} Success!</div>
       <div className="m-2 text-right">
         <Link
           className="flex justify-end text-right items-center gap-2 text-white"
           href={
             wallet?.currentChain?.chain?.blockExplorers?.default.url +
-            "tx/" +
+            'tx/' +
             hash
           }
           target="_blank"

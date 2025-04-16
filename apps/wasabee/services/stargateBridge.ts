@@ -14,7 +14,7 @@ import {
   stargateSupportedChain,
   stargateSupportedToken,
 } from '@/config/stargateConfig';
-import { wallet } from './wallet';
+import { wallet } from '@honeypot/shared';
 
 export class StargateBridge {
   selectedToken: Token | null = null;

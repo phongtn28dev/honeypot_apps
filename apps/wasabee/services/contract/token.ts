@@ -1,10 +1,9 @@
 import BigNumber from 'bignumber.js';
 import { BaseContract } from '.';
-import { wallet } from '../wallet';
+import { wallet } from '@honeypot/shared';
 import { get, makeAutoObservable, reaction } from 'mobx';
 import { Address, getContract, zeroAddress } from 'viem';
 import { ContractWrite } from '../utils';
-import { amountFormatted } from '@/lib/format';
 import { ERC20ABI } from '@/lib/abis/erc20';
 import { faucetABI } from '@/lib/abis/faucet';
 import { watchAsset } from 'viem/actions';
@@ -15,6 +14,7 @@ import NetworkManager from '../network';
 import { getSingleTokenData } from '@/lib/algebra/graphql/clients/token';
 import { when } from 'mobx';
 import { Token as IndexerToken } from '@/lib/algebra/graphql/generated/graphql';
+import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
 
 export class Token implements BaseContract {
   static tokensMap: Record<string, Token> = {};
@@ -482,9 +482,11 @@ export class Token implements BaseContract {
   }
 
   get balanceFormatted() {
-    return amountFormatted(this.balanceWithoutDecimals, {
+    return DynamicFormatAmount({
+      amount: this.balanceWithoutDecimals
+        .div(new BigNumber(10).pow(this.decimals))
+        .toString(),
       decimals: this.decimals,
-      fixed: 3,
     });
   }
 

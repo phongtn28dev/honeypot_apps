@@ -8,7 +8,7 @@ import { Token } from '@/services/contract/token';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { cn } from '@/lib/utils';
 import { HiOutlineSwitchHorizontal, HiSwitchVertical } from 'react-icons/hi';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 
 interface EnterAmountsCardProps {
   currency: Currency | undefined;

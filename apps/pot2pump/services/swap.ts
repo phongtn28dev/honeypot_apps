@@ -1,21 +1,21 @@
-import { Token } from "./contract/token";
-import { PairContract } from "@/services/contract/dex/liquidity/pair-contract";
-import BigNumber from "bignumber.js";
-import { wallet } from "@/services/wallet";
-import { liquidity } from "@/services/liquidity";
-import { exec } from "~/lib/contract";
-import { autorun, makeAutoObservable, reaction, when } from "mobx";
-import { AsyncState } from "./utils";
-import { debounce } from "lodash";
-import dayjs from "dayjs";
-import { chart } from "./chart";
-import { zeroAddress } from "viem";
+import { Token } from './contract/token';
+import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
+import BigNumber from 'bignumber.js';
+import { wallet } from '@honeypot/shared';
+import { liquidity } from '@/services/liquidity';
+import { exec } from '~/lib/contract';
+import { autorun, makeAutoObservable, reaction, when } from 'mobx';
+import { AsyncState } from './utils';
+import { debounce } from 'lodash';
+import dayjs from 'dayjs';
+import { chart } from './chart';
+import { zeroAddress } from 'viem';
 
 class Swap {
   fromToken: Token | undefined = undefined;
   toToken: Token | undefined = undefined;
-  fromAmount: string = "";
-  toAmount: string = "";
+  fromAmount: string = '';
+  toAmount: string = '';
   slippage: number = 1;
   deadline: number = 20;
   price: BigNumber | null = null;
@@ -31,8 +31,9 @@ class Swap {
 
     const routerPossiblePaths = this.getRouterPathsByValidatedToken();
 
-    const bestPath =
-      await this.calculateBestPathFromRouterPaths(routerPossiblePaths);
+    const bestPath = await this.calculateBestPathFromRouterPaths(
+      routerPossiblePaths
+    );
 
     this.setRouterToken(bestPath.map((t) => Token.getToken({ address: t })));
   };
@@ -139,33 +140,33 @@ class Swap {
 
   get buttonContent() {
     if (!this.fromToken || !this.toToken) {
-      return "Select Tokens";
+      return 'Select Tokens';
     }
 
     if (this.currentPair.loading) {
-      return "Loading Pair";
+      return 'Loading Pair';
     }
 
     if (
       !this.currentPair.value &&
       (!this.routerToken || this.routerToken?.length === 0)
     ) {
-      return "Insufficient Liquidity";
+      return 'Insufficient Liquidity';
     }
 
     if (!this.fromAmount || !this.toAmount) {
-      return "Enter Amount";
+      return 'Enter Amount';
     }
 
     if (this.fromToken.balance.toNumber() < Number(this.fromAmount)) {
-      return "Insufficient Balance";
+      return 'Insufficient Balance';
     }
 
     if (this.needApprove) {
-      return "Approve";
+      return 'Approve';
     }
 
-    return "Swap";
+    return 'Swap';
   }
 
   get factoryContract() {
@@ -213,7 +214,7 @@ class Swap {
           await this.currentPair.call();
           if (this.fromAmount.length > 0) {
             // if the fromAmount is not empty, recalculate the toAmount
-            this.fromAmount = this.fromAmount + " ";
+            this.fromAmount = this.fromAmount + ' ';
           }
         }
         // this.updateChartData();
@@ -258,7 +259,7 @@ class Swap {
         this.price = new BigNumber(0);
       }
     } else {
-      this.toAmount = "";
+      this.toAmount = '';
       this.price = null;
     }
   }, 300);
@@ -281,8 +282,8 @@ class Swap {
   }
 
   setFromToken(token: Token) {
-    console.log("From Token", this.fromToken);
-    console.log("Token", token);
+    console.log('From Token', this.fromToken);
+    console.log('Token', token);
     if (
       this.fromToken?.address !== token?.address ||
       this.fromToken.isNative !== token.isNative
@@ -293,11 +294,11 @@ class Swap {
         this.toToken?.isNative === token?.isNative
       ) {
         this.toToken = this.fromToken;
-        this.toAmount = "";
+        this.toAmount = '';
       }
       this.fromToken = token;
       this.fromToken.init();
-      this.fromAmount = "";
+      this.fromAmount = '';
     }
   }
 
@@ -316,11 +317,11 @@ class Swap {
         this.fromToken?.isNative === token?.isNative
       ) {
         this.fromToken = this.toToken;
-        this.fromAmount = "";
+        this.fromAmount = '';
       }
       this.toToken = token;
       this.toToken.init();
-      this.toAmount = "";
+      this.toAmount = '';
     }
   }
 
@@ -357,7 +358,7 @@ class Swap {
     ]);
 
     if (this.isWrapOrUnwrap) {
-      console.log("wrap or unwrap");
+      console.log('wrap or unwrap');
       if (this.isWrap) {
         // @ts-ignore
         await this.toToken.deposit.callV2({
@@ -368,7 +369,7 @@ class Swap {
         await this.toToken.withdraw.callV2([BigInt(fromAmountDecimals)]);
       }
     } else {
-      console.log("swapExactTokensForTokens");
+      console.log('swapExactTokensForTokens');
       await Promise.all([
         this.fromToken.approveIfNoAllowance({
           amount: fromAmountDecimals,
@@ -412,7 +413,7 @@ class Swap {
         this.toToken.supportingFeeOnTransferTokens ||
         this.fromToken.supportingFeeOnTransferTokens
       ) {
-        console.log("supporting fee on transfer tokens");
+        console.log('supporting fee on transfer tokens');
         console.log([
           BigInt(fromAmountDecimals),
           BigInt(minAmountOutDecimals),
@@ -440,7 +441,7 @@ class Swap {
       }
     }
 
-    this.fromAmount = "";
+    this.fromAmount = '';
 
     Promise.all([
       this.currentPair.value?.init(true),
@@ -670,7 +671,7 @@ class Swap {
   };
 
   updateChartData = async () => {
-    let label = "";
+    let label = '';
     chart.setChartTarget(undefined);
 
     if (this.fromToken && this.toToken) {
@@ -680,10 +681,10 @@ class Swap {
     }
 
     if (!chart.chartTarget) {
-      label = "No chart available";
+      label = 'No chart available';
     } else {
       label = `${this.fromToken?.symbol}${
-        this.toToken ? "/" + this.toToken.symbol : "/USD"
+        this.toToken ? '/' + this.toToken.symbol : '/USD'
       }`;
     }
 

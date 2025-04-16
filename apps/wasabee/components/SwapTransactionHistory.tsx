@@ -11,7 +11,7 @@ import { useDerivedSwapInfo } from '@/lib/algebra/state/swapStore';
 import { zeroAddress } from 'viem';
 import CardContainer from '@/components/CardContianer/v3';
 import { cn } from '@/lib/utils';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 const SwapTransactionHistory = () => {
   const [transactions, setTransactions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

@@ -1,5 +1,5 @@
 import { truncate } from '@/lib/format';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { Tab, Tabs } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import Link from 'next/link';

@@ -1,12 +1,12 @@
-import { useRouter } from "next/router";
-import { observer } from "mobx-react-lite";
-import { useEffect, useMemo, useState, useCallback } from "react";
-import launchpad from "@/services/launchpad";
-import { NextLayoutPage } from "@/types/nextjs";
-import { FtoPairContract } from "@/services/contract/launches/fto/ftopair-contract";
-import { wallet } from "@/services/wallet";
-import { Button } from "@/components/button/button-next";
-import Image from "next/image";
+import { useRouter } from 'next/router';
+import { observer } from 'mobx-react-lite';
+import { useEffect, useMemo, useState, useCallback } from 'react';
+import launchpad from '@/services/launchpad';
+import { NextLayoutPage } from '@/types/nextjs';
+import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
+import { wallet } from '@honeypot/shared';
+import { Button } from '@/components/button/button-next';
+import Image from 'next/image';
 import {
   Modal,
   ModalBody,
@@ -14,27 +14,27 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { chart } from "@/services/chart";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
-import { WrappedToastify } from "@/lib/wrappedToastify";
-import Action from "./components/Action";
-import Tabs from "./components/Tabs";
-import ProjectTitle from "./components/ProjectTitle";
-import KlineChart from "./components/KlineChart";
-import { LaunchDataProgress } from "./components/LaunchDataProgress";
-import { cn } from "@/lib/tailwindcss";
-import CardContainer from "@/components/CardContianer/v3";
-import ProjectDescription from "./components/ProjectDescription";
-import ProjectStats from "./components/ProjectStats";
-import { useLaunchTokenQuery } from "@/lib/hooks/useLaunchTokenQuery";
-import { Pot2Pump } from "@/lib/algebra/graphql/generated/graphql";
-import { pot2PumpToMemePair } from "@/lib/algebra/graphql/clients/pair";
-import { chain } from "@/services/chain";
+} from '@nextui-org/react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { chart } from '@/services/chart';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
+import { WrappedToastify } from '@/lib/wrappedToastify';
+import Action from './components/Action';
+import Tabs from './components/Tabs';
+import ProjectTitle from './components/ProjectTitle';
+import KlineChart from './components/KlineChart';
+import { LaunchDataProgress } from './components/LaunchDataProgress';
+import { cn } from '@/lib/tailwindcss';
+import CardContainer from '@/components/CardContianer/v3';
+import ProjectDescription from './components/ProjectDescription';
+import ProjectStats from './components/ProjectStats';
+import { useLaunchTokenQuery } from '@/lib/hooks/useLaunchTokenQuery';
+import { Pot2Pump } from '@/lib/algebra/graphql/generated/graphql';
+import { pot2PumpToMemePair } from '@/lib/algebra/graphql/clients/pair';
+import { chain } from '@/services/chain';
 
 export const UpdateProjectModal = observer(
   ({ pair }: { pair: FtoPairContract | MemePairContract }) => {
@@ -50,21 +50,21 @@ export const UpdateProjectModal = observer(
             projectName: z.string(),
             description: z.string(),
             twitter: z.union([
-              z.string().url().startsWith("https://x.com/"),
-              z.string().url().startsWith("https://twitter.com/"),
-              z.literal(""),
+              z.string().url().startsWith('https://x.com/'),
+              z.string().url().startsWith('https://twitter.com/'),
+              z.literal(''),
             ]),
-            website: z.string().url().startsWith("https://").or(z.literal("")),
+            website: z.string().url().startsWith('https://').or(z.literal('')),
             telegram: z.union([
-              z.string().startsWith("https://t.me/"),
-              z.string().startsWith("@"),
-              z.literal(""),
+              z.string().startsWith('https://t.me/'),
+              z.string().startsWith('@'),
+              z.literal(''),
             ]),
           })
           .transform((data) => {
             const mutateTelegram = (telegram: string | undefined | null) => {
-              if (telegram && telegram.startsWith("@")) {
-                return `https://t.me/${telegram.split("@")[1]}`;
+              if (telegram && telegram.startsWith('@')) {
+                return `https://t.me/${telegram.split('@')[1]}`;
               }
 
               return telegram;
@@ -78,9 +78,9 @@ export const UpdateProjectModal = observer(
     });
 
     const inputBaseClass =
-      "w-full bg-white rounded-[12px] md:rounded-[16px] px-3 md:px-4 py-2 md:py-[18px] text-black outline-none border border-black shadow-[0px_332px_93px_0px_rgba(0,0,0,0.00),0px_212px_85px_0px_rgba(0,0,0,0.01),0px_119px_72px_0px_rgba(0,0,0,0.05),0px_53px_53px_0px_rgba(0,0,0,0.09),0px_13px_29px_0px_rgba(0,0,0,0.10)] placeholder:text-black/50 text-sm md:text-base font-medium h-[40px] md:h-[60px]";
+      'w-full bg-white rounded-[12px] md:rounded-[16px] px-3 md:px-4 py-2 md:py-[18px] text-black outline-none border border-black shadow-[0px_332px_93px_0px_rgba(0,0,0,0.00),0px_212px_85px_0px_rgba(0,0,0,0.01),0px_119px_72px_0px_rgba(0,0,0,0.05),0px_53px_53px_0px_rgba(0,0,0,0.09),0px_13px_29px_0px_rgba(0,0,0,0.10)] placeholder:text-black/50 text-sm md:text-base font-medium h-[40px] md:h-[60px]';
 
-    const labelBaseClass = "text-black text-sm md:text-base font-medium";
+    const labelBaseClass = 'text-black text-sm md:text-base font-medium';
 
     const FormBody = observer(({ onClose }: any) => (
       <>
@@ -113,9 +113,9 @@ export const UpdateProjectModal = observer(
               <label className={labelBaseClass}>Project Name</label>
               <input
                 type="text"
-                {...register("projectName", {
+                {...register('projectName', {
                   value: pair.projectName,
-                  required: "Project name is required",
+                  required: 'Project name is required',
                 })}
                 className={inputBaseClass}
                 placeholder="Enter project name"
@@ -130,9 +130,9 @@ export const UpdateProjectModal = observer(
               <label className={labelBaseClass}>Description</label>
               <input
                 type="text"
-                {...register("description", {
+                {...register('description', {
                   value: pair.description,
-                  required: "Description is required",
+                  required: 'Description is required',
                 })}
                 className={inputBaseClass}
                 placeholder="Enter description"
@@ -149,7 +149,7 @@ export const UpdateProjectModal = observer(
               </label>
               <input
                 type="text"
-                {...register("twitter", {
+                {...register('twitter', {
                   value: pair.twitter,
                 })}
                 className={inputBaseClass}
@@ -167,7 +167,7 @@ export const UpdateProjectModal = observer(
               </label>
               <input
                 type="text"
-                {...register("website", {
+                {...register('website', {
                   value: pair.website,
                 })}
                 className={inputBaseClass}
@@ -185,7 +185,7 @@ export const UpdateProjectModal = observer(
               </label>
               <input
                 type="text"
-                {...register("telegram", {
+                {...register('telegram', {
                   value: pair.telegram,
                 })}
                 className={inputBaseClass}
@@ -207,21 +207,21 @@ export const UpdateProjectModal = observer(
                     chain_id: chain.currentChainId,
                     projectName: data.projectName,
                     description: data.description,
-                    twitter: data.twitter || "",
-                    website: data.website || "",
-                    telegram: data.telegram || "",
+                    twitter: data.twitter || '',
+                    website: data.website || '',
+                    telegram: data.telegram || '',
                   });
                   if (launchpad.updateProject.error) {
                     WrappedToastify.error({
-                      message: "Update failed",
-                      title: "Update Project Detail",
+                      message: 'Update failed',
+                      title: 'Update Project Detail',
                     });
                     return;
                   }
                   await pair.getProjectInfo();
                   WrappedToastify.success({
-                    message: "Update success",
-                    title: "Update Project Detail",
+                    message: 'Update success',
+                    title: 'Update Project Detail',
                   });
                   onClose();
                 })();
@@ -296,7 +296,7 @@ const MemeView = observer(() => {
               )}
             </ul>
             <p>
-              Click{" "}
+              Click{' '}
               <span
                 onClick={() => {
                   onOpen();
@@ -305,7 +305,7 @@ const MemeView = observer(() => {
                 className="text-blue-500 cursor-pointer"
               >
                 here
-              </span>{" "}
+              </span>{' '}
               to update the project
             </p>
           </div>
@@ -322,10 +322,10 @@ const MemeView = observer(() => {
     if (!pair?.launchedToken) {
       return;
     }
-    chart.setCurrencyCode("USD");
+    chart.setCurrencyCode('USD');
     chart.setTokenNumber(0);
     chart.setChartTarget(pair.launchedToken);
-    chart.setChartLabel(pair.launchedToken?.displayName + "/USD");
+    chart.setChartLabel(pair.launchedToken?.displayName + '/USD');
   }, [pair, pair?.launchedToken]);
 
   return (
@@ -336,11 +336,11 @@ const MemeView = observer(() => {
             isOpen={isOpen}
             onOpenChange={onOpenChange}
             classNames={{
-              body: "bg-[#FFCD4D]",
-              header: "bg-[#FFCD4D]",
-              footer: "bg-[#FFCD4D]",
-              closeButton: "hover:bg-black/5",
-              base: "max-h-[70vh] overflow-y-auto",
+              body: 'bg-[#FFCD4D]',
+              header: 'bg-[#FFCD4D]',
+              footer: 'bg-[#FFCD4D]',
+              closeButton: 'hover:bg-black/5',
+              base: 'max-h-[70vh] overflow-y-auto',
             }}
           >
             <UpdateProjectModal pair={pair}></UpdateProjectModal>
@@ -349,8 +349,8 @@ const MemeView = observer(() => {
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-4 md:gap-x-4 md:gap-y-14 w-full @container">
           <div
             className={cn(
-              "relative bg-white col-span-1 lg:col-span-2 px-2 sm:px-4 md:px-8 py-3 md:py-5 rounded-xl sm:rounded-3xl",
-              "grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-0 text-[#202020]"
+              'relative bg-white col-span-1 lg:col-span-2 px-2 sm:px-4 md:px-8 py-3 md:py-5 rounded-xl sm:rounded-3xl',
+              'grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-0 text-[#202020]'
             )}
           >
             <ProjectTitle
@@ -378,7 +378,7 @@ const MemeView = observer(() => {
             loading={!pair}
             loadingSize={200}
             loadingText="Loading Data..."
-            className={cn("relative min-h-[500px] px-1 sm:px-2 md:px-4")}
+            className={cn('relative min-h-[500px] px-1 sm:px-2 md:px-4')}
           >
             {pair?.state === 0 && (
               <div className="md:block w-full">

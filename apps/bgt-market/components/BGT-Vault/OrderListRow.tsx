@@ -6,7 +6,7 @@ import {
 } from '@/lib/algebra/graphql/generated/graphql';
 import { BGTVault } from '@/services/contract/bgt-market/bgt-vault';
 import { popmodal } from '@/services/popmodal';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { Button, SelectItem } from '@nextui-org/react';
 import { cn } from '@nextui-org/theme';
 import { PressEvent } from '@react-types/shared';

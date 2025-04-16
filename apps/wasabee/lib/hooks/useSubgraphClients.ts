@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { InMemoryCache } from '@apollo/client';
 import { ApolloClient } from '@apollo/client';
 import { useObserver } from 'mobx-react-lite';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { networksMap } from '@/services/chain';
 
 export function useInfoClient() {

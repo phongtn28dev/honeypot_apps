@@ -1,25 +1,25 @@
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { TokenSelector } from "@/components/TokenSelector";
-import { SwapAmount } from "../SwapAmount/index";
-import { liquidity } from "@/services/liquidity";
-import { Button } from "@/components/button";
-import { Token } from "@/services/contract/token";
-import { SpinnerContainer } from "../Spinner";
-import { PlusSvg } from "../svg/plus";
-import { useEffect } from "react";
-import { useRouter } from "next/router";
-import { isEthAddress } from "@/lib/address";
-import { wallet } from "@/services/wallet";
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import { TokenSelector } from '@/components/TokenSelector';
+import { SwapAmount } from '../SwapAmount/index';
+import { liquidity } from '@/services/liquidity';
+import { Button } from '@/components/button';
+import { Token } from '@/services/contract/token';
+import { SpinnerContainer } from '../Spinner';
+import { PlusSvg } from '../svg/plus';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { isEthAddress } from '@/lib/address';
+import { wallet } from '@honeypot/shared';
 import {
   Checkbox,
   Slider,
   Tab,
   Tabs,
   Button as NextButton,
-} from "@nextui-org/react";
-import { ItemSelect, SelectState } from "../ItemSelect";
-import { SelectItem } from "../ItemSelect/index";
-import { LoadingDisplay } from "../LoadingDisplay/LoadingDisplay";
+} from '@nextui-org/react';
+import { ItemSelect, SelectState } from '../ItemSelect';
+import { SelectItem } from '../ItemSelect/index';
+import { LoadingDisplay } from '../LoadingDisplay/LoadingDisplay';
 
 const AddLiquidity = observer(() => {
   return (
@@ -40,9 +40,9 @@ const AddLiquidity = observer(() => {
                 Number(liquidity.fromAmount) >
                   (liquidity.fromToken as Token)?.balance?.toNumber() ||
                 Number(liquidity.fromAmount) < 0,
-              errorMessage: "Insufficient balance",
+              errorMessage: 'Insufficient balance',
               onClear: () => {
-                liquidity.setFromAmount("");
+                liquidity.setFromAmount('');
               },
               onChange: (e) => {
                 liquidity.setFromAmount(e.target.value);
@@ -96,9 +96,9 @@ const AddLiquidity = observer(() => {
                 Number(liquidity.toAmount) >
                   (liquidity.toToken as Token)?.balance?.toNumber() ||
                 Number(liquidity.toAmount) < 0,
-              errorMessage: "Insufficient balance",
+              errorMessage: 'Insufficient balance',
               onClear: () => {
-                liquidity.setToAmount("");
+                liquidity.setToAmount('');
               },
               isClearable: !liquidity.currentPair.value,
               onChange: (e) => {
@@ -198,23 +198,23 @@ export const RemoveLiquidity = observer(
             marks={[
               {
                 value: 0,
-                label: "0%",
+                label: '0%',
               },
               {
                 value: 0.25,
-                label: "25%",
+                label: '25%',
               },
               {
                 value: 0.5,
-                label: "50%",
+                label: '50%',
               },
               {
                 value: 0.75,
-                label: "75%",
+                label: '75%',
               },
               {
                 value: 1,
-                label: "100%",
+                label: '100%',
               },
             ]}
           />
@@ -303,7 +303,7 @@ export const RemoveLiquidity = observer(
             >
               <div>{item.poolName}</div>
               <div>
-                {item.myLiquidityDisplay.reserve0} /{" "}
+                {item.myLiquidityDisplay.reserve0} /{' '}
                 {item.myLiquidityDisplay.reserve1}
               </div>
               <NextButton
@@ -401,8 +401,8 @@ export const LPCard = observer(() => {
           variant="light"
           disableAnimation
           classNames={{
-            tabList: "gap-16px p-0 bg-transparent",
-            tab: "px-[0.25rem] data-[selected=true]:bg-transparent font-bold text-[1.2rem]",
+            tabList: 'gap-16px p-0 bg-transparent',
+            tab: 'px-[0.25rem] data-[selected=true]:bg-transparent font-bold text-[1.2rem]',
           }}
         >
           <Tab

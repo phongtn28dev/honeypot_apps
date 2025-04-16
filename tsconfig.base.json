@@ -13,9 +13,9 @@
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
+    "baseUrl": ".",
     "paths": {
-      "mobx": ["node_modules/mobx"],
-      "mobx-react-lite": ["node_modules/mobx-react-lite"]
+      "@honeypot/shared": ["libs/shared/hpot-sdk/src/index.ts"],
     }
   },
   "exclude": ["node_modules", "tmp"]

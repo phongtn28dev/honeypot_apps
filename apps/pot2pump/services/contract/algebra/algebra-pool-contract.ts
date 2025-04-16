@@ -1,15 +1,15 @@
-import { exec } from "~/lib/contract";
-import { BaseContract } from "..";
-import { wallet } from "@/services/wallet";
-import { Signer, ethers } from "ethers";
-import { Contract } from "ethcall";
-import BigNumber from "bignumber.js";
-import { makeAutoObservable } from "mobx";
-import { get } from "http";
-import { getContract } from "viem";
-import { algebraPoolABI } from "@/lib/abis/algebra-contracts/ABIs";
-import { AsyncState, ContractWrite } from "@/services/utils";
-import { Token } from "../token";
+import { exec } from '~/lib/contract';
+import { BaseContract } from '..';
+import { wallet } from '@honeypot/shared';
+import { Signer, ethers } from 'ethers';
+import { Contract } from 'ethcall';
+import BigNumber from 'bignumber.js';
+import { makeAutoObservable } from 'mobx';
+import { get } from 'http';
+import { getContract } from 'viem';
+import { algebraPoolABI } from '@/lib/abis/algebra-contracts/ABIs';
+import { AsyncState, ContractWrite } from '@/services/utils';
+import { Token } from '../token';
 
 export class AlgebraPoolContract implements BaseContract {
   static poolMap: Record<string, AlgebraPoolContract> = {};
@@ -36,8 +36,8 @@ export class AlgebraPoolContract implements BaseContract {
     return AlgebraPoolContract.poolMap[key];
   }
 
-  address = "";
-  name: string = "";
+  address = '';
+  name: string = '';
   abi = algebraPoolABI;
   isInit = false;
 

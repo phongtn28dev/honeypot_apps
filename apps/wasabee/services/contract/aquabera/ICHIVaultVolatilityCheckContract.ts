@@ -1,12 +1,12 @@
-import { BaseContract } from "./..";
-import { wallet } from "@/services/wallet";
-import { makeAutoObservable } from "mobx";
-import { Address, getContract, zeroAddress } from "viem";
-import ICHIVaultVolatilityCheckABI from "@/lib/abis/aquabera/ICHIVaultVolatilityCheck";
+import { BaseContract } from './..';
+import { wallet } from '@honeypot/shared';
+import { makeAutoObservable } from 'mobx';
+import { Address, getContract, zeroAddress } from 'viem';
+import ICHIVaultVolatilityCheckABI from '@/lib/abis/aquabera/ICHIVaultVolatilityCheck';
 
 export class ICHIVaultVolatilityCheckContract implements BaseContract {
   address: Address = zeroAddress;
-  name: string = "ICHIVaultVolatilityCheck";
+  name: string = 'ICHIVaultVolatilityCheck';
   abi = ICHIVaultVolatilityCheckABI;
 
   constructor(args: Partial<ICHIVaultVolatilityCheckContract>) {

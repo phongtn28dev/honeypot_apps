@@ -1,7 +1,7 @@
-import { ADDRESS_ZERO, Pool } from "@cryptoalgebra/sdk";
-import { Address } from "viem";
-import { useCurrency } from "../common/useCurrency";
-import { useEffect, useMemo, useState } from "react";
+import { ADDRESS_ZERO, Pool } from '@cryptoalgebra/sdk';
+import { Address } from 'viem';
+import { useCurrency } from '../common/useCurrency';
+import { useEffect, useMemo, useState } from 'react';
 import {
   useReadAlgebraPoolTickSpacing,
   useReadAlgebraPoolGlobalState,
@@ -9,15 +9,15 @@ import {
   useReadAlgebraPoolToken0,
   useReadAlgebraPoolToken1,
   watchAlgebraPoolTickSpacingEvent,
-} from "@/wagmi-generated";
-import { getCode } from "viem/actions";
-import { wallet } from "@/services/wallet";
+} from '@/wagmi-generated';
+import { getCode } from 'viem/actions';
+import { wallet } from '@honeypot/shared';
 
 export const PoolState = {
-  LOADING: "LOADING",
-  NOT_EXISTS: "NOT_EXISTS",
-  EXISTS: "EXISTS",
-  INVALID: "INVALID",
+  LOADING: 'LOADING',
+  NOT_EXISTS: 'NOT_EXISTS',
+  EXISTS: 'EXISTS',
+  INVALID: 'INVALID',
 } as const;
 
 export type PoolStateType = (typeof PoolState)[keyof typeof PoolState];
@@ -125,7 +125,7 @@ export function usePool(
         ),
       ];
     } catch (error) {
-      console.error("Error creating pool:", error);
+      console.error('Error creating pool:', error);
       return [PoolState.NOT_EXISTS, null];
     }
   }, [

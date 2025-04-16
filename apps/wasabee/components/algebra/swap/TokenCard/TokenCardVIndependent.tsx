@@ -7,7 +7,7 @@ import { useAccount, useBalance, useWatchBlockNumber } from 'wagmi';
 import { Address, zeroAddress } from 'viem';
 import { TokenSelector } from '@/components/TokenSelector/v3';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { Token } from '@/services/contract/token';
 import { Slider } from '@nextui-org/react';
 import { debounce } from 'lodash';

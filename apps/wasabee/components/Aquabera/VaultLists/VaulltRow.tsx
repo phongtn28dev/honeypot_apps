@@ -5,7 +5,7 @@ import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
 import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
 import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
 import { Token } from '@/services/contract/token';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import {
   useReadIchiVaultAllowToken0,
   useReadIchiVaultAllowToken1,

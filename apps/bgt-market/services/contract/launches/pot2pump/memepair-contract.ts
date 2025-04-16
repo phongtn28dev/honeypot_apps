@@ -1,22 +1,22 @@
-import { Token } from "@/services/contract/token";
-import { getContract, zeroAddress } from "viem";
-import { dayjs } from "@/lib/dayjs";
-import BigNumber from "bignumber.js";
-import { trpcClient } from "@/lib/trpc";
-import { makeAutoObservable } from "mobx";
-import { AsyncState, ContractWrite } from "@/services/utils";
-import { pot2PumpPairABI } from "@/lib/abis/Pot2Pump/pot2PumpPair";
-import { formatAmountWithAlphabetSymbol } from "@/lib/algebra/utils/common/formatAmount";
+import { Token } from '@/services/contract/token';
+import { getContract, zeroAddress } from 'viem';
+import { dayjs } from '@/lib/dayjs';
+import BigNumber from 'bignumber.js';
+import { trpcClient } from '@/lib/trpc';
+import { makeAutoObservable } from 'mobx';
+import { AsyncState, ContractWrite } from '@/services/utils';
+import { pot2PumpPairABI } from '@/lib/abis/Pot2Pump/pot2PumpPair';
+import { formatAmountWithAlphabetSymbol } from '@/lib/algebra/utils/common/formatAmount';
 import {
   getParticipantDetail,
   subgraphPot2PumpToMemePair,
-} from "@/lib/algebra/graphql/clients/pot2pump";
-import { wallet } from "@/services/wallet";
-import { chain } from "@/services/chain";
-import { ICHIVaultContract } from "../../aquabera/ICHIVault-contract";
-import { BaseLaunchContract } from "../base-launch-contract";
-import { Pool } from "@/lib/algebra/graphql/generated/graphql";
-import { poolsByTokenPair } from "@/lib/algebra/graphql/clients/pool";
+} from '@/lib/algebra/graphql/clients/pot2pump';
+import { wallet } from '@honeypot/shared';
+import { chain } from '@/services/chain';
+import { ICHIVaultContract } from '../../aquabera/ICHIVault-contract';
+import { BaseLaunchContract } from '../base-launch-contract';
+import { Pool } from '@/lib/algebra/graphql/generated/graphql';
+import { poolsByTokenPair } from '@/lib/algebra/graphql/clients/pool';
 export class MemePairContract implements BaseLaunchContract {
   static contractMap: Record<string, MemePairContract> = {};
   static loadContract(
@@ -35,8 +35,8 @@ export class MemePairContract implements BaseLaunchContract {
     return contract;
   }
   databaseId: number | undefined = undefined;
-  address = "";
-  name: string = "";
+  address = '';
+  name: string = '';
   abi = pot2PumpPairABI;
   raiseToken: Token | undefined = undefined;
   launchedToken: Token | undefined = undefined;
@@ -44,17 +44,17 @@ export class MemePairContract implements BaseLaunchContract {
   depositedLaunchedTokenWithoutDecimals: BigNumber | null = null;
   launchedTokenBuyCount: BigNumber | null = null;
   launchedTokenSellCount: BigNumber | null = null;
-  endTime: string = "";
-  startTime: string = "";
-  launchedTokenProvider: string = "";
-  projectName = "";
-  description = "";
-  telegram = "";
-  twitter = "";
-  website = "";
+  endTime: string = '';
+  startTime: string = '';
+  launchedTokenProvider: string = '';
+  projectName = '';
+  description = '';
+  telegram = '';
+  twitter = '';
+  website = '';
   isValidated = false;
   isInit = false;
-  provider = "";
+  provider = '';
   canClaimLP = false;
   canRefund = false;
   isRefundable = false;
@@ -65,10 +65,10 @@ export class MemePairContract implements BaseLaunchContract {
     link: string;
     icon: string;
   }[] = [];
-  logoUrl = "";
-  bannerUrl = "";
+  logoUrl = '';
+  bannerUrl = '';
   participantsCount = new BigNumber(0);
-  beravoteSpaceId = "";
+  beravoteSpaceId = '';
   vaultBalance = BigInt(0);
   indexerDataLoaded = false;
   userDepositedRaisedTokenWithoutDecimals = new BigNumber(0);
@@ -107,8 +107,11 @@ export class MemePairContract implements BaseLaunchContract {
 
   get pottingPercentageDisplay() {
     return this.depositedRaisedToken && this.raisedTokenMinCap
-      ? `${formatAmountWithAlphabetSymbol(this.pottingPercentageNumber.toFixed(2), 2)}%`
-      : "--";
+      ? `${formatAmountWithAlphabetSymbol(
+          this.pottingPercentageNumber.toFixed(2),
+          2
+        )}%`
+      : '--';
   }
 
   get pottingPercentageNumber() {
@@ -148,7 +151,7 @@ export class MemePairContract implements BaseLaunchContract {
       ? dayjs(
           new BigNumber(this.startTime).multipliedBy(1000).toNumber()
         ).toISOString()
-      : "-";
+      : '-';
   }
 
   get endTimeDisplay() {
@@ -156,7 +159,7 @@ export class MemePairContract implements BaseLaunchContract {
       ? dayjs(
           new BigNumber(this.endTime).multipliedBy(1000).toNumber()
         ).toISOString()
-      : "-";
+      : '-';
   }
 
   get depositedRaisedToken() {
@@ -194,7 +197,7 @@ export class MemePairContract implements BaseLaunchContract {
 
   get contract() {
     if (!chain.isInit) {
-      throw new Error("Get contract failed, please select a chain first");
+      throw new Error('Get contract failed, please select a chain first');
     }
     return getContract({
       address: this.address as `0x${string}`,
@@ -257,39 +260,39 @@ export class MemePairContract implements BaseLaunchContract {
   get remainTime() {
     const now = dayjs();
     if (!this.endTime) {
-      return "-";
+      return '-';
     }
     const targetTime = dayjs(
       new BigNumber(this.endTime).multipliedBy(1000).toNumber()
     );
     if (!targetTime.isValid()) {
-      return "Invalid Date";
+      return 'Invalid Date';
     }
-    const diffDays = targetTime.diff(now, "days");
+    const diffDays = targetTime.diff(now, 'days');
 
     if (Math.abs(diffDays) >= 1) {
       return `${Math.abs(diffDays)} ${
-        diffDays > 0 ? "days later" : "days ago"
+        diffDays > 0 ? 'days later' : 'days ago'
       }`;
     }
 
-    const diffHours = targetTime.diff(now, "hours");
+    const diffHours = targetTime.diff(now, 'hours');
 
     if (Math.abs(diffHours) >= 1) {
       return `${Math.abs(diffHours)} ${
-        diffHours > 0 ? "hours later" : "hours ago"
+        diffHours > 0 ? 'hours later' : 'hours ago'
       }`;
     }
 
-    const diffMinutes = targetTime.diff(now, "minutes");
+    const diffMinutes = targetTime.diff(now, 'minutes');
     return `${Math.abs(diffMinutes)} ${
-      diffMinutes > 0 ? "minutes later" : "minutes ago"
+      diffMinutes > 0 ? 'minutes later' : 'minutes ago'
     }`;
   }
 
   deposit = new AsyncState(async ({ amount }: { amount: string }) => {
     if (!this.raiseToken || !this.launchedToken) {
-      throw new Error("token is not initialized");
+      throw new Error('token is not initialized');
     }
 
     amount = new BigNumber(amount)
@@ -313,11 +316,11 @@ export class MemePairContract implements BaseLaunchContract {
 
   refund = new AsyncState(async () => {
     if (!this.raiseToken || !this.launchedToken) {
-      throw new Error("token is not initialized");
+      throw new Error('token is not initialized');
     }
 
     await new ContractWrite(this.contract.write.refundRaisedToken, {
-      action: "Refund",
+      action: 'Refund',
     }).call([wallet.account as `0x${string}`]);
 
     await this.raiseToken?.getBalance();
@@ -327,7 +330,7 @@ export class MemePairContract implements BaseLaunchContract {
 
   claimLP = new AsyncState(async () => {
     if (!this.raiseToken || !this.launchedToken) {
-      throw new Error("token is not initialized");
+      throw new Error('token is not initialized');
     }
 
     await this.facadeContract.claimLP.call([
@@ -339,7 +342,7 @@ export class MemePairContract implements BaseLaunchContract {
 
   get withdraw() {
     return new ContractWrite(this.contract.write.claimLP, {
-      action: "Withdraw",
+      action: 'Withdraw',
       isSuccessEffect: true,
     });
   }
@@ -348,36 +351,36 @@ export class MemePairContract implements BaseLaunchContract {
     switch (this.state) {
       case 0:
         return {
-          status: "success",
-          color: "bg-success/20 text-success-600",
+          status: 'success',
+          color: 'bg-success/20 text-success-600',
         };
       case 1:
         return {
-          status: "Fail",
-          color: "bg-danger/20 text-danger",
+          status: 'Fail',
+          color: 'bg-danger/20 text-danger',
         };
       case 2:
         return {
-          status: "Paused",
-          color: "bg-warning/20 text-warning-600",
+          status: 'Paused',
+          color: 'bg-warning/20 text-warning-600',
         };
       case 3:
         if (this.isCompleted) {
           return {
-            status: "Completed",
-            color: "bg-[rgba(226,232,240,0.1)] text-default-foreground",
+            status: 'Completed',
+            color: 'bg-[rgba(226,232,240,0.1)] text-default-foreground',
           };
         }
         return {
-          status: "Processing",
-          color: "text-[#83C2E9] bg-[rgba(131,194,233,0.1)]",
+          status: 'Processing',
+          color: 'text-[#83C2E9] bg-[rgba(131,194,233,0.1)]',
         };
     }
   }
 
   async getProjectInfo(force?: boolean) {
     if (!chain.isInit) {
-      throw new Error("Get project info failed, please select a chain first");
+      throw new Error('Get project info failed, please select a chain first');
     }
 
     const currentChainId = chain.currentChainId;
@@ -389,8 +392,8 @@ export class MemePairContract implements BaseLaunchContract {
 
       if (
         cachedProjectInfo &&
-        cachedProjectInfo !== "undefined" &&
-        cachedProjectInfo !== "null"
+        cachedProjectInfo !== 'undefined' &&
+        cachedProjectInfo !== 'null'
       ) {
         this.setData(JSON.parse(cachedProjectInfo));
         return;
@@ -402,7 +405,7 @@ export class MemePairContract implements BaseLaunchContract {
       pair: this.address,
     });
 
-    console.log("res", res);
+    console.log('res', res);
 
     if (!res) {
       return;
@@ -415,25 +418,25 @@ export class MemePairContract implements BaseLaunchContract {
     if (res.telegram) {
       this.telegram = res.telegram;
       this.socials.push({
-        name: "telegram",
+        name: 'telegram',
         link: res.telegram,
-        icon: "/images/telegram.svg",
+        icon: '/images/telegram.svg',
       });
     }
     if (res.twitter) {
       this.twitter = res.twitter;
       this.socials.push({
-        name: "twitter",
+        name: 'twitter',
         link: res.twitter,
-        icon: "/images/twitter.svg",
+        icon: '/images/twitter.svg',
       });
     }
     if (res.website) {
       this.website = res.website;
       this.socials.push({
-        name: "website",
+        name: 'website',
         link: res.website,
-        icon: "/images/website.svg",
+        icon: '/images/website.svg',
       });
     }
     if (res.description) {
@@ -516,7 +519,7 @@ export class MemePairContract implements BaseLaunchContract {
       //this.getParticipantDetail(),
     ]).catch((error) => {
       if (!chain.isInit) {
-        throw new Error("Init meme pair failed, please select a chain first");
+        throw new Error('Init meme pair failed, please select a chain first');
       }
       console.error(error, `init-memepair-error-${this.address}`);
       // 优先使用 chain.currentChainId
@@ -543,7 +546,7 @@ export class MemePairContract implements BaseLaunchContract {
       this.launchedToken.address.toLowerCase()
     );
 
-    console.log("poolAddress", poolAddress);
+    console.log('poolAddress', poolAddress);
 
     if (!poolAddress) {
       return;
@@ -552,7 +555,7 @@ export class MemePairContract implements BaseLaunchContract {
     this.raisedandLaunchTokenPairPool = poolAddress[0] as Pool;
 
     console.log(
-      "this.raisedandLaunchTokenPairPool",
+      'this.raisedandLaunchTokenPairPool',
       this.raisedandLaunchTokenPairPool
     );
   }
@@ -579,11 +582,11 @@ export class MemePairContract implements BaseLaunchContract {
     }
     const res = await subgraphPot2PumpToMemePair(this.address, wallet.account);
     if (res) {
-      console.log("res indexer", res);
+      console.log('res indexer', res);
       Object.assign(this, res);
       this.indexerDataLoaded = true;
     } else {
-      console.error("getIndexerData", `getIndexerData-error-${this.address}`);
+      console.error('getIndexerData', `getIndexerData-error-${this.address}`);
     }
   }
 
@@ -598,7 +601,7 @@ export class MemePairContract implements BaseLaunchContract {
 
   getIsValidated() {
     if (!chain.isInit) {
-      throw new Error("Get isValidated failed, please select a chain first");
+      throw new Error('Get isValidated failed, please select a chain first');
     }
     // 优先使用 chain.currentChain，如果不存在则使用 wallet.currentChain
     const currentChain = chain.currentChain || wallet.currentChain;
@@ -618,7 +621,7 @@ export class MemePairContract implements BaseLaunchContract {
       }
 
       const claimed = await this.contract.read.claimedLp([wallet.account] as [
-        `0x${string}`,
+        `0x${string}`
       ]);
 
       const claimable = await this.contract.read.claimableLP([
@@ -643,15 +646,15 @@ export class MemePairContract implements BaseLaunchContract {
   }
 
   async getLaunchedToken(launchedToken?: Token, force?: boolean) {
-    console.log("launchedToken", launchedToken);
+    console.log('launchedToken', launchedToken);
     if (!!launchedToken && launchedToken.address !== zeroAddress && !force) {
       this.launchedToken = launchedToken;
       //this.launchedToken.init();
     } else {
       const res = (await this.contract.read.launchedToken()) as `0x${string}`;
-      console.log("res", res);
+      console.log('res', res);
       this.launchedToken = Token.getToken({ address: res, force });
-      console.log("this.launchedToken", this.launchedToken);
+      console.log('this.launchedToken', this.launchedToken);
     }
   }
 
@@ -800,7 +803,7 @@ export class MemePairContract implements BaseLaunchContract {
     ]);
 
     await new ContractWrite(aquaberaVaultContract.contract.write.withdraw, {
-      action: "Claim Tokens",
+      action: 'Claim Tokens',
       isSuccessEffect: true,
     }).call([this.vaultBalance, wallet.account as `0x${string}`]);
 

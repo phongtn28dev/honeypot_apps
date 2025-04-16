@@ -5,7 +5,7 @@ import { useTransactionAwait } from '../common/useTransactionAwait';
 import { algebraPositionManagerABI } from '@cryptoalgebra/sdk';
 import { TransactionType } from '../../state/pendingTransactionsStore';
 import { useObserver } from 'mobx-react-lite';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 
 export function useFarmApprove(tokenId: bigint) {
   const APPROVE = true;

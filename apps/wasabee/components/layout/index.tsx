@@ -19,7 +19,7 @@ import { Footer } from './footer';
 import { chatService, presetQuestions, questionTitles } from '@/services/chat';
 import _ from 'lodash';
 import { InvitationCodeModal } from '../InvitationCodeModal/InvitationCodeModal';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 
 export const Layout = ({
   children,

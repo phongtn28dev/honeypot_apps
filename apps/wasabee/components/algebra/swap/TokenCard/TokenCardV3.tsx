@@ -7,7 +7,7 @@ import { useAccount, useBalance, useWatchBlockNumber } from 'wagmi';
 import { Address, zeroAddress } from 'viem';
 import { TokenSelector } from '@/components/TokenSelector/v3';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { Token } from '@/services/contract/token';
 import { Slider } from '@nextui-org/react';
 import { debounce } from 'lodash';
@@ -477,7 +477,7 @@ const TokenCardV3 = ({
             maxValue={Number(balance?.formatted)}
             minValue={0}
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            onChange={(value:any) => {
+            onChange={(value: any) => {
               if (isNaN(value)) return;
               const maxValue = BigNumber(balance?.value.toString() ?? 0).div(
                 10 ** (balance?.decimals ?? 18)

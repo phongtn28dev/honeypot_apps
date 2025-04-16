@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
-import styled from "styled-components";
-import Image from "next/image";
-import raceFieldBg from "public/images/horserace/race_field.png";
-import { Token } from "@/services/contract/token";
-import { V3SwapCard } from "@/components/algebra/swap/V3SwapCard";
-import { wallet } from "@/services/wallet";
-import { observer } from "mobx-react-lite";
-import { getAllRacers, Racer } from "@/lib/algebra/graphql/clients/racer";
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import styled from 'styled-components';
+import Image from 'next/image';
+import raceFieldBg from 'public/images/horserace/race_field.png';
+import { Token } from '@/services/contract/token';
+import { V3SwapCard } from '@/components/algebra/swap/V3SwapCard';
+import { wallet } from '@honeypot/shared';
+import { observer } from 'mobx-react-lite';
+import { getAllRacers, Racer } from '@/lib/algebra/graphql/clients/racer';
 import {
   Tooltip,
   Modal,
@@ -14,16 +14,16 @@ import {
   ModalHeader,
   ModalBody,
   useDisclosure,
-} from "@nextui-org/react";
-import { useSpring, animated } from "react-spring";
-import { getTokenTop10Holders } from "@/lib/algebra/graphql/clients/token";
-import { TokenTop10HoldersQuery } from "@/lib/algebra/graphql/generated/graphql";
-import BigNumber from "bignumber.js";
-import { poolsByTokenPair } from "@/lib/algebra/graphql/clients/pool";
-import { useRouter } from "next/router";
-import { ExternalLink } from "lucide-react";
-import { Copy } from "@/components/Copy";
-import { VscCopy } from "react-icons/vsc";
+} from '@nextui-org/react';
+import { useSpring, animated } from 'react-spring';
+import { getTokenTop10Holders } from '@/lib/algebra/graphql/clients/token';
+import { TokenTop10HoldersQuery } from '@/lib/algebra/graphql/generated/graphql';
+import BigNumber from 'bignumber.js';
+import { poolsByTokenPair } from '@/lib/algebra/graphql/clients/pool';
+import { useRouter } from 'next/router';
+import { ExternalLink } from 'lucide-react';
+import { Copy } from '@/components/Copy';
+import { VscCopy } from 'react-icons/vsc';
 
 const START_TIMESTAMP = 1734436800;
 const END_TIMESTAMP = 1734825600;
@@ -41,7 +41,7 @@ const RaceTrack = styled.div<{ totalRacers: number }>`
   overflow-y: auto;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -208,7 +208,7 @@ const AnimatedValue = styled.span<{ changed: boolean }>`
   display: inline-block;
   transition: all 0.3s ease-in-out;
   background-color: ${(props) =>
-    props.changed ? "rgba(255, 255, 255, 0.1)" : "transparent"};
+    props.changed ? 'rgba(255, 255, 255, 0.1)' : 'transparent'};
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
 `;
@@ -238,19 +238,19 @@ const TableContainer = styled.div`
 
 const DeadRacers = [
   {
-    racerAddress: "0x6e504fcb8519820499ec2518bd912016b373c5dc",
+    racerAddress: '0x6e504fcb8519820499ec2518bd912016b373c5dc',
     deadTime: 1734710400,
   },
   {
-    racerAddress: "0xd92e5d89cfe82bb0c0f95a3f4b0ee5ddb22e5e87",
+    racerAddress: '0xd92e5d89cfe82bb0c0f95a3f4b0ee5ddb22e5e87',
     deadTime: 1734710400,
   },
   {
-    racerAddress: "0x24dc27d117aca1d8c0aace33bd840026c9a52e28",
+    racerAddress: '0x24dc27d117aca1d8c0aace33bd840026c9a52e28',
     deadTime: 1734710400,
   },
   {
-    racerAddress: "0x04457d8063168e7008df0f6d10961622a316dd1c",
+    racerAddress: '0x04457d8063168e7008df0f6d10961622a316dd1c',
     deadTime: 1734710400,
   },
 ];
@@ -319,10 +319,10 @@ const TopHoldersModal = observer(
         placement="center"
         size="4xl"
         classNames={{
-          base: "bg-transparent",
-          wrapper: "bg-transparent",
-          closeButton: "right-4 top-4 text-white z-50",
-          body: "p-0",
+          base: 'bg-transparent',
+          wrapper: 'bg-transparent',
+          closeButton: 'right-4 top-4 text-white z-50',
+          body: 'p-0',
         }}
       >
         <ModalContent className="bg-transparent max-w-[1000px] w-[90vw]">
@@ -333,8 +333,8 @@ const TopHoldersModal = observer(
               <ModalHeader className="p-0">
                 <div className="flex items-center gap-4">
                   <Image
-                    src={racer.tokenOnchainData?.logoURI || ""}
-                    alt={racer.tokenOnchainData?.symbol || ""}
+                    src={racer.tokenOnchainData?.logoURI || ''}
+                    alt={racer.tokenOnchainData?.symbol || ''}
                     width={48}
                     height={48}
                     className="rounded-full"
@@ -378,7 +378,7 @@ const TopHoldersModal = observer(
                           >
                             <td className="py-2 px-2 sm:px-4 text-sm sm:text-base whitespace-nowrap">
                               <span className="flex items-center gap-2">
-                                {index === 0 ? "👑" : index + 1}
+                                {index === 0 ? '👑' : index + 1}
                               </span>
                             </td>
                             <td className="py-2 px-2 sm:px-4 text-sm sm:text-base whitespace-nowrap">
@@ -456,7 +456,7 @@ const SwapModal = observer(
         hideCloseButton={false}
         placement="center"
         classNames={{
-          closeButton: "right-4 top-4 z-50 text-white z-[9999]",
+          closeButton: 'right-4 top-4 z-50 text-white z-[9999]',
         }}
       >
         <ModalContent className="bg-transparent">
@@ -533,7 +533,7 @@ export const MemeHorseRace = observer(
 
           // return () => clearInterval(interval);
         } catch (error) {
-          console.error("Initialization error:", error);
+          console.error('Initialization error:', error);
           setIsInitializing(false);
         }
       };
@@ -544,7 +544,7 @@ export const MemeHorseRace = observer(
     useEffect(() => {
       // 组件挂载时初始化进度条颜色
       if (timeSliderRef.current) {
-        timeSliderRef.current.style.setProperty("--value", "100%");
+        timeSliderRef.current.style.setProperty('--value', '100%');
       }
     }, []);
 
@@ -600,7 +600,7 @@ export const MemeHorseRace = observer(
     const getCurrentScores = () => {
       const currentTimestamp = timestamps[timeIndex];
       console.log(
-        "racers",
+        'racers',
         racers.map((racer) => ({
           ...racer,
           tokenOnchainData: tokens[racer.tokenAddress],
@@ -648,13 +648,10 @@ export const MemeHorseRace = observer(
     };
 
     useEffect(() => {
-      const currentScores = currentRacers.reduce(
-        (acc, racer) => {
-          acc[racer.tokenAddress] = racer.currentScore;
-          return acc;
-        },
-        {} as Record<string, number>
-      );
+      const currentScores = currentRacers.reduce((acc, racer) => {
+        acc[racer.tokenAddress] = racer.currentScore;
+        return acc;
+      }, {} as Record<string, number>);
 
       const newChangedValues: Record<string, boolean> = {};
       Object.keys(currentScores).forEach((address) => {
@@ -686,7 +683,7 @@ export const MemeHorseRace = observer(
       ) as HTMLInputElement;
       if (sliderElement && timeIndex >= 0) {
         const percent = (timeIndex / (timestamps.length - 1)) * 100;
-        sliderElement.style.setProperty("--value", `${percent}%`);
+        sliderElement.style.setProperty('--value', `${percent}%`);
       }
     }, [timestamps.length, timeIndex]);
 
@@ -718,7 +715,7 @@ export const MemeHorseRace = observer(
         setHoldersData(data);
         onHoldersOpen();
       } catch (error) {
-        console.error("Error fetching holders:", error);
+        console.error('Error fetching holders:', error);
       } finally {
         setIsLoading(false);
       }
@@ -742,7 +739,7 @@ export const MemeHorseRace = observer(
       setTimeIndex(value);
       // 更新进度条颜色
       const percent = (value / (timestamps.length - 1)) * 100;
-      e.target.style.setProperty("--value", `${percent}%`);
+      e.target.style.setProperty('--value', `${percent}%`);
     };
 
     // Add a new function to check if the race has ended
@@ -802,10 +799,10 @@ export const MemeHorseRace = observer(
                                     rank < 3 && (
                                       <RankIndicator>
                                         {rank === 0
-                                          ? "👑"
+                                          ? '👑'
                                           : rank === 1
-                                            ? "2"
-                                            : "3"}
+                                          ? '2'
+                                          : '3'}
                                       </RankIndicator>
                                     )}
                                   <div className="relative">
@@ -816,12 +813,20 @@ export const MemeHorseRace = observer(
                                           !isRaceEnded() &&
                                           handleTokenClick(racer.tokenAddress)
                                         }
-                                        className={`cursor-${isDead || isRaceEnded() ? "default" : "pointer"} transform transition-transform duration-200 ${!isDead && !isRaceEnded() && "hover:scale-110"}`}
+                                        className={`cursor-${
+                                          isDead || isRaceEnded()
+                                            ? 'default'
+                                            : 'pointer'
+                                        } transform transition-transform duration-200 ${
+                                          !isDead &&
+                                          !isRaceEnded() &&
+                                          'hover:scale-110'
+                                        }`}
                                       >
                                         <Image
                                           src={racer.tokenOnchainData?.logoURI}
                                           alt={
-                                            racer.tokenOnchainData?.symbol || ""
+                                            racer.tokenOnchainData?.symbol || ''
                                           }
                                           width={100}
                                           height={100}
@@ -901,7 +906,7 @@ export const MemeHorseRace = observer(
                             <div className="flex items-center gap-3">
                               <Image
                                 src={racer.tokenOnchainData?.logoURI}
-                                alt={racer.tokenOnchainData?.symbol || ""}
+                                alt={racer.tokenOnchainData?.symbol || ''}
                                 width={40}
                                 height={40}
                                 className="rounded-full"
@@ -930,8 +935,8 @@ export const MemeHorseRace = observer(
                             <span
                               className={
                                 racer.hourlyChange >= 0
-                                  ? "text-green-500"
-                                  : "text-red-500"
+                                  ? 'text-green-500'
+                                  : 'text-red-500'
                               }
                             >
                               {racer.hourlyChange.toFixed(2)}%
@@ -948,7 +953,7 @@ export const MemeHorseRace = observer(
                                   disabled
                                   className="px-4 py-2 bg-gray-600 cursor-not-allowed rounded text-gray-400 font-medium opacity-50"
                                 >
-                                  {isRaceEnded() ? "Race Ended" : "Dead"}
+                                  {isRaceEnded() ? 'Race Ended' : 'Dead'}
                                 </button>
                               ) : (
                                 <>

@@ -9,7 +9,7 @@ import { Address } from 'viem';
 import { Token } from '@/services/contract/token';
 import { Pool } from '@cryptoalgebra/sdk';
 import { observer } from 'mobx-react-lite';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { Button, Link } from '@nextui-org/react';
 import Settings from '@/components/algebra/common/Settings';
 

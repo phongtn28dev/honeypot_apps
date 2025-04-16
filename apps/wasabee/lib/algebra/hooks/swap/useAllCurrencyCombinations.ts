@@ -1,4 +1,4 @@
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { Currency, Token } from '@cryptoalgebra/sdk';
 import { useObserver } from 'mobx-react-lite';
 import { useMemo } from 'react';

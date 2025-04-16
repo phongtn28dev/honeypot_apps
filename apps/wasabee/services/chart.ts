@@ -3,7 +3,7 @@ import { Token } from './contract/token';
 import { PairContract } from './contract/dex/liquidity/pair-contract';
 import { AsyncState } from './utils';
 import { ChartDataResponse, resolutionType } from './priceFeed/priceFeedTypes';
-import { wallet } from './wallet';
+import { wallet } from '@honeypot/shared';
 import { trpcClient } from '@/lib/trpc';
 import { dayjs } from '@/lib/dayjs';
 import { AlgebraPoolContract } from './contract/algebra/algebra-pool-contract';
@@ -105,13 +105,19 @@ class Chart {
       this.isLoading = false;
 
       if (priceDataRequest.status === 'error') {
-        console.log('Chart data fetch error:', priceDataRequest.message || 'Unknown error');
+        console.log(
+          'Chart data fetch error:',
+          priceDataRequest.message || 'Unknown error'
+        );
         return undefined;
       } else {
         console.log('Chart data fetch successful:', {
           dataPoints: priceDataRequest.data?.getBars?.c?.length || 0,
           firstPrice: priceDataRequest.data?.getBars?.c?.[0],
-          lastPrice: priceDataRequest.data?.getBars?.c?.[priceDataRequest.data?.getBars?.c?.length - 1],
+          lastPrice:
+            priceDataRequest.data?.getBars?.c?.[
+              priceDataRequest.data?.getBars?.c?.length - 1
+            ],
         });
         return priceDataRequest.data;
       }
@@ -223,7 +229,7 @@ class Chart {
     try {
       const from = dayjs().unix() - 60;
       const to = dayjs().unix();
-      
+
       console.log('Latest price request parameters:', {
         chainId: wallet.currentChainId.toString(),
         tokenAddress: this.chartTarget.address,
@@ -231,7 +237,7 @@ class Chart {
         to,
         resolution: '1',
         tokenNumber: this.tokenNumber,
-        currencyCode: this.currencyCode
+        currencyCode: this.currencyCode,
       });
 
       const newestPrice = await trpcClient.priceFeed.getChartData.query({
@@ -250,9 +256,14 @@ class Chart {
       ) {
         const newPrice = newestPrice.data?.getBars?.c[0];
         console.log('Latest price update received:', newPrice);
-        
+
         if (this.chartData.value?.getBars?.c) {
-          console.log('Previous last price:', this.chartData.value.getBars.c[this.chartData.value.getBars.c.length - 1]);
+          console.log(
+            'Previous last price:',
+            this.chartData.value.getBars.c[
+              this.chartData.value.getBars.c.length - 1
+            ]
+          );
           this.chartData.value.getBars.c.push(
             newestPrice.data?.getBars?.c[0] as never
           );
@@ -263,7 +274,7 @@ class Chart {
       } else {
         console.log('Latest price update failed or returned undefined data:', {
           status: newestPrice.status,
-          hasData: newestPrice.data?.getBars?.c[0] !== undefined
+          hasData: newestPrice.data?.getBars?.c[0] !== undefined,
         });
       }
     } catch (error) {

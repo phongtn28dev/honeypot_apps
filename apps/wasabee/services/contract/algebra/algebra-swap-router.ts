@@ -1,6 +1,6 @@
 import { exec } from '~/lib/contract';
 import { BaseContract } from './..';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { Signer, ethers } from 'ethers';
 import { Contract } from 'ethcall';
 import BigNumber from 'bignumber.js';

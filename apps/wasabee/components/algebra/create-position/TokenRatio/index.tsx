@@ -3,7 +3,7 @@ import { Token } from '@/services/contract/token';
 import { IDerivedMintInfo } from '@/lib/algebra/state/mintStore';
 import { useMemo } from 'react';
 import { zeroAddress } from 'viem';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 
 interface TokenRatioProps {
   mintInfo: IDerivedMintInfo;

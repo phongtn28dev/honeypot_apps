@@ -17,7 +17,7 @@ import { popmodal } from '@/services/popmodal';
 import { Tooltip } from '@nextui-org/react';
 import { AlgebraPoolContract } from '@/services/contract/algebra/algebra-pool-contract';
 import { removeLiquidityV3 } from '@/services/removeLoqioditiV3';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 interface PoolLiquidityCardV3Props {
   pair: AlgebraPoolContract;
   autoSize?: boolean;

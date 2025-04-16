@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { chart } from '@/services/chart';
 import { observer } from 'mobx-react-lite';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { useSearchParams } from 'next/navigation';
 import { itemPopUpVariants } from '@/lib/animation';
 import { DarkContainer } from '@/components/CardContianer';

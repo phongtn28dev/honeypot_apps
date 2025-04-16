@@ -11,7 +11,7 @@ import { SwapCallEstimate } from '@/lib/algebra/hooks/swap/useSwapCallback';
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
 import { Token } from '@/services/contract/token';
 import { ContractWrite } from '@/services/utils';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { xSwap } from '@/services/xswap';
 import { Trade } from '@cryptoalgebra/sdk';
 import { Button } from '@nextui-org/react';

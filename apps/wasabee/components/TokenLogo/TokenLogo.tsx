@@ -1,6 +1,6 @@
 import { cn } from '@/lib/tailwindcss';
 import { Token } from '@/services/contract/token';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { Tooltip } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import Image from 'next/image';

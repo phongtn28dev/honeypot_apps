@@ -8,7 +8,7 @@ import {
   useMintActionHandlers,
 } from '@/lib/algebra/state/mintStore';
 import { useObserver } from 'mobx-react-lite';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 
 interface EnterAmountsProps {
   currencyA: Currency | undefined;

@@ -1,5 +1,5 @@
 import { makeAutoObservable, reaction, autorun } from 'mobx';
-import { wallet } from './wallet';
+import { wallet } from '@honeypot/shared';
 import { Token } from './contract/token';
 import { SwapFieldType } from '@/types/algebra/types/swap-field';
 import BigNumber from 'bignumber.js';

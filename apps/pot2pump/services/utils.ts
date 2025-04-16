@@ -1,15 +1,15 @@
-import { makeAutoObservable } from "mobx";
-import { ToastOptions, toast } from "react-toastify";
-import { wallet } from "./wallet";
-import TransactionPendingToastify from "@/components/CustomToastify/TransactionPendingToastify/TransactionPendingToastify";
-import { localforage } from "@/lib/storage";
-import { LRUCache } from "lru-cache";
-import { cache } from "../lib/cache";
-import { debounce, max, initial } from "lodash";
-import { PageRequest, PairFilter } from "./indexer/indexerTypes";
-import { visualEffects } from "./visualeffects";
-import { WrappedToastify } from "@/lib/wrappedToastify";
-import BigNumber from "bignumber.js";
+import { makeAutoObservable } from 'mobx';
+import { ToastOptions, toast } from 'react-toastify';
+import { wallet } from '@honeypot/shared';
+import TransactionPendingToastify from '@/components/CustomToastify/TransactionPendingToastify/TransactionPendingToastify';
+import { localforage } from '@/lib/storage';
+import { LRUCache } from 'lru-cache';
+import { cache } from '../lib/cache';
+import { debounce, max, initial } from 'lodash';
+import { PageRequest, PairFilter } from './indexer/indexerTypes';
+import { visualEffects } from './visualeffects';
+import { WrappedToastify } from '@/lib/wrappedToastify';
+import BigNumber from 'bignumber.js';
 
 export type PageInfo = {
   hasNextPage: boolean;
@@ -54,7 +54,7 @@ export class ValueState<T> {
 
 export class AsyncState<
   K extends (...args: any) => Promise<any> = (...args: any) => Promise<any>,
-  T = Awaited<ReturnType<K>>,
+  T = Awaited<ReturnType<K>>
 > {
   initialValue: T | null = null;
   isInit = false;
@@ -140,9 +140,9 @@ export class ContractWrite<T extends (...args: any) => any> {
   static nonce = 0;
   loading = false;
   error: Error | null = null;
-  action?: string = "";
-  successMsg: string = "";
-  failMsg: string = "";
+  action?: string = '';
+  successMsg: string = '';
+  failMsg: string = '';
   silent: boolean = false;
   isSuccessEffect: boolean = false;
   private _call: (...args: any) => any;
@@ -176,7 +176,7 @@ export class ContractWrite<T extends (...args: any) => any> {
         account: wallet.account,
         ...options,
       });
-      console.log("hash", hash);
+      console.log('hash', hash);
       const pendingPopup = WrappedToastify.pending({
         message: TransactionPendingToastify({ hash, action: this.action }),
         title: this.action,
@@ -190,11 +190,11 @@ export class ContractWrite<T extends (...args: any) => any> {
         hash,
         timeout: 1000 * 60 * 5,
       });
-      console.log("transaction", transaction);
+      console.log('transaction', transaction);
       toast.dismiss(pendingPopup);
       if (!this.silent) {
         switch (transaction.status) {
-          case "success":
+          case 'success':
             WrappedToastify.success({
               message: this.successMsgAgg,
               title: this.action,
@@ -203,7 +203,7 @@ export class ContractWrite<T extends (...args: any) => any> {
               visualEffects.startConfetti();
             }
             break;
-          case "reverted":
+          case 'reverted':
             WrappedToastify.error({
               message: this.failMsgAgg,
               title: this.action,
@@ -215,8 +215,8 @@ export class ContractWrite<T extends (...args: any) => any> {
       }
       return transaction;
     } catch (error: any) {
-      if (error.message.includes("User rejected the request")) {
-        WrappedToastify.error({ message: "User rejected the request" });
+      if (error.message.includes('User rejected the request')) {
+        WrappedToastify.error({ message: 'User rejected the request' });
       } else {
         WrappedToastify.error({ message: this.failMsg || error.message });
       }
@@ -232,7 +232,7 @@ export class ContractWrite<T extends (...args: any) => any> {
     this.setLoading(true);
     try {
       const hash = await this._call(...args);
-      console.log("hash", hash);
+      console.log('hash', hash);
       const pendingPopup = WrappedToastify.pending({
         message: TransactionPendingToastify({ hash, action: this.action }),
         title: this.action,
@@ -246,17 +246,17 @@ export class ContractWrite<T extends (...args: any) => any> {
         hash,
         timeout: 1000 * 60 * 5,
       });
-      console.log("transaction", transaction);
+      console.log('transaction', transaction);
       toast.dismiss(pendingPopup);
       if (!this.silent) {
         switch (transaction.status) {
-          case "success":
+          case 'success':
             WrappedToastify.success({
               message: this.successMsgAgg,
               title: this.action,
             });
             break;
-          case "reverted":
+          case 'reverted':
             WrappedToastify.error({
               message: this.failMsgAgg,
               title: this.action,
@@ -268,8 +268,8 @@ export class ContractWrite<T extends (...args: any) => any> {
       }
       return transaction;
     } catch (error: any) {
-      if (error.message.includes("User rejected the request")) {
-        WrappedToastify.error({ message: "User rejected the request" });
+      if (error.message.includes('User rejected the request')) {
+        WrappedToastify.error({ message: 'User rejected the request' });
       } else {
         WrappedToastify.error({ message: this.failMsg || error.message });
       }
@@ -379,14 +379,14 @@ export class PaginationDataState<T> {
  */
 export class OldIndexerPaginationState<
   FilterT extends Record<string, any> = {},
-  ItemT extends any = any,
+  ItemT extends any = any
 > {
-  namespace: string = "";
+  namespace: string = '';
   pageInfo: PageInfo = {
     hasNextPage: true,
     hasPreviousPage: false,
-    startCursor: "",
-    endCursor: "",
+    startCursor: '',
+    endCursor: '',
   };
   filter: FilterT = {} as FilterT;
   isInit: boolean = false;
@@ -417,8 +417,8 @@ export class OldIndexerPaginationState<
     this.pageInfo = {
       hasNextPage: true,
       hasPreviousPage: false,
-      startCursor: "",
-      endCursor: "",
+      startCursor: '',
+      endCursor: '',
     };
     this.isInit = false;
     this.pageItems.setValue([]);
@@ -441,7 +441,7 @@ export class OldIndexerPaginationState<
 
     try {
       const { items, pageInfo } = await this.LoadNextPageFunction(this.filter, {
-        direction: "next",
+        direction: 'next',
         cursor: this.pageInfo.endCursor,
       });
 
@@ -489,9 +489,9 @@ export class OldIndexerPaginationState<
 
 export class IndexerPaginationState<
   FilterT extends Record<string, any & { hasNextPage: boolean }> = {},
-  ItemT extends any = any,
+  ItemT extends any = any
 > {
-  namespace: string = "";
+  namespace: string = '';
   filter: FilterT = {} as FilterT;
   defaultFilter: FilterT = {} as FilterT;
   isInit: boolean = false;
@@ -514,13 +514,13 @@ export class IndexerPaginationState<
       ...this.filter,
       ...filter,
     };
-    console.log("this.filter", JSON.stringify(this.filter));
+    console.log('this.filter', JSON.stringify(this.filter));
     this.reloadPage();
   }, 500);
 
   resetPage = () => {
     this.filter = { ...this.defaultFilter, ...this.filter };
-    console.log("resetPage", this.filter);
+    console.log('resetPage', this.filter);
     this.isInit = false;
     this.pageItems.setValue([]);
   };
@@ -534,8 +534,8 @@ export class IndexerPaginationState<
   };
 
   loadMore = async () => {
-    console.log("load more...");
-    console.log("this.filter.hasNextPage", this.filter.hasNextPage);
+    console.log('load more...');
+    console.log('this.filter.hasNextPage', this.filter.hasNextPage);
     if (this.isLoading || !this.filter.hasNextPage) {
       return;
     }
@@ -543,11 +543,11 @@ export class IndexerPaginationState<
     this.isLoading = true;
 
     try {
-      console.log("this.filter.loadMore", JSON.stringify(this.filter));
+      console.log('this.filter.loadMore', JSON.stringify(this.filter));
       const { items, filterUpdates: newFilter } =
         await this.LoadNextPageFunction(this.filter);
 
-      console.log("items,newFilter", items, newFilter);
+      console.log('items,newFilter', items, newFilter);
 
       if (newFilter) {
         this.filter = {
@@ -558,7 +558,7 @@ export class IndexerPaginationState<
 
       this.SetPageItems([...this.pageItems.value, ...items]);
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
       console.error(error);
     } finally {
       this.isLoading = false;
@@ -610,7 +610,7 @@ export class StorageState<T = any, U = any> {
       })
     );
   }
-  key: string = "";
+  key: string = '';
   value: T | null = null;
   isInit = false;
   transform?: (args?: any) => T | null;
@@ -618,7 +618,7 @@ export class StorageState<T = any, U = any> {
   deserialize?: (value: U) => T | null;
   constructor({
     ...args
-  }: Pick<StorageState<T>, "key" | "value" | "deserialize" | "serialize"> & {
+  }: Pick<StorageState<T>, 'key' | 'value' | 'deserialize' | 'serialize'> & {
     transform?: (args?: any) => T | null;
   }) {
     Object.assign(this, args);

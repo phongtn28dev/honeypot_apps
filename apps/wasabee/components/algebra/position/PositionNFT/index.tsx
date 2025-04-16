@@ -1,4 +1,4 @@
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { useReadAlgebraPositionManagerTokenUri } from '@/wagmi-generated';
 import { ExternalLinkIcon } from 'lucide-react';
 import { useObserver } from 'mobx-react-lite';

@@ -4,7 +4,7 @@ import { Address } from 'viem';
 import { Token } from '@cryptoalgebra/sdk';
 import { ExtendedNative } from '@cryptoalgebra/sdk';
 import { ADDRESS_ZERO } from '@cryptoalgebra/sdk';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { useObserver } from 'mobx-react-lite';
 import { networksMap } from '@/services/chain';
 

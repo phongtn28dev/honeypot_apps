@@ -20,7 +20,7 @@ import JSBI from 'jsbi';
 import { useMemo } from 'react';
 import { useAccount, useContractWrite } from 'wagmi';
 import { useSimulateAlgebraPositionManagerMulticall } from '@/wagmi-generated';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { ContractWrite } from '@/services/utils';
 import { useObserver } from 'mobx-react-lite';
 interface AddLiquidityButtonProps {

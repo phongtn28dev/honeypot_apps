@@ -8,7 +8,7 @@ import { calculatePercentageChange } from '@/lib/utils';
 import { Address } from 'viem';
 import { Token } from '@/services/contract/token';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { useFarmingClient } from '@/lib/hooks/useSubgraphClients';
 
 interface PoolStatsCardProps {

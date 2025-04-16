@@ -12,7 +12,7 @@ import {
 } from '../algebra/graphql/clients/leaderboard';
 import dayjs from 'dayjs';
 import { useObserver } from 'mobx-react-lite';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 
 export function useAccounts(
   page: number = 1,

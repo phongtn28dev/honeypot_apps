@@ -1,29 +1,29 @@
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { TokenSelector } from "@/components/TokenSelector";
-import { SwapAmount } from "../SwapAmount/index";
-import { swap } from "@/services/swap";
-import { ExchangeSvg } from "../svg/exchange";
-import { Button } from "@/components/button";
-import { Token } from "@/services/contract/token";
-import { SpinnerContainer } from "../Spinner";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { isEthAddress } from "@/lib/address";
-import { wallet } from "@/services/wallet";
-import { amountFormatted } from "../../lib/format";
-import { AmountFormat } from "../AmountFormat";
-import ChartData from "../svg/chartData";
-import { liquidity } from "@/services/liquidity";
-import { chart } from "@/services/chart";
-import { LoadingContainer } from "../LoadingDisplay/LoadingDisplay";
-import { ItemSelect, SelectItem, SelectState } from "../ItemSelect";
-import { Slider } from "@nextui-org/react";
-import Image from "next/image";
-import { FaLongArrowAltRight } from "react-icons/fa";
-import TokenLogo from "../TokenLogo/TokenLogo";
-import { Slippage } from "./Slippage";
-import BigNumber from "bignumber.js";
-import { useInterval } from "@/lib/hooks";
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import { TokenSelector } from '@/components/TokenSelector';
+import { SwapAmount } from '../SwapAmount/index';
+import { swap } from '@/services/swap';
+import { ExchangeSvg } from '../svg/exchange';
+import { Button } from '@/components/button';
+import { Token } from '@/services/contract/token';
+import { SpinnerContainer } from '../Spinner';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { isEthAddress } from '@/lib/address';
+import { wallet } from '@honeypot/shared';
+import { amountFormatted } from '../../lib/format';
+import { AmountFormat } from '../AmountFormat';
+import ChartData from '../svg/chartData';
+import { liquidity } from '@/services/liquidity';
+import { chart } from '@/services/chart';
+import { LoadingContainer } from '../LoadingDisplay/LoadingDisplay';
+import { ItemSelect, SelectItem, SelectState } from '../ItemSelect';
+import { Slider } from '@nextui-org/react';
+import Image from 'next/image';
+import { FaLongArrowAltRight } from 'react-icons/fa';
+import TokenLogo from '../TokenLogo/TokenLogo';
+import { Slippage } from './Slippage';
+import BigNumber from 'bignumber.js';
+import { useInterval } from '@/lib/hooks';
 
 interface ISwapCard {
   allowChart?: boolean;
@@ -72,7 +72,7 @@ export const SwapCard = observer(
       } else {
         swap.setFromToken(
           Token.getToken({
-            address: "0x6969696969696969696969696969696969696969",
+            address: '0x6969696969696969696969696969696969696969',
             isNative: true,
           })
         );
@@ -87,7 +87,7 @@ export const SwapCard = observer(
       } else {
         swap.setToToken(
           Token.getToken({
-            address: "0xfc5e3743e9fac8bb60408797607352e24db7d65e",
+            address: '0xfc5e3743e9fac8bb60408797607352e24db7d65e',
           })
         );
       }
@@ -131,9 +131,9 @@ export const SwapCard = observer(
                       Number(swap.fromAmount) >
                         (swap.fromToken as Token)?.balance?.toNumber() ||
                       Number(swap.fromAmount) < 0,
-                    errorMessage: "Insufficient balance",
+                    errorMessage: 'Insufficient balance',
                     onClear: () => {
-                      swap.setFromAmount("0");
+                      swap.setFromAmount('0');
                     },
                     onChange: (e) => {
                       swap.setFromAmount(e.target.value);
@@ -155,8 +155,8 @@ export const SwapCard = observer(
                         className=" pb-2 cursor-pointer text-[color:var(--Button-Gradient,#F7931A)] ml-[8px] font-bold  underline"
                       >
                         <Image
-                          src={"/images/icons/artisticTexts/MAX.svg"}
-                          alt={""}
+                          src={'/images/icons/artisticTexts/MAX.svg'}
+                          alt={''}
                           width={40}
                           height={40}
                         ></Image>
@@ -197,7 +197,7 @@ export const SwapCard = observer(
                     step={Math.pow(0.1, 18)}
                   ></Slider>
                 </div>
-              )}{" "}
+              )}{' '}
               {swap.fromToken && (
                 <ItemSelect
                   selectState={state.selectState}
@@ -266,7 +266,7 @@ export const SwapCard = observer(
                       ></AmountFormat>
                     </div>
                     <div>
-                      {swap.toToken?.displayName} per{" "}
+                      {swap.toToken?.displayName} per{' '}
                       {swap.fromToken?.displayName}
                     </div>
                   </div>
@@ -275,13 +275,13 @@ export const SwapCard = observer(
                       {amountFormatted(swap.minToAmount, {
                         decimals: 0,
                         fixed: 6,
-                      })}{" "}
+                      })}{' '}
                       {swap.toToken?.displayName}
                     </div>
                     <div>Minimum Received</div>
                   </div>
                 </div>
-              )}{" "}
+              )}{' '}
               {swap.routerToken && swap.routerToken.length > 0 && (
                 <div className="w-full p-1 flex justify-between items-center rounded-xl  bg-black/50">
                   <>

@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { wallet } from '../wallet';
+import { wallet } from '@honeypot/shared';
 import { get, makeAutoObservable, reaction, runInAction } from 'mobx';
 import { Address, formatEther, getContract, zeroAddress } from 'viem';
 import { ContractWrite } from '../utils';

@@ -1,6 +1,6 @@
 import { makeAutoObservable, reaction } from 'mobx';
 import { Token } from './contract/token';
-import { wallet } from './wallet';
+import { wallet } from '@honeypot/shared';
 import BigNumber from 'bignumber.js';
 import { AsyncState } from './utils';
 import { getMultipleTokensData } from '@/lib/algebra/graphql/clients/token';

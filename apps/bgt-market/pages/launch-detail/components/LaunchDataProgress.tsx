@@ -1,20 +1,20 @@
 import {
   OptionsDropdown,
   optionsPresets,
-} from "@/components/OptionsDropdown/OptionsDropdown";
-import { trpcClient } from "@/lib/trpc";
-import { wallet } from "@/services/wallet";
-import { LucideFileEdit } from "lucide-react";
-import { toast } from "react-toastify";
-import SaleProgress from "./SaleProgress";
-import TokenAddress from "./TokenAddress";
-import TokenDetails from "./TokenDetails";
-import TokenRaised from "./TokenRaised";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
-import { FtoPairContract } from "@/services/contract/launches/fto/ftopair-contract";
-import { useDisclosure } from "@nextui-org/react";
-import { useState, useEffect } from "react";
-import { observer } from "mobx-react-lite";
+} from '@/components/OptionsDropdown/OptionsDropdown';
+import { trpcClient } from '@/lib/trpc';
+import { wallet } from '@honeypot/shared';
+import { LucideFileEdit } from 'lucide-react';
+import { toast } from 'react-toastify';
+import SaleProgress from './SaleProgress';
+import TokenAddress from './TokenAddress';
+import TokenDetails from './TokenDetails';
+import TokenRaised from './TokenRaised';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
+import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
+import { useDisclosure } from '@nextui-org/react';
+import { useState, useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
 
 interface LaunchDataProgressProps {
   pair: MemePairContract;
@@ -30,7 +30,7 @@ export const LaunchDataProgress = observer(
       flag_count: 0,
     });
 
-    console.log("pair", pair);
+    console.log('pair', pair);
 
     function refreshVotes() {
       trpcClient.projects.getProjectVotes
@@ -49,14 +49,14 @@ export const LaunchDataProgress = observer(
             raiseTokenDerivedUSD={pair?.raiseToken?.derivedUSD}
             raisedTokenMinCap={pair?.raisedTokenMinCap}
             raiseTokenDecimals={pair?.raiseToken?.decimals}
-          />{" "}
+          />{' '}
         </div>
         <SaleProgress
           ftoStatusDisplayStatus={pair?.ftoStatusDisplay?.status}
           raiseTokenBalance={pair?.raisedTokenMinCap}
           raiseTokenDecimals={pair?.raiseToken?.decimals}
           depositedRaisedToken={pair?.depositedRaisedToken}
-          raiseTokenSymbol={pair?.raiseToken?.symbol ?? "Raise Token"}
+          raiseTokenSymbol={pair?.raiseToken?.symbol ?? 'Raise Token'}
         />
         {/* 
         <TokenAddress address={pair?.launchedToken?.address} />
@@ -86,7 +86,7 @@ export const LaunchDataProgress = observer(
                       .mutate({
                         project_pair: pair?.address,
                         wallet_address: wallet.account,
-                        vote: key.split("_")[0],
+                        vote: key.split('_')[0],
                       })
                       .then(() => {
                         refreshVotes();
@@ -95,10 +95,10 @@ export const LaunchDataProgress = observer(
                   className="mt-2 flex-1 flex flex-col  justify-center items-center bg-[#202020] text-white px-3 py-3 hover:bg-[#FFCD4D] active:[background:#F0A000] cursor-pointer select-none border border-[#F2C34A] rounded-2xl"
                 >
                   <p>
-                    {(key.split("_")[0] === "rocket" && "🚀") ||
-                      (key.split("_")[0] === "fire" && "🔥") ||
-                      (key.split("_")[0] === "poo" && "💩") ||
-                      (key.split("_")[0] === "flag" && "🚩")}
+                    {(key.split('_')[0] === 'rocket' && '🚀') ||
+                      (key.split('_')[0] === 'fire' && '🔥') ||
+                      (key.split('_')[0] === 'poo' && '💩') ||
+                      (key.split('_')[0] === 'flag' && '🚩')}
                   </p>
                   <p>{value}</p>
                 </div>

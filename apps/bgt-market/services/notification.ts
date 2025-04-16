@@ -1,7 +1,7 @@
-import { canClaimPot2Pump } from "@/lib/algebra/graphql/clients/pot2pump";
-import { canRefundPot2Pump } from "@/lib/algebra/graphql/clients/pot2pump";
-import { makeAutoObservable } from "mobx";
-import { wallet } from "./wallet";
+import { canClaimPot2Pump } from '@/lib/algebra/graphql/clients/pot2pump';
+import { canRefundPot2Pump } from '@/lib/algebra/graphql/clients/pot2pump';
+import { makeAutoObservable } from 'mobx';
+import { wallet } from '@honeypot/shared';
 
 class NotificationService {
   isClaimableProject = false;
@@ -24,9 +24,9 @@ class NotificationService {
       return;
     }
     const res = await canRefundPot2Pump(wallet.account);
-    console.log("checkRefundableProject", res);
+    console.log('checkRefundableProject', res);
     this.isRefundableProject = res.length > 0;
-    console.log("isRefundableProject", this.isRefundableProject);
+    console.log('isRefundableProject', this.isRefundableProject);
   }
 }
 

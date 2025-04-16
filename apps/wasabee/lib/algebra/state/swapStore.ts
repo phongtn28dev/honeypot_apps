@@ -26,7 +26,7 @@ import { Address, parseUnits } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import { useNeedAllowance } from '../hooks/common/useNeedAllowance';
 import { create } from 'zustand';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 
 interface SwapState {
   readonly independentField: SwapFieldType;

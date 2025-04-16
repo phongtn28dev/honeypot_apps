@@ -3,7 +3,7 @@ import {
   getInfoClientByChainId,
   useInfoClient,
 } from '@/lib/hooks/useSubgraphClients';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 
 export const LEADERBOARD_QUERY = gql`
   query leaderboardStatus {

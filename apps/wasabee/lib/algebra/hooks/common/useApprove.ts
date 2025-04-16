@@ -19,7 +19,7 @@ import { useContractWrite, useSimulateContract } from 'wagmi';
 import { erc20Abi } from 'viem';
 import { useToastify } from '@/lib/hooks/useContractToastify';
 import { useObserver } from 'mobx-react-lite';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 
 export function useApprove(
   amountToApprove: CurrencyAmount<Currency> | undefined,

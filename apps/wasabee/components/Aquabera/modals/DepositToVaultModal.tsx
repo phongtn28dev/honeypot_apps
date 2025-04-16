@@ -5,7 +5,7 @@ import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contra
 import { Token } from '@/services/contract/token';
 import { Address, maxInt256 } from 'viem';
 import TokenCardV3 from '@/components/algebra/swap/TokenCard/TokenCardV3';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { Currency, tryParseAmount } from '@cryptoalgebra/sdk';
 import { useBalance } from 'wagmi';
 import {

@@ -1,18 +1,18 @@
-import { toCompactLocaleString } from "@/lib/utils";
-import { popmodal } from "@/services/popmodal";
-import { Button } from "@nextui-org/react";
-import { observer } from "mobx-react-lite";
-import dynamic from "next/dynamic";
-import { LaunchDetailSwapCard } from "../SwapCard/MemeSwap";
-import TokenLogo from "../TokenLogo/TokenLogo";
-import { useEffect, useState } from "react";
-import { fetchMemetrackerList, Pair } from "@/lib/algebra/graphql/clients/pair";
-import { wallet } from "@/services/wallet";
-import { Token } from "@/services/contract/token";
-import { trpcClient } from "@/lib/trpc";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
+import { toCompactLocaleString } from '@/lib/utils';
+import { popmodal } from '@/services/popmodal';
+import { Button } from '@nextui-org/react';
+import { observer } from 'mobx-react-lite';
+import dynamic from 'next/dynamic';
+import { LaunchDetailSwapCard } from '../SwapCard/MemeSwap';
+import TokenLogo from '../TokenLogo/TokenLogo';
+import { useEffect, useState } from 'react';
+import { fetchMemetrackerList, Pair } from '@/lib/algebra/graphql/clients/pair';
+import { wallet } from '@honeypot/shared';
+import { Token } from '@/services/contract/token';
+import { trpcClient } from '@/lib/trpc';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
 
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 export const Pot2PumpTracker = observer(() => {
   const [chartSeriesData, setChartSeriesData] = useState<
@@ -67,22 +67,22 @@ export const Pot2PumpTracker = observer(() => {
 
     options: {
       title: {
-        text: "Meme Token Tracker",
-        align: "center",
+        text: 'Meme Token Tracker',
+        align: 'center',
         style: {
-          color: "white",
-          fontSize: "2rem",
+          color: 'white',
+          fontSize: '2rem',
         },
         offsetY: 30,
       },
       chart: {
-        type: "scatter",
+        type: 'scatter',
         animations: {
           enabled: false,
         },
         zoom: {
           enabled: true,
-          type: "xy",
+          type: 'xy',
           allowMouseWheelZoom: true,
           autoScaleYaxis: true,
         },
@@ -119,16 +119,16 @@ export const Pot2PumpTracker = observer(() => {
           },
         },
       },
-      colors: ["orange"],
+      colors: ['orange'],
       xaxis: {
         tickAmount: 10,
         // min: 0,
         // max: 40,
         title: {
-          text: "Holders →",
+          text: 'Holders →',
           offsetY: -40,
           style: {
-            color: "white",
+            color: 'white',
           },
         },
         axisBorder: {
@@ -145,10 +145,10 @@ export const Pot2PumpTracker = observer(() => {
       },
       yaxis: {
         title: {
-          text: "Market Cap →",
+          text: 'Market Cap →',
           offsetX: 10,
           style: {
-            color: "white",
+            color: 'white',
           },
         },
         labels: {
@@ -175,7 +175,7 @@ export const Pot2PumpTracker = observer(() => {
         size: 20,
       },
       grid: {
-        borderColor: "transparent",
+        borderColor: 'transparent',
         show: false,
         padding: {
           left: 60,
@@ -218,7 +218,7 @@ export const Pot2PumpTracker = observer(() => {
               </div>
             `;
         },
-        theme: "dark",
+        theme: 'dark',
         fillSeriesColor: true,
         fixed: {
           enabled: true,
@@ -227,11 +227,11 @@ export const Pot2PumpTracker = observer(() => {
       },
 
       fill: {
-        type: "image",
+        type: 'image',
         opacity: 1,
         image: {
           src: chartSeriesData.map((pair) => {
-            return pair.logoUrl || "";
+            return pair.logoUrl || '';
           }),
           width: 40,
           height: 40,
@@ -255,7 +255,7 @@ export const Pot2PumpTracker = observer(() => {
           series={state.series}
           type="scatter"
           width="100%"
-          height={"100%"}
+          height={'100%'}
         />
       )}
     </div>

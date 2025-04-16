@@ -1,6 +1,6 @@
 import { OrbiterRouterV3ABI } from '@/lib/abis/orbiter/OrbiterRouterV3ABI';
 import { BaseContract } from './..';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { makeAutoObservable } from 'mobx';
 import { Address, getContract, zeroAddress } from 'viem';
 

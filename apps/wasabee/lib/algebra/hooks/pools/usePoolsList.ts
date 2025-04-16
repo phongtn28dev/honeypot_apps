@@ -1,5 +1,5 @@
 import { algebraFactoryABI } from '@/lib/abis/algebra-contracts/ABIs';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { useObserver } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { Address, decodeEventLog, parseAbiItem } from 'viem';

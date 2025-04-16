@@ -12,7 +12,7 @@ import {
 } from '@/lib/algebra/graphql/generated/graphql';
 import { SortingState } from '@tanstack/react-table';
 import { useUserPools } from '@/lib/algebra/graphql/clients/pool';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import BigNumber from 'bignumber.js';
 import { calculatePercentageChange } from '@/lib/utils';
 import { useFarmingClient } from '@/lib/hooks/useSubgraphClients';

@@ -1,15 +1,15 @@
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { FtoPairContract } from "@/services/contract/launches/fto/ftopair-contract";
-import { Button } from "@/components/button/button-next";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
-import { LaunchDetailSwapCard } from "@/components/SwapCard/MemeSwap";
-import { DedicatedSwapCard } from "@/components/SwapCard/MemeSwap";
-import PottingModal from "@/components/atoms/Pot2PumpComponents/PottingModal";
-import { wallet } from "@/services/wallet";
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
+import { Button } from '@/components/button/button-next';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
+import { LaunchDetailSwapCard } from '@/components/SwapCard/MemeSwap';
+import { DedicatedSwapCard } from '@/components/SwapCard/MemeSwap';
+import PottingModal from '@/components/atoms/Pot2PumpComponents/PottingModal';
+import { wallet } from '@honeypot/shared';
 
-import { SwapField } from "@/types/algebra/types/swap-field";
-import { useDerivedSwapInfo } from "@/lib/algebra/state/swapStore";
-import { DedicatedPot2Pump } from "@/config/dedicatedPot2pump";
+import { SwapField } from '@/types/algebra/types/swap-field';
+import { useDerivedSwapInfo } from '@/lib/algebra/state/swapStore';
+import { DedicatedPot2Pump } from '@/config/dedicatedPot2pump';
 
 const SuccessAction = observer(
   ({
@@ -28,7 +28,7 @@ const SuccessAction = observer(
     return (
       <LaunchDetailSwapCard
         noBoarder
-        inputAddress={pair.raiseToken?.address ?? ""}
+        inputAddress={pair.raiseToken?.address ?? ''}
         outputAddress={pair.launchedToken?.address}
         memePairContract={pair as MemePairContract}
         onSwapSuccess={refreshTxsCallback}
@@ -82,16 +82,13 @@ const FailAction = observer(
             }}
             isLoading={pair.refund.loading}
             style={{
-              backgroundColor: "green",
+              backgroundColor: 'green',
             }}
           >
             Refund LP
           </Button>
         ) : (
-          <Button
-            className="w-full bg-gray-500"
-            disabled
-          >
+          <Button className="w-full bg-gray-500" disabled>
             You have Refunded
           </Button>
         )}
@@ -108,12 +105,7 @@ const ProcessingAction = observer(
     pair: FtoPairContract | MemePairContract;
     refreshTxsCallback?: () => void;
   }) => {
-    return (
-      <PottingModal
-        pair={pair}
-        onSuccess={onSuccess}
-      />
-    );
+    return <PottingModal pair={pair} onSuccess={onSuccess} />;
   }
 );
 
@@ -129,17 +121,11 @@ const Action = observer(
     switch (pair.state) {
       case 0:
         return (
-          <SuccessAction
-            pair={pair}
-            refreshTxsCallback={refreshTxsCallback}
-          />
+          <SuccessAction pair={pair} refreshTxsCallback={refreshTxsCallback} />
         );
       case 1:
         return (
-          <FailAction
-            pair={pair}
-            refreshTxsCallback={refreshTxsCallback}
-          />
+          <FailAction pair={pair} refreshTxsCallback={refreshTxsCallback} />
         );
       case 2:
         return <>Case 2</>;

@@ -1,24 +1,24 @@
-import { truncate } from "@/lib/format";
-import { wallet } from "@/services/wallet";
-import { Tab, Tabs } from "@nextui-org/react";
-import { observer } from "mobx-react-lite";
-import Link from "next/link";
-import { useEffect, useState, useRef } from "react";
-import { useAccount } from "wagmi";
-import { MyLaunches } from "./MyLaunches";
-import ParticipatedLaunches from "./ParticipatedLaunches";
-import { portfolio } from "@/services/portfolio";
+import { truncate } from '@/lib/format';
+import { wallet } from '@honeypot/shared';
+import { Tab, Tabs } from '@nextui-org/react';
+import { observer } from 'mobx-react-lite';
+import Link from 'next/link';
+import { useEffect, useState, useRef } from 'react';
+import { useAccount } from 'wagmi';
+import { MyLaunches } from './MyLaunches';
+import ParticipatedLaunches from './ParticipatedLaunches';
+import { portfolio } from '@/services/portfolio';
 import {
   getLiquidatorDatas,
   UserPoolProfit,
-} from "@/lib/algebra/graphql/clients/userProfit";
-import { formatAmountWithAlphabetSymbol } from "@/lib/algebra/utils/common/formatAmount";
-import CardContainer from "@/components/CardContianer/v3";
-import Image from "next/image";
-import Copy from "@/components/Copy/v3";
-import { cn } from "@/lib/utils";
-import { notificationService } from "@/services/notification";
-import { Notification } from "@/components/atoms/Notification/Notification";
+} from '@/lib/algebra/graphql/clients/userProfit';
+import { formatAmountWithAlphabetSymbol } from '@/lib/algebra/utils/common/formatAmount';
+import CardContainer from '@/components/CardContianer/v3';
+import Image from 'next/image';
+import Copy from '@/components/Copy/v3';
+import { cn } from '@/lib/utils';
+import { notificationService } from '@/services/notification';
+import { Notification } from '@/components/atoms/Notification/Notification';
 export const Profile = observer(() => {
   const [notify, setNotify] = useState(false);
   useEffect(() => {
@@ -56,7 +56,7 @@ export const Profile = observer(() => {
                           className="text-[#4D4D4D] hover:text-[#0D0D0D] hover:underline decoration-2 transition-colors truncate flex-1 min-w-0"
                           href={`https://berascan.com/address/${wallet.account}`}
                         >
-                          {truncate(wallet.account || "", 16)}
+                          {truncate(wallet.account || '', 16)}
                         </Link>
                         <Copy
                           value={wallet.account}
@@ -73,24 +73,21 @@ export const Profile = observer(() => {
             <Tabs
               aria-label="Options"
               classNames={{
-                base: "relative w-full",
+                base: 'relative w-full',
                 tabList:
-                  "flex rounded-2xl border border-[#202020] bg-white p-2 sm:p-4 shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020] py-1.5 sm:py-2 px-2.5 sm:px-3.5 absolute left-1/2 -translate-x-1/2 z-10 -top-5 text-sm sm:text-base",
+                  'flex rounded-2xl border border-[#202020] bg-white p-2 sm:p-4 shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020] py-1.5 sm:py-2 px-2.5 sm:px-3.5 absolute left-1/2 -translate-x-1/2 z-10 -top-5 text-sm sm:text-base',
                 panel: cn(
-                  "flex flex-col h-full w-full gap-y-4 justify-center items-center bg-[#FFCD4D] rounded-2xl text-[#202020]",
-                  "px-4 sm:px-8 pt-[50px] sm:pt-[70px] pb-[50px] sm:pb-[70px]",
+                  'flex flex-col h-full w-full gap-y-4 justify-center items-center bg-[#FFCD4D] rounded-2xl text-[#202020]',
+                  'px-4 sm:px-8 pt-[50px] sm:pt-[70px] pb-[50px] sm:pb-[70px]',
                   "bg-[url('/images/card-container/honey/honey-border.png'),url('/images/card-container/dark/bottom-border.svg')]",
-                  "bg-[position:-65px_top,_-85px_bottom]",
-                  "bg-[size:auto_65px,_auto_65px]",
-                  "bg-repeat-x",
-                  "!mt-0"
+                  'bg-[position:-65px_top,_-85px_bottom]',
+                  'bg-[size:auto_65px,_auto_65px]',
+                  'bg-repeat-x',
+                  '!mt-0'
                 ),
               }}
             >
-              <Tab
-                key="my-launch"
-                title="My Launch"
-              >
+              <Tab key="my-launch" title="My Launch">
                 <MyLaunches />
               </Tab>
               <Tab

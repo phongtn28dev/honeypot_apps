@@ -1,10 +1,10 @@
-import { makeAutoObservable, reaction } from "mobx";
-import { Token } from "./contract/token";
-import { wallet } from "./wallet";
-import BigNumber from "bignumber.js";
-import { AsyncState } from "./utils";
-import { getMultipleTokensData } from "@/lib/algebra/graphql/clients/token";
-import { getSingleAccountDetails } from "@/lib/algebra/graphql/clients/account";
+import { makeAutoObservable, reaction } from 'mobx';
+import { Token } from './contract/token';
+import { wallet } from '@honeypot/shared';
+import BigNumber from 'bignumber.js';
+import { AsyncState } from './utils';
+import { getMultipleTokensData } from '@/lib/algebra/graphql/clients/token';
+import { getSingleAccountDetails } from '@/lib/algebra/graphql/clients/account';
 
 class Portfolio {
   tokens: Token[] = [];
@@ -17,7 +17,7 @@ class Portfolio {
   }
 
   async initPortfolio() {
-    console.log("initPortfolio", { isInit: this.isInit });
+    console.log('initPortfolio', { isInit: this.isInit });
     if (this.isInit || !wallet.isInit) return;
 
     this.isLoading = true;
@@ -25,24 +25,24 @@ class Portfolio {
     try {
       // Get validated tokens from current chain
       const validatedTokens = wallet.currentChain?.validatedTokens || [];
-      console.log("validatedTokens", validatedTokens);
+      console.log('validatedTokens', validatedTokens);
       // Initialize tokens
 
       const tokenIds = validatedTokens.map((token) =>
         token.address.toLowerCase()
       );
       //also add any account holding tokens
-      console.log("wallet.account", wallet.account);
+      console.log('wallet.account', wallet.account);
       const account = await getSingleAccountDetails(wallet.account);
-      console.log("account", account);
+      console.log('account', account);
       const accountHoldingTokenIds = account.account?.holder.map(
         (holder) => holder.token.id
       );
-      console.log("accountHoldingTokenIds", accountHoldingTokenIds);
+      console.log('accountHoldingTokenIds', accountHoldingTokenIds);
       const allTokenIds = [...tokenIds, ...(accountHoldingTokenIds || [])];
-      console.log("allTokenIds", allTokenIds);
+      console.log('allTokenIds', allTokenIds);
       const tokensData = await getMultipleTokensData(allTokenIds);
-      console.log("tokensData", tokensData);
+      console.log('tokensData', tokensData);
       const tokens = tokensData?.tokens.map((token) => {
         //remove marketCap from token
         const { marketCap, ...rest } = token;
@@ -55,7 +55,7 @@ class Portfolio {
         });
       });
       console.log(
-        "tokens",
+        'tokens',
         tokens?.map((token) => token.address)
       );
       // Filter tokens with balance
@@ -65,7 +65,7 @@ class Portfolio {
           try {
             token.getBalance();
           } catch (error) {
-            console.error("Error getting balance for token", token.address);
+            console.error('Error getting balance for token', token.address);
           }
         }) ?? []
       );
@@ -76,7 +76,7 @@ class Portfolio {
       // Calculate total balance in USD`
       this.calculateTotalBalance();
     } catch (error) {
-      console.error("Portfolio initialization error:", error);
+      console.error('Portfolio initialization error:', error);
     } finally {
       this.isLoading = false;
       this.isInit = true;

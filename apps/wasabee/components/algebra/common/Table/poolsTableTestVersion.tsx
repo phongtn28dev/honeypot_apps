@@ -1,4 +1,4 @@
-import { Button } from "@/components/algebra/ui/button";
+import { Button } from '@/components/algebra/ui/button';
 import {
   Table,
   TableBody,
@@ -6,7 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/algebra/ui/table";
+} from '@/components/algebra/ui/table';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -16,17 +16,17 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import { useEffect, useState } from "react";
-import { Search, Plus } from "lucide-react";
-import CreatePoolForm from "../../create-pool/CreatePoolForm";
-import { cn } from "@/lib/tailwindcss";
-import { HoneyContainer } from "@/components/CardContianer/HoneyContainer";
-import { popmodal } from "@/services/popmodal";
-import { Pool } from "./poolsColumns";
-import { LoadingDisplay } from "@/components/LoadingDisplay/LoadingDisplay";
-import { wallet } from "@/services/wallet";
-import { useObserver } from "mobx-react-lite";
+} from '@tanstack/react-table';
+import { useEffect, useState } from 'react';
+import { Search, Plus } from 'lucide-react';
+import CreatePoolForm from '../../create-pool/CreatePoolForm';
+import { cn } from '@/lib/tailwindcss';
+import { HoneyContainer } from '@/components/CardContianer/HoneyContainer';
+import { popmodal } from '@/services/popmodal';
+import { Pool } from './poolsColumns';
+import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';
+import { wallet } from '@honeypot/shared';
+import { useObserver } from 'mobx-react-lite';
 
 interface PoolsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -56,7 +56,7 @@ const PoolsTable = <TData, TValue>({
   loading,
   sorting,
   setSorting,
-  defaultFilter = "trending",
+  defaultFilter = 'trending',
   showOptions = true,
 }: PoolsTableProps<TData, TValue>) => {
   const [selectedFilter, setSelectedFilter] = useState<string>(defaultFilter);
@@ -65,19 +65,19 @@ const PoolsTable = <TData, TValue>({
   });
 
   const filters = [
-    { key: "trending", label: "All Pools" },
+    { key: 'trending', label: 'All Pools' },
     // { key: "highApr", label: "High APR" },
     // { key: "stablecoin", label: "Stablecoin" },
-    { key: "myPools", label: "My Pools" },
+    { key: 'myPools', label: 'My Pools' },
   ];
 
   const [tableData, setTableData] = useState<Pool[]>(data as Pool[]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const table = useReactTable({
     data: tableData as TData[],
-    columns: selectedFilter === "myPools" ? columnsMy : columns,
+    columns: selectedFilter === 'myPools' ? columnsMy : columns,
     filterFns: {},
     state: {
       columnFilters,
@@ -96,7 +96,7 @@ const PoolsTable = <TData, TValue>({
     setSelectedFilter(defaultFilter);
   }, [defaultFilter]);
 
-  const searchID = "pair";
+  const searchID = 'pair';
 
   const totalRows = table.getFilteredRowModel().rows.length;
   const startsFromRow =
@@ -125,7 +125,7 @@ const PoolsTable = <TData, TValue>({
           })
         );
       } else {
-        if (selectedFilter === "myPools") {
+        if (selectedFilter === 'myPools') {
           setTableData(userPools as Pool[]);
         } else {
           setTableData(data as Pool[]);
@@ -157,8 +157,8 @@ const PoolsTable = <TData, TValue>({
                   }}
                   className={`p-2.5 cursor-pointer ${
                     selectedFilter === filter.key
-                      ? "border border-[#E18A20]/40 bg-[#E18A20]/40 rounded-[10px]"
-                      : ""
+                      ? 'border border-[#E18A20]/40 bg-[#E18A20]/40 rounded-[10px]'
+                      : ''
                   }`}
                 >
                   {filter.label}
@@ -185,7 +185,7 @@ const PoolsTable = <TData, TValue>({
           <div className="flex items-center gap-x-5">
             <Button
               className={cn(
-                "flex items-center gap-x-1 p-2.5 cursor-pointer border border-[#E18A20]/40 bg-[#E18A20]/40 rounded-[10px]"
+                'flex items-center gap-x-1 p-2.5 cursor-pointer border border-[#E18A20]/40 bg-[#E18A20]/40 rounded-[10px]'
               )}
               onClick={() =>
                 walletClient &&
@@ -240,8 +240,8 @@ const PoolsTable = <TData, TValue>({
                       key={header.id}
                       className={`rounded-xl text-white font-semibold [&_svg]:mt-auto ${
                         header.column.getCanSort()
-                          ? "cursor-pointer select-none"
-                          : ""
+                          ? 'cursor-pointer select-none'
+                          : ''
                       }`}
                     >
                       <div className="flex items-center">
@@ -252,8 +252,8 @@ const PoolsTable = <TData, TValue>({
                               header.getContext()
                             )}
                         {{
-                          asc: " 🔼",
-                          desc: " 🔽",
+                          asc: ' 🔼',
+                          desc: ' 🔽',
                         }[header.column.getIsSorted() as string] ?? null}
                       </div>
                     </TableHead>
@@ -275,7 +275,7 @@ const PoolsTable = <TData, TValue>({
                 table.getRowModel().rows.map((row: any) => (
                   <TableRow
                     key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
+                    data-state={row.getIsSelected() && 'selected'}
                     className="border-card-border/40 bg-card-dark hover:bg-white cursor-pointer border-black"
                     onClick={() => {
                       if (action) {

@@ -1,6 +1,6 @@
-import { wallet } from "@/services/wallet";
-import { farmingCenterAbi, farmingCenterAddress } from "@/wagmi-generated";
-import { Address, getContract } from "viem";
+import { wallet } from '@honeypot/shared';
+import { farmingCenterAbi, farmingCenterAddress } from '@/wagmi-generated';
+import { Address, getContract } from 'viem';
 
 export async function getFarmingRewards({
   rewardToken,

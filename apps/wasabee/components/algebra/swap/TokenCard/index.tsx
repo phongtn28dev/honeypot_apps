@@ -7,7 +7,7 @@ import { useAccount, useBalance, useWatchBlockNumber } from 'wagmi';
 import { Address } from 'viem';
 import { TokenSelector } from '@/components/TokenSelector';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { Token } from '@/services/contract/token';
 
 interface TokenSwapCardProps {

@@ -15,7 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { config } from '@/config/wagmi';
 import { trpc, trpcQueryClient } from '../lib/trpc';
 import { useEffect, useState } from 'react';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { DM_Sans, Inter } from 'next/font/google';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { Analytics } from '@vercel/analytics/react';

@@ -1,11 +1,11 @@
-import { gql } from "@apollo/client";
-import { infoClient } from ".";
-import { PairFilter, SubgraphProjectFilter } from "@/services/launchpad";
-import { PageRequest } from "@/services/indexer/indexerTypes";
-import dayjs from "dayjs";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
-import BigNumber from "bignumber.js";
-import { Token } from "@/services/contract/token";
+import { gql } from '@apollo/client';
+import { infoClient } from '.';
+import { PairFilter, SubgraphProjectFilter } from '@/services/launchpad';
+import { PageRequest } from '@/services/indexer/indexerTypes';
+import dayjs from 'dayjs';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
+import BigNumber from 'bignumber.js';
+import { Token } from '@/services/contract/token';
 import {
   OrderDirection,
   Pot2Pump,
@@ -14,7 +14,7 @@ import {
   Pot2PumpDynamicFilterDocument,
   Pot2PumpDynamicFilterQuery,
   Pot2PumpDynamicFilterQueryVariables,
-} from "../generated/graphql";
+} from '../generated/graphql';
 import {
   Pot2PumpPottingNearSuccessDocument,
   Pot2PumpPottingHighPriceDocument,
@@ -25,10 +25,10 @@ import {
   Pot2PumpPottingTrendingQuery,
   Pot2PumpPottingTrendingDocument,
   Pot2PumpPottingTrendingQueryVariables,
-} from "../generated/graphql";
-import { filter } from "lodash";
-import { calculateToken24hPriceChange } from "../utils/calculateToken24hChange";
-import { wallet } from "@/services/wallet";
+} from '../generated/graphql';
+import { filter } from 'lodash';
+import { calculateToken24hPriceChange } from '../utils/calculateToken24hChange';
+import { wallet } from '@honeypot/shared';
 
 type SubgraphToken = {
   id: string;
@@ -183,7 +183,7 @@ export const pot2PumpToMemePair = (
       pot2Pump.launchToken
     );
 
-    console.log("pot2Pump.priceChangePercentage", priceChangePercentage);
+    console.log('pot2Pump.priceChangePercentage', priceChangePercentage);
 
     contract.launchedToken = Token.getToken({
       address: pot2Pump.launchToken?.id,
@@ -240,7 +240,7 @@ export async function fetchNearSuccessPot2Pump() {
   });
 
   console.log(
-    "Pot2PumpPottingNearSuccessDocument",
+    'Pot2PumpPottingNearSuccessDocument',
     Pot2PumpPottingNearSuccessDocument
   );
 
@@ -281,7 +281,7 @@ export async function fetchPairsList({
   filter: PairFilter;
   pageRequest?: PageRequest;
 }): Promise<PairsListResponse> {
-  let whereCondition = "";
+  let whereCondition = '';
   let conditions = [];
 
   if (filter.search) {
@@ -296,13 +296,13 @@ export async function fetchPairsList({
     `);
   }
 
-  if (filter.status === "success") {
+  if (filter.status === 'success') {
     conditions.push(`raisedTokenReachingMinCap: true`);
-  } else if (filter.status === "fail") {
+  } else if (filter.status === 'fail') {
     conditions.push(
       `raisedTokenReachingMinCap: false, endTime_lte: ${dayjs().unix()}`
     );
-  } else if (filter.status === "processing") {
+  } else if (filter.status === 'processing') {
     conditions.push(
       `raisedTokenReachingMinCap: false, endTime_gt: ${dayjs().unix()}`
     );
@@ -325,25 +325,25 @@ export async function fetchPairsList({
   }
 
   if (conditions.length > 0) {
-    whereCondition = `{ ${conditions.join(", ")} }`;
+    whereCondition = `{ ${conditions.join(', ')} }`;
   }
 
   const queryParts = [
-    filter.limit ? `first: ${filter.limit}` : "",
+    filter.limit ? `first: ${filter.limit}` : '',
     pageRequest?.pageNum && filter.limit
       ? `skip: ${(pageRequest?.pageNum - 1) * filter.limit}`
-      : "",
-    pageRequest?.orderBy ? `orderBy: ${pageRequest?.orderBy}` : "",
+      : '',
+    pageRequest?.orderBy ? `orderBy: ${pageRequest?.orderBy}` : '',
     pageRequest?.orderDirection
       ? `orderDirection: ${pageRequest.orderDirection}`
-      : "",
-    whereCondition ? `where: ${whereCondition}` : "",
+      : '',
+    whereCondition ? `where: ${whereCondition}` : '',
   ].filter(Boolean);
 
   const query = `
     query PairsList {
       pot2Pumps(
-        ${queryParts.join(", ")}
+        ${queryParts.join(', ')}
       ) {
         ${pop2PumpQuery}
       }
@@ -390,13 +390,13 @@ export async function fetchPairsList({
     const pageInfo: PageInfo = {
       hasPreviousPage: false,
       hasNextPage: pairs.length === filter.limit,
-      startCursor: "",
-      endCursor: "",
+      startCursor: '',
+      endCursor: '',
     };
 
     return {
-      status: "success",
-      message: "Success",
+      status: 'success',
+      message: 'Success',
       data: {
         pairs,
         pageInfo,
@@ -465,8 +465,8 @@ export async function fetchMemetrackerList({
     }));
 
     return {
-      status: "success",
-      message: "Success",
+      status: 'success',
+      message: 'Success',
       data: {
         pairs,
       },
@@ -482,7 +482,7 @@ export async function fetchPot2PumpList({
   chainId: string;
   filter: SubgraphProjectFilter;
 }): Promise<Pot2PumpListResponse> {
-  console.log("filter", filter);
+  console.log('filter', filter);
   const dynamicFilter: Pot2PumpDynamicFilterQueryVariables = {
     first: filter.limit,
     skip:
@@ -499,12 +499,12 @@ export async function fetchPot2PumpList({
     dynamicFilter.where = {};
   }
 
-  if (filter.status === "success") {
+  if (filter.status === 'success') {
     dynamicFilter.where.raisedTokenReachingMinCap = true;
-  } else if (filter.status === "fail") {
+  } else if (filter.status === 'fail') {
     dynamicFilter.where.raisedTokenReachingMinCap = false;
     dynamicFilter.where.endTime_lt = Math.floor(Date.now() / 1000);
-  } else if (filter.status === "processing") {
+  } else if (filter.status === 'processing') {
     dynamicFilter.where.raisedTokenReachingMinCap = false;
     dynamicFilter.where.endTime_gte = Math.floor(Date.now() / 1000);
   }
@@ -644,8 +644,8 @@ export async function fetchPot2PumpList({
   });
 
   return {
-    status: "success",
-    message: "Success",
+    status: 'success',
+    message: 'Success',
     data: {
       pairs: await pot2PumpListToMemePairList(
         data.pot2Pumps as Partial<Pot2Pump>[]

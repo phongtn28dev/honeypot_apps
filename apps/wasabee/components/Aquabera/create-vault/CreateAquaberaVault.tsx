@@ -5,7 +5,7 @@ import TokenCardV3 from '@/components/algebra/swap/TokenCard/TokenCardV3';
 import { computePoolAddress, Currency } from '@cryptoalgebra/sdk';
 import { ICHIVaultFactoryContract } from '@/services/contract/aquabera/ICHIVaultFactory-contract';
 import { Button } from '@/components/button';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { TokenSelector } from '@/components/TokenSelector';
 import { PoolState, usePool } from '@/lib/algebra/hooks/pools/usePool';
 import { Address } from 'viem';

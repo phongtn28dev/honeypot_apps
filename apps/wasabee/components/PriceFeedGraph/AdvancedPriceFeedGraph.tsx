@@ -20,7 +20,7 @@ import { pairQueryOutput } from '@/types/pair';
 import { chart } from '@/services/chart';
 import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
 import { observer } from 'mobx-react-lite';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 
 const TVChartContainer = dynamic(
   () =>

@@ -5,19 +5,19 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
-} from "@nextui-org/react";
-import { observer } from "mobx-react-lite";
-import { Pot2PumpPumpingService } from "@/services/launchpad/pot2pump/pumping";
-import { Pot2PumpPumpingService as Pot2PumpService } from "@/services/launchpad/pot2pump/pot2Pump";
-import { Button } from "@/components/button/v3";
-import { FaSlidersH } from "react-icons/fa";
-import { FilterState } from "@/constants/pot2pump.type";
-import FilterRangeItem from "./components/FilterRangeItem";
-import { defaultFilterState } from "@/constants/pot2pump";
-import { useState, useEffect } from "react";
-import FilterTokenItem from "./components/FilterTokenItem";
-import { Token } from "@/services/contract/token";
-import { wallet } from "@/services/wallet";
+} from '@nextui-org/react';
+import { observer } from 'mobx-react-lite';
+import { Pot2PumpPumpingService } from '@/services/launchpad/pot2pump/pumping';
+import { Pot2PumpPumpingService as Pot2PumpService } from '@/services/launchpad/pot2pump/pot2Pump';
+import { Button } from '@/components/button/v3';
+import { FaSlidersH } from 'react-icons/fa';
+import { FilterState } from '@/constants/pot2pump.type';
+import FilterRangeItem from './components/FilterRangeItem';
+import { defaultFilterState } from '@/constants/pot2pump';
+import { useState, useEffect } from 'react';
+import FilterTokenItem from './components/FilterTokenItem';
+import { Token } from '@/services/contract/token';
+import { wallet } from '@honeypot/shared';
 
 interface FilterProps {
   filters: FilterState;
@@ -87,10 +87,10 @@ export const Filter = observer(
           onOpenChange={onOpenChange}
           hideCloseButton={true}
           classNames={{
-            base: "bg-transparent",
-            wrapper: "bg-transparent",
+            base: 'bg-transparent',
+            wrapper: 'bg-transparent',
             closeButton:
-              "absolute right-4 top-6 z-50 text-white w-8 h-8 flex items-center justify-center",
+              'absolute right-4 top-6 z-50 text-white w-8 h-8 flex items-center justify-center',
           }}
         >
           <ModalContent className="bg-[#FFCD4D] relative overflow-hidden">
@@ -119,7 +119,7 @@ export const Filter = observer(
                       const filterField = filterState[filter.category];
                       console.log(filterField);
 
-                      if (filterField?.inputType === "range") {
+                      if (filterField?.inputType === 'range') {
                         return (
                           <FilterRangeItem
                             key={filter.key}
@@ -129,7 +129,7 @@ export const Filter = observer(
                             max={filterField.max}
                           />
                         );
-                      } else if (filterField?.inputType === "token") {
+                      } else if (filterField?.inputType === 'token') {
                         return (
                           <FilterTokenItem
                             key={filter.key}

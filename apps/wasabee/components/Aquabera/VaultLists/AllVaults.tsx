@@ -1,4 +1,4 @@
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { Currency } from '@cryptoalgebra/sdk';
 import { Token } from '@/services/contract/token';
 import { useEffect, useState, useMemo } from 'react';

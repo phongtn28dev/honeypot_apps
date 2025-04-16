@@ -32,7 +32,7 @@ import { chart } from '@/services/chart';
 import { Token } from '@/services/contract/token';
 import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { AlgebraPoolContract } from '@/services/contract/algebra/algebra-pool-contract';
 import { Address, zeroAddress } from 'viem';
 import TokenCardV3Independent from '../TokenCard/TokenCardVIndependent';

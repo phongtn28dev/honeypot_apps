@@ -31,7 +31,7 @@ import { cn } from '@/lib/tailwindcss';
 import { Token } from '@/services/contract/token';
 import CardContainer from '@/components/CardContianer/v3';
 import { useRouter } from 'next/router';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { observer } from 'mobx-react-lite';
 import { LoadingContainer } from '@/components/LoadingDisplay/LoadingDisplay';
 import PoolChart from '@/components/algebra/pool/PoolChart';

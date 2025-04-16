@@ -1,7 +1,7 @@
 import { Token } from '@/services/contract/token';
 import BigNumber from 'bignumber.js';
 import { BaseContract } from '@/services/contract';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import IUniswapV2Pair from '@uniswap/v2-core/build/IUniswapV2Pair.json';
 import { makeAutoObservable } from 'mobx';
 import { getContract, zeroAddress } from 'viem';

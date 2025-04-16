@@ -1,20 +1,20 @@
-import { BaseContract } from "./..";
-import { wallet } from "@/services/wallet";
-import { makeAutoObservable } from "mobx";
-import { Address, getContract, zeroAddress } from "viem";
-import { ICHIVaultABI } from "@/lib/abis/aquabera/ICHIVault";
-import { writeContract } from "viem/actions";
-import { ContractWrite } from "@/services/utils";
-import BigNumber from "bignumber.js";
-import { Token } from "../token";
-import { PairContract } from "../dex/liquidity/pair-contract";
-import { VaultDeposit } from "@/lib/algebra/graphql/generated/graphql";
-import { VaultWithdraw } from "@/lib/algebra/graphql/generated/graphql";
-import { VaultCollectFee } from "@/lib/algebra/graphql/generated/graphql";
+import { BaseContract } from './..';
+import { wallet } from '@honeypot/shared';
+import { makeAutoObservable } from 'mobx';
+import { Address, getContract, zeroAddress } from 'viem';
+import { ICHIVaultABI } from '@/lib/abis/aquabera/ICHIVault';
+import { writeContract } from 'viem/actions';
+import { ContractWrite } from '@/services/utils';
+import BigNumber from 'bignumber.js';
+import { Token } from '../token';
+import { PairContract } from '../dex/liquidity/pair-contract';
+import { VaultDeposit } from '@/lib/algebra/graphql/generated/graphql';
+import { VaultWithdraw } from '@/lib/algebra/graphql/generated/graphql';
+import { VaultCollectFee } from '@/lib/algebra/graphql/generated/graphql';
 
 export class ICHIVaultContract implements BaseContract {
   address: Address = zeroAddress;
-  name: string = "ICHIVault";
+  name: string = 'ICHIVault';
   abi = ICHIVaultABI;
   fee = 0;
   totalAmountsWithoutDecimal: { total0: bigint; total1: bigint } = {
@@ -125,7 +125,7 @@ export class ICHIVaultContract implements BaseContract {
       return;
     }
     return await new ContractWrite(this.contract.write.deposit, {
-      action: "deposit",
+      action: 'deposit',
     })
       .call([deposit0, deposit1, to as `0x${string}`])
       .finally(() => {
@@ -139,7 +139,7 @@ export class ICHIVaultContract implements BaseContract {
       return;
     }
     return await new ContractWrite(this.contract.write.withdraw, {
-      action: "withdraw",
+      action: 'withdraw',
     })
       .call([shares, to as `0x${string}`])
       .finally(() => {

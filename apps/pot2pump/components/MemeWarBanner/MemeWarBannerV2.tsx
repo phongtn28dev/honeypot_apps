@@ -1,32 +1,32 @@
-import { FtoPairContract } from "@/services/contract/launches/fto/ftopair-contract";
-import { AsyncState, ValueState } from "@/services/utils";
-import { wallet } from "@/services/wallet";
-import { card, Input, Select, SelectItem } from "@nextui-org/react";
-import { Button } from "../button";
-import { animate, motion, Variants } from "framer-motion";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import Image from "next/image";
-import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useBalance } from "wagmi";
-import { Token } from "@/services/contract/token";
-import { DiscussionArea } from "../Discussion/DiscussionArea/DiscussionArea";
-import { swap } from "@/services/swap";
-import { liquidity } from "@/services/liquidity";
-import { amountFormatted } from "@/lib/format";
-import { MemeWarParticipant, memewarStore } from "@/services/memewar";
-import { WarppedNextSelect } from "../wrappedNextUI/Select/Select";
-import BigNumber from "bignumber.js";
-import dynamic from "next/dynamic";
-import { popmodal } from "@/services/popmodal";
-import { LaunchDetailSwapCard } from "../SwapCard/MemeSwap";
-import { toCompactLocaleString } from "@/lib/utils";
-import TokenLogo from "../TokenLogo/TokenLogo";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
+import { AsyncState, ValueState } from '@/services/utils';
+import { wallet } from '@honeypot/shared';
+import { card, Input, Select, SelectItem } from '@nextui-org/react';
+import { Button } from '../button';
+import { animate, motion, Variants } from 'framer-motion';
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useBalance } from 'wagmi';
+import { Token } from '@/services/contract/token';
+import { DiscussionArea } from '../Discussion/DiscussionArea/DiscussionArea';
+import { swap } from '@/services/swap';
+import { liquidity } from '@/services/liquidity';
+import { amountFormatted } from '@/lib/format';
+import { MemeWarParticipant, memewarStore } from '@/services/memewar';
+import { WarppedNextSelect } from '../wrappedNextUI/Select/Select';
+import BigNumber from 'bignumber.js';
+import dynamic from 'next/dynamic';
+import { popmodal } from '@/services/popmodal';
+import { LaunchDetailSwapCard } from '../SwapCard/MemeSwap';
+import { toCompactLocaleString } from '@/lib/utils';
+import TokenLogo from '../TokenLogo/TokenLogo';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
+const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 const ANIMATION_DURATION = 500; //ms
-const HP_BAR_URL = "/images/memewar/HP_BAR.png";
+const HP_BAR_URL = '/images/memewar/HP_BAR.png';
 
 export interface Props {
   isEnd?: boolean;
@@ -79,10 +79,7 @@ export const MemeWarBannerV2 = observer((props: Props) => {
         </div>
         <MemeWarPariticipantRaceChart />
       </div>
-      <DiscussionArea
-        pairDatabaseId={-9999}
-        isSide
-      />
+      <DiscussionArea pairDatabaseId={-9999} isSide />
     </div>
   ) : (
     <div className="flex justify-center items-center h-[500px]">
@@ -96,12 +93,12 @@ export const MemeWarSupportSection = observer(() => {
     <div className="flex flex-col m-2 gap-5 md:max-w-[min(1024px,80vw)] md:m-auto">
       <div className=" *:my-4">
         <div className="text-center">
-          your tHpot balance:{" "}
+          your tHpot balance:{' '}
           {amountFormatted(memewarStore.tHpotToken?.balance, {
             fixed: 2,
             decimals: 0,
-            symbol: " tHPOT",
-          }) || "loading..."}
+            symbol: ' tHPOT',
+          }) || 'loading...'}
         </div>
         <WarppedNextSelect
           items={Object.entries(memewarStore.memewarParticipants)}
@@ -114,16 +111,13 @@ export const MemeWarSupportSection = observer(() => {
           {Object.entries(memewarStore.memewarParticipants).map(
             ([key, value]) => {
               return (
-                <SelectItem
-                  key={key}
-                  value={key}
-                >
+                <SelectItem key={key} value={key}>
                   {value.participantName}
                 </SelectItem>
               );
             }
           )}
-        </WarppedNextSelect>{" "}
+        </WarppedNextSelect>{' '}
         <div className="flex justify-center items-center gap-2">
           <Button
             isDisabled={false}
@@ -138,7 +132,7 @@ export const MemeWarSupportSection = observer(() => {
                   !memewarStore.selectedSupportParticipantPair ||
                   !memewarStore.selectedSupportParticipantPair.launchedToken
                 ) {
-                  console.error("missing data");
+                  console.error('missing data');
                   return;
                 }
                 swap.setFromToken(memewarStore.tHpotToken);
@@ -184,7 +178,7 @@ export const MemeWarSupportSection = observer(() => {
           <h3 className="z-10 text-3xl">Complete quest to earn prize</h3>
           <Link
             href={
-              "https://www.cubquests.com/campaigns/berachaindevs?quest=honeypot-finance"
+              'https://www.cubquests.com/campaigns/berachaindevs?quest=honeypot-finance'
             }
             target="_blank"
           >
@@ -215,16 +209,16 @@ export const MemeWarPariticipantRaceChart = observer(() => {
     }),
     options: {
       title: {
-        text: "Meme War Tracker",
-        align: "center",
+        text: 'Meme War Tracker',
+        align: 'center',
         style: {
-          color: "white",
-          fontSize: "2rem",
+          color: 'white',
+          fontSize: '2rem',
         },
         offsetY: 30,
       },
       chart: {
-        type: "scatter",
+        type: 'scatter',
         animations: {
           enabled: false,
         },
@@ -275,16 +269,16 @@ export const MemeWarPariticipantRaceChart = observer(() => {
           },
         },
       },
-      colors: ["orange"],
+      colors: ['orange'],
       xaxis: {
         tickAmount: 10,
         // min: 0,
         // max: 40,
         title: {
-          text: "Holders →",
+          text: 'Holders →',
           offsetY: -40,
           style: {
-            color: "white",
+            color: 'white',
           },
         },
         axisBorder: {
@@ -301,10 +295,10 @@ export const MemeWarPariticipantRaceChart = observer(() => {
       },
       yaxis: {
         title: {
-          text: "Market Cap →",
+          text: 'Market Cap →',
           offsetX: 10,
           style: {
-            color: "white",
+            color: 'white',
           },
         },
         labels: {
@@ -331,7 +325,7 @@ export const MemeWarPariticipantRaceChart = observer(() => {
         size: 20,
       },
       grid: {
-        borderColor: "transparent",
+        borderColor: 'transparent',
         show: false,
         padding: {
           left: 60,
@@ -370,7 +364,7 @@ export const MemeWarPariticipantRaceChart = observer(() => {
             </div>
           `;
         },
-        theme: "dark",
+        theme: 'dark',
         fillSeriesColor: true,
         fixed: {
           enabled: true,
@@ -379,11 +373,11 @@ export const MemeWarPariticipantRaceChart = observer(() => {
       },
 
       fill: {
-        type: "image",
+        type: 'image',
         opacity: 1,
         image: {
           src: memewarStore.sortedMemewarParticipants.map((participant) => {
-            return participant.iconUrl || participant.pair?.logoUrl || "";
+            return participant.iconUrl || participant.pair?.logoUrl || '';
           }),
           width: 40,
           height: 40,
@@ -406,7 +400,7 @@ export const MemeWarPariticipantRaceChart = observer(() => {
         series={state.series}
         type="scatter"
         width="100%"
-        height={"100%"}
+        height={'100%'}
       />
     </div>
   );
@@ -454,7 +448,7 @@ export const MemeWarPariticipantCard = observer(
           className="flex w-full items-center z-10 justify-center md:justify-end transition-all gap-4"
         >
           <h2 className="flex justify-center items-center font-[MEMEH] text-[3rem] w-[5rem]">
-            {participant.rank == "1" ? "👑" : participant.rank}
+            {participant.rank == '1' ? '👑' : participant.rank}
           </h2>
           <Link href={`/launch-detail/${participant.pair.address}`}>
             <Image
@@ -484,12 +478,12 @@ export const MemeWarPariticipantCard = observer(
               <h3 className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-black">
                 {participant.pair.state != 0
                   ? participant.pair?.depositedRaisedToken?.toFixed(0) ||
-                    "loading..."
+                    'loading...'
                   : Math.max(
                       participant.currentScore.toNumber(),
                       participant.pair?.depositedRaisedToken?.toNumber() ?? 0
-                    ).toLocaleString("en-US", {
-                      style: "decimal",
+                    ).toLocaleString('en-US', {
+                      style: 'decimal',
                       maximumFractionDigits: 0,
                     })}
               </h3>

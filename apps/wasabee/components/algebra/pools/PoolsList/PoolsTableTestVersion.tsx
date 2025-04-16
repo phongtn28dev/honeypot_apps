@@ -15,7 +15,7 @@ import PoolCardList from './PoolCardList';
 import { SortingState } from '@tanstack/react-table';
 import { id } from 'ethers/lib/utils';
 import { useUserPools } from '@/lib/algebra/graphql/clients/pool';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import BigNumber from 'bignumber.js';
 import { observer } from 'mobx-react-lite';
 import { useFarmingClient } from '@/lib/hooks/useSubgraphClients';

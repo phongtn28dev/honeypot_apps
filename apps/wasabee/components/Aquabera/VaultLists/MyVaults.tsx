@@ -4,7 +4,7 @@ import { getAccountVaultsList } from '@/lib/algebra/graphql/clients/vaults';
 import { AccountVaultSharesQuery } from '@/lib/algebra/graphql/generated/graphql';
 import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
 import { Token } from '@/services/contract/token';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { useEffect, useState } from 'react';
 import { Currency } from '@cryptoalgebra/sdk';
 import { DepositToVaultModal } from '../modals/DepositToVaultModal';
