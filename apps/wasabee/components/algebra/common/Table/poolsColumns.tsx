@@ -14,7 +14,7 @@ import {
 import { TokenFieldsFragment } from '@/lib/algebra/graphql/generated/graphql';
 import { ReactNode } from 'react';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
-import { Token } from '@/services/contract/token';
+import { Token } from '@honeypot/shared';
 import {
   DynamicFormatAmount,
   formatAmountWithAlphabetSymbol,

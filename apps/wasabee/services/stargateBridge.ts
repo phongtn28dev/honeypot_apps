@@ -9,7 +9,8 @@
 // &dstAmountMin=9000000"
 
 import { makeAutoObservable, reaction } from 'mobx';
-import { Token } from './contract/token';
+
+import { Token } from '@honeypot/shared';
 import {
   stargateSupportedChain,
   stargateSupportedToken,

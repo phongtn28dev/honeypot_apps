@@ -1,14 +1,15 @@
-import { swap } from "@/services/swap";
-import { Input } from "@/components/input";
-import { InputProps } from "@nextui-org/react";
-import { Token } from "@/services/contract/token";
-import { TokenSelector } from "@/components/TokenSelector/v3";
-import { cn } from "@/lib/tailwindcss";
+import { swap } from '@/services/swap';
+import { Input } from '@/components/input';
+import { InputProps } from '@nextui-org/react';
+
+import { Token } from '@honeypot/shared';
+import { TokenSelector } from '@/components/TokenSelector/v3';
+import { cn } from '@/lib/tailwindcss';
 
 type SwapAmountProps = {
   label: string;
   token?: Token;
-  direction: "from" | "to";
+  direction: 'from' | 'to';
   inputProps?: InputProps;
 };
 
@@ -24,7 +25,7 @@ export const SwapAmount = ({
         <span>{label}</span>
         <div className="flex items-center gap-x-2">
           <div>Balance: {token?.balanceFormatted}</div>
-          {direction === "from" && (
+          {direction === 'from' && (
             <div
               className="cursor-pointer underline"
               onClick={() => {
@@ -40,7 +41,7 @@ export const SwapAmount = ({
         <TokenSelector
           value={token}
           onSelect={(token) => {
-            direction === "from"
+            direction === 'from'
               ? swap.setFromToken(token)
               : swap.setToToken(token);
           }}
@@ -51,38 +52,38 @@ export const SwapAmount = ({
           isClearable
           classNames={{
             base: cn(
-              "text-right",
-              "!bg-transparent",
-              "[&_*]:!bg-transparent",
-              "data-[invalid=true]:!bg-transparent"
+              'text-right',
+              '!bg-transparent',
+              '[&_*]:!bg-transparent',
+              'data-[invalid=true]:!bg-transparent'
             ),
 
             inputWrapper: cn(
-              "!bg-transparent",
-              "border-none",
-              "shadow-none",
-              "!transition-none",
-              "data-[invalid=true]:!bg-transparent",
-              "group-data-[invalid=true]:!bg-transparent"
+              '!bg-transparent',
+              'border-none',
+              'shadow-none',
+              '!transition-none',
+              'data-[invalid=true]:!bg-transparent',
+              'group-data-[invalid=true]:!bg-transparent'
             ),
 
             input: cn(
-              "!bg-transparent",
-              "!text-[#202020]",
-              "text-right",
-              "text-xl",
-              "!pr-0",
-              "[appearance:textfield]",
-              "[&::-webkit-outer-spin-button]:appearance-none",
-              "[&::-webkit-inner-spin-button]:appearance-none",
-              "data-[invalid=true]:!bg-transparent"
+              '!bg-transparent',
+              '!text-[#202020]',
+              'text-right',
+              'text-xl',
+              '!pr-0',
+              '[appearance:textfield]',
+              '[&::-webkit-outer-spin-button]:appearance-none',
+              '[&::-webkit-inner-spin-button]:appearance-none',
+              'data-[invalid=true]:!bg-transparent'
             ),
 
             clearButton: cn(
-              "opacity-70",
-              "hover:opacity-100",
-              "!text-black",
-              "!p-0"
+              'opacity-70',
+              'hover:opacity-100',
+              '!text-black',
+              '!p-0'
             ),
           }}
           {...inputProps}

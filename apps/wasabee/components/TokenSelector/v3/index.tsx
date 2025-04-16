@@ -10,7 +10,8 @@ import {
 } from '@nextui-org/react';
 import { IoSearchOutline } from 'react-icons/io5';
 import { IoClose } from 'react-icons/io5';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { Observer, observer, useLocalObservable } from 'mobx-react-lite';
 import { useCallback, useEffect, useState } from 'react';
 import { isEthAddress } from '@/lib/address';

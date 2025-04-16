@@ -4,7 +4,8 @@ import { SwapAmount } from '../SwapAmount/index';
 import { swap } from '@/services/swap';
 import { ExchangeSvg } from '../svg/exchange';
 import { Button } from '@/components/button';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { SpinnerContainer } from '../Spinner';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';

@@ -5,7 +5,8 @@ import {
   TradePair,
   Router,
 } from '@orbiter-finance/bridge-sdk';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { action, makeAutoObservable, reaction } from 'mobx';
 import { wallet } from '@honeypot/shared';
 import BigNumber from 'bignumber.js';

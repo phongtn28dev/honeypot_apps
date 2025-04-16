@@ -21,7 +21,8 @@ import { SwapField, SwapFieldType } from '@/types/algebra/types/swap-field';
 import TokenCardV3 from '../TokenCard/TokenCardV3';
 import { ExchangeSvg } from '@/components/svg/exchange';
 import { chart } from '@/services/chart';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
 import { wallet } from '@honeypot/shared';

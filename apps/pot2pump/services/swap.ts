@@ -1,4 +1,4 @@
-import { Token } from './contract/token';
+import { Token } from '@honeypot/shared';
 import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
 import BigNumber from 'bignumber.js';
 import { wallet } from '@honeypot/shared';

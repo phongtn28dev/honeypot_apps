@@ -5,7 +5,8 @@ import { PageRequest } from '@/services/indexer/indexerTypes';
 import dayjs from 'dayjs';
 import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
 import BigNumber from 'bignumber.js';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import {
   OrderDirection,
   Pot2Pump,

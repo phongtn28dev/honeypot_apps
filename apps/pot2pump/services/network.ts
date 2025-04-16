@@ -1,4 +1,4 @@
-import { Token } from './contract/token';
+import { Token } from '@honeypot/shared';
 import { Chain } from 'viem/chains';
 import { berachain } from '@/lib/chain';
 import { ALGEBRA_POSITION_MANAGER } from '@/config/algebra/addresses';

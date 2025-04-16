@@ -28,7 +28,8 @@ import {
 import { FormattedPosition } from '@/types/algebra/types/formatted-position';
 import { Address, zeroAddress } from 'viem';
 import { cn } from '@/lib/tailwindcss';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import CardContainer from '@/components/CardContianer/v3';
 import { useRouter } from 'next/router';
 import { wallet } from '@honeypot/shared';

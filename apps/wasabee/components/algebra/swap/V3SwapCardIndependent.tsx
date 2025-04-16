@@ -3,7 +3,8 @@ import SwapButtonV3 from './SwapButton/SwapButotnV3';
 import SwapParamsV3 from './SwapParams/SwapParamsV3';
 import CardContainer from '../../CardContianer/v3';
 import PoweredByAlgebra from '../common/PoweredByAlgebra';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { SwapFieldType } from '@/types/algebra/types/swap-field';
 import { SwapField } from '@/types/algebra/types/swap-field';
 import { useCallback, useState } from 'react';

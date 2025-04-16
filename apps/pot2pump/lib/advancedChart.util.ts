@@ -1,4 +1,4 @@
-import { Token } from '@/services/contract/token';
+import { Token } from '@honeypot/shared';
 import { networksMap } from '@/services/network';
 import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
 

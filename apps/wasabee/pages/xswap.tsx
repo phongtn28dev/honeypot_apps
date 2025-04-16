@@ -9,7 +9,8 @@ import { useMediaQuery } from '@/lib/algebra/hooks/common/useMediaQuery';
 import { SuccessfulCall } from '@/lib/algebra/hooks/swap/useSwapCallback';
 import { SwapCallEstimate } from '@/lib/algebra/hooks/swap/useSwapCallback';
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { ContractWrite } from '@/services/utils';
 import { wallet } from '@honeypot/shared';
 import { xSwap } from '@/services/xswap';

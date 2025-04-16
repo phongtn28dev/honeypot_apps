@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useState } from 'react';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import TokenCardV3 from '@/components/algebra/swap/TokenCard/TokenCardV3';
 import { computePoolAddress, Currency } from '@cryptoalgebra/sdk';
 import { ICHIVaultFactoryContract } from '@/services/contract/aquabera/ICHIVaultFactory-contract';

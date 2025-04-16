@@ -1,4 +1,4 @@
-import { Token } from '@/services/contract/token';
+import { Token } from '@honeypot/shared';
 import { SwapFieldType } from '@/types/algebra/types/swap-field';
 import { SwapField } from '@/types/algebra/types/swap-field';
 import { useCallback, useEffect, useMemo, useState } from 'react';

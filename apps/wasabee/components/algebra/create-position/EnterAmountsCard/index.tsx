@@ -4,7 +4,8 @@ import { useCallback, useMemo } from 'react';
 import { useAccount, useBalance } from 'wagmi';
 import { Address } from 'viem';
 import { formatCurrency } from '@/lib/algebra/utils/common/formatCurrency';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { cn } from '@/lib/utils';
 import { HiOutlineSwitchHorizontal, HiSwitchVertical } from 'react-icons/hi';

@@ -4,7 +4,8 @@ import { observer } from 'mobx-react-lite';
 import { CardContainer, HoneyContainer } from '@/components/CardContianer';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { wallet } from '@honeypot/shared';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 
 const MarketBaseTokenSwitcher = observer(() => {
   return (

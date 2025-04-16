@@ -1,10 +1,11 @@
-import { cn } from "@/lib/tailwindcss";
-import { Token } from "@/services/contract/token";
-import { Tooltip } from "@nextui-org/react";
-import { observer } from "mobx-react-lite";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect } from "react";
+import { cn } from '@/lib/tailwindcss';
+
+import { Token } from '@honeypot/shared';
+import { Tooltip } from '@nextui-org/react';
+import { observer } from 'mobx-react-lite';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect } from 'react';
 
 interface TokenLogoProps {
   size?: number;
@@ -42,20 +43,20 @@ export const TokenLogo = observer(
           className="shrink-0"
           href={
             disableLink
-              ? "#"
+              ? '#'
               : `https://bartio.beratrail.io/address/${token.address}`
           }
-          target={disableLink ? "" : "_blank"}
+          target={disableLink ? '' : '_blank'}
         >
           <Image
             className={cn(
-              "border border-[color:var(--card-stroke,#F7931A)] rounded-[50%] cursor-pointer aspect-square bg-white",
+              'border border-[color:var(--card-stroke,#F7931A)] rounded-[50%] cursor-pointer aspect-square bg-white',
               addtionalClasses
             )}
             src={
               !!token.logoURI
                 ? token.logoURI
-                : "/images/icons/tokens/unknown-token-icon.png"
+                : '/images/icons/tokens/unknown-token-icon.png'
             }
             alt=""
             width={size || 24}

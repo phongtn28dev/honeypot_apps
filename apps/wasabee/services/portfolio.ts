@@ -1,5 +1,6 @@
 import { makeAutoObservable, reaction } from 'mobx';
-import { Token } from './contract/token';
+
+import { Token } from '@honeypot/shared';
 import { wallet } from '@honeypot/shared';
 import BigNumber from 'bignumber.js';
 import { AsyncState } from './utils';

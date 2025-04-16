@@ -9,7 +9,8 @@ import { get } from 'http';
 import { getContract } from 'viem';
 import { algebraPoolABI } from '@/lib/abis/algebra-contracts/ABIs';
 import { AsyncState, ContractWrite } from '@/services/utils';
-import { Token } from '../token';
+
+import { Token } from '@honeypot/shared';
 
 export class AlgebraPoolContract implements BaseContract {
   static poolMap: Record<string, AlgebraPoolContract> = {};

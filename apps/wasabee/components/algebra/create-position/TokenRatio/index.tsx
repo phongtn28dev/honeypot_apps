@@ -1,5 +1,6 @@
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { IDerivedMintInfo } from '@/lib/algebra/state/mintStore';
 import { useMemo } from 'react';
 import { zeroAddress } from 'viem';

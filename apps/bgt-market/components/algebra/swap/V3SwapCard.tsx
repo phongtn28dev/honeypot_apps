@@ -1,10 +1,11 @@
-import SwapPairV3 from "./SwapPair/SwapPairV3";
-import SwapButtonV3 from "./SwapButton/SwapButotnV3";
-import SwapParamsV3 from "./SwapParams/SwapParamsV3";
-import CardContainer from "../../CardContianer/v3";
-import PoweredByAlgebra from "../common/PoweredByAlgebra";
-import { Token } from "@/services/contract/token";
-import { PresetPair } from "./SwapPair/SwapPairV3";
+import SwapPairV3 from './SwapPair/SwapPairV3';
+import SwapButtonV3 from './SwapButton/SwapButotnV3';
+import SwapParamsV3 from './SwapParams/SwapParamsV3';
+import CardContainer from '../../CardContianer/v3';
+import PoweredByAlgebra from '../common/PoweredByAlgebra';
+
+import { Token } from '@honeypot/shared';
+import { PresetPair } from './SwapPair/SwapPairV3';
 
 interface V3SwapCardProps {
   presetPairs?: PresetPair[];

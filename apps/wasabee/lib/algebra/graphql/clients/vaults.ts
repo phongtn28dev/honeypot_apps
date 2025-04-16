@@ -14,7 +14,8 @@ import {
   MultipleVaultDetailsQuery,
 } from '../generated/graphql';
 import { Address } from 'viem';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { poolQueryToContract } from './pool';
 import BigNumber from 'bignumber.js';
 import { useInfoClient } from '@/lib/hooks/useSubgraphClients';

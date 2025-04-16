@@ -9,7 +9,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useBalance } from 'wagmi';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { DiscussionArea } from '../Discussion/DiscussionArea/DiscussionArea';
 import { swap } from '@/services/swap';
 import { liquidity } from '@/services/liquidity';

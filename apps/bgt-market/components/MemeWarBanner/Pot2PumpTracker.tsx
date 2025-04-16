@@ -8,7 +8,8 @@ import TokenLogo from '../TokenLogo/TokenLogo';
 import { useEffect, useState } from 'react';
 import { fetchMemetrackerList, Pair } from '@/lib/algebra/graphql/clients/pair';
 import { wallet } from '@honeypot/shared';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { trpcClient } from '@/lib/trpc';
 import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
 

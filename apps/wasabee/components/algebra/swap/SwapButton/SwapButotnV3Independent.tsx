@@ -21,7 +21,8 @@ import {
   warningSeverity,
 } from '@/lib/algebra/utils/swap/prices';
 import { useToastify } from '@/lib/hooks/useContractToastify';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { wallet } from '@honeypot/shared';
 import { ApprovalState } from '@/types/algebra/types/approve-state';
 import { SwapField } from '@/types/algebra/types/swap-field';

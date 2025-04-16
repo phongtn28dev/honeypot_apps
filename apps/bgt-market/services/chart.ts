@@ -1,5 +1,6 @@
 import { action, makeAutoObservable, reaction } from 'mobx';
-import { Token } from './contract/token';
+
+import { Token } from '@honeypot/shared';
 import { PairContract } from './contract/dex/liquidity/pair-contract';
 import { AsyncState } from './utils';
 import { ChartDataResponse, resolutionType } from './priceFeed/priceFeedTypes';

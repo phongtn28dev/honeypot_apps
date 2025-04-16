@@ -3,7 +3,8 @@ import { TokenSelector } from '@/components/TokenSelector';
 import { SwapAmount } from '../SwapAmount/index';
 import { liquidity } from '@/services/liquidity';
 import { Button } from '@/components/button';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { SpinnerContainer } from '../Spinner';
 import { PlusSvg } from '../svg/plus';
 import { useEffect } from 'react';

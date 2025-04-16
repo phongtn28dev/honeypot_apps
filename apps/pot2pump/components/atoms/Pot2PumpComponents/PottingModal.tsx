@@ -9,7 +9,8 @@ import { Input } from '@/components/input';
 import { TokenSelector } from '@/components/TokenSelector/v3';
 import { WNATIVE_EXTENDED } from '@/config/algebra/routing';
 import { wallet } from '@honeypot/shared';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { useEffect, useState } from 'react';
 import TokenCardV3 from '@/components/algebra/swap/TokenCard/TokenCardV3';
 import { Address } from 'viem';

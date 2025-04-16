@@ -1,12 +1,13 @@
-import TokenLogo from "@/components/TokenLogo/TokenLogo";
-import { Token } from "@/services/contract/token";
-import { Ellipsis } from "lucide-react";
-import { AvgAPR, Plugins } from "../../common/Table/poolsColumns";
-import { formatUSD } from "@/lib/algebra/utils/common/formatUSD";
-import { formatPercent } from "@/lib/algebra/utils/common/formatPercent";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { observer } from "mobx-react-lite";
+import TokenLogo from '@/components/TokenLogo/TokenLogo';
+
+import { Token } from '@honeypot/shared';
+import { Ellipsis } from 'lucide-react';
+import { AvgAPR, Plugins } from '../../common/Table/poolsColumns';
+import { formatUSD } from '@/lib/algebra/utils/common/formatUSD';
+import { formatPercent } from '@/lib/algebra/utils/common/formatPercent';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 
 type TokenAsset = {
   __typename?: string;

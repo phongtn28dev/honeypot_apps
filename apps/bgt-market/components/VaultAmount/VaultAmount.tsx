@@ -1,12 +1,13 @@
-import { Input } from "@/components/input";
-import { InputProps } from "@nextui-org/react";
-import { Token } from "@/services/contract/token";
-import { TokenSelector } from "@/components/TokenSelector/v3";
-import { cn } from "@/lib/tailwindcss";
-import TokenLogo from "../TokenLogo/TokenLogo";
-import { ICHIVaultContract } from "@/services/contract/aquabera/ICHIVault-contract";
-import { useEffect, useState } from "react";
-import { observer } from "mobx-react-lite";
+import { Input } from '@/components/input';
+import { InputProps } from '@nextui-org/react';
+
+import { Token } from '@honeypot/shared';
+import { TokenSelector } from '@/components/TokenSelector/v3';
+import { cn } from '@/lib/tailwindcss';
+import TokenLogo from '../TokenLogo/TokenLogo';
+import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
+import { useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 
 type VaultAmountProps = {
   vaultContract: ICHIVaultContract;
@@ -34,7 +35,7 @@ export const VaultAmount = observer(
                   className="cursor-pointer underline"
                   onClick={() => {
                     onAmountChange(
-                      vault?.token0?.balance.toFixed() ?? "0",
+                      vault?.token0?.balance.toFixed() ?? '0',
                       values.amount1
                     );
                   }}
@@ -51,42 +52,42 @@ export const VaultAmount = observer(
                 isClearable
                 value={values.amount0}
                 onChange={(e) => onAmountChange(e.target.value, values.amount1)}
-                onClear={() => onAmountChange("0", values.amount1)}
+                onClear={() => onAmountChange('0', values.amount1)}
                 isInvalid={
                   vault?.token0 &&
                   Number(values.amount0) > vault.token0.balance.toNumber()
                 }
                 classNames={{
                   base: cn(
-                    "text-right",
-                    "!bg-transparent",
-                    "[&_*]:!bg-transparent",
-                    "data-[invalid=true]:!bg-transparent"
+                    'text-right',
+                    '!bg-transparent',
+                    '[&_*]:!bg-transparent',
+                    'data-[invalid=true]:!bg-transparent'
                   ),
                   inputWrapper: cn(
-                    "!bg-transparent",
-                    "border-none",
-                    "shadow-none",
-                    "!transition-none",
-                    "data-[invalid=true]:!bg-transparent",
-                    "group-data-[invalid=true]:!bg-transparent"
+                    '!bg-transparent',
+                    'border-none',
+                    'shadow-none',
+                    '!transition-none',
+                    'data-[invalid=true]:!bg-transparent',
+                    'group-data-[invalid=true]:!bg-transparent'
                   ),
                   input: cn(
-                    "!bg-transparent",
-                    "!text-[#202020]",
-                    "text-right",
-                    "text-xl",
-                    "!pr-0",
-                    "[appearance:textfield]",
-                    "[&::-webkit-outer-spin-button]:appearance-none",
-                    "[&::-webkit-inner-spin-button]:appearance-none",
-                    "data-[invalid=true]:!bg-transparent"
+                    '!bg-transparent',
+                    '!text-[#202020]',
+                    'text-right',
+                    'text-xl',
+                    '!pr-0',
+                    '[appearance:textfield]',
+                    '[&::-webkit-outer-spin-button]:appearance-none',
+                    '[&::-webkit-inner-spin-button]:appearance-none',
+                    'data-[invalid=true]:!bg-transparent'
                   ),
                   clearButton: cn(
-                    "opacity-70",
-                    "hover:opacity-100",
-                    "!text-black",
-                    "!p-0"
+                    'opacity-70',
+                    'hover:opacity-100',
+                    '!text-black',
+                    '!p-0'
                   ),
                 }}
               />
@@ -106,7 +107,7 @@ export const VaultAmount = observer(
                   onClick={() => {
                     onAmountChange(
                       values.amount0,
-                      vault?.token1?.balance.toFixed() ?? "0"
+                      vault?.token1?.balance.toFixed() ?? '0'
                     );
                   }}
                 >
@@ -122,42 +123,42 @@ export const VaultAmount = observer(
                 isClearable
                 value={values.amount1}
                 onChange={(e) => onAmountChange(values.amount0, e.target.value)}
-                onClear={() => onAmountChange(values.amount0, "0")}
+                onClear={() => onAmountChange(values.amount0, '0')}
                 isInvalid={
                   vault?.token1 &&
                   Number(values.amount1) > vault.token1.balance.toNumber()
                 }
                 classNames={{
                   base: cn(
-                    "text-right",
-                    "!bg-transparent",
-                    "[&_*]:!bg-transparent",
-                    "data-[invalid=true]:!bg-transparent"
+                    'text-right',
+                    '!bg-transparent',
+                    '[&_*]:!bg-transparent',
+                    'data-[invalid=true]:!bg-transparent'
                   ),
                   inputWrapper: cn(
-                    "!bg-transparent",
-                    "border-none",
-                    "shadow-none",
-                    "!transition-none",
-                    "data-[invalid=true]:!bg-transparent",
-                    "group-data-[invalid=true]:!bg-transparent"
+                    '!bg-transparent',
+                    'border-none',
+                    'shadow-none',
+                    '!transition-none',
+                    'data-[invalid=true]:!bg-transparent',
+                    'group-data-[invalid=true]:!bg-transparent'
                   ),
                   input: cn(
-                    "!bg-transparent",
-                    "!text-[#202020]",
-                    "text-right",
-                    "text-xl",
-                    "!pr-0",
-                    "[appearance:textfield]",
-                    "[&::-webkit-outer-spin-button]:appearance-none",
-                    "[&::-webkit-inner-spin-button]:appearance-none",
-                    "data-[invalid=true]:!bg-transparent"
+                    '!bg-transparent',
+                    '!text-[#202020]',
+                    'text-right',
+                    'text-xl',
+                    '!pr-0',
+                    '[appearance:textfield]',
+                    '[&::-webkit-outer-spin-button]:appearance-none',
+                    '[&::-webkit-inner-spin-button]:appearance-none',
+                    'data-[invalid=true]:!bg-transparent'
                   ),
                   clearButton: cn(
-                    "opacity-70",
-                    "hover:opacity-100",
-                    "!text-black",
-                    "!p-0"
+                    'opacity-70',
+                    'hover:opacity-100',
+                    '!text-black',
+                    '!p-0'
                   ),
                 }}
               />

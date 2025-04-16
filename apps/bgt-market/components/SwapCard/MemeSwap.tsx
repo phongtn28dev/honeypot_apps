@@ -1,7 +1,8 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { swap } from '@/services/swap';
 import { Button } from '@/components/button/button-next';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { SpinnerContainer } from '../Spinner';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';

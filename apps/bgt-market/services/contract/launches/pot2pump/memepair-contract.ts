@@ -1,4 +1,4 @@
-import { Token } from '@/services/contract/token';
+import { Token } from '@honeypot/shared';
 import { getContract, zeroAddress } from 'viem';
 import { dayjs } from '@/lib/dayjs';
 import BigNumber from 'bignumber.js';

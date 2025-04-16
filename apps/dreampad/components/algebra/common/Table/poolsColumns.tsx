@@ -1,26 +1,27 @@
-import { ColumnDef } from "@tanstack/react-table";
-import { HeaderItem } from "./common";
-import { Address } from "viem";
-import { DynamicFeePluginIcon } from "../PluginIcons";
-import { usePoolPlugins } from "@/lib/algebra/hooks/pools/usePoolPlugins";
-import { Skeleton } from "@/components/ui/skeleton";
-import { FarmingPluginIcon } from "../PluginIcons";
-import { useCurrency } from "@/lib/algebra/hooks/common/useCurrency";
+import { ColumnDef } from '@tanstack/react-table';
+import { HeaderItem } from './common';
+import { Address } from 'viem';
+import { DynamicFeePluginIcon } from '../PluginIcons';
+import { usePoolPlugins } from '@/lib/algebra/hooks/pools/usePoolPlugins';
+import { Skeleton } from '@/components/ui/skeleton';
+import { FarmingPluginIcon } from '../PluginIcons';
+import { useCurrency } from '@/lib/algebra/hooks/common/useCurrency';
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/components/algebra/ui/hover-card";
-import { TokenFieldsFragment } from "@/lib/algebra/graphql/generated/graphql";
-import { ReactNode } from "react";
-import TokenLogo from "@/components/TokenLogo/TokenLogo";
-import { Token } from "@/services/contract/token";
+} from '@/components/algebra/ui/hover-card';
+import { TokenFieldsFragment } from '@/lib/algebra/graphql/generated/graphql';
+import { ReactNode } from 'react';
+import TokenLogo from '@/components/TokenLogo/TokenLogo';
+
+import { Token } from '@honeypot/shared';
 import {
   DynamicFormatAmount,
   formatAmountWithAlphabetSymbol,
-} from "@/lib/algebra/utils/common/formatAmount";
-import { observer } from "mobx-react-lite";
-import BigNumber from "bignumber.js";
+} from '@/lib/algebra/utils/common/formatAmount';
+import { observer } from 'mobx-react-lite';
+import BigNumber from 'bignumber.js';
 
 interface Pair {
   token0: TokenFieldsFragment;
@@ -248,7 +249,7 @@ export const AvgAPR = ({
 
 export const poolsColumns: ColumnDef<Pool>[] = [
   {
-    accessorKey: "pair",
+    accessorKey: 'pair',
     header: () => <HeaderItem className="ml-2">Pool</HeaderItem>,
     cell: ({ row }) => <PoolPair {...row.original} />,
     filterFn: (v, _, value) =>
@@ -258,39 +259,39 @@ export const poolsColumns: ColumnDef<Pool>[] = [
         v.original.pair.token0.name,
         v.original.pair.token1.name,
       ]
-        .join(" ")
+        .join(' ')
         .toLowerCase()
         .includes(value),
   },
   {
-    accessorKey: "plugins",
+    accessorKey: 'plugins',
     header: () => <HeaderItem>Plugins</HeaderItem>,
     cell: ({ row }) => <Plugins poolId={row.original.id} />,
     filterFn: (v, _, value: boolean) => v.original.hasActiveFarming === value,
   },
   {
-    accessorKey: "fee",
+    accessorKey: 'fee',
     header: () => <HeaderItem className="uppercase">Fee</HeaderItem>,
     cell: ({ row }) => `${row.original.fee}%`,
   },
   {
-    accessorKey: "apr24h",
+    accessorKey: 'apr24h',
     header: () => <HeaderItem className="uppercase">APR 24H</HeaderItem>,
     cell: ({ row }) =>
       `${DynamicFormatAmount({
         amount: row.original.apr24h,
         decimals: 2,
-        endWith: "%",
+        endWith: '%',
       })}`,
   },
   {
-    accessorKey: "tvlUSD",
-    id: "tvlUSD",
+    accessorKey: 'tvlUSD',
+    id: 'tvlUSD',
     header: () => <HeaderItem className="uppercase">TVL</HeaderItem>,
     cell: ({ row }) => {
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(row.original.tvlUSD);
@@ -307,13 +308,13 @@ export const poolsColumns: ColumnDef<Pool>[] = [
   //   cell: ({ row }) => row.original.txCount,
   // },
   {
-    accessorKey: "volumeUSD",
+    accessorKey: 'volumeUSD',
     header: () => <HeaderItem className="uppercase">Total Volume</HeaderItem>,
     cell: ({ row }) => (
       <span>
-        {new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "USD",
+        {new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD',
           minimumFractionDigits: 2,
           maximumFractionDigits: 2,
         }).format(row?.original?.volumeUSD)}
@@ -321,13 +322,13 @@ export const poolsColumns: ColumnDef<Pool>[] = [
     ),
   },
   {
-    accessorKey: "volume24USD",
+    accessorKey: 'volume24USD',
     header: () => <HeaderItem className="uppercase">24h Volume</HeaderItem>,
     cell: ({ row }) => (
       <span>
-        {new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "USD",
+        {new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD',
           minimumFractionDigits: 2,
           maximumFractionDigits: 2,
         }).format(row?.original?.volume24USD)}
@@ -408,7 +409,7 @@ export const poolsColumns: ColumnDef<Pool>[] = [
 
 export const poolsColumnsMy: ColumnDef<Pool>[] = [
   {
-    accessorKey: "pair",
+    accessorKey: 'pair',
     header: () => <HeaderItem className="ml-2">Pool</HeaderItem>,
     cell: ({ row }) => <PoolPair {...row.original} />,
     filterFn: (v, _, value) =>
@@ -418,39 +419,39 @@ export const poolsColumnsMy: ColumnDef<Pool>[] = [
         v.original.pair.token0.name,
         v.original.pair.token1.name,
       ]
-        .join(" ")
+        .join(' ')
         .toLowerCase()
         .includes(value),
   },
   {
-    accessorKey: "plugins",
+    accessorKey: 'plugins',
     header: () => <HeaderItem>Plugins</HeaderItem>,
     cell: ({ row }) => <Plugins poolId={row.original.id} />,
     filterFn: (v, _, value: boolean) => v.original.hasActiveFarming === value,
   },
   {
-    accessorKey: "fee",
+    accessorKey: 'fee',
     header: () => <HeaderItem className="uppercase">Fee</HeaderItem>,
     cell: ({ row }) => `${row.original.fee}%`,
   },
   {
-    accessorKey: "apr24h",
+    accessorKey: 'apr24h',
     header: () => <HeaderItem className="uppercase">APR 24H</HeaderItem>,
     cell: ({ row }) =>
       `${DynamicFormatAmount({
         amount: row.original.apr24h,
         decimals: 2,
-        endWith: "%",
+        endWith: '%',
       })}`,
   },
   {
-    accessorKey: "tvlUSD",
-    id: "tvlUSD",
+    accessorKey: 'tvlUSD',
+    id: 'tvlUSD',
     header: () => <HeaderItem className="uppercase">TVL</HeaderItem>,
     cell: ({ row }) => {
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(row.original.tvlUSD);
@@ -495,13 +496,13 @@ export const poolsColumnsMy: ColumnDef<Pool>[] = [
   //   ),
   // },
   {
-    accessorKey: "unclaimedFees",
+    accessorKey: 'unclaimedFees',
     header: () => <HeaderItem className="uppercase">Unclaimed Fees</HeaderItem>,
     cell: ({ row }) =>
       DynamicFormatAmount({
         amount: row.original.unclaimedFees?.toString() ?? 0,
         decimals: 5,
-        endWith: "USD",
+        endWith: 'USD',
       }),
   },
   // {

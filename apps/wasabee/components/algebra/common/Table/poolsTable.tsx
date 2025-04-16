@@ -4,7 +4,8 @@ import { Search, Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Tab, Tabs, Tooltip } from '@nextui-org/react';
 import { popmodal } from '@/services/popmodal';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/algebra/ui/button';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';

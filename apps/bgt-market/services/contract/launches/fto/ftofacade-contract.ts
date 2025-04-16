@@ -1,13 +1,14 @@
-import { BaseContract } from "../..";
-import { wallet } from "../../../wallet";
-import { getContract } from "viem";
-import { makeAutoObservable } from "mobx";
-import { ftoFacadeABI } from "@/lib/abis/ftoFacade";
-import { ContractWrite } from "../../../utils";
+import { BaseContract } from '../..';
+
+import { wallet } from '@honeypot/shared';
+import { getContract } from 'viem';
+import { makeAutoObservable } from 'mobx';
+import { ftoFacadeABI } from '@/lib/abis/ftoFacade';
+import { ContractWrite } from '../../../utils';
 
 export class FtoFacadeContract implements BaseContract {
-  address = "";
-  name: string = "";
+  address = '';
+  name: string = '';
   abi = ftoFacadeABI;
 
   constructor(args: Partial<FtoFacadeContract>) {
@@ -25,14 +26,14 @@ export class FtoFacadeContract implements BaseContract {
 
   get deposit() {
     return new ContractWrite(this.contract.write?.deposit, {
-      action: "Deposit",
+      action: 'Deposit',
       isSuccessEffect: true,
     });
   }
 
   get claimLP() {
     return new ContractWrite(this.contract.write?.claimLP, {
-      action: "Claim Liquidity Pool",
+      action: 'Claim Liquidity Pool',
       isSuccessEffect: true,
     });
   }

@@ -4,7 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { chart } from '@/services/chart';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { RotateCcw } from 'lucide-react';
 import { getBaseUrl } from '@/lib/trpc';
 import { strParams } from '@/lib/advancedChart.util';

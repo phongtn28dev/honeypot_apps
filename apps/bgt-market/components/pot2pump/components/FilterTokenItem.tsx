@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { Token } from "@/services/contract/token";
-import { TokenSelector } from "@/components/TokenSelector/v3";
-import { observer } from "mobx-react-lite";
+import React, { useState } from 'react';
+
+import { Token } from '@honeypot/shared';
+import { TokenSelector } from '@/components/TokenSelector/v3';
+import { observer } from 'mobx-react-lite';
 
 type Props = {
   token?: Token;

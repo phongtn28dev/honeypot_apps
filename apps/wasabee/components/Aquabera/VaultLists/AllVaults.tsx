@@ -1,6 +1,7 @@
 import { wallet } from '@honeypot/shared';
 import { Currency } from '@cryptoalgebra/sdk';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { useEffect, useState, useMemo } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/algebra/ui/button';

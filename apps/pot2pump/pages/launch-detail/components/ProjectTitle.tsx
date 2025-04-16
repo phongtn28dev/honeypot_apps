@@ -40,7 +40,8 @@ import { chain } from '@/services/chain';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useRouter } from 'next/router';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { DedicatedPot2Pump } from '@/config/dedicatedPot2pump';
 
 interface ProjectTitleProps {

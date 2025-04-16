@@ -10,7 +10,7 @@ import {
 import { DropdownSvg } from '../svg/dropdown';
 import { IoSearchOutline } from 'react-icons/io5';
 import { IoClose } from 'react-icons/io5';
-import { Token } from '@/services/contract/token';
+import { Token } from '@honeypot/shared';
 import { Observer, observer, useLocalObservable } from 'mobx-react-lite';
 import { useEffect } from 'react';
 import { isEthAddress } from '@/lib/address';

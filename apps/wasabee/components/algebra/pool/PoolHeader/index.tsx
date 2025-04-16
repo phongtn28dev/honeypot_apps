@@ -6,7 +6,8 @@ import { useCurrency } from '@/lib/algebra/hooks/common/useCurrency';
 import { formatPercent } from '@/lib/algebra/utils/common/formatPercent';
 import { AlgebraPoolContract } from '@/services/contract/algebra/algebra-pool-contract';
 import { Address } from 'viem';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { Pool } from '@cryptoalgebra/sdk';
 import { observer } from 'mobx-react-lite';
 import { wallet } from '@honeypot/shared';

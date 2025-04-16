@@ -10,7 +10,8 @@ import { SlOptions, SlShare } from 'react-icons/sl';
 import { VscCopy } from 'react-icons/vsc';
 import * as clipboard from 'clipboard-polyfill';
 import { ShareMediaDisplay } from '../ShareSocialMedialPopUp/ShareSocialMedialPopUp';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { BiLink, BiWallet } from 'react-icons/bi';
 import { popmodal } from '@/services/popmodal';
 import { WrappedToastify } from '@/lib/wrappedToastify';

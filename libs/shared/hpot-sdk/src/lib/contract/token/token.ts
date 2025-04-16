@@ -13,6 +13,7 @@ import { getSingleTokenData } from '../../graphql/clients/token';
 import { Token as IndexerToken } from '../../graphql/generated/graphql';
 import { when } from 'mobx';
 import { DynamicFormatAmount } from '../../utils/formatAmount';
+import { networksMap } from '../../chains/chain';
 
 export class Token implements BaseContract {
   static tokensMap: Record<string, Token> = {};
@@ -561,5 +562,30 @@ export class Token implements BaseContract {
           message: 'Failed to add token to wallet',
         });
       });
+  }
+
+  getIsRouterToken() {
+    //const networkManager = NetworkManager.getInstance();
+
+    // const currentChainId = wallet.isInit
+    //   ? wallet.currentChainId
+    //   : networkManager.getSelectedNetwork()?.chainId;
+
+    // if (currentChainId) {
+    //   this.isRouterToken =
+    //     networksMap[currentChainId].validatedTokensInfo[
+    //       this.address.toLowerCase()
+    //     ]?.isRouterToken;
+    //   return this.isRouterToken;
+    // }
+    return false;
+  }
+
+  getSupportedFeeOnTransferTokens() {
+    this.supportingFeeOnTransferTokens =
+      networksMap[wallet.currentChainId].validatedTokensInfo[
+        this.address.toLowerCase()
+      ]?.supportingFeeOnTransferTokens;
+    return this.supportingFeeOnTransferTokens;
   }
 }

@@ -4,7 +4,8 @@ import { getSingleVaultDetails } from '@/lib/algebra/graphql/clients/vaults';
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
 import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
 import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { wallet } from '@honeypot/shared';
 import {
   useReadIchiVaultAllowToken0,

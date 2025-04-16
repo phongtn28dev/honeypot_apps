@@ -1,15 +1,15 @@
-import { Token } from "@/services/contract/token";
-import TokenLogo from "../TokenLogo/TokenLogo";
-import { observer } from "mobx-react-lite";
+import { Token } from '@honeypot/shared';
+import TokenLogo from '../TokenLogo/TokenLogo';
+import { observer } from 'mobx-react-lite';
 import {
   OptionsDropdown,
   optionsPresets,
-} from "../OptionsDropdown/OptionsDropdown";
-import { motion } from "framer-motion";
-import { itemSlideVariants } from "@/lib/animation";
-import { useEffect } from "react";
-import BigNumber from "bignumber.js";
-import { portfolio } from "@/services/portfolio";
+} from '../OptionsDropdown/OptionsDropdown';
+import { motion } from 'framer-motion';
+import { itemSlideVariants } from '@/lib/animation';
+import { useEffect } from 'react';
+import BigNumber from 'bignumber.js';
+import { portfolio } from '@/services/portfolio';
 
 interface TokenBalanceCardProps {
   token: Token;
@@ -41,7 +41,7 @@ export const TokenBalanceCard = observer(({ token }: TokenBalanceCardProps) => {
 
   // Format USD price with "<0.00" for very small values
   const formattedUSDPrice = new BigNumber(token.derivedUSD || 0).lt(0.01)
-    ? "<0.01"
+    ? '<0.01'
     : `$${Number(token.derivedUSD).toFixed(2)}`;
 
   return (
@@ -64,11 +64,11 @@ export const TokenBalanceCard = observer(({ token }: TokenBalanceCardProps) => {
           <span
             className={`text-xs ${
               Number(priceChangePercent) >= 0
-                ? "text-[#4ADE80]"
-                : "text-[#FF5555]"
+                ? 'text-[#4ADE80]'
+                : 'text-[#FF5555]'
             }`}
           >
-            {Number(priceChangePercent) >= 0 ? "+" : ""}
+            {Number(priceChangePercent) >= 0 ? '+' : ''}
             {priceChangePercent}%
           </span>
         </div>
@@ -101,15 +101,15 @@ export const TokenBalanceCard = observer(({ token }: TokenBalanceCardProps) => {
           className="min-h-0 h-[unset] bg-white text-black"
           options={[
             optionsPresets.copy({
-              copyText: token?.address ?? "",
-              displayText: "Copy Token address",
-              copysSuccessText: "Token address copied",
+              copyText: token?.address ?? '',
+              displayText: 'Copy Token address',
+              copysSuccessText: 'Token address copied',
             }),
             optionsPresets.importTokenToWallet({
               token: token,
             }),
             optionsPresets.viewOnExplorer({
-              address: token?.address ?? "",
+              address: token?.address ?? '',
             }),
           ]}
         />

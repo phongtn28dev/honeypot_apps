@@ -35,7 +35,8 @@ import { cn } from '@/lib/tailwindcss';
 import { uploadFile, UploadImage } from '@/components/UploadImage/UploadImage';
 import BigNumber from 'bignumber.js';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { amountFormatted, formatAmount } from '@/lib/format';
 import { trpcClient } from '@/lib/trpc';
 import { Blob, File } from 'buffer';

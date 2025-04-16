@@ -1,26 +1,27 @@
-import { FtoPairContract } from "@/services/contract/launches/fto/ftopair-contract";
-import { observer } from "mobx-react-lite";
-import { Button } from "@/components/button/button-next";
-import Link from "next/link";
-import { HTMLAttributes } from "react";
-import { cn } from "@/lib/tailwindcss";
-import Image from "next/image";
+import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
+import { observer } from 'mobx-react-lite';
+import { Button } from '@/components/button/button-next';
+import Link from 'next/link';
+import { HTMLAttributes } from 'react';
+import { cn } from '@/lib/tailwindcss';
+import Image from 'next/image';
 import {
   OptionsDropdown,
   optionsPresets,
-} from "../../OptionsDropdown/OptionsDropdown";
-import { motion } from "framer-motion";
-import { itemPopUpVariants } from "@/lib/animation";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
-import ProgressBar from "../../atoms/ProgressBar/ProgressBar";
-import { AmountFormat } from "../../AmountFormat";
-import Countdown from "react-countdown";
-import BigNumber from "bignumber.js";
-import { Pot2Pump } from "@/lib/algebra/graphql/clients/type";
-import { Token } from "@/services/contract/token";
-import { useProjectInfo } from "@/hooks/useProjectInfo";
+} from '../../OptionsDropdown/OptionsDropdown';
+import { motion } from 'framer-motion';
+import { itemPopUpVariants } from '@/lib/animation';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
+import ProgressBar from '../../atoms/ProgressBar/ProgressBar';
+import { AmountFormat } from '../../AmountFormat';
+import Countdown from 'react-countdown';
+import BigNumber from 'bignumber.js';
+import { Pot2Pump } from '@/lib/algebra/graphql/clients/type';
 
-type launchCardVariants = "list" | "detail" | "trending";
+import { Token } from '@honeypot/shared';
+import { useProjectInfo } from '@/hooks/useProjectInfo';
+
+type launchCardVariants = 'list' | 'detail' | 'trending';
 
 const ComponentContainer = ({
   children,
@@ -32,7 +33,7 @@ const ComponentContainer = ({
   return (
     <div
       className={cn(
-        "flex flex-col items-center gap-1 odd:last:col-span-2",
+        'flex flex-col items-center gap-1 odd:last:col-span-2',
         className
       )}
     >
@@ -59,10 +60,10 @@ const TimeLineComponent = observer(({ pair }: { pair: Pot2Pump }) => {
                 } else {
                   return (
                     <span>
-                      {days ? `${days}d ` : ""}
-                      {hours ? `${hours}h ` : ""}
-                      {minutes ? `${minutes}m ` : ""}
-                      {seconds ? `${seconds}s ` : ""}
+                      {days ? `${days}d ` : ''}
+                      {hours ? `${hours}h ` : ''}
+                      {minutes ? `${minutes}m ` : ''}
+                      {seconds ? `${seconds}s ` : ''}
                     </span>
                   );
                 }
@@ -88,7 +89,7 @@ const LaunchProgress = observer(({ pair }: { pair: MemePairContract }) => {
                   (pair.depositedRaisedToken.toNumber() /
                     (pair.raisedTokenMinCap.toNumber() / Math.pow(10, 18))) *
                   100
-                ).toFixed(2) + "%"
+                ).toFixed(2) + '%'
               }
               value={
                 (pair.depositedRaisedToken.toNumber() /
@@ -127,7 +128,7 @@ const Participants = observer(
         <div className="flex items-center gap-2 text-sm">
           {/* <TotalRaisedSvg /> */}
           <span className="font-bold">
-            {pair?.participantsCount ? pair.participantsCount.toFormat(0) : "-"}
+            {pair?.participantsCount ? pair.participantsCount.toFormat(0) : '-'}
           </span>
         </div>
       </ComponentContainer>
@@ -145,7 +146,7 @@ const TotalRaised = observer(
           <span className="font-bold">
             {pair?.depositedRaisedToken
               ? pair.depositedRaisedToken.toFormat(3)
-              : "-"}
+              : '-'}
             &nbsp;
             {pair?.raiseToken?.displayName}
           </span>
@@ -162,7 +163,7 @@ const TokenPrice = observer(
         <h6 className="text-xs">Token Price</h6>
         <div className="flex items-center gap-2 text-sm">
           <span className="font-bold">
-            <AmountFormat amount={pair?.price?.toFixed()}></AmountFormat>{" "}
+            <AmountFormat amount={pair?.price?.toFixed()}></AmountFormat>{' '}
             {pair?.raiseToken?.displayName}
           </span>
         </div>
@@ -183,7 +184,7 @@ const UserDeposited = observer(({ pair }: { pair: FtoPairContract }) => {
                 pair.userDepositedRaisedToken.toNumber() /
                 Math.pow(10, pair.raiseToken?.decimals ?? 18)
               ).toFixed(3)
-            : "-"}
+            : '-'}
           &nbsp;
           {pair?.raiseToken?.displayName}
         </span>
@@ -205,7 +206,7 @@ const ClaimAction = observer(
                 pair.claimLP.call();
               }}
               style={{
-                backgroundColor: "green",
+                backgroundColor: 'green',
               }}
             >
               Claim LP
@@ -228,7 +229,7 @@ const RefundAction = observer(({ pair }: { pair: MemePairContract }) => {
               pair.refund.call();
             }}
             style={{
-              backgroundColor: "green",
+              backgroundColor: 'green',
             }}
           >
             Refund
@@ -318,20 +319,20 @@ const DetailLaunchCard = observer(
           className="absolute right-0 top-[1rem] text-black"
           options={[
             optionsPresets.copy({
-              copyText: pair?.launchToken?.id ?? "",
-              displayText: "Copy Token address",
-              copysSuccessText: "Token address copied",
+              copyText: pair?.launchToken?.id ?? '',
+              displayText: 'Copy Token address',
+              copysSuccessText: 'Token address copied',
             }),
             optionsPresets.importTokenToWallet({
               token: Token.getToken({ address: pair?.launchToken?.id }),
             }),
             optionsPresets.share({
               shareUrl: `${window.location.origin}/launch-detail/${pair?.id}`,
-              displayText: "Share this project",
-              shareText: "Checkout this Token: " + pair?.launchToken?.name,
+              displayText: 'Share this project',
+              shareText: 'Checkout this Token: ' + pair?.launchToken?.name,
             }),
             optionsPresets.viewOnExplorer({
-              address: pair?.id ?? "",
+              address: pair?.id ?? '',
             }),
           ]}
         />
@@ -342,10 +343,10 @@ const DetailLaunchCard = observer(
           height={0}
           objectFit="cover"
           className="mx-auto w-fit h-[108px] bg-contain rounded-xl"
-          src={projectInfo.banner_url ?? "/images/pumping/trade-card-bg.png"}
+          src={projectInfo.banner_url ?? '/images/pumping/trade-card-bg.png'}
           onError={(e) => {
             const target = e.target as HTMLImageElement;
-            target.src = "/images/pumping/trade-card-bg.png";
+            target.src = '/images/pumping/trade-card-bg.png';
           }}
         />
         <span className="break-all text-black">{projectInfo.logo_url}</span>
@@ -363,10 +364,10 @@ const DetailLaunchCard = observer(
               height={48}
               objectFit="cover"
               className="rounded-full"
-              src={projectInfo.logo_url ?? "/images/empty-logo.png"}
+              src={projectInfo.logo_url ?? '/images/empty-logo.png'}
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
-                target.src = "/images/empty-logo.png";
+                target.src = '/images/empty-logo.png';
               }}
             />
           </div>
@@ -452,10 +453,10 @@ const TrendingLaunchCard = observer(({ pair }: { pair: Pot2Pump }) => {
         height={0}
         objectFit="cover"
         className="w-full h-[108px] rounded-xl"
-        src={projectInfo.banner_url ?? "/images/pumping/trade-card-bg.png"}
+        src={projectInfo.banner_url ?? '/images/pumping/trade-card-bg.png'}
         onError={(e) => {
           const target = e.target as HTMLImageElement;
-          target.src = "/images/pumping/trade-card-bg.png";
+          target.src = '/images/pumping/trade-card-bg.png';
         }}
       />
       <div className="text-[#202020]">
@@ -472,10 +473,10 @@ const TrendingLaunchCard = observer(({ pair }: { pair: Pot2Pump }) => {
             height={48}
             objectFit="cover"
             className="rounded-full"
-            src={projectInfo.logo_url ?? "/images/empty-logo.png"}
+            src={projectInfo.logo_url ?? '/images/empty-logo.png'}
             onError={(e) => {
               const target = e.target as HTMLImageElement;
-              target.src = "/images/empty-logo.png";
+              target.src = '/images/empty-logo.png';
             }}
           />
         </div>
@@ -524,19 +525,16 @@ export const LaunchCardV3 = observer(
         animate="visible"
         whileInView="visible"
         variants={itemPopUpVariants}
-        className={cn("w-full", className)}
+        className={cn('w-full', className)}
       >
-        {(!type || type === "detail") && pair && (
+        {(!type || type === 'detail') && pair && (
           // FIXME: height issue
-          <DetailLaunchCard
-            pair={pair}
-            action={action}
-          />
+          <DetailLaunchCard pair={pair} action={action} />
         )}
 
-        {type === "list" && pair && <div>To be implemented</div>}
+        {type === 'list' && pair && <div>To be implemented</div>}
 
-        {type === "trending" && pair && <TrendingLaunchCard pair={pair} />}
+        {type === 'trending' && pair && <TrendingLaunchCard pair={pair} />}
       </motion.div>
     );
   }

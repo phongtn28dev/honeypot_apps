@@ -1,14 +1,15 @@
-import { BaseContract } from "../..";
-import { wallet } from "../../../wallet";
-import { Address, getContract } from "viem";
-import { makeAutoObservable } from "mobx";
-import { ContractWrite, AsyncState } from "../../../utils";
-import { ftoFactoryABI } from "@/lib/abis/ftoFactory";
-import { FtoPairContract } from "./ftopair-contract";
+import { BaseContract } from '../..';
+
+import { wallet } from '@honeypot/shared';
+import { Address, getContract } from 'viem';
+import { makeAutoObservable } from 'mobx';
+import { ContractWrite, AsyncState } from '../../../utils';
+import { ftoFactoryABI } from '@/lib/abis/ftoFactory';
+import { FtoPairContract } from './ftopair-contract';
 
 export class FtoFactoryContract implements BaseContract {
-  address = "";
-  name: string = "";
+  address = '';
+  name: string = '';
   abi = ftoFactoryABI;
   constructor(args: Partial<FtoFactoryContract>) {
     Object.assign(this, args);
@@ -29,7 +30,7 @@ export class FtoFactoryContract implements BaseContract {
 
   get createFTO() {
     return new ContractWrite(this.contract.write.createFTO, {
-      action: "Create FTO Project",
+      action: 'Create FTO Project',
       isSuccessEffect: true,
     });
   }
@@ -44,12 +45,12 @@ export class FtoFactoryContract implements BaseContract {
 
   get resume() {
     return new ContractWrite(this.contract.write.resume, {
-      action: "Resume",
+      action: 'Resume',
     });
   }
   get pause() {
     return new ContractWrite(this.contract.write.pause, {
-      action: "Pause",
+      action: 'Pause',
     });
   }
 }

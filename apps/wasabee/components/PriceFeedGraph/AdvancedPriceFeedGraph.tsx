@@ -2,7 +2,8 @@
 import { Button } from '@nextui-org/react';
 import EChartsReact from 'echarts-for-react';
 import { useEffect, useMemo, useState } from 'react';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { networksMap } from '@/services/chain';
 import { useAccount } from 'wagmi';
 import { trpcClient } from '@/lib/trpc';

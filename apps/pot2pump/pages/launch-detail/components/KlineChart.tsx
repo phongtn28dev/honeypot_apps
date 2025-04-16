@@ -1,19 +1,20 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { observer } from "mobx-react-lite";
-import { chart } from "@/services/chart";
-import TokenLogo from "@/components/TokenLogo/TokenLogo";
-import { Token } from "@/services/contract/token";
-import { RotateCcw } from "lucide-react";
-import { getBaseUrl } from "@/lib/trpc";
-import { strParams } from "@/lib/advancedChart.util";
-import { TbChartArea, TbChartHistogram } from "react-icons/tb";
-import Link from "next/link";
-import Image from "next/image";
-import codexIcon from "@/public/images/partners/codex_white.png";
-import { chain } from "@/services/chain";
-import dynamic from "next/dynamic";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { observer } from 'mobx-react-lite';
+import { chart } from '@/services/chart';
+import TokenLogo from '@/components/TokenLogo/TokenLogo';
+
+import { Token } from '@honeypot/shared';
+import { RotateCcw } from 'lucide-react';
+import { getBaseUrl } from '@/lib/trpc';
+import { strParams } from '@/lib/advancedChart.util';
+import { TbChartArea, TbChartHistogram } from 'react-icons/tb';
+import Link from 'next/link';
+import Image from 'next/image';
+import codexIcon from '@/public/images/partners/codex_white.png';
+import { chain } from '@/services/chain';
+import dynamic from 'next/dynamic';
 
 // 为 Window 对象添加 TradingView 相关的类型定义
 declare global {
@@ -31,7 +32,7 @@ const formatNumber = (number: number) => {
   if (number === 0) return 0;
   if (number < 0) number = Math.abs(number);
 
-  if (number >= 1000) return new Intl.NumberFormat("en-US").format(number);
+  if (number >= 1000) return new Intl.NumberFormat('en-US').format(number);
   else if (number > 100)
     return parseFloat(String(number)).toFixed(2).toString();
   else if (number > 1) return parseFloat(String(number)).toFixed(3).toString();
@@ -43,7 +44,7 @@ const formatNumber = (number: number) => {
     if (number < 1e-7) {
       return number.toExponential(2);
     }
-    
+
     // For small values, use fewer decimal places
     const zeros = -Math.floor(Math.log10(number) + 1);
     if (zeros > 6) {
@@ -61,15 +62,15 @@ interface KlineChartProps {
 
 // 添加图表类型定义
 type ChartType =
-  | "Bars"
-  | "Candles"
-  | "Line"
-  | "Area"
-  | "Heikin Ashi"
-  | "Hollow Candles"
-  | "Baseline"
-  | "High-low"
-  | "Columns";
+  | 'Bars'
+  | 'Candles'
+  | 'Line'
+  | 'Area'
+  | 'Heikin Ashi'
+  | 'Hollow Candles'
+  | 'Baseline'
+  | 'High-low'
+  | 'Columns';
 
 // 使用动态导入并禁用SSR
 const KlineChart = dynamic(() => Promise.resolve(KlineChartComponent), {
@@ -79,13 +80,13 @@ const KlineChart = dynamic(() => Promise.resolve(KlineChartComponent), {
 const KlineChartComponent = observer(
   ({ height = 400, onReady }: KlineChartProps) => {
     // 获取时区信息，但仅在客户端执行
-    const [timeZone, setTimeZone] = useState<string>("UTC");
-    const [currentInterval, setCurrentInterval] = useState("60");
+    const [timeZone, setTimeZone] = useState<string>('UTC');
+    const [currentInterval, setCurrentInterval] = useState('60');
     const chartWrapRef = useRef<HTMLDivElement>(null);
     const [chartWidth, setChartWidth] = useState(200);
-    const [priceType, setPriceType] = useState<"PRICE" | "MCAP">("PRICE");
-    const [currencyType, setCurrencyType] = useState<"USD" | "BERA">("USD");
-    const [chartType, setChartType] = useState<ChartType>("Candles");
+    const [priceType, setPriceType] = useState<'PRICE' | 'MCAP'>('PRICE');
+    const [currencyType, setCurrencyType] = useState<'USD' | 'BERA'>('USD');
+    const [chartType, setChartType] = useState<ChartType>('Candles');
     const [showChartTypeMenu, setShowChartTypeMenu] = useState(false);
     const [showTrades, setShowTrades] = useState(true);
     const [screenshotUrl, setScreenshotUrl] = useState<string | null>(null);
@@ -94,43 +95,55 @@ const KlineChartComponent = observer(
 
     // 添加加载用户设置的函数
     const loadUserSettings = useCallback(() => {
-      if (typeof window === "undefined") return; // 服务器端不执行
-      
+      if (typeof window === 'undefined') return; // 服务器端不执行
+
       try {
         // 加载间隔设置
-        const savedInterval = localStorage.getItem("chart_interval");
+        const savedInterval = localStorage.getItem('chart_interval');
         if (savedInterval) {
           setCurrentInterval(savedInterval);
         }
-        
+
         // 加载价格类型设置
-        const savedPriceType = localStorage.getItem("chart_price_type") as "PRICE" | "MCAP";
-        if (savedPriceType && (savedPriceType === "PRICE" || savedPriceType === "MCAP")) {
+        const savedPriceType = localStorage.getItem('chart_price_type') as
+          | 'PRICE'
+          | 'MCAP';
+        if (
+          savedPriceType &&
+          (savedPriceType === 'PRICE' || savedPriceType === 'MCAP')
+        ) {
           setPriceType(savedPriceType);
         }
-        
+
         // 加载货币类型设置
-        const savedCurrencyType = localStorage.getItem("chart_currency_type") as "USD" | "BERA";
-        if (savedCurrencyType && (savedCurrencyType === "USD" || savedCurrencyType === "BERA")) {
+        const savedCurrencyType = localStorage.getItem(
+          'chart_currency_type'
+        ) as 'USD' | 'BERA';
+        if (
+          savedCurrencyType &&
+          (savedCurrencyType === 'USD' || savedCurrencyType === 'BERA')
+        ) {
           setCurrencyType(savedCurrencyType);
         }
-        
+
         // 加载图表类型设置
-        const savedChartType = localStorage.getItem("chart_type") as ChartType;
+        const savedChartType = localStorage.getItem('chart_type') as ChartType;
         if (savedChartType) {
-          const isValidChartType = chartTypes.some(ct => ct.type === savedChartType);
+          const isValidChartType = chartTypes.some(
+            (ct) => ct.type === savedChartType
+          );
           if (isValidChartType) {
             setChartType(savedChartType);
           }
         }
-        
+
         // 加载显示交易设置
-        const savedShowTrades = localStorage.getItem("chart_show_trades");
+        const savedShowTrades = localStorage.getItem('chart_show_trades');
         if (savedShowTrades !== null) {
-          setShowTrades(savedShowTrades === "true");
+          setShowTrades(savedShowTrades === 'true');
         }
       } catch (error) {
-        console.error("Error loading chart settings from localStorage:", error);
+        console.error('Error loading chart settings from localStorage:', error);
       }
     }, []);
 
@@ -138,45 +151,45 @@ const KlineChartComponent = observer(
     const saveInterval = useCallback((interval: string) => {
       setCurrentInterval(interval);
       try {
-        localStorage.setItem("chart_interval", interval);
+        localStorage.setItem('chart_interval', interval);
       } catch (error) {
-        console.error("Error saving interval to localStorage:", error);
+        console.error('Error saving interval to localStorage:', error);
       }
     }, []);
-    
-    const savePriceType = useCallback((type: "PRICE" | "MCAP") => {
+
+    const savePriceType = useCallback((type: 'PRICE' | 'MCAP') => {
       setPriceType(type);
       try {
-        localStorage.setItem("chart_price_type", type);
+        localStorage.setItem('chart_price_type', type);
       } catch (error) {
-        console.error("Error saving price type to localStorage:", error);
+        console.error('Error saving price type to localStorage:', error);
       }
     }, []);
-    
-    const saveCurrencyType = useCallback((type: "USD" | "BERA") => {
+
+    const saveCurrencyType = useCallback((type: 'USD' | 'BERA') => {
       setCurrencyType(type);
       try {
-        localStorage.setItem("chart_currency_type", type);
+        localStorage.setItem('chart_currency_type', type);
       } catch (error) {
-        console.error("Error saving currency type to localStorage:", error);
+        console.error('Error saving currency type to localStorage:', error);
       }
     }, []);
-    
+
     const saveChartType = useCallback((type: ChartType) => {
       setChartType(type);
       try {
-        localStorage.setItem("chart_type", type);
+        localStorage.setItem('chart_type', type);
       } catch (error) {
-        console.error("Error saving chart type to localStorage:", error);
+        console.error('Error saving chart type to localStorage:', error);
       }
     }, []);
-    
+
     const saveShowTrades = useCallback((show: boolean) => {
       setShowTrades(show);
       try {
-        localStorage.setItem("chart_show_trades", show ? "true" : "false");
+        localStorage.setItem('chart_show_trades', show ? 'true' : 'false');
       } catch (error) {
-        console.error("Error saving show trades to localStorage:", error);
+        console.error('Error saving show trades to localStorage:', error);
       }
     }, []);
 
@@ -188,17 +201,17 @@ const KlineChartComponent = observer(
     }, [loadUserSettings]);
 
     const intervals = [
-      { text: "1m", resolution: "1" },
-      { text: "5m", resolution: "5" },
-      { text: "1H", resolution: "60" },
-      { text: "4H", resolution: "240" },
-      { text: "1D", resolution: "D" },
+      { text: '1m', resolution: '1' },
+      { text: '5m', resolution: '5' },
+      { text: '1H', resolution: '60' },
+      { text: '4H', resolution: '240' },
+      { text: '1D', resolution: 'D' },
     ];
 
     // 添加图表类型选项
     const chartTypes: { type: ChartType; icon: JSX.Element }[] = [
       {
-        type: "Bars",
+        type: 'Bars',
         icon: (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -221,7 +234,7 @@ const KlineChartComponent = observer(
         ),
       },
       {
-        type: "Candles",
+        type: 'Candles',
         icon: (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -264,7 +277,7 @@ const KlineChartComponent = observer(
         ),
       },
       {
-        type: "Line",
+        type: 'Line',
         icon: (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -282,11 +295,11 @@ const KlineChartComponent = observer(
         ),
       },
       {
-        type: "Area",
+        type: 'Area',
         icon: <TbChartArea size={16} />,
       },
       {
-        type: "Heikin Ashi",
+        type: 'Heikin Ashi',
         icon: (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -319,7 +332,7 @@ const KlineChartComponent = observer(
         ),
       },
       {
-        type: "Hollow Candles",
+        type: 'Hollow Candles',
         icon: (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -363,7 +376,7 @@ const KlineChartComponent = observer(
         ),
       },
       {
-        type: "Baseline",
+        type: 'Baseline',
         icon: (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -381,7 +394,7 @@ const KlineChartComponent = observer(
         ),
       },
       {
-        type: "High-low",
+        type: 'High-low',
         icon: (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -404,13 +417,13 @@ const KlineChartComponent = observer(
         ),
       },
       {
-        type: "Columns",
+        type: 'Columns',
         icon: <TbChartHistogram size={16} />,
       },
     ];
 
     const initOnReady = useCallback(() => {
-      if (typeof window === "undefined") return;
+      if (typeof window === 'undefined') return;
 
       window.Datafeeds.UDFCompatibleDatafeed.prototype.resolveSymbol =
         function (
@@ -420,12 +433,12 @@ const KlineChartComponent = observer(
         ) {
           onSymbolResolvedCallback({
             name: symbolName,
-            ticker: "",
-            description: "",
-            type: "stock",
-            exchange: "DEX",
+            ticker: '',
+            description: '',
+            type: 'stock',
+            exchange: 'DEX',
             minmove2: 0,
-            session: "24x7",
+            session: '24x7',
             timezone: timeZone,
             minmov: 1,
             pricescale: 100000000,
@@ -463,91 +476,91 @@ const KlineChartComponent = observer(
             priceType
           ),
           interval: currentInterval as any,
-          container: "tv_chart_container",
+          container: 'tv_chart_container',
           width: chartWidth,
           height: isMobile ? 350 : Number(height),
           formatting_price_precision: 10,
           timezone: timeZone as any,
           datafeed: datafeed,
-          library_path: "/charting_library/",
-          locale: "en",
+          library_path: '/charting_library/',
+          locale: 'en',
           disabled_features: [
-            "use_localstorage_for_settings",
-            "header_symbol_search",
-            "header_compare",
-            "header_undo_redo",
-            "border_around_the_chart",
-            "header_saveload",
-            "drawing_templates",
-            "volume_force_overlay",
-            ...(isMobile ? ["left_toolbar"] : []),
+            'use_localstorage_for_settings',
+            'header_symbol_search',
+            'header_compare',
+            'header_undo_redo',
+            'border_around_the_chart',
+            'header_saveload',
+            'drawing_templates',
+            'volume_force_overlay',
+            ...(isMobile ? ['left_toolbar'] : []),
           ],
           enabled_features: [
-            ...(isMobile ? [] : ["left_toolbar"]),
-            "control_bar",
-            "header_resolutions",
-            "timeframes_toolbar",
-            "header_fullscreen_button",
-            "study_dialog",
-            "trading_notifications",
-            "fullscreen_button",
-            "screenshot_button",
+            ...(isMobile ? [] : ['left_toolbar']),
+            'control_bar',
+            'header_resolutions',
+            'timeframes_toolbar',
+            'header_fullscreen_button',
+            'study_dialog',
+            'trading_notifications',
+            'fullscreen_button',
+            'screenshot_button',
           ],
-          toolbar_bg: "#202020",
-          header_widget_dom_node: "trading_view_header",
+          toolbar_bg: '#202020',
+          header_widget_dom_node: 'trading_view_header',
           timeframes: intervals,
-          charts_storage_url: "https://saveload.tradingview.com",
-          charts_storage_api_version: "1.1",
-          client_id: "tradingview.com",
-          user_id: "public_user_id",
-          preset: "mobile",
-          custom_css_url: "/css/tradingViews.css",
+          charts_storage_url: 'https://saveload.tradingview.com',
+          charts_storage_api_version: '1.1',
+          client_id: 'tradingview.com',
+          user_id: 'public_user_id',
+          preset: 'mobile',
+          custom_css_url: '/css/tradingViews.css',
           loading_screen: {
-            backgroundColor: "#202020",
-            foregroundColor: "#FFCD4D",
+            backgroundColor: '#202020',
+            foregroundColor: '#FFCD4D',
           },
-          theme: "dark",
+          theme: 'dark',
           overrides: {
-            "paneProperties.backgroundType": "solid",
-            "paneProperties.background": "#202020",
-            "scalesProperties.lineColor": "#2A2A2A",
-            
+            'paneProperties.backgroundType': 'solid',
+            'paneProperties.background': '#202020',
+            'scalesProperties.lineColor': '#2A2A2A',
+
             // Make price scale font smaller and adjust scale settings
-            "scalesProperties.fontSize": 9, // Reduced font size for all scale values
-            "scalesProperties.textColor": "#808080",
-            
+            'scalesProperties.fontSize': 9, // Reduced font size for all scale values
+            'scalesProperties.textColor': '#808080',
+
             // Reduce precision to make numbers more compact
-            "mainSeriesProperties.precision": 6,
-            "mainSeriesProperties.minTick": "0.000001",
-            
+            'mainSeriesProperties.precision': 6,
+            'mainSeriesProperties.minTick': '0.000001',
+
             // Adjust y-axis formatting
-            "scalesProperties.showSeriesLastValue": true,
-            "scalesProperties.showStudyLastValue": false,
-            "scalesProperties.showStudyPlotLabels": false,
+            'scalesProperties.showSeriesLastValue': true,
+            'scalesProperties.showStudyLastValue': false,
+            'scalesProperties.showStudyPlotLabels': false,
 
             // Reduce volume panel height
-            "volumePaneSize": "small", // Set volume panel to small size
-            
-            "mainSeriesProperties.candleStyle.upColor": "#089981",
-            "mainSeriesProperties.candleStyle.borderUpColor": "#089981",
-            "mainSeriesProperties.candleStyle.downColor": "#F23645",
-            "mainSeriesProperties.candleStyle.borderDownColor": "#F23645",
-            "mainSeriesProperties.candleStyle.wickUpColor": "#089981",
-            "mainSeriesProperties.candleStyle.wickDownColor": "#F23645",
-            
+            volumePaneSize: 'small', // Set volume panel to small size
+
+            'mainSeriesProperties.candleStyle.upColor': '#089981',
+            'mainSeriesProperties.candleStyle.borderUpColor': '#089981',
+            'mainSeriesProperties.candleStyle.downColor': '#F23645',
+            'mainSeriesProperties.candleStyle.borderDownColor': '#F23645',
+            'mainSeriesProperties.candleStyle.wickUpColor': '#089981',
+            'mainSeriesProperties.candleStyle.wickDownColor': '#F23645',
+
             // Mobile-specific settings
             ...(isMobile
               ? {
-                  "scalesProperties.fontSize": 8, // Even smaller on mobile
-                  "scalesProperties.scaleSeriesOnly": true,
-                  "mainSeriesProperties.priceAxisProperties.autoScale": true,
-                  "mainSeriesProperties.priceAxisProperties.percentage": false,
-                  "mainSeriesProperties.priceAxisProperties.log": false,
-                  "scalesProperties.showLeftScale": false,
-                  "scalesProperties.showRightScale": true,
-                  "scalesProperties.alignLabels": true,
-                  "paneProperties.rightMargin": 5,
-                  "paneProperties.leftMargin": 5,
+                  'scalesProperties.fontSize': 8, // Even smaller on mobile
+                  'scalesProperties.scaleSeriesOnly': true,
+                  'mainSeriesProperties.priceAxisProperties.autoScale': true,
+                  'mainSeriesProperties.priceAxisProperties.percentage': false,
+                  'mainSeriesProperties.priceAxisProperties.log': false,
+                  'scalesProperties.showLeftScale': false,
+                  'scalesProperties.showRightScale': true,
+                  'scalesProperties.alignLabels': true,
+                  'paneProperties.rightMargin': 5,
+                  'paneProperties.leftMargin': 5,
                 }
               : {}),
           },
@@ -561,16 +574,16 @@ const KlineChartComponent = observer(
           // 设置初始图表类型
           try {
             switch (chartType) {
-              case "Bars":
+              case 'Bars':
                 chart.setChartType(0);
                 break;
-              case "Candles":
+              case 'Candles':
                 chart.setChartType(1);
                 break;
               // ... 其他类型
             }
           } catch (error) {
-            console.error("Error setting initial chart type:", error);
+            console.error('Error setting initial chart type:', error);
           }
 
           onReady?.();
@@ -604,8 +617,8 @@ const KlineChartComponent = observer(
         }
       };
       resizeChart();
-      window.addEventListener("resize", resizeChart);
-      return () => window.removeEventListener("resize", resizeChart);
+      window.addEventListener('resize', resizeChart);
+      return () => window.removeEventListener('resize', resizeChart);
     }, [chartWidth, isMobile, initOnReady]);
 
     useEffect(() => {
@@ -617,7 +630,7 @@ const KlineChartComponent = observer(
         // 获取图表实例
         const chart = window.tvWidget.chart();
         // 打开指标对话框
-        window.tvWidget.chart().executeActionById("insertIndicator");
+        window.tvWidget.chart().executeActionById('insertIndicator');
       }
     };
 
@@ -625,16 +638,16 @@ const KlineChartComponent = observer(
       if (window.tvWidget) {
         const chart = window.tvWidget.chart();
         try {
-          chart.executeActionById("toggleTrades");
+          chart.executeActionById('toggleTrades');
           saveShowTrades(!showTrades); // 使用新的保存函数
         } catch (error) {
-          console.error("Error toggling trades:", error);
+          console.error('Error toggling trades:', error);
         }
       }
     };
 
     const handlePriceMCapClick = () => {
-      const newType = priceType === "PRICE" ? "MCAP" : "PRICE";
+      const newType = priceType === 'PRICE' ? 'MCAP' : 'PRICE';
       savePriceType(newType); // Uses the new save function
       // Reload the chart with the new price type
       if (window.tvWidget) {
@@ -644,17 +657,17 @@ const KlineChartComponent = observer(
     };
 
     const handleUSDBeraClick = () => {
-      const newType = currencyType === "USD" ? "BERA" : "USD";
+      const newType = currencyType === 'USD' ? 'BERA' : 'USD';
       saveCurrencyType(newType); // 使用新的保存函数
       if (window.tvWidget) {
-        chart.setCurrencyCode(newType === "USD" ? "USD" : "TOKEN");
+        chart.setCurrencyCode(newType === 'USD' ? 'USD' : 'TOKEN');
         initOnReady();
       }
     };
 
     // 添加切换图表类型的处理函数
     const handleChartTypeChange = (type: ChartType) => {
-      console.log("Changing chart type to:", type);
+      console.log('Changing chart type to:', type);
       saveChartType(type); // 使用新的保存函数
       setShowChartTypeMenu(false);
 
@@ -662,39 +675,39 @@ const KlineChartComponent = observer(
         const chart = window.tvWidget.chart();
         try {
           switch (type) {
-            case "Bars":
+            case 'Bars':
               chart.setChartType(0);
               break;
-            case "Candles":
+            case 'Candles':
               chart.setChartType(1);
               break;
-            case "Line":
+            case 'Line':
               chart.setChartType(2);
               break;
-            case "Area":
+            case 'Area':
               chart.setChartType(3);
               break;
-            case "Heikin Ashi":
+            case 'Heikin Ashi':
               chart.setChartType(8);
               break;
-            case "Hollow Candles":
+            case 'Hollow Candles':
               chart.setChartType(9);
               break;
-            case "Baseline":
+            case 'Baseline':
               chart.setChartType(10);
               break;
-            case "High-low":
+            case 'High-low':
               chart.setChartType(12);
               break;
-            case "Columns":
+            case 'Columns':
               chart.setChartType(13);
               break;
           }
         } catch (error) {
-          console.error("Error setting chart type:", error);
+          console.error('Error setting chart type:', error);
         }
       } else {
-        console.error("TradingView widget not initialized");
+        console.error('TradingView widget not initialized');
       }
     };
 
@@ -703,18 +716,18 @@ const KlineChartComponent = observer(
       const handleClickOutside = (event: MouseEvent) => {
         if (
           (showChartTypeMenu &&
-            !(event.target as Element).closest(".chart-type-dropdown")) ||
+            !(event.target as Element).closest('.chart-type-dropdown')) ||
           (showIntervalMenu &&
-            !(event.target as Element).closest(".interval-dropdown"))
+            !(event.target as Element).closest('.interval-dropdown'))
         ) {
           setShowChartTypeMenu(false);
           setShowIntervalMenu(false);
         }
       };
 
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
       return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
+        document.removeEventListener('mousedown', handleClickOutside);
       };
     }, [showChartTypeMenu, showIntervalMenu]);
 
@@ -734,12 +747,7 @@ const KlineChartComponent = observer(
                   return <></>;
                 }
 
-                return (
-                  <TokenLogo
-                    key={token.address}
-                    token={token}
-                  />
-                );
+                return <TokenLogo key={token.address} token={token} />;
               })}
             </div>
             <span className="text-white text-base sm:text-lg font-bold">
@@ -755,11 +763,11 @@ const KlineChartComponent = observer(
             <span
               className={`text-sm sm:text-base ${
                 chart.chartPricePercentageChange >= 0
-                  ? "text-[#089981]"
-                  : "text-[#F23645]"
+                  ? 'text-[#089981]'
+                  : 'text-[#F23645]'
               }`}
             >
-              {chart.chartPricePercentageChange >= 0 ? "▲" : "▼"}{" "}
+              {chart.chartPricePercentageChange >= 0 ? '▲' : '▼'}{' '}
               {chart.chartPricePercentageChange.toFixed(2)}%
             </span>
           </div>
@@ -774,8 +782,8 @@ const KlineChartComponent = observer(
                   onClick={() => saveInterval(interval.resolution)}
                   className={`text-xs sm:text-sm transition-colors ${
                     currentInterval === interval.resolution
-                      ? "text-[#FFCD4D]"
-                      : "text-[#808080] hover:text-[#FFCD4D]"
+                      ? 'text-[#FFCD4D]'
+                      : 'text-[#808080] hover:text-[#FFCD4D]'
                   }`}
                 >
                   {interval.text}
@@ -804,7 +812,9 @@ const KlineChartComponent = observer(
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className={`transition-transform ${showIntervalMenu ? "rotate-180" : ""}`}
+                  className={`transition-transform ${
+                    showIntervalMenu ? 'rotate-180' : ''
+                  }`}
                 >
                   <path d="m6 9 6 6 6-6" />
                 </svg>
@@ -824,8 +834,8 @@ const KlineChartComponent = observer(
                       }}
                       className={`w-full px-4 py-1.5 text-left text-xs sm:text-sm hover:bg-[#2A2A2A] ${
                         currentInterval === interval.resolution
-                          ? "text-[#FFCD4D]"
-                          : "text-[#808080]"
+                          ? 'text-[#FFCD4D]'
+                          : 'text-[#808080]'
                       }`}
                     >
                       {interval.text}
@@ -858,7 +868,7 @@ const KlineChartComponent = observer(
                     key={type}
                     onClick={() => handleChartTypeChange(type)}
                     className={`w-full px-4 py-1.5 flex items-center gap-3 hover:bg-[#2A2A2A] ${
-                      chartType === type ? "text-[#FFCD4D]" : "text-[#808080]"
+                      chartType === type ? 'text-[#FFCD4D]' : 'text-[#808080]'
                     }`}
                   >
                     <span className="opacity-60">{icon}</span>
@@ -901,14 +911,14 @@ const KlineChartComponent = observer(
             onClick={handleHideTradesClick}
             className="text-xs sm:text-sm text-[#808080] hover:text-[#FFCD4D] transition-colors shrink-0"
           >
-            {showTrades ? "Hide" : "Show"} trades
+            {showTrades ? 'Hide' : 'Show'} trades
           </button>
 
           <div className="h-[20px] mx-2 w-[1px] bg-gray-600" />
           <button
             onClick={handlePriceMCapClick}
             className={`text-xs sm:text-sm transition-colors ${
-              priceType === "PRICE" ? "text-[#FFCD4D]" : "text-[#808080]"
+              priceType === 'PRICE' ? 'text-[#FFCD4D]' : 'text-[#808080]'
             }`}
           >
             Price
@@ -917,7 +927,7 @@ const KlineChartComponent = observer(
           <button
             onClick={handlePriceMCapClick}
             className={`text-xs sm:text-sm transition-colors ${
-              priceType === "MCAP" ? "text-[#FFCD4D]" : "text-[#808080]"
+              priceType === 'MCAP' ? 'text-[#FFCD4D]' : 'text-[#808080]'
             }`}
           >
             MCap
@@ -926,7 +936,7 @@ const KlineChartComponent = observer(
           <button
             onClick={handleUSDBeraClick}
             className={`text-xs sm:text-sm transition-colors ${
-              currencyType === "USD" ? "text-[#FFCD4D]" : "text-[#808080]"
+              currencyType === 'USD' ? 'text-[#FFCD4D]' : 'text-[#808080]'
             }`}
           >
             USD
@@ -935,23 +945,20 @@ const KlineChartComponent = observer(
           <button
             onClick={handleUSDBeraClick}
             className={`text-xs sm:text-sm transition-colors ${
-              currencyType === "BERA" ? "text-[#FFCD4D]" : "text-[#808080]"
+              currencyType === 'BERA' ? 'text-[#FFCD4D]' : 'text-[#808080]'
             }`}
           >
             BERA
           </button>
         </div>
 
-        <div
-          ref={chartWrapRef}
-          className="relative my-4"
-        >
+        <div ref={chartWrapRef} className="relative my-4">
           <div
             id="tv_chart_container"
             style={{
-              width: "100%",
-              height: isMobile ? "350px" : "500px",
-              transition: "opacity 0.3s ease-out",
+              width: '100%',
+              height: isMobile ? '350px' : '500px',
+              transition: 'opacity 0.3s ease-out',
             }}
           />
         </div>
@@ -976,18 +983,8 @@ const KlineChartComponent = observer(
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   >
-                    <line
-                      x1="18"
-                      y1="6"
-                      x2="6"
-                      y2="18"
-                    ></line>
-                    <line
-                      x1="6"
-                      y1="6"
-                      x2="18"
-                      y2="18"
-                    ></line>
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
                   </svg>
                 </button>
               </div>
@@ -1013,13 +1010,8 @@ const KlineChartComponent = observer(
           target="_blank"
           className="text-center text-sm text-[#808080] hover:text-[#FFCD4D] transition-colors flex items-center  gap-1"
         >
-          price feed powered by{" "}
-          <Image
-            src={codexIcon}
-            alt="Codex"
-            width={50}
-            height={50}
-          />
+          price feed powered by{' '}
+          <Image src={codexIcon} alt="Codex" width={50} height={50} />
         </Link>
       </div>
     );

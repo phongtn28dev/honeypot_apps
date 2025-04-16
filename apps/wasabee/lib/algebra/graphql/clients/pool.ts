@@ -24,7 +24,8 @@ import { unwrappedToken } from '@cryptoalgebra/sdk';
 import BigNumber from 'bignumber.js';
 import { object } from 'zod';
 import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
 import { ApolloClient } from '@apollo/client';
 import { createClientHook } from '../clientUtils';

@@ -1,15 +1,15 @@
-import { Token } from "@/services/contract/token";
+import { Token } from '@honeypot/shared';
 
 export type FilterField = RangeFilterField | TokenFilterField;
 
 export type RangeFilterField = {
-  inputType: "range";
+  inputType: 'range';
   min?: string;
   max?: string;
 };
 
 export type TokenFilterField = {
-  inputType: "token";
+  inputType: 'token';
   token?: Token;
 };
 

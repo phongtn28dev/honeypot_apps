@@ -1,12 +1,13 @@
-import { Input } from "@/components/algebra/ui/input";
-import { Currency, CurrencyAmount } from "@cryptoalgebra/sdk";
-import { useCallback, useMemo } from "react";
-import { useAccount, useBalance } from "wagmi";
-import { Address } from "viem";
-import { formatCurrency } from "@/lib/algebra/utils/common/formatCurrency";
-import { Token } from "@/services/contract/token";
-import TokenLogo from "@/components/TokenLogo/TokenLogo";
-import { cn } from "@/lib/utils";
+import { Input } from '@/components/algebra/ui/input';
+import { Currency, CurrencyAmount } from '@cryptoalgebra/sdk';
+import { useCallback, useMemo } from 'react';
+import { useAccount, useBalance } from 'wagmi';
+import { Address } from 'viem';
+import { formatCurrency } from '@/lib/algebra/utils/common/formatCurrency';
+
+import { Token } from '@honeypot/shared';
+import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { cn } from '@/lib/utils';
 
 interface EnterAmountsCardProps {
   currency: Currency | undefined;
@@ -33,18 +34,18 @@ const EnterAmountCard = ({
   });
 
   const balanceString = useMemo(() => {
-    if (isLoading || !balance) return "Loading...";
+    if (isLoading || !balance) return 'Loading...';
 
     return formatCurrency.format(Number(balance.formatted));
   }, [balance, isLoading]);
 
   const handleInput = useCallback((value: string) => {
-    if (value === ".") value = "0.";
+    if (value === '.') value = '0.';
     handleChange(value);
   }, []);
 
   function setMax() {
-    handleChange(balance?.formatted || "0");
+    handleChange(balance?.formatted || '0');
   }
 
   return (
@@ -60,7 +61,7 @@ const EnterAmountCard = ({
             />
           )}
           <span className="font-medium text-black">
-            {currency ? currency.symbol : "Select a token"}
+            {currency ? currency.symbol : 'Select a token'}
           </span>
         </div>
 
@@ -69,46 +70,46 @@ const EnterAmountCard = ({
             value={value}
             id={`amount-${currency?.symbol}`}
             onUserInput={(v: string) => handleInput(v)}
-            placeholder={"0.00"}
+            placeholder={'0.00'}
             maxDecimals={currency?.decimals}
             className={cn(
-              "text-right",
-              "!bg-transparent",
-              "[&_*]:!bg-transparent",
-              "data-[invalid=true]:!bg-transparent",
-              "border-none",
-              "text-black",
-              "text-xl",
-              "font-medium",
-              "w-[160px]"
+              'text-right',
+              '!bg-transparent',
+              '[&_*]:!bg-transparent',
+              'data-[invalid=true]:!bg-transparent',
+              'border-none',
+              'text-black',
+              'text-xl',
+              'font-medium',
+              'w-[160px]'
             )}
             classNames={{
               inputWrapper: cn(
-                "!bg-transparent",
-                "border-none",
-                "shadow-none",
-                "!transition-none",
-                "data-[invalid=true]:!bg-transparent",
-                "group-data-[invalid=true]:!bg-transparent",
-                "pr-5"
+                '!bg-transparent',
+                'border-none',
+                'shadow-none',
+                '!transition-none',
+                'data-[invalid=true]:!bg-transparent',
+                'group-data-[invalid=true]:!bg-transparent',
+                'pr-5'
               ),
               input: cn(
-                "!bg-transparent",
-                "!text-[#202020]",
-                "text-right",
-                "text-xl",
-                "!pr-0",
-                "[appearance:textfield]",
-                "[&::-webkit-outer-spin-button]:appearance-none",
-                "[&::-webkit-inner-spin-button]:appearance-none",
-                "data-[invalid=true]:!bg-transparent"
+                '!bg-transparent',
+                '!text-[#202020]',
+                'text-right',
+                'text-xl',
+                '!pr-0',
+                '[appearance:textfield]',
+                '[&::-webkit-outer-spin-button]:appearance-none',
+                '[&::-webkit-inner-spin-button]:appearance-none',
+                'data-[invalid=true]:!bg-transparent'
               ),
             }}
           />
           {currency && account && (
             <div className="flex items-center gap-2 text-sm text-[#202020]">
               <span>Balance: {balanceString}</span>
-              <button 
+              <button
                 onClick={setMax}
                 className="text-[#FFCD4D] hover:text-[#ffd666] font-medium transition-colors"
               >

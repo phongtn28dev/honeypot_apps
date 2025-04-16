@@ -6,7 +6,8 @@ import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
 import { useMemo } from 'react';
 import { calculatePercentageChange } from '@/lib/utils';
 import { Address } from 'viem';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { wallet } from '@honeypot/shared';
 import { useFarmingClient } from '@/lib/hooks/useSubgraphClients';

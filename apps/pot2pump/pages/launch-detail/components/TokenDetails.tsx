@@ -1,10 +1,11 @@
-import React from "react";
-import Image from "next/image";
-import { amountFormatted } from "@/lib/format";
-import { Skeleton } from "@nextui-org/react";
-import BigNumber from "bignumber.js";
-import { DynamicFormatAmount } from "@/lib/algebra/utils/common/formatAmount";
-import { Token } from "@/services/contract/token";
+import React from 'react';
+import Image from 'next/image';
+import { amountFormatted } from '@/lib/format';
+import { Skeleton } from '@nextui-org/react';
+import BigNumber from 'bignumber.js';
+import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+
+import { Token } from '@honeypot/shared';
 
 interface TokenDetailsProps {
   price?: BigNumber;
@@ -52,14 +53,14 @@ const TokenDetails: React.FC<TokenDetailsProps> = ({
         </div>
         <div className="text-white text-xs font-medium leading-[normal] mt-[4px]">
           {startTimeDisplay ? (
-            startTimeDisplay !== "-" ? (
+            startTimeDisplay !== '-' ? (
               <>
                 {new Date(startTimeDisplay).toLocaleDateString()}
                 <br />
                 {new Date(startTimeDisplay).toLocaleTimeString()}
               </>
             ) : (
-              "--"
+              '--'
             )
           ) : (
             <Skeleton className="rounded-lg h-6 w-24 bg-white/40" />
@@ -79,14 +80,14 @@ const TokenDetails: React.FC<TokenDetailsProps> = ({
         </div>
         <div className="text-white text-xs font-medium leading-[normal] mt-[4px]">
           {endTimeDisplay ? (
-            endTimeDisplay !== "-" ? (
+            endTimeDisplay !== '-' ? (
               <>
                 {new Date(endTimeDisplay).toLocaleDateString()}
                 <br />
                 {new Date(endTimeDisplay).toLocaleTimeString()}
               </>
             ) : (
-              "--"
+              '--'
             )
           ) : (
             <Skeleton className="rounded-lg h-6 w-24 bg-white/40" />

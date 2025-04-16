@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import raceFieldBg from 'public/images/horserace/race_field.png';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { V3SwapCard } from '@/components/algebra/swap/V3SwapCard';
 import { wallet } from '@honeypot/shared';
 import { observer } from 'mobx-react-lite';

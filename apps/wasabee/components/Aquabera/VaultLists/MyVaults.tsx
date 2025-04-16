@@ -3,7 +3,8 @@ import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { getAccountVaultsList } from '@/lib/algebra/graphql/clients/vaults';
 import { AccountVaultSharesQuery } from '@/lib/algebra/graphql/generated/graphql';
 import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { wallet } from '@honeypot/shared';
 import { useEffect, useState } from 'react';
 import { Currency } from '@cryptoalgebra/sdk';

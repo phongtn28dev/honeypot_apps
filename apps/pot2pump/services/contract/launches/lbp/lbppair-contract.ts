@@ -1,4 +1,4 @@
-import { Token } from '@/services/contract/token';
+import { Token } from '@honeypot/shared';
 import { getContract, zeroAddress } from 'viem';
 import BigNumber from 'bignumber.js';
 import { makeAutoObservable } from 'mobx';

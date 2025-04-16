@@ -8,7 +8,8 @@ import { Address } from 'viem';
 import { TokenSelector } from '@/components/TokenSelector';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
 import { wallet } from '@honeypot/shared';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 
 interface TokenSwapCardProps {
   handleTokenSelection: (currency: Currency) => void;
