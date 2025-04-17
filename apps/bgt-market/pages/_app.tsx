@@ -16,7 +16,7 @@ import { config } from '@/config/wagmi';
 import { trpc, trpcQueryClient } from '../lib/trpc';
 import { useEffect, useMemo, useState } from 'react';
 import { wallet } from '@honeypot/shared';
-import { chain } from '@/services/chain';
+import { chain } from '@honeypot/shared';
 import { DM_Sans, Inter } from 'next/font/google';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { Analytics } from '@vercel/analytics/react';
@@ -24,7 +24,7 @@ import { ApolloProvider } from '@apollo/client';
 import { bgtClient } from '@/lib/algebra/graphql/clients';
 import Image from 'next/image';
 import SafeProvider from '@safe-global/safe-apps-react-sdk';
-import { berachainNetwork } from '@/services/network';
+import { bera } from '@honeypot/shared';
 // enableStaticRendering(true)
 const queryClient = new QueryClient({
   defaultOptions: {

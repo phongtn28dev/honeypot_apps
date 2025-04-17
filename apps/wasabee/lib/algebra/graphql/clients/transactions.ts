@@ -11,7 +11,7 @@ import {
   TransactionType,
   Transaction,
 } from '../generated/graphql';
-import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
+import { useSubgraphClient } from '@honeypot/shared';
 type ParticipantTransaction = {
   id: string;
   account: {
@@ -52,7 +52,7 @@ export async function fetchPot2PumpTransactions(
     hasNextPage: boolean;
   };
 }> {
-  const infoClient = useInfoClient();
+  const infoClient = useSubgraphClient('algebra_info');
   const skip = (page - 1) * pageSize;
 
   const { data } = await infoClient.query<

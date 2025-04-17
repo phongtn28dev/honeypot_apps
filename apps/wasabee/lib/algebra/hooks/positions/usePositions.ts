@@ -10,7 +10,7 @@ import { useDepositsQuery } from '../../graphql/generated/graphql';
 import { useReadAlgebraPositionManagerBalanceOf } from '@/wagmi-generated';
 import { useObserver } from 'mobx-react-lite';
 import { wallet } from '@honeypot/shared';
-import { useFarmingClient } from '@/lib/hooks/useSubgraphClients';
+import { useSubgraphClient } from '@honeypot/shared';
 
 export interface PositionFromTokenId {
   tokenId: number;
@@ -184,7 +184,7 @@ export function usePosition(tokenId: string | number | undefined): {
 
 export function usePositionInFarming(tokenId: string | number | undefined) {
   const { position } = usePosition(tokenId);
-  const farmingClient = useFarmingClient();
+  const farmingClient = useSubgraphClient('algebra_farming');
 
   const { address: account } = useAccount();
 

@@ -1,5 +1,5 @@
 import { ApolloClient, gql } from '@apollo/client';
-import { useInfoClient } from '../../../hooks/useSubgraphClients';
+import { useSubgraphClient } from '@honeypot/shared';
 
 type SwapTransaction = {
   id: string;
@@ -98,7 +98,7 @@ export async function fetchSwapTransactions(
 }
 
 export function useSwapTransactions() {
-  const infoClient = useInfoClient();
+  const infoClient = useSubgraphClient('algebra_info');
 
   return {
     fetchTransactions: async (

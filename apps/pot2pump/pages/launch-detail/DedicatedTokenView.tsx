@@ -19,7 +19,7 @@ import { Pot2Pump } from '@/lib/algebra/graphql/generated/graphql';
 import { pot2PumpToMemePair } from '@/lib/algebra/graphql/clients/pair';
 import NotConnetctedDisplay from '@/components/NotConnetctedDisplay/NotConnetctedDisplay';
 import { dedicatedPot2pumps } from '@/config/dedicatedPot2pump';
-import { chain } from '@/services/chain';
+import { chain } from '@honeypot/shared';
 
 export const DedicatedTokenView = observer(() => {
   const router = useRouter();

@@ -13,7 +13,7 @@ import { TbChartArea, TbChartHistogram } from 'react-icons/tb';
 import Link from 'next/link';
 import Image from 'next/image';
 import codexIcon from '@/public/images/partners/codex_white.png';
-import { chain } from '@/services/chain';
+import { wallet } from '@honeypot/shared';
 import dynamic from 'next/dynamic';
 
 // 为 Window 对象添加 TradingView 相关的类型定义
@@ -374,7 +374,7 @@ const KlineChartComponent = observer(
         window.tvWidget = new window.TradingView.widget({
           symbol: strParams(
             chart.chartTarget as Token,
-            chain.currentChainId,
+            wallet.currentChainId,
             chart.tokenNumber,
             chart.currencyCode
           ),

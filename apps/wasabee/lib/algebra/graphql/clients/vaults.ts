@@ -18,7 +18,7 @@ import { Address } from 'viem';
 import { Token } from '@honeypot/shared';
 import { poolQueryToContract } from './pool';
 import BigNumber from 'bignumber.js';
-import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
+import { useSubgraphClient } from '@honeypot/shared';
 import { ApolloClient } from '@apollo/client';
 import { createClientHook } from '../clientUtils';
 
@@ -182,8 +182,11 @@ export async function getSingleVaultDetails(
 }
 
 // 创建一个自定义Hook来包装这些函数
-export const useVaultsClient = createClientHook(useInfoClient, {
-  getAccountVaultsList,
-  getVaultPageData,
-  getSingleVaultDetails,
-});
+export const useVaultsClient = createClientHook(
+  () => useSubgraphClient('algebra_info'),
+  {
+    getAccountVaultsList,
+    getVaultPageData,
+    getSingleVaultDetails,
+  }
+);

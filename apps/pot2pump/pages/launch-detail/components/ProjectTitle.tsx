@@ -36,7 +36,6 @@ import { observer } from 'mobx-react-lite';
 import { WrappedToastify } from '@/lib/wrappedToastify';
 import launchpad from '@/services/launchpad';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { chain } from '@/services/chain';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useRouter } from 'next/router';
@@ -226,7 +225,7 @@ export const UpdateProjectModal = observer(
                 handleSubmit(async (data) => {
                   await launchpad.updateProject.call({
                     pair: pair.address,
-                    chain_id: chain.currentChainId,
+                    chain_id: wallet.currentChain.chainId,
                     projectName: data.projectName,
                     description: data.description,
                     twitter: data.twitter || '',

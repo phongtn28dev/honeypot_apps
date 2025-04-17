@@ -23,7 +23,7 @@ import BigNumber from 'bignumber.js';
 import { object } from 'zod';
 import { PairContract } from '../../contract/dex/liquidity/pair-contract';
 import { Token } from '../../contract/token/token';
-import { useInfoClient } from '../../../hooks/useSubgraphClients';
+import { useSubgraphClient } from '@honeypot/shared';
 import { ApolloClient } from '@apollo/client';
 import { createClientHook } from '../clientUtils';
 import { useObserver } from 'mobx-react-lite';
@@ -139,10 +139,13 @@ export const userPools = async (
   return pools;
 };
 
-export const usePoolsClient = createClientHook(useInfoClient, {
-  poolsByTokenPair,
-  userPools,
-});
+export const usePoolsClient = createClientHook(
+  () => useSubgraphClient('algebra_info'),
+  {
+    poolsByTokenPair,
+    userPools,
+  }
+);
 
 export const useUserPools = (userAddress: string) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -281,7 +284,7 @@ export const useUserPools = (userAddress: string) => {
 };
 
 export const poolExists = async (poolAddress: string) => {
-  const infoClient = useInfoClient();
+  const infoClient = useSubgraphClient('algebra_info');
   const { data } = await infoClient.query<
     SinglePoolQuery,
     SinglePoolQueryVariables

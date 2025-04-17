@@ -5,6 +5,8 @@ export interface SubgraphAddresses {
   lbp: string;
 }
 
+export type SubgraphEndpointType = keyof SubgraphAddresses;
+
 export const subgraphAddresses: Record<string, SubgraphAddresses> = {
   default: {
     algebra_info: '',

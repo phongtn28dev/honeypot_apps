@@ -1,18 +1,18 @@
-import BigNumber from "bignumber.js";
-import { BaseContract } from ".";
-import { wallet } from "../wallet";
-import { get, makeAutoObservable, reaction } from "mobx";
-import { Address, getContract, zeroAddress } from "viem";
-import { ContractWrite } from "../utils";
-import { amountFormatted } from "@/lib/format";
-import { ERC20ABI } from "@/lib/abis/erc20";
-import { faucetABI } from "@/lib/abis/faucet";
-import { watchAsset } from "viem/actions";
-import { networksMap } from "../network";
-import { WrappedToastify } from "@/lib/wrappedToastify";
-import { trpcClient } from "@/lib/trpc";
-import NetworkManager from "../network";
-import { getSingleTokenData } from "@/lib/algebra/graphql/clients/token";
+import BigNumber from 'bignumber.js';
+import { BaseContract } from '.';
+
+import { wallet } from '@honeypot/shared';
+import { get, makeAutoObservable, reaction } from 'mobx';
+import { Address, getContract, zeroAddress } from 'viem';
+import { ContractWrite } from '../utils';
+import { amountFormatted } from '@/lib/format';
+import { ERC20ABI } from '@/lib/abis/erc20';
+import { faucetABI } from '@/lib/abis/faucet';
+import { watchAsset } from 'viem/actions';
+import { networksMap } from '@honeypot/shared';
+import { WrappedToastify } from '@/lib/wrappedToastify';
+import { trpcClient } from '@/lib/trpc';
+import { getSingleTokenData } from '@/lib/algebra/graphql/clients/token';
 
 export class Token implements BaseContract {
   static tokensMap: Record<string, Token> = {};
@@ -25,7 +25,7 @@ export class Token implements BaseContract {
     force?: boolean;
   } & Partial<Token>) {
     const lowerAddress = address.toLowerCase();
-    const key = `${lowerAddress}-${args.isNative ? "native" : "erc20"}`;
+    const key = `${lowerAddress}-${args.isNative ? 'native' : 'erc20'}`;
     const token = Token.tokensMap[key];
 
     if (!token) {
@@ -42,32 +42,32 @@ export class Token implements BaseContract {
     }
     return Token.tokensMap[key];
   }
-  address: string = "";
-  name: string = "";
+  address: string = '';
+  name: string = '';
   balanceWithoutDecimals = new BigNumber(0);
   totalSupplyWithoutDecimals = new BigNumber(0);
-  symbol: string = "";
+  symbol: string = '';
   decimals: number = 0;
   abi = ERC20ABI;
   faucetLoading = false;
   claimed = false;
   isInit = false;
   isNative = false;
-  logoURI = "";
+  logoURI = '';
   isRouterToken = false;
   supportingFeeOnTransferTokens = false;
   isPopular = false;
-  derivedETH = "";
-  derivedUSD = "";
-  holderCount = "";
-  swapCount = "";
+  derivedETH = '';
+  derivedUSD = '';
+  holderCount = '';
+  swapCount = '';
   indexerDataLoaded = false;
-  volumeUSD = "";
-  initialUSD = "";
-  totalValueLockedUSD = "";
+  volumeUSD = '';
+  initialUSD = '';
+  totalValueLockedUSD = '';
   poolCount = 0;
-  priceChange = "";
-  priceChange24hPercentage = "";
+  priceChange = '';
+  priceChange24hPercentage = '';
   pot2pumpAddress: Address | undefined | null = undefined;
 
   // determines the order of the token in the list
@@ -118,7 +118,6 @@ export class Token implements BaseContract {
   constructor(args: Partial<Token>) {
     this.setData(args);
     makeAutoObservable(this);
-    this.getIsRouterToken();
     reaction(
       () => wallet?.account,
       () => {
@@ -129,25 +128,25 @@ export class Token implements BaseContract {
 
   get faucet() {
     return new ContractWrite(this.faucetContract.write?.faucet, {
-      action: "Get Faucet",
+      action: 'Get Faucet',
     });
   }
 
   get approve() {
     return new ContractWrite(this.contract.write?.approve, {
-      action: "Approve",
+      action: 'Approve',
     });
   }
 
   get deposit() {
     return new ContractWrite(this.contract.write?.deposit, {
-      action: "Swap BERA to WBERA",
+      action: 'Swap BERA to WBERA',
     });
   }
 
   get withdraw() {
     return new ContractWrite(this.contract.write?.withdraw, {
-      action: "Swap WBERA to BERA",
+      action: 'Swap WBERA to BERA',
     });
   }
 
@@ -165,8 +164,8 @@ export class Token implements BaseContract {
 
       if (
         !!cachedLocalLogoURI &&
-        cachedLocalLogoURI !== "null" &&
-        cachedLocalLogoURI !== "undefined"
+        cachedLocalLogoURI !== 'null' &&
+        cachedLocalLogoURI !== 'undefined'
       ) {
         this.setLogoURI(cachedLocalLogoURI);
         return this.logoURI;
@@ -186,23 +185,23 @@ export class Token implements BaseContract {
 
     await this.getPot2PumpAddress();
 
-    console.log("this.pot2pumpAddress", this.pot2pumpAddress);
+    console.log('this.pot2pumpAddress', this.pot2pumpAddress);
     if (!this.pot2pumpAddress) {
       return;
     }
 
-    console.log("this. wallet.currentChainId,", wallet.currentChainId);
-    console.log("this. pot2pumpAddress", this.pot2pumpAddress);
+    console.log('this. wallet.currentChainId,', wallet.currentChainId);
+    console.log('this. pot2pumpAddress', this.pot2pumpAddress);
     const launch = await trpcClient.projects.getProjectInfo.query({
       chain_id: wallet.currentChainId,
       pair: this.pot2pumpAddress,
     });
 
-    console.log("launch", launch);
+    console.log('launch', launch);
 
     launch?.logo_url && this.setLogoURI(launch.logo_url);
 
-    console.log("this.logoURI", this.logoURI);
+    console.log('this.logoURI', this.logoURI);
 
     return this.logoURI;
   }
@@ -286,7 +285,7 @@ export class Token implements BaseContract {
       const cachedName = localStorage.getItem(
         `token-name-${this.address.toLowerCase()}`
       );
-      if (!!cachedName && cachedName !== "null" && cachedName !== "undefined") {
+      if (!!cachedName && cachedName !== 'null' && cachedName !== 'undefined') {
         this.name = cachedName;
         return;
       }
@@ -317,8 +316,8 @@ export class Token implements BaseContract {
       );
       if (
         !!cachedSymbol &&
-        cachedSymbol !== "null" &&
-        cachedSymbol !== "undefined"
+        cachedSymbol !== 'null' &&
+        cachedSymbol !== 'undefined'
       ) {
         this.symbol = cachedSymbol;
         return;
@@ -343,8 +342,8 @@ export class Token implements BaseContract {
       );
       if (
         !!cachedDecimals &&
-        cachedDecimals !== "null" &&
-        cachedDecimals !== "undefined"
+        cachedDecimals !== 'null' &&
+        cachedDecimals !== 'undefined'
       ) {
         this.decimals = parseInt(cachedDecimals);
         return;
@@ -415,7 +414,7 @@ export class Token implements BaseContract {
   }
 
   async getClaimed(): Promise<boolean> {
-    console.log("getClaimed");
+    console.log('getClaimed');
     const claimed = await this.faucetContract.read.faucetClaimer([
       wallet.account as `0x${string}`,
     ]);
@@ -438,7 +437,7 @@ export class Token implements BaseContract {
       return this.balanceWithoutDecimals;
     } catch (e) {
       console.log(e);
-      console.log("error loading balance", this.address);
+      console.log('error loading balance', this.address);
       return new BigNumber(0);
     }
   }
@@ -446,7 +445,9 @@ export class Token implements BaseContract {
   async getTotalSupply(force?: boolean) {
     if (!force) {
       const cachedTotalSupply = localStorage.getItem(
-        `token-totalSupply-${wallet.currentChainId}-${this.address.toLowerCase()}`
+        `token-totalSupply-${
+          wallet.currentChainId
+        }-${this.address.toLowerCase()}`
       );
       if (cachedTotalSupply) {
         this.totalSupplyWithoutDecimals = new BigNumber(cachedTotalSupply);
@@ -459,7 +460,9 @@ export class Token implements BaseContract {
     this.totalSupplyWithoutDecimals = new BigNumber(totalSupply.toString());
 
     localStorage.setItem(
-      `token-totalSupply-${wallet.currentChainId}-${this.address.toLowerCase()}`,
+      `token-totalSupply-${
+        wallet.currentChainId
+      }-${this.address.toLowerCase()}`,
       totalSupply.toString()
     );
 
@@ -478,31 +481,6 @@ export class Token implements BaseContract {
       decimals: this.decimals,
       fixed: 3,
     });
-  }
-
-  getIsRouterToken() {
-    const networkManager = NetworkManager.getInstance();
-
-    const currentChainId = wallet.isInit
-      ? wallet.currentChainId
-      : networkManager.getSelectedNetwork()?.chainId;
-
-    if (currentChainId) {
-      this.isRouterToken =
-        networksMap[currentChainId].validatedTokensInfo[
-          this.address.toLowerCase()
-        ]?.isRouterToken;
-      return this.isRouterToken;
-    }
-    return false;
-  }
-
-  getSupportedFeeOnTransferTokens() {
-    this.supportingFeeOnTransferTokens =
-      networksMap[wallet.currentChainId].validatedTokensInfo[
-        this.address.toLowerCase()
-      ]?.supportingFeeOnTransferTokens;
-    return this.supportingFeeOnTransferTokens;
   }
 
   async getIndexerTokenData(option?: { force?: boolean }) {
@@ -551,7 +529,7 @@ export class Token implements BaseContract {
 
   async watch() {
     watchAsset(wallet.walletClient, {
-      type: "ERC20",
+      type: 'ERC20',
       options: {
         address: this.address,
         symbol: this.symbol,
@@ -562,13 +540,13 @@ export class Token implements BaseContract {
       .then(() => {
         WrappedToastify.success({
           title: this.symbol,
-          message: "Token added to wallet",
+          message: 'Token added to wallet',
         });
       })
       .catch((e) => {
         WrappedToastify.error({
           title: this.symbol,
-          message: "Failed to add token to wallet",
+          message: 'Failed to add token to wallet',
         });
       });
   }

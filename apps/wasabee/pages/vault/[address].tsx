@@ -20,7 +20,7 @@ import Copy from '@/components/Copy/v3';
 import { HiExternalLink } from 'react-icons/hi';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { cn, Tooltip } from '@nextui-org/react';
-import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
+import { useSubgraphClient } from '@honeypot/shared';
 import { InfoIcon } from 'lucide-react';
 import { VaultTag } from '@/components/Aquabera/VaultTag';
 
@@ -34,7 +34,7 @@ export const VaultDetail = observer(() => {
   const [poolVolume24h, setPoolVolume24h] = useState<string>('0');
   const [poolFees24h, setPoolFees24h] = useState<string>('0');
   const [volatility, setVolatility] = useState<string>('0');
-  const infoclient = useInfoClient();
+  const infoClient = useSubgraphClient('algebra_info');
 
   useEffect(() => {
     if (!wallet.isInit || !wallet.account || !wallet.walletClient) return;
@@ -61,7 +61,7 @@ export const VaultDetail = observer(() => {
     // Fetch token addresses and pool data
     const loadVaultData = async () => {
       const vaultContract = await getSingleVaultDetails(
-        infoclient,
+        infoClient,
         address as string
       );
 
@@ -104,7 +104,7 @@ export const VaultDetail = observer(() => {
     if (!vault || !wallet.account || wallet.account === zeroAddress) return;
 
     // Refresh subgraph data
-    const vaultDetails = await getSingleVaultDetails(infoclient, vault.address);
+    const vaultDetails = await getSingleVaultDetails(infoClient, vault.address);
     setVault(vaultDetails);
     // Get total supply
     vaultDetails?.getTotalSupply();

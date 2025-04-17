@@ -12,7 +12,7 @@ import { DepositToVaultModal } from '../modals/DepositToVaultModal';
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { observer } from 'mobx-react-lite';
 import MyVaultRow from './MyVaultRow';
-import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
+import { useSubgraphClient } from '@honeypot/shared';
 import { Button } from '@/components/algebra/ui/button';
 
 type SortField =
@@ -39,7 +39,7 @@ export const MyAquaberaVaults = observer(
     const [myVaults, setMyVaults] = useState<AccountVaultSharesQuery>();
     const [sortField, setSortField] = useState<SortField>('tvl');
     const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
-    const infoClient = useInfoClient();
+    const infoClient = useSubgraphClient('algebra_info');
 
     const getAllowToken = (vault: any) => {
       return vault.allowToken;

@@ -19,7 +19,7 @@ import Image from 'next/image';
 import Copy from '@/components/Copy/v3';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/router';
-import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
+import { useSubgraphClient } from '@honeypot/shared';
 
 export const Profile = observer(() => {
   const { chainId } = useAccount();
@@ -29,11 +29,11 @@ export const Profile = observer(() => {
   const [userPoolsProfit, setUserPoolsProfit] = useState<UserPoolProfit[]>([]);
   const router = useRouter();
   const urlParams = router.query as { tab: string };
-  const infoclient = useInfoClient();
+  const infoClient = useSubgraphClient('algebra_info');
 
   useEffect(() => {
     if (wallet.account && wallet.currentChain.supportDEX) {
-      getLiquidatorDatas(infoclient, wallet.account).then((data) => {
+      getLiquidatorDatas(infoClient, wallet.account).then((data) => {
         setUserPoolsProfit(data);
       });
     }

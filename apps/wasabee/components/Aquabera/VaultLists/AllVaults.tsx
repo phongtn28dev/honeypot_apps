@@ -13,7 +13,7 @@ import {
 import { VaultsSortedByHoldersQuery } from '@/lib/algebra/graphql/generated/graphql';
 import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
 import VaultRow from './VaulltRow';
-import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
+import { useSubgraphClient } from '@honeypot/shared';
 
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import VaultCard from './VaultCard';
@@ -47,7 +47,7 @@ export function AllAquaberaVaults({
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [page, setPage] = useState(1);
   const rowsPerPage = 10;
-  const infoClient = useInfoClient();
+  const infoClient = useSubgraphClient('algebra_info');
 
   console.log('vaultsContracts', vaultsContracts);
 

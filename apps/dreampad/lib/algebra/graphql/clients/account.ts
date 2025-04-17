@@ -5,10 +5,10 @@ import {
   SingleAccountDetailsQueryVariables,
 } from '../generated/graphql';
 import { All_Accounts, SINGLE_ACCOUNT_DETAILS } from '../queries/account';
-import { useInfoClient } from '@honeypot/shared';
+import { useSubgraphClient } from '@honeypot/shared';
 
 export async function getAccountsPageData() {
-  const infoClient = useInfoClient();
+  const infoClient = useSubgraphClient('algebra_info');
   const accountsQuery = await infoClient.query<AllAccountsQuery>({
     query: All_Accounts,
     fetchPolicy: 'network-only',
@@ -23,7 +23,7 @@ export async function getAccountsPageData() {
 
 export async function getSingleAccountDetails(accountId: string) {
   try {
-    const infoClient = useInfoClient();
+    const infoClient = useSubgraphClient('algebra_info');
     const accountQuery = await infoClient.query<
       SingleAccountDetailsQuery,
       SingleAccountDetailsQueryVariables

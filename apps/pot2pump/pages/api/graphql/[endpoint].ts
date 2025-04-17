@@ -15,7 +15,7 @@ export default async function handler(
   const { endpoint } = req.query as {
     endpoint: ENDPOINTS;
   };
-  console.log('endpoint', { endpoint, chainId });
+
   let graphqlEndpoint: string | undefined;
   if (endpoint === 'info') {
     graphqlEndpoint = subgraphAddresses[chainId].algebra_info;

@@ -11,9 +11,9 @@ import {
 import { isAddress } from 'viem';
 import { zeroAddress } from 'viem';
 import {
-  getInfoClientByChainId,
-  useInfoClient,
-} from '@/lib/hooks/useSubgraphClients';
+  getSubgraphClientByChainId,
+  useSubgraphClient,
+} from '@honeypot/shared';
 import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
 import { wallet } from '@honeypot/shared';
 import { ApolloClient } from '@apollo/client';
@@ -21,7 +21,7 @@ import { ApolloClient } from '@apollo/client';
 const EVENT_REWARD_EACH_POOL = 400; //BERA
 
 export function useBitgetEvents(user: string) {
-  const infoClient = useInfoClient();
+  const infoClient = useSubgraphClient('algebra_info');
 
   const tokenQuery = useGetBitgetEventsQuery({
     variables: { user },
@@ -34,7 +34,7 @@ export function useBitgetEvents(user: string) {
 }
 
 export async function getFullBitgetEventsParticipantList(chainId: string) {
-  const client = getInfoClientByChainId(chainId);
+  const client = getSubgraphClientByChainId(chainId, 'algebra_info');
   let hasMore = true;
   let skip = 0;
   const participants: BitgetCampaignParticipant[] = [];

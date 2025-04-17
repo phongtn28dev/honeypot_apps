@@ -12,7 +12,7 @@ import {
   Token,
 } from '../generated/graphql';
 import { wallet } from '@honeypot/shared';
-import { getInfoClientByChainId } from '@/lib/hooks/useSubgraphClients';
+import { getSubgraphClientByChainId } from '@honeypot/shared';
 
 let tokenRequestIds: string[] = [];
 let tokenRequestTimeout: NodeJS.Timeout | null = null;
@@ -49,7 +49,10 @@ const bulkGetTokenDebounce = async (tokenId: string): Promise<Token[]> => {
 };
 
 export async function getTokenTop10Holders(tokenId: string) {
-  const infoClient = getInfoClientByChainId(wallet.currentChainId.toString());
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const tokenQuery = await infoClient.query<
     TokenTop10HoldersQuery,
     TokenTop10HoldersQueryVariables
@@ -74,7 +77,7 @@ export async function getMultipleTokensData(
   chainId: string
 ): Promise<Token[]> {
   if (!tokenIds || tokenIds.length === 0) return [];
-  const infoClient = getInfoClientByChainId(chainId);
+  const infoClient = getSubgraphClientByChainId(chainId, 'algebra_info');
   const tokenQuery = await infoClient.query<
     MultipleTokensQuery,
     MultipleTokensQueryVariables

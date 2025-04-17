@@ -1,6 +1,6 @@
-import { networks } from "@/services/network";
-import { getDefaultConfig } from "@rainbow-me/rainbowkit";
-import { connectorsForWallets } from "@rainbow-me/rainbowkit";
+import { networks } from '@honeypot/shared';
+import { getDefaultConfig } from '@rainbow-me/rainbowkit';
+import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import {
   rainbowWallet,
   bitgetWallet,
@@ -8,18 +8,18 @@ import {
   walletConnectWallet,
   metaMaskWallet,
   safeWallet,
-} from "@rainbow-me/rainbowkit/wallets";
-import { injected, safe } from "wagmi/connectors";
+} from '@rainbow-me/rainbowkit/wallets';
+import { injected, safe } from 'wagmi/connectors';
 // import { holdstationWallet } from "./holdstationWallet";
 // import { capsuleWallet } from "./capsualWallet";
 // import { berasigWallet } from "./berasigWallet";
-import { createConfig, http, cookieStorage, createStorage } from "wagmi";
+import { createConfig, http, cookieStorage, createStorage } from 'wagmi';
 
-const pId = "1d1c8b5204bfbd57502685fc0934a57d";
+const pId = '1d1c8b5204bfbd57502685fc0934a57d';
 const CAPSULE_API_KEY = process.env.NEXT_PUBLIC_CAPSULE_API_KEY!;
 const DAPP_URL =
   process.env.NEXT_PUBLIC_DAPP_URL ||
-  (typeof window !== "undefined" ? window.location.origin : "");
+  (typeof window !== 'undefined' ? window.location.origin : '');
 
 let customWallets = [
   metaMaskWallet,
@@ -47,12 +47,12 @@ const connectors = [
   ...connectorsForWallets(
     [
       {
-        groupName: "Recommended",
+        groupName: 'Recommended',
         wallets: customWallets,
       },
     ],
     {
-      appName: "Honypot Finance",
+      appName: 'Honypot Finance',
       projectId: pId,
     }
   ),
@@ -68,8 +68,8 @@ const connectors = [
 
 export const config = getDefaultConfig({
   connectors,
-  appName: "Honypot Finance",
-  projectId: "1d1c8b5204bfbd57502685fc0934a57d",
+  appName: 'Honypot Finance',
+  projectId: '1d1c8b5204bfbd57502685fc0934a57d',
   // @ts-ignore
   chains: networks.map((network) => network.chain),
   ssr: true, // If your dApp uses server side rendering (SSR)

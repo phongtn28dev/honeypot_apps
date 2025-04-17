@@ -27,7 +27,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useAccount, useContractWrite } from 'wagmi';
 import { useSimulateAlgebraPositionManagerMulticall } from '@/wagmi-generated';
 import { HoneyContainer } from '@/components/CardContianer';
-import { useFarmingClient } from '@/lib/hooks/useSubgraphClients';
+import { useSubgraphClient } from '@honeypot/shared';
 
 interface RemoveLiquidityModalProps {
   positionId: number;
@@ -37,7 +37,7 @@ type SliderValue = number[];
 
 const RemoveLiquidityModal = ({ positionId }: RemoveLiquidityModalProps) => {
   const [sliderValue, setSliderValue] = useState<SliderValue>([50]);
-  const farmingClient = useFarmingClient();
+  const farmingClient = useSubgraphClient('algebra_farming');
   const { txDeadline } = useUserState();
   const { address: account } = useAccount();
 

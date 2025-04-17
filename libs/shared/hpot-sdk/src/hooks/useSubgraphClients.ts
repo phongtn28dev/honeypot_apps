@@ -3,59 +3,75 @@ import {
   InMemoryCache,
   ApolloClient,
   NormalizedCacheObject,
+  createHttpLink,
 } from '@apollo/client';
 import { useObserver } from 'mobx-react-lite';
 import { wallet } from '../lib/wallet/wallet';
 import { networksMap } from '../lib/chains/chain';
+import { SubgraphEndpointType } from '../config/subgraphEndPoint';
 
-export function useInfoClient(): ApolloClient<any> {
-  const chainId = useObserver(() => wallet.currentChainId);
-  const client = useMemo(
-    () => getInfoClientByChainId(chainId.toString()),
-    [chainId]
-  );
+const ApolloClientsRecord: Record<
+  string,
+  Record<SubgraphEndpointType, ApolloClient<NormalizedCacheObject>>
+> = {};
+const ApolloProxyClientsRecord: Record<
+  string,
+  Record<SubgraphEndpointType, ApolloClient<NormalizedCacheObject>>
+> = {};
 
-  return client;
-}
-
-export function useFarmingClient(): ApolloClient<any> {
-  const chainId = useObserver(() => wallet.currentChainId);
-  const client = useMemo(
-    () => getFarmingClientByChainId(chainId.toString()),
-    [chainId]
-  );
-
-  return client;
-}
-
-export function useLbpClient(): ApolloClient<any> {
-  const chainId = useObserver(() => wallet.currentChainId);
-  const client = useMemo(
-    () => getLbpClientByChainId(chainId.toString()),
-    [chainId]
-  );
-
-  return client;
-}
-
-export function getFarmingClientByChainId(chainId: string) {
-  const FARMING_GRAPH = networksMap[chainId].subgraphAddresses.algebra_farming;
-  return new ApolloClient({
-    uri: FARMING_GRAPH,
-    ssrMode: true,
-    queryDeduplication: false,
+const createProxiedClient = (
+  endpoint: SubgraphEndpointType,
+  chainId: string
+) => {
+  if (ApolloProxyClientsRecord[chainId]?.[endpoint]) {
+    return ApolloProxyClientsRecord[chainId][endpoint];
+  }
+  const client = new ApolloClient({
+    link: createHttpLink({
+      uri: `/api/graphql/${endpoint}?chainId=${chainId}`,
+      credentials: 'same-origin',
+    }),
     cache: new InMemoryCache(),
-    defaultOptions: {
-      query: {
-        errorPolicy: 'all',
-      },
-    },
   });
+
+  ApolloProxyClientsRecord[chainId][endpoint] = client;
+
+  return client;
+};
+
+export function useProxiedSubgraphClient(
+  endpoint: SubgraphEndpointType
+): ApolloClient<any> {
+  const chainId = useObserver(() => wallet.currentChainId);
+  const client = useMemo(
+    () => createProxiedClient(endpoint, chainId.toString()),
+    [endpoint, chainId]
+  );
+
+  return client;
 }
 
-export function getLbpClientByChainId(chainId: string) {
-  const LBP_GRAPH = networksMap[chainId].subgraphAddresses.lbp;
-  return new ApolloClient({
+export function useSubgraphClient(
+  endpoint: SubgraphEndpointType
+): ApolloClient<any> {
+  const chainId = useObserver(() => wallet.currentChainId);
+  const client = useMemo(
+    () => getSubgraphClientByChainId(chainId.toString(), endpoint),
+    [chainId, endpoint]
+  );
+
+  return client;
+}
+
+export function getSubgraphClientByChainId(
+  chainId: string,
+  endpoint: SubgraphEndpointType
+) {
+  if (ApolloClientsRecord[chainId]?.[endpoint]) {
+    return ApolloClientsRecord[chainId][endpoint];
+  }
+  const LBP_GRAPH = networksMap[chainId].subgraphAddresses[endpoint];
+  const client = new ApolloClient({
     uri: LBP_GRAPH,
     ssrMode: true,
     queryDeduplication: false,
@@ -66,20 +82,16 @@ export function getLbpClientByChainId(chainId: string) {
       },
     },
   });
-}
 
-export function getInfoClientByChainId(chainId: string) {
-  const INFO_GRAPH = networksMap[chainId].subgraphAddresses.algebra_info;
+  if (!ApolloClientsRecord[chainId]) {
+    ApolloClientsRecord[chainId] = {
+      algebra_info: null as any,
+      algebra_farming: null as any,
+      bgt_market: null as any,
+      lbp: null as any,
+    };
+  }
 
-  return new ApolloClient({
-    uri: INFO_GRAPH,
-    ssrMode: true,
-    queryDeduplication: false,
-    cache: new InMemoryCache(),
-    defaultOptions: {
-      query: {
-        errorPolicy: 'all',
-      },
-    },
-  });
+  ApolloClientsRecord[chainId][endpoint] = client;
+  return client;
 }

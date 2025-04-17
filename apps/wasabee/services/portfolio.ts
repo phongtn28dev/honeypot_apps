@@ -6,10 +6,7 @@ import BigNumber from 'bignumber.js';
 import { AsyncState } from './utils';
 import { getMultipleTokensData } from '@/lib/algebra/graphql/clients/token';
 import { getSingleAccountDetails } from '@/lib/algebra/graphql/clients/account';
-import {
-  getInfoClientByChainId,
-  useInfoClient,
-} from '@/lib/hooks/useSubgraphClients';
+import { getSubgraphClientByChainId } from '@honeypot/shared';
 
 class Portfolio {
   tokens: Token[] = [];
@@ -41,7 +38,10 @@ class Portfolio {
   async initPortfolio() {
     if (!wallet.isInit) return;
 
-    const infoClient = getInfoClientByChainId(wallet.currentChainId.toString());
+    const infoClient = getSubgraphClientByChainId(
+      wallet.currentChainId.toString(),
+      'algebra_info'
+    );
 
     this.isLoading = true;
 

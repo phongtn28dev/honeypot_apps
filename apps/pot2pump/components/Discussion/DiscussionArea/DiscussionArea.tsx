@@ -76,6 +76,7 @@ export function DiscussionArea(props: DiscussionAreaProps) {
       project_id: props.pairDatabaseId ?? -1,
       limit: 10,
     });
+    console.log('startFetchComments res', res);
 
     if (res) {
       setComments(res);

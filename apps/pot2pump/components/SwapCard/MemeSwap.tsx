@@ -1,7 +1,6 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { swap } from '@/services/swap';
 import { Button } from '@/components/button/button-next';
-
 import { Token } from '@honeypot/shared';
 import { SpinnerContainer } from '../Spinner';
 import { useRouter } from 'next/router';
@@ -55,7 +54,7 @@ export const LaunchDetailSwapCard = observer(
     });
     const [presetPairs, setPresetPairs] = useState<PresetPair[]>([]);
     const router = useRouter();
-    const isInit = wallet.isInit && liquidity.isInit;
+    const isInit = wallet.isInit;
     const state = useLocalObservable(() => ({
       selectState: new SelectState({
         value: 0,
@@ -86,16 +85,19 @@ export const LaunchDetailSwapCard = observer(
           const fromToken = Token.getToken({
             address: inputAddress,
             isNative: isInputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           });
 
           const fromTokenWrapped = Token.getToken({
             address: wallet.currentChain.nativeToken.address,
             isNative: inputAddress !== wallet.currentChain.nativeToken.address,
+            chainId: wallet.currentChain.chainId.toString(),
           });
 
           const toToken = Token.getToken({
             address: outputAddress,
             isNative: isOutputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           });
           newPresetPairs.push({ fromToken, toToken });
           newPresetPairs.push({ fromToken: fromTokenWrapped, toToken });
@@ -121,11 +123,13 @@ export const LaunchDetailSwapCard = observer(
         const fromToken = Token.getToken({
           address: wallet.currentChain.nativeToken.address,
           isNative: true,
+          chainId: wallet.currentChain.chainId.toString(),
         });
 
         const toToken = Token.getToken({
           address: memePairContract.launchedToken!.address,
           isNative: isOutputNative,
+          chainId: wallet.currentChain.chainId.toString(),
         });
 
         newPresetPairs.push({ fromToken, toToken });
@@ -174,6 +178,7 @@ export const LaunchDetailSwapCard = observer(
           Token.getToken({
             address: inputCurrency,
             isNative: isInputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           })
         );
       } else {
@@ -182,6 +187,7 @@ export const LaunchDetailSwapCard = observer(
             address:
               inputAddress || '0xfc5e3743e9fac8bb60408797607352e24db7d65e',
             isNative: isInputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           })
         );
       }
@@ -191,6 +197,7 @@ export const LaunchDetailSwapCard = observer(
           Token.getToken({
             address: outputCurrency,
             isNative: isOutputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           })
         );
       } else {
@@ -198,6 +205,7 @@ export const LaunchDetailSwapCard = observer(
           Token.getToken({
             address: outputAddress ?? '',
             isNative: isOutputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           })
         );
       }
@@ -218,16 +226,34 @@ export const LaunchDetailSwapCard = observer(
     useEffect(() => {
       if (swap.toToken) {
         chart.setChartLabel(
-          `${Token.getToken({ address: swap.toToken.address }).symbol}`
+          `${
+            Token.getToken({
+              address: swap.toToken.address,
+              chainId: wallet.currentChain.chainId.toString(),
+            }).symbol
+          }`
         );
-        chart.setChartTarget(Token.getToken({ address: swap.toToken.address }));
+        chart.setChartTarget(
+          Token.getToken({
+            address: swap.toToken.address,
+            chainId: wallet.currentChain.chainId.toString(),
+          })
+        );
         chart.setCurrencyCode('USD');
       } else if (swap.fromToken) {
         chart.setChartLabel(
-          `${Token.getToken({ address: swap.fromToken.address }).symbol}`
+          `${
+            Token.getToken({
+              address: swap.fromToken.address,
+              chainId: wallet.currentChain.chainId.toString(),
+            }).symbol
+          }`
         );
         chart.setChartTarget(
-          Token.getToken({ address: swap.fromToken.address })
+          Token.getToken({
+            address: swap.fromToken.address,
+            chainId: wallet.currentChain.chainId.toString(),
+          })
         );
         chart.setCurrencyCode('USD');
       }
@@ -391,7 +417,7 @@ export const DedicatedSwapCard = observer(
     //     value: 0,
     //     onSelectChange: (value) => {
     //       swap.setFromAmount(
-    //         (swap.fromToken as Token).balance.times(value).toFixed()
+    //         (swap.fromToken as Token).balance.times(value).toFixe`d()
     //       );
     //     },
     //   }),
@@ -416,16 +442,19 @@ export const DedicatedSwapCard = observer(
           const fromToken = Token.getToken({
             address: inputAddress,
             isNative: true,
+            chainId: wallet.currentChain.chainId.toString(),
           });
 
           const fromTokenWrapped = Token.getToken({
             address: inputAddress,
             isNative: false,
+            chainId: wallet.currentChain.chainId.toString(),
           });
 
           const toToken = Token.getToken({
             address: outputAddress,
             isNative: isOutputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           });
           newPresetPairs.push({ fromToken, toToken });
           newPresetPairs.push({ fromToken: fromTokenWrapped, toToken });
@@ -444,11 +473,13 @@ export const DedicatedSwapCard = observer(
         const fromToken = Token.getToken({
           address: wallet.currentChain.nativeToken.address,
           isNative: true,
+          chainId: wallet.currentChain.chainId.toString(),
         });
 
         const toToken = Token.getToken({
           address: outputAddress!,
           isNative: isOutputNative,
+          chainId: wallet.currentChain.chainId.toString(),
         });
 
         newPresetPairs.push({ fromToken, toToken });
@@ -496,6 +527,7 @@ export const DedicatedSwapCard = observer(
           Token.getToken({
             address: inputCurrency,
             isNative: isInputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           })
         );
       } else {
@@ -504,6 +536,7 @@ export const DedicatedSwapCard = observer(
             address:
               inputAddress || '0xfc5e3743e9fac8bb60408797607352e24db7d65e',
             isNative: isInputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           })
         );
       }
@@ -513,6 +546,7 @@ export const DedicatedSwapCard = observer(
           Token.getToken({
             address: outputCurrency,
             isNative: isOutputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           })
         );
       } else {
@@ -520,6 +554,7 @@ export const DedicatedSwapCard = observer(
           Token.getToken({
             address: outputAddress ?? '',
             isNative: isOutputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           })
         );
       }
@@ -540,16 +575,34 @@ export const DedicatedSwapCard = observer(
     useEffect(() => {
       if (swap.toToken) {
         chart.setChartLabel(
-          `${Token.getToken({ address: swap.toToken.address }).symbol}`
+          `${
+            Token.getToken({
+              address: swap.toToken.address,
+              chainId: wallet.currentChain.chainId.toString(),
+            }).symbol
+          }`
         );
-        chart.setChartTarget(Token.getToken({ address: swap.toToken.address }));
+        chart.setChartTarget(
+          Token.getToken({
+            address: swap.toToken.address,
+            chainId: wallet.currentChain.chainId.toString(),
+          })
+        );
         chart.setCurrencyCode('USD');
       } else if (swap.fromToken) {
         chart.setChartLabel(
-          `${Token.getToken({ address: swap.fromToken.address }).symbol}`
+          `${
+            Token.getToken({
+              address: swap.fromToken.address,
+              chainId: wallet.currentChain.chainId.toString(),
+            }).symbol
+          }`
         );
         chart.setChartTarget(
-          Token.getToken({ address: swap.fromToken.address })
+          Token.getToken({
+            address: swap.fromToken.address,
+            chainId: wallet.currentChain.chainId.toString(),
+          })
         );
         chart.setCurrencyCode('USD');
       }

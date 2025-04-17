@@ -378,11 +378,11 @@ export class MemePairContract implements BaseLaunchContract {
   }
 
   async getProjectInfo(force?: boolean) {
-    if (!chain.isInit) {
+    if (!wallet.isInit) {
       throw new Error('Get project info failed, please select a chain first');
     }
 
-    const currentChainId = chain.currentChainId;
+    const currentChainId = wallet.currentChainId;
 
     if (!force) {
       const cachedProjectInfo = localStorage.getItem(
@@ -400,7 +400,7 @@ export class MemePairContract implements BaseLaunchContract {
     }
 
     const res = await trpcClient.projects.getProjectInfo.query({
-      chain_id: chain.currentChainId,
+      chain_id: wallet.currentChainId,
       pair: this.address,
     });
 
@@ -522,7 +522,7 @@ export class MemePairContract implements BaseLaunchContract {
       }
       console.error(error, `init-memepair-error-${this.address}`);
       // 优先使用 chain.currentChainId
-      const currentChainId = chain.currentChainId;
+      const currentChainId = wallet.currentChainId;
       trpcClient.projects.revalidateProjectType.mutate({
         chain_id: currentChainId,
         pair: this.address,

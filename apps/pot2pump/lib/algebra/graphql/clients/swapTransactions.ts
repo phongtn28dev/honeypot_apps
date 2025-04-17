@@ -1,5 +1,6 @@
-import { gql } from "@apollo/client";
-import { infoClient } from ".";
+import { gql } from '@apollo/client';
+import { getSubgraphClientByChainId } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared';
 
 type SwapTransaction = {
   id: string;
@@ -39,6 +40,10 @@ export async function fetchSwapTransactions(
   token1Address: string,
   token2Address: string
 ): Promise<SwapTransactionsResponse> {
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const skip = (page - 1) * pageSize;
 
   const query = `
@@ -86,8 +91,8 @@ export async function fetchSwapTransactions(
   });
 
   return {
-    status: "success",
-    message: "Success",
+    status: 'success',
+    message: 'Success',
     data: data.swaps,
     pageInfo: {
       hasNextPage: data.swaps.length === pageSize,

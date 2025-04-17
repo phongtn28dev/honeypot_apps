@@ -10,7 +10,7 @@ import { Address } from 'viem';
 import { Token } from '@honeypot/shared';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { wallet } from '@honeypot/shared';
-import { useFarmingClient } from '@/lib/hooks/useSubgraphClients';
+import { useSubgraphClient } from '@honeypot/shared';
 
 interface PoolStatsCardProps {
   pool: Pool | null | undefined;
@@ -18,7 +18,7 @@ interface PoolStatsCardProps {
 
 export default function PoolStatsCard({ pool }: PoolStatsCardProps) {
   // Hooks need to be called unconditionally at the top
-  const farmingClient = useFarmingClient();
+  const farmingClient = useSubgraphClient('algebra_farming');
   const { data: activeFarmings } = useActiveFarmingsQuery({
     client: farmingClient,
   });

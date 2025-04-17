@@ -1,11 +1,8 @@
-import {
-  useFarmingClient,
-  useInfoClient,
-} from '@/lib/hooks/useSubgraphClients';
+import { useSubgraphClient } from '@honeypot/shared';
 
 export function useClients() {
-  const infoClient = useInfoClient();
-  const farmingClient = useFarmingClient();
+  const infoClient = useSubgraphClient('algebra_info');
+  const farmingClient = useSubgraphClient('algebra_farming');
 
   return {
     infoClient,

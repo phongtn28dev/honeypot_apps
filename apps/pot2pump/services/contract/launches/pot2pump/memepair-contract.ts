@@ -12,7 +12,6 @@ import {
   subgraphPot2PumpToMemePair,
 } from '@/lib/algebra/graphql/clients/pot2pump';
 import { wallet } from '@honeypot/shared';
-import { chain } from '@/services/chain';
 import { ICHIVaultContract } from '../../aquabera/ICHIVault-contract';
 import { BaseLaunchContract } from '../base-launch-contract';
 import { Pool } from '@/lib/algebra/graphql/generated/graphql';
@@ -202,7 +201,7 @@ export class MemePairContract implements BaseLaunchContract {
       address: this.address as `0x${string}`,
       abi: this.abi,
       client: {
-        public: chain.publicClient!,
+        public: wallet.publicClient!,
         wallet: wallet.walletClient,
       },
     });
@@ -382,7 +381,7 @@ export class MemePairContract implements BaseLaunchContract {
       throw new Error('Get project info failed, please select a chain first');
     }
 
-    const currentChainId = chain.currentChainId;
+    const currentChainId = wallet.currentChainId;
 
     if (!force) {
       const cachedProjectInfo = localStorage.getItem(
@@ -400,7 +399,7 @@ export class MemePairContract implements BaseLaunchContract {
     }
 
     const res = await trpcClient.projects.getProjectInfo.query({
-      chain_id: chain.currentChainId,
+      chain_id: wallet.currentChainId,
       pair: this.address,
     });
 
@@ -521,8 +520,7 @@ export class MemePairContract implements BaseLaunchContract {
         throw new Error('Init meme pair failed, please select a chain first');
       }
       console.error(error, `init-memepair-error-${this.address}`);
-      // 优先使用 chain.currentChainId
-      const currentChainId = chain.currentChainId;
+      const currentChainId = wallet.currentChainId;
       trpcClient.projects.revalidateProjectType.mutate({
         chain_id: currentChainId,
         pair: this.address,
@@ -603,7 +601,7 @@ export class MemePairContract implements BaseLaunchContract {
       throw new Error('Get isValidated failed, please select a chain first');
     }
     // 优先使用 chain.currentChain，如果不存在则使用 wallet.currentChain
-    const currentChain = chain.currentChain || wallet.currentChain;
+    const currentChain = wallet.currentChain;
     this.isValidated =
       currentChain?.validatedFtoAddresses.includes(
         this.address.toLowerCase()
@@ -640,7 +638,11 @@ export class MemePairContract implements BaseLaunchContract {
       //this.raiseToken.init();
     } else {
       const res = (await this.contract.read.raisedToken()) as `0x${string}`;
-      this.raiseToken = Token.getToken({ address: res, force });
+      this.raiseToken = Token.getToken({
+        address: res,
+        force,
+        chainId: wallet.currentChainId.toString(),
+      });
     }
   }
 
@@ -652,7 +654,11 @@ export class MemePairContract implements BaseLaunchContract {
     } else {
       const res = (await this.contract.read.launchedToken()) as `0x${string}`;
       console.log('res', res);
-      this.launchedToken = Token.getToken({ address: res, force });
+      this.launchedToken = Token.getToken({
+        address: res,
+        force,
+        chainId: wallet.currentChainId.toString(),
+      });
       console.log('this.launchedToken', this.launchedToken);
     }
   }

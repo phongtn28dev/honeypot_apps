@@ -11,10 +11,6 @@ import { MyPools } from './MyPools';
 import PortfolioTab from './Portfolio';
 import { ProtfolioBalanceChart } from './ProtfolioBalanceChart';
 import { portfolio } from '@/services/portfolio';
-import {
-  getLiquidatorDatas,
-  UserPoolProfit,
-} from '@/lib/algebra/graphql/clients/userProfit';
 import { formatAmountWithAlphabetSymbol } from '@/lib/algebra/utils/common/formatAmount';
 import CardContainer from '@/components/CardContianer/v3';
 import Image from 'next/image';
@@ -26,15 +22,6 @@ export const Profile = observer(() => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const [chartWidth, setChartWidth] = useState(0);
   const [timeRange, setTimeRange] = useState<'1D' | '1W' | '1M'>('1D');
-  const [userPoolsProfit, setUserPoolsProfit] = useState<UserPoolProfit[]>([]);
-
-  useEffect(() => {
-    if (wallet.account) {
-      getLiquidatorDatas(wallet.account).then((data) => {
-        setUserPoolsProfit(data);
-      });
-    }
-  }, [wallet.account]);
 
   useEffect(() => {
     if (chartContainerRef.current) {
@@ -102,36 +89,6 @@ export const Profile = observer(() => {
                         USD
                       </div>
                     </span> */}
-                    <span className="flex flex-col items-start p-2">
-                      <span className="text-[#0D0D0D] text-base mb-4">
-                        Total LP Fees Gained
-                      </span>
-                      <div className="text-white text-[24px] leading-none text-shadow-[1.081px_2.162px_0px_#AF7F3D] text-stroke-1.5 text-stroke-black">
-                        {formatAmountWithAlphabetSymbol(
-                          userPoolsProfit
-                            .reduce(
-                              (acc, curr) => acc + curr.collectedFeesUSD,
-                              0
-                            )
-                            .toFixed(2),
-                          2
-                        )}{' '}
-                        USD
-                      </div>
-                    </span>
-                  </div>
-                </div>
-
-                <div className="w-[511px] flex flex-col gap-2">
-                  <div
-                    className="h-30 w-full rounded-lg overflow-hidden"
-                    ref={chartContainerRef}
-                  >
-                    <ProtfolioBalanceChart
-                      userPoolsProfits={userPoolsProfit}
-                      timeRange={timeRange}
-                      onTimeRangeChange={setTimeRange}
-                    />
                   </div>
                 </div>
               </div>

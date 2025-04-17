@@ -7,10 +7,10 @@ import { amountFormatted } from '@/lib/format';
 import { ERC20ABI } from '@/lib/abis/erc20';
 import { faucetABI } from '@/lib/abis/faucet';
 import { watchAsset } from 'viem/actions';
-import { networksMap } from '../network';
+import { networksMap } from '@honeypot/shared';
 import { WrappedToastify } from '@/lib/wrappedToastify';
 import { trpcClient } from '@/lib/trpc';
-import NetworkManager from '../network';
+import { NetworkManager } from '@honeypot/shared';
 import { getSingleTokenData } from '@/lib/algebra/graphql/clients/token';
 import {
   Order,

@@ -1,5 +1,8 @@
 import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
-import { getInfoClientByChainId } from '@/lib/hooks/useSubgraphClients';
+import {
+  getSubgraphClientByChainId,
+  subgraphAddresses,
+} from '@honeypot/shared';
 import { networksMap } from '@/services/chain';
 import type { NextApiResponse, NextApiRequest, PageConfig } from 'next';
 

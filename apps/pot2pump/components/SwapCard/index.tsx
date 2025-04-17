@@ -68,6 +68,7 @@ export const SwapCard = observer(
         swap.setFromToken(
           Token.getToken({
             address: inputCurrency,
+            chainId: wallet.currentChain.chainId.toString(),
           })
         );
       } else {
@@ -75,6 +76,7 @@ export const SwapCard = observer(
           Token.getToken({
             address: '0x6969696969696969696969696969696969696969',
             isNative: true,
+            chainId: wallet.currentChain.chainId.toString(),
           })
         );
       }
@@ -83,12 +85,14 @@ export const SwapCard = observer(
         swap.setToToken(
           Token.getToken({
             address: outputCurrency,
+            chainId: wallet.currentChain.chainId.toString(),
           })
         );
       } else {
         swap.setToToken(
           Token.getToken({
             address: '0xfc5e3743e9fac8bb60408797607352e24db7d65e',
+            chainId: wallet.currentChain.chainId.toString(),
           })
         );
       }

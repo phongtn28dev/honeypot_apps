@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 import {
   getInfoClientByChainId,
-  useInfoClient,
+  useSubgraphClient,
 } from '../../../hooks/useSubgraphClients';
 import { wallet } from '../../wallet/wallet';
 

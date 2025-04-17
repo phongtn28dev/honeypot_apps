@@ -9,7 +9,7 @@ import { farmingCenterABI } from '@/lib/abis/algebra-contracts/ABIs';
 import { Deposit } from '../../graphql/generated/graphql';
 import { TransactionType } from '../../state/pendingTransactionsStore';
 import { wallet } from '@honeypot/shared';
-import { useFarmingClient } from '@/lib/hooks/useSubgraphClients';
+import { useSubgraphClient } from '@honeypot/shared';
 
 export function useFarmStake({
   tokenId,
@@ -25,7 +25,7 @@ export function useFarmStake({
   nonce: bigint;
 }) {
   const { approved } = useFarmCheckApprove(tokenId);
-  const farmingClient = useFarmingClient();
+  const farmingClient = useSubgraphClient('algebra_farming');
 
   const [isQueryLoading, setIsQueryLoading] = useState<boolean>(false);
 
@@ -110,7 +110,7 @@ export function useFarmUnstake({
   account: Address;
 }) {
   const [isQueryLoading, setIsQueryLoading] = useState<boolean>(false);
-  const farmingClient = useFarmingClient();
+  const farmingClient = useSubgraphClient('algebra_farming');
   const exitFarmingCalldata = encodeFunctionData({
     abi: farmingCenterABI,
     functionName: 'exitFarming',

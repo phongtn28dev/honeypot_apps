@@ -6,18 +6,19 @@ import { Button as NextButton } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { useState, useEffect } from 'react';
 import Pagination from '@/components/Pagination/Pagination';
+import { zeroAddress } from 'viem';
 
 export const MyLaunches = observer(() => {
   const [myProjects, setMyProjects] = useState<Pot2PumpService>();
 
   useEffect(() => {
-    if (!wallet.isInit) {
+    if (!wallet.isInit || wallet.account === zeroAddress) {
       return;
     }
     const newPumpingProjects = new Pot2PumpService();
     setMyProjects(newPumpingProjects);
     newPumpingProjects.myLaunches.reloadPage();
-  }, [wallet.isInit]);
+  }, [wallet.isInit, wallet.account, wallet.currentChain]);
 
   return (
     <div className="custom-dashed-3xl w-full p-6 bg-white space-y-8">

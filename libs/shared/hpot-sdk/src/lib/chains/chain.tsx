@@ -31,6 +31,7 @@ export class Network {
   supportVault: boolean = false;
   supportBridge: boolean = false;
   supportLBP: boolean = false;
+  supportPot2Pump: boolean = false;
   isActive: boolean = true;
   iconUrl: string = '';
   get chainId() {
@@ -132,6 +133,7 @@ export const berachainBepoliaNetwork = new Network({
   supportDEX: true,
   supportVault: true,
   supportBridge: true,
+  supportPot2Pump: true,
   iconUrl:
     'https://cdn.prod.website-files.com/633c67ced5457aa4dec572be/67b845abe842d21521095c26_667ac3022260a22071b3cf37_u_b_f51944d0-b527-11ee-be26-a5e0a0cc15ce.png',
   chain: berachainBepoliaTestnet,
@@ -144,7 +146,13 @@ export const berachainBepoliaNetwork = new Network({
     logoURI: '/images/icons/tokens/wbera-token-icon.png',
     chainId: '80069',
   },
-  raisedTokenData: [],
+  raisedTokenData: [
+    {
+      symbol: 'WBERA',
+      address: '0x6969696969696969696969696969696969696969'.toLowerCase(),
+      amount: BigInt('1000000000000000000'),
+    },
+  ],
   platformTokenAddress: {
     HPOT: zeroAddress.toLowerCase(),
   },
@@ -178,6 +186,7 @@ export const berachainNetwork = new Network({
   supportVault: true,
   supportBridge: true,
   supportLBP: true,
+  supportPot2Pump: true,
   iconUrl:
     'https://cdn.prod.website-files.com/633c67ced5457aa4dec572be/67b845abe842d21521095c26_667ac3022260a22071b3cf37_u_b_f51944d0-b527-11ee-be26-a5e0a0cc15ce.png',
   chain: berachainMainnet,

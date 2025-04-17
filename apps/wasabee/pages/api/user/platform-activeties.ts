@@ -1,7 +1,7 @@
 import type { NextApiResponse, NextApiRequest, PageConfig } from 'next';
 import { getAccountSwapsWithPools } from '@/lib/algebra/graphql/clients/account';
 import { getSingleBitgetParticipantInfo } from '@/lib/algebra/graphql/clients/bitget_event';
-import { getInfoClientByChainId } from '@/lib/hooks/useSubgraphClients';
+import { getSubgraphClientByChainId } from '@honeypot/shared';
 import { wallet } from '@honeypot/shared';
 import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
 
@@ -12,7 +12,10 @@ export default async function handler(
   const accountId = request.query.accountid as string;
   let totalAmountUsdTraded = 0;
   let totalSwaps = 0;
-  const infoClient = getInfoClientByChainId(DEFAULT_CHAIN_ID.toString());
+  const infoClient = getSubgraphClientByChainId(
+    DEFAULT_CHAIN_ID.toString(),
+    'algebra_info'
+  );
   const amountUsdTradedForEachPool: Record<
     string,
     { pair: string; amountUsd: number; swaps: number }

@@ -1,5 +1,4 @@
 import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
-import { infoClient } from '.';
 import {
   AccountVaultSharesDocument,
   AccountVaultSharesQuery,
@@ -17,6 +16,8 @@ import {
   SINGLE_VAULT_DETAILS,
 } from '../queries/vaults';
 import { Address } from 'viem';
+import { getSubgraphClientByChainId } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared';
 
 import { Token } from '@honeypot/shared';
 import { poolQueryToContract } from './pool';
@@ -58,7 +59,10 @@ export async function getAccountVaultsList(
   accountAddress: string
 ): Promise<AccountVaultSharesQuery> {
   console.log(AccountVaultSharesDocument);
-
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const vaults = await infoClient.query<AccountVaultSharesQuery>({
     query: AccountVaultSharesDocument,
     variables: {
@@ -75,6 +79,10 @@ export async function getVaultPageData(
   search?: string
 ): Promise<VaultsSortedByHoldersQuery> {
   console.log(VAULTS_SORTED_BY_HOLDERS);
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const vaults = await infoClient.query<VaultsSortedByHoldersQuery>({
     query: VaultsSortedByHoldersDocument,
     variables: {
@@ -89,6 +97,10 @@ export async function getSingleVaultDetails(
   vaultId: string
 ): Promise<ICHIVaultContract | null> {
   try {
+    const infoClient = getSubgraphClientByChainId(
+      wallet.currentChainId.toString(),
+      'algebra_info'
+    );
     const result = await infoClient.query<SingleVaultDetailsQuery>({
       query: SingleVaultDetailsDocument,
       variables: {

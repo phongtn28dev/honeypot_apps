@@ -15,7 +15,7 @@ import { useUserPools } from '@/lib/algebra/graphql/clients/pool';
 import { wallet } from '@honeypot/shared';
 import BigNumber from 'bignumber.js';
 import { calculatePercentageChange } from '@/lib/utils';
-import { useFarmingClient } from '@/lib/hooks/useSubgraphClients';
+import { useSubgraphClient } from '@honeypot/shared';
 const mappingSortKeys: Record<any, Pool_OrderBy> = {
   tvlUSD: Pool_OrderBy.TotalValueLockedUsd,
   price: Pool_OrderBy.Token0Price,
@@ -41,7 +41,7 @@ const PoolsList = ({
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'id', desc: true },
   ]);
-  const farmingClient = useFarmingClient();
+  const farmingClient = useSubgraphClient('algebra_farming');
   const [search, setSearch] = useState('');
 
   const orderBy = mappingSortKeys[sorting[0].id];

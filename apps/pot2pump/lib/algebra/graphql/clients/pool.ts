@@ -1,5 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
-import { infoClient } from '.';
+import { getSubgraphClientByChainId } from '@honeypot/shared';
 import {
   PoolsByTokenPairQuery,
   PoolsByTokenPairDocument,
@@ -42,6 +41,7 @@ export const poolQueryToContract = (pool: Pool): PairContract => {
     decimals: pool.token0.decimals,
     name: pool.token0.name,
     symbol: pool.token0.symbol,
+    chainId: wallet.currentChainId.toString(),
   });
 
   pairContract.token1 = Token.getToken({
@@ -49,12 +49,17 @@ export const poolQueryToContract = (pool: Pool): PairContract => {
     decimals: pool.token1.decimals,
     name: pool.token1.name,
     symbol: pool.token1.symbol,
+    chainId: wallet.currentChainId.toString(),
   });
 
   return pairContract;
 };
 
 export const poolsByTokenPair = async (token0: string, token1: string) => {
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const { data } = await infoClient.query<
     PoolsByTokenPairQuery,
     PoolsByTokenPairQueryVariables
@@ -67,6 +72,10 @@ export const poolsByTokenPair = async (token0: string, token1: string) => {
 };
 
 export const userPools = async (userAddress: string) => {
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const { data } = await infoClient.query<
     UserActivePositionsQuery,
     UserActivePositionsQueryVariables
@@ -201,6 +210,10 @@ export const useUserPools = (userAddress: string) => {
 };
 
 export const poolExists = async (poolAddress: string) => {
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const { data } = await infoClient.query<
     SinglePoolQuery,
     SinglePoolQueryVariables

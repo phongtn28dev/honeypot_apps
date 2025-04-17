@@ -1,6 +1,5 @@
-import { Network, networksMap } from "@/services/chain";
-import NetworkManager from "@/services/network";
-import React, { useState, useEffect } from "react";
+import { Network, networksMap, NetworkManager } from '@honeypot/shared';
+import React, { useState, useEffect } from 'react';
 
 const NetworkSelect: React.FC = () => {
   const networkManager = NetworkManager.getInstance();
@@ -26,7 +25,7 @@ const NetworkSelect: React.FC = () => {
       {/* FIXME: Optimize the style */}
       <select
         className="text-black text-nowrap hidden md:flex h-[43px] justify-center items-center gap-[5.748px] [background:#FFCD4D] shadow-[-0.359px_-1.796px_0px_0px_#946D3F_inset] px-[14.369px] py-[7.184px] rounded-[21.553px] border-[0.718px] border-solid border-[rgba(148,109,63,0.37)]"
-        value={selectedNetwork ? selectedNetwork.chainId : ""}
+        value={selectedNetwork ? selectedNetwork.chainId : ''}
         onChange={(e) => {
           const selectedChainId = e.target.value;
           const selectedNetwork = networksMap[selectedChainId];

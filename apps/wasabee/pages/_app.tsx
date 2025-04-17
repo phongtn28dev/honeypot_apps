@@ -32,7 +32,7 @@ import {
 import { DynamicWagmiConnector } from '@dynamic-labs/wagmi-connector';
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 import { deserialize, serialize } from 'wagmi';
-import { useInfoClient } from '@/lib/hooks/useSubgraphClients';
+import { useSubgraphClient } from '@honeypot/shared';
 
 // enableStaticRendering(true)
 const queryClient = new QueryClient({
@@ -94,7 +94,7 @@ export default function App({
 }: AppProps & {
   Component: NextLayoutPage;
 }) {
-  const infoClient = useInfoClient();
+  const infoClient = useSubgraphClient('algebra_info');
   const ComponentLayout = Component.Layout || Layout;
 
   const persister = createSyncStoragePersister({

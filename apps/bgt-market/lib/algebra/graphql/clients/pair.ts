@@ -1,5 +1,4 @@
-import { gql } from '@apollo/client';
-import { infoClient } from '.';
+import { getSubgraphClientByChainId } from '@honeypot/shared';
 import { PairFilter, SubgraphProjectFilter } from '@/services/launchpad';
 import { PageRequest } from '@/services/indexer/indexerTypes';
 import dayjs from 'dayjs';
@@ -30,6 +29,7 @@ import {
 import { filter } from 'lodash';
 import { calculateToken24hPriceChange } from '../utils/calculateToken24hChange';
 import { wallet } from '@honeypot/shared';
+import { gql } from '@apollo/client';
 
 type SubgraphToken = {
   id: string;
@@ -187,6 +187,7 @@ export const pot2PumpToMemePair = (
     console.log('pot2Pump.priceChangePercentage', priceChangePercentage);
 
     contract.launchedToken = Token.getToken({
+      chainId: wallet.currentChainId.toString(),
       address: pot2Pump.launchToken?.id,
       name: pot2Pump.launchToken?.name,
       symbol: pot2Pump.launchToken?.symbol,
@@ -206,6 +207,7 @@ export const pot2PumpToMemePair = (
 
   if (pot2Pump.raisedToken?.id) {
     contract.raiseToken = Token.getToken({
+      chainId: wallet.currentChainId.toString(),
       address: pot2Pump.raisedToken?.id,
       name: pot2Pump.raisedToken?.name,
       symbol: pot2Pump.raisedToken?.symbol,
@@ -233,6 +235,10 @@ export const pot2PumpToMemePair = (
 };
 
 export async function fetchNearSuccessPot2Pump() {
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const { data } = await infoClient.query<Pot2PumpPottingNearSuccessQuery>({
     query: Pot2PumpPottingNearSuccessDocument,
     variables: {
@@ -249,6 +255,10 @@ export async function fetchNearSuccessPot2Pump() {
 }
 
 export async function fetchPottingNewTokens() {
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const { data } = await infoClient.query<Pot2PumpPottingNewTokensQuery>({
     query: Pot2PumpPottingNewTokensDocument,
     variables: {
@@ -260,6 +270,10 @@ export async function fetchPottingNewTokens() {
 }
 
 export async function fetchPumpingHighPricePot2Pump() {
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const { data } = await infoClient.query<Pot2PumpPottingHighPriceQuery>({
     query: Pot2PumpPottingHighPriceDocument,
   });
@@ -268,6 +282,10 @@ export async function fetchPumpingHighPricePot2Pump() {
 }
 
 export async function fetchPottingTrendingPot2Pump() {
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const { data } = await infoClient.query<Pot2PumpPottingTrendingQuery>({
     query: Pot2PumpPottingTrendingDocument,
   });
@@ -284,6 +302,10 @@ export async function fetchPairsList({
 }): Promise<PairsListResponse> {
   let whereCondition = '';
   let conditions = [];
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
 
   if (filter.search) {
     conditions.push(`
@@ -413,6 +435,10 @@ export async function fetchMemetrackerList({
 }: {
   chainId: string;
 }): Promise<MemetrackerListResponse> {
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const query = `
     query MemetrackerList {
       pot2Pumps(
@@ -483,6 +509,10 @@ export async function fetchPot2PumpList({
   chainId: string;
   filter: SubgraphProjectFilter;
 }): Promise<Pot2PumpListResponse> {
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   console.log('filter', filter);
   const dynamicFilter: Pot2PumpDynamicFilterQueryVariables = {
     first: filter.limit,

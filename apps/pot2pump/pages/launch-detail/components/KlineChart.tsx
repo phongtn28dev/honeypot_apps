@@ -13,7 +13,7 @@ import { TbChartArea, TbChartHistogram } from 'react-icons/tb';
 import Link from 'next/link';
 import Image from 'next/image';
 import codexIcon from '@/public/images/partners/codex_white.png';
-import { chain } from '@/services/chain';
+import { wallet } from '@honeypot/shared';
 import dynamic from 'next/dynamic';
 
 // 为 Window 对象添加 TradingView 相关的类型定义
@@ -37,21 +37,23 @@ const formatNumber = (number: number) => {
     return parseFloat(String(number)).toFixed(2).toString();
   else if (number > 1) return parseFloat(String(number)).toFixed(3).toString();
   else if (number > 1e-4)
-    return parseFloat(String(number)).toFixed(5).toString();
+    return parseFloat(parseFloat(String(number)).toExponential(4)).toString();
   else {
-    // For very small numbers, simplify display
-    // Show scientific notation for extremely small values
-    if (number < 1e-7) {
-      return number.toExponential(2);
-    }
-
-    // For small values, use fewer decimal places
+    const endNumbers = Number(number)
+      .toExponential()
+      .split('e')[0]
+      .replace('.', '')
+      .substring(0, 4);
     const zeros = -Math.floor(Math.log10(number) + 1);
-    if (zeros > 6) {
-      return number.toExponential(2);
+    let subNumber;
+    if (zeros > 9) {
+      subNumber =
+        String.fromCharCode(parseInt(`2081`, 16)) +
+        String.fromCharCode(parseInt(`208${zeros - 10}`, 16));
     } else {
-      return number.toFixed(6);
+      subNumber = String.fromCharCode(parseInt(`208${zeros}`, 16));
     }
+    return '0.0' + subNumber + endNumbers;
   }
 };
 
@@ -84,6 +86,7 @@ const KlineChartComponent = observer(
     const [currentInterval, setCurrentInterval] = useState('60');
     const chartWrapRef = useRef<HTMLDivElement>(null);
     const [chartWidth, setChartWidth] = useState(200);
+    const listener = useRef<any>(null);
     const [priceType, setPriceType] = useState<'PRICE' | 'MCAP'>('PRICE');
     const [currencyType, setCurrencyType] = useState<'USD' | 'BERA'>('USD');
     const [chartType, setChartType] = useState<ChartType>('Candles');
@@ -93,114 +96,16 @@ const KlineChartComponent = observer(
     const [showIntervalMenu, setShowIntervalMenu] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
 
-    // 添加加载用户设置的函数
-    const loadUserSettings = useCallback(() => {
-      if (typeof window === 'undefined') return; // 服务器端不执行
-
-      try {
-        // 加载间隔设置
-        const savedInterval = localStorage.getItem('chart_interval');
-        if (savedInterval) {
-          setCurrentInterval(savedInterval);
-        }
-
-        // 加载价格类型设置
-        const savedPriceType = localStorage.getItem('chart_price_type') as
-          | 'PRICE'
-          | 'MCAP';
-        if (
-          savedPriceType &&
-          (savedPriceType === 'PRICE' || savedPriceType === 'MCAP')
-        ) {
-          setPriceType(savedPriceType);
-        }
-
-        // 加载货币类型设置
-        const savedCurrencyType = localStorage.getItem(
-          'chart_currency_type'
-        ) as 'USD' | 'BERA';
-        if (
-          savedCurrencyType &&
-          (savedCurrencyType === 'USD' || savedCurrencyType === 'BERA')
-        ) {
-          setCurrencyType(savedCurrencyType);
-        }
-
-        // 加载图表类型设置
-        const savedChartType = localStorage.getItem('chart_type') as ChartType;
-        if (savedChartType) {
-          const isValidChartType = chartTypes.some(
-            (ct) => ct.type === savedChartType
-          );
-          if (isValidChartType) {
-            setChartType(savedChartType);
-          }
-        }
-
-        // 加载显示交易设置
-        const savedShowTrades = localStorage.getItem('chart_show_trades');
-        if (savedShowTrades !== null) {
-          setShowTrades(savedShowTrades === 'true');
-        }
-      } catch (error) {
-        console.error('Error loading chart settings from localStorage:', error);
-      }
-    }, []);
-
-    // 修改设置函数，使其保存到localStorage
-    const saveInterval = useCallback((interval: string) => {
-      setCurrentInterval(interval);
-      try {
-        localStorage.setItem('chart_interval', interval);
-      } catch (error) {
-        console.error('Error saving interval to localStorage:', error);
-      }
-    }, []);
-
-    const savePriceType = useCallback((type: 'PRICE' | 'MCAP') => {
-      setPriceType(type);
-      try {
-        localStorage.setItem('chart_price_type', type);
-      } catch (error) {
-        console.error('Error saving price type to localStorage:', error);
-      }
-    }, []);
-
-    const saveCurrencyType = useCallback((type: 'USD' | 'BERA') => {
-      setCurrencyType(type);
-      try {
-        localStorage.setItem('chart_currency_type', type);
-      } catch (error) {
-        console.error('Error saving currency type to localStorage:', error);
-      }
-    }, []);
-
-    const saveChartType = useCallback((type: ChartType) => {
-      setChartType(type);
-      try {
-        localStorage.setItem('chart_type', type);
-      } catch (error) {
-        console.error('Error saving chart type to localStorage:', error);
-      }
-    }, []);
-
-    const saveShowTrades = useCallback((show: boolean) => {
-      setShowTrades(show);
-      try {
-        localStorage.setItem('chart_show_trades', show ? 'true' : 'false');
-      } catch (error) {
-        console.error('Error saving show trades to localStorage:', error);
-      }
-    }, []);
-
-    // 在组件挂载时设置时区、加载用户设置和移动设备检测
+    // 在组件挂载时设置时区和移动设备检测
     useEffect(() => {
       setTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
       setIsMobile(window.innerWidth < 640);
-      loadUserSettings();
-    }, [loadUserSettings]);
+    }, []);
 
     const intervals = [
+      { text: '1s', resolution: '1S' },
+      { text: '15s', resolution: '15S' },
+      { text: '30s', resolution: '30S' },
       { text: '1m', resolution: '1' },
       { text: '5m', resolution: '5' },
       { text: '1H', resolution: '60' },
@@ -447,18 +352,18 @@ const KlineChartComponent = observer(
           });
         };
 
-      // window.Datafeeds.UDFCompatibleDatafeed.prototype.subscribeBars = (
-      //   symbolInfo: any,
-      //   resolution: any,
-      //   onRealtimeCallback: any,
-      //   subscribeUID: any,
-      //   onResetCacheNeededCallback: any
-      // ) => {
-      //   listener.current = {
-      //     onRealtimeCallback,
-      //     resolution,
-      //   };
-      // };
+      window.Datafeeds.UDFCompatibleDatafeed.prototype.subscribeBars = (
+        symbolInfo: any,
+        resolution: any,
+        onRealtimeCallback: any,
+        subscribeUID: any,
+        onResetCacheNeededCallback: any
+      ) => {
+        listener.current = {
+          onRealtimeCallback,
+          resolution,
+        };
+      };
 
       const datafeed = new window.Datafeeds.UDFCompatibleDatafeed(
         `${getBaseUrl()}/api/udf-data-feed`,
@@ -469,11 +374,9 @@ const KlineChartComponent = observer(
         window.tvWidget = new window.TradingView.widget({
           symbol: strParams(
             chart.chartTarget as Token,
-            chain.currentChainId,
+            wallet.currentChainId,
             chart.tokenNumber,
-            chart.currencyCode,
-            chart?.tokenSupply?.toString(),
-            priceType
+            chart.currencyCode
           ),
           interval: currentInterval as any,
           container: 'tv_chart_container',
@@ -523,35 +426,20 @@ const KlineChartComponent = observer(
           overrides: {
             'paneProperties.backgroundType': 'solid',
             'paneProperties.background': '#202020',
-            'scalesProperties.lineColor': '#2A2A2A',
-
-            // Make price scale font smaller and adjust scale settings
-            'scalesProperties.fontSize': 9, // Reduced font size for all scale values
-            'scalesProperties.textColor': '#808080',
-
-            // Reduce precision to make numbers more compact
-            'mainSeriesProperties.precision': 6,
-            'mainSeriesProperties.minTick': '0.000001',
-
-            // Adjust y-axis formatting
-            'scalesProperties.showSeriesLastValue': true,
-            'scalesProperties.showStudyLastValue': false,
-            'scalesProperties.showStudyPlotLabels': false,
-
-            // Reduce volume panel height
-            volumePaneSize: 'small', // Set volume panel to small size
-
+            'scalesProperties.lineColor': '#202020',
+            'mainSeriesProperties.candleStyle.barColorsOnPrevClose': true,
+            'mainSeriesProperties.haStyle.barColorsOnPrevClose': true,
+            'mainSeriesProperties.barStyle.barColorsOnPrevClose': true,
             'mainSeriesProperties.candleStyle.upColor': '#089981',
             'mainSeriesProperties.candleStyle.borderUpColor': '#089981',
             'mainSeriesProperties.candleStyle.downColor': '#F23645',
             'mainSeriesProperties.candleStyle.borderDownColor': '#F23645',
             'mainSeriesProperties.candleStyle.wickUpColor': '#089981',
             'mainSeriesProperties.candleStyle.wickDownColor': '#F23645',
-
-            // Mobile-specific settings
             ...(isMobile
               ? {
-                  'scalesProperties.fontSize': 8, // Even smaller on mobile
+                  'scalesProperties.fontSize': 10,
+                  'scalesProperties.textColor': '#808080',
                   'scalesProperties.scaleSeriesOnly': true,
                   'mainSeriesProperties.priceAxisProperties.autoScale': true,
                   'mainSeriesProperties.priceAxisProperties.percentage': false,
@@ -598,7 +486,6 @@ const KlineChartComponent = observer(
       isMobile,
       timeZone,
       chartType,
-      priceType,
     ]);
 
     useEffect(() => {
@@ -639,7 +526,7 @@ const KlineChartComponent = observer(
         const chart = window.tvWidget.chart();
         try {
           chart.executeActionById('toggleTrades');
-          saveShowTrades(!showTrades); // 使用新的保存函数
+          setShowTrades(!showTrades); // 切换状态
         } catch (error) {
           console.error('Error toggling trades:', error);
         }
@@ -648,17 +535,18 @@ const KlineChartComponent = observer(
 
     const handlePriceMCapClick = () => {
       const newType = priceType === 'PRICE' ? 'MCAP' : 'PRICE';
-      savePriceType(newType); // Uses the new save function
-      // Reload the chart with the new price type
+      setPriceType(newType);
+      // 切换价格/市值显示
       if (window.tvWidget) {
-        // Don't change the currency code here, just reload with new parameters
+        // 将 PRICE 映射为 USD，将 MCAP 映射为 TOKEN
+        chart.setCurrencyCode(newType === 'PRICE' ? 'USD' : 'TOKEN');
         initOnReady();
       }
     };
 
     const handleUSDBeraClick = () => {
       const newType = currencyType === 'USD' ? 'BERA' : 'USD';
-      saveCurrencyType(newType); // 使用新的保存函数
+      setCurrencyType(newType);
       if (window.tvWidget) {
         chart.setCurrencyCode(newType === 'USD' ? 'USD' : 'TOKEN');
         initOnReady();
@@ -667,8 +555,8 @@ const KlineChartComponent = observer(
 
     // 添加切换图表类型的处理函数
     const handleChartTypeChange = (type: ChartType) => {
-      console.log('Changing chart type to:', type);
-      saveChartType(type); // 使用新的保存函数
+      console.log('Changing chart type to:', type); // 添加日志
+      setChartType(type);
       setShowChartTypeMenu(false);
 
       if (window.tvWidget) {
@@ -676,16 +564,16 @@ const KlineChartComponent = observer(
         try {
           switch (type) {
             case 'Bars':
-              chart.setChartType(0);
+              chart.setChartType(0); // 修改类型值
               break;
             case 'Candles':
-              chart.setChartType(1);
+              chart.setChartType(1); // 修改类型值
               break;
             case 'Line':
-              chart.setChartType(2);
+              chart.setChartType(2); // 修改类型值
               break;
             case 'Area':
-              chart.setChartType(3);
+              chart.setChartType(3); // 修改类型值
               break;
             case 'Heikin Ashi':
               chart.setChartType(8);
@@ -779,7 +667,7 @@ const KlineChartComponent = observer(
               {intervals.map((interval) => (
                 <button
                   key={interval.text}
-                  onClick={() => saveInterval(interval.resolution)}
+                  onClick={() => setCurrentInterval(interval.resolution)}
                   className={`text-xs sm:text-sm transition-colors ${
                     currentInterval === interval.resolution
                       ? 'text-[#FFCD4D]'
@@ -829,7 +717,7 @@ const KlineChartComponent = observer(
                     <button
                       key={interval.text}
                       onClick={() => {
-                        saveInterval(interval.resolution);
+                        setCurrentInterval(interval.resolution);
                         setShowIntervalMenu(false);
                       }}
                       className={`w-full px-4 py-1.5 text-left text-xs sm:text-sm hover:bg-[#2A2A2A] ${

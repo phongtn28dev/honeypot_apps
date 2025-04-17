@@ -12,7 +12,7 @@ import { isAddress } from 'viem';
 import { zeroAddress } from 'viem';
 import {
   getInfoClientByChainId,
-  useInfoClient,
+  useSubgraphClient,
 } from '../../../hooks/useSubgraphClients';
 import { DEFAULT_CHAIN_ID } from '../../../config/algebra/default-chain-id';
 import { wallet } from '../../wallet/wallet';
@@ -21,7 +21,7 @@ import { ApolloClient } from '@apollo/client';
 const EVENT_REWARD_EACH_POOL = 400; //BERA
 
 export function useBitgetEvents(user: string) {
-  const infoClient = useInfoClient();
+  const infoClient = useSubgraphClient('algebra_info');
 
   const tokenQuery = useGetBitgetEventsQuery({
     variables: { user },

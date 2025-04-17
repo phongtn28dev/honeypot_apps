@@ -15,17 +15,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import { config } from '@/config/wagmi';
 import { trpc, trpcQueryClient } from '../lib/trpc';
 import { useEffect, useMemo, useState } from 'react';
-import { wallet } from '@honeypot/shared';
-import { chain } from '@/services/chain';
+import { getSubgraphClientByChainId, wallet } from '@honeypot/shared';
 import { DM_Sans, Inter } from 'next/font/google';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { Analytics } from '@vercel/analytics/react';
-// import { capsuleClient, capsuleModalProps } from "@/config/wagmi/capsualWallet";
 import { ApolloProvider } from '@apollo/client';
-import { infoClient } from '@/lib/algebra/graphql/clients';
 import Image from 'next/image';
 import SafeProvider from '@safe-global/safe-apps-react-sdk';
-import { berachainNetwork } from '@/services/network';
+import { berachainNetwork } from '@honeypot/shared';
 // enableStaticRendering(true)
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -79,7 +76,10 @@ export default function App({
   Component: NextLayoutPage;
 }) {
   const ComponentLayout = Component.Layout || Layout;
-
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   // const [isEthereum, setIsEthereum] = useState(false);
 
   // useEffect(() => {

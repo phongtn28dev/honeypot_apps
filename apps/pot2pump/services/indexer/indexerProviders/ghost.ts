@@ -2,7 +2,7 @@ import {
   PairFilter as FtoPairFilter,
   ProjectStatus,
   statusTextToNumber,
-} from "@/services/launchpad";
+} from '@/services/launchpad';
 import {
   GhostFtoPairResponse,
   GhostAPIOpt,
@@ -21,15 +21,15 @@ import {
   GhostBundleResponse,
   GhostAlgebraPoolPair,
   GhostAlgebraPairResponse,
-} from "./../indexerTypes";
-import { networksMap } from "@/services/network";
-import { PageInfo } from "@/services/utils";
-import dayjs from "dayjs";
+} from './../indexerTypes';
+import { networksMap } from '@honeypot/shared';
+import { PageInfo } from '@/services/utils';
+import dayjs from 'dayjs';
 
-const memeGraphHandle = "5e83143f-8481-4564-afc2-7b7a766afef9/ghostgraph";
-const ftoGraphHandle = "df583977-1412-4c0a-9b3a-ebea68604f3a/ghostgraph";
-const memelaunchGraphHandle = "6250c399-1065-408f-9491-24a000b9d62d/ghostgraph";
-const pairGraphHandle = "35512369-5e78-4bcc-ab57-8a1a506d842a/ghostgraph";
+const memeGraphHandle = '5e83143f-8481-4564-afc2-7b7a766afef9/ghostgraph';
+const ftoGraphHandle = 'df583977-1412-4c0a-9b3a-ebea68604f3a/ghostgraph';
+const memelaunchGraphHandle = '6250c399-1065-408f-9491-24a000b9d62d/ghostgraph';
+const pairGraphHandle = '35512369-5e78-4bcc-ab57-8a1a506d842a/ghostgraph';
 
 function getTimeStampToDayNow() {
   return Math.floor(dayjs().unix() / 86400);
@@ -50,16 +50,16 @@ export class GhostIndexer {
   ): Promise<ApiResponseType<any>> => {
     if (!this.apiKey || !query) {
       return {
-        status: "error",
-        message: "Error: API Key or query is missing.",
+        status: 'error',
+        message: 'Error: API Key or query is missing.',
       };
     }
 
     const res = await fetch(this.apiEndpoint + option.apiHandle, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "X-GHOST-KEY": this.apiKey,
+        'Content-Type': 'application/json',
+        'X-GHOST-KEY': this.apiKey,
       },
       body: JSON.stringify({ query: query }),
     });
@@ -70,9 +70,9 @@ export class GhostIndexer {
         throw new Error(data.errors[0].message);
       }
       return {
-        status: "success",
+        status: 'success',
         data: data.data,
-        message: "Success",
+        message: 'Success',
       };
     } else {
       throw new Error(res.statusText);
@@ -121,15 +121,15 @@ export class GhostIndexer {
 
     const res = await this.callIndexerApi(query, { apiHandle: ftoGraphHandle });
 
-    if (res.status === "error") {
+    if (res.status === 'error') {
       return res;
     } else {
       let pairs = ((res.data as any)?.pairs?.items as GhostFTOPair[]) ?? [];
       let pageInfo = (res.data as any)?.pairs?.pageInfo as PageInfo;
 
       return {
-        status: "success",
-        message: "Success",
+        status: 'success',
+        message: 'Success',
         data: { pairs: pairs, pageInfo: pageInfo },
       };
     }
@@ -140,7 +140,7 @@ export class GhostIndexer {
     chainId: string,
     provider?: string,
     pageRequest?: PageRequest,
-    projectType?: "fto" | "meme"
+    projectType?: 'fto' | 'meme'
   ): Promise<ApiResponseType<GhostFtoPairResponse>> => {
     const getMemeStatusQuery = (status: string) => {
       switch (status) {
@@ -156,43 +156,43 @@ export class GhostIndexer {
       }
     };
     const getFtoStatusQuery = (status: string) => {
-      const statusNum = statusTextToNumber(filter?.status ?? "all");
-      const statusCondition = statusNum != -1 ? `status: "${statusNum}",` : "";
+      const statusNum = statusTextToNumber(filter?.status ?? 'all');
+      const statusCondition = statusNum != -1 ? `status: "${statusNum}",` : '';
       return statusCondition;
     };
     const status = filter?.status ?? ProjectStatus.All;
     const statusCondition =
-      projectType === "meme"
+      projectType === 'meme'
         ? getMemeStatusQuery(status)
         : getFtoStatusQuery(status);
     const dirCondition = pageRequest?.cursor
-      ? pageRequest?.direction === "next"
+      ? pageRequest?.direction === 'next'
         ? `after:"${pageRequest?.cursor}"`
         : `before:"${pageRequest?.cursor}"`
-      : "";
+      : '';
 
     const searchIdCondition =
-      filter?.search && filter.search.startsWith("0x")
+      filter?.search && filter.search.startsWith('0x')
         ? `id: "${filter.search}",`
-        : "";
+        : '';
 
     const searchToken0IdCondition =
-      filter?.search && filter.search.startsWith("0x")
+      filter?.search && filter.search.startsWith('0x')
         ? `token0Id: "${filter?.search}",`
-        : "";
+        : '';
 
     const searchToken1IdCondition =
-      filter?.search && filter.search.startsWith("0x")
+      filter?.search && filter.search.startsWith('0x')
         ? `token1Id: "${filter?.search}",`
-        : "";
+        : '';
 
     const providerCondition = provider
       ? `launchedTokenProvider: "${provider}",`
-      : "";
+      : '';
 
     const searchStringCondition = filter?.search
       ? `searchString_contains:"${filter.search.toLowerCase()}",`
-      : "";
+      : '';
 
     const query = `
         {
@@ -206,7 +206,7 @@ export class GhostIndexer {
                 }
                 ${
                   (statusCondition || searchIdCondition || !filter.search) &&
-                  (!filter.search || filter.search.startsWith("0x"))
+                  (!filter.search || filter.search.startsWith('0x'))
                     ? `{
                     ${searchIdCondition}
                   }
@@ -217,7 +217,7 @@ export class GhostIndexer {
                     ${searchToken1IdCondition}
                   } 
                   `
-                    : ""
+                    : ''
                 }
               ]
             }
@@ -259,13 +259,13 @@ export class GhostIndexer {
         }
       `;
 
-    console.log("getFilteredFtoPairs: ", query);
+    console.log('getFilteredFtoPairs: ', query);
 
     const res = await this.callIndexerApi(query, {
-      apiHandle: projectType === "meme" ? memeGraphHandle : ftoGraphHandle,
+      apiHandle: projectType === 'meme' ? memeGraphHandle : ftoGraphHandle,
     });
 
-    if (res.status === "error") {
+    if (res.status === 'error') {
       return res;
     } else {
       let pairs = ((res.data as any)?.pairs?.items as GhostFTOPair[]) ?? [];
@@ -278,8 +278,8 @@ export class GhostIndexer {
       }
 
       return {
-        status: "success",
-        message: "Success",
+        status: 'success',
+        message: 'Success',
         data: { pairs: pairs, pageInfo: pageInfo },
       };
     }
@@ -303,12 +303,12 @@ export class GhostIndexer {
 
     const res = await this.callIndexerApi(query, { apiHandle: ftoGraphHandle });
 
-    if (res.status === "error") {
+    if (res.status === 'error') {
       return res;
     } else {
       return {
-        status: "success",
-        message: "Success",
+        status: 'success',
+        message: 'Success',
         data: (res.data as any).erc20s.items as GhostFtoTokensResponse,
       };
     }
@@ -339,12 +339,12 @@ export class GhostIndexer {
 
     const res = await this.callIndexerApi(query, { apiHandle: ftoGraphHandle });
 
-    if (res.status === "error") {
+    if (res.status === 'error') {
       return res;
     } else {
       return {
-        status: "success",
-        message: "Success",
+        status: 'success',
+        message: 'Success',
         data: { items: (res.data as any).erc20s.items as GhostToken[] },
       };
     }
@@ -387,12 +387,12 @@ export class GhostIndexer {
       apiHandle: pairGraphHandle,
     });
 
-    if (res.status === "error") {
+    if (res.status === 'error') {
       return res;
     } else {
       return {
-        status: "success",
-        message: "Success",
+        status: 'success',
+        message: 'Success',
         data: {
           pairs: (res.data as any).pairs?.items as GhostPoolPair[],
           pageInfo: (res.data as any).pairs?.pageInfo as PageInfo,
@@ -421,12 +421,12 @@ export class GhostIndexer {
       apiHandle: pairGraphHandle,
     });
 
-    if (res.status === "error") {
+    if (res.status === 'error') {
       return res;
     } else {
       return {
-        status: "success",
-        message: "Success",
+        status: 'success',
+        message: 'Success',
         data: res.data,
       };
     }
@@ -439,10 +439,10 @@ export class GhostIndexer {
     pageRequest?: PageRequest
   ): Promise<ApiResponseType<GhostHoldingPairsResponse>> => {
     const dirCondition = pageRequest?.cursor
-      ? pageRequest?.direction === "next"
+      ? pageRequest?.direction === 'next'
         ? `after:"${pageRequest?.cursor}"`
         : `before:"${pageRequest?.cursor}"`
-      : "";
+      : '';
 
     const searchStringCondition = filter?.searchString
       ? `pair_:{
@@ -451,11 +451,11 @@ export class GhostIndexer {
       : ``;
 
     const tradingVolumeSortingCondition =
-      filter?.sortingTarget === "tradingVolumeYesterday"
+      filter?.sortingTarget === 'tradingVolumeYesterday'
         ? `pair_:{
             timeStampToday:"${getTimeStampToDayNow()}"
           },`
-        : "";
+        : '';
 
     const query = `
     {
@@ -530,24 +530,24 @@ export class GhostIndexer {
     }
   `;
 
-    console.log("getHoldingPairs", query);
+    console.log('getHoldingPairs', query);
 
     const res = await this.callIndexerApi(query, {
       apiHandle: pairGraphHandle,
     });
 
-    res.status === "success" &&
+    res.status === 'success' &&
       res.data.holdingPairs.items.map(
         (item: holdingPairs) =>
           `${item.pair.token0symbol}-${item.pair.token1symbol} ${item.totalLpAmount}`
       );
 
-    if (res.status === "error") {
+    if (res.status === 'error') {
       return res;
     } else {
       return {
-        status: "success",
-        message: "Success",
+        status: 'success',
+        message: 'Success',
         data: {
           holdingPairs: (res.data as any).holdingPairs?.items as holdingPairs[],
           pageInfo: (res.data as any).holdingPairs?.pageInfo as PageInfo,
@@ -560,7 +560,7 @@ export class GhostIndexer {
     walletAddress: string,
     chainId: string,
     pageRequest: PageRequest,
-    type: "fto" | "meme",
+    type: 'fto' | 'meme',
     filter: Partial<FtoPairFilter>
   ): Promise<ApiResponseType<GhostParticipatedProjectsResponse>> => {
     const getMemeStatusQuery = (status: string) => {
@@ -577,21 +577,21 @@ export class GhostIndexer {
       }
     };
     const getFtoStatusQuery = (status: string) => {
-      const statusNum = statusTextToNumber(filter?.status ?? "all");
+      const statusNum = statusTextToNumber(filter?.status ?? 'all');
 
       const statusCondition =
         statusNum != -1
           ? `pair_:{
         status: "${statusNum}",
       }`
-          : "";
+          : '';
       return statusCondition;
     };
     const status = filter?.status ?? ProjectStatus.All;
     const statusCondition =
-      type === "meme" ? getMemeStatusQuery(status) : getFtoStatusQuery(status);
+      type === 'meme' ? getMemeStatusQuery(status) : getFtoStatusQuery(status);
     const searchIdCondition =
-      filter?.search && filter.search.startsWith("0x")
+      filter?.search && filter.search.startsWith('0x')
         ? `{
             pair_:{
               id: "${filter.search}"
@@ -607,17 +607,17 @@ export class GhostIndexer {
               token1Id: "${filter.search}"
             }
           },`
-        : "";
+        : '';
 
     const dirCondition = pageRequest?.cursor
-      ? pageRequest?.direction === "next"
+      ? pageRequest?.direction === 'next'
         ? `after:"${pageRequest?.cursor}"`
         : `before:"${pageRequest?.cursor}"`
-      : "";
+      : '';
 
     const searchStringCondition = filter?.search
       ? `searchString_contains:"${filter.search.toLowerCase()}",`
-      : "";
+      : '';
 
     const limit = filter.limit ?? 9;
 
@@ -684,15 +684,15 @@ export class GhostIndexer {
     console.log(query);
 
     const res = await this.callIndexerApi(query, {
-      apiHandle: type === "meme" ? memeGraphHandle : ftoGraphHandle,
+      apiHandle: type === 'meme' ? memeGraphHandle : ftoGraphHandle,
     });
 
-    if (res.status === "error") {
+    if (res.status === 'error') {
       return res;
     } else {
       return {
-        status: "success",
-        message: "Success",
+        status: 'success',
+        message: 'Success',
         data: res.data,
       };
     }
@@ -706,24 +706,24 @@ export class GhostIndexer {
   ): Promise<ApiResponseType<GhostPoolPairResponse>> => {
     console.log(filter);
     const dirCondition = pageRequest?.cursor
-      ? pageRequest?.direction === "next"
+      ? pageRequest?.direction === 'next'
         ? `after:"${pageRequest?.cursor}"`
         : `before:"${pageRequest?.cursor}"`
-      : "";
+      : '';
 
     const tradingVolumeSortingCondition =
-      filter.sortingTarget === "tradingVolumeYesterday"
+      filter.sortingTarget === 'tradingVolumeYesterday'
         ? `timeStampToday:"${getTimeStampToDayNow()}",`
-        : "";
+        : '';
 
     const query = `
         {
           pairs(
-            ${filter.sortingTarget ? `orderBy: "${filter.sortingTarget}",` : ""}
+            ${filter.sortingTarget ? `orderBy: "${filter.sortingTarget}",` : ''}
             ${
               filter.sortingDirection
                 ? `orderDirection: "${filter.sortingDirection}",`
-                : ""
+                : ''
             }
             where: {
               ${tradingVolumeSortingCondition}
@@ -732,26 +732,26 @@ export class GhostIndexer {
                   ? `
               OR: [
                 ${
-                  filter.searchString.startsWith("0x")
+                  filter.searchString.startsWith('0x')
                     ? `{ id: "${filter.searchString}"  }`
-                    : ""
+                    : ''
                 }
                 
                  ${
-                   filter.searchString.startsWith("0x")
+                   filter.searchString.startsWith('0x')
                      ? `{ token1Id: "${filter.searchString}"  }`
-                     : ""
+                     : ''
                  }
                 
                  ${
-                   filter.searchString.startsWith("0x")
+                   filter.searchString.startsWith('0x')
                      ? `{ token1Id: "${filter.searchString}"  }`
-                     : ""
+                     : ''
                  }
 
                 {searchString_contains:"${filter.searchString.toLowerCase()}" }
               ]`
-                  : ""
+                  : ''
               }
             }
             limit: ${filter.limit}
@@ -795,18 +795,18 @@ export class GhostIndexer {
         }
       `;
 
-    console.log("filtered pairs: ", query);
+    console.log('filtered pairs: ', query);
 
     const res = await this.callIndexerApi(query, {
       apiHandle: pairGraphHandle,
     });
 
-    if (res.status === "error") {
+    if (res.status === 'error') {
       return res;
     } else {
       return {
-        status: "success",
-        message: "Success",
+        status: 'success',
+        message: 'Success',
         data: {
           pairs: (res.data as any).pairs?.items as GhostPoolPair[],
           pageInfo: (res.data as any).pairs?.pageInfo as PageInfo,
@@ -878,12 +878,12 @@ export class GhostIndexer {
       apiHandle: pairGraphHandle,
     });
 
-    if (res.status === "error") {
+    if (res.status === 'error') {
       return res;
     } else {
       return {
-        status: "success",
-        message: "Success",
+        status: 'success',
+        message: 'Success',
         data: {
           pairs: (res.data as any).pairs?.items as GhostPoolPair[],
           pageInfo: (res.data as any).pairs?.pageInfo as PageInfo,
@@ -898,7 +898,7 @@ export class GhostIndexer {
     const query = `
       {
         tokens(where: {
-        id_in: [${tokenAddresses.map((address) => `"${address}"`).join(",")}]
+        id_in: [${tokenAddresses.map((address) => `"${address}"`).join(',')}]
       }) {
           items{
           id
@@ -919,12 +919,12 @@ export class GhostIndexer {
 
     console.log(res);
 
-    if (res.status === "error") {
+    if (res.status === 'error') {
       return res;
     } else {
       return {
-        status: "success",
-        message: "Success",
+        status: 'success',
+        message: 'Success',
         data: (res.data as any).tokens.items as GhostToken[],
       };
     }
@@ -953,19 +953,19 @@ export class GhostIndexer {
 
     console.log(res);
 
-    if (res.status === "error") {
+    if (res.status === 'error') {
       return res;
     } else {
       return {
-        status: "success",
-        message: "Success",
+        status: 'success',
+        message: 'Success',
         data: (res.data as any).token as GhostToken,
       };
     }
   };
 
   async getTrendingMEMEPairs(): Promise<ApiResponseType<TrendingMEMEs>> {
-    console.log("endtime", dayjs().unix());
+    console.log('endtime', dayjs().unix());
 
     const query = `{
         pairs(
@@ -999,18 +999,18 @@ export class GhostIndexer {
       }
   `;
 
-    console.log("query", query);
+    console.log('query', query);
 
     const res = await this.callIndexerApi(query, {
       apiHandle: memeGraphHandle,
     });
 
-    if (res.status === "error") {
+    if (res.status === 'error') {
       return res;
     } else {
       return {
-        status: "success",
-        message: "Success",
+        status: 'success',
+        message: 'Success',
         data: res.data,
       };
     }
@@ -1091,7 +1091,7 @@ export class GhostIndexer {
       apiHandle: pairGraphHandle,
     });
 
-    if (res.status === "success") {
+    if (res.status === 'success') {
       return res.data.pairs0.items[0] || res.data.pairs1.items[0];
     }
     return res;
@@ -1121,7 +1121,7 @@ export class GhostIndexer {
       apiHandle: memelaunchGraphHandle,
     });
 
-    if (res.status === "success") {
+    if (res.status === 'success') {
       return res.data.raisedTokenDeposits.items;
     }
     return res;

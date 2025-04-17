@@ -10,12 +10,12 @@ import {
 import { LbpLaunch, lbpMetadatas, wallet } from '@honeypot/shared';
 import { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
-import { useLbpClient } from '@honeypot/shared';
+import { useSubgraphClient } from '@honeypot/shared';
 import { ApolloClient } from '@apollo/client';
 
 export const useLbpLaunchList = () => {
   const [lbpLaunchList, setLbpLaunchList] = useState<LbpLaunch[]>([]);
-  const lbpClient = useLbpClient();
+  const lbpClient = useSubgraphClient('lbp');
   const { data, loading, error } = useLbpPairsQuery({
     client: lbpClient as unknown as ApolloClient<any>,
   });
@@ -47,7 +47,7 @@ export const useLbpLaunchList = () => {
 
 export const useLbpLaunch = (lbpAddress: Address) => {
   const [lbpLaunch, setLbpLaunch] = useState<LbpLaunch | undefined>(undefined);
-  const lbpClient = useLbpClient();
+  const lbpClient = useSubgraphClient('lbp');
   const { data, loading, error } = useLbpPairQuery({
     client: lbpClient as unknown as ApolloClient<any>,
     variables: {

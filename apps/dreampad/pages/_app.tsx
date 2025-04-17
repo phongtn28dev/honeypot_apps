@@ -16,12 +16,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import { config } from '@/config/wagmi';
 import { trpc, trpcQueryClient } from '../lib/trpc';
 import { useEffect, useState } from 'react';
-import { useInfoClient, wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared';
+import { useSubgraphClient } from '@honeypot/shared';
 import { DM_Sans, Inter } from 'next/font/google';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { Analytics } from '@vercel/analytics/react';
 // import { capsuleClient, capsuleModalProps } from "@/config/wagmi/capsualWallet";
-import { ApolloProvider } from '@apollo/client';
+import { ApolloClient, ApolloProvider } from '@apollo/client';
 import Image from 'next/image';
 import { WalletClient } from 'viem';
 
@@ -87,7 +88,7 @@ export default function App({
   }
 
   const ComponentLayout = Component.Layout || Layout;
-  const infoClient = useInfoClient();
+  const infoClient = useSubgraphClient('algebra_info');
 
   return (
     <trpc.Provider client={trpcQueryClient} queryClient={queryClient}>

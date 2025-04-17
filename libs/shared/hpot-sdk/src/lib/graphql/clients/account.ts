@@ -8,7 +8,7 @@ import {
   AccountSwapsWithPoolsQueryVariables,
 } from '../generated/graphql';
 import { All_Accounts, SINGLE_ACCOUNT_DETAILS } from '../queries/account';
-import { useInfoClient } from '../../../hooks/useSubgraphClients';
+import { useSubgraphClient } from '@honeypot/shared';
 import { ApolloClient } from '@apollo/client';
 import { createClientHook } from '../clientUtils';
 
@@ -63,8 +63,11 @@ export async function getSingleAccountDetails(
   }
 }
 
-export const useAccount = createClientHook(useInfoClient, {
-  getAccountsPageData,
-  getAccountSwapsWithPools,
-  getSingleAccountDetails,
-});
+export const useAccount = createClientHook(
+  () => useSubgraphClient('algebra_info'),
+  {
+    getAccountsPageData,
+    getAccountSwapsWithPools,
+    getSingleAccountDetails,
+  }
+);

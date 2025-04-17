@@ -1,37 +1,37 @@
-import dayjs from "dayjs";
-import { wallet } from "./../wallet";
-import BigNumber from "bignumber.js";
-import { FtoPairContract } from "../contract/launches/fto/ftopair-contract";
+import dayjs from 'dayjs';
+import { wallet } from '@honeypot/shared';
+import BigNumber from 'bignumber.js';
+import { FtoPairContract } from '../contract/launches/fto/ftopair-contract';
 import {
   AsyncState,
   OldIndexerPaginationState,
   PageInfo,
   PaginationState,
   ValueState,
-} from "./../utils";
-import { trpc, trpcClient } from "@/lib/trpc";
-import { createSiweMessage } from "@/lib/siwe";
-import { Token } from "./../contract/token";
-import { parseEventLogs } from "viem";
-import { ERC20ABI } from "@/lib/abis/erc20";
-import { MemePairContract } from "./../contract/launches/pot2pump/memepair-contract";
-import { PageRequest } from "./../indexer/indexerTypes";
-import { fetchPairsList } from "@/lib/algebra/graphql/clients/pair";
+} from './../utils';
+import { trpc, trpcClient } from '@/lib/trpc';
+import { createSiweMessage } from '@/lib/siwe';
+import { Token } from './../contract/token';
+import { parseEventLogs } from 'viem';
+import { ERC20ABI } from '@/lib/abis/erc20';
+import { MemePairContract } from './../contract/launches/pot2pump/memepair-contract';
+import { PageRequest } from './../indexer/indexerTypes';
+import { fetchPairsList } from '@/lib/algebra/graphql/clients/pair';
 
 export const PAGE_LIMIT = 9;
 
-export type launchpadType = "fto" | "meme";
+export type launchpadType = 'fto' | 'meme';
 
 export enum ProjectStatus {
-  All = "all",
-  Processing = "processing",
-  Success = "success",
-  Fail = "fail",
+  All = 'all',
+  Processing = 'processing',
+  Success = 'success',
+  Fail = 'fail',
 }
 
 export type PairFilter = {
   search: string;
-  status: "all" | "processing" | "success" | "fail";
+  status: 'all' | 'processing' | 'success' | 'fail';
   showNotValidatedPairs: boolean;
   limit: number;
   tvlRange?: {
@@ -45,7 +45,7 @@ export type PairFilter = {
 };
 
 export type SubgraphProjectFilter = {
-  status?: "all" | "processing" | "success" | "fail";
+  status?: 'all' | 'processing' | 'success' | 'fail';
   search?: string;
   currentPage?: number;
   limit?: number;
@@ -98,20 +98,20 @@ export const defaultPairFilters: {
   participatedPairs: PairFilter;
 } = {
   all: {
-    search: "",
-    status: "processing",
+    search: '',
+    status: 'processing',
     showNotValidatedPairs: true,
     limit: PAGE_LIMIT,
   },
   myPairs: {
-    search: "",
-    status: "all",
+    search: '',
+    status: 'all',
     showNotValidatedPairs: true,
     limit: PAGE_LIMIT,
   },
   participatedPairs: {
-    search: "",
-    status: "all",
+    search: '',
+    status: 'all',
     showNotValidatedPairs: true,
     limit: PAGE_LIMIT,
   },
@@ -132,37 +132,37 @@ export const statusTextToNumber = (status: string) => {
 
 function calculateTimeDifference(timestamp: number): string {
   if (timestamp.toString().length !== 13) {
-    return "Invaild";
+    return 'Invaild';
   }
   const now = dayjs();
   const targetTime = dayjs(timestamp);
 
-  const diffDays = now.diff(targetTime, "days");
+  const diffDays = now.diff(targetTime, 'days');
 
   if (Math.abs(diffDays) >= 1) {
-    return `${diffDays} ${diffDays > 0 ? "days later" : "days ago"}`;
+    return `${diffDays} ${diffDays > 0 ? 'days later' : 'days ago'}`;
   }
 
-  const diffHours = now.diff(targetTime, "hours");
+  const diffHours = now.diff(targetTime, 'hours');
 
   if (Math.abs(diffHours) >= 1) {
-    return `${diffHours} ${diffHours > 0 ? "hours later" : "hours ago"}`;
+    return `${diffHours} ${diffHours > 0 ? 'hours later' : 'hours ago'}`;
   }
 
-  const diffMinutes = now.diff(targetTime, "minutes");
-  return `${diffMinutes} ${diffMinutes > 0 ? "minutes later" : "minutes ago"}`;
+  const diffMinutes = now.diff(targetTime, 'minutes');
+  return `${diffMinutes} ${diffMinutes > 0 ? 'minutes later' : 'minutes ago'}`;
 }
 
 class LaunchPad {
   currentLaunchpadType = new ValueState<launchpadType>({
-    value: "meme",
+    value: 'meme',
   });
 
   projectsPage = new OldIndexerPaginationState<
     PairFilter,
     FtoPairContract | MemePairContract
   >({
-    namespace: "projectsPage",
+    namespace: 'projectsPage',
     filter: defaultPairFilters.all,
     LoadNextPageFunction: async (
       filter: PairFilter,
@@ -174,12 +174,12 @@ class LaunchPad {
           pageInfo: {
             hasNextPage: false,
             hasPreviousPage: false,
-            startCursor: "",
-            endCursor: "",
+            startCursor: '',
+            endCursor: '',
           },
         };
       } else {
-        if (this.currentLaunchpadType.value === "meme") {
+        if (this.currentLaunchpadType.value === 'meme') {
           return (await this.LoadMoreProjectPage(pageRequest)) as {
             items: MemePairContract[];
             pageInfo: PageInfo;
@@ -223,7 +223,7 @@ class LaunchPad {
     this.participatedPairs.updateFilter({ search });
   }
 
-  set pairFilterStatus(status: "all" | "processing" | "success" | "fail") {
+  set pairFilterStatus(status: 'all' | 'processing' | 'success' | 'fail') {
     this.projectsPage.updateFilter({ status });
     this.myLaunches.updateFilter({ status });
     this.participatedPairs.updateFilter({ status });
@@ -264,7 +264,7 @@ class LaunchPad {
         limit: 5,
       });
 
-    if (mostSuccessfulFtos.status === "success") {
+    if (mostSuccessfulFtos.status === 'success') {
       return mostSuccessfulFtos.data?.pairs.map((pairAddress) => {
         const pair = new FtoPairContract({
           address: pairAddress.id,
@@ -313,7 +313,7 @@ class LaunchPad {
   async trendingMEMEs(): Promise<MemePairContract[]> {
     const mostSuccessfulFtos =
       await trpcClient.indexerFeedRouter.getTrendingMEMEPairs.query();
-    if (mostSuccessfulFtos.status === "success") {
+    if (mostSuccessfulFtos.status === 'success') {
       return mostSuccessfulFtos.data?.pairs.items.map((pairAddress) => {
         const pair = MemePairContract.loadContract(pairAddress.id, {
           address: pairAddress.id,
@@ -361,7 +361,7 @@ class LaunchPad {
   loadVerifiedProjects = async () => {
     this.setFtoPageLoading(true);
     let projects = [];
-    if (this.currentLaunchpadType.value === "meme") {
+    if (this.currentLaunchpadType.value === 'meme') {
       projects = await Promise.all(
         wallet.currentChain.validatedMemeAddresses.map(async (pairAddress) => {
           const pair = MemePairContract.loadContract(pairAddress, {
@@ -390,7 +390,7 @@ class LaunchPad {
   LoadMoreProjectPage = async (pageRequest: PageRequest) => {
     let res;
 
-    if (this.currentLaunchpadType.value === "meme") {
+    if (this.currentLaunchpadType.value === 'meme') {
       res = await fetchPairsList({
         filter: this.projectsPage.filter,
         pageRequest: pageRequest,
@@ -404,11 +404,11 @@ class LaunchPad {
       });
     }
 
-    if (res.status === "success") {
+    if (res.status === 'success') {
       const data = {
         items: res.data.pairs.map((pairAddress) => {
           const pair =
-            this.currentLaunchpadType.value === "fto"
+            this.currentLaunchpadType.value === 'fto'
               ? new FtoPairContract({
                   address: pairAddress.id,
                   participantsCount: new BigNumber(
@@ -467,8 +467,8 @@ class LaunchPad {
         pageInfo: {
           hasNextPage: true,
           hasPreviousPage: false,
-          startCursor: "",
-          endCursor: "",
+          startCursor: '',
+          endCursor: '',
         },
       };
     }
@@ -484,11 +484,11 @@ class LaunchPad {
         walletAddress: wallet.account,
       });
 
-    if (res.status === "success") {
+    if (res.status === 'success') {
       const data = {
         items: res.data.participateds.items.map((pairAddress) => {
           const pair =
-            this.currentLaunchpadType.value === "fto"
+            this.currentLaunchpadType.value === 'fto'
               ? new FtoPairContract({
                   address: pairAddress.pairId,
                   participantsCount: new BigNumber(
@@ -544,8 +544,8 @@ class LaunchPad {
         pageInfo: {
           hasNextPage: true,
           hasPreviousPage: false,
-          startCursor: "",
-          endCursor: "",
+          startCursor: '',
+          endCursor: '',
         },
       };
     }
@@ -560,11 +560,11 @@ class LaunchPad {
       pageRequest: pageRequest,
     });
 
-    if (res.status === "success") {
+    if (res.status === 'success') {
       const data = {
         items: res.data.pairs.map((pairAddress) => {
           const pair =
-            this.currentLaunchpadType.value === "fto"
+            this.currentLaunchpadType.value === 'fto'
               ? new FtoPairContract({
                   address: pairAddress.id,
                   participantsCount: new BigNumber(
@@ -620,8 +620,8 @@ class LaunchPad {
         pageInfo: {
           hasNextPage: true,
           hasPreviousPage: false,
-          startCursor: "",
-          endCursor: "",
+          startCursor: '',
+          endCursor: '',
         },
       };
     }
@@ -644,7 +644,7 @@ class LaunchPad {
       logoUrl,
       bannerUrl,
     }: {
-      launchType: "fto" | "meme";
+      launchType: 'fto' | 'meme';
       provider: string;
       raisedToken: string;
       tokenName: string;
@@ -660,7 +660,7 @@ class LaunchPad {
       bannerUrl: string;
     }): Promise<string> => {
       const targetLaunchContractFunc = async () => {
-        if (launchType === "fto") {
+        if (launchType === 'fto') {
           return this.ftofactoryContract.createFTO.call([
             provider as `0x${string}`,
             raisedToken as `0x${string}`,
@@ -691,7 +691,7 @@ class LaunchPad {
       });
 
       const getPairAddress = () => {
-        if (launchType === "fto") {
+        if (launchType === 'fto') {
           return res.logs[res.logs.length - 1]?.address as string;
         } else {
           return (logs[0].args as any).to;
@@ -736,7 +736,7 @@ class LaunchPad {
     }) => {
       await createSiweMessage(
         wallet.account,
-        "Sign In With Honeypot",
+        'Sign In With Honeypot',
         wallet.walletClient
       );
       await trpcClient.projects.createOrUpdateProjectInfo.mutate(data);
@@ -747,7 +747,7 @@ class LaunchPad {
     async (data: { logo_url: string; pair: string; chain_id: number }) => {
       await createSiweMessage(
         wallet.account,
-        "Sign In With Honeypot",
+        'Sign In With Honeypot',
         wallet.walletClient
       );
 
@@ -759,7 +759,7 @@ class LaunchPad {
     async (data: { banner_url: string; pair: string; chain_id: number }) => {
       await createSiweMessage(
         wallet.account,
-        "Sign In With Honeypot",
+        'Sign In With Honeypot',
         wallet.walletClient
       );
 
