@@ -16,7 +16,7 @@ import { Address } from 'viem';
 import { Token } from '../../contract/token/token';
 import { poolQueryToContract } from './pool';
 import BigNumber from 'bignumber.js';
-import { useSubgraphClient } from '@honeypot/shared';
+import { useSubgraphClient, wallet } from '@honeypot/shared';
 import { ApolloClient } from '@apollo/client';
 import { createClientHook } from '../clientUtils';
 
@@ -108,12 +108,14 @@ export const vaultQueryResToVaultContract = (
     throw new Error('Vault contract not found');
   }
 
-  vaultContract.token0 = new Token({
+  vaultContract.token0 = Token.getToken({
     address: vault.tokenA as Address,
+    chainId: wallet.currentChain.chainId.toString(),
   });
 
-  vaultContract.token1 = new Token({
+  vaultContract.token1 = Token.getToken({
     address: vault.tokenB as Address,
+    chainId: wallet.currentChain.chainId.toString(),
   });
 
   vaultContract.recentTransactions = [

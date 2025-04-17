@@ -29,7 +29,6 @@ import {
 } from '@/lib/algebra/graphql/clients/pot2pump';
 import { Button } from '@/components/button/v3';
 import { cn } from '@/lib/utils';
-import { chain } from '@honeypot/shared';
 
 const MemeLaunchPage: NextLayoutPage = observer(() => {
   const [pottingProjects, setPottingProjects] =

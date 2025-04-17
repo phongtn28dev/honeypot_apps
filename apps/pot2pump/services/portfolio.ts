@@ -50,6 +50,7 @@ class Portfolio {
 
         return Token.getToken({
           ...rest,
+          chainId: wallet.currentChainId.toString(),
           address: token.id.toLowerCase(),
           derivedETH: token.derivedMatic,
           derivedUSD: token.derivedUSD,

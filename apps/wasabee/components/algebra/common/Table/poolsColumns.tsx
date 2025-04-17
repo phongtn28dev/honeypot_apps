@@ -13,7 +13,7 @@ import {
 } from '@/components/algebra/ui/hover-card';
 import { TokenFieldsFragment } from '@/lib/algebra/graphql/generated/graphql';
 import { ReactNode } from 'react';
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import { Token } from '@honeypot/shared';
 import {
   DynamicFormatAmount,

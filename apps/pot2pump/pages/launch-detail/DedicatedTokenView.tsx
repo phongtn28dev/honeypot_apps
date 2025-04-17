@@ -19,7 +19,6 @@ import { Pot2Pump } from '@/lib/algebra/graphql/generated/graphql';
 import { pot2PumpToMemePair } from '@/lib/algebra/graphql/clients/pair';
 import NotConnetctedDisplay from '@/components/NotConnetctedDisplay/NotConnetctedDisplay';
 import { dedicatedPot2pumps } from '@/config/dedicatedPot2pump';
-import { chain } from '@honeypot/shared';
 
 export const DedicatedTokenView = observer(() => {
   const router = useRouter();
@@ -36,7 +35,7 @@ export const DedicatedTokenView = observer(() => {
   );
 
   useEffect(() => {
-    if (!dedicatedPot2pump || !(chain.isInit || wallet.isInit)) {
+    if (!dedicatedPot2pump || wallet.isInit) {
       return;
     }
 
@@ -48,7 +47,7 @@ export const DedicatedTokenView = observer(() => {
       .then(() => {
         console.log(dedicatedPot2pump.token);
       });
-  }, [dedicatedPot2pump, chain.isInit, wallet.isInit]);
+  }, [dedicatedPot2pump, wallet.isInit]);
 
   useEffect(() => {
     if (!dedicatedPot2pump?.token) {

@@ -1,8 +1,6 @@
-import { cn } from '@/lib/tailwindcss';
-
-import { Token } from '@honeypot/shared';
+import { cn } from '@nextui-org/react';
+import { Token, wallet } from '@honeypot/shared';
 import { Tooltip } from '@nextui-org/react';
-import { wallet } from '@honeypot/shared';
 import { observer } from 'mobx-react-lite';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -26,9 +24,11 @@ export const TokenLogo = observer(
     ...props
   }: TokenLogoProps) => {
     useEffect(() => {
-      token.loadLogoURI();
-      token.loadName();
-      token.loadSymbol();
+      token.init(true, {
+        loadLogoURI: true,
+        loadName: true,
+        loadSymbol: true,
+      });
     }, [token]);
     return (
       <Tooltip
@@ -41,11 +41,11 @@ export const TokenLogo = observer(
         closeDelay={0}
       >
         <Link
-          className="shrink-0"
+          className={cn('shrink-0', disableLink && 'cursor-default')}
           href={
             disableLink
               ? '#'
-              : `${wallet.currentChain.chain.blockExplorers?.default.url}/address/${token.address}`
+              : `${wallet.currentChain.chain.blockExplorers?.default.url}address/${token.address}`
           }
           target={disableLink ? '' : '_blank'}
         >

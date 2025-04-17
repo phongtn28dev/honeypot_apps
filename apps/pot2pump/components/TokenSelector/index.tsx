@@ -13,7 +13,6 @@ import { IoClose } from 'react-icons/io5';
 
 import { Token } from '@honeypot/shared';
 import { Observer, observer, useLocalObservable } from 'mobx-react-lite';
-import { liquidity } from '@/services/liquidity';
 import { useEffect } from 'react';
 import { isEthAddress } from '@/lib/address';
 import { useAccount } from 'wagmi';
@@ -23,7 +22,7 @@ import { NoData } from '../table';
 import { Copy } from '../Copy/index';
 import { BiLinkExternal } from 'react-icons/bi';
 import { wallet } from '@honeypot/shared';
-import TokenLogo from '../TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import TruncateMarkup from 'react-truncate-markup';
 import { motion } from 'framer-motion';
 
@@ -63,6 +62,7 @@ export const TokenSelector = observer(
           }
           const token = Token.getToken({
             address: state.search,
+            chainId: wallet.currentChain.chainId.toString(),
           });
           await token.init();
           state.tokens = [token];

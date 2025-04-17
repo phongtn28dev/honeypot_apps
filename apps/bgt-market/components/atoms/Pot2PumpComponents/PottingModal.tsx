@@ -1,6 +1,6 @@
 import { Button } from '@/components/button/button-next';
 import { SelectState, ItemSelect } from '@/components/ItemSelect';
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
 import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
 import { cn, SelectItem } from '@nextui-org/react';

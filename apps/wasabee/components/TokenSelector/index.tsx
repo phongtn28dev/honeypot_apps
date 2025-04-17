@@ -21,7 +21,7 @@ import { NoData } from '../table';
 import { Copy } from '../Copy/index';
 import { BiLinkExternal } from 'react-icons/bi';
 import { wallet } from '@honeypot/shared';
-import TokenLogo from '../TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import TruncateMarkup from 'react-truncate-markup';
 import { motion } from 'framer-motion';
 

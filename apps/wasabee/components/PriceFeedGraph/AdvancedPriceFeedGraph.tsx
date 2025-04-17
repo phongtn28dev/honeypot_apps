@@ -18,7 +18,6 @@ import { pairToTicker, tokenToTicker } from '@/lib/advancedChart.util';
 import { pairQueryOutput } from '@/types/pair';
 //import { TVChartContainer } from "../AdvancedChart/TVChartContainer/TVChartContainer";
 import { chart } from '@/services/chart';
-import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
 import { observer } from 'mobx-react-lite';
 import { wallet } from '@honeypot/shared';
 

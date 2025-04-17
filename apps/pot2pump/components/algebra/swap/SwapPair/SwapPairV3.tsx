@@ -23,7 +23,6 @@ import { ExchangeSvg } from '@/components/svg/exchange';
 import { chart } from '@/services/chart';
 
 import { Token } from '@honeypot/shared';
-import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
 import { wallet } from '@honeypot/shared';
 import { AlgebraPoolContract } from '@/services/contract/algebra/algebra-pool-contract';
@@ -184,6 +183,7 @@ const SwapPairV3 = ({
         const token = Token.getToken({
           address: fromTokenAddress,
           isNative: isInputNative,
+          chainId: wallet.currentChain.chainId.toString(),
         });
         // await token.init(false, {
         //   loadIndexerTokenData: true,
@@ -215,6 +215,7 @@ const SwapPairV3 = ({
         const token = Token.getToken({
           address: toTokenAddress,
           isNative: isOutputNative,
+          chainId: wallet.currentChain.chainId.toString(),
         });
         // await token.init(false, {
         //   loadIndexerTokenData: true,
@@ -263,7 +264,10 @@ const SwapPairV3 = ({
       baseCurrency?.wrapped.address == quoteCurrency?.wrapped.address
     ) {
       chart.setChartLabel(`${baseCurrency.wrapped.symbol}`);
-      Token.getToken({ address: baseCurrency.wrapped.address })
+      Token.getToken({
+        address: baseCurrency.wrapped.address,
+        chainId: wallet.currentChain.chainId.toString(),
+      })
         .init()
         .then((token) => {
           chart.setChartTarget(token);
@@ -289,7 +293,10 @@ const SwapPairV3 = ({
       });
     } else if (baseCurrency) {
       chart.setChartLabel(`${baseCurrency.symbol}`);
-      Token.getToken({ address: baseCurrency.wrapped.address })
+      Token.getToken({
+        address: baseCurrency.wrapped.address,
+        chainId: wallet.currentChain.chainId.toString(),
+      })
         .init()
         .then((token) => {
           chart.setCurrencyCode('USD');
@@ -297,7 +304,10 @@ const SwapPairV3 = ({
         });
     } else if (quoteCurrency) {
       chart.setChartLabel(`${quoteCurrency.symbol}`);
-      Token.getToken({ address: quoteCurrency.wrapped.address })
+      Token.getToken({
+        address: quoteCurrency.wrapped.address,
+        chainId: wallet.currentChain.chainId.toString(),
+      })
         .init()
         .then((token) => {
           chart.setCurrencyCode('USD');

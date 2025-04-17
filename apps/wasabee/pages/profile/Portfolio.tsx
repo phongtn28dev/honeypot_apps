@@ -16,7 +16,7 @@ import { Button } from '@/components/button/button-next';
 import Image from 'next/image';
 import rhinoLogo from '@/public/images/partners/rhino-finance-logo.svg';
 import { ChevronDown } from 'lucide-react';
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 
 type SortField = 'name' | 'price' | 'balance' | 'value';
 type SortDirection = 'asc' | 'desc';

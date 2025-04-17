@@ -21,7 +21,7 @@ import { ItemSelect, SelectItem, SelectState } from '../ItemSelect';
 import { Slider } from '@nextui-org/react';
 import Image from 'next/image';
 import { FaLongArrowAltRight } from 'react-icons/fa';
-import TokenLogo from '../TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import { Slippage } from './Slippage';
 import BigNumber from 'bignumber.js';
 import { useInterval } from '@/lib/hooks';

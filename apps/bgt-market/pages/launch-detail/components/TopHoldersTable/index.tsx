@@ -1,15 +1,15 @@
-import React, { ReactNode, useEffect, useState, useMemo } from "react";
-import { Copy } from "@/components/Copy";
-import { truncate } from "@/lib/format";
-import { LoadingDisplay } from "@/components/LoadingDisplay/LoadingDisplay";
-import { getTokenTop10Holders } from "@/lib/algebra/graphql/clients/token";
-import BigNumber from "bignumber.js";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
-import Image from "next/image";
-import pot2pumpIcon from "@/public/images/bera/smoking_bera.png";
-import poolIcon from "@/public/images/bera/beekeeperBear.png";
-import { poolExists } from "@/lib/algebra/graphql/clients/pool";
-import { shortenAddressString } from "@/lib/utils";
+import React, { ReactNode, useEffect, useState, useMemo } from 'react';
+import { Copy } from '@/components/Copy';
+import { truncate } from '@/lib/format';
+import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';
+import { getTokenTop10Holders } from '@/lib/algebra/graphql/clients/token';
+import BigNumber from 'bignumber.js';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
+import Image from 'next/image';
+import pot2pumpIcon from '@/public/images/bera/smoking_bera.png';
+import poolIcon from '@/public/images/bera/beekeeperBear.png';
+import { poolExists } from '@honeypot/shared';
+import { shortenAddressString } from '@/lib/utils';
 interface Holder {
   rank: string;
   address: string;
@@ -125,7 +125,7 @@ const TopHoldersTable = ({
             })) || [];
           setHolders(formattedHolders);
         } catch (error) {
-          console.error("Error fetching holders:", error);
+          console.error('Error fetching holders:', error);
           setHolders([]);
         } finally {
           setLoading(false);
@@ -155,10 +155,7 @@ const TopHoldersTable = ({
           <tbody className="divide-y divide-[#4D4D4D]/10">
             {!holders.length ? (
               <tr className="hover:bg-white border-white h-full">
-                <td
-                  colSpan={4}
-                  className="h-24 text-center text-black"
-                >
+                <td colSpan={4} className="h-24 text-center text-black">
                   No results.
                 </td>
               </tr>

@@ -6,7 +6,7 @@ import { Address } from 'viem';
 import { formatCurrency } from '@/lib/algebra/utils/common/formatCurrency';
 
 import { Token, wallet } from '@honeypot/shared';
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import { cn } from '@/lib/utils';
 
 interface EnterAmountsCardProps {

@@ -1,5 +1,5 @@
 import { Network, networksMap } from '@honeypot/shared';
-import NetworkManager from '@honeypot/shared';
+import { NetworkManager } from '@honeypot/shared';
 import React, { useState, useEffect } from 'react';
 
 const NetworkSelect: React.FC = () => {

@@ -1,4 +1,4 @@
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo, wallet } from '@honeypot/shared';
 
 import { Token } from '@honeypot/shared';
 import { IDerivedMintInfo } from '@/lib/algebra/state/mintStore';
@@ -75,6 +75,7 @@ const TokenRatio = ({ mintInfo }: TokenRatioProps) => {
               addtionalClasses="w-8 absolute left-2 top-0"
               token={Token.getToken({
                 address: currencyA ? currencyA.wrapped.address : zeroAddress,
+                chainId: wallet.currentChain.chainId.toString(),
               })}
             />
             {`${parseFloat(token0Ratio).toFixed()}%`}
@@ -92,6 +93,7 @@ const TokenRatio = ({ mintInfo }: TokenRatioProps) => {
               addtionalClasses="w-8 absolute right-0 top-0"
               token={Token.getToken({
                 address: currencyB ? currencyB.wrapped.address : zeroAddress,
+                chainId: wallet.currentChain.chainId.toString(),
               })}
             />
           </div>

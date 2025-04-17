@@ -1,4 +1,4 @@
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 
 import { Token, wallet } from '@honeypot/shared';
 import { IDerivedMintInfo } from '@/lib/algebra/state/mintStore';

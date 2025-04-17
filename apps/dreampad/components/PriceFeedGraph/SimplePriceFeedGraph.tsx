@@ -1,18 +1,18 @@
-import { chart, chartTimeRanges } from "@/services/chart";
-import { PairContract } from "@/services/contract/dex/liquidity/pair-contract";
-import { swap } from "@/services/swap";
-import { Button, cn } from "@nextui-org/react";
-import { ApexOptions } from "apexcharts";
-import dayjs from "dayjs";
-import { observer } from "mobx-react-lite";
-import dynamic from "next/dynamic";
-import { useCallback, useEffect, useState } from "react";
-import { FaSpinner } from "react-icons/fa";
-import { IoCaretDown, IoCaretUp } from "react-icons/io5";
-import HoneyStickSvg from "../svg/HoneyStick";
-import TokenLogo from "../TokenLogo/TokenLogo";
+import { chart, chartTimeRanges } from '@/services/chart';
+import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
+import { swap } from '@/services/swap';
+import { Button, cn } from '@nextui-org/react';
+import { ApexOptions } from 'apexcharts';
+import dayjs from 'dayjs';
+import { observer } from 'mobx-react-lite';
+import dynamic from 'next/dynamic';
+import { useCallback, useEffect, useState } from 'react';
+import { FaSpinner } from 'react-icons/fa';
+import { IoCaretDown, IoCaretUp } from 'react-icons/io5';
+import HoneyStickSvg from '../svg/HoneyStick';
+import { TokenLogo } from '@honeypot/shared';
 
-const Chart = dynamic(() => import("react-apexcharts"), {
+const Chart = dynamic(() => import('react-apexcharts'), {
   loading: () => <p>Loading...</p>,
   ssr: false,
 });
@@ -32,13 +32,13 @@ export const SimplePriceFeedGraph = observer(() => {
             ];
           }) ?? [],
         color: chart.chartColors.labelColor,
-        name: "price",
+        name: 'price',
       },
     ],
     options: {
       chart: {
-        id: "area-datetime",
-        type: "area",
+        id: 'area-datetime',
+        type: 'area',
         zoom: {
           autoScaleYaxis: true,
           allowMouseWheelZoom: false,
@@ -51,7 +51,7 @@ export const SimplePriceFeedGraph = observer(() => {
       },
       dataLabels: {
         enabled: true,
-        textAnchor: "end",
+        textAnchor: 'end',
         formatter: function (val, opts) {
           if (opts.dataPointIndex === opts.w.config.series[0].data.length - 1) {
             return (val as any)?.toFixed(5);
@@ -62,7 +62,7 @@ export const SimplePriceFeedGraph = observer(() => {
         size: 0,
       },
       xaxis: {
-        type: "datetime",
+        type: 'datetime',
         min: chart.timestampsByRange * 1000,
         max: dayjs().unix() * 1000,
         tickAmount: 6,
@@ -85,17 +85,17 @@ export const SimplePriceFeedGraph = observer(() => {
       tooltip: {
         enabled: true,
         x: {
-          format: "dd MMM HH:mm",
+          format: 'dd MMM HH:mm',
         },
-        theme: "dark",
+        theme: 'dark',
         fillSeriesColor: true,
         fixed: {
           enabled: true,
-          position: "topRight",
+          position: 'topRight',
         },
       },
       fill: {
-        type: "gradient",
+        type: 'gradient',
         gradient: {
           shadeIntensity: 1,
           opacityFrom: 1,
@@ -147,8 +147,8 @@ export const SimplePriceFeedGraph = observer(() => {
             ? 0
             : 1
           : 0;
-      const currencyCode: "TOKEN" | "USD" =
-        chart.chartTarget instanceof PairContract ? "TOKEN" : "USD";
+      const currencyCode: 'TOKEN' | 'USD' =
+        chart.chartTarget instanceof PairContract ? 'TOKEN' : 'USD';
 
       chart.setTokenNumber(tokenNum);
       chart.setCurrencyCode(currencyCode);
@@ -160,7 +160,7 @@ export const SimplePriceFeedGraph = observer(() => {
   const updateChartData = useCallback(() => {
     chart.chartData.call().then(() => {
       const chartColor =
-        chart.chartPricePercentageChange >= 0 ? "green" : "red";
+        chart.chartPricePercentageChange >= 0 ? 'green' : 'red';
       chart.setChartColors(chartColor);
 
       setState({
@@ -175,7 +175,7 @@ export const SimplePriceFeedGraph = observer(() => {
                 ];
               }) ?? [],
             color: chart.chartColors.labelColor,
-            name: "price",
+            name: 'price',
           },
         ],
         options: {
@@ -190,7 +190,7 @@ export const SimplePriceFeedGraph = observer(() => {
             ...state.options.tooltip,
             x: {
               ...state.options.tooltip?.x,
-              format: chart.range === "1D" ? "dd MMM HH" : "dd MMM HH:mm",
+              format: chart.range === '1D' ? 'dd MMM HH' : 'dd MMM HH:mm',
             },
           },
           fill: {
@@ -261,15 +261,15 @@ export const SimplePriceFeedGraph = observer(() => {
           <>
             <div className="w-full pl-4 mt-4">
               <span className="mr-2 text-[1rem] sm:text-[2rem]">
-                {(chart.currentPrice ?? 0) < 0.004 && "<"}
+                {(chart.currentPrice ?? 0) < 0.004 && '<'}
                 {chart.currentPrice?.toFixed(2)}
               </span>
               <span
                 className={cn(
-                  "inline-flex justify-start",
+                  'inline-flex justify-start',
                   chart.chartPricePercentageChange >= 0
-                    ? "text-green-500"
-                    : "text-red-500"
+                    ? 'text-green-500'
+                    : 'text-red-500'
                 )}
               >
                 {chart.chartPricePercentageChange >= 0 ? (

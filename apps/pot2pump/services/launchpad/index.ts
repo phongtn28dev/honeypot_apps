@@ -11,7 +11,7 @@ import {
 } from './../utils';
 import { trpc, trpcClient } from '@/lib/trpc';
 import { createSiweMessage } from '@/lib/siwe';
-import { Token } from './../contract/token';
+import { Token } from '@honeypot/shared';
 import { parseEventLogs } from 'viem';
 import { ERC20ABI } from '@/lib/abis/erc20';
 import { MemePairContract } from './../contract/launches/pot2pump/memepair-contract';
@@ -240,9 +240,11 @@ class LaunchPad {
           ? Token.getToken({
               ...pairAddress.token1,
               address: pairAddress.token1.id,
+              chainId: wallet.currentChainId.toString(),
             })
           : Token.getToken({
               address: pairAddress.token0.id,
+              chainId: wallet.currentChainId.toString(),
             });
 
         const launchedToken =
@@ -251,10 +253,12 @@ class LaunchPad {
             ? Token.getToken({
                 ...pairAddress.token0,
                 address: pairAddress.token0.id,
+                chainId: wallet.currentChainId.toString(),
               })
             : Token.getToken({
                 ...pairAddress.token1,
                 address: pairAddress.token1.id,
+                chainId: wallet.currentChainId.toString(),
               });
 
         if (!pair.isInit) {
@@ -289,9 +293,11 @@ class LaunchPad {
           ? Token.getToken({
               ...pairAddress.token1,
               address: pairAddress.token1.id,
+              chainId: wallet.currentChainId.toString(),
             })
           : Token.getToken({
               address: pairAddress.token0.id,
+              chainId: wallet.currentChainId.toString(),
             });
 
         const launchedToken =
@@ -300,10 +306,12 @@ class LaunchPad {
             ? Token.getToken({
                 ...pairAddress.token0,
                 address: pairAddress.token0.id,
+                chainId: wallet.currentChainId.toString(),
               })
             : Token.getToken({
                 ...pairAddress.token1,
                 address: pairAddress.token1.id,
+                chainId: wallet.currentChainId.toString(),
               });
 
         if (!pair.isInit) {
@@ -392,10 +400,13 @@ class LaunchPad {
             ? Token.getToken({
                 ...pairAddress.token1,
                 address: pairAddress.token1.id,
+                chainId: wallet.currentChainId.toString(),
                 decimals: Number(pairAddress.token1.decimals),
               })
             : Token.getToken({
                 address: pairAddress.token0.id,
+                chainId: wallet.currentChainId.toString(),
+                decimals: Number(pairAddress.token0.decimals),
               });
 
           const launchedToken =
@@ -404,11 +415,13 @@ class LaunchPad {
               ? Token.getToken({
                   ...pairAddress.token0,
                   address: pairAddress.token0.id,
+                  chainId: wallet.currentChainId.toString(),
                   decimals: Number(pairAddress.token0.decimals),
                 })
               : Token.getToken({
                   ...pairAddress.token1,
                   address: pairAddress.token1.id,
+                  chainId: wallet.currentChainId.toString(),
                   decimals: Number(pairAddress.token1.decimals),
                 });
 
@@ -472,9 +485,11 @@ class LaunchPad {
             ? Token.getToken({
                 ...pairAddress.pair.token1,
                 address: pairAddress.pair.token1.id,
+                chainId: wallet.currentChainId.toString(),
               })
             : Token.getToken({
                 address: pairAddress.pair.token0.id,
+                chainId: wallet.currentChainId.toString(),
               });
 
           const launchedToken =
@@ -483,10 +498,12 @@ class LaunchPad {
               ? Token.getToken({
                   ...pairAddress.pair.token0,
                   address: pairAddress.pair.token0.id,
+                  chainId: wallet.currentChainId.toString(),
                 })
               : Token.getToken({
                   ...pairAddress.pair.token1,
                   address: pairAddress.pair.token1.id,
+                  chainId: wallet.currentChainId.toString(),
                 });
 
           pair.init({
@@ -548,9 +565,12 @@ class LaunchPad {
             ? Token.getToken({
                 ...pairAddress.token1,
                 address: pairAddress.token1.id,
+                chainId: wallet.currentChainId.toString(),
               })
             : Token.getToken({
                 address: pairAddress.token0.id,
+                chainId: wallet.currentChainId.toString(),
+                decimals: Number(pairAddress.token0.decimals),
               });
 
           const launchedToken =
@@ -559,10 +579,14 @@ class LaunchPad {
               ? Token.getToken({
                   ...pairAddress.token0,
                   address: pairAddress.token0.id,
+                  chainId: wallet.currentChainId.toString(),
+                  decimals: Number(pairAddress.token0.decimals),
                 })
               : Token.getToken({
                   ...pairAddress.token1,
                   address: pairAddress.token1.id,
+                  chainId: wallet.currentChainId.toString(),
+                  decimals: Number(pairAddress.token1.decimals),
                 });
 
           pair.init({
@@ -633,7 +657,7 @@ class LaunchPad {
             tokenName,
             tokenSymbol,
             BigInt(new BigNumber(tokenAmount).multipliedBy(1e18).toFixed()),
-            wallet.currentChain.contracts.routerV3 as `0x${string}`,
+            wallet.currentChain.contracts.algebraSwapRouter as `0x${string}`,
             BigInt(raisingCycle),
           ]);
         } else {
@@ -643,7 +667,7 @@ class LaunchPad {
               name: tokenName,
               symbol: tokenSymbol,
               swapHandler: wallet.currentChain.contracts
-                .routerV3 as `0x${string}`,
+                .algebraSwapRouter as `0x${string}`,
             },
           ]);
         }
@@ -736,7 +760,7 @@ class LaunchPad {
   );
 
   isRaiseToken(tokenAddress: string): boolean {
-    return wallet.currentChain.contracts.ftoTokens.some(
+    return wallet.currentChain.raisedTokenData.some(
       (ftoToken) =>
         ftoToken.address?.toLowerCase() === tokenAddress.toLowerCase()
     );

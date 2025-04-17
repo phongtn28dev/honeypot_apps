@@ -28,7 +28,7 @@ import dynamic from 'next/dynamic';
 import { CarouselApi } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import { CartoonButton } from '@/components/atoms/CartoonButton/CartoonButton';
-import { wallet } from '@honeypot/shared';
+import { useSubgraphClient, wallet } from '@honeypot/shared';
 // 在组件外部定义常量
 
 const POT_TABS = {
@@ -85,6 +85,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
     POT_TABS.ALMOST,
     POT_TABS.NEW_PUMPS,
   ]);
+  const infoClient = useSubgraphClient('algebra_info');
 
   // Load saved tabs from localStorage after component mounts (client-side only)
   useEffect(() => {
@@ -118,6 +119,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
 
   const { data: pottingNewTokens, networkStatus: newTokensNetworkStatus } =
     usePot2PumpPottingNewTokensQuery({
+      client: infoClient,
       variables: {
         endTime: currentTime,
       },
@@ -133,6 +135,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
     data: pottingNearSuccessTokens,
     networkStatus: nearSuccessNetworkStatus,
   } = usePot2PumpPottingNearSuccessQuery({
+    client: infoClient,
     variables: {
       endTime: currentTime,
     },
@@ -148,6 +151,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
     data: pottingHighPriceTokens,
     networkStatus: highPriceNetworkStatus,
   } = usePot2PumpPottingHighPriceQuery({
+    client: infoClient,
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
     pollInterval: 5000,
@@ -159,6 +163,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
 
   const { data: pottingTrendingTokens, networkStatus: trendingNetworkStatus } =
     usePot2PumpPottingTrendingQuery({
+      client: infoClient,
       fetchPolicy: 'network-only',
       notifyOnNetworkStatusChange: true,
       pollInterval: 5000,
@@ -172,6 +177,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
     data: pumpingPopularTokens,
     networkStatus: pumpingPopularNetworkStatus,
   } = usePot2PumpPumpingPopularQuery({
+    client: infoClient,
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
     pollInterval: 5000,
@@ -185,6 +191,7 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
     data: pottingNewTokensByEndtime,
     networkStatus: newTokensByEndtimeNetworkStatus,
   } = usePot2PumpPottingNewTokensByEndtimeQuery({
+    client: infoClient,
     variables: {
       endTime: currentTime,
     },
@@ -410,6 +417,17 @@ const Pot2PumpOverviewPage: NextLayoutPage = observer(() => {
       return prev;
     });
   }, [endTimeTokensList.length, pottingNewTokensByEndtime]);
+
+  useEffect(() => {
+    if (!wallet.isInit) return;
+
+    setEndTimeTokensList([]);
+    setNearSuccessTokensList([]);
+    setHighPriceTokensList([]);
+    setTrendingTokensList([]);
+    setPopularCapTokensList([]);
+    setNewTokensList([]);
+  }, [wallet.currentChain]);
 
   // // Auto scroll effect
   // useEffect(() => {

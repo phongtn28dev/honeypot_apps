@@ -46,6 +46,8 @@ export const Filter = observer(
         Token.getToken({
           address: token.address,
           force: true,
+
+          chainId: wallet.currentChain.chainId.toString(),
         })
       );
 

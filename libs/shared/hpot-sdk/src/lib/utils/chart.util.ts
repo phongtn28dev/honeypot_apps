@@ -1,6 +1,6 @@
 import { Token } from '@honeypot/shared';
 import { networksMap } from '@honeypot/shared';
-import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
+import { PairContract } from '@honeypot/shared';
 
 export const tokenToSymbol = (token: Token) => {
   return token.symbol;
@@ -24,9 +24,7 @@ export const strParams = (
   token: Token,
   chainId: number,
   tokenNumber: number,
-  currencyCode: string,
-  totalSupply = '1',
-  quoteMetric?: 'PRICE' | 'MCAP'
+  currencyCode: string
 ) => {
   return (
     token.name +
@@ -37,11 +35,7 @@ export const strParams = (
     ':' +
     tokenNumber +
     ':' +
-    currencyCode +
-    ':' +
-    totalSupply +
-    ':' +
-    (quoteMetric || 'PRICE')
+    currencyCode
   );
 };
 

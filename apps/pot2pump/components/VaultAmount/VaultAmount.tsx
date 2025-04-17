@@ -4,7 +4,7 @@ import { InputProps } from '@nextui-org/react';
 import { Token } from '@honeypot/shared';
 import { TokenSelector } from '@/components/TokenSelector/v3';
 import { cn } from '@/lib/tailwindcss';
-import TokenLogo from '../TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 
 import { ICHIVaultContract } from '@honeypot/shared';
 import { useEffect, useState } from 'react';

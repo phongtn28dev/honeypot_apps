@@ -21,7 +21,7 @@ import dynamic from 'next/dynamic';
 import { popmodal } from '@/services/popmodal';
 import { LaunchDetailSwapCard } from '../SwapCard/MemeSwap';
 import { toCompactLocaleString } from '@/lib/utils';
-import TokenLogo from '../TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 

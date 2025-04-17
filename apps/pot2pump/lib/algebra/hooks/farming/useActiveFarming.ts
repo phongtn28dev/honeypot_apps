@@ -1,14 +1,14 @@
-import { useAccount } from "wagmi";
-import { useClients } from "../graphql/useClients";
-import { useEffect, useState } from "react";
-import { Farming } from "@/types/algebra/types/farming-info";
-import { Address } from "viem";
+import { useAccount } from 'wagmi';
+import { useEffect, useState } from 'react';
+import { Farming } from '@/types/algebra/types/farming-info';
+import { Address } from 'viem';
 import {
   SinglePoolQuery,
   useEternalFarmingsQuery,
   useSingleTokenQuery,
   useDepositsQuery,
-} from "../../graphql/generated/graphql";
+} from '../../graphql/generated/graphql';
+import { useSubgraphClient } from '@honeypot/shared';
 
 export function useActiveFarming({
   poolId,
@@ -21,7 +21,7 @@ export function useActiveFarming({
 
   const [farmingInfo, setFarmingInfo] = useState<Farming | null>();
 
-  const { farmingClient } = useClients();
+  const farmingClient = useSubgraphClient('algebra_farming');
 
   const { data: farmings, loading: isFarmingLoading } = useEternalFarmingsQuery(
     {
@@ -66,7 +66,7 @@ export function useActiveFarming({
     if (!rewardToken) return;
     if (!bonusRewardToken) return;
     if (!activeFarming || !rewardToken.token) {
-      console.debug("Active farming not found");
+      console.debug('Active farming not found');
       setFarmingInfo(null);
       return;
     }

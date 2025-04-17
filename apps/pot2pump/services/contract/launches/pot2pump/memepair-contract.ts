@@ -1,4 +1,8 @@
-import { Token } from '@honeypot/shared';
+import {
+  getSubgraphClientByChainId,
+  Token,
+  useSubgraphClient,
+} from '@honeypot/shared';
 import { getContract, zeroAddress } from 'viem';
 import { dayjs } from '@/lib/dayjs';
 import BigNumber from 'bignumber.js';
@@ -15,7 +19,7 @@ import { wallet } from '@honeypot/shared';
 import { ICHIVaultContract } from '../../aquabera/ICHIVault-contract';
 import { BaseLaunchContract } from '../base-launch-contract';
 import { Pool } from '@/lib/algebra/graphql/generated/graphql';
-import { poolsByTokenPair } from '@/lib/algebra/graphql/clients/pool';
+import { poolsByTokenPair } from '@honeypot/shared';
 export class MemePairContract implements BaseLaunchContract {
   static contractMap: Record<string, MemePairContract> = {};
   static loadContract(
@@ -538,7 +542,13 @@ export class MemePairContract implements BaseLaunchContract {
       return;
     }
 
+    const infoClient = getSubgraphClientByChainId(
+      wallet.currentChainId.toString(),
+      'algebra_info'
+    );
+
     const poolAddress = await poolsByTokenPair(
+      infoClient,
       this.raiseToken.address.toLowerCase(),
       this.launchedToken.address.toLowerCase()
     );

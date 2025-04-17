@@ -12,8 +12,6 @@ import { useBalance } from 'wagmi';
 
 import { Token } from '@honeypot/shared';
 import { DiscussionArea } from '../Discussion/DiscussionArea/DiscussionArea';
-import { swap } from '@/services/swap';
-import { liquidity } from '@/services/liquidity';
 import { amountFormatted } from '@/lib/format';
 import { MemeWarParticipant, memewarStore } from '@/services/memewar';
 import { WarppedNextSelect } from '../wrappedNextUI/Select/Select';
@@ -22,7 +20,7 @@ import dynamic from 'next/dynamic';
 import { popmodal } from '@/services/popmodal';
 import { LaunchDetailSwapCard } from '../SwapCard/MemeSwap';
 import { toCompactLocaleString } from '@/lib/utils';
-import TokenLogo from '../TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -122,35 +120,35 @@ export const MemeWarSupportSection = observer(() => {
         <div className="flex justify-center items-center gap-2">
           <Button
             isDisabled={false}
-            onClick={async () => {
-              if (memewarStore.selectedSupportParticipantPair?.state === 3) {
-                memewarStore.selectedSupportParticipantPair.deposit.call({
-                  amount: memewarStore.supportAmount.toFixed(0),
-                });
-              } else {
-                if (
-                  !memewarStore.tHpotToken ||
-                  !memewarStore.selectedSupportParticipantPair ||
-                  !memewarStore.selectedSupportParticipantPair.launchedToken
-                ) {
-                  console.error('missing data');
-                  return;
-                }
-                swap.setFromToken(memewarStore.tHpotToken);
-                swap.setToToken(
-                  memewarStore.selectedSupportParticipantPair.launchedToken
-                );
-                swap.setFromAmount(memewarStore.supportAmount.toFixed(0));
+            // onClick={async () => {
+            //   if (memewarStore.selectedSupportParticipantPair?.state === 3) {
+            //     memewarStore.selectedSupportParticipantPair.deposit.call({
+            //       amount: memewarStore.supportAmount.toFixed(0),
+            //     });
+            //   } else {
+            //     if (
+            //       !memewarStore.tHpotToken ||
+            //       !memewarStore.selectedSupportParticipantPair ||
+            //       !memewarStore.selectedSupportParticipantPair.launchedToken
+            //     ) {
+            //       console.error('missing data');
+            //       return;
+            //     }
+            //     swap.setFromToken(memewarStore.tHpotToken);
+            //     swap.setToToken(
+            //       memewarStore.selectedSupportParticipantPair.launchedToken
+            //     );
+            //     swap.setFromAmount(memewarStore.supportAmount.toFixed(0));
 
-                await new Promise((resolve) => {
-                  setTimeout(() => {
-                    resolve(undefined);
-                  }, 1000);
-                });
+            //     await new Promise((resolve) => {
+            //       setTimeout(() => {
+            //         resolve(undefined);
+            //       }, 1000);
+            //     });
 
-                swap.swapExactTokensForTokens.call();
-              }
-            }}
+            //     swap.swapExactTokensForTokens.call();
+            //   }
+            // }}
           >
             Support
           </Button>

@@ -8,7 +8,7 @@ import { popmodal } from '@/services/popmodal';
 import { Token, wallet } from '@honeypot/shared';
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/algebra/ui/button';
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import CreatePoolForm from '../../create-pool/CreatePoolForm';
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';

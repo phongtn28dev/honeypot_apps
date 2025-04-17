@@ -6,7 +6,7 @@ import { useMemo, useState } from 'react';
 import { Address } from 'viem';
 import PoolsTable from '@/components/algebra/common/Table/poolsTable';
 import { usePositions } from '@/lib/algebra/hooks/positions/usePositions';
-import { farmingClient } from '@/lib/algebra/graphql/clients';
+import { useSubgraphClient } from '@honeypot/shared';
 import {
   usePoolsListQuery,
   useActiveFarmingsQuery,
@@ -14,7 +14,7 @@ import {
 } from '@/lib/algebra/graphql/generated/graphql';
 import PoolCardList from './PoolCardList';
 import { SortingState } from '@tanstack/react-table';
-import { useUserPools } from '@/lib/algebra/graphql/clients/pool';
+import { useUserPools } from '@honeypot/shared';
 import { wallet } from '@honeypot/shared';
 import BigNumber from 'bignumber.js';
 
@@ -42,6 +42,8 @@ const PoolsList = ({
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'id', desc: true },
   ]);
+
+  const farmingClient = useSubgraphClient('algebra_farming');
 
   const [search, setSearch] = useState('');
 

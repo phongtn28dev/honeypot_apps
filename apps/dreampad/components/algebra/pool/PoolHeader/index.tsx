@@ -1,7 +1,7 @@
 import CurrencyLogo from '@/components/algebra/common/CurrencyLogo';
 import PageTitle from '@/components/algebra/common/PageTitle';
 import { Skeleton } from '@/components/algebra/ui/skeleton';
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import { useCurrency } from '@/lib/algebra/hooks/common/useCurrency';
 import { formatPercent } from '@/lib/algebra/utils/common/formatPercent';
 import { AlgebraPoolContract } from '@/services/contract/algebra/algebra-pool-contract';

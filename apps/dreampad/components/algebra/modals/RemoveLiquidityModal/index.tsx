@@ -1,32 +1,32 @@
-import Loader from "@/components/algebra/common/Loader";
-import { Button } from "@/components/algebra/ui/button";
+import Loader from '@/components/algebra/common/Loader';
+import { Button } from '@/components/algebra/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/algebra/ui/dialog";
-import { Slider } from "@/components/algebra/ui/slider";
-import { farmingClient } from "@/lib/algebra/graphql/clients";
-import { Deposit } from "@/lib/algebra/graphql/generated/graphql";
-import { useTransactionAwait } from "@/lib/algebra/hooks/common/useTransactionAwait";
+} from '@/components/algebra/ui/dialog';
+import { Slider } from '@/components/algebra/ui/slider';
+import { useSubgraphClient } from '@honeypot/shared';
+import { Deposit } from '@/lib/algebra/graphql/generated/graphql';
+import { useTransactionAwait } from '@/lib/algebra/hooks/common/useTransactionAwait';
 import {
   usePosition,
   usePositions,
-} from "@/lib/algebra/hooks/positions/usePositions";
+} from '@/lib/algebra/hooks/positions/usePositions';
 import {
   useBurnState,
   useBurnActionHandlers,
   useDerivedBurnInfo,
-} from "@/lib/algebra/state/burnStore";
-import { TransactionType } from "@/lib/algebra/state/pendingTransactionsStore";
-import { useUserState } from "@/lib/algebra/state/userStore";
-import { NonfungiblePositionManager, Percent } from "@cryptoalgebra/sdk";
-import { Address } from "viem";
-import { useEffect, useMemo, useState } from "react";
-import { useAccount, useContractWrite } from "wagmi";
-import { useSimulateAlgebraPositionManagerMulticall } from "@/wagmi-generated";
+} from '@/lib/algebra/state/burnStore';
+import { TransactionType } from '@/lib/algebra/state/pendingTransactionsStore';
+import { useUserState } from '@/lib/algebra/state/userStore';
+import { NonfungiblePositionManager, Percent } from '@cryptoalgebra/sdk';
+import { Address } from 'viem';
+import { useEffect, useMemo, useState } from 'react';
+import { useAccount, useContractWrite } from 'wagmi';
+import { useSimulateAlgebraPositionManagerMulticall } from '@/wagmi-generated';
 
 interface RemoveLiquidityModalProps {
   positionId: number;
@@ -56,6 +56,8 @@ const RemoveLiquidityModal = ({ positionId }: RemoveLiquidityModalProps) => {
     feeValue0,
     feeValue1,
   } = derivedInfo;
+
+  const farmingClient = useSubgraphClient('algebra_farming');
 
   const { calldata, value } = useMemo(() => {
     if (
@@ -106,7 +108,7 @@ const RemoveLiquidityModal = ({ positionId }: RemoveLiquidityModalProps) => {
   const { isLoading: isRemoveLoading, isSuccess } = useTransactionAwait(
     removeLiquidityData,
     {
-      title: "Removing liquidity",
+      title: 'Removing liquidity',
       tokenA: position?.token0 as Address,
       tokenB: position?.token1 as Address,
       type: TransactionType.POOL,
@@ -140,7 +142,7 @@ const RemoveLiquidityModal = ({ positionId }: RemoveLiquidityModalProps) => {
         interval = setInterval(
           () =>
             farmingClient.refetchQueries({
-              include: ["Deposits"],
+              include: ['Deposits'],
               onQueryUpdated: (query, { result: diff }) => {
                 const currentPos = diff.deposits.find(
                   (deposit: Deposit) =>
@@ -166,7 +168,7 @@ const RemoveLiquidityModal = ({ positionId }: RemoveLiquidityModalProps) => {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
-          variant={"outline"}
+          variant={'outline'}
           className="w-full rounded-md border-2 border-[rgba(225,138,32,0.40)] bg-[rgba(225,138,32,0.40)] backdrop-blur-sm"
         >
           Remove Liquidity
@@ -174,7 +176,7 @@ const RemoveLiquidityModal = ({ positionId }: RemoveLiquidityModalProps) => {
       </DialogTrigger>
       <DialogContent
         className="min-w-[500px] rounded-3xl bg-[#322111] border-none"
-        style={{ borderRadius: "32px" }}
+        style={{ borderRadius: '32px' }}
       >
         <DialogHeader>
           <DialogTitle className="font-bold select-none">
@@ -190,9 +192,9 @@ const RemoveLiquidityModal = ({ positionId }: RemoveLiquidityModalProps) => {
               <Button
                 key={`liquidity-percent-${v}`}
                 disabled={isRemoveLoading}
-                variant={"icon"}
+                variant={'icon'}
                 className="border border-card-border"
-                size={"sm"}
+                size={'sm'}
                 onClick={() => setSliderValue([v])}
               >
                 {v}%
@@ -220,7 +222,7 @@ const RemoveLiquidityModal = ({ positionId }: RemoveLiquidityModalProps) => {
               removeLiquidity(removeLiquidityConfig.request)
             }
           >
-            {isRemoveLoading ? <Loader /> : "Remove Liquidity"}
+            {isRemoveLoading ? <Loader /> : 'Remove Liquidity'}
           </Button>
         </div>
       </DialogContent>

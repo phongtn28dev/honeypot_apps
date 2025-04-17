@@ -5,12 +5,13 @@ import { useState, useEffect, useCallback } from 'react';
 import { ICHIVaultContract } from '@honeypot/shared';
 import { Address, isAddress, zeroAddress } from 'viem';
 import { Button } from '@/components/algebra/ui/button';
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import { DepositToVaultModal } from '@/components/Aquabera/modals/DepositToVaultModal';
 import { wallet } from '@honeypot/shared';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
 import { WithdrawFromVaultModal } from '@/components/Aquabera/modals/WithdrawFromVaultModal';
-import { getSingleVaultDetails } from '@/lib/algebra/graphql/clients/vaults';
+
+import { getSingleVaultDetails } from '@honeypot/shared';
 import { SingleVaultDetailsQuery } from '@/lib/algebra/graphql/generated/graphql';
 import BigNumber from 'bignumber.js';
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';

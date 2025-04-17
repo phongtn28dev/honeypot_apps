@@ -2,15 +2,15 @@ import {
   Token,
   algebraPositionManagerABI,
   computePoolAddress,
-} from "@cryptoalgebra/sdk";
-import { useMemo } from "react";
-import { useAccount, useContractReads } from "wagmi";
-import { Address } from "viem";
-import { ALGEBRA_POSITION_MANAGER } from "@/config/algebra/addresses";
-import { DEFAULT_CHAIN_ID } from "@/config/algebra/default-chain-id";
-import { farmingClient } from "../../graphql/clients";
-import { useDepositsQuery } from "../../graphql/generated/graphql";
-import { useReadAlgebraPositionManagerBalanceOf } from "@/wagmi-generated";
+} from '@cryptoalgebra/sdk';
+import { useMemo } from 'react';
+import { useAccount, useContractReads } from 'wagmi';
+import { Address } from 'viem';
+import { ALGEBRA_POSITION_MANAGER } from '@/config/algebra/addresses';
+import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
+import { useSubgraphClient } from '@honeypot/shared';
+import { useDepositsQuery } from '../../graphql/generated/graphql';
+import { useReadAlgebraPositionManagerBalanceOf } from '@/wagmi-generated';
 
 export interface PositionFromTokenId {
   tokenId: number;
@@ -28,7 +28,7 @@ export interface PositionFromTokenId {
   pool: Address;
 }
 
-function usePositionsFromTokenIds (tokenIds: any[] | undefined): {
+function usePositionsFromTokenIds(tokenIds: any[] | undefined): {
   isLoading: boolean;
   positions: PositionFromTokenId[] | undefined;
   refetch: () => void;
@@ -48,7 +48,7 @@ function usePositionsFromTokenIds (tokenIds: any[] | undefined): {
     contracts: inputs.map((x) => ({
       address: ALGEBRA_POSITION_MANAGER,
       abi: algebraPositionManagerABI,
-      functionName: "positions",
+      functionName: 'positions',
       args: [[Number(x)]],
     })),
     // cacheTime: 10_000,
@@ -100,7 +100,7 @@ function usePositionsFromTokenIds (tokenIds: any[] | undefined): {
   }, [isLoading, positions, refetch]);
 }
 
-export function usePositions () {
+export function usePositions() {
   const { address: account } = useAccount();
 
   const { data: balanceResult, isLoading: balanceLoading } =
@@ -126,7 +126,7 @@ export function usePositions () {
       contracts: tokenIdsArgs.map((args) => ({
         address: ALGEBRA_POSITION_MANAGER,
         abi: algebraPositionManagerABI,
-        functionName: "tokenOfOwnerByIndex",
+        functionName: 'tokenOfOwnerByIndex',
         args,
       })),
       //cacheTime: 10_000,
@@ -155,7 +155,7 @@ export function usePositions () {
   };
 }
 
-export function usePosition (tokenId: string | number | undefined): {
+export function usePosition(tokenId: string | number | undefined): {
   loading: boolean;
   position: PositionFromTokenId | undefined;
   refetch: () => void;
@@ -177,7 +177,7 @@ export function usePosition (tokenId: string | number | undefined): {
   }, [isLoading, positions, refetch]);
 }
 
-export function usePositionInFarming (tokenId: string | number | undefined) {
+export function usePositionInFarming(tokenId: string | number | undefined) {
   const { position } = usePosition(tokenId);
 
   const { address: account } = useAccount();

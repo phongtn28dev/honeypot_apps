@@ -389,6 +389,7 @@ const TokenCardV3 = ({
                   ? Token.getToken({
                       address: currency?.wrapped.address,
                       isNative: currency.isNative,
+                      chainId: wallet.currentChain.chainId.toString(),
                     })
                   : undefined
               }

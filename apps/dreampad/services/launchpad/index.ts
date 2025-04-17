@@ -11,7 +11,8 @@ import {
 } from './../utils';
 import { trpc, trpcClient } from '@/lib/trpc';
 import { createSiweMessage } from '@/lib/siwe';
-import { Token } from './../contract/token';
+
+import { Token } from '@honeypot/shared';
 import { parseEventLogs } from 'viem';
 import { ERC20ABI } from '@/lib/abis/erc20';
 import { MemePairContract } from './../contract/launches/pot2pump/memepair-contract';

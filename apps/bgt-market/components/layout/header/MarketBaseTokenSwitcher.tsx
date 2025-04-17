@@ -2,7 +2,7 @@ import { Switch } from '@nextui-org/react';
 import { globalService } from '@/services/global';
 import { observer } from 'mobx-react-lite';
 import { CardContainer, HoneyContainer } from '@/components/CardContianer';
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import { wallet } from '@honeypot/shared';
 
 import { Token } from '@honeypot/shared';

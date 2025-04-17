@@ -1,12 +1,11 @@
-import { useMemo, useState } from "react";
-import { Address } from "viem";
-import { useClients } from "../graphql/useClients";
+import { useMemo, useState } from 'react';
+import { Address } from 'viem';
 import {
   SinglePoolQuery,
   EternalFarming,
   useEternalFarmingsQuery,
-} from "../../graphql/generated/graphql";
-
+} from '../../graphql/generated/graphql';
+import { useSubgraphClient } from '@honeypot/shared';
 export function useClosedFarmings({
   poolId,
   poolInfo,
@@ -18,7 +17,7 @@ export function useClosedFarmings({
     EternalFarming[] | null
   >();
 
-  const { farmingClient } = useClients();
+  const farmingClient = useSubgraphClient('algebra_farming');
 
   const { data: initialData, loading: isLoading } = useEternalFarmingsQuery({
     variables: {

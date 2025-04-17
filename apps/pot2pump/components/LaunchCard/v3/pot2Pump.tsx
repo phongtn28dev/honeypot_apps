@@ -18,7 +18,7 @@ import Countdown from 'react-countdown';
 import BigNumber from 'bignumber.js';
 import { Pot2Pump } from '@/lib/algebra/graphql/clients/type';
 
-import { Token } from '@honeypot/shared';
+import { Token, wallet } from '@honeypot/shared';
 import { useProjectInfo } from '@/hooks/useProjectInfo';
 
 type launchCardVariants = 'list' | 'detail' | 'trending';
@@ -334,6 +334,7 @@ const DetailLaunchCard = observer(
             optionsPresets.importTokenToWallet({
               token: Token.getToken({
                 address: pair?.launchedToken?.address ?? '',
+                chainId: wallet.currentChain.chainId.toString(),
               }),
             }),
             optionsPresets.share({

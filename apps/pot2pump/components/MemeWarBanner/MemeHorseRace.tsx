@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import raceFieldBg from 'public/images/horserace/race_field.png';
 
-import { Token } from '@honeypot/shared';
+import { Token, useSubgraphClient } from '@honeypot/shared';
 import { V3SwapCard } from '@/components/algebra/swap/V3SwapCard';
 import { wallet } from '@honeypot/shared';
 import { observer } from 'mobx-react-lite';
@@ -20,7 +20,7 @@ import { useSpring, animated } from 'react-spring';
 import { getTokenTop10Holders } from '@/lib/algebra/graphql/clients/token';
 import { TokenTop10HoldersQuery } from '@/lib/algebra/graphql/generated/graphql';
 import BigNumber from 'bignumber.js';
-import { poolsByTokenPair } from '@/lib/algebra/graphql/clients/pool';
+import { poolsByTokenPair } from '@honeypot/shared';
 import { useRouter } from 'next/router';
 import { ExternalLink } from 'lucide-react';
 import { Copy } from '@/components/Copy';
@@ -504,6 +504,7 @@ export const MemeHorseRace = observer(
       onOpen: onHoldersOpen,
       onClose: onHoldersClose,
     } = useDisclosure();
+    const infoClient = useSubgraphClient('algebra_info');
 
     useEffect(() => {
       const initialize = async () => {
@@ -517,7 +518,10 @@ export const MemeHorseRace = observer(
           if (wallet.isInit) {
             const tokenMap: Record<string, Token> = {};
             for (const racer of initialRacers) {
-              const token = Token.getToken({ address: racer.tokenAddress });
+              const token = Token.getToken({
+                address: racer.tokenAddress,
+                chainId: wallet.currentChain.chainId.toString(),
+              });
               await token.init();
               tokenMap[racer.tokenAddress] = token;
             }
@@ -724,6 +728,7 @@ export const MemeHorseRace = observer(
 
     const handleAddLP = async (tokenAddress: string) => {
       const pools = await poolsByTokenPair(
+        infoClient,
         tokenAddress,
         wallet.currentChain.platformTokenAddress.HPOT
       );

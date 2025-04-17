@@ -1,5 +1,5 @@
 import { Token } from '@honeypot/shared';
-import TokenLogo from '../TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import { Copy } from '../Copy';
 import { observer } from 'mobx-react-lite';
 import CardContianer from '../CardContianer/CardContianer';

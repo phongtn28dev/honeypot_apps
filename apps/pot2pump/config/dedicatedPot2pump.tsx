@@ -1,4 +1,4 @@
-import { Token } from '@honeypot/shared';
+import { Token, wallet } from '@honeypot/shared';
 
 export type DedicatedPot2Pump = {
   tokenAddress: string;
@@ -17,6 +17,7 @@ export const dedicatedPot2pumps: DedicatedPot2Pump[] = [
     tokenAddress: '0x5c43a5fef2b056934478373a53d1cb08030fd382',
     token: Token.getToken({
       address: '0x5c43a5fef2b056934478373a53d1cb08030fd382',
+      chainId: '80094',
     }),
     logoURI: '/images/icons/tokens/berally.png',
     bannerURI: '/images/banner/berally-banner.png',

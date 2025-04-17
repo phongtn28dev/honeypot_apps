@@ -29,7 +29,7 @@ import { LuOption } from 'react-icons/lu';
 import { IoOptions } from 'react-icons/io5';
 import { SlOptions } from 'react-icons/sl';
 import { FaLongArrowAltRight } from 'react-icons/fa';
-import TokenLogo from '../TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import { Slippage } from './Slippage';
 import BigNumber from 'bignumber.js';
 import { useInterval } from '@/lib/hooks';

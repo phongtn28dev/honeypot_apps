@@ -4,7 +4,7 @@ import { Button } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import dynamic from 'next/dynamic';
 import { LaunchDetailSwapCard } from '../SwapCard/MemeSwap';
-import TokenLogo from '../TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import { useEffect, useState } from 'react';
 import { fetchMemetrackerList, Pair } from '@/lib/algebra/graphql/clients/pair';
 import { wallet } from '@honeypot/shared';

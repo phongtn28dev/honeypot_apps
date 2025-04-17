@@ -1,4 +1,4 @@
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo, wallet } from '@honeypot/shared';
 
 import { Token } from '@honeypot/shared';
 import { Ellipsis } from 'lucide-react';
@@ -43,9 +43,11 @@ const PoolCardList = observer(({ data }: { data: Pool[] }) => {
       {data.map((pool) => {
         const token1 = Token.getToken({
           address: pool.pair.token0.id,
+          chainId: wallet.currentChain.chainId.toString(),
         });
         const token2 = Token.getToken({
           address: pool.pair.token1.id,
+          chainId: wallet.currentChain.chainId.toString(),
         });
 
         return (

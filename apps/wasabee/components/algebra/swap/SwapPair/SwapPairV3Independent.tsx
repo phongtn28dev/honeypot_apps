@@ -24,7 +24,6 @@ import { ExchangeSvg } from '@/components/svg/exchange';
 import { chart } from '@/services/chart';
 
 import { Token } from '@honeypot/shared';
-import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
 import { wallet } from '@honeypot/shared';
 import { AlgebraPoolContract } from '@/services/contract/algebra/algebra-pool-contract';

@@ -56,7 +56,10 @@ export class AlgebraPoolContract implements BaseContract {
     if (this.token0.value && !options?.force) return;
 
     const token0Address = await this.contract.read.token0();
-    const token = Token.getToken({ address: token0Address });
+    const token = Token.getToken({
+      address: token0Address,
+      chainId: wallet.currentChain.chainId.toString(),
+    });
     await token.init();
 
     return token;
@@ -68,7 +71,10 @@ export class AlgebraPoolContract implements BaseContract {
     if (this.token1.value && !options?.force) return;
 
     const token1Address = await this.contract.read.token1();
-    const token = Token.getToken({ address: token1Address });
+    const token = Token.getToken({
+      address: token1Address,
+      chainId: wallet.currentChain.chainId.toString(),
+    });
     await token.init();
 
     return token;

@@ -1,5 +1,5 @@
 import Loader from '@/components/algebra/common/Loader';
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import { MAX_UINT128 } from '@/config/algebra/max-uint128';
 import { usePoolPlugins } from '@/lib/algebra/hooks/pools/usePoolPlugins';
 import useWrapCallback, {

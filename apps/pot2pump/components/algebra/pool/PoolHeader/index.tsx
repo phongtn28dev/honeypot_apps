@@ -1,7 +1,7 @@
 import CurrencyLogo from '@/components/algebra/common/CurrencyLogo';
 import PageTitle from '@/components/algebra/common/PageTitle';
 import { Skeleton } from '@/components/algebra/ui/skeleton';
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo, wallet } from '@honeypot/shared';
 import { useCurrency } from '@/lib/algebra/hooks/common/useCurrency';
 import { formatPercent } from '@/lib/algebra/utils/common/formatPercent';
 import { AlgebraPoolContract } from '@/services/contract/algebra/algebra-pool-contract';
@@ -29,6 +29,7 @@ const PoolHeader = observer(({ pool, token0, token1 }: PoolHeaderProps) => {
               size={40}
               token={Token.getToken({
                 address: token0.address,
+                chainId: wallet.currentChain.chainId.toString(),
               })}
             />
           )}
@@ -39,6 +40,7 @@ const PoolHeader = observer(({ pool, token0, token1 }: PoolHeaderProps) => {
               size={40}
               token={Token.getToken({
                 address: token1.address,
+                chainId: wallet.currentChain.chainId.toString(),
               })}
             />
           )}

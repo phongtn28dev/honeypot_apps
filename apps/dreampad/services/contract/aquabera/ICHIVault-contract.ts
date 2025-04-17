@@ -8,7 +8,7 @@ import { ContractWrite } from '@/services/utils';
 import BigNumber from 'bignumber.js';
 
 import { Token } from '@honeypot/shared';
-import { PairContract } from '../dex/liquidity/pair-contract';
+import { PairContract } from '@honeypot/shared';
 import { VaultDeposit } from '@/lib/algebra/graphql/generated/graphql';
 import { VaultWithdraw } from '@/lib/algebra/graphql/generated/graphql';
 import { VaultCollectFee } from '@/lib/algebra/graphql/generated/graphql';

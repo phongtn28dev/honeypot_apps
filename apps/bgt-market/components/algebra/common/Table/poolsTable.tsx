@@ -5,10 +5,10 @@ import { useEffect, useState } from 'react';
 import { Tab, Tabs } from '@nextui-org/react';
 import { popmodal } from '@/services/popmodal';
 
-import { Token } from '@honeypot/shared';
+import { Token, wallet } from '@honeypot/shared';
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/algebra/ui/button';
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import CreatePoolForm from '../../create-pool/CreatePoolForm';
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';
@@ -265,6 +265,7 @@ const PoolsTable = <TData, TValue>({
                           <TokenLogo
                             token={Token.getToken({
                               address: pool.pair.token0.id,
+                              chainId: wallet.currentChain.chainId.toString(),
                             })}
                             addtionalClasses="translate-x-[25%]"
                             size={24}
@@ -272,6 +273,7 @@ const PoolsTable = <TData, TValue>({
                           <TokenLogo
                             token={Token.getToken({
                               address: pool.pair.token1.id,
+                              chainId: wallet.currentChain.chainId.toString(),
                             })}
                             addtionalClasses="translate-x-[-25%]"
                             size={24}

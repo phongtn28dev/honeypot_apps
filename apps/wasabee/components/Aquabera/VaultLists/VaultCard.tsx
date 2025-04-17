@@ -1,6 +1,7 @@
 import { Button } from '@/components/algebra/ui/button';
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
-import { getSingleVaultDetails } from '@/lib/algebra/graphql/clients/vaults';
+import { TokenLogo } from '@honeypot/shared';
+
+import { getSingleVaultDetails } from '@honeypot/shared';
 
 import { ICHIVaultContract } from '@honeypot/shared';
 

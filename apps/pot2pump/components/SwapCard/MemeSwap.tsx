@@ -1,13 +1,10 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { swap } from '@/services/swap';
 import { Button } from '@/components/button/button-next';
-import { Token } from '@honeypot/shared';
-import { SpinnerContainer } from '../Spinner';
+import { Token, useSubgraphClient } from '@honeypot/shared';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { isEthAddress } from '@/lib/address';
 import { wallet } from '@honeypot/shared';
-import { liquidity } from '@/services/liquidity';
 import { LoadingContainer } from '../LoadingDisplay/LoadingDisplay';
 import { SelectState } from '../ItemSelect/v3';
 import { cn } from '@nextui-org/react';
@@ -20,7 +17,8 @@ import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair
 import { chart } from '@/services/chart';
 import { V3SwapCard } from '../algebra/swap/V3SwapCard';
 import { HoneyContainer } from '../CardContianer';
-import { getSingleVaultDetails } from '@/lib/algebra/graphql/clients/vaults';
+
+import { getSingleVaultDetails } from '@honeypot/shared';
 import { DOMAIN_MAP } from 'honeypot-sdk';
 import { Tab, Tabs } from '@nextui-org/react';
 import { PresetPair } from '../algebra/swap/SwapPair/SwapPairV3';
@@ -56,22 +54,14 @@ export const LaunchDetailSwapCard = observer(
     const [presetPairs, setPresetPairs] = useState<PresetPair[]>([]);
     const router = useRouter();
     const isInit = wallet.isInit;
-    const state = useLocalObservable(() => ({
-      selectState: new SelectState({
-        value: 0,
-        onSelectChange: (value) => {
-          swap.setFromAmount(
-            (swap.fromToken as Token).balance.times(value).toFixed()
-          );
-        },
-      }),
-    }));
     const [vaultContract, setVaultContract] =
       useState<ICHIVaultContract | null>(null);
 
     const onAmountChange = (amount0: string, amount1: string) => {
       setValues({ amount0, amount1 });
     };
+
+    const infoClient = useSubgraphClient('algebra_info');
 
     useEffect(() => {
       const newPresetPairs = [];
@@ -153,7 +143,10 @@ export const LaunchDetailSwapCard = observer(
         try {
           const lpTokenAddress = await memePairContract.contract.read.lpToken();
           console.log('lpTokenAddress', lpTokenAddress);
-          const vaultContract = await getSingleVaultDetails(lpTokenAddress);
+          const vaultContract = await getSingleVaultDetails(
+            infoClient,
+            lpTokenAddress
+          );
           console.log('vaultContract', vaultContract);
           setVaultContract(vaultContract);
         } catch (error) {
@@ -167,99 +160,6 @@ export const LaunchDetailSwapCard = observer(
       inputCurrency: string;
       outputCurrency: string;
     };
-
-    useEffect(() => {
-      if (!isInit) {
-        liquidity.initPool();
-        return;
-      }
-
-      if (inputCurrency && isEthAddress(inputCurrency)) {
-        swap.setFromToken(
-          Token.getToken({
-            address: inputCurrency,
-            isNative: isInputNative,
-            chainId: wallet.currentChain.chainId.toString(),
-          })
-        );
-      } else {
-        swap.setFromToken(
-          Token.getToken({
-            address:
-              inputAddress || '0xfc5e3743e9fac8bb60408797607352e24db7d65e',
-            isNative: isInputNative,
-            chainId: wallet.currentChain.chainId.toString(),
-          })
-        );
-      }
-
-      if (outputCurrency && isEthAddress(outputCurrency)) {
-        swap.setToToken(
-          Token.getToken({
-            address: outputCurrency,
-            isNative: isOutputNative,
-            chainId: wallet.currentChain.chainId.toString(),
-          })
-        );
-      } else {
-        swap.setToToken(
-          Token.getToken({
-            address: outputAddress ?? '',
-            isNative: isOutputNative,
-            chainId: wallet.currentChain.chainId.toString(),
-          })
-        );
-      }
-    }, [
-      isInit,
-      inputCurrency,
-      outputCurrency,
-      inputAddress,
-      outputAddress,
-      isInputNative,
-      isOutputNative,
-    ]);
-
-    useInterval(() => {
-      swap.onFromAmountChange();
-    }, 3000);
-
-    useEffect(() => {
-      if (swap.toToken) {
-        chart.setChartLabel(
-          `${
-            Token.getToken({
-              address: swap.toToken.address,
-              chainId: wallet.currentChain.chainId.toString(),
-            }).symbol
-          }`
-        );
-        chart.setChartTarget(
-          Token.getToken({
-            address: swap.toToken.address,
-            chainId: wallet.currentChain.chainId.toString(),
-          })
-        );
-        chart.setCurrencyCode('USD');
-      } else if (swap.fromToken) {
-        chart.setChartLabel(
-          `${
-            Token.getToken({
-              address: swap.fromToken.address,
-              chainId: wallet.currentChain.chainId.toString(),
-            }).symbol
-          }`
-        );
-        chart.setChartTarget(
-          Token.getToken({
-            address: swap.fromToken.address,
-            chainId: wallet.currentChain.chainId.toString(),
-          })
-        );
-        chart.setCurrencyCode('USD');
-      }
-      console.log('chart.getChartTarget()', chart.chartTarget);
-    }, [swap.fromToken, swap.toToken]);
 
     return (
       <div>
@@ -412,7 +312,7 @@ export const DedicatedSwapCard = observer(
     });
     const [presetPairs, setPresetPairs] = useState<PresetPair[]>([]);
     const router = useRouter();
-    const isInit = wallet.isInit && liquidity.isInit;
+    const isInit = wallet.isInit;
     // const state = useLocalObservable(() => ({
     //   selectState: new SelectState({
     //     value: 0,
@@ -493,122 +393,10 @@ export const DedicatedSwapCard = observer(
       wallet.currentChain?.nativeToken?.address,
     ]);
 
-    // useEffect(() => {
-    //   if (!wallet.isInit) {
-    //     return;
-    //   }
-
-    //   const loadVaultContract = async () => {
-    //     try {
-    //       const lpTokenAddress = await memePairContract.contract.read.lpToken();
-    //       console.log("lpTokenAddress", lpTokenAddress);
-    //       const vaultContract = await getSingleVaultDetails(lpTokenAddress);
-    //       console.log("vaultContract", vaultContract);
-    //       setVaultContract(vaultContract);
-    //     } catch (error) {
-    //       console.error("Failed to load vault contract:", error);
-    //     }
-    //   };
-    //   loadVaultContract();
-    // }, [inputAddress, outputAddress, wallet.isInit]);
-
     const { inputCurrency, outputCurrency } = router.query as {
       inputCurrency: string;
       outputCurrency: string;
     };
-
-    useEffect(() => {
-      if (!isInit) {
-        liquidity.initPool();
-        return;
-      }
-
-      if (inputCurrency && isEthAddress(inputCurrency)) {
-        swap.setFromToken(
-          Token.getToken({
-            address: inputCurrency,
-            isNative: isInputNative,
-            chainId: wallet.currentChain.chainId.toString(),
-          })
-        );
-      } else {
-        swap.setFromToken(
-          Token.getToken({
-            address:
-              inputAddress || '0xfc5e3743e9fac8bb60408797607352e24db7d65e',
-            isNative: isInputNative,
-            chainId: wallet.currentChain.chainId.toString(),
-          })
-        );
-      }
-
-      if (outputCurrency && isEthAddress(outputCurrency)) {
-        swap.setToToken(
-          Token.getToken({
-            address: outputCurrency,
-            isNative: isOutputNative,
-            chainId: wallet.currentChain.chainId.toString(),
-          })
-        );
-      } else {
-        swap.setToToken(
-          Token.getToken({
-            address: outputAddress ?? '',
-            isNative: isOutputNative,
-            chainId: wallet.currentChain.chainId.toString(),
-          })
-        );
-      }
-    }, [
-      isInit,
-      inputCurrency,
-      outputCurrency,
-      inputAddress,
-      outputAddress,
-      isInputNative,
-      isOutputNative,
-    ]);
-
-    useInterval(() => {
-      swap.onFromAmountChange();
-    }, 3000);
-
-    useEffect(() => {
-      if (swap.toToken) {
-        chart.setChartLabel(
-          `${
-            Token.getToken({
-              address: swap.toToken.address,
-              chainId: wallet.currentChain.chainId.toString(),
-            }).symbol
-          }`
-        );
-        chart.setChartTarget(
-          Token.getToken({
-            address: swap.toToken.address,
-            chainId: wallet.currentChain.chainId.toString(),
-          })
-        );
-        chart.setCurrencyCode('USD');
-      } else if (swap.fromToken) {
-        chart.setChartLabel(
-          `${
-            Token.getToken({
-              address: swap.fromToken.address,
-              chainId: wallet.currentChain.chainId.toString(),
-            }).symbol
-          }`
-        );
-        chart.setChartTarget(
-          Token.getToken({
-            address: swap.fromToken.address,
-            chainId: wallet.currentChain.chainId.toString(),
-          })
-        );
-        chart.setCurrencyCode('USD');
-      }
-      console.log('chart.getChartTarget()', chart.chartTarget);
-    }, [swap.fromToken, swap.toToken]);
 
     return (
       <div>

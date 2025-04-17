@@ -15,7 +15,7 @@ import { ICHIVaultContract } from '@honeypot/shared';
 import VaultRow from './VaulltRow';
 import { useSubgraphClient } from '@honeypot/shared';
 
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import VaultCard from './VaultCard';
 
 type SortField =

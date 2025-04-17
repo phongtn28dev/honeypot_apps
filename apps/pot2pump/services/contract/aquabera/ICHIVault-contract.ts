@@ -8,7 +8,7 @@ import { ContractWrite } from '@/services/utils';
 import BigNumber from 'bignumber.js';
 
 import { Token } from '@honeypot/shared';
-import { PairContract } from '../dex/liquidity/pair-contract';
+import { PairContract } from '@honeypot/shared';
 import { VaultDeposit } from '@/lib/algebra/graphql/generated/graphql';
 import { VaultWithdraw } from '@/lib/algebra/graphql/generated/graphql';
 import { VaultCollectFee } from '@/lib/algebra/graphql/generated/graphql';
@@ -95,13 +95,19 @@ export class ICHIVaultContract implements BaseContract {
 
   async getToken0() {
     const token0 = await this.contract.read.token0();
-    this.token0 = Token.getToken({ address: token0 });
+    this.token0 = Token.getToken({
+      address: token0,
+      chainId: wallet.currentChain.chainId.toString(),
+    });
     return this.token0;
   }
 
   async getToken1() {
     const token1 = await this.contract.read.token1();
-    this.token1 = Token.getToken({ address: token1 });
+    this.token1 = Token.getToken({
+      address: token1,
+      chainId: wallet.currentChain.chainId.toString(),
+    });
     return this.token1;
   }
 

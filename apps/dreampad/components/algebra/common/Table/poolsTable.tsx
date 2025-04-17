@@ -9,7 +9,7 @@ import { Pool } from './poolsColumns';
 import { ColumnDef } from '@tanstack/react-table';
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { Tab, Tabs } from '@nextui-org/react';
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import { Token, wallet } from '@honeypot/shared';
 
 interface PoolsTableProps<TData, TValue> {

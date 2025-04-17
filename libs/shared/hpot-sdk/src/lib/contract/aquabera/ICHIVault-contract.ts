@@ -6,7 +6,7 @@ import { ICHIVaultABI } from '../../abis/aquabera/ICHIVault';
 import { ContractWrite } from '../../utils/utils';
 import BigNumber from 'bignumber.js';
 import { Token } from '../token/token';
-import { PairContract } from '../dex/liquidity/pair-contract';
+import { PairContract } from '@honeypot/shared';
 import { VaultDeposit } from '../../graphql/generated/graphql';
 import { VaultWithdraw } from '../../graphql/generated/graphql';
 import { VaultCollectFee } from '../../graphql/generated/graphql';

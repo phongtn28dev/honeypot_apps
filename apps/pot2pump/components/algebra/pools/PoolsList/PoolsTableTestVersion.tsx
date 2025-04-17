@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Address } from 'viem';
 import PoolsTable from '@/components/algebra/common/Table/poolsTable';
 import { usePositions } from '@/lib/algebra/hooks/positions/usePositions';
-import { farmingClient } from '@/lib/algebra/graphql/clients';
+import { useSubgraphClient } from '@honeypot/shared';
 import {
   usePoolsListQuery,
   useActiveFarmingsQuery,
@@ -16,7 +16,7 @@ import {
 import PoolCardList from './PoolCardList';
 import { SortingState } from '@tanstack/react-table';
 import { id } from 'ethers/lib/utils';
-import { useUserPools } from '@/lib/algebra/graphql/clients/pool';
+import { useUserPools } from '@honeypot/shared';
 import { wallet } from '@honeypot/shared';
 import BigNumber from 'bignumber.js';
 import { observer } from 'mobx-react-lite';
@@ -43,7 +43,7 @@ const PoolsList = observer(
       { id: 'id', desc: true },
     ]);
     const [isAllpoolsLoading, setIsAllpoolsLoading] = useState(true);
-
+    const farmingClient = useSubgraphClient('algebra_farming');
     const orderBy = mappingSortKeys[sorting[0].id];
 
     const {

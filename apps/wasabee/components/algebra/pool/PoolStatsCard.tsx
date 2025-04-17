@@ -8,7 +8,7 @@ import { calculatePercentageChange } from '@/lib/utils';
 import { Address } from 'viem';
 
 import { Token } from '@honeypot/shared';
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import { wallet } from '@honeypot/shared';
 import { useSubgraphClient } from '@honeypot/shared';
 

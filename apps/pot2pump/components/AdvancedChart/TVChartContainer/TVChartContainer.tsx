@@ -8,10 +8,6 @@ import {
   widget,
 } from '@/public/static/charting_library/charting_library';
 import { getBaseUrl } from '@/lib/trpc';
-import { observable } from 'mobx';
-import { ParseTicker } from '@/lib/advancedChart.util';
-import { chart } from '@/services/chart';
-import { wallet } from '@honeypot/shared';
 
 export const TVChartContainer = (
   props: Partial<ChartingLibraryWidgetOptions>

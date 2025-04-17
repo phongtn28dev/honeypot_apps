@@ -1,5 +1,5 @@
 import HoneyContainer from '@/components/CardContianer/v3';
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import { useBitgetEvents } from '@/lib/algebra/graphql/clients/bitget_event';
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
 

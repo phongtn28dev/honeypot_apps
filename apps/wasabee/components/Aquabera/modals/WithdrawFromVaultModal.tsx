@@ -9,7 +9,7 @@ import { ContractWrite } from '@/services/utils';
 import { Slider } from '@nextui-org/slider';
 import BigNumber from 'bignumber.js';
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 
 interface WithdrawFromVaultModalProps {
   isOpen: boolean;

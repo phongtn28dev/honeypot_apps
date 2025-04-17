@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import { getAccountVaultsList } from '@/lib/algebra/graphql/clients/vaults';
 import { AccountVaultSharesQuery } from '@/lib/algebra/graphql/generated/graphql';
 

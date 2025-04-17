@@ -88,7 +88,7 @@ export const pairRouter = router({
           const { chainId } = input;
           const currentNetwork = networksMap[chainId];
           const factoryContract = getContract({
-            address: currentNetwork.contracts.factory as `0x${string}`,
+            address: currentNetwork.contracts.algebraFactory as `0x${string}`,
             abi: factoryABI,
             // 1a. Insert a single client
             client: {

@@ -1,15 +1,15 @@
-import { useContractWrite, useSimulateContract } from "wagmi";
-import { encodeFunctionData } from "viem";
-import { MaxUint128 } from "@cryptoalgebra/sdk";
-import { useFarmCheckApprove } from "./useFarmCheckApprove";
-import { useEffect, useState } from "react";
-import { useTransactionAwait } from "../common/useTransactionAwait";
-import { Address } from "viem";
-import { FARMING_CENTER } from "@/config/algebra/addresses";
-import { farmingCenterABI } from "@/lib/abis/algebra-contracts/ABIs";
-import { farmingClient } from "../../graphql/clients";
-import { Deposit } from "../../graphql/generated/graphql";
-import { TransactionType } from "../../state/pendingTransactionsStore";
+import { useContractWrite, useSimulateContract } from 'wagmi';
+import { encodeFunctionData } from 'viem';
+import { MaxUint128 } from '@cryptoalgebra/sdk';
+import { useFarmCheckApprove } from './useFarmCheckApprove';
+import { useEffect, useState } from 'react';
+import { useTransactionAwait } from '../common/useTransactionAwait';
+import { Address } from 'viem';
+import { FARMING_CENTER } from '@/config/algebra/addresses';
+import { farmingCenterABI } from '@/lib/abis/algebra-contracts/ABIs';
+import { useSubgraphClient } from '@honeypot/shared';
+import { Deposit } from '../../graphql/generated/graphql';
+import { TransactionType } from '../../state/pendingTransactionsStore';
 
 export function useFarmStake({
   tokenId,
@@ -28,12 +28,13 @@ export function useFarmStake({
 
   const [isQueryLoading, setIsQueryLoading] = useState<boolean>(false);
 
+  const farmingClient = useSubgraphClient('algebra_farming');
   const address = tokenId && approved ? FARMING_CENTER : undefined;
 
   const { data: config } = useSimulateContract({
     address,
     abi: farmingCenterABI,
-    functionName: "enterFarming",
+    functionName: 'enterFarming',
     args: [
       {
         rewardToken,
@@ -60,7 +61,7 @@ export function useFarmStake({
     const interval: NodeJS.Timeout = setInterval(
       () =>
         farmingClient.refetchQueries({
-          include: ["Deposits"],
+          include: ['Deposits'],
           onQueryUpdated: (query, { result: diff }) => {
             const currentPos = diff.deposits.find(
               (deposit: Deposit) => deposit.id.toString() === tokenId.toString()
@@ -109,7 +110,7 @@ export function useFarmUnstake({
 
   const exitFarmingCalldata = encodeFunctionData({
     abi: farmingCenterABI,
-    functionName: "exitFarming",
+    functionName: 'exitFarming',
     args: [
       {
         rewardToken,
@@ -123,13 +124,13 @@ export function useFarmUnstake({
 
   const rewardClaimCalldata = encodeFunctionData({
     abi: farmingCenterABI,
-    functionName: "claimReward",
+    functionName: 'claimReward',
     args: [rewardToken, account, BigInt(MaxUint128)],
   });
 
   const bonusRewardClaimCalldata = encodeFunctionData({
     abi: farmingCenterABI,
-    functionName: "claimReward",
+    functionName: 'claimReward',
     args: [bonusRewardToken, account, BigInt(MaxUint128)],
   });
 
@@ -142,11 +143,13 @@ export function useFarmUnstake({
   const { data: config } = useSimulateContract({
     address: account && tokenId ? FARMING_CENTER : undefined,
     abi: farmingCenterABI,
-    functionName: "multicall",
+    functionName: 'multicall',
     args: [calldatas],
   });
 
   const { data: data, writeContractAsync: onUnstake } = useContractWrite();
+
+  const farmingClient = useSubgraphClient('algebra_farming');
 
   const { isLoading, isSuccess } = useTransactionAwait(data, {
     title: `Farm Unstake`,
@@ -161,7 +164,7 @@ export function useFarmUnstake({
     const interval: NodeJS.Timeout = setInterval(
       () =>
         farmingClient.refetchQueries({
-          include: ["Deposits"],
+          include: ['Deposits'],
           onQueryUpdated: (query, { result: diff }) => {
             const currentPos = diff.deposits.find(
               (deposit: Deposit) => deposit.id.toString() === tokenId.toString()

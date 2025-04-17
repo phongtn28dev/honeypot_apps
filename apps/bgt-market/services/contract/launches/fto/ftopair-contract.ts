@@ -6,7 +6,7 @@ import { AsyncState, ContractWrite } from '../../../utils';
 import { makeAutoObservable } from 'mobx';
 import { MUBAI_FTO_PAIR_ABI } from '@/lib/abis/ftoPair';
 import BigNumber from 'bignumber.js';
-import { Token } from '../../token';
+import { Token } from '@honeypot/shared';
 import { dayjs } from '@/lib/dayjs';
 import { cn } from '@/lib/tailwindcss';
 import { trpcClient } from '@/lib/trpc';
@@ -451,7 +451,10 @@ export class FtoPairContract implements BaseLaunchContract {
       this.raiseToken.init();
     } else {
       const res = (await this.contract.read.raisedToken()) as `0x${string}`;
-      this.raiseToken = Token.getToken({ address: res });
+      this.raiseToken = Token.getToken({
+        address: res,
+        chainId: wallet.currentChainId.toString(),
+      });
       this.raiseToken.init();
     }
   }
@@ -462,7 +465,10 @@ export class FtoPairContract implements BaseLaunchContract {
       this.launchedToken.init();
     } else {
       const res = (await this.contract.read.launchedToken()) as `0x${string}`;
-      this.launchedToken = Token.getToken({ address: res });
+      this.launchedToken = Token.getToken({
+        address: res,
+        chainId: wallet.currentChainId.toString(),
+      });
       this.launchedToken.init();
     }
   }

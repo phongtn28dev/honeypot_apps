@@ -13,7 +13,7 @@ import {
 } from '@/components/algebra/ui/hover-card';
 import { TokenFieldsFragment } from '@/lib/algebra/graphql/generated/graphql';
 import { ReactNode } from 'react';
-import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 
 import { Token } from '@honeypot/shared';
 import {
@@ -22,6 +22,7 @@ import {
 } from '@/lib/algebra/utils/common/formatAmount';
 import { observer } from 'mobx-react-lite';
 import BigNumber from 'bignumber.js';
+import { wallet } from '@honeypot/shared';
 
 interface Pair {
   token0: TokenFieldsFragment;
@@ -81,6 +82,7 @@ const PoolPair = observer(({ pair, fee }: Pool) => {
             size={30}
             token={Token.getToken({
               address: token0Address,
+              chainId: wallet.currentChain.chainId.toString(),
             })}
           />
         </div>
@@ -89,6 +91,7 @@ const PoolPair = observer(({ pair, fee }: Pool) => {
             size={30}
             token={Token.getToken({
               address: token1Address,
+              chainId: wallet.currentChain.chainId.toString(),
             })}
           />
         </div>
