@@ -4,7 +4,6 @@ import { ADDRESS_ZERO } from '@cryptoalgebra/sdk';
 import { useAlgebraToken } from './useAlgebraToken';
 import { wallet } from '@honeypot/shared';
 import { useObserver } from 'mobx-react-lite';
-import { networksMap } from '@/services/chain';
 
 export function useCurrency(
   address: Address | undefined,

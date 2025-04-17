@@ -14,7 +14,8 @@ import { cn } from '@nextui-org/react';
 import { useInterval } from '@/lib/hooks';
 import Link from 'next/link';
 import { VaultAmount } from '../VaultAmount/VaultAmount';
-import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
+
+import { ICHIVaultContract } from '@honeypot/shared';
 import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
 import { chart } from '@/services/chart';
 import { V3SwapCard } from '../algebra/swap/V3SwapCard';

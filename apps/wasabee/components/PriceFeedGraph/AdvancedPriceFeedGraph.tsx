@@ -4,7 +4,6 @@ import EChartsReact from 'echarts-for-react';
 import { useEffect, useMemo, useState } from 'react';
 
 import { Token } from '@honeypot/shared';
-import { networksMap } from '@/services/chain';
 import { useAccount } from 'wagmi';
 import { trpcClient } from '@/lib/trpc';
 import { dayjs } from '@/lib/dayjs';

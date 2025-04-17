@@ -1,6 +1,6 @@
-import type { NextApiResponse, NextApiRequest, PageConfig } from "next";
-import { appRouter, caller } from "@/server/_app";
-import { networksMap } from "@/services/chain";
+import type { NextApiResponse, NextApiRequest, PageConfig } from 'next';
+import { appRouter, caller } from '@/server/_app';
+import { networksMap } from '@honeypot/shared';
 
 export default async function handler(
   request: NextApiRequest,
@@ -9,8 +9,8 @@ export default async function handler(
   const chainId = request.query.chain;
   if (!chainId) {
     return response.status(400).json({
-      s: "error",
-      errmsg: "chainId is required",
+      s: 'error',
+      errmsg: 'chainId is required',
     });
   }
 
@@ -21,14 +21,14 @@ export default async function handler(
     ),
   });
 
-  if (res.status === "error") {
+  if (res.status === 'error') {
     return response.status(500).json({
-      s: "error",
+      s: 'error',
       errmsg: res.message,
     });
   } else {
     return response.status(200).json({
-      s: "ok",
+      s: 'ok',
       data: res.data.map((d) => ({
         ...networksMap[chainId as string].validatedTokensInfo[d.address],
         address: d.address,

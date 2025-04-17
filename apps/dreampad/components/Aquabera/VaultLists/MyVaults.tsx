@@ -2,7 +2,8 @@ import { useRouter } from 'next/router';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { getAccountVaultsList } from '@/lib/algebra/graphql/clients/vaults';
 import { AccountVaultSharesQuery } from '@/lib/algebra/graphql/generated/graphql';
-import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
+
+import { ICHIVaultContract } from '@honeypot/shared';
 import { Token } from '@honeypot/shared';
 import { wallet } from '@honeypot/shared';
 import { useEffect, useState } from 'react';

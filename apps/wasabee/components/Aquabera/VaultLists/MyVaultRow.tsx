@@ -2,7 +2,8 @@ import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { getSingleVaultDetails } from '@/lib/algebra/graphql/clients/vaults';
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
 import { useSubgraphClient } from '@honeypot/shared';
-import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
+
+import { ICHIVaultContract } from '@honeypot/shared';
 
 import { Token } from '@honeypot/shared';
 import { wallet } from '@honeypot/shared';

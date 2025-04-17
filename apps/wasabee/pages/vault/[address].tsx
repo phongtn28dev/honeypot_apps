@@ -1,7 +1,8 @@
 // pages/vault/[address].tsx
 import { useRouter } from 'next/router';
 import { useState, useEffect, useCallback } from 'react';
-import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
+
+import { ICHIVaultContract } from '@honeypot/shared';
 import { Address, isAddress, zeroAddress } from 'viem';
 import { Button } from '@/components/algebra/ui/button';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';

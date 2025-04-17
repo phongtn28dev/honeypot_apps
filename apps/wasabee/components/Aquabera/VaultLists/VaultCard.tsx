@@ -1,7 +1,8 @@
 import { Button } from '@/components/algebra/ui/button';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { getSingleVaultDetails } from '@/lib/algebra/graphql/clients/vaults';
-import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
+
+import { ICHIVaultContract } from '@honeypot/shared';
 
 import { Token } from '@honeypot/shared';
 import { wallet } from '@honeypot/shared';

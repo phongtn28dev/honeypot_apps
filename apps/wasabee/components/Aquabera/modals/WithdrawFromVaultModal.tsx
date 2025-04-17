@@ -2,7 +2,8 @@
 import { Modal, ModalContent, ModalHeader, ModalBody } from '@nextui-org/modal';
 import { Button } from '@/components/button/button-next';
 import { useCallback, useState } from 'react';
-import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
+
+import { ICHIVaultContract } from '@honeypot/shared';
 import { wallet } from '@honeypot/shared';
 import { ContractWrite } from '@/services/utils';
 import { Slider } from '@nextui-org/slider';

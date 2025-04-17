@@ -6,7 +6,6 @@ import {
   TokenFieldsFragment,
   useMultiplePoolsLazyQuery,
 } from '../../graphql/generated/graphql';
-import { networksMap } from '@/services/chain';
 import { wallet } from '@honeypot/shared';
 import { useObserver } from 'mobx-react-lite';
 

@@ -9,7 +9,8 @@ import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { DepositToVaultModal } from '../modals/DepositToVaultModal';
 import { getVaultPageData } from '@/lib/algebra/graphql/clients/vaults';
 import { VaultsSortedByHoldersQuery } from '@/lib/algebra/graphql/generated/graphql';
-import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
+
+import { ICHIVaultContract } from '@honeypot/shared';
 
 type SortField = 'pair' | 'address' | 'tvl' | 'volume' | 'fees';
 type SortDirection = 'asc' | 'desc';

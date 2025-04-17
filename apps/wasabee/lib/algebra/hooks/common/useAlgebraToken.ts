@@ -6,7 +6,6 @@ import { ExtendedNative } from '@cryptoalgebra/sdk';
 import { ADDRESS_ZERO } from '@cryptoalgebra/sdk';
 import { wallet } from '@honeypot/shared';
 import { useObserver } from 'mobx-react-lite';
-import { networksMap } from '@/services/chain';
 
 export function useAlgebraToken(address: Address | undefined) {
   const isETH = address === ADDRESS_ZERO;

@@ -21,6 +21,11 @@ const nextConfig = {
         __dirname,
         '../../node_modules/react-toastify'
       ),
+      mobx: path.resolve(__dirname, '../../node_modules/mobx'),
+      'mobx-react-lite': path.resolve(
+        __dirname,
+        '../../node_modules/mobx-react-lite'
+      ),
     };
 
     // ✅ Include shared lib for Babel transpilation

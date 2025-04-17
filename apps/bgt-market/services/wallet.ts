@@ -10,7 +10,8 @@ import { createPublicClientByChain } from '@/lib/client';
 import { StorageState } from './utils';
 import { MemeFactoryContract } from '@/services/contract/launches/pot2pump/memefactory-contract';
 import { MEMEFacadeContract } from '@/services/contract/launches/pot2pump/memefacade-contract';
-import { ICHIVaultFactoryContract } from '@/services/contract/aquabera/ICHIVaultFactory-contract';
+
+import { ICHIVaultContract } from '@honeypot/shared';
 import { BGTMarketContract } from './contract/bgt-market/bgt-market';
 import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
 import { HeyBgtContract } from './contract/bgt-market/hey-bgt';

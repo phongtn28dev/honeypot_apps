@@ -1,10 +1,8 @@
-import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { getSingleVaultDetails } from '@/lib/algebra/graphql/clients/vaults';
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
 import { useSubgraphClient } from '@honeypot/shared';
-import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
-
+import { ICHIVaultContract } from '@honeypot/shared';
 import { Token } from '@honeypot/shared';
 import { wallet } from '@honeypot/shared';
 import {
@@ -49,6 +47,13 @@ export const VaultRow = observer(({ vault }: { vault: ICHIVaultContract }) => {
   const isTokenBAllowed = useReadIchiVaultAllowToken1({
     address: vault.address,
   });
+
+  if (
+    vaultContract?.address.toLowerCase() ===
+    '0xb00ae8a7be63036dbcd143a842bfc14708c440bb'
+  ) {
+    console.log(vaultContract);
+  }
 
   useEffect(() => {
     if (!vault) return;

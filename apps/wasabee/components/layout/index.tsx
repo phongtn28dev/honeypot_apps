@@ -2,8 +2,6 @@
 import { useEffect, useState } from 'react';
 import { Header } from './header/v3';
 import { useRouter } from 'next/router';
-import { useAccount } from 'wagmi';
-import { networksMap } from '@/services/chain';
 import { cn } from '@/lib/tailwindcss';
 import NotConnetctedDisplay from '../NotConnetctedDisplay/NotConnetctedDisplay';
 import ConfettiComponent from '../atoms/Confetti/Confetti';

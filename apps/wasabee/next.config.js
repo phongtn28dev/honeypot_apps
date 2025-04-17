@@ -16,8 +16,19 @@ const nextConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       'styled-components': path.resolve(
-        '../../node_modules/styled-components/dist/styled-components.esm.js'
+        'node_modules/styled-components/dist/styled-components.esm.js'
       ), // alias for styled-components ESM build
+      react: path.resolve(__dirname, '../../node_modules/react'),
+      'react-dom': path.resolve(__dirname, '../../node_modules/react-dom'),
+      'react-toastify': path.resolve(
+        __dirname,
+        '../../node_modules/react-toastify'
+      ),
+      mobx: path.resolve(__dirname, '../../node_modules/mobx'),
+      'mobx-react-lite': path.resolve(
+        __dirname,
+        '../../node_modules/mobx-react-lite'
+      ),
     };
     return config;
   },

@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { Token } from '@honeypot/shared';
 import TokenCardV3 from '@/components/algebra/swap/TokenCard/TokenCardV3';
 import { computePoolAddress, Currency } from '@cryptoalgebra/sdk';
-import { ICHIVaultFactoryContract } from '@/services/contract/aquabera/ICHIVaultFactory-contract';
+
+import { ICHIVaultContract } from '@honeypot/shared';
 import { Button } from '@/components/button';
 import { wallet } from '@honeypot/shared';
 import { TokenSelector } from '@/components/TokenSelector';

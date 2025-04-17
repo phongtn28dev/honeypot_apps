@@ -1,7 +1,6 @@
-import type { NextApiResponse, NextApiRequest, PageConfig } from "next";
-import { appRouter, caller } from "@/server/_app";
-import { networksMap } from "@/services/chain";
-import { DOMAIN_MAP } from "@/config/allAppPath";
+import type { NextApiResponse, NextApiRequest, PageConfig } from 'next';
+import { networksMap } from '@honeypot/shared';
+import { DOMAIN_MAP } from '@/config/allAppPath';
 
 export default async function handler(
   request: NextApiRequest,
@@ -10,15 +9,15 @@ export default async function handler(
   const chainId = request.query.chain;
   if (!chainId) {
     return response.status(400).json({
-      s: "error",
-      errmsg: "chainId is required",
+      s: 'error',
+      errmsg: 'chainId is required',
     });
   }
 
   const network = networksMap[chainId as string];
   const validatedTokensInfo = Object.entries(network.validatedTokensInfo).map(
     ([address, tokenInfo]) => {
-      if (!tokenInfo.logoURI.startsWith("https://")) {
+      if (!tokenInfo.logoURI.startsWith('https://')) {
         tokenInfo.logoURI = DOMAIN_MAP.WASABEE + tokenInfo.logoURI;
       }
       return {
@@ -29,7 +28,7 @@ export default async function handler(
   );
 
   return response.status(200).json({
-    s: "ok",
+    s: 'ok',
     data: validatedTokensInfo,
   });
 }

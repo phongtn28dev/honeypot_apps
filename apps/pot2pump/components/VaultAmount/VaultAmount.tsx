@@ -5,7 +5,8 @@ import { Token } from '@honeypot/shared';
 import { TokenSelector } from '@/components/TokenSelector/v3';
 import { cn } from '@/lib/tailwindcss';
 import TokenLogo from '../TokenLogo/TokenLogo';
-import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
+
+import { ICHIVaultContract } from '@honeypot/shared';
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 

@@ -1,4 +1,4 @@
-import { networks } from '@/services/chain';
+import { networks } from '@honeypot/shared';
 import { connectorsForWallets, getDefaultConfig } from '@rainbow-me/rainbowkit';
 import {
   rainbowWallet,

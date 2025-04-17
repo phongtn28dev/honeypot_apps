@@ -17,7 +17,7 @@ import {
   GhostAlgebraPoolPair,
   GhostAlgebraPairResponse,
 } from './../indexerTypes';
-import { networksMap } from '@/services/chain';
+import { networksMap } from '@honeypot/shared';
 import { PageInfo } from '@/services/utils';
 import dayjs from 'dayjs';
 

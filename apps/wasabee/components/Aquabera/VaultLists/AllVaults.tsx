@@ -11,7 +11,7 @@ import {
   getVaultPageData,
 } from '@/lib/algebra/graphql/clients/vaults';
 import { VaultsSortedByHoldersQuery } from '@/lib/algebra/graphql/generated/graphql';
-import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
+import { ICHIVaultContract } from '@honeypot/shared';
 import VaultRow from './VaulltRow';
 import { useSubgraphClient } from '@honeypot/shared';
 

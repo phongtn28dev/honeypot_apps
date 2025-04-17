@@ -1,4 +1,4 @@
-import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
+import { ICHIVaultContract } from '@honeypot/shared';
 
 import {
   AccountVaultSharesDocument,

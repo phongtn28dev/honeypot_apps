@@ -1,5 +1,4 @@
-import { Network } from "./chain";
-
+import { Network } from '@honeypot/shared';
 class NetworkManager {
   private static instance: NetworkManager;
   private selectedNetwork: Network | null = null;
