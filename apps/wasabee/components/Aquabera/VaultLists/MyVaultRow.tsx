@@ -1,9 +1,11 @@
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { getSingleVaultDetails } from '@/lib/algebra/graphql/clients/vaults';
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { useSubgraphClient } from '@honeypot/shared';
 import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
-import { Token } from '@/services/contract/token';
-import { wallet } from '@/services/wallet';
+
+import { Token } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared';
 import {
   useReadIchiVaultAllowToken0,
   useReadIchiVaultAllowToken1,
@@ -19,11 +21,18 @@ export const MyVaultRow = observer(
     const [vaultContract, setVaultContract] = useState<
       ICHIVaultContract | undefined
     >(undefined);
-    const tokenA = Token.getToken({ address: vault.token0?.address ?? '' });
-    const tokenB = Token.getToken({ address: vault.token1?.address ?? '' });
+    const infoClient = useSubgraphClient('algebra_info');
+    const tokenA = Token.getToken({
+      address: vault.token0?.address ?? '',
+      chainId: wallet.currentChainId.toString(),
+    });
+    const tokenB = Token.getToken({
+      address: vault.token1?.address ?? '',
+      chainId: wallet.currentChainId.toString(),
+    });
     const loading = useMemo(() => {
-      return !vaultContract || !tokenA || !tokenB || !vaultContract?.userTVLUSD;
-    }, [vaultContract, tokenA, tokenB, vaultContract?.userTVLUSD]);
+      return !vaultContract || !tokenA || !tokenB;
+    }, [vaultContract, tokenA, tokenB]);
 
     const isTokenAAllowed = useReadIchiVaultAllowToken0({
       address: vault.address,
@@ -38,7 +47,10 @@ export const MyVaultRow = observer(
 
       async function getVaultsContracts() {
         if (!vault) return;
-        const vaultContract = await getSingleVaultDetails(vault.address);
+        const vaultContract = await getSingleVaultDetails(
+          infoClient,
+          vault.address
+        );
 
         if (vaultContract) {
           Promise.all([

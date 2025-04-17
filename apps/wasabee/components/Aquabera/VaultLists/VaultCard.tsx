@@ -2,13 +2,15 @@ import { Button } from '@/components/algebra/ui/button';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { getSingleVaultDetails } from '@/lib/algebra/graphql/clients/vaults';
 import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
-import { Token } from '@/services/contract/token';
-import { wallet } from '@/services/wallet';
+
+import { Token } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '@nextui-org/react';
 import { VaultTag } from '../VaultTag';
 import Link from 'next/link';
+import { getSubgraphClientByChainId } from '@honeypot/shared';
 
 interface VaultCardProps {
   vault: ICHIVaultContract;
@@ -19,8 +21,18 @@ const VaultCard = observer(({ vault }: VaultCardProps) => {
     ICHIVaultContract | undefined
   >(undefined);
   const [loading, setLoading] = useState(true);
-  const tokenA = Token.getToken({ address: vault.token0?.address ?? '' });
-  const tokenB = Token.getToken({ address: vault.token1?.address ?? '' });
+  const tokenA = Token.getToken({
+    address: vault.token0?.address ?? '',
+    chainId: wallet.currentChainId.toString(),
+  });
+  const tokenB = Token.getToken({
+    address: vault.token1?.address ?? '',
+    chainId: wallet.currentChainId.toString(),
+  });
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
 
   useEffect(() => {
     if (!vault) return;
@@ -28,7 +40,10 @@ const VaultCard = observer(({ vault }: VaultCardProps) => {
     async function initializeVault() {
       try {
         setLoading(true);
-        const vaultContract = await getSingleVaultDetails(vault.address);
+        const vaultContract = await getSingleVaultDetails(
+          infoClient,
+          vault.address
+        );
 
         if (vaultContract) {
           await Promise.all([
@@ -37,16 +52,13 @@ const VaultCard = observer(({ vault }: VaultCardProps) => {
             vaultContract?.getBalanceOf(wallet.account),
           ]);
 
-          vaultContract?.token0?.init(true, {
+          vaultContract?.token0?.init(false, {
             loadIndexerTokenData: true,
           });
 
-          vaultContract?.token1?.init(true, {
+          vaultContract?.token1?.init(false, {
             loadIndexerTokenData: true,
           });
-
-          tokenA.init();
-          tokenB.init();
 
           setVaultContract(vaultContract);
         }

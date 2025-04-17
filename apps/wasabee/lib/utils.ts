@@ -1,6 +1,18 @@
-import BigNumber from "bignumber.js";
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+import BigNumber from 'bignumber.js';
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function ethAddressUtils(address: string): string {
+  let account = address;
+
+  const ipfsRegExp = /^0x.*/;
+
+  if (!ipfsRegExp.test(account) && account) {
+    account = '0x' + account;
+  }
+
+  return account as `0x${string}`;
+}
 
 export function calculatePercentageChange(current: number, previous: number) {
   // Ensure the result is a valid number
@@ -25,22 +37,22 @@ export function toCompactLocaleString(
   value: number | string | BigNumber,
   options?: Intl.NumberFormatOptions
 ) {
-  if (!!!value) return "0";
+  if (!!!value) return '0';
   return Number(value) >= 0.01
-    ? Number(value).toLocaleString("en-US", {
+    ? Number(value).toLocaleString('en-US', {
         // add suffixes for thousands, millions, and billions
         // the maximum number of decimal places to use
         maximumFractionDigits: 2,
         // specify the abbreviations to use for the suffixes
-        notation: "compact",
-        compactDisplay: "short",
+        notation: 'compact',
+        compactDisplay: 'short',
         ...options,
       })
-    : "< 0.01";
+    : '< 0.01';
 }
 
 export const shortenAddressString = (address: string, chars = 4): string => {
-  if (!address) return "";
+  if (!address) return '';
   return `${address.substring(0, chars + 2)}...${address.substring(
     address.length - chars
   )}`;
@@ -69,17 +81,17 @@ const isNotNull = (value: any): boolean => {
 };
 
 export function hasValue(obj: any): boolean {
-  if (typeof obj !== "object" || obj === null) return false;
+  if (typeof obj !== 'object' || obj === null) return false;
   for (let key in obj) {
     const value = obj[key];
-    if (typeof value !== "object" && isNotNull(value) && Boolean(value))
+    if (typeof value !== 'object' && isNotNull(value) && Boolean(value))
       return true;
 
     if (Array.isArray(value)) {
       if (value.some(hasValue)) return true;
     }
 
-    if (typeof value === "object" && value !== null) {
+    if (typeof value === 'object' && value !== null) {
       if (hasValue(value)) return true;
     }
   }
@@ -95,12 +107,12 @@ export function removeEmptyFields(obj: FilterObject): FilterObject {
 
   for (const key in obj) {
     if (obj[key] !== null && obj[key] !== undefined) {
-      if (typeof obj[key] === "object" && !Array.isArray(obj[key])) {
+      if (typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
         const nestedObject = removeEmptyFields(obj[key]);
         if (Object.keys(nestedObject).length > 0) {
           cleanedObject[key] = nestedObject;
         }
-      } else if (obj[key] !== "") {
+      } else if (obj[key] !== '') {
         cleanedObject[key] = obj[key];
       }
     }
@@ -111,13 +123,13 @@ export function removeEmptyFields(obj: FilterObject): FilterObject {
 
 export function getTextSizeClass(text: string | undefined | null): string {
   if (!text)
-    return "text-2xl md:text-[34px] text-stroke-2 text-shadow-[2px_4px_0px_#AF7F3D]";
+    return 'text-2xl md:text-[34px] text-stroke-2 text-shadow-[2px_4px_0px_#AF7F3D]';
 
   if (text.length > 10)
-    return "text-base md:text-xl text-stroke-1 text-shadow-[1px_2px_0px_#AF7F3D]";
+    return 'text-base md:text-xl text-stroke-1 text-shadow-[1px_2px_0px_#AF7F3D]';
   if (text.length > 5)
-    return "text-xl md:text-2xl text-stroke-[1.5px] text-shadow-[1.5px_3px_0px_#AF7F3D]";
-  return "text-2xl md:text-[34px] text-stroke-2 text-shadow-[2px_4px_0px_#AF7F3D]";
+    return 'text-xl md:text-2xl text-stroke-[1.5px] text-shadow-[1.5px_3px_0px_#AF7F3D]';
+  return 'text-2xl md:text-[34px] text-stroke-2 text-shadow-[2px_4px_0px_#AF7F3D]';
 }
 
 export const formatNumberWithUnit = (num: number, decimals = 2): string => {
@@ -126,7 +138,7 @@ export const formatNumberWithUnit = (num: number, decimals = 2): string => {
     return `<${minValue}`;
   }
 
-  const units = ["", "k", "M", "B", "T"];
+  const units = ['', 'k', 'M', 'B', 'T'];
   let unitIndex = 0;
   let value = num;
 

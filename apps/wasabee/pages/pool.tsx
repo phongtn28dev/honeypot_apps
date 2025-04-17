@@ -1,21 +1,13 @@
-import CreatePoolForm from "@/components/algebra/create-pool/CreatePoolForm";
-import { LoadingDisplay } from "@/components/LoadingDisplay/LoadingDisplay";
-import { liquidity } from "@/services/liquidity";
-import { wallet } from "@/services/wallet";
-import { Tab, Tabs } from "@nextui-org/react";
-import { observer } from "mobx-react-lite";
-import { useEffect } from "react";
-import { CreateAquaberaVault } from "@/components/Aquabera/create-vault/CreateAquaberaVault";
+import CreatePoolForm from '@/components/algebra/create-pool/CreatePoolForm';
+import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';
+import { wallet } from '@honeypot/shared';
+import { Tab, Tabs } from '@nextui-org/react';
+import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
+import { CreateAquaberaVault } from '@/components/Aquabera/create-vault/CreateAquaberaVault';
 
 const Pool = observer(() => {
-  const isInit = wallet.isInit && liquidity.isInit;
-  useEffect(() => {
-    if (!wallet.isInit) {
-      return;
-    }
-
-    liquidity.initPool();
-  }, [wallet.isInit]);
+  const isInit = wallet.isInit;
 
   return (
     <div className="w-full">

@@ -1,11 +1,10 @@
-import { useState } from "react";
-import { cn } from "@/lib/tailwindcss";
-import { trpcClient } from "@/lib/trpc";
-import { wallet } from "@/services/wallet";
-import { Button } from "@nextui-org/react";
-import { PeddingSvg } from "@/components/svg/Pedding";
-import { PoweredByAlphaKek } from "@/components/algebra/common/PoweredByAlgebra";
-
+import { useState } from 'react';
+import { cn } from '@/lib/tailwindcss';
+import { trpcClient } from '@/lib/trpc';
+import { wallet } from '@honeypot/shared';
+import { Button } from '@nextui-org/react';
+import { PeddingSvg } from '@/components/svg/Pedding';
+import { PoweredByAlphaKek } from '@/components/algebra/common/PoweredByAlgebra';
 
 export type TokenGeneratedSuccessValues = {
   description?: string;
@@ -30,10 +29,10 @@ interface AITokenGeneratorProps {
 export default function AITokenGenerator({
   tokenGeneratedCallback,
 }: AITokenGeneratorProps) {
-  const [prompt, setPrompt] = useState<string>("");
-  const [tip, setTip] = useState<string>("");
-  const [state, setState] = useState<"idle" | "loading" | "success" | "error">(
-    "idle"
+  const [prompt, setPrompt] = useState<string>('');
+  const [tip, setTip] = useState<string>('');
+  const [state, setState] = useState<'idle' | 'loading' | 'success' | 'error'>(
+    'idle'
   );
 
   const handleAiLaunch = async () => {
@@ -44,8 +43,8 @@ export default function AITokenGenerator({
     //   return;
     // }
 
-    setState("loading");
-    setTip("Generating token... This may take up to a minute");
+    setState('loading');
+    setTip('Generating token... This may take up to a minute');
     try {
       const res: string =
         await trpcClient.aiLaunchProject.generateAiProject.query({
@@ -53,21 +52,21 @@ export default function AITokenGenerator({
           prompt_input: prompt,
         });
 
-      setState("success");
+      setState('success');
 
       tokenGeneratedCallback({
-        name: "",
-        symbol: "",
+        name: '',
+        symbol: '',
         image: res,
-        description: "",
+        description: '',
       });
     } catch (error: any) {
-      console.error("Error:", error);
-      setState("error");
-      if (error.message.includes("Rate limit exceeded")) {
-        setTip("can only generate once per 2 minute");
+      console.error('Error:', error);
+      setState('error');
+      if (error.message.includes('Rate limit exceeded')) {
+        setTip('can only generate once per 2 minute');
       } else {
-        setTip("An error occurred while generating the token");
+        setTip('An error occurred while generating the token');
       }
     }
   };
@@ -76,7 +75,7 @@ export default function AITokenGenerator({
     <div className="flex flex-col">
       <div className="flex justify-between items-center gap-5">
         <textarea
-          disabled={state === "loading"}
+          disabled={state === 'loading'}
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           placeholder="Try our AI launch with prompt"
@@ -84,18 +83,18 @@ export default function AITokenGenerator({
         />
         <div className="flex flex-col items-center gap-2">
           <Button
-            isDisabled={state === "loading" || prompt.length === 0}
+            isDisabled={state === 'loading' || prompt.length === 0}
             className="p-6 "
             onClick={() => {
               handleAiLaunch();
             }}
           >
-            {state === "loading" ? (
+            {state === 'loading' ? (
               <div className="relative max-h-full scale-[25%] flex items-center justify-center">
                 <PeddingSvg className="w-full h-full " />
               </div>
             ) : (
-              "Generate Meme Token"
+              'Generate Meme Token'
             )}
           </Button>
           <PoweredByAlphaKek />
@@ -103,12 +102,12 @@ export default function AITokenGenerator({
       </div>
       <p
         className={cn(
-          "text-black text-base font-medium ",
-          state === "success" && "text-green-700",
-          state === "error" && "text-red-500"
+          'text-black text-base font-medium ',
+          state === 'success' && 'text-green-700',
+          state === 'error' && 'text-red-500'
         )}
       >
-        {state === "success" ? "Your token is ready to be launched" : tip}
+        {state === 'success' ? 'Your token is ready to be launched' : tip}
       </p>
     </div>
   );

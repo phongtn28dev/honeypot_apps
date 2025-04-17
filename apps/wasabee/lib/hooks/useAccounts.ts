@@ -1,24 +1,27 @@
-import { useQuery } from "@apollo/client";
+import { useQuery } from '@apollo/client';
 import {
   ACCOUNTS_WITH_ADDRESS_QUERY,
   ACCOUNTS_WITHOUT_ADDRESS_QUERY,
   AccountsQueryData,
-  PaginationParams,
   TOP_PARTICIPATE_ACCOUNTS_QUERY,
   TOP_POT2PUMP_DEPLOYER_QUERY,
   TOP_SWAP_ACCOUNTS_QUERY,
   TopParticipateAccountsQueryData,
   TopPot2PumpDeployerQueryData,
   TopSwapAccountsQueryData,
-} from "../algebra/graphql/clients/leaderboard";
-import dayjs from "dayjs";
-import { ALGEBRA_ROUTER } from "@/config/algebra/addresses";
+} from '../algebra/graphql/clients/leaderboard';
+import dayjs from 'dayjs';
+import { useObserver } from 'mobx-react-lite';
+import { wallet } from '@honeypot/shared';
 
 export function useAccounts(
   page: number = 1,
   pageSize: number = 10,
-  searchAddress: string = ""
+  searchAddress: string = ''
 ) {
+  const ALGEBRA_ROUTER = useObserver(
+    () => wallet.currentChain.contracts.algebraSwapRouter
+  );
   const { data, loading, error, fetchMore } = useQuery<AccountsQueryData>(
     searchAddress
       ? ACCOUNTS_WITH_ADDRESS_QUERY
@@ -44,9 +47,9 @@ export function useAccounts(
       participateCount: parseInt(account.participateCount),
       lastActive: account.transaction[0]
         ? dayjs(parseInt(account.transaction[0].timestamp) * 1000).format(
-            "MM/DD/YYYY, h:mm:ss A"
+            'MM/DD/YYYY, h:mm:ss A'
           )
-        : "-",
+        : '-',
     })) ?? [];
 
   const loadMore = () => {
@@ -69,6 +72,9 @@ export function useAccounts(
 }
 
 export function useTopSwapAccounts() {
+  const ALGEBRA_ROUTER = useObserver(
+    () => wallet.currentChain.contracts.algebraSwapRouter
+  );
   const { data, loading, error } = useQuery<TopSwapAccountsQueryData>(
     TOP_SWAP_ACCOUNTS_QUERY,
     {

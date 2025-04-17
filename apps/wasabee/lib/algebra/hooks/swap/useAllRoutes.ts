@@ -11,6 +11,8 @@ import { useSwapPools } from './useSwapPools';
 import { useChainId } from 'wagmi';
 import { Address } from 'viem';
 import { useUserState } from '../../state/userStore';
+import { useObserver } from 'mobx-react-lite';
+import { wallet } from '@honeypot/shared';
 
 /**
  * Returns true if poolA is equivalent to poolB
@@ -54,17 +56,6 @@ function computeAllRoutes(
     const { liquidity, price, tick, fee } = pool.pool;
     if (price === '0' || liquidity === '0') continue;
 
-    console.log('newPool args', {
-      tokenA,
-      tokenB,
-      fee,
-      price,
-      ADDRESS_ZERO,
-      liquidity,
-      tick,
-      DEFAULT_TICK_SPACING,
-    });
-
     const newPool = new Pool(
       tokenA,
       tokenB,
@@ -76,9 +67,8 @@ function computeAllRoutes(
       Number(DEFAULT_TICK_SPACING)
     );
 
-    console.log('newPool', newPool);
-
     if (
+      !newPool ||
       !newPool.involvesToken(tokenIn) ||
       currentPath.find((pathPool) => poolEquals(newPool, pathPool))
     )
@@ -117,7 +107,9 @@ export function useAllRoutes(
   currencyIn?: Currency,
   currencyOut?: Currency
 ): { loading: boolean; routes: Route<Currency, Currency>[] } {
-  const chainId = useChainId();
+  const { currentChainId } = useObserver(() => ({
+    currentChainId: wallet.currentChainId,
+  }));
 
   const { pools, loading: poolsLoading } = useSwapPools(
     currencyIn,
@@ -127,7 +119,13 @@ export function useAllRoutes(
   const { isMultihop } = useUserState();
 
   return useMemo(() => {
-    if (poolsLoading || !chainId || !pools || !currencyIn || !currencyOut)
+    if (
+      poolsLoading ||
+      !currentChainId ||
+      !pools ||
+      !currencyIn ||
+      !currencyOut
+    )
       return {
         loading: true,
         routes: [],
@@ -140,7 +138,7 @@ export function useAllRoutes(
       currencyIn,
       currencyOut,
       pools,
-      chainId,
+      currentChainId,
       [],
       [],
       currencyIn,
@@ -148,5 +146,12 @@ export function useAllRoutes(
     );
 
     return { loading: false, routes };
-  }, [chainId, currencyIn, currencyOut, pools, poolsLoading, isMultihop]);
+  }, [
+    currentChainId,
+    currencyIn,
+    currencyOut,
+    pools,
+    poolsLoading,
+    isMultihop,
+  ]);
 }

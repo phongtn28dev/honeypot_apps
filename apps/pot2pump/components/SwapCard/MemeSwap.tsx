@@ -1,28 +1,28 @@
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { swap } from "@/services/swap";
-import { Button } from "@/components/button/button-next";
-import { Token } from "@/services/contract/token";
-import { SpinnerContainer } from "../Spinner";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { isEthAddress } from "@/lib/address";
-import { wallet } from "@/services/wallet";
-import { liquidity } from "@/services/liquidity";
-import { LoadingContainer } from "../LoadingDisplay/LoadingDisplay";
-import { SelectState } from "../ItemSelect/v3";
-import { cn } from "@nextui-org/react";
-import { useInterval } from "@/lib/hooks";
-import Link from "next/link";
-import { VaultAmount } from "../VaultAmount/VaultAmount";
-import { ICHIVaultContract } from "@/services/contract/aquabera/ICHIVault-contract";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
-import { chart } from "@/services/chart";
-import { V3SwapCard } from "../algebra/swap/V3SwapCard";
-import { HoneyContainer } from "../CardContianer";
-import { getSingleVaultDetails } from "@/lib/algebra/graphql/clients/vaults";
-import { DOMAIN_MAP } from "honeypot-sdk";
-import { Tab, Tabs } from "@nextui-org/react";
-import { PresetPair } from "../algebra/swap/SwapPair/SwapPairV3";
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import { swap } from '@/services/swap';
+import { Button } from '@/components/button/button-next';
+import { Token } from '@honeypot/shared';
+import { SpinnerContainer } from '../Spinner';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { isEthAddress } from '@/lib/address';
+import { wallet } from '@honeypot/shared';
+import { liquidity } from '@/services/liquidity';
+import { LoadingContainer } from '../LoadingDisplay/LoadingDisplay';
+import { SelectState } from '../ItemSelect/v3';
+import { cn } from '@nextui-org/react';
+import { useInterval } from '@/lib/hooks';
+import Link from 'next/link';
+import { VaultAmount } from '../VaultAmount/VaultAmount';
+import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
+import { chart } from '@/services/chart';
+import { V3SwapCard } from '../algebra/swap/V3SwapCard';
+import { HoneyContainer } from '../CardContianer';
+import { getSingleVaultDetails } from '@/lib/algebra/graphql/clients/vaults';
+import { DOMAIN_MAP } from 'honeypot-sdk';
+import { Tab, Tabs } from '@nextui-org/react';
+import { PresetPair } from '../algebra/swap/SwapPair/SwapPairV3';
 
 export const LaunchDetailSwapCard = observer(
   ({
@@ -49,12 +49,12 @@ export const LaunchDetailSwapCard = observer(
     disableToSelection?: boolean;
   }) => {
     const [values, setValues] = useState<{ amount0: string; amount1: string }>({
-      amount0: "0",
-      amount1: "0",
+      amount0: '0',
+      amount1: '0',
     });
     const [presetPairs, setPresetPairs] = useState<PresetPair[]>([]);
     const router = useRouter();
-    const isInit = wallet.isInit && liquidity.isInit;
+    const isInit = wallet.isInit;
     const state = useLocalObservable(() => ({
       selectState: new SelectState({
         value: 0,
@@ -85,16 +85,19 @@ export const LaunchDetailSwapCard = observer(
           const fromToken = Token.getToken({
             address: inputAddress,
             isNative: isInputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           });
 
           const fromTokenWrapped = Token.getToken({
             address: wallet.currentChain.nativeToken.address,
             isNative: inputAddress !== wallet.currentChain.nativeToken.address,
+            chainId: wallet.currentChain.chainId.toString(),
           });
 
           const toToken = Token.getToken({
             address: outputAddress,
             isNative: isOutputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           });
           newPresetPairs.push({ fromToken, toToken });
           newPresetPairs.push({ fromToken: fromTokenWrapped, toToken });
@@ -120,11 +123,13 @@ export const LaunchDetailSwapCard = observer(
         const fromToken = Token.getToken({
           address: wallet.currentChain.nativeToken.address,
           isNative: true,
+          chainId: wallet.currentChain.chainId.toString(),
         });
 
         const toToken = Token.getToken({
           address: memePairContract.launchedToken!.address,
           isNative: isOutputNative,
+          chainId: wallet.currentChain.chainId.toString(),
         });
 
         newPresetPairs.push({ fromToken, toToken });
@@ -146,12 +151,12 @@ export const LaunchDetailSwapCard = observer(
       const loadVaultContract = async () => {
         try {
           const lpTokenAddress = await memePairContract.contract.read.lpToken();
-          console.log("lpTokenAddress", lpTokenAddress);
+          console.log('lpTokenAddress', lpTokenAddress);
           const vaultContract = await getSingleVaultDetails(lpTokenAddress);
-          console.log("vaultContract", vaultContract);
+          console.log('vaultContract', vaultContract);
           setVaultContract(vaultContract);
         } catch (error) {
-          console.error("Failed to load vault contract:", error);
+          console.error('Failed to load vault contract:', error);
         }
       };
       loadVaultContract();
@@ -173,14 +178,16 @@ export const LaunchDetailSwapCard = observer(
           Token.getToken({
             address: inputCurrency,
             isNative: isInputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           })
         );
       } else {
         swap.setFromToken(
           Token.getToken({
             address:
-              inputAddress || "0xfc5e3743e9fac8bb60408797607352e24db7d65e",
+              inputAddress || '0xfc5e3743e9fac8bb60408797607352e24db7d65e',
             isNative: isInputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           })
         );
       }
@@ -190,13 +197,15 @@ export const LaunchDetailSwapCard = observer(
           Token.getToken({
             address: outputCurrency,
             isNative: isOutputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           })
         );
       } else {
         swap.setToToken(
           Token.getToken({
-            address: outputAddress ?? "",
+            address: outputAddress ?? '',
             isNative: isOutputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           })
         );
       }
@@ -217,20 +226,38 @@ export const LaunchDetailSwapCard = observer(
     useEffect(() => {
       if (swap.toToken) {
         chart.setChartLabel(
-          `${Token.getToken({ address: swap.toToken.address }).symbol}`
-        );
-        chart.setChartTarget(Token.getToken({ address: swap.toToken.address }));
-        chart.setCurrencyCode("USD");
-      } else if (swap.fromToken) {
-        chart.setChartLabel(
-          `${Token.getToken({ address: swap.fromToken.address }).symbol}`
+          `${
+            Token.getToken({
+              address: swap.toToken.address,
+              chainId: wallet.currentChain.chainId.toString(),
+            }).symbol
+          }`
         );
         chart.setChartTarget(
-          Token.getToken({ address: swap.fromToken.address })
+          Token.getToken({
+            address: swap.toToken.address,
+            chainId: wallet.currentChain.chainId.toString(),
+          })
         );
-        chart.setCurrencyCode("USD");
+        chart.setCurrencyCode('USD');
+      } else if (swap.fromToken) {
+        chart.setChartLabel(
+          `${
+            Token.getToken({
+              address: swap.fromToken.address,
+              chainId: wallet.currentChain.chainId.toString(),
+            }).symbol
+          }`
+        );
+        chart.setChartTarget(
+          Token.getToken({
+            address: swap.fromToken.address,
+            chainId: wallet.currentChain.chainId.toString(),
+          })
+        );
+        chart.setCurrencyCode('USD');
       }
-      console.log("chart.getChartTarget()", chart.chartTarget);
+      console.log('chart.getChartTarget()', chart.chartTarget);
     }, [swap.fromToken, swap.toToken]);
 
     return (
@@ -238,19 +265,19 @@ export const LaunchDetailSwapCard = observer(
         <Tabs
           aria-label="Swap Options"
           classNames={{
-            base: "relative w-full",
+            base: 'relative w-full',
             tabList: cn(
-              "flex rounded-2xl border border-[#202020] bg-white shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020]",
-              "absolute left-1/2 -translate-x-1/2 z-10 -top-5",
-              "overflow-x-auto max-w-[90vw] sm:max-w-none"
+              'flex rounded-2xl border border-[#202020] bg-white shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020]',
+              'absolute left-1/2 -translate-x-1/2 z-10 -top-5',
+              'overflow-x-auto max-w-[90vw] sm:max-w-none'
             ),
-            tab: "px-5 py-1 rounded-lg whitespace-nowrap text-xs sm:text-sm sm:text-base",
-            tabContent: "group-data-[selected=true]:text-white",
+            tab: 'px-5 py-1 rounded-lg whitespace-nowrap text-xs sm:text-sm sm:text-base',
+            tabContent: 'group-data-[selected=true]:text-white',
             cursor:
-              "bg-[#020202] border border-black shadow-[0.5px_0.5px_0px_0px_#000000] sm:shadow-[2px_2px_0px_0px_#000000]",
+              'bg-[#020202] border border-black shadow-[0.5px_0.5px_0px_0px_#000000] sm:shadow-[2px_2px_0px_0px_#000000]',
             panel: cn(
-              "flex flex-col h-full w-full gap-y-4 justify-center items-center",
-              "!mt-0 !py-0"
+              'flex flex-col h-full w-full gap-y-4 justify-center items-center',
+              '!mt-0 !py-0'
             ),
           }}
         >
@@ -258,7 +285,7 @@ export const LaunchDetailSwapCard = observer(
             key="swap"
             title="Swap"
             className={cn(
-              "relative",
+              'relative',
               memePairContract.canClaimLP &&
                 "after:absolute after:content-[''] after:w-2 after:h-2 after:bg-red-500 after:rounded-full after:-top-1 after:-right-1"
             )}
@@ -283,7 +310,7 @@ export const LaunchDetailSwapCard = observer(
             key="lp"
             title="LP"
             className={cn(
-              "relative",
+              'relative',
               memePairContract.canClaimLP &&
                 "after:absolute after:content-[''] after:w-2 after:h-2 after:bg-red-500 after:rounded-full after:-top-1 after:-right-1"
             )}
@@ -344,7 +371,7 @@ export const LaunchDetailSwapCard = observer(
                     );
                   }}
                 >
-                  {vaultContract?.transactionPending ? "Pending..." : "Deposit"}
+                  {vaultContract?.transactionPending ? 'Pending...' : 'Deposit'}
                 </Button>
               </HoneyContainer>
             </LoadingContainer>
@@ -379,8 +406,8 @@ export const DedicatedSwapCard = observer(
     disableToSelection?: boolean;
   }) => {
     const [values, setValues] = useState<{ amount0: string; amount1: string }>({
-      amount0: "0",
-      amount1: "0",
+      amount0: '0',
+      amount1: '0',
     });
     const [presetPairs, setPresetPairs] = useState<PresetPair[]>([]);
     const router = useRouter();
@@ -390,7 +417,7 @@ export const DedicatedSwapCard = observer(
     //     value: 0,
     //     onSelectChange: (value) => {
     //       swap.setFromAmount(
-    //         (swap.fromToken as Token).balance.times(value).toFixed()
+    //         (swap.fromToken as Token).balance.times(value).toFixe`d()
     //       );
     //     },
     //   }),
@@ -415,16 +442,19 @@ export const DedicatedSwapCard = observer(
           const fromToken = Token.getToken({
             address: inputAddress,
             isNative: true,
+            chainId: wallet.currentChain.chainId.toString(),
           });
 
           const fromTokenWrapped = Token.getToken({
             address: inputAddress,
             isNative: false,
+            chainId: wallet.currentChain.chainId.toString(),
           });
 
           const toToken = Token.getToken({
             address: outputAddress,
             isNative: isOutputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           });
           newPresetPairs.push({ fromToken, toToken });
           newPresetPairs.push({ fromToken: fromTokenWrapped, toToken });
@@ -443,11 +473,13 @@ export const DedicatedSwapCard = observer(
         const fromToken = Token.getToken({
           address: wallet.currentChain.nativeToken.address,
           isNative: true,
+          chainId: wallet.currentChain.chainId.toString(),
         });
 
         const toToken = Token.getToken({
           address: outputAddress!,
           isNative: isOutputNative,
+          chainId: wallet.currentChain.chainId.toString(),
         });
 
         newPresetPairs.push({ fromToken, toToken });
@@ -495,14 +527,16 @@ export const DedicatedSwapCard = observer(
           Token.getToken({
             address: inputCurrency,
             isNative: isInputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           })
         );
       } else {
         swap.setFromToken(
           Token.getToken({
             address:
-              inputAddress || "0xfc5e3743e9fac8bb60408797607352e24db7d65e",
+              inputAddress || '0xfc5e3743e9fac8bb60408797607352e24db7d65e',
             isNative: isInputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           })
         );
       }
@@ -512,13 +546,15 @@ export const DedicatedSwapCard = observer(
           Token.getToken({
             address: outputCurrency,
             isNative: isOutputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           })
         );
       } else {
         swap.setToToken(
           Token.getToken({
-            address: outputAddress ?? "",
+            address: outputAddress ?? '',
             isNative: isOutputNative,
+            chainId: wallet.currentChain.chainId.toString(),
           })
         );
       }
@@ -539,20 +575,38 @@ export const DedicatedSwapCard = observer(
     useEffect(() => {
       if (swap.toToken) {
         chart.setChartLabel(
-          `${Token.getToken({ address: swap.toToken.address }).symbol}`
-        );
-        chart.setChartTarget(Token.getToken({ address: swap.toToken.address }));
-        chart.setCurrencyCode("USD");
-      } else if (swap.fromToken) {
-        chart.setChartLabel(
-          `${Token.getToken({ address: swap.fromToken.address }).symbol}`
+          `${
+            Token.getToken({
+              address: swap.toToken.address,
+              chainId: wallet.currentChain.chainId.toString(),
+            }).symbol
+          }`
         );
         chart.setChartTarget(
-          Token.getToken({ address: swap.fromToken.address })
+          Token.getToken({
+            address: swap.toToken.address,
+            chainId: wallet.currentChain.chainId.toString(),
+          })
         );
-        chart.setCurrencyCode("USD");
+        chart.setCurrencyCode('USD');
+      } else if (swap.fromToken) {
+        chart.setChartLabel(
+          `${
+            Token.getToken({
+              address: swap.fromToken.address,
+              chainId: wallet.currentChain.chainId.toString(),
+            }).symbol
+          }`
+        );
+        chart.setChartTarget(
+          Token.getToken({
+            address: swap.fromToken.address,
+            chainId: wallet.currentChain.chainId.toString(),
+          })
+        );
+        chart.setCurrencyCode('USD');
       }
-      console.log("chart.getChartTarget()", chart.chartTarget);
+      console.log('chart.getChartTarget()', chart.chartTarget);
     }, [swap.fromToken, swap.toToken]);
 
     return (
@@ -560,27 +614,23 @@ export const DedicatedSwapCard = observer(
         <Tabs
           aria-label="Swap Options"
           classNames={{
-            base: "relative w-full",
+            base: 'relative w-full',
             tabList: cn(
-              "flex rounded-2xl border border-[#202020] bg-white shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020]",
-              "absolute left-1/2 -translate-x-1/2 z-10 -top-5",
-              "overflow-x-auto max-w-[90vw] sm:max-w-none"
+              'flex rounded-2xl border border-[#202020] bg-white shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020]',
+              'absolute left-1/2 -translate-x-1/2 z-10 -top-5',
+              'overflow-x-auto max-w-[90vw] sm:max-w-none'
             ),
-            tab: "px-5 py-1 rounded-lg whitespace-nowrap text-xs sm:text-sm sm:text-base",
-            tabContent: "group-data-[selected=true]:text-white",
+            tab: 'px-5 py-1 rounded-lg whitespace-nowrap text-xs sm:text-sm sm:text-base',
+            tabContent: 'group-data-[selected=true]:text-white',
             cursor:
-              "bg-[#020202] border border-black shadow-[0.5px_0.5px_0px_0px_#000000] sm:shadow-[2px_2px_0px_0px_#000000]",
+              'bg-[#020202] border border-black shadow-[0.5px_0.5px_0px_0px_#000000] sm:shadow-[2px_2px_0px_0px_#000000]',
             panel: cn(
-              "flex flex-col h-full w-full gap-y-4 justify-center items-center",
-              "!mt-0 !py-0"
+              'flex flex-col h-full w-full gap-y-4 justify-center items-center',
+              '!mt-0 !py-0'
             ),
           }}
         >
-          <Tab
-            key="swap"
-            title="Swap"
-            className={cn("relative")}
-          >
+          <Tab key="swap" title="Swap" className={cn('relative')}>
             <LoadingContainer isLoading={!isInit}>
               <V3SwapCard
                 presetPairs={presetPairs}

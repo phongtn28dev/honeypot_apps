@@ -1,5 +1,6 @@
-import { infoClient } from ".";
-import { AllRacersDocument, AllRacersQuery } from "../generated/graphql";
+import { AllRacersDocument, AllRacersQuery } from '../generated/graphql';
+import { getSubgraphClientByChainId } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared';
 
 export interface Racer {
   tokenAddress: string;
@@ -17,6 +18,10 @@ export interface Racer {
 }
 
 export async function getAllRacers() {
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const allRacers = await infoClient.query<AllRacersQuery>({
     query: AllRacersDocument,
   });

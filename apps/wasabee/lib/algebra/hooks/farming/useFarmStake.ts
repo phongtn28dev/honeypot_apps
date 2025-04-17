@@ -1,15 +1,15 @@
-import { useContractWrite, useSimulateContract } from "wagmi";
-import { encodeFunctionData } from "viem";
-import { MaxUint128 } from "@cryptoalgebra/sdk";
-import { useFarmCheckApprove } from "./useFarmCheckApprove";
-import { useEffect, useState } from "react";
-import { useTransactionAwait } from "../common/useTransactionAwait";
-import { Address } from "viem";
-import { FARMING_CENTER } from "@/config/algebra/addresses";
-import { farmingCenterABI } from "@/lib/abis/algebra-contracts/ABIs";
-import { farmingClient } from "../../graphql/clients";
-import { Deposit } from "../../graphql/generated/graphql";
-import { TransactionType } from "../../state/pendingTransactionsStore";
+import { useContractWrite, useSimulateContract } from 'wagmi';
+import { encodeFunctionData } from 'viem';
+import { MaxUint128 } from '@cryptoalgebra/sdk';
+import { useFarmCheckApprove } from './useFarmCheckApprove';
+import { useEffect, useState } from 'react';
+import { useTransactionAwait } from '../common/useTransactionAwait';
+import { Address } from 'viem';
+import { farmingCenterABI } from '@/lib/abis/algebra-contracts/ABIs';
+import { Deposit } from '../../graphql/generated/graphql';
+import { TransactionType } from '../../state/pendingTransactionsStore';
+import { wallet } from '@honeypot/shared';
+import { useSubgraphClient } from '@honeypot/shared';
 
 export function useFarmStake({
   tokenId,
@@ -25,15 +25,19 @@ export function useFarmStake({
   nonce: bigint;
 }) {
   const { approved } = useFarmCheckApprove(tokenId);
+  const farmingClient = useSubgraphClient('algebra_farming');
 
   const [isQueryLoading, setIsQueryLoading] = useState<boolean>(false);
 
-  const address = tokenId && approved ? FARMING_CENTER : undefined;
+  const address =
+    tokenId && approved
+      ? wallet.currentChain.contracts.algebraFarmingCenter
+      : undefined;
 
   const { data: config } = useSimulateContract({
     address,
     abi: farmingCenterABI,
-    functionName: "enterFarming",
+    functionName: 'enterFarming',
     args: [
       {
         rewardToken,
@@ -60,7 +64,7 @@ export function useFarmStake({
     const interval: NodeJS.Timeout = setInterval(
       () =>
         farmingClient.refetchQueries({
-          include: ["Deposits"],
+          include: ['Deposits'],
           onQueryUpdated: (query, { result: diff }) => {
             const currentPos = diff.deposits.find(
               (deposit: Deposit) => deposit.id.toString() === tokenId.toString()
@@ -106,10 +110,10 @@ export function useFarmUnstake({
   account: Address;
 }) {
   const [isQueryLoading, setIsQueryLoading] = useState<boolean>(false);
-
+  const farmingClient = useSubgraphClient('algebra_farming');
   const exitFarmingCalldata = encodeFunctionData({
     abi: farmingCenterABI,
-    functionName: "exitFarming",
+    functionName: 'exitFarming',
     args: [
       {
         rewardToken,
@@ -123,13 +127,13 @@ export function useFarmUnstake({
 
   const rewardClaimCalldata = encodeFunctionData({
     abi: farmingCenterABI,
-    functionName: "claimReward",
+    functionName: 'claimReward',
     args: [rewardToken, account, BigInt(MaxUint128)],
   });
 
   const bonusRewardClaimCalldata = encodeFunctionData({
     abi: farmingCenterABI,
-    functionName: "claimReward",
+    functionName: 'claimReward',
     args: [bonusRewardToken, account, BigInt(MaxUint128)],
   });
 
@@ -140,9 +144,12 @@ export function useFarmUnstake({
   ];
 
   const { data: config } = useSimulateContract({
-    address: account && tokenId ? FARMING_CENTER : undefined,
+    address:
+      account && tokenId
+        ? wallet.currentChain.contracts.algebraFarmingCenter
+        : undefined,
     abi: farmingCenterABI,
-    functionName: "multicall",
+    functionName: 'multicall',
     args: [calldatas],
   });
 
@@ -161,7 +168,7 @@ export function useFarmUnstake({
     const interval: NodeJS.Timeout = setInterval(
       () =>
         farmingClient.refetchQueries({
-          include: ["Deposits"],
+          include: ['Deposits'],
           onQueryUpdated: (query, { result: diff }) => {
             const currentPos = diff.deposits.find(
               (deposit: Deposit) => deposit.id.toString() === tokenId.toString()

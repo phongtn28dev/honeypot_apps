@@ -2,7 +2,7 @@ import { BGTVault } from '@/services/contract/bgt-market/bgt-vault';
 import { useEffect, useState } from 'react';
 import { Address } from 'viem';
 import { usePollingBlockNumber } from './useBlockNumber';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { useObserver } from 'mobx-react-lite';
 import { useBGTVaults } from '../algebra/graphql/clients/bgt-market';
 

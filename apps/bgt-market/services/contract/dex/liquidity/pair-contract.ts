@@ -1,21 +1,21 @@
-import { Token } from "@/services/contract/token";
-import BigNumber from "bignumber.js";
-import { BaseContract } from "@/services/contract";
-import { wallet } from "@/services/wallet";
-import IUniswapV2Pair from "@uniswap/v2-core/build/IUniswapV2Pair.json";
-import { makeAutoObservable } from "mobx";
-import { getContract, zeroAddress } from "viem";
-import { AsyncState } from "@/services/utils";
-import { toCompactLocaleString } from "@/lib/utils";
-import { amountFormatted, formatAmount } from "@/lib/format";
-import dayjs from "dayjs";
-import { liquidity } from "@/services/liquidity";
+import { Token } from '@honeypot/shared';
+import BigNumber from 'bignumber.js';
+import { BaseContract } from '@/services/contract';
+import { wallet } from '@honeypot/shared';
+import IUniswapV2Pair from '@uniswap/v2-core/build/IUniswapV2Pair.json';
+import { makeAutoObservable } from 'mobx';
+import { getContract, zeroAddress } from 'viem';
+import { AsyncState } from '@/services/utils';
+import { toCompactLocaleString } from '@/lib/utils';
+import { amountFormatted, formatAmount } from '@/lib/format';
+import dayjs from 'dayjs';
+import { liquidity } from '@/services/liquidity';
 import {
   Transaction,
   VaultCollectFee,
   VaultDeposit,
   VaultWithdraw,
-} from "@/lib/algebra/graphql/generated/graphql";
+} from '@/lib/algebra/graphql/generated/graphql';
 
 // const totalSupply = await pairContract.methods.totalSupply().call()
 // const LPTokenBalance = await this.balanceOf(pairAddress)
@@ -23,8 +23,8 @@ import {
 // const LPtoken1Balance = reserve1 * LPTokenBalance / totalSxupply
 
 export class PairContract implements BaseContract {
-  address: string = "";
-  name: string = "";
+  address: string = '';
+  name: string = '';
   abi = IUniswapV2Pair.abi;
   token: Token = new Token({});
   deadline: number = 20;
@@ -33,7 +33,7 @@ export class PairContract implements BaseContract {
     reserve1: BigNumber;
   } | null = null;
   trackedReserveETH: BigNumber = new BigNumber(0);
-  tradingVolumeYesterday: string = "";
+  tradingVolumeYesterday: string = '';
   token0: Token = new Token({}); // fixed
   token1: Token = new Token({}); // fixed
   isInit = false;
@@ -101,8 +101,8 @@ export class PairContract implements BaseContract {
           }`,
         }
       : {
-          reserve0: "-",
-          reserve1: "-",
+          reserve0: '-',
+          reserve1: '-',
         };
   }
 
@@ -131,13 +131,13 @@ export class PairContract implements BaseContract {
           }`,
         }
       : {
-          reserve0: "-",
-          reserve1: "-",
+          reserve0: '-',
+          reserve1: '-',
         };
   }
 
   get poolName() {
-    return this.token0.displayName + "-" + this.token1.displayName;
+    return this.token0.displayName + '-' + this.token1.displayName;
   }
 
   get contract() {
@@ -176,8 +176,8 @@ export class PairContract implements BaseContract {
         };
       }
     } catch (e) {
-      console.log("this", this);
-      console.log("error", e);
+      console.log('this', this);
+      console.log('error', e);
     }
   }
   getAmountOut = new AsyncState(

@@ -7,6 +7,8 @@ import { BsPerson } from 'react-icons/bs';
 import Link from 'next/link';
 import { formatNumberWithUnit } from '@/lib/utils';
 import { mock } from 'wagmi/connectors';
+import { useObserver } from 'mobx-react-lite';
+import { wallet } from '@honeypot/shared';
 
 const ConnectButtonCustom = (props: ButtonHTMLAttributes<any>) => {
   return (
@@ -20,6 +22,7 @@ const ConnectButtonCustom = (props: ButtonHTMLAttributes<any>) => {
 
 export const WalletConnect = () => {
   const { connect } = useConnect();
+  const currentChain = useObserver(() => wallet.currentChain);
 
   return (
     <div className="flex flex-col items-center">
@@ -121,18 +124,18 @@ export const WalletConnect = () => {
                           className="flex cursor-pointer bg-[#202020] text-white px-3 lg:px-4 py-1.5 lg:py-2 rounded-2xl gap-1.5 lg:gap-2 items-center shrink-0 text-xs sm:text-sm lg:text-base"
                         >
                           <Image
-                            src={'/images/empty-logo.png'}
+                            src={currentChain.iconUrl}
                             alt="icon"
                             width={18}
                             height={18}
-                            className="lg:w-5 lg:h-5"
+                            className="lg:w-5 lg:h-5 rounded-full"
                           />
                           <div className="text-nowrap text-white">
                             {account.balanceFormatted ? (
                               <span>{`${formatNumberWithUnit(
                                 Number(account.balanceFormatted),
                                 3
-                              )} BERA`}</span>
+                              )} ${account.balanceSymbol}`}</span>
                             ) : (
                               <div className="h-3 lg:h-4 w-16 lg:w-20 bg-gray-700 animate-pulse rounded"></div>
                             )}

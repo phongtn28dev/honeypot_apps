@@ -5,7 +5,6 @@ import { useTotalUsers } from '@/lib/hooks/useTotalUsers';
 import CardContainer from '@/components/CardContianer/v3';
 import { useLeaderboard } from '@/lib/hooks/useLeaderboard';
 import { shortenAddressString, formatVolume } from '@/lib/utils';
-import { wallet } from '@/services/wallet';
 import {
   useAccounts,
   useTopSwapAccounts,
@@ -13,6 +12,7 @@ import {
   useTopParticipateAccounts,
 } from '@/lib/hooks/useAccounts';
 import { formatExtremelyLargeNumber } from '@/lib/format';
+import { wallet } from '@honeypot/shared';
 
 interface LeaderboardItem {
   rank: number;
@@ -116,6 +116,15 @@ const LeaderboardPage = () => {
       } Participations`,
     },
   ];
+  if (!wallet.currentChain.supportDEX) {
+    return (
+      <div className="w-full flex items-center justify-center pb-6 sm:pb-12 overflow-x-hidden">
+        <div className="text-center">
+          <p className="text-lg">DEX is not supported on this chain</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <CardContainer className="xl:max-w-[1200px] mx-auto w-[calc(100%-32px)]">
@@ -260,7 +269,7 @@ const LeaderboardPage = () => {
                                 placement="top"
                               >
                                 <Link
-                                  href={`https://berascan.com/address/${item.walletAddress}`}
+                                  href={`${wallet.currentChain.chain.blockExplorers?.default.url}address/${item.walletAddress}`}
                                   target="_blank"
                                   className="text-blue-400 text-xs sm:text-sm md:text-base"
                                 >

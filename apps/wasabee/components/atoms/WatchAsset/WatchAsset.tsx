@@ -1,9 +1,10 @@
-import { WalletSvg } from "@/components/svg/wallet";
-import { Token } from "@/services/contract/token";
-import { Tooltip } from "@nextui-org/react";
-import clsx from "clsx";
-import React from "react";
-import { useState } from "react";
+import { WalletSvg } from '@/components/svg/wallet';
+
+import { Token } from '@honeypot/shared';
+import { Tooltip } from '@nextui-org/react';
+import clsx from 'clsx';
+import React from 'react';
+import { useState } from 'react';
 
 interface WatchAssetProps extends React.SVGProps<SVGSVGElement> {
   token: Token;
@@ -29,7 +30,7 @@ export function WatchAsset(props: WatchAssetProps) {
           setState({ isTooltipOpen: false });
         }}
         className={clsx(
-          " inline-block cursor-pointer hover:text-primary hover:stroke-primary hover:fill-primary ",
+          ' inline-block cursor-pointer hover:text-primary hover:stroke-primary hover:fill-primary ',
           props.className
         )}
         onClick={() => {

@@ -1,39 +1,39 @@
-import { useEffect, useMemo, useState } from "react";
-import { Formik, Form, Field } from "formik";
-import { StyledButton } from "../../styled";
-import FormInput from "../../Input";
-import { BtnWrapper, FormContainer } from "./styled";
-import { ethers } from "ethers";
-import APIAccessPayment from "@/lib/abis/beravote/abi/APIAccessPayment.json";
-import { wallet } from "@/services/wallet";
-import { WrappedToastify } from "@/lib/wrappedToastify";
-import { FtoPairContract } from "@/services/contract/launches/fto/ftopair-contract";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
-import Link from "next/link";
-import { observer } from "mobx-react-lite";
-import { trpcClient } from "@/lib/trpc";
-import { toast } from "react-toastify";
-import { createSiweMessage } from "@/lib/siwe";
+import { useEffect, useMemo, useState } from 'react';
+import { Formik, Form, Field } from 'formik';
+import { StyledButton } from '../../styled';
+import FormInput from '../../Input';
+import { BtnWrapper, FormContainer } from './styled';
+import { ethers } from 'ethers';
+import APIAccessPayment from '@/lib/abis/beravote/abi/APIAccessPayment.json';
+import { wallet } from '@honeypot/shared';
+import { WrappedToastify } from '@/lib/wrappedToastify';
+import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
+import Link from 'next/link';
+import { observer } from 'mobx-react-lite';
+import { trpcClient } from '@/lib/trpc';
+import { toast } from 'react-toastify';
+import { createSiweMessage } from '@/lib/siwe';
 
-const payContract = "0x166a064C9D0E243fea5d9afA3E7B06a8b94E05F9";
+const payContract = '0x166a064C9D0E243fea5d9afA3E7B06a8b94E05F9';
 const ethersProvider =
-  typeof window !== "undefined" && window.ethereum
+  typeof window !== 'undefined' && window.ethereum
     ? new ethers.providers.Web3Provider(window.ethereum)
     : null;
 
 function toDataURL(src: string, callback: (arg0: string) => void) {
   var image = new Image();
-  image.crossOrigin = "Anonymous";
+  image.crossOrigin = 'Anonymous';
   image.onload = function () {
-    var canvas = document.createElement("canvas");
-    var context = canvas.getContext("2d");
+    var canvas = document.createElement('canvas');
+    var context = canvas.getContext('2d');
     // @ts-ignore
     canvas.height = this.naturalHeight;
     // @ts-ignore
     canvas.width = this.naturalWidth;
     // @ts-ignore
     context.drawImage(this, 0, 0);
-    var dataURL = canvas.toDataURL("image/jpeg");
+    var dataURL = canvas.toDataURL('image/jpeg');
     callback(dataURL);
   };
   image.src = src;
@@ -70,15 +70,15 @@ const createDaoSpace = async (requestBody: {
   signature: any;
 }) => {
   const cloudflareCorsProxy =
-    "https://white-mud-e962.forgingblock.workers.dev/corsproxy/?apiurl=";
+    'https://white-mud-e962.forgingblock.workers.dev/corsproxy/?apiurl=';
   try {
     const response = await fetch(
-      cloudflareCorsProxy + "https://beravote.com/api/wlspaces",
+      cloudflareCorsProxy + 'https://beravote.com/api/wlspaces',
       {
-        method: "POST",
+        method: 'POST',
         //mode: 'no-cors',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(requestBody),
       }
@@ -86,14 +86,14 @@ const createDaoSpace = async (requestBody: {
 
     if (response.ok) {
       const data = await response.json();
-      console.log("Success:", data);
+      console.log('Success:', data);
       return { success: true, data };
     } else {
-      console.error("Error:", response.statusText);
+      console.error('Error:', response.statusText);
       return { success: false, error: response.statusText };
     }
   } catch (error) {
-    console.error("Request failed:", error);
+    console.error('Request failed:', error);
     return { success: false, error };
   }
 };
@@ -112,8 +112,8 @@ const handleYes = async (
   paymentFee: any,
   pair: FtoPairContract | MemePairContract
 ) => {
-  console.log("Form Data:", values);
-  console.log("paymentFee", paymentFee);
+  console.log('Form Data:', values);
+  console.log('paymentFee', paymentFee);
   const address = await signer.getAddress();
   console.log(address);
   const paymentContract = new ethers.Contract(
@@ -123,8 +123,8 @@ const handleYes = async (
   );
 
   const createSpaceToast = WrappedToastify.pending({
-    title: "Creating Governance Space",
-    message: "Please wait...",
+    title: 'Creating Governance Space',
+    message: 'Please wait...',
     options: { autoClose: false },
   });
 
@@ -137,12 +137,12 @@ const handleYes = async (
   toast.dismiss(createSpaceToast);
   if (receipt.status === 1) {
     WrappedToastify.success({
-      title: "Payment successful",
-      message: "Creating Governance Space",
+      title: 'Payment successful',
+      message: 'Creating Governance Space',
     });
-    console.log("Transaction succeeded:", receipt);
+    console.log('Transaction succeeded:', receipt);
     if (!pair.launchedToken) {
-      console.error("pair.launchedToken is undefined");
+      console.error('pair.launchedToken is undefined');
       return;
     }
     const timestamp = parseInt((Date.now() / 1000).toString());
@@ -162,16 +162,16 @@ const handleYes = async (
           symbol: pair.launchedToken.symbol,
           decimals: pair.launchedToken.decimals,
           votingThreshold: Math.pow(10, pair.launchedToken.decimals).toFixed(), // "1000000000000000000", // voting threshold 1 token (18 decimals)
-          type: "erc20",
+          type: 'erc20',
           contract: pair.launchedToken.address,
-          chain: "berachain-b2",
+          chain: 'berachain-b2',
           votingWeight: 1,
           name: pair.launchedToken.name,
           ss58Format: 80084,
         },
       ],
-      weightStrategy: ["balance-of"],
-      proposalThreshold: "0",
+      weightStrategy: ['balance-of'],
+      proposalThreshold: '0',
       pubkey: pubkey,
       address: pubkey,
       timestamp: timestamp,
@@ -183,31 +183,31 @@ const handleYes = async (
     });
     const stringToHex = (str: string) => {
       return (
-        "0x" +
+        '0x' +
         Array.from(str)
-          .map((char) => char.charCodeAt(0).toString(16).padStart(2, "0"))
-          .join("")
+          .map((char) => char.charCodeAt(0).toString(16).padStart(2, '0'))
+          .join('')
       );
     };
     const hex = stringToHex(msg);
     const signatureToastr = WrappedToastify.pending({
-      title: "Sign message",
-      message: "Please sign the message to create Governance space",
+      title: 'Sign message',
+      message: 'Please sign the message to create Governance space',
       options: { autoClose: false },
     });
     const signature = await window.ethereum
       .request({
-        method: "personal_sign",
+        method: 'personal_sign',
         params: [hex, address],
       })
       .then((result: any) => {
         toast.dismiss(signatureToastr);
 
-        console.log("Signature:", result);
+        console.log('Signature:', result);
         if (result) {
           WrappedToastify.success({
-            title: "Message signed",
-            message: "Creating Governance space",
+            title: 'Message signed',
+            message: 'Creating Governance space',
           });
         }
 
@@ -216,10 +216,10 @@ const handleYes = async (
       .catch((error: any) => {
         toast.dismiss(signatureToastr);
         WrappedToastify.error({
-          title: "Failed to sign message",
-          message: "Failed to create Governance space",
+          title: 'Failed to sign message',
+          message: 'Failed to create Governance space',
         });
-        console.error("Failed to sign message:", error);
+        console.error('Failed to sign message:', error);
       });
 
     const requestBody = {
@@ -229,8 +229,8 @@ const handleYes = async (
     };
 
     const saveSpaceToast = WrappedToastify.pending({
-      title: "Saving Governance Space",
-      message: "Please wait...",
+      title: 'Saving Governance Space',
+      message: 'Please wait...',
       options: { autoClose: false },
     });
     const result = await createDaoSpace(requestBody);
@@ -238,14 +238,14 @@ const handleYes = async (
     toast.dismiss(saveSpaceToast);
 
     if (result.success) {
-      console.log("https://beravote.com/space/" + result.data.spaceId);
+      console.log('https://beravote.com/space/' + result.data.spaceId);
       WrappedToastify.success({
-        title: "Governance Space created: ",
-        message: "https://beravote.com/space/" + result.data.spaceId,
+        title: 'Governance Space created: ',
+        message: 'https://beravote.com/space/' + result.data.spaceId,
       });
       await createSiweMessage(
         wallet.account,
-        "Sign In With Honeypot",
+        'Sign In With Honeypot',
         wallet.walletClient
       );
 
@@ -260,20 +260,20 @@ const handleYes = async (
           window.location.reload();
         });
     } else {
-      WrappedToastify.error({ message: "Failed to create Governance space" });
-      console.error("Failed to create DAO space:", result.error);
+      WrappedToastify.error({ message: 'Failed to create Governance space' });
+      console.error('Failed to create DAO space:', result.error);
     }
   } else {
-    WrappedToastify.error({ message: "Failed to create Governance space" });
+    WrappedToastify.error({ message: 'Failed to create Governance space' });
 
-    console.log("Transaction failed:", receipt);
+    console.log('Transaction failed:', receipt);
   }
 };
 
 const BeraVoteForm = observer(
   ({ pair }: { pair: FtoPairContract | MemePairContract }) => {
-    const [logoBase64, setLogoBase64] = useState("");
-    const [paymentFee, setPaymentFee] = useState("");
+    const [logoBase64, setLogoBase64] = useState('');
+    const [paymentFee, setPaymentFee] = useState('');
     const [formSpaceId, setFormSpaceId] = useState(pair.projectName);
     const signer = ethersProvider?.getSigner();
     const [allCreatedSpaces, setAllCreatedSpaces] = useState<string[]>([]);
@@ -281,7 +281,7 @@ const BeraVoteForm = observer(
     useEffect(() => {
       const fetchAllSpaces = async () => {
         const response = await fetch(
-          "https://beravote.com/api/spaces-without-filter"
+          'https://beravote.com/api/spaces-without-filter'
         );
         const data = await response.json();
         setAllCreatedSpaces(Object.keys(data).map((key) => data[key].name));
@@ -299,7 +299,7 @@ const BeraVoteForm = observer(
           console.log(dataUrl);
           setLogoBase64(dataUrl);
         });
-        console.log("logoBase64", logoBase64);
+        console.log('logoBase64', logoBase64);
       }
     }, [pair.logoUrl]);
 
@@ -327,14 +327,14 @@ const BeraVoteForm = observer(
           description: pair.description,
           website: pair.website,
           twitter: pair.twitter,
-          github: "",
-          doc: "",
-          forum: "",
+          github: '',
+          doc: '',
+          forum: '',
           logo: logoBase64,
           createDaoSpace: true,
         }}
         onSubmit={(values) => {
-          console.log("Form Data:", values);
+          console.log('Form Data:', values);
           if (values.createDaoSpace === true) {
             values.logo = logoBase64;
             signer && handleYes(values, signer, paymentFee, pair);
@@ -349,18 +349,18 @@ const BeraVoteForm = observer(
                 <p>
                   Voting space is a decentralized autonomous organization (DAO)
                   where users can vote on proposals and make decisions on the
-                  project.{" "}
+                  project.{' '}
                 </p>
                 <p>
                   <Link
-                    href={"https://quicksnap.gitbook.io/beravote"}
+                    href={'https://quicksnap.gitbook.io/beravote'}
                     className="text-yellow underline"
                   >
                     learn more on beravote
                   </Link>
                 </p>
                 <p>
-                  cost of dao creation:{" "}
+                  cost of dao creation:{' '}
                   {paymentFee && ethers.utils.formatEther(paymentFee)} Bera
                 </p>
               </div>
@@ -370,7 +370,7 @@ const BeraVoteForm = observer(
                 name="name"
                 placeholder="Please enter the website URL"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setFieldValue("name", e.target.value);
+                  setFieldValue('name', e.target.value);
                   setFormSpaceId(e.target.value);
                 }}
               />

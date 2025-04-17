@@ -1,4 +1,3 @@
-import { infoClient } from ".";
 import {
   SwapsQuery,
   SwapsDocument,
@@ -11,7 +10,9 @@ import {
   TransactionsQueryVariables,
   TransactionType,
   Transaction,
-} from "../generated/graphql";
+} from '../generated/graphql';
+import { getSubgraphClientByChainId } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared';
 
 type ParticipantTransaction = {
   id: string;
@@ -55,6 +56,10 @@ export async function fetchPot2PumpTransactions(
 }> {
   const skip = (page - 1) * pageSize;
 
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const { data } = await infoClient.query<
     TransactionsQuery,
     TransactionsQueryVariables
@@ -86,12 +91,12 @@ export async function fetchPot2PumpTransactions(
       first: pageSize,
       skip,
     },
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
   });
 
   return {
-    status: "success",
-    message: "Success",
+    status: 'success',
+    message: 'Success',
     data: data,
     pageInfo: {
       hasNextPage: data.transactions.length === pageSize,

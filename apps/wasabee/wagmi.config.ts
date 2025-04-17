@@ -1,14 +1,5 @@
-import { ContractConfig, defineConfig } from "@wagmi/cli";
-import { actions, react } from "@wagmi/cli/plugins";
-import {
-  ALGEBRA_ETERNAL_FARMING,
-  ALGEBRA_FACTORY,
-  ALGEBRA_POSITION_MANAGER,
-  ALGEBRA_QUOTER,
-  ALGEBRA_QUOTER_V2,
-  ALGEBRA_ROUTER,
-  FARMING_CENTER,
-} from "./config/algebra/addresses";
+import { ContractConfig, defineConfig } from '@wagmi/cli';
+import { actions, react } from '@wagmi/cli/plugins';
 import {
   algebraFactoryABI,
   algebraPoolABI,
@@ -21,87 +12,102 @@ import {
   farmingCenterABI,
   wNativeABI,
   algebraVirtualPoolABI,
-} from "./lib/abis/algebra-contracts/ABIs";
-import { ICHIVaultABI } from "./lib/abis/aquabera/ICHIVault";
-import { ICHIVaultFactoryABI } from "./lib/abis/aquabera/ICHIVaultFactory";
-import { ERC20ABI } from "./lib/abis/erc20";
+} from './lib/abis/algebra-contracts/ABIs';
+import { ICHIVaultABI } from './lib/abis/aquabera/ICHIVault';
+import { ICHIVaultFactoryABI } from './lib/abis/aquabera/ICHIVaultFactory';
+import { ERC20ABI } from './lib/abis/erc20';
+import { contractAddresses } from './config/contractAddresses';
+import { Address } from 'viem';
 
 const contracts: ContractConfig[] = [
   {
-    address: ALGEBRA_FACTORY,
+    address: Object.entries(contractAddresses).reduce((acc, [key, network]) => {
+      acc[key] = network.algebraFactory;
+      return acc;
+    }, {} as Record<string, Address>),
     abi: algebraFactoryABI,
-    name: "AlgebraFactory",
+    name: 'AlgebraFactory',
   },
   {
     abi: algebraPoolABI,
-    name: "AlgebraPool",
+    name: 'AlgebraPool',
   },
   {
     abi: algebraBasePluginABI,
-    name: "AlgebraBasePlugin",
+    name: 'AlgebraBasePlugin',
   },
   {
-    address: ALGEBRA_POSITION_MANAGER,
+    address: Object.entries(contractAddresses).reduce((acc, [key, network]) => {
+      acc[key] = network.algebraPositionManager;
+      return acc;
+    }, {} as Record<string, Address>),
     abi: algebraPositionManagerABI,
-    name: "AlgebraPositionManager",
+    name: 'AlgebraPositionManager',
   },
   {
-    address: ALGEBRA_QUOTER,
+    address: Object.entries(contractAddresses).reduce((acc, [key, network]) => {
+      acc[key] = network.algebraQuoter;
+      return acc;
+    }, {} as Record<string, Address>),
     abi: algebraQuoterABI,
-    name: "AlgebraQuoter",
+    name: 'AlgebraQuoter',
   },
   {
-    address: ALGEBRA_QUOTER_V2,
+    address: Object.entries(contractAddresses).reduce((acc, [key, network]) => {
+      acc[key] = network.algebraQuoterV2;
+      return acc;
+    }, {} as Record<string, Address>),
     abi: algebraQuoterV2ABI,
-    name: "AlgerbaQuoterV2",
+    name: 'AlgerbaQuoterV2',
   },
   {
-    address: ALGEBRA_ROUTER,
+    address: Object.entries(contractAddresses).reduce((acc, [key, network]) => {
+      acc[key] = network.algebraSwapRouter;
+      return acc;
+    }, {} as Record<string, Address>),
     abi: algebraRouterABI,
-    name: "AlgebraRouter",
+    name: 'AlgebraRouter',
   },
   {
-    address: ALGEBRA_ETERNAL_FARMING,
+    address: Object.entries(contractAddresses).reduce((acc, [key, network]) => {
+      acc[key] = network.algebraEternalFarming;
+      return acc;
+    }, {} as Record<string, Address>),
     abi: algebraEternalFarmingABI,
-    name: "AlgebraEternalFarming",
+    name: 'AlgebraEternalFarming',
   },
   {
-    address: FARMING_CENTER,
+    address: Object.entries(contractAddresses).reduce((acc, [key, network]) => {
+      acc[key] = network.algebraFarmingCenter;
+      return acc;
+    }, {} as Record<string, Address>),
     abi: farmingCenterABI,
-    name: "FarmingCenter",
+    name: 'FarmingCenter',
   },
   {
     abi: algebraVirtualPoolABI,
-    name: "AlgebraVirtualPool",
+    name: 'AlgebraVirtualPool',
   },
   {
     abi: wNativeABI,
-    name: "WrappedNative",
+    name: 'WrappedNative',
   },
   {
     abi: ERC20ABI,
-    name: "ERC20",
+    name: 'ERC20',
   },
   {
     abi: ICHIVaultABI,
-    name: "ICHIVault",
+    name: 'ICHIVault',
   },
   {
     abi: ICHIVaultFactoryABI,
-    name: "ICHIVaultFactory",
+    name: 'ICHIVaultFactory',
   },
 ];
 
 export default defineConfig({
-  out: "./wagmi-generated.ts",
+  out: './apps/wasabee/wagmi-generated.ts',
   contracts,
-  plugins: [
-    actions({
-      //watchContractEvent: false,
-    }),
-    react({
-      // useContractEvent: false,
-      //useContractItemEvent: false,
-    }),
-  ],
+  plugins: [react()],
 });

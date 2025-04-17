@@ -1,25 +1,24 @@
 import {
   poolsColumns,
   poolsColumnsMy,
-} from "@/components/algebra/common/Table/poolsColumns";
-import { useEffect, useMemo, useState } from "react";
-import { Address } from "viem";
-import PoolsTable from "@/components/algebra/common/Table/poolsTable";
-import { usePositions } from "@/lib/algebra/hooks/positions/usePositions";
-import { farmingClient } from "@/lib/algebra/graphql/clients";
+} from '@/components/algebra/common/Table/poolsColumns';
+import { useEffect, useMemo, useState } from 'react';
+import { Address } from 'viem';
+import PoolsTable from '@/components/algebra/common/Table/poolsTable';
 import {
   usePoolsListQuery,
   useActiveFarmingsQuery,
   OrderDirection,
   Pool_OrderBy,
-} from "@/lib/algebra/graphql/generated/graphql";
-import PoolCardList from "./PoolCardList";
-import { SortingState } from "@tanstack/react-table";
-import { id } from "ethers/lib/utils";
-import { useUserPools } from "@/lib/algebra/graphql/clients/pool";
-import { wallet } from "@/services/wallet";
-import BigNumber from "bignumber.js";
-import { observer } from "mobx-react-lite";
+} from '@/lib/algebra/graphql/generated/graphql';
+import PoolCardList from './PoolCardList';
+import { SortingState } from '@tanstack/react-table';
+import { id } from 'ethers/lib/utils';
+import { useUserPools } from '@/lib/algebra/graphql/clients/pool';
+import { wallet } from '@honeypot/shared';
+import BigNumber from 'bignumber.js';
+import { observer } from 'mobx-react-lite';
+import { useSubgraphClient } from '@honeypot/shared';
 const mappingSortKeys: Record<any, Pool_OrderBy> = {
   tvlUSD: Pool_OrderBy.TotalValueLockedUsd,
   price: Pool_OrderBy.Token0Price,
@@ -31,19 +30,19 @@ const mappingSortKeys: Record<any, Pool_OrderBy> = {
   changeWeek: Pool_OrderBy.Id,
   changeMonth: Pool_OrderBy.Id,
   liquidity: Pool_OrderBy.Liquidity,
-  "marktet cap": Pool_OrderBy.Token0MarketCap,
+  'marktet cap': Pool_OrderBy.Token0MarketCap,
 };
 interface PoolsListProps {
   defaultFilter?: string;
   showOptions?: boolean;
 }
 const PoolsList = observer(
-  ({ defaultFilter = "trending", showOptions = true }: PoolsListProps) => {
+  ({ defaultFilter = 'trending', showOptions = true }: PoolsListProps) => {
     const [sorting, setSorting] = useState<SortingState>([
-      { id: "id", desc: true },
+      { id: 'id', desc: true },
     ]);
     const [isAllpoolsLoading, setIsAllpoolsLoading] = useState(true);
-
+    const farmingClient = useSubgraphClient('algebra_farming');
     const orderBy = mappingSortKeys[sorting[0].id];
 
     const {
@@ -51,9 +50,9 @@ const PoolsList = observer(
       loading: isPoolsListLoading,
       refetch,
     } = usePoolsListQuery({
-      fetchPolicy: "cache-and-network",
-      nextFetchPolicy: "cache-and-network",
-      initialFetchPolicy: "cache-and-network",
+      fetchPolicy: 'cache-and-network',
+      nextFetchPolicy: 'cache-and-network',
+      initialFetchPolicy: 'cache-and-network',
       notifyOnNetworkStatusChange: true,
       pollInterval: 10000, // Refetch every 10 seconds
     });
@@ -102,7 +101,7 @@ const PoolsList = observer(
           const currentDate = new Date().getTime();
 
           const handlePoolChange = (poolTimeData0: any, poolTimeData1: any) => {
-            if (!poolTimeData0) return "0"; // No data available
+            if (!poolTimeData0) return '0'; // No data available
             if (
               !poolTimeData1 ||
               poolTimeData1.volumeUSD == 0 ||
@@ -202,7 +201,7 @@ const PoolsList = observer(
           const currentDate = new Date().getTime();
 
           const handlePoolChange = (poolTimeData0: any, poolTimeData1: any) => {
-            if (!poolTimeData0) return "0"; // No data available
+            if (!poolTimeData0) return '0'; // No data available
             if (
               !poolTimeData1 ||
               poolTimeData1.volumeUSD == 0 ||
@@ -296,7 +295,7 @@ const PoolsList = observer(
             userPools={formattedUserPools}
             sorting={sorting}
             setSorting={handleSort}
-            link={"pool-detail"}
+            link={'pool-detail'}
             showPagination={true}
             loading={isLoading}
             defaultFilter={defaultFilter}

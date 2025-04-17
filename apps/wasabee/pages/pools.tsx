@@ -1,27 +1,24 @@
 import { cn } from '@/lib/utils';
-import { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { Tab, Tabs } from '@nextui-org/react';
 import { NextLayoutPage } from '@/types/nextjs';
-import { liquidity } from '@/services/liquidity';
+import { useCallback, useEffect, useState } from 'react';
 import PoolsList from '@/components/algebra/pools/PoolsList';
 import AquaberaList from '@/components/Aquabera/VaultLists/VaultLists';
 
 const PoolsPage: NextLayoutPage = observer(() => {
-  useEffect(() => {
-    if (!wallet.isInit) {
-      return;
-    }
-    liquidity.initPool();
-  }, [wallet.isInit]);
+  const [currentTab, setCurrentTab] = useState<'all' | 'my'>('all');
 
-  useEffect(() => {
-    if (wallet.isInit && liquidity.isInit) {
-      liquidity.pairPage.reloadPage();
-      liquidity.myPairPage.reloadPage();
-    }
-  }, [wallet.isInit, liquidity.isInit]);
+  if (!wallet.currentChain.supportDEX) {
+    return (
+      <div className="w-full flex items-center justify-center pb-6 sm:pb-12 overflow-x-hidden">
+        <div className="text-center">
+          <p className="text-lg">DEX is not supported on this chain</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-[1200px] mx-auto px-4 xl:px-0 font-gliker w-full mt-5">
@@ -47,10 +44,18 @@ const PoolsPage: NextLayoutPage = observer(() => {
         }}
         aria-label="Pool options"
       >
-        <Tab key="aquabera" title={<span className="text-xs sm:text-base">POGE Vault</span>}>
+        <Tab
+          key="aquabera"
+          title={<span className="text-xs sm:text-base">POGE Vault</span>}
+        >
           <AquaberaList />
         </Tab>
-        <Tab key="algebra" title={<span className="text-xs sm:text-base">Concentrated Liquidity</span>}>
+        <Tab
+          key="algebra"
+          title={
+            <span className="text-xs sm:text-base">Concentrated Liquidity</span>
+          }
+        >
           <PoolsList />
         </Tab>
       </Tabs>

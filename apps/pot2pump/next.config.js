@@ -30,7 +30,7 @@ const nextConfig = {
       },
     ],
   },
-
+  productionBrowserSourceMaps: true,
   transpilePackages: ['styled-components'],
 };
 

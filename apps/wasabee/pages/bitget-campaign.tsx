@@ -2,8 +2,9 @@ import HoneyContainer from '@/components/CardContianer/v3';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { useBitgetEvents } from '@/lib/algebra/graphql/clients/bitget_event';
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
-import { Token } from '@/services/contract/token';
-import { wallet } from '@/services/wallet';
+
+import { Token } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared';
 import { Button } from '@/components/ui/button';
 import { observer } from 'mobx-react-lite';
 import Link from 'next/link';
@@ -26,6 +27,16 @@ export const BitgetCampaign = observer(() => {
     '0xc1014c1b2b131f87d4dd6ddfd9e3b0ab68fcd631': 'WBERA/Henlo',
   };
 
+  if (wallet.currentChainId !== 80094) {
+    return (
+      <div className="flex flex-col gap-4 w-full justify-center items-center">
+        <HoneyContainer className="w-full px-4 sm:px-6 max-w-[1200px]">
+          <div>This campaign is only available on Berachain Mainnet.</div>
+        </HoneyContainer>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-4 w-full justify-center items-center">
       <HoneyContainer className="w-full px-4 sm:px-6 max-w-[1200px]">
@@ -33,6 +44,7 @@ export const BitgetCampaign = observer(() => {
       </HoneyContainer>
     </div>
   );
+
   return (
     <div className="flex flex-col gap-4 w-full justify-center items-center">
       <HoneyContainer className="w-full px-4 sm:px-6 max-w-[1200px]">
@@ -93,6 +105,7 @@ export const BitgetCampaign = observer(() => {
                         <TokenLogo
                           token={Token.getToken({
                             address: pool.pool.token0.id,
+                            chainId: wallet.currentChainId.toString(),
                           })}
                           size={24}
                           disableLink
@@ -100,6 +113,7 @@ export const BitgetCampaign = observer(() => {
                         <TokenLogo
                           token={Token.getToken({
                             address: pool.pool.token1.id,
+                            chainId: wallet.currentChainId.toString(),
                           })}
                           size={24}
                           disableLink

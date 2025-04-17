@@ -6,7 +6,7 @@ import { Address, isAddress, zeroAddress } from 'viem';
 import { Button } from '@/components/algebra/ui/button';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import { DepositToVaultModal } from '@/components/Aquabera/modals/DepositToVaultModal';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
 import { WithdrawFromVaultModal } from '@/components/Aquabera/modals/WithdrawFromVaultModal';
 import { getSingleVaultDetails } from '@/lib/algebra/graphql/clients/vaults';
@@ -20,6 +20,7 @@ import Copy from '@/components/Copy/v3';
 import { HiExternalLink } from 'react-icons/hi';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { cn, Tooltip } from '@nextui-org/react';
+import { useSubgraphClient } from '@honeypot/shared';
 import { InfoIcon } from 'lucide-react';
 import { VaultTag } from '@/components/Aquabera/VaultTag';
 
@@ -33,6 +34,7 @@ export const VaultDetail = observer(() => {
   const [poolVolume24h, setPoolVolume24h] = useState<string>('0');
   const [poolFees24h, setPoolFees24h] = useState<string>('0');
   const [volatility, setVolatility] = useState<string>('0');
+  const infoClient = useSubgraphClient('algebra_info');
 
   useEffect(() => {
     if (!wallet.isInit || !wallet.account || !wallet.walletClient) return;
@@ -56,11 +58,12 @@ export const VaultDetail = observer(() => {
     )
       return;
 
-    console.log('address', address);
-
     // Fetch token addresses and pool data
     const loadVaultData = async () => {
-      const vaultContract = await getSingleVaultDetails(address as string);
+      const vaultContract = await getSingleVaultDetails(
+        infoClient,
+        address as string
+      );
 
       if (vaultContract) {
         Promise.all([
@@ -98,10 +101,10 @@ export const VaultDetail = observer(() => {
 
   // Add a function to refresh vault data
   const refreshVaultData = useCallback(async () => {
-    if (!vault || !wallet.account) return;
+    if (!vault || !wallet.account || wallet.account === zeroAddress) return;
 
     // Refresh subgraph data
-    const vaultDetails = await getSingleVaultDetails(vault.address);
+    const vaultDetails = await getSingleVaultDetails(infoClient, vault.address);
     setVault(vaultDetails);
     // Get total supply
     vaultDetails?.getTotalSupply();
@@ -110,28 +113,7 @@ export const VaultDetail = observer(() => {
     vaultDetails?.getBalanceOf(wallet.account);
 
     vaultDetails?.getTotalAmounts();
-  }, [vault, wallet.isInit]);
-
-  // Format number with 18 decimals
-  const formatShares = (value: bigint) => {
-    const divisor = BigInt(10 ** 18); // Always use 18 decimals for shares
-    const integerPart = value / divisor;
-    const fractionalPart = value % divisor;
-
-    // Convert to string and pad with zeros if needed
-    const fractionalStr = fractionalPart.toString().padStart(18, '0');
-
-    // Show up to 6 decimal places for better readability
-    const displayDecimals = 18;
-    const formattedFractional = fractionalStr.slice(0, displayDecimals);
-
-    // Remove trailing zeros
-    const trimmedFractional = formattedFractional.replace(/0+$/, '');
-
-    return trimmedFractional
-      ? `${integerPart}.${trimmedFractional}`
-      : integerPart.toString();
-  };
+  }, [vault, wallet.isInit, wallet.account]);
 
   return (
     <div className="container mx-auto px-4 font-gliker">
@@ -257,15 +239,13 @@ export const VaultDetail = observer(() => {
               </h3>
               <div className="space-y-1">
                 <p className="text-xs md:text-xl font-bold text-[#202020] flex flex-col md:flex-row justify-between gap-2">
-                  <span>
-                    {DynamicFormatAmount({
-                      amount: BigNumber(
-                        vault?.userTokenAmounts.total0.toString() ?? 0
-                      ).toString(),
-                      decimals: 3,
-                      endWith: vault?.token0?.symbol,
-                    })}
-                  </span>
+                  {DynamicFormatAmount({
+                    amount: BigNumber(
+                      vault?.userTokenAmounts.total0.toString() ?? 0
+                    ).toString(),
+                    decimals: 3,
+                    endWith: vault?.token0?.symbol,
+                  })}
                 </p>
                 <p className="text-xs md:text-xl font-bold text-[#202020]">
                   {DynamicFormatAmount({
@@ -361,7 +341,7 @@ export const VaultDetail = observer(() => {
                 </Tooltip>
               </p>
             </div>
-            <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D] relative">
+            <div className="rounded-[24px] border border-black bg-white px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D] relative">
               <h3 className="text-base text-[#202020] mb-2">
                 Volatility{' '}
                 <span>
@@ -372,7 +352,7 @@ export const VaultDetail = observer(() => {
               </h3>
               <p
                 className={cn(
-                  'text-xs md:text-xl font-bold text-[#202020]',
+                  'text-2xl font-bold text-[#202020]',
                   volatility > '500' && 'text-orange-500',
                   volatility > '1000' && 'text-red-500'
                 )}
@@ -396,7 +376,7 @@ export const VaultDetail = observer(() => {
                       {address}
                     </p>
                     <Link
-                      href={`https://berascan.com/address/${address}`}
+                      href={`${wallet.currentChain.chain.blockExplorers?.default.url}address/${address}`}
                       target="_blank"
                       className="text-[#202020] hover:text-[#202020]/80 flex-shrink-0"
                     >
@@ -414,7 +394,7 @@ export const VaultDetail = observer(() => {
                       {vault?.token0?.address}
                     </p>
                     <Link
-                      href={`https://berascan.com/address/${vault?.token0?.address}`}
+                      href={`${wallet.currentChain.chain.blockExplorers?.default.url}address/${vault?.token0?.address}`}
                       target="_blank"
                       className="text-[#202020] hover:text-[#202020]/80 flex-shrink-0"
                     >
@@ -429,7 +409,7 @@ export const VaultDetail = observer(() => {
                       {vault?.token1?.address}
                     </p>
                     <Link
-                      href={`https://berascan.com/address/${vault?.token1?.address}`}
+                      href={`${wallet.currentChain.chain.blockExplorers?.default.url}address/${vault?.token1?.address}`}
                       target="_blank"
                       className="text-[#202020] hover:text-[#202020]/80 flex-shrink-0"
                     >
@@ -627,7 +607,9 @@ export const VaultDetail = observer(() => {
                     <div>
                       <Link
                         target="_blank"
-                        href={`https://berascan.com/tx/${tx.id.split('-')[0]}`}
+                        href={`${
+                          wallet.currentChain.chain.blockExplorers?.default.url
+                        }tx/${tx.id.split('-')[0]}`}
                         className="text-gray-500 text-sm underline hover:text-gray-500/80"
                       >
                         {tx.id.split('-')[0].substring(0, 6)}...

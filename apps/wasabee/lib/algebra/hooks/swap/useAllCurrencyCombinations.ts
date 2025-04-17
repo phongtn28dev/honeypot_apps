@@ -1,13 +1,19 @@
-import { BASES_TO_CHECK_TRADES_AGAINST } from "@/config/algebra/routing";
-import { Currency, Token } from "@cryptoalgebra/sdk";
-import { useMemo } from "react";
-import { useChainId } from "wagmi";
+import { wallet } from '@honeypot/shared';
+import { Currency, Token } from '@cryptoalgebra/sdk';
+import { useObserver } from 'mobx-react-lite';
+import { useMemo } from 'react';
+import { useChainId } from 'wagmi';
 
 export function useAllCurrencyCombinations(
   currencyA?: Currency,
   currencyB?: Currency
 ): [Token, Token][] {
   const chainId = useChainId();
+  const { currentChain } = useObserver(() => {
+    return {
+      currentChain: wallet.currentChain,
+    };
+  });
 
   const [tokenA, tokenB] = chainId
     ? [currencyA?.wrapped, currencyB?.wrapped]
@@ -16,8 +22,19 @@ export function useAllCurrencyCombinations(
   const bases: Token[] = useMemo(() => {
     if (!chainId) return [];
 
-    return BASES_TO_CHECK_TRADES_AGAINST[chainId] ?? [];
-  }, [chainId]);
+    return (
+      currentChain.validatedTokens.map(
+        (token) =>
+          new Token(
+            chainId,
+            token.address,
+            token.decimals,
+            token.symbol,
+            token.name
+          ).wrapped
+      ) ?? []
+    );
+  }, [chainId, currentChain]);
 
   const basePairs: [Token, Token][] = useMemo(
     () =>

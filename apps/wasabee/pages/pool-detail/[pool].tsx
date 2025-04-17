@@ -28,10 +28,11 @@ import {
 import { FormattedPosition } from '@/types/algebra/types/formatted-position';
 import { Address, zeroAddress } from 'viem';
 import { cn } from '@/lib/tailwindcss';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import CardContainer from '@/components/CardContianer/v3';
 import { useRouter } from 'next/router';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { observer } from 'mobx-react-lite';
 import { LoadingContainer } from '@/components/LoadingDisplay/LoadingDisplay';
 import PoolChart from '@/components/algebra/pool/PoolChart';
@@ -70,7 +71,11 @@ const PoolPage = observer(() => {
     if (!wallet.isInit) return;
     if (poolInfo?.pool?.token0.id) {
       setToken0(
-        Token.getToken({ address: poolInfo.pool.token0.id, force: true })
+        Token.getToken({
+          address: poolInfo.pool.token0.id,
+          force: true,
+          chainId: wallet.currentChainId.toString(),
+        })
       );
     }
   }, [poolInfo?.pool?.token0.id, wallet.isInit]);
@@ -79,7 +84,11 @@ const PoolPage = observer(() => {
     if (!wallet.isInit) return;
     if (poolInfo?.pool?.token1.id) {
       setToken1(
-        Token.getToken({ address: poolInfo.pool.token1.id, force: true })
+        Token.getToken({
+          address: poolInfo.pool.token1.id,
+          force: true,
+          chainId: wallet.currentChainId.toString(),
+        })
       );
     }
   }, [poolInfo?.pool?.token1.id, wallet.isInit]);
@@ -241,7 +250,7 @@ const PoolPage = observer(() => {
 
   return (
     <div className="container mx-auto font-gliker">
-      <div className='px-2 sm:px-4 md:px-8'>
+      <div className="px-2 sm:px-4 md:px-8">
         <Button
           onClick={() => router.push('/pools')}
           className="flex items-center gap-2 text-white text-xl px-0"
@@ -311,57 +320,58 @@ const PoolPage = observer(() => {
                   <span className="text-xs sm:text-base">My Positions</span>
                 }
               >
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-0 gap-y-8 w-full lg:gap-8">
-                  <div className="col-span-3">
-                    {!account ? (
-                      <NoAccount />
-                    ) : positionsLoading ||
-                      isFarmingLoading ||
-                      areDepositsLoading ? (
-                      <LoadingState />
-                    ) : noPositions ? (
-                      <NoPositions poolId={poolId ? poolId : zeroAddress} />
-                    ) : (
-                      <>
-                        {/* <MyPositionsToolbar
+                <div className="w-full bg-white rounded-2xl p-4 custom-dashed-3xl border-black">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-0 gap-y-8 w-full lg:gap-8">
+                    <div className="lg:col-span-2">
+                      {!account ? (
+                        <NoAccount />
+                      ) : positionsLoading ||
+                        isFarmingLoading ||
+                        areDepositsLoading ? (
+                        <LoadingState />
+                      ) : noPositions ? (
+                        <NoPositions poolId={poolId ? poolId : zeroAddress} />
+                      ) : (
+                        <>
+                          {/* <MyPositionsToolbar
                         positionsData={positionsData}
                         poolId={poolId ? poolId : zeroAddress}
                       /> */}
-                        <MyPositions
-                          positions={positionsData}
-                          poolId={poolId ? poolId : zeroAddress}
-                          selectedPosition={selectedPosition?.id}
-                          selectPosition={(positionId) =>
-                            selectPosition((prev) =>
-                              prev === positionId ? null : positionId
-                            )
-                          }
-                        />
-                        {farmingInfo &&
-                          deposits &&
-                          !isFarmingLoading &&
-                          !areDepositsLoading && (
-                            <div>
-                              <h2 className="font-semibold text-xl text-left mt-12">
-                                Farming
-                              </h2>
-                              <ActiveFarming
-                                deposits={deposits && deposits.deposits}
-                                farming={farmingInfo}
-                                positionsData={positionsData}
-                              />
-                            </div>
-                          )}
-                      </>
-                    )}
-                  </div>
-
-                  <div className="flex flex-col gap-8 w-full h-full">
-                    <PositionCard
-                      farming={farmingInfo}
-                      closedFarmings={closedFarmings}
-                      selectedPosition={selectedPosition}
-                    />
+                          <MyPositions
+                            positions={positionsData}
+                            poolId={poolId ? poolId : zeroAddress}
+                            selectedPosition={selectedPosition?.id}
+                            selectPosition={(positionId) =>
+                              selectPosition((prev) =>
+                                prev === positionId ? null : positionId
+                              )
+                            }
+                          />
+                          {farmingInfo &&
+                            deposits &&
+                            !isFarmingLoading &&
+                            !areDepositsLoading && (
+                              <div>
+                                <h2 className="font-semibold text-xl text-left mt-12">
+                                  Farming
+                                </h2>
+                                <ActiveFarming
+                                  deposits={deposits && deposits.deposits}
+                                  farming={farmingInfo}
+                                  positionsData={positionsData}
+                                />
+                              </div>
+                            )}
+                        </>
+                      )}
+                    </div>
+                    <div className="flex flex-col gap-8 w-full h-full col-span-1">
+                      <PositionCard
+                        farming={farmingInfo}
+                        closedFarmings={closedFarmings}
+                        selectedPosition={selectedPosition}
+                      />
+                    </div>
                   </div>
                 </div>
               </Tab>

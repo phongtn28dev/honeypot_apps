@@ -1,12 +1,14 @@
-import { Currency, Token, computePoolAddress } from "@cryptoalgebra/sdk";
-import { useEffect, useMemo, useState } from "react";
-import { useAllCurrencyCombinations } from "./useAllCurrencyCombinations";
-import { Address } from "viem";
-import { DEFAULT_CHAIN_ID } from "@/config/algebra/default-chain-id";
+import { Currency, Token, computePoolAddress } from '@cryptoalgebra/sdk';
+import { useEffect, useMemo, useState } from 'react';
+import { useAllCurrencyCombinations } from './useAllCurrencyCombinations';
+import { Address } from 'viem';
 import {
   TokenFieldsFragment,
   useMultiplePoolsLazyQuery,
-} from "../../graphql/generated/graphql";
+} from '../../graphql/generated/graphql';
+import { networksMap } from '@/services/chain';
+import { wallet } from '@honeypot/shared';
+import { useObserver } from 'mobx-react-lite';
 
 /**
  * Returns all the existing pools that should be considered for swapping between an input currency and an output currency
@@ -32,6 +34,12 @@ export function useSwapPools(
   loading: boolean;
 } {
   const [existingPools, setExistingPools] = useState<any[]>();
+  const { currentChainId, currentChain } = useObserver(() => {
+    return {
+      currentChainId: wallet.currentChainId,
+      currentChain: wallet.currentChain,
+    };
+  });
 
   const allCurrencyCombinations = useAllCurrencyCombinations(
     currencyIn,
@@ -94,14 +102,14 @@ export function useSwapPools(
         .map((pool) => ({
           tokens: [
             new Token(
-              DEFAULT_CHAIN_ID,
+              currentChainId,
               pool.token0.id,
               Number(pool.token0.decimals),
               pool.token0.symbol,
               pool.token0.name
             ),
             new Token(
-              DEFAULT_CHAIN_ID,
+              currentChainId,
               pool.token1.id,
               Number(pool.token1.decimals),
               pool.token1.symbol,
@@ -115,5 +123,5 @@ export function useSwapPools(
         }),
       loading: false,
     };
-  }, [existingPools]);
+  }, [existingPools, currentChainId]);
 }

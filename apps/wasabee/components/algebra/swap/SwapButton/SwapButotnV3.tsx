@@ -1,27 +1,28 @@
-import Loader from "@/components/algebra/common/Loader";
-import { Button } from "@/components/button";
-import { useApproveCallbackFromTrade } from "@/lib/algebra/hooks/common/useApprove";
-import { useSwapCallback } from "@/lib/algebra/hooks/swap/useSwapCallback";
+import Loader from '@/components/algebra/common/Loader';
+import { Button } from '@/components/button';
+import { useApproveCallbackFromTrade } from '@/lib/algebra/hooks/common/useApprove';
+import { useSwapCallback } from '@/lib/algebra/hooks/swap/useSwapCallback';
 import useWrapCallback, {
   WrapType,
-} from "@/lib/algebra/hooks/swap/useWrapCallback";
+} from '@/lib/algebra/hooks/swap/useWrapCallback';
 import {
   useSwapState,
   useDerivedSwapInfo,
   useSwapActionHandlers,
-} from "@/lib/algebra/state/swapStore";
-import { useUserState } from "@/lib/algebra/state/userStore";
+} from '@/lib/algebra/state/swapStore';
+import { useUserState } from '@/lib/algebra/state/userStore';
 import {
   computeRealizedLPFeePercent,
   warningSeverity,
-} from "@/lib/algebra/utils/swap/prices";
-import { useToastify } from "@/lib/hooks/useContractToastify";
-import { Token } from "@/services/contract/token";
-import { wallet } from "@/services/wallet";
-import { ApprovalState } from "@/types/algebra/types/approve-state";
-import { SwapField } from "@/types/algebra/types/swap-field";
-import { TradeState } from "@/types/algebra/types/trade-state";
-import { useCallback, useEffect, useMemo } from "react";
+} from '@/lib/algebra/utils/swap/prices';
+import { useToastify } from '@/lib/hooks/useContractToastify';
+
+import { Token } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared';
+import { ApprovalState } from '@/types/algebra/types/approve-state';
+import { SwapField } from '@/types/algebra/types/swap-field';
+import { TradeState } from '@/types/algebra/types/trade-state';
+import { useCallback, useEffect, useMemo } from 'react';
 
 const SwapButtonV3 = ({ onSwapSuccess }: { onSwapSuccess?: () => void }) => {
   const { isExpertMode } = useUserState();
@@ -51,12 +52,12 @@ const SwapButtonV3 = ({ onSwapSuccess }: { onSwapSuccess?: () => void }) => {
   );
 
   const wrapToast = useToastify({
-    title: wrapType === WrapType.WRAP ? "Wrap" : "Unwrap",
+    title: wrapType === WrapType.WRAP ? 'Wrap' : 'Unwrap',
     message: isWrapLoading
-      ? " Pending"
+      ? ' Pending'
       : isWrapSuccess
-        ? " Success"
-        : " Failed",
+      ? ' Success'
+      : ' Failed',
     isError: false,
     isLoading: isWrapLoading ?? false,
     isSuccess: isWrapSuccess ?? false,
@@ -81,7 +82,9 @@ const SwapButtonV3 = ({ onSwapSuccess }: { onSwapSuccess?: () => void }) => {
   const userHasSpecifiedInputOutput = Boolean(
     currencies[SwapField.INPUT] &&
       currencies[SwapField.OUTPUT] &&
-      parsedAmounts[independentField as keyof typeof parsedAmounts]?.greaterThan("0")
+      parsedAmounts[
+        independentField as keyof typeof parsedAmounts
+      ]?.greaterThan('0')
   );
 
   const routeNotFound = !trade?.route;
@@ -99,7 +102,7 @@ const SwapButtonV3 = ({ onSwapSuccess }: { onSwapSuccess?: () => void }) => {
       const priceImpact = trade?.priceImpact?.subtract(realizedLpFeePercent);
       return warningSeverity(priceImpact);
     } catch (error) {
-      console.error("Error calculating price impact:", error);
+      console.error('Error calculating price impact:', error);
       return 4;
     }
   }, [trade]);
@@ -129,6 +132,7 @@ const SwapButtonV3 = ({ onSwapSuccess }: { onSwapSuccess?: () => void }) => {
     if (isWrapSuccessMemo) {
       Token.getToken({
         address: wallet.currentChain.nativeToken.address,
+        chainId: wallet.currentChainId.toString(),
       }).getBalance();
     }
   }, [isWrapSuccessMemo]);
@@ -138,10 +142,12 @@ const SwapButtonV3 = ({ onSwapSuccess }: { onSwapSuccess?: () => void }) => {
       trade?.inputAmount.currency.wrapped.address &&
         Token.getToken({
           address: trade?.inputAmount.currency.wrapped.address,
+          chainId: wallet.currentChainId.toString(),
         }).getBalance();
       trade?.outputAmount.currency.wrapped.address &&
         Token.getToken({
           address: trade?.outputAmount.currency.wrapped.address,
+          chainId: wallet.currentChainId.toString(),
         }).getBalance();
 
       if (onSwapSuccess) {
@@ -151,8 +157,10 @@ const SwapButtonV3 = ({ onSwapSuccess }: { onSwapSuccess?: () => void }) => {
   }, [isSwapSuccessMemo, onSwapSuccess, onUserInput]);
 
   const swapToast = useToastify({
-    title: `Swap ${trade?.inputAmount.toSignificant()} ${trade?.inputAmount.currency.symbol}`,
-    message: "Swap",
+    title: `Swap ${trade?.inputAmount.toSignificant()} ${
+      trade?.inputAmount.currency.symbol
+    }`,
+    message: 'Swap',
     isError: !!swapCallback && swapCallbackError != null,
     isLoading: isSwapLoading,
     isSuccess: isSwapSuccess,
@@ -180,9 +188,9 @@ const SwapButtonV3 = ({ onSwapSuccess }: { onSwapSuccess?: () => void }) => {
         {isWrapLoading ? (
           <Loader />
         ) : wrapType === WrapType.WRAP ? (
-          "Wrap"
+          'Wrap'
         ) : (
-          "Unwrap"
+          'Unwrap'
         )}
       </Button>
     );
@@ -190,7 +198,7 @@ const SwapButtonV3 = ({ onSwapSuccess }: { onSwapSuccess?: () => void }) => {
   if (routeNotFound && userHasSpecifiedInputOutput)
     return (
       <Button disabled>
-        {isLoadingRoute ? <Loader /> : "Insufficient liquidity for this trade."}
+        {isLoadingRoute ? <Loader /> : 'Insufficient liquidity for this trade.'}
       </Button>
     );
 
@@ -205,7 +213,7 @@ const SwapButtonV3 = ({ onSwapSuccess }: { onSwapSuccess?: () => void }) => {
           {approvalState === ApprovalState.PENDING ? (
             <Loader />
           ) : approvalState === ApprovalState.APPROVED ? (
-            "Approved"
+            'Approved'
           ) : (
             `Approve ${currencies[SwapField.INPUT]?.symbol}`
           )}
@@ -229,11 +237,11 @@ const SwapButtonV3 = ({ onSwapSuccess }: { onSwapSuccess?: () => void }) => {
         ) : swapInputError ? (
           swapInputError
         ) : priceImpactTooHigh ? (
-          "Price Impact Too High"
+          'Price Impact Too High'
         ) : priceImpactSeverity > 2 ? (
-          "Swap Anyway"
+          'Swap Anyway'
         ) : (
-          "Swap"
+          'Swap'
         )}
       </Button>
     </>

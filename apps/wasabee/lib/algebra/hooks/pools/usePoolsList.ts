@@ -1,8 +1,9 @@
-import { ALGEBRA_FACTORY } from "@/config/algebra/addresses";
-import { algebraFactoryABI } from "@/lib/abis/algebra-contracts/ABIs";
-import { useEffect, useState } from "react";
-import { Address, decodeEventLog, parseAbiItem } from "viem";
-import { usePublicClient } from "wagmi";
+import { algebraFactoryABI } from '@/lib/abis/algebra-contracts/ABIs';
+import { wallet } from '@honeypot/shared';
+import { useObserver } from 'mobx-react-lite';
+import { useEffect, useState } from 'react';
+import { Address, decodeEventLog, parseAbiItem } from 'viem';
+import { usePublicClient } from 'wagmi';
 
 interface IPools {
   readonly token0: Address;
@@ -15,6 +16,9 @@ const ALGEBRA_FACTORY_CREATION_BLOCK = BigInt(32610688);
 
 export function usePoolsList() {
   const publicClient = usePublicClient();
+  const ALGEBRA_FACTORY = useObserver(
+    () => wallet.currentChain.contracts.algebraFactory
+  );
 
   const [pools, updatePools] = useState<IPools[]>();
 
@@ -22,16 +26,16 @@ export function usePoolsList() {
     publicClient
       ?.getLogs({
         address: ALGEBRA_FACTORY,
-        event: parseAbiItem("event Pool(address, address, address)"),
+        event: parseAbiItem('event Pool(address, address, address)'),
         fromBlock: ALGEBRA_FACTORY_CREATION_BLOCK,
-        toBlock: "latest",
+        toBlock: 'latest',
       })
       .then((logs) =>
         logs.map(
           ({ data, topics }) =>
             decodeEventLog({
               abi: algebraFactoryABI,
-              eventName: "Pool",
+              eventName: 'Pool',
               data,
               topics,
             }).args

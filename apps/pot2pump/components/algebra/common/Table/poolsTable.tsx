@@ -1,16 +1,17 @@
-import { Pool } from "./poolsColumns";
-import { cn } from "@/lib/tailwindcss";
-import { Search, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Tab, Tabs } from "@nextui-org/react";
-import { popmodal } from "@/services/popmodal";
-import { Token } from "@/services/contract/token";
-import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/algebra/ui/button";
-import TokenLogo from "@/components/TokenLogo/TokenLogo";
-import CreatePoolForm from "../../create-pool/CreatePoolForm";
-import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
-import { LoadingDisplay } from "@/components/LoadingDisplay/LoadingDisplay";
+import { Pool } from './poolsColumns';
+import { cn } from '@/lib/tailwindcss';
+import { Search, Plus } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Tab, Tabs } from '@nextui-org/react';
+import { popmodal } from '@/services/popmodal';
+
+import { Token, wallet } from '@honeypot/shared';
+import { ColumnDef } from '@tanstack/react-table';
+import { Button } from '@/components/algebra/ui/button';
+import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import CreatePoolForm from '../../create-pool/CreatePoolForm';
+import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';
 
 interface PoolsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -30,8 +31,8 @@ interface PoolsTableProps<TData, TValue> {
   handleSearch: (data: string) => void;
 }
 
-type SortField = "pool" | "tvl" | "volume" | "apr" | "unclaimedFees";
-type SortDirection = "asc" | "desc";
+type SortField = 'pool' | 'tvl' | 'volume' | 'apr' | 'unclaimedFees';
+type SortDirection = 'asc' | 'desc';
 
 const PoolsTable = <TData, TValue>({
   columns,
@@ -42,25 +43,25 @@ const PoolsTable = <TData, TValue>({
   link,
   showPagination = true,
   loading,
-  defaultFilter = "trending",
+  defaultFilter = 'trending',
   showOptions = true,
   handleSearch,
 }: PoolsTableProps<TData, TValue>) => {
   const [selectedFilter, setSelectedFilter] = useState<string>(defaultFilter);
-  const [search, setSearch] = useState("");
-  const [sortField, setSortField] = useState<SortField>("tvl");
-  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+  const [search, setSearch] = useState('');
+  const [sortField, setSortField] = useState<SortField>('tvl');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [page, setPage] = useState(1);
 
   const filters = [
-    { key: "trending", label: "All Pools" },
-    { key: "myPools", label: "My Pools" },
+    { key: 'trending', label: 'All Pools' },
+    { key: 'myPools', label: 'My Pools' },
   ];
 
   const [tableData, setTableData] = useState<Pool[]>([]);
 
   useEffect(() => {
-    if (selectedFilter === "myPools") {
+    if (selectedFilter === 'myPools') {
       setTableData(userPools as Pool[]);
     } else {
       setTableData(data as Pool[]);
@@ -78,32 +79,32 @@ const PoolsTable = <TData, TValue>({
   const handleSort = (field: SortField) => {
     setPage(1);
     if (sortField === field) {
-      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     } else {
       setSortField(field);
-      setSortDirection("desc");
+      setSortDirection('desc');
     }
   };
 
   const getSortedPools = () => {
     const sortedPools = [...tableData].sort((a, b) => {
-      const multiplier = sortDirection === "asc" ? 1 : -1;
+      const multiplier = sortDirection === 'asc' ? 1 : -1;
 
       switch (sortField) {
-        case "pool":
+        case 'pool':
           return (
             multiplier *
             (a.pair.token0.symbol + a.pair.token1.symbol).localeCompare(
               b.pair.token0.symbol + b.pair.token1.symbol
             )
           );
-        case "tvl":
+        case 'tvl':
           return multiplier * (Number(a.tvlUSD) - Number(b.tvlUSD));
-        case "volume":
+        case 'volume':
           return multiplier * (Number(a.volume24USD) - Number(b.volume24USD));
-        case "apr":
+        case 'apr':
           return multiplier * (Number(a.apr24h) - Number(b.apr24h));
-        case "unclaimedFees":
+        case 'unclaimedFees':
           return (
             multiplier * (Number(a.unclaimedFees) - Number(b.unclaimedFees))
           );
@@ -118,33 +119,39 @@ const PoolsTable = <TData, TValue>({
   const SortHeader = ({
     field,
     label,
-    align = "right",
+    align = 'right',
   }: {
     field: SortField;
     label: string;
-    align?: "left" | "right" | "center";
+    align?: 'left' | 'right' | 'center';
   }) => (
     <th
       className={`py-4 px-6 cursor-pointer transition-colors text-[#4D4D4D]`}
       onClick={() => handleSort(field)}
     >
       <div
-        className={`flex items-center gap-2 ${align === "right" ? "justify-end" : align === "center" ? "justify-center" : ""}`}
+        className={`flex items-center gap-2 ${
+          align === 'right'
+            ? 'justify-end'
+            : align === 'center'
+            ? 'justify-center'
+            : ''
+        }`}
       >
         <span>{label}</span>
         <div className="flex flex-col">
           <ChevronUpIcon
             className={`h-3 w-3 ${
-              sortField === field && sortDirection === "asc"
-                ? "text-black"
-                : "text-[#4D4D4D]"
+              sortField === field && sortDirection === 'asc'
+                ? 'text-black'
+                : 'text-[#4D4D4D]'
             }`}
           />
           <ChevronDownIcon
             className={`h-3 w-3 ${
-              sortField === field && sortDirection === "desc"
-                ? "text-black"
-                : "text-[#4D4D4D]"
+              sortField === field && sortDirection === 'desc'
+                ? 'text-black'
+                : 'text-[#4D4D4D]'
             }`}
           />
         </div>
@@ -159,19 +166,19 @@ const PoolsTable = <TData, TValue>({
           <div className="flex items-center xl:gap-x-6 w-full xl:w-fit justify-between">
             <Tabs
               classNames={{
-                base: "relative w-full",
+                base: 'relative w-full',
                 tabList:
-                  "flex rounded-2xl border border-[#202020] bg-white p-4 shadow-[2px_2px_0px_0px_#000] py-2 px-3.5 ml-auto z-10",
+                  'flex rounded-2xl border border-[#202020] bg-white p-4 shadow-[2px_2px_0px_0px_#000] py-2 px-3.5 ml-auto z-10',
                 cursor:
-                  "bg-[#FFCD4D] border border-black shadow-[2px_2px_0px_0px_#000000] text-sm",
-                panel: "w-full",
-                tabContent: "!text-[#202020]",
+                  'bg-[#FFCD4D] border border-black shadow-[2px_2px_0px_0px_#000000] text-sm',
+                panel: 'w-full',
+                tabContent: '!text-[#202020]',
               }}
               onSelectionChange={(key) =>
-                setSelectedFilter(key === "all" ? "trending" : "myPools")
+                setSelectedFilter(key === 'all' ? 'trending' : 'myPools')
               }
               defaultSelectedKey={
-                selectedFilter === "trending" ? "all" : "myPools"
+                selectedFilter === 'trending' ? 'all' : 'myPools'
               }
             >
               <Tab key="all" title="All Pools" />
@@ -194,7 +201,7 @@ const PoolsTable = <TData, TValue>({
           <div className="flex items-center gap-x-5">
             <Button
               className={cn(
-                "flex items-center gap-x-1 p-2.5 cursor-pointer border border-[#2D2D2D] bg-[#FFCD4D] rounded-2xl shadow-[2px_2px_0px_0px_#000] hover:bg-[#FFD666]"
+                'flex items-center gap-x-1 p-2.5 cursor-pointer border border-[#2D2D2D] bg-[#FFCD4D] rounded-2xl shadow-[2px_2px_0px_0px_#000] hover:bg-[#FFD666]'
               )}
               onClick={() =>
                 popmodal.openModal({
@@ -220,7 +227,7 @@ const PoolsTable = <TData, TValue>({
                 <SortHeader field="tvl" label="TVL" />
                 <SortHeader field="volume" label="Volume 24H" />
                 <SortHeader field="apr" label="APR" />
-                {defaultFilter === "myPools" && (
+                {defaultFilter === 'myPools' && (
                   <SortHeader
                     field="unclaimedFees"
                     label="Unclaimed Fees"
@@ -258,6 +265,7 @@ const PoolsTable = <TData, TValue>({
                           <TokenLogo
                             token={Token.getToken({
                               address: pool.pair.token0.id,
+                              chainId: wallet.currentChainId.toString(),
                             })}
                             addtionalClasses="translate-x-[25%]"
                             size={24}
@@ -265,6 +273,7 @@ const PoolsTable = <TData, TValue>({
                           <TokenLogo
                             token={Token.getToken({
                               address: pool.pair.token1.id,
+                              chainId: wallet.currentChainId.toString(),
                             })}
                             addtionalClasses="translate-x-[-25%]"
                             size={24}
@@ -295,11 +304,11 @@ const PoolsTable = <TData, TValue>({
                         <span
                           className={`text-xs ${
                             Number(pool.change24h) >= 0
-                              ? "text-[#4ADE80]"
-                              : "text-[#FF5555]"
+                              ? 'text-[#4ADE80]'
+                              : 'text-[#FF5555]'
                           }`}
                         >
-                          {Number(pool.change24h) >= 0 ? "+" : ""}
+                          {Number(pool.change24h) >= 0 ? '+' : ''}
                           {Number(pool.change24h).toFixed(2)}%
                         </span>
                       </div>
@@ -311,7 +320,7 @@ const PoolsTable = <TData, TValue>({
                         </span>
                       </div>
                     </td>
-                    {defaultFilter === "myPools" && (
+                    {defaultFilter === 'myPools' && (
                       <td className="py-4 px-6 text-center">
                         <span className="text-black">
                           ${Number(pool.unclaimedFees).toLocaleString()}

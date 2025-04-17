@@ -1,5 +1,5 @@
 import { cn } from '@/lib/tailwindcss';
-import { Token } from '@/services/contract/token';
+import { Token, wallet } from '@honeypot/shared';
 import { Tooltip } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import Image from 'next/image';
@@ -43,14 +43,15 @@ export const TokenLogo = observer(
         <Link
           className={cn('shrink-0', disableLink && 'cursor-default')}
           href={
-            disableLink ? '#' : `https://berascan.com/address/${token.address}`
+            disableLink
+              ? '#'
+              : `${wallet.currentChain.chain.blockExplorers?.default.url}address/${token.address}`
           }
           target={disableLink ? '' : '_blank'}
-          aria-disabled={disableLink}
         >
           <Image
             className={cn(
-              'border border-[color:var(--card-stroke,#F7931A)] rounded-[50%]  aspect-square bg-white',
+              'border border-[color:var(--card-stroke,#F7931A)] rounded-[50%] cursor-pointer aspect-square bg-white',
               addtionalClasses
             )}
             src={

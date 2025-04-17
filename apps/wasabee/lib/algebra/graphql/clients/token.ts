@@ -1,5 +1,4 @@
-import { isAddress } from "viem";
-import { infoClient } from ".";
+import { isAddress } from 'viem';
 import {
   TokenTop10HoldersDocument,
   TokenTop10HoldersQuery,
@@ -10,9 +9,50 @@ import {
   MultipleTokensQuery,
   MultipleTokensQueryVariables,
   MultipleTokensDocument,
-} from "../generated/graphql";
+  Token,
+} from '../generated/graphql';
+import { wallet } from '@honeypot/shared';
+import { getSubgraphClientByChainId } from '@honeypot/shared';
+
+let tokenRequestIds: string[] = [];
+let tokenRequestTimeout: NodeJS.Timeout | null = null;
+let tokenRequestResolvers: ((tokens: Token[]) => void)[] = [];
+
+const bulkGetTokenDebounce = async (tokenId: string): Promise<Token[]> => {
+  tokenRequestIds.push(tokenId);
+
+  return new Promise((resolve) => {
+    tokenRequestResolvers.push(resolve);
+
+    if (tokenRequestTimeout) {
+      clearTimeout(tokenRequestTimeout);
+    }
+
+    tokenRequestTimeout = setTimeout(async () => {
+      const idsToFetch = [...new Set(tokenRequestIds)]; // de-dupe
+      const multipleTokenData = await getMultipleTokensData(
+        idsToFetch,
+        wallet.currentChainId.toString()
+      );
+
+      // Clear queue before resolving
+      tokenRequestIds = [];
+      tokenRequestTimeout = null;
+
+      // Resolve all waiting promises
+      for (const r of tokenRequestResolvers) {
+        r(multipleTokenData);
+      }
+      tokenRequestResolvers = [];
+    }, 100);
+  });
+};
 
 export async function getTokenTop10Holders(tokenId: string) {
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const tokenQuery = await infoClient.query<
     TokenTop10HoldersQuery,
     TokenTop10HoldersQueryVariables
@@ -24,21 +64,20 @@ export async function getTokenTop10Holders(tokenId: string) {
   return tokenQuery.data;
 }
 
-export async function getSingleTokenData(tokenId: string) {
+export async function getSingleTokenData(
+  tokenId: string
+): Promise<Token | undefined> {
   if (!tokenId || !isAddress(tokenId)) return;
-  const tokenQuery = await infoClient.query<
-    SingleTokenQuery,
-    SingleTokenQueryVariables
-  >({
-    query: SingleTokenDocument,
-    variables: { tokenId },
-  });
-
-  return tokenQuery.data;
+  const tokenData = await bulkGetTokenDebounce(tokenId);
+  return tokenData.find((token) => token.id === tokenId) || undefined;
 }
 
-export async function getMultipleTokensData(tokenIds: string[]) {
-  if (!tokenIds || tokenIds.length === 0) return;
+export async function getMultipleTokensData(
+  tokenIds: string[],
+  chainId: string
+): Promise<Token[]> {
+  if (!tokenIds || tokenIds.length === 0) return [];
+  const infoClient = getSubgraphClientByChainId(chainId, 'algebra_info');
   const tokenQuery = await infoClient.query<
     MultipleTokensQuery,
     MultipleTokensQueryVariables
@@ -46,6 +85,5 @@ export async function getMultipleTokensData(tokenIds: string[]) {
     query: MultipleTokensDocument,
     variables: { tokenIds },
   });
-  tokenQuery.data.tokens;
-  return tokenQuery.data;
+  return tokenQuery.data.tokens as Token[];
 }

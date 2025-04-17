@@ -1,14 +1,14 @@
 // components/Aquabera/modals/WithdrawFromVaultModal.tsx
-import { Modal, ModalContent, ModalHeader, ModalBody } from "@nextui-org/modal";
-import { Button } from "@/components/button/button-next";
-import { useCallback, useState } from "react";
-import { ICHIVaultContract } from "@/services/contract/aquabera/ICHIVault-contract";
-import { wallet } from "@/services/wallet";
-import { ContractWrite } from "@/services/utils";
-import { Slider } from "@nextui-org/slider";
-import BigNumber from "bignumber.js";
-import { DynamicFormatAmount } from "@/lib/algebra/utils/common/formatAmount";
-import TokenLogo from "@/components/TokenLogo/TokenLogo";
+import { Modal, ModalContent, ModalHeader, ModalBody } from '@nextui-org/modal';
+import { Button } from '@/components/button/button-next';
+import { useCallback, useState } from 'react';
+import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
+import { wallet } from '@honeypot/shared';
+import { ContractWrite } from '@/services/utils';
+import { Slider } from '@nextui-org/slider';
+import BigNumber from 'bignumber.js';
+import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import TokenLogo from '@/components/TokenLogo/TokenLogo';
 
 interface WithdrawFromVaultModalProps {
   isOpen: boolean;
@@ -23,18 +23,18 @@ export function WithdrawFromVaultModal({
   vault,
   maxShares,
 }: WithdrawFromVaultModalProps) {
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState('');
   const [percentage, setPercentage] = useState(0);
 
   const handleTypeAmount = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
-      if (value === "" || /^\d*\.?\d*$/.test(value)) {
+      if (value === '' || /^\d*\.?\d*$/.test(value)) {
         setAmount(value);
         // Convert decimal input to BigInt shares
         if (value) {
-          const [integerPart, fractionalPart = ""] = value.split(".");
-          const paddedFractional = fractionalPart.padEnd(18, "0");
+          const [integerPart, fractionalPart = ''] = value.split('.');
+          const paddedFractional = fractionalPart.padEnd(18, '0');
           const fullNumber = `${integerPart}${paddedFractional}`;
           const newPercentage = (Number(fullNumber) / Number(maxShares)) * 100;
           setPercentage(Math.min(newPercentage, 100));
@@ -88,7 +88,7 @@ export function WithdrawFromVaultModal({
     console.log(withdrawAmount);
 
     if (withdrawAmount > maxShares) {
-      console.error("Cannot withdraw more than available shares");
+      console.error('Cannot withdraw more than available shares');
       return;
     }
 
@@ -98,13 +98,13 @@ export function WithdrawFromVaultModal({
       }
 
       await new ContractWrite(vault.contract.write.withdraw, {
-        action: "Withdraw",
+        action: 'Withdraw',
         isSuccessEffect: true,
       }).call([withdrawAmount, wallet.account as `0x${string}`]);
 
       onClose(); // Close modal after successful transaction
     } catch (error) {
-      console.error("Withdraw failed:", error);
+      console.error('Withdraw failed:', error);
     }
   };
 
@@ -114,10 +114,10 @@ export function WithdrawFromVaultModal({
     const divisor = BigInt(10 ** decimals);
     const integerPart = value / divisor;
     const fractionalPart = value % divisor;
-    const fractionalStr = fractionalPart.toString().padStart(decimals, "0");
+    const fractionalStr = fractionalPart.toString().padStart(decimals, '0');
     const displayDecimals = 6; // Show 6 decimal places
     const formattedFractional = fractionalStr.slice(0, displayDecimals);
-    const trimmedFractional = formattedFractional.replace(/0+$/, ""); // Remove trailing zeros
+    const trimmedFractional = formattedFractional.replace(/0+$/, ''); // Remove trailing zeros
 
     return trimmedFractional
       ? `${integerPart}.${trimmedFractional}`
@@ -130,10 +130,10 @@ export function WithdrawFromVaultModal({
       onClose={onClose}
       size="2xl"
       classNames={{
-        base: "bg-transparent",
-        wrapper: "bg-transparent",
+        base: 'bg-transparent',
+        wrapper: 'bg-transparent',
         closeButton:
-          "absolute right-4 top-6 z-50 text-white w-8 h-8 flex items-center justify-center rounded-full",
+          'absolute right-4 top-6 z-50 text-white w-8 h-8 flex items-center justify-center rounded-full',
       }}
     >
       <ModalContent className="bg-[#FFCD4D] relative overflow-hidden">
@@ -157,7 +157,7 @@ export function WithdrawFromVaultModal({
                         Amount to Withdraw
                       </label>
                       <span className="flex text-black text-base gap-2">
-                        Available:{" "}
+                        Available:{' '}
                         <span className="flex flex-col text-right">
                           <div className="grid grid-cols-[1fr_auto] gap-2">
                             {DynamicFormatAmount({
@@ -199,7 +199,7 @@ export function WithdrawFromVaultModal({
                               )
                                 .times(
                                   BigNumber(amount).div(
-                                    vault.userShares.toString()
+                                    vault.userShares?.toString() ?? 0
                                   )
                                 )
                                 .toString(),
@@ -218,7 +218,7 @@ export function WithdrawFromVaultModal({
                               )
                                 .times(
                                   BigNumber(amount).div(
-                                    vault.userShares.toString()
+                                    vault.userShares?.toString() ?? 0
                                   )
                                 )
                                 .toString(),
@@ -245,10 +245,10 @@ export function WithdrawFromVaultModal({
                         maxValue={100}
                         minValue={0}
                         classNames={{
-                          base: "max-w-full",
-                          track: "bg-black/30",
-                          filler: "bg-[#FFCD4D]",
-                          thumb: "bg-[#FFCD4D] shadow-lg border-2 border-white",
+                          base: 'max-w-full',
+                          track: 'bg-black/30',
+                          filler: 'bg-[#FFCD4D]',
+                          thumb: 'bg-[#FFCD4D] shadow-lg border-2 border-white',
                         }}
                       />
                     </div>
@@ -261,8 +261,8 @@ export function WithdrawFromVaultModal({
                           onClick={() => handlePercentageClick(percent)}
                           className={`rounded-[30px] px-[24px] ${
                             percentage === percent
-                              ? "bg-[#FFCD4D] text-black"
-                              : "bg-white text-black border border-black"
+                              ? 'bg-[#FFCD4D] text-black'
+                              : 'bg-white text-black border border-black'
                           }`}
                         >
                           {percent}%

@@ -1,24 +1,25 @@
-import { formatBalance } from "@/lib/algebra/utils/common/formatBalance";
+import { formatBalance } from '@/lib/algebra/utils/common/formatBalance';
 import {
   Currency,
   CurrencyAmount,
   Percent,
   Trade,
   TradeType,
-} from "@cryptoalgebra/sdk";
-import { useNeedAllowance } from "./useNeedAllowance";
-import { useMemo } from "react";
-import { useTransactionAwait } from "./useTransactionAwait";
-import { ALGEBRA_ROUTER } from "@/config/algebra/addresses";
+} from '@cryptoalgebra/sdk';
+import { useNeedAllowance } from './useNeedAllowance';
+import { useMemo } from 'react';
+import { useTransactionAwait } from './useTransactionAwait';
 import {
   ApprovalStateType,
   ApprovalState,
-} from "@/types/algebra/types/approve-state";
-import { TransactionType } from "../../state/pendingTransactionsStore";
-import { Address, maxInt256 } from "viem";
-import { useContractWrite, useSimulateContract } from "wagmi";
-import { erc20Abi } from "viem";
-import { useToastify } from "@/lib/hooks/useContractToastify";
+} from '@/types/algebra/types/approve-state';
+import { TransactionType } from '../../state/pendingTransactionsStore';
+import { Address, maxInt256 } from 'viem';
+import { useContractWrite, useSimulateContract } from 'wagmi';
+import { erc20Abi } from 'viem';
+import { useToastify } from '@/lib/hooks/useContractToastify';
+import { useObserver } from 'mobx-react-lite';
+import { wallet } from '@honeypot/shared';
 
 export function useApprove(
   amountToApprove: CurrencyAmount<Currency> | undefined,
@@ -41,7 +42,7 @@ export function useApprove(
       ? (amountToApprove.currency.wrapped.address as Address)
       : undefined,
     abi: erc20Abi,
-    functionName: "approve",
+    functionName: 'approve',
     args: [
       spender,
       BigInt(maxInt256),
@@ -54,14 +55,18 @@ export function useApprove(
     useContractWrite();
 
   const { isLoading, isSuccess, isError } = useTransactionAwait(approvalData, {
-    title: `Approve ${formatBalance(amountToApprove?.toSignificant() as string)} ${amountToApprove?.currency.symbol}`,
+    title: `Approve ${formatBalance(
+      amountToApprove?.toSignificant() as string
+    )} ${amountToApprove?.currency.symbol}`,
     tokenA: token?.address as Address,
     type: TransactionType.SWAP,
   });
 
   useToastify({
-    title: `Approve ${formatBalance(amountToApprove?.toSignificant() as string)} ${amountToApprove?.currency.symbol}`,
-    message: "Approve",
+    title: `Approve ${formatBalance(
+      amountToApprove?.toSignificant() as string
+    )} ${amountToApprove?.currency.symbol}`,
+    message: 'Approve',
     isError: isError,
     isLoading: isLoading,
     isSuccess: isSuccess,
@@ -71,8 +76,8 @@ export function useApprove(
     approvalState: isLoading
       ? ApprovalState.PENDING
       : isSuccess && approvalState === ApprovalState.APPROVED
-        ? ApprovalState.APPROVED
-        : approvalState,
+      ? ApprovalState.APPROVED
+      : approvalState,
     approvalCallback: () => config && approve(config?.request),
   };
 }
@@ -81,6 +86,9 @@ export function useApproveCallbackFromTrade(
   trade: Trade<Currency, Currency, TradeType> | undefined,
   allowedSlippage: Percent
 ) {
+  const ALGEBRA_ROUTER = useObserver(
+    () => wallet.currentChain.contracts.algebraSwapRouter
+  );
   const amountToApprove = useMemo(
     () =>
       trade && trade.inputAmount.currency.isToken

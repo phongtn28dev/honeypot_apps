@@ -1,7 +1,9 @@
-import { put } from '@vercel/blob';
 import type { NextApiResponse, NextApiRequest, PageConfig } from 'next';
 import { getAccountSwapsWithPools } from '@/lib/algebra/graphql/clients/account';
 import { getSingleBitgetParticipantInfo } from '@/lib/algebra/graphql/clients/bitget_event';
+import { getSubgraphClientByChainId } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared';
+import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
 
 export default async function handler(
   request: NextApiRequest,
@@ -10,6 +12,10 @@ export default async function handler(
   const accountId = request.query.accountid as string;
   let totalAmountUsdTraded = 0;
   let totalSwaps = 0;
+  const infoClient = getSubgraphClientByChainId(
+    DEFAULT_CHAIN_ID.toString(),
+    'algebra_info'
+  );
   const amountUsdTradedForEachPool: Record<
     string,
     { pair: string; amountUsd: number; swaps: number }
@@ -47,8 +53,11 @@ export default async function handler(
     '0xc1014c1b2b131f87d4dd6ddfd9e3b0ab68fcd631', // WBERA / HENLO
   ];
 
-  const swaps = await getAccountSwapsWithPools(accountId, pools);
-  const bitgetParticipantInfo = await getSingleBitgetParticipantInfo(accountId);
+  const swaps = await getAccountSwapsWithPools(infoClient, accountId, pools);
+  const bitgetParticipantInfo = await getSingleBitgetParticipantInfo(
+    infoClient,
+    accountId
+  );
 
   console.log('swaps', swaps);
   console.log('bitgetParticipantInfo', bitgetParticipantInfo);
@@ -63,7 +72,7 @@ export default async function handler(
     });
   });
 
-  bitgetParticipantInfo?.map((participant) => {
+  bitgetParticipantInfo?.map((participant: any) => {
     totalAmountUsdTraded += Number(participant.amountUSD);
     amountUsdTradedForEachPool[participant.pool.id.toLowerCase()].amountUsd +=
       Number(participant.amountUSD);

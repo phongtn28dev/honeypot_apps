@@ -1,17 +1,17 @@
-"use client";
-import styles from "./TVChartContainer.module.css";
-import { useEffect, useRef, useState } from "react";
+'use client';
+import styles from './TVChartContainer.module.css';
+import { useEffect, useRef, useState } from 'react';
 import {
   ChartingLibraryWidgetOptions,
   LanguageCode,
   ResolutionString,
   widget,
-} from "@/public/static/charting_library/charting_library";
-import { getBaseUrl } from "@/lib/trpc";
-import { observable } from "mobx";
-import { ParseTicker } from "@/lib/advancedChart.util";
-import { chart } from "@/services/chart";
-import { wallet } from "@/services/wallet";
+} from '@/public/static/charting_library/charting_library';
+import { getBaseUrl } from '@/lib/trpc';
+import { observable } from 'mobx';
+import { ParseTicker } from '@/lib/advancedChart.util';
+import { chart } from '@/services/chart';
+import { wallet } from '@honeypot/shared';
 
 export const TVChartContainer = (
   props: Partial<ChartingLibraryWidgetOptions>
@@ -27,15 +27,15 @@ export const TVChartContainer = (
         undefined,
         {
           maxResponseLength: 1000,
-          expectedOrder: "latestFirst",
+          expectedOrder: 'latestFirst',
         }
       ),
       interval: props.interval as ResolutionString,
       container: chartContainerRef.current,
       library_path: props.library_path,
       locale: props.locale as LanguageCode,
-      disabled_features: ["use_localstorage_for_settings"],
-      enabled_features: ["study_templates", "hide_left_toolbar_by_default"],
+      disabled_features: ['use_localstorage_for_settings'],
+      enabled_features: ['study_templates', 'hide_left_toolbar_by_default'],
       charts_storage_url: props.charts_storage_url,
       charts_storage_api_version: props.charts_storage_api_version,
       client_id: props.client_id,
@@ -45,11 +45,11 @@ export const TVChartContainer = (
       theme: props.theme,
       symbol_search_complete: props.symbol_search_complete,
       overrides: {
-        "paneProperties.background": "#271A0C",
-        "paneProperties.backgroundType": "solid",
-        "paneProperties.separatorColor": "#F7931A",
+        'paneProperties.background': '#271A0C',
+        'paneProperties.backgroundType': 'solid',
+        'paneProperties.separatorColor': '#F7931A',
       },
-      custom_css_url: "./TVChartContainer.module.css",
+      custom_css_url: './TVChartContainer.module.css',
     };
 
     const tvWidget = new widget(widgetOptions);

@@ -10,10 +10,12 @@ import { SlOptions, SlShare } from 'react-icons/sl';
 import { VscCopy } from 'react-icons/vsc';
 import * as clipboard from 'clipboard-polyfill';
 import { ShareMediaDisplay } from '../ShareSocialMedialPopUp/ShareSocialMedialPopUp';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { BiLink, BiWallet } from 'react-icons/bi';
 import { popmodal } from '@/services/popmodal';
 import { WrappedToastify } from '@/lib/wrappedToastify';
+import { wallet } from '@honeypot/shared';
 
 type optionItem = {
   icon: JSX.Element;
@@ -135,7 +137,10 @@ export const optionsPresets = {
       icon: <BiLink size={18} />,
       display: displayText ?? 'View on explorer',
       onClick: () => {
-        window.open(`https://berascan.com/address/${address}`, '_blank');
+        window.open(
+          `${wallet.currentChain.chain.blockExplorers?.default.url}/address/${address}`,
+          '_blank'
+        );
       },
     };
   },

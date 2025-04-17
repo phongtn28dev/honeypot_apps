@@ -1,22 +1,22 @@
 /* eslint-disable @next/next/no-before-interactive-script-outside-document */
-import { observer } from "mobx-react-lite";
-import { useEffect } from "react";
-import { Header } from "./header/v3";
-import { useRouter } from "next/router";
-import { cn } from "@/lib/tailwindcss";
-import ConfettiComponent from "../atoms/Confetti/Confetti";
-import PopOverModal from "../PopOverModal/PopOverModal";
-import { trpcClient } from "@/lib/trpc";
-import { popmodal } from "@/services/popmodal";
-import { metadata } from "@/config/metadata";
-import AnnouncementBar from "./AnnouncementBar";
-import Link from "next/link";
-import ChatWidget from "../ServiceChat";
-import { Footer } from "./footer";
-import { chatService, questionTitles } from "@/services/chat";
-import _ from "lodash";
-import { notificationService } from "@/services/notification";
-import { wallet } from "@/services/wallet";
+import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
+import { Header } from './header/v3';
+import { useRouter } from 'next/router';
+import { cn } from '@/lib/tailwindcss';
+import ConfettiComponent from '../atoms/Confetti/Confetti';
+import PopOverModal from '../PopOverModal/PopOverModal';
+import { trpcClient } from '@/lib/trpc';
+import { popmodal } from '@/services/popmodal';
+import { metadata } from '@/config/metadata';
+import AnnouncementBar from './AnnouncementBar';
+import Link from 'next/link';
+import ChatWidget from '../ServiceChat';
+import { Footer } from './footer';
+import { chatService, questionTitles } from '@/services/chat';
+import _ from 'lodash';
+import { notificationService } from '@/services/notification';
+import { wallet } from '@honeypot/shared';
 
 export const Layout = observer(
   ({
@@ -48,7 +48,7 @@ export const Layout = observer(
           chatService.getPresetQuestions()[questions[0] as questionTitles]
             .answer
         );
-        window.localStorage.setItem(`pageVisited`, "true");
+        window.localStorage.setItem(`pageVisited`, 'true');
       }
     }, [router.pathname]);
 
@@ -56,7 +56,7 @@ export const Layout = observer(
       trpcClient.metadata.getServerMetadata.query().then((res) => {
         if (
           res.latest_version === metadata.version ||
-          process.env.NODE_ENV === "development"
+          process.env.NODE_ENV === 'development'
         )
           return;
 
@@ -67,7 +67,7 @@ export const Layout = observer(
                 Announcement
               </div>
               <h1 className="mt-[24px]">
-                This version is outdated, please check our newest link:&nbsp;{" "}
+                This version is outdated, please check our newest link:&nbsp;{' '}
                 <a
                   className="hover:text-orange-500 transition-all underline"
                   href={res.latest_site}

@@ -1,23 +1,24 @@
-import { LaunchCardV3 } from "@/components/LaunchCard/v3";
-import launchpad from "@/services/launchpad";
-import { Pot2PumpService } from "@/services/launchpad/pot2pump";
-import { wallet } from "@/services/wallet";
-import { Button as NextButton } from "@nextui-org/react";
-import { observer } from "mobx-react-lite";
-import { useState, useEffect } from "react";
-import Pagination from "@/components/Pagination/Pagination";
+import { LaunchCardV3 } from '@/components/LaunchCard/v3';
+import launchpad from '@/services/launchpad';
+import { Pot2PumpService } from '@/services/launchpad/pot2pump';
+import { wallet } from '@honeypot/shared';
+import { Button as NextButton } from '@nextui-org/react';
+import { observer } from 'mobx-react-lite';
+import { useState, useEffect } from 'react';
+import Pagination from '@/components/Pagination/Pagination';
+import { zeroAddress } from 'viem';
 
 export const MyLaunches = observer(() => {
   const [myProjects, setMyProjects] = useState<Pot2PumpService>();
 
   useEffect(() => {
-    if (!wallet.isInit) {
+    if (!wallet.isInit || wallet.account === zeroAddress) {
       return;
     }
     const newPumpingProjects = new Pot2PumpService();
     setMyProjects(newPumpingProjects);
     newPumpingProjects.myLaunches.reloadPage();
-  }, [wallet.isInit]);
+  }, [wallet.isInit, wallet.account, wallet.currentChain]);
 
   return (
     <div className="custom-dashed-3xl w-full p-6 bg-white space-y-8">
@@ -35,10 +36,10 @@ export const MyLaunches = observer(() => {
             />
           )}
           classNames={{
-            base: "",
+            base: '',
             itemsContainer:
-              "grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:gap-6",
-            item: "",
+              'grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:gap-6',
+            item: '',
           }}
         />
       )}

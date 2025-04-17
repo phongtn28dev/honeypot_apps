@@ -1,6 +1,6 @@
-import { wallet } from "@/services/wallet";
-import { farmingCenterAbi, farmingCenterAddress } from "@/wagmi-generated";
-import { Address, getContract } from "viem";
+import { wallet } from '@honeypot/shared';
+import { farmingCenterAbi, farmingCenterAddress } from '@/wagmi-generated';
+import { Address, getContract } from 'viem';
 
 export async function getFarmingRewards({
   rewardToken,
@@ -17,7 +17,7 @@ export async function getFarmingRewards({
 }): Promise<{ reward: bigint; bonusReward: bigint }> {
   try {
     const farmingCenter = getContract({
-      address: farmingCenterAddress,
+      address: wallet.currentChain.contracts.algebraFarmingCenter,
       abi: farmingCenterAbi,
       client: wallet.publicClient,
     });

@@ -1,4 +1,3 @@
-import { infoClient } from ".";
 import {
   GetPot2PumpDetailDocument,
   GetPot2PumpDetailQuery,
@@ -16,8 +15,10 @@ import {
   GetPot2PumpByLaunchTokenDocument,
   GetPot2PumpByLaunchTokenQuery,
   GetPot2PumpByLaunchTokenQueryVariables,
-} from "../generated/graphql";
-import { pot2PumpListToMemePairList, pot2PumpToMemePair } from "./pair";
+} from '../generated/graphql';
+import { pot2PumpListToMemePairList, pot2PumpToMemePair } from './pair';
+import { getSubgraphClientByChainId } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared';
 
 export const getPot2PumpContractByLaunchToken = async (launchToken: string) => {
   const pot2Pump = await getPot2PumpByLaunchToken(launchToken);
@@ -26,26 +27,34 @@ export const getPot2PumpContractByLaunchToken = async (launchToken: string) => {
 };
 
 export const getPot2PumpByLaunchToken = async (launchToken: string) => {
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const res = await infoClient.query<
     GetPot2PumpByLaunchTokenQuery,
     GetPot2PumpByLaunchTokenQueryVariables
   >({
     query: GetPot2PumpByLaunchTokenDocument,
     variables: { launchToken: launchToken.toLowerCase() },
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
   });
 
   return res.data?.pot2Pumps[0] ?? null;
 };
 
 export const getPot2PumpDetail = async (id: string, accountId?: string) => {
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const res = await infoClient.query<
     GetPot2PumpDetailQuery,
     GetPot2PumpDetailQueryVariables
   >({
     query: GetPot2PumpDetailDocument,
     variables: { id, accountId: accountId },
-    fetchPolicy: "cache-first",
+    fetchPolicy: 'cache-first',
     notifyOnNetworkStatusChange: true,
   });
 
@@ -61,6 +70,10 @@ export const subgraphPot2PumpToMemePair = async (
 };
 
 export const canClaimPot2Pump = async (accountId: string) => {
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const res = await infoClient.query<
     CanClaimPot2PumpParticipantQuery,
     CanClaimPot2PumpParticipantQueryVariables
@@ -69,7 +82,7 @@ export const canClaimPot2Pump = async (accountId: string) => {
     variables: {
       accountId: accountId.toLowerCase(),
     },
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
   });
 
   const memeList = await pot2PumpListToMemePairList(
@@ -85,7 +98,10 @@ export const canClaimPot2Pump = async (accountId: string) => {
 
 export const canRefundPot2Pump = async (accountId: string) => {
   const timeNow = Math.floor(Date.now() / 1000);
-
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const res = await infoClient.query<
     CanRefundPot2PumpParticipantQuery,
     CanRefundPot2PumpParticipantQueryVariables
@@ -95,12 +111,12 @@ export const canRefundPot2Pump = async (accountId: string) => {
       accountId: accountId.toLowerCase(),
       timeNow: timeNow,
     },
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
   });
 
   if (!res.data?.participants) {
     console.error(
-      "Failed to fetch refundable pot2pump participants:",
+      'Failed to fetch refundable pot2pump participants:',
       res.error
     );
     return [];
@@ -121,6 +137,10 @@ export const getParticipantDetail = async (
   accountId: string,
   pot2PumpId: string
 ) => {
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const res = await infoClient.query<
     GetParticipantDetailQuery,
     GetParticipantDetailQueryVariables

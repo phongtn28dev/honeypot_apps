@@ -10,9 +10,9 @@ import {
 } from '@nextui-org/react';
 import { IoSearchOutline } from 'react-icons/io5';
 import { IoClose } from 'react-icons/io5';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { Observer, observer, useLocalObservable } from 'mobx-react-lite';
-import { liquidity } from '@/services/liquidity';
 import { useCallback, useEffect, useState } from 'react';
 import { isEthAddress } from '@/lib/address';
 import { Input } from '../../input/index';
@@ -20,7 +20,7 @@ import { SpinnerContainer } from '../../Spinner';
 import { NoData } from '../../table';
 import { Copy } from '../../Copy/index';
 import { BiLinkExternal } from 'react-icons/bi';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import TokenLogo from '../../TokenLogo/TokenLogo';
 import TruncateMarkup from 'react-truncate-markup';
 import { motion } from 'framer-motion';
@@ -34,6 +34,8 @@ type TokenSelectorProps = {
   value?: Token | null;
   disableSelection?: boolean;
   staticTokenList?: Token[];
+  disableSearch?: boolean;
+  disableTools?: boolean;
 };
 
 export const TokenSelector = observer(
@@ -42,6 +44,8 @@ export const TokenSelector = observer(
     value,
     disableSelection,
     staticTokenList,
+    disableTools,
+    disableSearch,
   }: TokenSelectorProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const state = useLocalObservable(() => ({
@@ -52,17 +56,19 @@ export const TokenSelector = observer(
       filterLoading: false,
       filterTokensBySearch: async function () {
         if (!state.search) {
-          state.tokens = liquidity.tokens;
+          state.tokens = wallet.currentChain.validatedTokens;
           return;
         }
         state.filterLoading = true;
         const isEthAddr = isEthAddress(state.search);
         if (isEthAddr) {
-          const filterToken = liquidity.tokens?.find((token) => {
-            return (
-              token.address.toLowerCase() === state.search.toLocaleLowerCase()
-            );
-          });
+          const filterToken = wallet.currentChain.validatedTokens?.find(
+            (token) => {
+              return (
+                token.address.toLowerCase() === state.search.toLocaleLowerCase()
+              );
+            }
+          );
           if (filterToken) {
             state.tokens = [filterToken];
             state.filterLoading = false;
@@ -70,16 +76,21 @@ export const TokenSelector = observer(
           }
           const token = Token.getToken({
             address: state.search,
+            chainId: wallet.currentChainId.toString(),
           });
           await token.init();
           state.tokens = [token];
         } else {
-          state.tokens = liquidity.tokens?.filter((token) => {
-            return (
-              token.name?.toLowerCase().includes(state.search.toLowerCase()) ||
-              token.symbol?.toLowerCase().includes(state.search.toLowerCase())
-            );
-          });
+          state.tokens = wallet.currentChain.validatedTokens?.filter(
+            (token) => {
+              return (
+                token.name
+                  ?.toLowerCase()
+                  .includes(state.search.toLowerCase()) ||
+                token.symbol?.toLowerCase().includes(state.search.toLowerCase())
+              );
+            }
+          );
         }
         state.filterLoading = false;
       },
@@ -102,7 +113,7 @@ export const TokenSelector = observer(
 
     useEffect(() => {
       state.filterTokensBySearch();
-    }, [state.search]);
+    }, [state.search, wallet.currentChainId]);
 
     return (
       <motion.div
@@ -334,7 +345,7 @@ export const TokenSelector = observer(
             </Observer>
           </PopoverContent>
         </Popover>
-        {value && (
+        {value && !disableTools && (
           <div className="text-black flex items-center gap-x-2 z-10">
             <Link
               href={`${wallet.currentChain?.chain.blockExplorers?.default.url}/token/${value.address}`}

@@ -1,22 +1,22 @@
-import React, { createElement, useEffect } from "react";
-import { FaXTwitter } from "react-icons/fa6";
-import { Skeleton } from "@/components/ui/skeleton";
-import { FaTelegram, FaGlobe } from "react-icons/fa";
-import { Copy } from "@/components/Copy";
-import { VscCopy } from "react-icons/vsc";
-import { BiSearch } from "react-icons/bi";
-import PairStatus from "@/components/atoms/TokenStatusDisplay/PairStatus";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
+import React, { createElement, useEffect } from 'react';
+import { FaXTwitter } from 'react-icons/fa6';
+import { Skeleton } from '@/components/ui/skeleton';
+import { FaTelegram, FaGlobe } from 'react-icons/fa';
+import { Copy } from '@/components/Copy';
+import { VscCopy } from 'react-icons/vsc';
+import { BiSearch } from 'react-icons/bi';
+import PairStatus from '@/components/atoms/TokenStatusDisplay/PairStatus';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
 import {
   pot2pumpShareLink,
   pot2PumpShareContent,
   dedicatedPot2PumpShareLink,
   dedicatedPot2PumpShareTwitterContent,
-} from "@/config/socialSharingContents";
-import { cn } from "@nextui-org/theme";
-import Link from "next/link";
-import { BiLinkExternal } from "react-icons/bi";
-import Image from "next/image";
+} from '@/config/socialSharingContents';
+import { cn } from '@nextui-org/theme';
+import Link from 'next/link';
+import { BiLinkExternal } from 'react-icons/bi';
+import Image from 'next/image';
 import {
   Modal,
   ModalBody,
@@ -25,23 +25,23 @@ import {
   Tooltip,
   useDisclosure,
   ModalHeader,
-} from "@nextui-org/react";
-import { WrappedTooltip } from "@/components/wrappedNextUI/Tooltip/Tooltip";
-import { optionsPresets } from "@/components/OptionsDropdown/OptionsDropdown";
-import { LucideFileEdit } from "lucide-react";
-import { wallet } from "@/services/wallet";
-import { toast } from "react-toastify";
-import { Button } from "@/components/button/v3";
-import { observer } from "mobx-react-lite";
-import { WrappedToastify } from "@/lib/wrappedToastify";
-import launchpad from "@/services/launchpad";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { chain } from "@/services/chain";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { useRouter } from "next/router";
-import { Token } from "@/services/contract/token";
-import { DedicatedPot2Pump } from "@/config/dedicatedPot2pump";
+} from '@nextui-org/react';
+import { WrappedTooltip } from '@/components/wrappedNextUI/Tooltip/Tooltip';
+import { optionsPresets } from '@/components/OptionsDropdown/OptionsDropdown';
+import { LucideFileEdit } from 'lucide-react';
+import { wallet } from '@honeypot/shared';
+import { toast } from 'react-toastify';
+import { Button } from '@/components/button/v3';
+import { observer } from 'mobx-react-lite';
+import { WrappedToastify } from '@/lib/wrappedToastify';
+import launchpad from '@/services/launchpad';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { useRouter } from 'next/router';
+
+import { Token } from '@honeypot/shared';
+import { DedicatedPot2Pump } from '@/config/dedicatedPot2pump';
 
 interface ProjectTitleProps {
   name?: string;
@@ -71,21 +71,21 @@ export const UpdateProjectModal = observer(
             projectName: z.string(),
             description: z.string(),
             twitter: z.union([
-              z.string().url().startsWith("https://x.com/"),
-              z.string().url().startsWith("https://twitter.com/"),
-              z.literal(""),
+              z.string().url().startsWith('https://x.com/'),
+              z.string().url().startsWith('https://twitter.com/'),
+              z.literal(''),
             ]),
-            website: z.string().url().startsWith("https://").or(z.literal("")),
+            website: z.string().url().startsWith('https://').or(z.literal('')),
             telegram: z.union([
-              z.string().startsWith("https://t.me/"),
-              z.string().startsWith("@"),
-              z.literal(""),
+              z.string().startsWith('https://t.me/'),
+              z.string().startsWith('@'),
+              z.literal(''),
             ]),
           })
           .transform((data) => {
             const mutateTelegram = (telegram: string | undefined | null) => {
-              if (telegram && telegram.startsWith("@")) {
-                return `https://t.me/${telegram.split("@")[1]}`;
+              if (telegram && telegram.startsWith('@')) {
+                return `https://t.me/${telegram.split('@')[1]}`;
               }
 
               return telegram;
@@ -99,9 +99,9 @@ export const UpdateProjectModal = observer(
     });
 
     const inputBaseClass =
-      "w-full bg-white rounded-[12px] md:rounded-[16px] px-3 md:px-4 py-2 md:py-[18px] text-black outline-none border border-black shadow-[0px_332px_93px_0px_rgba(0,0,0,0.00),0px_212px_85px_0px_rgba(0,0,0,0.01),0px_119px_72px_0px_rgba(0,0,0,0.05),0px_53px_53px_0px_rgba(0,0,0,0.09),0px_13px_29px_0px_rgba(0,0,0,0.10)] placeholder:text-black/50 text-sm md:text-base font-medium h-[40px] md:h-[60px]";
+      'w-full bg-white rounded-[12px] md:rounded-[16px] px-3 md:px-4 py-2 md:py-[18px] text-black outline-none border border-black shadow-[0px_332px_93px_0px_rgba(0,0,0,0.00),0px_212px_85px_0px_rgba(0,0,0,0.01),0px_119px_72px_0px_rgba(0,0,0,0.05),0px_53px_53px_0px_rgba(0,0,0,0.09),0px_13px_29px_0px_rgba(0,0,0,0.10)] placeholder:text-black/50 text-sm md:text-base font-medium h-[40px] md:h-[60px]';
 
-    const labelBaseClass = "text-black text-sm md:text-base font-medium";
+    const labelBaseClass = 'text-black text-sm md:text-base font-medium';
 
     const FormBody = observer(({ onClose }: any) => (
       <>
@@ -134,9 +134,9 @@ export const UpdateProjectModal = observer(
               <label className={labelBaseClass}>Project Name</label>
               <input
                 type="text"
-                {...register("projectName", {
+                {...register('projectName', {
                   value: pair.projectName,
-                  required: "Project name is required",
+                  required: 'Project name is required',
                 })}
                 className={inputBaseClass}
                 placeholder="Enter project name"
@@ -151,9 +151,9 @@ export const UpdateProjectModal = observer(
               <label className={labelBaseClass}>Description</label>
               <input
                 type="text"
-                {...register("description", {
+                {...register('description', {
                   value: pair.description,
-                  required: "Description is required",
+                  required: 'Description is required',
                 })}
                 className={inputBaseClass}
                 placeholder="Enter description"
@@ -170,7 +170,7 @@ export const UpdateProjectModal = observer(
               </label>
               <input
                 type="text"
-                {...register("twitter", {
+                {...register('twitter', {
                   value: pair.twitter,
                 })}
                 className={inputBaseClass}
@@ -188,7 +188,7 @@ export const UpdateProjectModal = observer(
               </label>
               <input
                 type="text"
-                {...register("website", {
+                {...register('website', {
                   value: pair.website,
                 })}
                 className={inputBaseClass}
@@ -206,7 +206,7 @@ export const UpdateProjectModal = observer(
               </label>
               <input
                 type="text"
-                {...register("telegram", {
+                {...register('telegram', {
                   value: pair.telegram,
                 })}
                 className={inputBaseClass}
@@ -225,24 +225,24 @@ export const UpdateProjectModal = observer(
                 handleSubmit(async (data) => {
                   await launchpad.updateProject.call({
                     pair: pair.address,
-                    chain_id: chain.currentChainId,
+                    chain_id: wallet.currentChain.chainId,
                     projectName: data.projectName,
                     description: data.description,
-                    twitter: data.twitter || "",
-                    website: data.website || "",
-                    telegram: data.telegram || "",
+                    twitter: data.twitter || '',
+                    website: data.website || '',
+                    telegram: data.telegram || '',
                   });
                   if (launchpad.updateProject.error) {
                     WrappedToastify.error({
-                      message: "Update failed",
-                      title: "Update Project Detail",
+                      message: 'Update failed',
+                      title: 'Update Project Detail',
                     });
                     return;
                   }
                   await pair.getProjectInfo();
                   WrappedToastify.success({
-                    message: "Update success",
-                    title: "Update Project Detail",
+                    message: 'Update success',
+                    title: 'Update Project Detail',
                   });
                   onClose();
                 })();
@@ -314,7 +314,7 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({
               )}
             </ul>
             <p>
-              Click{" "}
+              Click{' '}
               <span
                 onClick={() => {
                   onOpen();
@@ -323,7 +323,7 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({
                 className="text-blue-500 cursor-pointer"
               >
                 here
-              </span>{" "}
+              </span>{' '}
               to update the project
             </p>
           </div>
@@ -339,7 +339,7 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({
   return (
     <div
       className={cn(
-        "flex items-end md:items-center md:justify-start gap-x-4 md:gap-x-[7.5px] justify-center",
+        'flex items-end md:items-center md:justify-start gap-x-4 md:gap-x-[7.5px] justify-center',
         className
       )}
     >
@@ -348,11 +348,11 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({
           isOpen={isOpen}
           onOpenChange={onOpenChange}
           classNames={{
-            body: "bg-[#FFCD4D]",
-            header: "bg-[#FFCD4D]",
-            footer: "bg-[#FFCD4D]",
-            closeButton: "hover:bg-black/5",
-            base: "max-h-[70vh] overflow-y-auto",
+            body: 'bg-[#FFCD4D]',
+            header: 'bg-[#FFCD4D]',
+            footer: 'bg-[#FFCD4D]',
+            closeButton: 'hover:bg-black/5',
+            base: 'max-h-[70vh] overflow-y-auto',
           }}
         >
           <UpdateProjectModal pair={pair}></UpdateProjectModal>
@@ -366,8 +366,8 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({
             objectFit="cover"
             className="rounded-full"
             sizes="(max-width: 640px) 40px,77px"
-            alt={pair?.launchedToken?.name || "honey"}
-            src={!!pair?.logoUrl ? pair.logoUrl : "/images/empty-logo.png"}
+            alt={pair?.launchedToken?.name || 'honey'}
+            src={!!pair?.logoUrl ? pair.logoUrl : '/images/empty-logo.png'}
           />
         </div>
         <div className="flex flex-col items-center gap-0.5 md:hidden">
@@ -411,10 +411,7 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({
             ) : null}
 
             {pair?.isProvider && (
-              <WrappedTooltip
-                key={"Update Project"}
-                content={"Update Project"}
-              >
+              <WrappedTooltip key={'Update Project'} content={'Update Project'}>
                 <div
                   onClick={() => {
                     if (!pair) return;
@@ -423,7 +420,7 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({
                       pair.provider.toLowerCase() !==
                       wallet.account.toLowerCase()
                     ) {
-                      toast.warning("You are not the owner of this project");
+                      toast.warning('You are not the owner of this project');
                       return;
                     }
 
@@ -550,7 +547,7 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({
                         token: pair?.launchedToken,
                       }),
                       optionsPresets.viewOnExplorer({
-                        address: pair?.address ?? "",
+                        address: pair?.address ?? '',
                       }),
                     ].map((item) => {
                       return (
@@ -606,7 +603,7 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({
                 </span>
                 <div
                   className={cn(
-                    "text-right flex items-center gap-2 flex-row text-black"
+                    'text-right flex items-center gap-2 flex-row text-black'
                   )}
                 >
                   <Link
@@ -614,7 +611,7 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({
                     target="_blank"
                     href={`https://twitter.com/intent/tweet?text=${pot2PumpShareContent(
                       pair,
-                      "twitter"
+                      'twitter'
                     )}%0A%0A${pot2pumpShareLink(pair)}`}
                   >
                     <div className="flex items-center gap-1 hover:text-black/40">
@@ -627,7 +624,7 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({
                     target="_blank"
                     href={`https://telegram.me/share/url?url=${pot2pumpShareLink(
                       pair
-                    )}%0A&text=${pot2PumpShareContent(pair, "telegram")}`}
+                    )}%0A&text=${pot2PumpShareContent(pair, 'telegram')}`}
                   >
                     <div className="flex items-center gap-1 hover:text-black/40">
                       TG
@@ -649,7 +646,7 @@ export const ProjectTitleDedicated = observer(
     return (
       <div
         className={cn(
-          "flex items-end md:items-center md:justify-start gap-x-4 md:gap-x-[7.5px] justify-center",
+          'flex items-end md:items-center md:justify-start gap-x-4 md:gap-x-[7.5px] justify-center',
           className
         )}
       >
@@ -661,8 +658,8 @@ export const ProjectTitleDedicated = observer(
               objectFit="cover"
               className="rounded-full"
               sizes="(max-width: 640px) 40px,77px"
-              alt={token.token.name || "honey"}
-              src={!!token.logoURI ? token.logoURI : "/images/empty-logo.png"}
+              alt={token.token.name || 'honey'}
+              src={!!token.logoURI ? token.logoURI : '/images/empty-logo.png'}
             />
           </div>
           <div className="flex flex-col items-center gap-0.5 md:hidden">
@@ -751,7 +748,7 @@ export const ProjectTitleDedicated = observer(
                         token: token.token,
                       }),
                       optionsPresets.viewOnExplorer({
-                        address: token.token.address ?? "",
+                        address: token.token.address ?? '',
                       }),
                     ].map((item) => {
                       return (
@@ -792,7 +789,7 @@ export const ProjectTitleDedicated = observer(
                   </span>
                   <div
                     className={cn(
-                      "text-right flex items-center gap-2 flex-row text-black"
+                      'text-right flex items-center gap-2 flex-row text-black'
                     )}
                   >
                     <Link
@@ -812,7 +809,9 @@ export const ProjectTitleDedicated = observer(
                       target="_blank"
                       href={`https://telegram.me/share/url?url=${dedicatedPot2PumpShareLink(
                         token
-                      )}%0A&text=${dedicatedPot2PumpShareTwitterContent(token)}`}
+                      )}%0A&text=${dedicatedPot2PumpShareTwitterContent(
+                        token
+                      )}`}
                     >
                       <div className="flex items-center gap-1 hover:text-black/40">
                         TG

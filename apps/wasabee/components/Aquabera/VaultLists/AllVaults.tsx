@@ -1,12 +1,20 @@
-import { wallet } from '@/services/wallet';
-import { Token } from '@/services/contract/token';
+import { wallet } from '@honeypot/shared';
+import { Currency } from '@cryptoalgebra/sdk';
+
+import { Token } from '@honeypot/shared';
 import { useEffect, useState, useMemo } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/algebra/ui/button';
-import { getVaultPageData } from '@/lib/algebra/graphql/clients/vaults';
+import { DepositToVaultModal } from '../modals/DepositToVaultModal';
+import {
+  getSingleVaultDetails,
+  getVaultPageData,
+} from '@/lib/algebra/graphql/clients/vaults';
 import { VaultsSortedByHoldersQuery } from '@/lib/algebra/graphql/generated/graphql';
 import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
 import VaultRow from './VaulltRow';
+import { useSubgraphClient } from '@honeypot/shared';
+
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
 import VaultCard from './VaultCard';
 
@@ -39,6 +47,7 @@ export function AllAquaberaVaults({
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [page, setPage] = useState(1);
   const rowsPerPage = 10;
+  const infoClient = useSubgraphClient('algebra_info');
 
   console.log('vaultsContracts', vaultsContracts);
 
@@ -48,7 +57,7 @@ export function AllAquaberaVaults({
 
       try {
         // Load data regardless of searchString
-        const res = await getVaultPageData(searchString);
+        const res = await getVaultPageData(infoClient, searchString);
         setVaults(res);
 
         if (onDataLoaded) {
@@ -121,18 +130,22 @@ export function AllAquaberaVaults({
         case 'pair': {
           const aSymbol = Token.getToken({
             address: a.token0?.address ?? '',
+            chainId: wallet.currentChainId.toString(),
           }).symbol;
           const bSymbol = Token.getToken({
             address: b.token0?.address ?? '',
+            chainId: wallet.currentChainId.toString(),
           }).symbol;
           return multiplier * aSymbol.localeCompare(bSymbol);
         }
         case 'allow_token': {
           const aSymbol = Token.getToken({
             address: a.token0?.address ?? '',
+            chainId: wallet.currentChainId.toString(),
           }).symbol;
           const bSymbol = Token.getToken({
             address: b.token0?.address ?? '',
+            chainId: wallet.currentChainId.toString(),
           }).symbol;
           return multiplier * aSymbol.localeCompare(bSymbol);
         }

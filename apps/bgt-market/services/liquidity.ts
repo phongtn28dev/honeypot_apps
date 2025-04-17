@@ -1,5 +1,6 @@
-import { wallet } from './wallet';
-import { Token } from './contract/token';
+import { wallet } from '@honeypot/shared';
+
+import { Token } from '@honeypot/shared';
 import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
 import BigNumber from 'bignumber.js';
 import { trpcClient } from '@/lib/trpc';

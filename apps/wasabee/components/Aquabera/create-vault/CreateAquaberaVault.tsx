@@ -1,22 +1,29 @@
-import { observer } from "mobx-react-lite";
-import { useState } from "react";
-import { Token } from "@/services/contract/token";
-import TokenCardV3 from "@/components/algebra/swap/TokenCard/TokenCardV3";
-import { computePoolAddress, Currency } from "@cryptoalgebra/sdk";
-import { ICHIVaultFactoryContract } from "@/services/contract/aquabera/ICHIVaultFactory-contract";
-import { Button } from "@/components/button";
-import { wallet } from "@/services/wallet";
-import { TokenSelector } from "@/components/TokenSelector";
-import { PoolState, usePool } from "@/lib/algebra/hooks/pools/usePool";
-import { Address } from "viem";
-import { Token as AlgebraToken } from "@cryptoalgebra/sdk";
+import { observer } from 'mobx-react-lite';
+import { useState } from 'react';
+
+import { Token } from '@honeypot/shared';
+import TokenCardV3 from '@/components/algebra/swap/TokenCard/TokenCardV3';
+import { computePoolAddress, Currency } from '@cryptoalgebra/sdk';
+import { ICHIVaultFactoryContract } from '@/services/contract/aquabera/ICHIVaultFactory-contract';
+import { Button } from '@/components/button';
+import { wallet } from '@honeypot/shared';
+import { TokenSelector } from '@/components/TokenSelector';
+import { PoolState, usePool } from '@/lib/algebra/hooks/pools/usePool';
+import { Address } from 'viem';
+import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
 
 export const CreateAquaberaVault = observer(() => {
   const [tokenA, setTokenA] = useState<Token>(
-    Token.getToken({ address: wallet.currentChain.validatedTokens[0].address })
+    Token.getToken({
+      address: wallet.currentChain.validatedTokens[0].address,
+      chainId: wallet.currentChainId.toString(),
+    })
   );
   const [tokenB, setTokenB] = useState<Token>(
-    Token.getToken({ address: wallet.currentChain.validatedTokens[1].address })
+    Token.getToken({
+      address: wallet.currentChain.validatedTokens[1].address,
+      chainId: wallet.currentChainId.toString(),
+    })
   );
 
   const poolAddress =
@@ -53,10 +60,10 @@ export const CreateAquaberaVault = observer(() => {
         tokenB?.address as string, // Assuming tokenB has an address property
         true // allowTokenB
       );
-      console.log("res", res);
-      console.log("Vault created successfully");
+      console.log('res', res);
+      console.log('Vault created successfully');
     } catch (error) {
-      console.error("Error creating vault:", error);
+      console.error('Error creating vault:', error);
     }
   };
 
@@ -76,7 +83,7 @@ export const CreateAquaberaVault = observer(() => {
           className="form-submit-button"
           isDisabled={!isPoolExists}
         >
-          {!isPoolExists ? "Algebra Pool does not exist" : "Create Vault"}
+          {!isPoolExists ? 'Algebra Pool does not exist' : 'Create Vault'}
         </Button>
       </form>
     </div>

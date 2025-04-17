@@ -1,5 +1,5 @@
 import { BaseContract } from '..';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { makeAutoObservable } from 'mobx';
 import { Address, getContract, parseEther, zeroAddress } from 'viem';
 import { ICHIVaultFactoryABI } from '@/lib/abis/aquabera/ICHIVaultFactory';
@@ -9,7 +9,8 @@ import { BGTVault } from './bgt-vault';
 import { simulateContract } from 'viem/actions';
 import { WrappedToastify } from '@/lib/wrappedToastify';
 import { HeyBGTABI } from '@/lib/abis/bgt-market/HeyBGTABI';
-import { Token } from '../token';
+
+import { Token } from '@honeypot/shared';
 
 const NODE_ID = 1;
 

@@ -14191,29 +14191,36 @@ export type VaultsSortedByHoldersQueryVariables = Exact<{
 }>;
 
 
-export type VaultsSortedByHoldersQuery = { __typename?: 'Query', ichiVaults: Array<{ __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, feeApr_1d: any, feeApr_3d: any, feeApr_7d: any, feeApr_30d: any, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } }> };
+export type VaultsSortedByHoldersQuery = { __typename?: 'Query', ichiVaults: Array<{ __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, feeApr_1d: any, feeApr_3d: any, feeApr_7d: any, feeApr_30d: any, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolHourData: Array<{ __typename?: 'PoolHourData', feesUSD: any, id: string, tvlUSD: any, txCount: any, volumeUSD: any, periodStartUnix: number }>, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } }> };
 
 export type AccountVaultSharesQueryVariables = Exact<{
   AccountId: Scalars['ID']['input'];
 }>;
 
 
-export type AccountVaultSharesQuery = { __typename?: 'Query', vaultShares: Array<{ __typename?: 'VaultShare', id: string, vaultShareBalance: any, vault: { __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, feeApr_1d: any, feeApr_3d: any, feeApr_7d: any, feeApr_30d: any, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } } }> };
+export type AccountVaultSharesQuery = { __typename?: 'Query', vaultShares: Array<{ __typename?: 'VaultShare', id: string, vaultShareBalance: any, vault: { __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, feeApr_1d: any, feeApr_3d: any, feeApr_7d: any, feeApr_30d: any, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolHourData: Array<{ __typename?: 'PoolHourData', feesUSD: any, id: string, tvlUSD: any, txCount: any, volumeUSD: any, periodStartUnix: number }>, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } } }> };
 
 export type VaultUserFieldFragment = { __typename?: 'Account', id: string };
 
-export type VaultSharesFieldFragment = { __typename?: 'VaultShare', id: string, vaultShareBalance: any, vault: { __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, feeApr_1d: any, feeApr_3d: any, feeApr_7d: any, feeApr_30d: any, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } } };
+export type VaultSharesFieldFragment = { __typename?: 'VaultShare', id: string, vaultShareBalance: any, vault: { __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, feeApr_1d: any, feeApr_3d: any, feeApr_7d: any, feeApr_30d: any, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolHourData: Array<{ __typename?: 'PoolHourData', feesUSD: any, id: string, tvlUSD: any, txCount: any, volumeUSD: any, periodStartUnix: number }>, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } } };
 
-export type VaultFieldFragment = { __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, feeApr_1d: any, feeApr_3d: any, feeApr_7d: any, feeApr_30d: any, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } };
+export type VaultFieldFragment = { __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, feeApr_1d: any, feeApr_3d: any, feeApr_7d: any, feeApr_30d: any, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolHourData: Array<{ __typename?: 'PoolHourData', feesUSD: any, id: string, tvlUSD: any, txCount: any, volumeUSD: any, periodStartUnix: number }>, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } };
 
-export type PoolFieldFragment = { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> };
+export type PoolFieldFragment = { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolHourData: Array<{ __typename?: 'PoolHourData', feesUSD: any, id: string, tvlUSD: any, txCount: any, volumeUSD: any, periodStartUnix: number }>, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> };
+
+export type MultipleVaultDetailsQueryVariables = Exact<{
+  vaultIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
+}>;
+
+
+export type MultipleVaultDetailsQuery = { __typename?: 'Query', ichiVaults: Array<{ __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, feeApr_1d: any, feeApr_3d: any, feeApr_7d: any, feeApr_30d: any, vaultShares: Array<{ __typename?: 'VaultShare', id: string, vaultShareBalance: any }>, vaultDeposits: Array<{ __typename?: 'VaultDeposit', id: string, createdAtTimestamp: any, amount0: any, amount1: any, shares: any, to: any }>, vaultWithdraws: Array<{ __typename?: 'VaultWithdraw', id: string, createdAtTimestamp: any, amount0: any, amount1: any, shares: any, to: any }>, vaultCollectFees: Array<{ __typename?: 'VaultCollectFee', id: string, createdAtTimestamp: any, feeAmount0: any, feeAmount1: any, sender: any }>, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolHourData: Array<{ __typename?: 'PoolHourData', feesUSD: any, id: string, tvlUSD: any, txCount: any, volumeUSD: any, periodStartUnix: number }>, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } }> };
 
 export type SingleVaultDetailsQueryVariables = Exact<{
   vaultId: Scalars['ID']['input'];
 }>;
 
 
-export type SingleVaultDetailsQuery = { __typename?: 'Query', ichiVault?: { __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, feeApr_1d: any, feeApr_3d: any, feeApr_7d: any, feeApr_30d: any, vaultShares: Array<{ __typename?: 'VaultShare', id: string, vaultShareBalance: any }>, vaultDeposits: Array<{ __typename?: 'VaultDeposit', id: string, createdAtTimestamp: any, amount0: any, amount1: any, shares: any, to: any }>, vaultWithdraws: Array<{ __typename?: 'VaultWithdraw', id: string, createdAtTimestamp: any, amount0: any, amount1: any, shares: any, to: any }>, vaultCollectFees: Array<{ __typename?: 'VaultCollectFee', id: string, createdAtTimestamp: any, feeAmount0: any, feeAmount1: any, sender: any }>, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } } | null };
+export type SingleVaultDetailsQuery = { __typename?: 'Query', ichiVault?: { __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, feeApr_1d: any, feeApr_3d: any, feeApr_7d: any, feeApr_30d: any, vaultShares: Array<{ __typename?: 'VaultShare', id: string, vaultShareBalance: any }>, vaultDeposits: Array<{ __typename?: 'VaultDeposit', id: string, createdAtTimestamp: any, amount0: any, amount1: any, shares: any, to: any }>, vaultWithdraws: Array<{ __typename?: 'VaultWithdraw', id: string, createdAtTimestamp: any, amount0: any, amount1: any, shares: any, to: any }>, vaultCollectFees: Array<{ __typename?: 'VaultCollectFee', id: string, createdAtTimestamp: any, feeAmount0: any, feeAmount1: any, sender: any }>, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolHourData: Array<{ __typename?: 'PoolHourData', feesUSD: any, id: string, tvlUSD: any, txCount: any, volumeUSD: any, periodStartUnix: number }>, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } } | null };
 
 export const BundleFieldsFragmentDoc = gql`
     fragment BundleFields on Bundle {
@@ -14665,6 +14672,9 @@ export const PoolFieldFragmentDoc = gql`
     name
     decimals
   }
+  poolHourData(first: 100, orderBy: periodStartUnix, orderDirection: desc) {
+    ...PoolHourDataFields
+  }
   poolDayData(first: 30, orderBy: date, orderDirection: desc) {
     date
     volumeUSD
@@ -14672,7 +14682,7 @@ export const PoolFieldFragmentDoc = gql`
     tvlUSD
   }
 }
-    `;
+    ${PoolHourDataFieldsFragmentDoc}`;
 export const VaultFieldFragmentDoc = gql`
     fragment VaultField on IchiVault {
   id
@@ -16817,6 +16827,73 @@ export type AccountVaultSharesQueryHookResult = ReturnType<typeof useAccountVaul
 export type AccountVaultSharesLazyQueryHookResult = ReturnType<typeof useAccountVaultSharesLazyQuery>;
 export type AccountVaultSharesSuspenseQueryHookResult = ReturnType<typeof useAccountVaultSharesSuspenseQuery>;
 export type AccountVaultSharesQueryResult = Apollo.QueryResult<AccountVaultSharesQuery, AccountVaultSharesQueryVariables>;
+export const MultipleVaultDetailsDocument = gql`
+    query MultipleVaultDetails($vaultIds: [ID!]!) {
+  ichiVaults(where: {id_in: $vaultIds}) {
+    ...VaultField
+    vaultShares {
+      id
+      vaultShareBalance
+    }
+    vaultDeposits(orderBy: createdAtTimestamp, orderDirection: desc, first: 100) {
+      id
+      createdAtTimestamp
+      amount0
+      amount1
+      shares
+      to
+    }
+    vaultWithdraws(orderBy: createdAtTimestamp, orderDirection: desc, first: 100) {
+      id
+      createdAtTimestamp
+      amount0
+      amount1
+      shares
+      to
+    }
+    vaultCollectFees(orderBy: createdAtTimestamp, orderDirection: desc, first: 100) {
+      id
+      createdAtTimestamp
+      feeAmount0
+      feeAmount1
+      sender
+    }
+  }
+}
+    ${VaultFieldFragmentDoc}`;
+
+/**
+ * __useMultipleVaultDetailsQuery__
+ *
+ * To run a query within a React component, call `useMultipleVaultDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMultipleVaultDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMultipleVaultDetailsQuery({
+ *   variables: {
+ *      vaultIds: // value for 'vaultIds'
+ *   },
+ * });
+ */
+export function useMultipleVaultDetailsQuery(baseOptions: Apollo.QueryHookOptions<MultipleVaultDetailsQuery, MultipleVaultDetailsQueryVariables> & ({ variables: MultipleVaultDetailsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MultipleVaultDetailsQuery, MultipleVaultDetailsQueryVariables>(MultipleVaultDetailsDocument, options);
+      }
+export function useMultipleVaultDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MultipleVaultDetailsQuery, MultipleVaultDetailsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MultipleVaultDetailsQuery, MultipleVaultDetailsQueryVariables>(MultipleVaultDetailsDocument, options);
+        }
+export function useMultipleVaultDetailsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<MultipleVaultDetailsQuery, MultipleVaultDetailsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<MultipleVaultDetailsQuery, MultipleVaultDetailsQueryVariables>(MultipleVaultDetailsDocument, options);
+        }
+export type MultipleVaultDetailsQueryHookResult = ReturnType<typeof useMultipleVaultDetailsQuery>;
+export type MultipleVaultDetailsLazyQueryHookResult = ReturnType<typeof useMultipleVaultDetailsLazyQuery>;
+export type MultipleVaultDetailsSuspenseQueryHookResult = ReturnType<typeof useMultipleVaultDetailsSuspenseQuery>;
+export type MultipleVaultDetailsQueryResult = Apollo.QueryResult<MultipleVaultDetailsQuery, MultipleVaultDetailsQueryVariables>;
 export const SingleVaultDetailsDocument = gql`
     query SingleVaultDetails($vaultId: ID!) {
   ichiVault(id: $vaultId) {

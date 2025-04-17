@@ -19,7 +19,7 @@ import { Footer } from './footer';
 import { chatService, presetQuestions, questionTitles } from '@/services/chat';
 import _ from 'lodash';
 import { InvitationCodeModal } from '../InvitationCodeModal/InvitationCodeModal';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 
 export const Layout = ({
   children,
@@ -47,38 +47,38 @@ export const Layout = ({
     }
   }, [router.pathname]);
 
-  useEffect(() => {
-    trpcClient.metadata.getServerMetadata.query().then((res) => {
-      if (
-        res.latest_version === metadata.version ||
-        process.env.NODE_ENV === 'development'
-      )
-        return;
-      popmodal.openModal({
-        content: (
-          <div className="min-h-[300px] line-[24px]">
-            <div className="text-center  font-bold text-[30px]">
-              Announcement
-            </div>
-            <h1 className="mt-[24px]">
-              This version is outdated, please check our newest link:&nbsp;{' '}
-              <a
-                className="hover:text-orange-500 transition-all underline"
-                href={res.latest_site}
-              >
-                {res.latest_site}.
-              </a>
-            </h1>
-            <p>
-              Pls have fun with brand new features with pot2pump meme launch. we
-              will not update and maintain this version anymore so feel free to
-              migrate your assets to our new version
-            </p>
-          </div>
-        ),
-      });
-    });
-  }, []);
+  // useEffect(() => {
+  //   trpcClient.metadata.getServerMetadata.query().then((res) => {
+  //     if (
+  //       res.latest_version === metadata.version ||
+  //       process.env.NODE_ENV === 'development'
+  //     )
+  //       return;
+  //     popmodal.openModal({
+  //       content: (
+  //         <div className="min-h-[300px] line-[24px]">
+  //           <div className="text-center  font-bold text-[30px]">
+  //             Announcement
+  //           </div>
+  //           <h1 className="mt-[24px]">
+  //             This version is outdated, please check our newest link:&nbsp;{' '}
+  //             <a
+  //               className="hover:text-orange-500 transition-all underline"
+  //               href={res.latest_site}
+  //             >
+  //               {res.latest_site}.
+  //             </a>
+  //           </h1>
+  //           <p>
+  //             Pls have fun with brand new features with pot2pump meme launch. we
+  //             will not update and maintain this version anymore so feel free to
+  //             migrate your assets to our new version
+  //           </p>
+  //         </div>
+  //       ),
+  //     });
+  //   });
+  // }, []);
 
   // useEffect(() => {
   //   const inviteCode = localStorage.getItem("inviteCode");
@@ -156,22 +156,7 @@ export const Layout = ({
       <PopOverModal />
       <Header />
       {!showInviteModal ? (
-        currentChain ? (
-          currentChain?.isActive ? (
-            <div className="flex-1 flex w-full">{children}</div>
-          ) : (
-            <div className="flex-1 flex items-center justify-center">
-              <div className="text-center">
-                <h1 className="text-2xl font-bold">
-                  Chain will be support soon
-                </h1>
-                <p className="text-lg">Check back later for more information</p>
-              </div>
-            </div>
-          )
-        ) : (
-          <NotConnetctedDisplay />
-        )
+        wallet.currentChain && <div className="flex-1 flex">{children}</div>
       ) : (
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">

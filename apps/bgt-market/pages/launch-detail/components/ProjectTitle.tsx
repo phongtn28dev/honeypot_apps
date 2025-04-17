@@ -1,26 +1,26 @@
-import React, { createElement } from "react";
-import { FaXTwitter } from "react-icons/fa6";
-import { Skeleton } from "@/components/ui/skeleton";
-import { FaTelegram, FaGlobe } from "react-icons/fa";
-import { Copy } from "@/components/Copy";
-import { VscCopy } from "react-icons/vsc";
-import { BiSearch } from "react-icons/bi";
-import PairStatus from "@/components/atoms/TokenStatusDisplay/PairStatus";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
+import React, { createElement } from 'react';
+import { FaXTwitter } from 'react-icons/fa6';
+import { Skeleton } from '@/components/ui/skeleton';
+import { FaTelegram, FaGlobe } from 'react-icons/fa';
+import { Copy } from '@/components/Copy';
+import { VscCopy } from 'react-icons/vsc';
+import { BiSearch } from 'react-icons/bi';
+import PairStatus from '@/components/atoms/TokenStatusDisplay/PairStatus';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
 import {
   pot2pumpShareLink,
   pot2PumpShareContent,
-} from "@/config/socialSharingContents";
-import { cn } from "@nextui-org/theme";
-import Link from "next/link";
-import { BiLinkExternal } from "react-icons/bi";
-import Image from "next/image";
-import { Tooltip, useDisclosure } from "@nextui-org/react";
-import { WrappedTooltip } from "@/components/wrappedNextUI/Tooltip/Tooltip";
-import { optionsPresets } from "@/components/OptionsDropdown/OptionsDropdown";
-import { LucideFileEdit } from "lucide-react";
-import { wallet } from "@/services/wallet";
-import { toast } from "react-toastify";
+} from '@/config/socialSharingContents';
+import { cn } from '@nextui-org/theme';
+import Link from 'next/link';
+import { BiLinkExternal } from 'react-icons/bi';
+import Image from 'next/image';
+import { Tooltip, useDisclosure } from '@nextui-org/react';
+import { WrappedTooltip } from '@/components/wrappedNextUI/Tooltip/Tooltip';
+import { optionsPresets } from '@/components/OptionsDropdown/OptionsDropdown';
+import { LucideFileEdit } from 'lucide-react';
+import { wallet } from '@honeypot/shared';
+import { toast } from 'react-toastify';
 
 interface ProjectTitleProps {
   name?: string;
@@ -56,7 +56,7 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({
   return (
     <div
       className={cn(
-        "flex items-end md:items-center md:justify-start gap-x-4 md:gap-x-[7.5px] justify-center",
+        'flex items-end md:items-center md:justify-start gap-x-4 md:gap-x-[7.5px] justify-center',
         className
       )}
     >
@@ -68,8 +68,8 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({
             objectFit="cover"
             className="rounded-full"
             sizes="(max-width: 640px) 40px,77px"
-            alt={pair?.launchedToken?.name || "honey"}
-            src={!!pair?.logoUrl ? pair.logoUrl : "/images/empty-logo.png"}
+            alt={pair?.launchedToken?.name || 'honey'}
+            src={!!pair?.logoUrl ? pair.logoUrl : '/images/empty-logo.png'}
           />
         </div>
         <div className="flex flex-col items-center gap-0.5 md:hidden">
@@ -222,11 +222,11 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({
                         token: pair?.launchedToken,
                       }),
                       optionsPresets.viewOnExplorer({
-                        address: pair?.address ?? "",
+                        address: pair?.address ?? '',
                       }),
                       {
                         icon: <LucideFileEdit size={14} />,
-                        display: "Update Project",
+                        display: 'Update Project',
                         onClick: () => {
                           if (!pair) return;
 
@@ -235,7 +235,7 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({
                             wallet.account.toLowerCase()
                           ) {
                             toast.warning(
-                              "You are not the owner of this project"
+                              'You are not the owner of this project'
                             );
                             return;
                           }
@@ -297,7 +297,7 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({
                 </span>
                 <div
                   className={cn(
-                    "text-right flex items-center gap-2 flex-row text-black"
+                    'text-right flex items-center gap-2 flex-row text-black'
                   )}
                 >
                   <Link
@@ -305,7 +305,7 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({
                     target="_blank"
                     href={`https://twitter.com/intent/tweet?text=${pot2PumpShareContent(
                       pair,
-                      "twitter"
+                      'twitter'
                     )}%0A%0A${pot2pumpShareLink(pair)}`}
                   >
                     <div className="flex items-center gap-1 hover:text-black/40">
@@ -318,7 +318,7 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({
                     target="_blank"
                     href={`https://telegram.me/share/url?url=${pot2pumpShareLink(
                       pair
-                    )}%0A&text=${pot2PumpShareContent(pair, "telegram")}`}
+                    )}%0A&text=${pot2PumpShareContent(pair, 'telegram')}`}
                   >
                     <div className="flex items-center gap-1 hover:text-black/40">
                       TG

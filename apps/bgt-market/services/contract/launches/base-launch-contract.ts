@@ -1,21 +1,22 @@
-import { BaseContract } from "@/services/contract";
-import { Token } from "@/services/contract/token";
-import BigNumber from "bignumber.js";
-import { MemePairContract } from "./pot2pump/memepair-contract";
-import { LBPPairContract } from "./lbp/lbppair-contract";
-import { FtoPairContract } from "./fto/ftopair-contract";
+import { BaseContract } from '@/services/contract';
+
+import { Token } from '@honeypot/shared';
+import BigNumber from 'bignumber.js';
+import { MemePairContract } from './pot2pump/memepair-contract';
+import { LBPPairContract } from './lbp/lbppair-contract';
+import { FtoPairContract } from './fto/ftopair-contract';
 
 export type LaunchContract = MemePairContract;
 
-export type LaunchContractType = "meme" | "lbp" | "fto";
+export type LaunchContractType = 'meme' | 'lbp' | 'fto';
 
 export function getLaunchContractType(
   contract: LaunchContract
 ): LaunchContractType {
   if (contract instanceof MemePairContract) {
-    return "meme";
+    return 'meme';
   }
-  throw new Error("Invalid contract type");
+  throw new Error('Invalid contract type');
 }
 
 export interface BaseLaunchContract extends BaseContract {

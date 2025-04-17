@@ -1,9 +1,10 @@
 import { action, makeAutoObservable, reaction } from 'mobx';
-import { Token } from './contract/token';
+
+import { Token } from '@honeypot/shared';
 import { PairContract } from './contract/dex/liquidity/pair-contract';
 import { AsyncState } from './utils';
 import { ChartDataResponse, resolutionType } from './priceFeed/priceFeedTypes';
-import { wallet } from './wallet';
+import { wallet } from '@honeypot/shared';
 import { trpcClient } from '@/lib/trpc';
 import { dayjs } from '@/lib/dayjs';
 import { AlgebraPoolContract } from './contract/algebra/algebra-pool-contract';

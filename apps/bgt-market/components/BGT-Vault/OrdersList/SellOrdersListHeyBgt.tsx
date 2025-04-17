@@ -17,7 +17,7 @@ import {
   useRecentBuyOrdersQuery,
   useRecentSellOrdersQuery,
 } from '@/lib/algebra/graphql/generated/graphql';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { watchBlockNumber } from 'viem/actions';
 import { Button } from '../../button/v3';
 import { Switch } from '@nextui-org/react';

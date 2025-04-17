@@ -1,10 +1,12 @@
-import { makeAutoObservable, reaction } from "mobx";
-import { Token } from "./contract/token";
-import { wallet } from "./wallet";
-import BigNumber from "bignumber.js";
-import { AsyncState } from "./utils";
-import { getMultipleTokensData } from "@/lib/algebra/graphql/clients/token";
-import { getSingleAccountDetails } from "@/lib/algebra/graphql/clients/account";
+import { makeAutoObservable, reaction } from 'mobx';
+
+import { Token } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared';
+import BigNumber from 'bignumber.js';
+import { AsyncState } from './utils';
+import { getMultipleTokensData } from '@/lib/algebra/graphql/clients/token';
+import { getSingleAccountDetails } from '@/lib/algebra/graphql/clients/account';
+import { getSubgraphClientByChainId } from '@honeypot/shared';
 
 class Portfolio {
   tokens: Token[] = [];
@@ -13,6 +15,18 @@ class Portfolio {
 
   constructor() {
     makeAutoObservable(this);
+    reaction(
+      () => wallet.account,
+      () => {
+        this.initPortfolio();
+      }
+    );
+    reaction(
+      () => wallet.currentChainId,
+      () => {
+        this.initPortfolio();
+      }
+    );
   }
 
   get totalBalance() {
@@ -22,14 +36,19 @@ class Portfolio {
   }
 
   async initPortfolio() {
-    if (this.isInit || !wallet.isInit) return;
+    if (!wallet.isInit) return;
+
+    const infoClient = getSubgraphClientByChainId(
+      wallet.currentChainId.toString(),
+      'algebra_info'
+    );
 
     this.isLoading = true;
 
     try {
       // Get validated tokens from current chain
       const validatedTokens = wallet.currentChain?.validatedTokens || [];
-      console.log("validatedTokens", validatedTokens);
+      console.log('validatedTokens', validatedTokens);
       // Initialize tokens
 
       const tokenIds = validatedTokens.map((token) =>
@@ -37,18 +56,21 @@ class Portfolio {
       );
 
       //also add any account holding tokens
-      console.log("wallet.account", wallet.account);
-      const account = await getSingleAccountDetails(wallet.account);
-      console.log("account", account);
+      console.log('wallet.account', wallet.account);
+      const account = await getSingleAccountDetails(infoClient, wallet.account);
+      console.log('account', account);
       const accountHoldingTokenIds = account.account?.holder.map(
         (holder) => holder.token.id
       );
-      console.log("accountHoldingTokenIds", accountHoldingTokenIds);
+      console.log('accountHoldingTokenIds', accountHoldingTokenIds);
       const allTokenIds = [...tokenIds, ...(accountHoldingTokenIds || [])];
-      console.log("allTokenIds", allTokenIds);
-      const tokensData = await getMultipleTokensData(allTokenIds);
-      console.log("tokensData", tokensData);
-      const tokens = tokensData?.tokens.map((token) => {
+      console.log('allTokenIds', allTokenIds);
+      const tokensData = await getMultipleTokensData(
+        allTokenIds,
+        wallet.currentChainId.toString()
+      );
+      console.log('tokensData', tokensData);
+      const tokens = tokensData?.map((token) => {
         //remove marketCap from token
         const { marketCap, ...rest } = token;
 
@@ -57,10 +79,11 @@ class Portfolio {
           address: token.id.toLowerCase(),
           derivedETH: token.derivedMatic,
           derivedUSD: token.derivedUSD,
+          chainId: wallet.currentChainId.toString(),
         });
       });
       console.log(
-        "tokens",
+        'tokens',
         tokens?.map((token) => token.address)
       );
       // Filter tokens with balance
@@ -70,7 +93,7 @@ class Portfolio {
           try {
             await token.getBalance();
           } catch (error) {
-            console.error("Error getting balance for token", token.address);
+            console.error('Error getting balance for token', token.address);
           }
         }) ?? []
       );
@@ -88,7 +111,7 @@ class Portfolio {
         }
       }
     } catch (error) {
-      console.error("Portfolio initialization error:", error);
+      console.error('Portfolio initialization error:', error);
     } finally {
       this.isLoading = false;
       this.isInit = true;

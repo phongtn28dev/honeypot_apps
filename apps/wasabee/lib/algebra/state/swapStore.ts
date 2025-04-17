@@ -1,17 +1,15 @@
-import { ALGEBRA_ROUTER } from "@/config/algebra/addresses";
-import { STABLECOINS } from "@/config/algebra/tokens";
-import { useCurrency } from "@/lib/algebra/hooks/common/useCurrency";
+import { useCurrency } from '@/lib/algebra/hooks/common/useCurrency';
 import {
   useBestTradeExactIn,
   useBestTradeExactOut,
-} from "@/lib/algebra/hooks/swap/useBestTrade";
-import useSwapSlippageTolerance from "@/lib/algebra/hooks/swap/useSwapSlippageTolerance";
-import { SwapFieldType, SwapField } from "@/types/algebra/types/swap-field";
-import { TradeStateType } from "@/types/algebra/types/trade-state";
+} from '@/lib/algebra/hooks/swap/useBestTrade';
+import useSwapSlippageTolerance from '@/lib/algebra/hooks/swap/useSwapSlippageTolerance';
+import { SwapFieldType, SwapField } from '@/types/algebra/types/swap-field';
+import { TradeStateType } from '@/types/algebra/types/trade-state';
 import {
   useReadAlgebraPoolGlobalState,
   useReadAlgebraPoolTickSpacing,
-} from "@/wagmi-generated";
+} from '@/wagmi-generated';
 import {
   ADDRESS_ZERO,
   Currency,
@@ -21,13 +19,14 @@ import {
   Trade,
   TradeType,
   computePoolAddress,
-} from "@cryptoalgebra/sdk";
-import JSBI from "jsbi";
-import { useCallback, useMemo } from "react";
-import { Address, parseUnits } from "viem";
-import { useAccount, useBalance } from "wagmi";
-import { useNeedAllowance } from "../hooks/common/useNeedAllowance";
-import { create } from "zustand";
+} from '@cryptoalgebra/sdk';
+import JSBI from 'jsbi';
+import { useCallback, useMemo } from 'react';
+import { Address, parseUnits } from 'viem';
+import { useAccount, useBalance } from 'wagmi';
+import { useNeedAllowance } from '../hooks/common/useNeedAllowance';
+import { create } from 'zustand';
+import { wallet } from '@honeypot/shared';
 
 interface SwapState {
   readonly independentField: SwapFieldType;
@@ -52,12 +51,14 @@ interface SwapState {
 
 export const useSwapState = create<SwapState>((set, get) => ({
   independentField: SwapField.INPUT,
-  typedValue: "",
+  typedValue: '',
   [SwapField.INPUT]: {
     currencyId: ADDRESS_ZERO,
   },
   [SwapField.OUTPUT]: {
-    currencyId: STABLECOINS.HONEY.address as Address,
+    currencyId: wallet.currentChain?.validatedTokens.filter(
+      (token) => token.isStableCoin
+    )[0].address as Address,
   },
   wasInverted: false,
   lastFocusedField: SwapField.INPUT,
@@ -124,7 +125,7 @@ export function useSwapActionHandlers(): {
           ? currency.address
           : currency.isNative
           ? ADDRESS_ZERO
-          : ""
+          : ''
       ),
     [selectCurrency]
   );
@@ -156,7 +157,7 @@ export function tryParseAmount<T extends Currency>(
   }
   try {
     const typedValueParsed = parseUnits(value, currency.decimals).toString();
-    if (typedValueParsed !== "0") {
+    if (typedValueParsed !== '0') {
       return CurrencyAmount.fromRawAmount(currency, typedValueParsed);
     }
   } catch (error) {
@@ -209,6 +210,7 @@ export function useDerivedSwapInfo(): {
     isExactIn ? parsedAmount : undefined,
     outputCurrency ?? undefined
   );
+
   const bestTradeExactOut = useBestTradeExactOut(
     inputCurrency ?? undefined,
     !isExactIn ? parsedAmount : undefined
@@ -217,17 +219,191 @@ export function useDerivedSwapInfo(): {
   const trade = (isExactIn ? bestTradeExactIn : bestTradeExactOut) ?? undefined;
 
   console.log(
-    "trade.trade?.inputAmount.toSignificant(2)",
+    'trade.trade?.inputAmount.toSignificant(2)',
     trade.trade?.inputAmount.toSignificant(2)
   );
   console.log(
-    "trade.trade?.outputAmount.toSignificant(2)",
+    'trade.trade?.outputAmount.toSignificant(2)',
     trade.trade?.outputAmount.toSignificant(2)
   );
 
   const [addressA, addressB] = [
-    inputCurrency?.isNative ? undefined : inputCurrency?.address || "",
-    outputCurrency?.isNative ? undefined : outputCurrency?.address || "",
+    inputCurrency?.isNative ? undefined : inputCurrency?.address || '',
+    outputCurrency?.isNative ? undefined : outputCurrency?.address || '',
+  ] as Address[];
+
+  const { data: inputCurrencyBalance } = useBalance({
+    address: account,
+    token: addressA,
+    // watch: true,
+  });
+  const { data: outputCurrencyBalance } = useBalance({
+    address: account,
+    token: addressB,
+    //watch: true,
+  });
+
+  const currencyBalances = {
+    [SwapField.INPUT]:
+      inputCurrency &&
+      inputCurrencyBalance &&
+      CurrencyAmount.fromRawAmount(
+        inputCurrency,
+        inputCurrencyBalance.value.toString()
+      ),
+    [SwapField.OUTPUT]:
+      outputCurrency &&
+      outputCurrencyBalance &&
+      CurrencyAmount.fromRawAmount(
+        outputCurrency,
+        outputCurrencyBalance.value.toString()
+      ),
+  };
+
+  const currencies: { [field in SwapFieldType]?: Currency } = {
+    [SwapField.INPUT]: inputCurrency ?? undefined,
+    [SwapField.OUTPUT]: outputCurrency ?? undefined,
+  };
+
+  let inputError: string | undefined;
+  if (!account) {
+    inputError = `Connect Wallet`;
+  }
+
+  if (!parsedAmount) {
+    inputError = inputError ?? `Enter an amount`;
+  }
+
+  if (!currencies[SwapField.INPUT] || !currencies[SwapField.OUTPUT]) {
+    inputError = inputError ?? `Select a token`;
+  }
+
+  const toggledTrade = trade.trade ?? undefined;
+
+  const tickAfterSwap =
+    trade.priceAfterSwap &&
+    TickMath.getTickAtSqrtRatio(
+      JSBI.BigInt(
+        trade.priceAfterSwap[trade.priceAfterSwap.length - 1].toString()
+      )
+    );
+
+  const allowedSlippage = useSwapSlippageTolerance(toggledTrade);
+
+  const [balanceIn, amountIn] = [
+    currencyBalances[SwapField.INPUT],
+    toggledTrade?.maximumAmountIn(allowedSlippage), // TODO: check if this is correct
+  ];
+
+  if (balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
+    inputError = `Insufficient ${amountIn.currency.symbol} balance`;
+  }
+
+  const isWrap =
+    currencies.INPUT &&
+    currencies.OUTPUT &&
+    currencies.INPUT.wrapped.equals(currencies.OUTPUT.wrapped);
+
+  const poolAddress = isWrap
+    ? undefined
+    : currencies[SwapField.INPUT] &&
+      currencies[SwapField.OUTPUT] &&
+      (computePoolAddress({
+        tokenA: currencies[SwapField.INPUT]!.wrapped,
+        tokenB: currencies[SwapField.OUTPUT]!.wrapped,
+      }).toLowerCase() as Address);
+
+  const { data: globalState } = useReadAlgebraPoolGlobalState({
+    address: poolAddress,
+  });
+
+  const { data: tickSpacing } = useReadAlgebraPoolTickSpacing({
+    address: poolAddress,
+  });
+
+  return {
+    currencies,
+    currencyBalances,
+    parsedAmount,
+    inputError,
+    tradeState: trade,
+    toggledTrade,
+    tickAfterSwap,
+    allowedSlippage,
+    poolFee: globalState && globalState[2],
+    tick: globalState && globalState[1],
+    tickSpacing: tickSpacing,
+    poolAddress,
+  };
+}
+
+export function useDerivedSwapInfoWithoutSwapState({
+  inputCurrencyId,
+  outputCurrencyId,
+  independentField,
+  typedValue,
+}: {
+  inputCurrencyId: Address | undefined;
+  outputCurrencyId: Address | undefined;
+  independentField: SwapFieldType;
+  typedValue: string;
+}): {
+  currencies: { [field in SwapFieldType]?: Currency };
+  currencyBalances: { [field in SwapFieldType]?: CurrencyAmount<Currency> };
+  parsedAmount: CurrencyAmount<Currency> | undefined;
+  inputError?: string;
+  tradeState: {
+    trade: Trade<Currency, Currency, TradeType> | null;
+    state: TradeStateType;
+    fee?: bigint[] | null;
+  };
+  toggledTrade: Trade<Currency, Currency, TradeType> | undefined;
+  tickAfterSwap: number | null | undefined;
+  allowedSlippage: Percent;
+  poolFee: number | undefined;
+  tick: number | undefined;
+  tickSpacing: number | undefined;
+  poolAddress: Address | undefined;
+} {
+  const { address: account } = useAccount();
+
+  const inputCurrency = useCurrency(inputCurrencyId);
+  const outputCurrency = useCurrency(outputCurrencyId);
+
+  const isExactIn: boolean = independentField === SwapField.INPUT;
+  const parsedAmount = useMemo(
+    () =>
+      tryParseAmount(
+        typedValue,
+        (isExactIn ? inputCurrency : outputCurrency) ?? undefined
+      ),
+    [typedValue, isExactIn, inputCurrency, outputCurrency]
+  );
+
+  const bestTradeExactIn = useBestTradeExactIn(
+    isExactIn ? parsedAmount : undefined,
+    outputCurrency ?? undefined
+  );
+
+  const bestTradeExactOut = useBestTradeExactOut(
+    inputCurrency ?? undefined,
+    !isExactIn ? parsedAmount : undefined
+  );
+
+  const trade = (isExactIn ? bestTradeExactIn : bestTradeExactOut) ?? undefined;
+
+  // console.log(
+  //   'trade.trade?.inputAmount.toSignificant(2)',
+  //   trade.trade?.inputAmount.toSignificant(2)
+  // );
+  // console.log(
+  //   'trade.trade?.outputAmount.toSignificant(2)',
+  //   trade.trade?.outputAmount.toSignificant(2)
+  // );
+
+  const [addressA, addressB] = [
+    inputCurrency?.isNative ? undefined : inputCurrency?.address || '',
+    outputCurrency?.isNative ? undefined : outputCurrency?.address || '',
   ] as Address[];
 
   const { data: inputCurrencyBalance } = useBalance({

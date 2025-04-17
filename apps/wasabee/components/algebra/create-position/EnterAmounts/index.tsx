@@ -1,13 +1,14 @@
-import { useNeedAllowance } from "@/lib/algebra/hooks/common/useNeedAllowance";
-import { Currency, Field } from "@cryptoalgebra/sdk";
-import { useEffect, useMemo } from "react";
-import EnterAmountCard from "../EnterAmountsCard";
-import { ALGEBRA_POSITION_MANAGER } from "@/config/algebra/addresses";
+import { useNeedAllowance } from '@/lib/algebra/hooks/common/useNeedAllowance';
+import { Currency, Field } from '@cryptoalgebra/sdk';
+import { useEffect, useMemo } from 'react';
+import EnterAmountCard from '../EnterAmountsCard';
 import {
   IDerivedMintInfo,
   useMintState,
   useMintActionHandlers,
-} from "@/lib/algebra/state/mintStore";
+} from '@/lib/algebra/state/mintStore';
+import { useObserver } from 'mobx-react-lite';
+import { wallet } from '@honeypot/shared';
 
 interface EnterAmountsProps {
   currencyA: Currency | undefined;
@@ -25,6 +26,9 @@ const EnterAmounts = ({
   setUseNative,
 }: EnterAmountsProps) => {
   const { independentField, typedValue } = useMintState();
+  const ALGEBRA_POSITION_MANAGER = useObserver(
+    () => wallet.currentChain.contracts.algebraPositionManager
+  );
 
   const { onFieldAInput, onFieldBInput } = useMintActionHandlers(
     mintInfo.noLiquidity
@@ -33,7 +37,7 @@ const EnterAmounts = ({
   const formattedAmounts = {
     [independentField]: typedValue,
     [mintInfo.dependentField]:
-      mintInfo.parsedAmounts[mintInfo.dependentField]?.toSignificant(6) ?? "",
+      mintInfo.parsedAmounts[mintInfo.dependentField]?.toSignificant(6) ?? '',
   };
 
   const currencyAError = useMemo(() => {
@@ -44,7 +48,7 @@ const EnterAmounts = ({
     )
       return;
 
-    const erroredToken = mintInfo.errorMessage.split(" ")[1];
+    const erroredToken = mintInfo.errorMessage.split(' ')[1];
     const erroredSymbol = currencyA.isNative
       ? currencyA.symbol
       : currencyA.wrapped.symbol;
@@ -62,7 +66,7 @@ const EnterAmounts = ({
     )
       return;
 
-    const erroredToken = mintInfo.errorMessage.split(" ")[1];
+    const erroredToken = mintInfo.errorMessage.split(' ')[1];
 
     if (currencyB.wrapped.symbol === erroredToken) return mintInfo.errorMessage;
 
@@ -83,8 +87,8 @@ const EnterAmounts = ({
 
   useEffect(() => {
     return () => {
-      onFieldAInput("");
-      onFieldBInput("");
+      onFieldAInput('');
+      onFieldBInput('');
     };
   }, []);
 

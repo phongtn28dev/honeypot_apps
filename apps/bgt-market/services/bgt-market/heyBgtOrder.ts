@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { wallet } from '../wallet';
+import { wallet } from '@honeypot/shared';
 import { get, makeAutoObservable, reaction, runInAction } from 'mobx';
 import { Address, formatEther, getContract, zeroAddress } from 'viem';
 import { ContractWrite } from '../utils';
@@ -7,10 +7,9 @@ import { amountFormatted } from '@/lib/format';
 import { ERC20ABI } from '@/lib/abis/erc20';
 import { faucetABI } from '@/lib/abis/faucet';
 import { watchAsset } from 'viem/actions';
-import { networksMap } from '../network';
+import { networksMap } from '@honeypot/shared';
 import { WrappedToastify } from '@/lib/wrappedToastify';
 import { trpcClient } from '@/lib/trpc';
-import NetworkManager from '../network';
 import { getSingleTokenData } from '@/lib/algebra/graphql/clients/token';
 import {
   Order,

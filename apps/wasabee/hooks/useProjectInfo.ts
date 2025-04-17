@@ -1,6 +1,6 @@
-import { trpcClient } from "@/lib/trpc";
-import { useEffect, useState } from "react";
-import { wallet } from "@/services/wallet";
+import { trpcClient } from '@/lib/trpc';
+import { useEffect, useState } from 'react';
+import { wallet } from '@honeypot/shared';
 
 interface ProjectInfo {
   id?: number;
@@ -33,7 +33,7 @@ export const useProjectInfo = (pairId: string) => {
           setProjectInfo(res);
         }
       } catch (error) {
-        console.error("Failed to fetch project info:", error);
+        console.error('Failed to fetch project info:', error);
       } finally {
         setLoading(false);
       }

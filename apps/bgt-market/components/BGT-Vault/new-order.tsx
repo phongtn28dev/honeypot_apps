@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { HoneyContainer } from '@/components/CardContianer';
 import { WarppedNextSelect } from '@/components/wrappedNextUI/Select/Select';
 import { SelectItem } from '@nextui-org/react';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { Address, formatEther, parseEther, zeroAddress } from 'viem';
 import { simulateContract } from 'viem/actions';
 import { useEffect, useMemo, useState } from 'react';

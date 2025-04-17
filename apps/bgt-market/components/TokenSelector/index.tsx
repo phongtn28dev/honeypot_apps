@@ -6,25 +6,26 @@ import {
   Divider,
   useDisclosure,
   Link,
-} from "@nextui-org/react";
-import { DropdownSvg } from "../svg/dropdown";
-import { IoSearchOutline } from "react-icons/io5";
-import { IoClose } from "react-icons/io5";
-import { Token } from "@/services/contract/token";
-import { Observer, observer, useLocalObservable } from "mobx-react-lite";
-import { liquidity } from "@/services/liquidity";
-import { useEffect } from "react";
-import { isEthAddress } from "@/lib/address";
-import { useAccount } from "wagmi";
-import { Input } from "../input/index";
-import { SpinnerContainer } from "../Spinner";
-import { NoData } from "../table";
-import { Copy } from "../Copy/index";
-import { BiLinkExternal } from "react-icons/bi";
-import { wallet } from "@/services/wallet";
-import TokenLogo from "../TokenLogo/TokenLogo";
-import TruncateMarkup from "react-truncate-markup";
-import { motion } from "framer-motion";
+} from '@nextui-org/react';
+import { DropdownSvg } from '../svg/dropdown';
+import { IoSearchOutline } from 'react-icons/io5';
+import { IoClose } from 'react-icons/io5';
+
+import { Token } from '@honeypot/shared';
+import { Observer, observer, useLocalObservable } from 'mobx-react-lite';
+import { liquidity } from '@/services/liquidity';
+import { useEffect } from 'react';
+import { isEthAddress } from '@/lib/address';
+import { useAccount } from 'wagmi';
+import { Input } from '../input/index';
+import { SpinnerContainer } from '../Spinner';
+import { NoData } from '../table';
+import { Copy } from '../Copy/index';
+import { BiLinkExternal } from 'react-icons/bi';
+import { wallet } from '@honeypot/shared';
+import TokenLogo from '../TokenLogo/TokenLogo';
+import TruncateMarkup from 'react-truncate-markup';
+import { motion } from 'framer-motion';
 
 type TokenSelectorProps = {
   onSelect: (token: Token) => void;
@@ -36,7 +37,7 @@ export const TokenSelector = observer(
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isConnected } = useAccount();
     const state = useLocalObservable(() => ({
-      search: "",
+      search: '',
       setSearch(value: string) {
         state.search = value.trim();
       },
@@ -76,7 +77,7 @@ export const TokenSelector = observer(
         state.filterLoading = false;
       },
       tokens: [] as Token[],
-      currentAnimationVariant: "initial",
+      currentAnimationVariant: 'initial',
     }));
     const animationVariants = {
       dropDownIcon: {
@@ -94,10 +95,10 @@ export const TokenSelector = observer(
       <motion.div
         className="flex items-center group"
         onHoverStart={() => {
-          state.currentAnimationVariant = "hover";
+          state.currentAnimationVariant = 'hover';
         }}
         onHoverEnd={() => {
-          state.currentAnimationVariant = "initial";
+          state.currentAnimationVariant = 'initial';
         }}
       >
         {value && (
@@ -120,18 +121,18 @@ export const TokenSelector = observer(
           classNames={{
             base: [
               // arrow color
-              "before:bg-default-200",
+              'before:bg-default-200',
             ],
             content: [
-              "py-3 px-4 border border-default-200",
-              "bg-gradient-to-br from-white to-default-300",
-              "dark:from-default-100 dark:to-default-50",
+              'py-3 px-4 border border-default-200',
+              'bg-gradient-to-br from-white to-default-300',
+              'dark:from-default-100 dark:to-default-50',
             ],
           }}
         >
           <PopoverTrigger
             onClick={() => {
-              state.setSearch("");
+              state.setSearch('');
             }}
           >
             <Button className="inline-flex max-w-full justify-between h-10 items-center shrink-0 border [background:#3E2A0F] px-2.5 py-0 rounded-[30px] border-solid border-[rgba(247,147,26,0.10)]">
@@ -145,7 +146,7 @@ export const TokenSelector = observer(
               )}
               <TruncateMarkup>
                 <span className="shrink overflow-clip text-ellipsis h-4">
-                  {value?.displayName ? value.displayName : "Select Token"}
+                  {value?.displayName ? value.displayName : 'Select Token'}
                 </span>
               </TruncateMarkup>
               <motion.div
@@ -166,7 +167,7 @@ export const TokenSelector = observer(
                       placeholder="Search token by symbol or address"
                       // className=" bg-transparent"
                       onClear={() => {
-                        state.setSearch("");
+                        state.setSearch('');
                       }}
                       onChange={(e) => {
                         state.setSearch(e.target.value);

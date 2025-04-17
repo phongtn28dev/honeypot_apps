@@ -1,19 +1,19 @@
-import { exec } from "~/lib/contract";
-import { BaseContract } from "./..";
-import { wallet } from "@/services/wallet";
-import { Signer, ethers } from "ethers";
-import { Contract } from "ethcall";
-import BigNumber from "bignumber.js";
-import { makeAutoObservable } from "mobx";
-import { get } from "http";
-import { getContract } from "viem";
-import { algebraBasePluginAbi } from "@/wagmi-generated";
-import { ContractWrite } from "@/services/utils";
-import { usePublicClient } from "wagmi";
+import { exec } from '~/lib/contract';
+import { BaseContract } from './..';
+import { wallet } from '@honeypot/shared';
+import { Signer, ethers } from 'ethers';
+import { Contract } from 'ethcall';
+import BigNumber from 'bignumber.js';
+import { makeAutoObservable } from 'mobx';
+import { get } from 'http';
+import { getContract } from 'viem';
+import { algebraBasePluginAbi } from '@/wagmi-generated';
+import { ContractWrite } from '@/services/utils';
+import { usePublicClient } from 'wagmi';
 
 export class AlgebraBasePluginContract implements BaseContract {
-  address = "";
-  name: string = "";
+  address = '';
+  name: string = '';
   abi = algebraBasePluginAbi;
 
   constructor(args: Partial<AlgebraBasePluginContract>) {

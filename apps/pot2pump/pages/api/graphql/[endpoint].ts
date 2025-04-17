@@ -1,13 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { cacheProvider, getCacheKey } from '@/lib/server/cache';
+import { DEFAULT_CHAIN_ID, subgraphAddresses } from '@honeypot/shared';
 
-const CACHE_TTL = 10; // 缓存时间，单位秒
-
-const GRAPHQL_ENDPOINTS = {
-  info: process.env.NEXT_PUBLIC_INFO_GRAPH,
-  blocks: process.env.NEXT_PUBLIC_BLOCKS_GRAPH,
-  farming: process.env.NEXT_PUBLIC_FARMING_GRAPH,
-};
+type ENDPOINTS = 'info' | 'farming';
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,10 +11,17 @@ export default async function handler(
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
+  const chainId = DEFAULT_CHAIN_ID;
+  const { endpoint } = req.query as {
+    endpoint: ENDPOINTS;
+  };
 
-  const { endpoint } = req.query;
-  const graphqlEndpoint =
-    GRAPHQL_ENDPOINTS[endpoint as keyof typeof GRAPHQL_ENDPOINTS];
+  let graphqlEndpoint: string | undefined;
+  if (endpoint === 'info') {
+    graphqlEndpoint = subgraphAddresses[chainId].algebra_info;
+  } else if (endpoint === 'farming') {
+    graphqlEndpoint = subgraphAddresses[chainId].algebra_farming;
+  }
 
   if (!graphqlEndpoint) {
     return res.status(400).json({ message: 'Invalid endpoint' });

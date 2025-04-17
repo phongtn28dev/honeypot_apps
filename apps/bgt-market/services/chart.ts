@@ -1,27 +1,28 @@
-import { action, makeAutoObservable, reaction } from "mobx";
-import { Token } from "./contract/token";
-import { PairContract } from "./contract/dex/liquidity/pair-contract";
-import { AsyncState } from "./utils";
-import { ChartDataResponse, resolutionType } from "./priceFeed/priceFeedTypes";
-import { wallet } from "./wallet";
-import { trpcClient } from "@/lib/trpc";
-import { dayjs } from "@/lib/dayjs";
-import { AlgebraPoolContract } from "./contract/algebra/algebra-pool-contract";
+import { action, makeAutoObservable, reaction } from 'mobx';
 
-type Range = "5M" | "15M" | "30M" | "4H" | "1D";
+import { Token } from '@honeypot/shared';
+import { PairContract } from './contract/dex/liquidity/pair-contract';
+import { AsyncState } from './utils';
+import { ChartDataResponse, resolutionType } from './priceFeed/priceFeedTypes';
+import { wallet } from '@honeypot/shared';
+import { trpcClient } from '@/lib/trpc';
+import { dayjs } from '@/lib/dayjs';
+import { AlgebraPoolContract } from './contract/algebra/algebra-pool-contract';
+
+type Range = '5M' | '15M' | '30M' | '4H' | '1D';
 
 export const chartColorThemes = {
   default: {
-    textColor: "white",
-    labelColor: "orange",
+    textColor: 'white',
+    labelColor: 'orange',
   },
   green: {
-    textColor: "white",
-    labelColor: "#43D9A3",
+    textColor: 'white',
+    labelColor: '#43D9A3',
   },
   red: {
-    textColor: "white",
-    labelColor: "red",
+    textColor: 'white',
+    labelColor: 'red',
   },
 };
 
@@ -32,30 +33,30 @@ export const chartTimeRanges: {
     resolution: resolutionType;
   };
 } = {
-  "5M": {
-    label: "5M",
+  '5M': {
+    label: '5M',
     value: dayjs().unix() - 60 * 5 * 10,
-    resolution: "1",
+    resolution: '1',
   },
-  "15M": {
-    label: "15M",
+  '15M': {
+    label: '15M',
     value: dayjs().unix() - 60 * 15 * 10,
-    resolution: "5",
+    resolution: '5',
   },
-  "30M": {
-    label: "30M",
+  '30M': {
+    label: '30M',
     value: dayjs().unix() - 60 * 30 * 10,
-    resolution: "15",
+    resolution: '15',
   },
-  "4H": {
-    label: "4H",
+  '4H': {
+    label: '4H',
     value: dayjs().unix() - 60 * 60 * 4 * 10,
-    resolution: "30",
+    resolution: '30',
   },
-  "1D": {
-    label: "1D",
+  '1D': {
+    label: '1D',
     value: dayjs().unix() - 60 * 60 * 24 * 10,
-    resolution: "60",
+    resolution: '60',
   },
 };
 
@@ -65,10 +66,10 @@ class Chart {
   chartTarget: Token | PairContract | AlgebraPoolContract | undefined =
     undefined;
   tokenNumber: 0 | 1 = 0;
-  currencyCode: "USD" | "TOKEN" = "USD";
-  range: Range = "5M";
+  currencyCode: 'USD' | 'TOKEN' = 'USD';
+  range: Range = '5M';
   chartColors = chartColorThemes.default;
-  chartLabel = "";
+  chartLabel = '';
   chartData = new AsyncState<
     () => Promise<ChartDataResponse | undefined>,
     ChartDataResponse | undefined
@@ -91,7 +92,7 @@ class Chart {
 
     this.isLoading = false;
 
-    if (priceDataRequest.status === "error") {
+    if (priceDataRequest.status === 'error') {
       return undefined;
     } else {
       return priceDataRequest.data;
@@ -199,13 +200,13 @@ class Chart {
       tokenAddress: this.chartTarget.address,
       from: dayjs().unix() - 60,
       to: dayjs().unix(),
-      resolution: "1",
+      resolution: '1',
       tokenNumber: this.tokenNumber,
       currencyCode: this.currencyCode,
     });
 
     if (
-      newestPrice.status === "success" &&
+      newestPrice.status === 'success' &&
       newestPrice.data?.getBars?.c[0] !== undefined
     ) {
       this.chartData.value?.getBars.c.push(
@@ -232,7 +233,7 @@ class Chart {
     this.tokenNumber = value;
   }
 
-  setCurrencyCode(value: "USD" | "TOKEN") {
+  setCurrencyCode(value: 'USD' | 'TOKEN') {
     this.currencyCode = value;
   }
 
@@ -240,7 +241,7 @@ class Chart {
     this.chartLabel = value;
   }
 
-  setChartColors(value: "default" | "green" | "red") {
+  setChartColors(value: 'default' | 'green' | 'red') {
     this.chartColors = chartColorThemes[value];
   }
 }

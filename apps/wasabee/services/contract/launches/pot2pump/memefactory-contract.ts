@@ -1,14 +1,14 @@
-import { BaseContract } from "@/services/contract";
-import { wallet } from "@/services/wallet";
-import { Address, getContract } from "viem";
-import { makeAutoObservable } from "mobx";
-import { ContractWrite, AsyncState } from "@/services/utils";
-import { MemeFactoryABI } from "@/lib/abis/MemeFactory";
-import { pot2PumpFactoryABI } from "@/lib/abis/Pot2Pump/pot2PumpFactory";
+import { BaseContract } from '@/services/contract';
+import { wallet } from '@honeypot/shared';
+import { Address, getContract } from 'viem';
+import { makeAutoObservable } from 'mobx';
+import { ContractWrite, AsyncState } from '@/services/utils';
+import { MemeFactoryABI } from '@/lib/abis/MemeFactory';
+import { pot2PumpFactoryABI } from '@/lib/abis/Pot2Pump/pot2PumpFactory';
 
 export class MemeFactoryContract implements BaseContract {
-  address = "";
-  name: string = "";
+  address = '';
+  name: string = '';
   abi = pot2PumpFactoryABI;
   constructor(args: Partial<MemeFactoryContract>) {
     Object.assign(this, args);
@@ -29,7 +29,7 @@ export class MemeFactoryContract implements BaseContract {
 
   get createPair() {
     return new ContractWrite(this.contract.write.createPair, {
-      action: "Create MEME Project",
+      action: 'Create MEME Project',
       isSuccessEffect: true,
     });
   }

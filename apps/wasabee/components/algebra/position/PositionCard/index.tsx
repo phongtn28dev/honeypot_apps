@@ -127,7 +127,14 @@ const PositionCard = ({
     collect(collectConfig.request);
   };
 
-  if (!selectedPosition || loading) return null;
+  if (!selectedPosition || loading)
+    return (
+      <div className="flex flex-col gap-4 rounded-3xl p-4 bg-white border border-[#F7931A20] w-full h-full">
+        <div className="flex flex-col gap-2 text-center justify-center items-center h-full">
+          Select a position to view details
+        </div>
+      </div>
+    );
 
   return (
     <div className="flex flex-col gap-4 rounded-3xl p-4 bg-white border border-[#F7931A20]">

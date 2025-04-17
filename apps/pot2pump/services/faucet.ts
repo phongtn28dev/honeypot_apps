@@ -1,6 +1,6 @@
-import { makeAutoObservable } from "mobx";
-import { wallet } from "./wallet";
-import { NativeFaucetContract } from "./contract/faucet-contract";
+import { makeAutoObservable } from 'mobx';
+import { wallet } from '@honeypot/shared';
+import { NativeFaucetContract } from './contract/faucet-contract';
 
 class fauset {
   nativeFaucet: NativeFaucetContract | undefined = undefined;

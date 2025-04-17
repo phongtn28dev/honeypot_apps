@@ -7,26 +7,27 @@ import {
   useDisclosure,
   Link,
   Tooltip,
-} from "@nextui-org/react";
-import { IoSearchOutline } from "react-icons/io5";
-import { IoClose } from "react-icons/io5";
-import { Token } from "@/services/contract/token";
-import { Observer, observer, useLocalObservable } from "mobx-react-lite";
-import { liquidity } from "@/services/liquidity";
-import { useCallback, useEffect, useState } from "react";
-import { isEthAddress } from "@/lib/address";
-import { Input } from "../../input/index";
-import { SpinnerContainer } from "../../Spinner";
-import { NoData } from "../../table";
-import { Copy } from "../../Copy/index";
-import { BiLinkExternal } from "react-icons/bi";
-import { wallet } from "@/services/wallet";
-import TokenLogo from "../../TokenLogo/TokenLogo";
-import TruncateMarkup from "react-truncate-markup";
-import { motion } from "framer-motion";
-import { ChevronDown } from "lucide-react";
-import Image from "next/image";
-import pot2pumpIcon from "@/public/images/bera/smoking_bera.png";
+} from '@nextui-org/react';
+import { IoSearchOutline } from 'react-icons/io5';
+import { IoClose } from 'react-icons/io5';
+
+import { Token } from '@honeypot/shared';
+import { Observer, observer, useLocalObservable } from 'mobx-react-lite';
+import { liquidity } from '@/services/liquidity';
+import { useCallback, useEffect, useState } from 'react';
+import { isEthAddress } from '@/lib/address';
+import { Input } from '../../input/index';
+import { SpinnerContainer } from '../../Spinner';
+import { NoData } from '../../table';
+import { Copy } from '../../Copy/index';
+import { BiLinkExternal } from 'react-icons/bi';
+import { wallet } from '@honeypot/shared';
+import TokenLogo from '../../TokenLogo/TokenLogo';
+import TruncateMarkup from 'react-truncate-markup';
+import { motion } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
+import Image from 'next/image';
+import pot2pumpIcon from '@/public/images/bera/smoking_bera.png';
 
 type TokenSelectorProps = {
   onSelect: (token: Token) => void;
@@ -44,7 +45,7 @@ export const TokenSelector = observer(
   }: TokenSelectorProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const state = useLocalObservable(() => ({
-      search: "",
+      search: '',
       setSearch(value: string) {
         state.search = value.trim();
       },
@@ -83,7 +84,7 @@ export const TokenSelector = observer(
         state.filterLoading = false;
       },
       tokens: [] as Token[],
-      currentAnimationVariant: "initial",
+      currentAnimationVariant: 'initial',
     }));
 
     const animationVariants = {
@@ -107,10 +108,10 @@ export const TokenSelector = observer(
       <motion.div
         className="flex items-center group"
         onHoverStart={() => {
-          state.currentAnimationVariant = "hover";
+          state.currentAnimationVariant = 'hover';
         }}
         onHoverEnd={() => {
-          state.currentAnimationVariant = "initial";
+          state.currentAnimationVariant = 'initial';
         }}
       >
         <Popover
@@ -122,19 +123,19 @@ export const TokenSelector = observer(
           classNames={{
             base: [
               // arrow color
-              "before:bg-default-200",
+              'before:bg-default-200',
             ],
             content: [
-              "py-3 px-4 border border-default-200",
-              "bg-gradient-to-br from-white to-default-300",
-              "dark:from-default-100 dark:to-default-50",
+              'py-3 px-4 border border-default-200',
+              'bg-gradient-to-br from-white to-default-300',
+              'dark:from-default-100 dark:to-default-50',
             ],
           }}
           isTriggerDisabled={disableSelection}
         >
           <PopoverTrigger
             onClick={() => {
-              state.setSearch("");
+              state.setSearch('');
             }}
           >
             <Button className="inline-flex max-w-full justify-between h-10 items-center shrink-0 bg-transparent px-2.5 py-0 rounded-[30px] text-black">
@@ -148,7 +149,7 @@ export const TokenSelector = observer(
               )}
               <TruncateMarkup>
                 <span className="shrink overflow-clip text-ellipsis h-4">
-                  {value?.displayName ? value.displayName : "Select Token"}
+                  {value?.displayName ? value.displayName : 'Select Token'}
                 </span>
               </TruncateMarkup>
               {!disableSelection && (
@@ -171,7 +172,7 @@ export const TokenSelector = observer(
                       placeholder="Search token by symbol or address"
                       // className=" bg-transparent"
                       onClear={() => {
-                        state.setSearch("");
+                        state.setSearch('');
                       }}
                       onChange={(e) => {
                         state.setSearch(e.target.value);
@@ -305,10 +306,7 @@ export const TokenSelector = observer(
             >
               <BiLinkExternal className=" cursor-pointer text-[#140E06]" />
             </Link>
-            <Copy
-              value={value.address}
-              className="size-4 text-[#140E06]"
-            />
+            <Copy value={value.address} className="size-4 text-[#140E06]" />
             {value.pot2pumpAddress && (
               <Tooltip content="This token is launched on Pot2Pump">
                 <Link href={`/launch-detail/${value.address}`}>

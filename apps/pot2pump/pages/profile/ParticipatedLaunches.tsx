@@ -1,17 +1,17 @@
-import { observer } from "mobx-react-lite";
-import { useState, useEffect } from "react";
-import { Pot2PumpService } from "@/services/launchpad/pot2pump";
-import { wallet } from "@/services/wallet";
-import { Tab, Tabs } from "@nextui-org/react";
-import Pagination from "@/components/Pagination/Pagination";
-import { LaunchCardV3 } from "@/components/LaunchCard/v3";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
+import { observer } from 'mobx-react-lite';
+import { useState, useEffect } from 'react';
+import { Pot2PumpService } from '@/services/launchpad/pot2pump';
+import { wallet } from '@honeypot/shared';
+import { Tab, Tabs } from '@nextui-org/react';
+import Pagination from '@/components/Pagination/Pagination';
+import { LaunchCardV3 } from '@/components/LaunchCard/v3';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
 import {
   canClaimPot2Pump,
   canRefundPot2Pump,
-} from "@/lib/algebra/graphql/clients/pot2pump";
-import { Button } from "@/components/algebra/ui/button";
-import { Address } from "viem";
+} from '@/lib/algebra/graphql/clients/pot2pump';
+import { Button } from '@/components/algebra/ui/button';
+import { Address } from 'viem';
 
 export const ParticipatedLaunches = observer(() => {
   const [myProjects, setMyProjects] = useState<Pot2PumpService>();
@@ -100,13 +100,13 @@ export const ParticipatedLaunches = observer(() => {
       </div>
       <Tabs
         classNames={{
-          base: "relative w-full",
+          base: 'relative w-full',
           tabList:
-            "flex rounded-2xl border border-[#202020] bg-white p-4 shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020] py-2 px-3.5 mb-6 ml-auto z-10",
+            'flex rounded-2xl border border-[#202020] bg-white p-4 shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020] py-2 px-3.5 mb-6 ml-auto z-10',
           cursor:
-            "bg-[#FFCD4D] border border-black shadow-[2px_2px_0px_0px_#000000] text-sm",
-          panel: "w-full",
-          tabContent: "!text-[#202020]",
+            'bg-[#FFCD4D] border border-black shadow-[2px_2px_0px_0px_#000000] text-sm',
+          panel: 'w-full',
+          tabContent: '!text-[#202020]',
         }}
       >
         <Tab key="participated" title="Participated">
@@ -122,10 +122,10 @@ export const ParticipatedLaunches = observer(() => {
                 />
               )}
               classNames={{
-                base: "",
+                base: '',
                 itemsContainer:
-                  "grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:gap-6",
-                item: "",
+                  'grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:gap-6',
+                item: '',
               }}
             />
           )}

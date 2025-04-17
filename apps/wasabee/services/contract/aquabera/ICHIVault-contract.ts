@@ -1,12 +1,13 @@
 import { BaseContract } from './..';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { makeAutoObservable } from 'mobx';
 import { Address, getContract, zeroAddress } from 'viem';
 import { ICHIVaultABI } from '@/lib/abis/aquabera/ICHIVault';
 import { writeContract } from 'viem/actions';
 import { ContractWrite } from '@/services/utils';
 import BigNumber from 'bignumber.js';
-import { Token } from '../token';
+
+import { Token } from '@honeypot/shared';
 import { PairContract } from '../dex/liquidity/pair-contract';
 import { VaultDeposit } from '@/lib/algebra/graphql/generated/graphql';
 import { VaultWithdraw } from '@/lib/algebra/graphql/generated/graphql';
@@ -49,17 +50,20 @@ export class ICHIVaultContract implements BaseContract {
   name: string = 'ICHIVault';
   abi = ICHIVaultABI;
   fee = 0;
-  totalAmountsWithoutDecimal: { total0: bigint; total1: bigint } = {
-    total0: BigInt(0),
-    total1: BigInt(0),
+  totalAmountsWithoutDecimal: {
+    total0: bigint | undefined;
+    total1: bigint | undefined;
+  } = {
+    total0: undefined,
+    total1: undefined,
   };
   token0: Token | undefined = undefined;
   token1: Token | undefined = undefined;
   allowToken0: boolean = false;
   allowToken1: boolean = false;
-  totalsupplyShares: bigint = BigInt(0);
-  userShares: bigint = BigInt(0);
-  holderCount: bigint = BigInt(0);
+  totalsupplyShares: bigint | undefined = undefined;
+  userShares: bigint | undefined = undefined;
+  holderCount: bigint | undefined = undefined;
   isInitialized: boolean = false;
   transactionPending: boolean = false;
   approvedToken0: BigInt = BigInt(0);
@@ -104,11 +108,6 @@ export class ICHIVaultContract implements BaseContract {
   }
 
   get userTokenAmountsWithoutDecimal() {
-    console.log({
-      totalsupplyShares: this.totalsupplyShares,
-      userShares: this.userShares,
-      totalAmountsWithoutDecimal: this.totalAmountsWithoutDecimal,
-    });
     if (
       !this.totalsupplyShares ||
       !this.userShares ||
@@ -116,7 +115,7 @@ export class ICHIVaultContract implements BaseContract {
       this.totalAmountsWithoutDecimal.total1 === undefined
     )
       return { total0: 0, total1: 0 };
-    console.log('is ok');
+
     return {
       total0:
         (this.totalAmountsWithoutDecimal.total0 * this.userShares) /
@@ -165,6 +164,13 @@ export class ICHIVaultContract implements BaseContract {
   }
 
   async getTotalAmounts() {
+    if (
+      this.totalAmountsWithoutDecimal.total0 !== undefined &&
+      this.totalAmountsWithoutDecimal.total1 !== undefined
+    ) {
+      return this.totalAmountsWithoutDecimal;
+    }
+
     const totalAmounts = await this.contract.read.getTotalAmounts();
     this.totalAmountsWithoutDecimal = {
       total0: BigInt(totalAmounts[0]),
@@ -177,8 +183,12 @@ export class ICHIVaultContract implements BaseContract {
     if (!this.contract) {
       return;
     }
+    if (this.token0 !== undefined) return this.token0;
     const token0 = await this.contract.read.token0();
-    this.token0 = Token.getToken({ address: token0 });
+    this.token0 = Token.getToken({
+      address: token0,
+      chainId: wallet.currentChainId.toString(),
+    });
     return this.token0;
   }
 
@@ -186,12 +196,17 @@ export class ICHIVaultContract implements BaseContract {
     if (!this.contract) {
       return;
     }
+    if (this.token1 !== undefined) return this.token1;
     const token1 = await this.contract.read.token1();
-    this.token1 = Token.getToken({ address: token1 });
+    this.token1 = Token.getToken({
+      address: token1,
+      chainId: wallet.currentChainId.toString(),
+    });
     return this.token1;
   }
 
   async getTotalSupply() {
+    if (this.totalsupplyShares !== undefined) return this.totalsupplyShares;
     if (!this.contract) {
       return;
     }

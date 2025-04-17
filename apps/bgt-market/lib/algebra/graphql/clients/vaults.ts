@@ -1,5 +1,4 @@
-import { ICHIVaultContract } from "@/services/contract/aquabera/ICHIVault-contract";
-import { infoClient } from ".";
+import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
 import {
   AccountVaultSharesDocument,
   AccountVaultSharesQuery,
@@ -10,16 +9,19 @@ import {
   SingleVaultDetailsDocument,
   SingleVaultDetailsQuery,
   IchiVault,
-} from "../generated/graphql";
+} from '../generated/graphql';
 import {
   ACCOUNT_VAULT_SHARES,
   VAULTS_SORTED_BY_HOLDERS,
   SINGLE_VAULT_DETAILS,
-} from "../queries/vaults";
-import { Address } from "viem";
-import { Token } from "@/services/contract/token";
-import { poolQueryToContract } from "./pool";
-import BigNumber from "bignumber.js";
+} from '../queries/vaults';
+import { Address } from 'viem';
+
+import { Token } from '@honeypot/shared';
+import { poolQueryToContract } from './pool';
+import BigNumber from 'bignumber.js';
+import { getSubgraphClientByChainId } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared';
 
 export const vaultQueryResToVaultContract = (
   vault: IchiVault
@@ -56,6 +58,10 @@ export const vaultQueryResToVaultContract = (
 export async function getAccountVaultsList(
   accountAddress: string
 ): Promise<AccountVaultSharesQuery> {
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   console.log(AccountVaultSharesDocument);
 
   const vaults = await infoClient.query<AccountVaultSharesQuery>({
@@ -74,10 +80,14 @@ export async function getVaultPageData(
   search?: string
 ): Promise<VaultsSortedByHoldersQuery> {
   console.log(VAULTS_SORTED_BY_HOLDERS);
+  const infoClient = getSubgraphClientByChainId(
+    wallet.currentChainId.toString(),
+    'algebra_info'
+  );
   const vaults = await infoClient.query<VaultsSortedByHoldersQuery>({
     query: VaultsSortedByHoldersDocument,
     variables: {
-      search: search ?? "",
+      search: search ?? '',
     },
   });
 
@@ -88,6 +98,10 @@ export async function getSingleVaultDetails(
   vaultId: string
 ): Promise<ICHIVaultContract | null> {
   try {
+    const infoClient = getSubgraphClientByChainId(
+      wallet.currentChainId.toString(),
+      'algebra_info'
+    );
     const result = await infoClient.query<SingleVaultDetailsQuery>({
       query: SingleVaultDetailsDocument,
       variables: {
@@ -96,13 +110,13 @@ export async function getSingleVaultDetails(
     });
 
     if (!result.data) {
-      throw new Error("No data returned from query");
+      throw new Error('No data returned from query');
     }
 
     // Add data validation and transformation here if needed
     return vaultQueryResToVaultContract(result.data.ichiVault as IchiVault);
   } catch (error) {
-    console.error("Error fetching vault details:", error);
+    console.error('Error fetching vault details:', error);
     // Return an empty or default response structure
     return null;
   }

@@ -1,16 +1,16 @@
-import { Textarea } from "@nextui-org/react";
-import { Button } from "@/components/button/button-next";
-import { CommentCard } from "../CommentCard/CommentCard";
-import CardContainer from "@/components/CardContianer/CardContianer";
-import Image from "next/image";
-import { trpcClient } from "@/lib/trpc";
-import { wallet } from "@/services/wallet";
-import { useEffect, useState, useCallback, useRef } from "react";
-import { LoadingDisplay } from "@/components/LoadingDisplay/LoadingDisplay";
-import { useRouter } from "next/router";
-import { cn } from "@/lib/tailwindcss";
-import dayjs from "dayjs";
-import { WrappedToastify } from "@/lib/wrappedToastify";
+import { Textarea } from '@nextui-org/react';
+import { Button } from '@/components/button/button-next';
+import { CommentCard } from '../CommentCard/CommentCard';
+import CardContainer from '@/components/CardContianer/CardContianer';
+import Image from 'next/image';
+import { trpcClient } from '@/lib/trpc';
+import { wallet } from '@honeypot/shared';
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';
+import { useRouter } from 'next/router';
+import { cn } from '@/lib/tailwindcss';
+import dayjs from 'dayjs';
+import { WrappedToastify } from '@/lib/wrappedToastify';
 
 interface DiscussionAreaProps {
   pairDatabaseId: number;
@@ -22,7 +22,7 @@ interface DiscussionAreaProps {
 
 export function DiscussionArea(props: DiscussionAreaProps) {
   const router = useRouter();
-  const [userComment, setUserComment] = useState("");
+  const [userComment, setUserComment] = useState('');
   const [comments, setComments] = useState<
     {
       id: number;
@@ -44,24 +44,28 @@ export function DiscussionArea(props: DiscussionAreaProps) {
 
   const timeoutId = useRef<NodeJS.Timeout | null>(null);
 
-  const continueFetchComments = useCallback(async (afterId: number) => {
-    const res = await trpcClient.discussionRouter.getCommentsByProjectId.query({
-      project_id: props.pairDatabaseId ?? -1,
-      afterId: afterId,
-    });
+  const continueFetchComments = useCallback(
+    async (afterId: number) => {
+      const res =
+        await trpcClient.discussionRouter.getCommentsByProjectId.query({
+          project_id: props.pairDatabaseId ?? -1,
+          afterId: afterId,
+        });
 
-    if (res && res.length > 0) {
-      setComments((prev) => {
-        const newArr = [...res, ...prev];
-        return newArr;
-      });
-    }
+      if (res && res.length > 0) {
+        setComments((prev) => {
+          const newArr = [...res, ...prev];
+          return newArr;
+        });
+      }
 
-    timeoutId.current = setTimeout(() => {
-      if (window.location.pathname !== router.asPath.toString()) return;
-      continueFetchComments(res?.[0]?.id ?? afterId);
-    }, 2000);
-  }, [props.pairDatabaseId, router.asPath]);
+      timeoutId.current = setTimeout(() => {
+        if (window.location.pathname !== router.asPath.toString()) return;
+        continueFetchComments(res?.[0]?.id ?? afterId);
+      }, 2000);
+    },
+    [props.pairDatabaseId, router.asPath]
+  );
 
   const startFetchComments = useCallback(async () => {
     setState((prevState) => ({
@@ -72,6 +76,7 @@ export function DiscussionArea(props: DiscussionAreaProps) {
       project_id: props.pairDatabaseId ?? -1,
       limit: 10,
     });
+    console.log('startFetchComments res', res);
 
     if (res) {
       setComments(res);
@@ -133,31 +138,31 @@ export function DiscussionArea(props: DiscussionAreaProps) {
 
   return (
     <CardContainer
-      addtionalClassName={cn(props.classNames?.container, "bg-[#202020]")}
+      addtionalClassName={cn(props.classNames?.container, 'bg-[#202020]')}
     >
       <div
         className={cn(
-          "flex-col w-full ",
+          'flex-col w-full ',
           props.isSide &&
-            " max-h-[100vh] grid grid-rows-[100px_300px_1fr] gap-2"
+            ' max-h-[100vh] grid grid-rows-[100px_300px_1fr] gap-2'
         )}
       >
         <h2 className="text-[2rem] font-bold">Discussion Board</h2>
         <div
           className={cn(
-            "grid grid-cols-1 lg:grid-cols-[1fr_200px] w-full min-h-[300px] justify-center items-center",
-            props.isSide && "!grid-cols-1"
+            'grid grid-cols-1 lg:grid-cols-[1fr_200px] w-full min-h-[300px] justify-center items-center',
+            props.isSide && '!grid-cols-1'
           )}
         >
           <Textarea
             maxRows={15}
             label="Leave a Comment!"
             classNames={{
-              base: "w-full h-full bg-[#262626] border border-[#FFCD4D] rounded-2xl overflow-hidden",
-              inputWrapper: "w-full !h-full z-1",
-              input: "w-full h-full",
-              mainWrapper: "w-full h-full bg-[#2F200B] hover:bg-[#2F200B] z-1",
-              label: "text-[#FFCD4D] text-base font-bold leading-[normal] z-1",
+              base: 'w-full h-full bg-[#262626] border border-[#FFCD4D] rounded-2xl overflow-hidden',
+              inputWrapper: 'w-full !h-full z-1',
+              input: 'w-full h-full',
+              mainWrapper: 'w-full h-full bg-[#2F200B] hover:bg-[#2F200B] z-1',
+              label: 'text-[#FFCD4D] text-base font-bold leading-[normal] z-1',
             }}
             value={userComment}
             onChange={(e) => setUserComment(e.target.value)}
@@ -165,27 +170,27 @@ export function DiscussionArea(props: DiscussionAreaProps) {
           <div className="flex gap-2 flex-col pl-5 justify-around items-center h-full">
             <Image
               className={cn(
-                "hidden lg:block w-[200px]",
-                props.isSide && "!hidden"
+                'hidden lg:block w-[200px]',
+                props.isSide && '!hidden'
               )}
-              src={"/images/bera/smoking_bera.png"}
+              src={'/images/bera/smoking_bera.png'}
               width={200}
               height={200}
               alt=""
-            ></Image>{" "}
+            ></Image>{' '}
             <Button
               isDisabled={state.commenting}
               isLoading={state.commenting}
               onClick={async () => {
                 if (!wallet.account) {
                   WrappedToastify.warn({
-                    message: "Please connect your wallet",
+                    message: 'Please connect your wallet',
                   });
                   return;
                 }
 
                 if (userComment.length === 0) {
-                  WrappedToastify.warn({ message: "Comment can not be empty" });
+                  WrappedToastify.warn({ message: 'Comment can not be empty' });
                   return;
                 }
 
@@ -204,10 +209,10 @@ export function DiscussionArea(props: DiscussionAreaProps) {
                   });
 
                 if (res) {
-                  setUserComment("");
-                  WrappedToastify.success({ message: "Comment successfully" });
+                  setUserComment('');
+                  WrappedToastify.success({ message: 'Comment successfully' });
                 } else {
-                  WrappedToastify.error({ message: "Failed to comment" });
+                  WrappedToastify.error({ message: 'Failed to comment' });
                 }
 
                 setState({
@@ -226,7 +231,7 @@ export function DiscussionArea(props: DiscussionAreaProps) {
           </div>
         ) : (
           <div
-            className={cn("w-full my-2", props.isSide && "overflow-y-scroll")}
+            className={cn('w-full my-2', props.isSide && 'overflow-y-scroll')}
           >
             {/** comment cards */}
             {comments?.map((comment) => (

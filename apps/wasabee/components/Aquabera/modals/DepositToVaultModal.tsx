@@ -2,10 +2,11 @@ import { Modal, ModalContent, ModalHeader, ModalBody } from '@nextui-org/modal';
 import { Button } from '@/components/button/button-next';
 import { useCallback, useState } from 'react';
 import { ICHIVaultContract } from '@/services/contract/aquabera/ICHIVault-contract';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { Address, maxInt256 } from 'viem';
 import TokenCardV3 from '@/components/algebra/swap/TokenCard/TokenCardV3';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { Currency, tryParseAmount } from '@cryptoalgebra/sdk';
 import { useBalance } from 'wagmi';
 import {

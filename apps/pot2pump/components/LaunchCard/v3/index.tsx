@@ -1,41 +1,41 @@
-import { FtoPairContract } from "@/services/contract/launches/fto/ftopair-contract";
-import { observer } from "mobx-react-lite";
-import Link from "next/link";
-import { HTMLAttributes, useEffect } from "react";
-import { cn } from "@/lib/tailwindcss";
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { itemPopUpVariants } from "@/lib/animation";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
-import ProgressBar from "../../atoms/ProgressBar/ProgressBar";
-import BigNumber from "bignumber.js";
-import { wallet } from "@/services/wallet";
+import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
+import { observer } from 'mobx-react-lite';
+import Link from 'next/link';
+import { HTMLAttributes, useEffect } from 'react';
+import { cn } from '@/lib/tailwindcss';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { itemPopUpVariants } from '@/lib/animation';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
+import ProgressBar from '../../atoms/ProgressBar/ProgressBar';
+import BigNumber from 'bignumber.js';
+import { wallet } from '@honeypot/shared';
 import {
   LaunchProgress,
   FtoProjectActions,
   MemeProjectActions,
-} from "./components";
+} from './components';
 import {
   DynamicFormatAmount,
   formatAmountWithAlphabetSymbol,
   formatAmountWithScientificNotation,
-} from "@/lib/algebra/utils/common/formatAmount";
-import { Button } from "@/components/button/button-next";
-import { PottingModalButton } from "@/components/atoms/Pot2PumpComponents/PottingModalButton";
-import { PumpingModalButton } from "@/components/atoms/Pot2PumpComponents/PumpingModalButton";
+} from '@/lib/algebra/utils/common/formatAmount';
+import { Button } from '@/components/button/button-next';
+import { PottingModalButton } from '@/components/atoms/Pot2PumpComponents/PottingModalButton';
+import { PumpingModalButton } from '@/components/atoms/Pot2PumpComponents/PumpingModalButton';
 import {
   getLaunchContractType,
   LaunchContract,
   LaunchContractType,
-} from "@/services/contract/launches/base-launch-contract";
-import { DynamicStringWrapper } from "@/components/atoms/DynamicStringWrapper/DynamicStringWrapper";
+} from '@/services/contract/launches/base-launch-contract';
+import { DynamicStringWrapper } from '@/components/atoms/DynamicStringWrapper/DynamicStringWrapper';
 
 export type launchCardVariants =
-  | "list"
-  | "detail"
-  | "trending"
-  | "simple"
-  | "featured";
+  | 'list'
+  | 'detail'
+  | 'trending'
+  | 'simple'
+  | 'featured';
 
 export const LaunchCardComponentContainer = ({
   children,
@@ -47,7 +47,7 @@ export const LaunchCardComponentContainer = ({
   return (
     <div
       className={cn(
-        "flex flex-col items-center gap-1 odd:last:col-span-2",
+        'flex flex-col items-center gap-1 odd:last:col-span-2',
         className
       )}
     >
@@ -79,22 +79,22 @@ const DetailLaunchCard = observer(
     pair,
     type,
     action,
-    theme = "light",
+    theme = 'light',
   }: // projectType,
   {
     pair: LaunchContract;
     action: React.ReactNode;
     // projectType: LaunchContractType;
     type: launchCardVariants;
-    theme?: "light" | "dark";
+    theme?: 'light' | 'dark';
   }) => {
     return (
       <div
         className={cn(
           "flex flex-col h-full justify-between gap-y-4 bg-white px-4 py-6 rounded-3xl relative overflow-hidden bg-[url('/images/card-container/honey/top-border.svg')] bg-[length:auto_24px] bg-left-top bg-repeat-x pt-6",
-          theme === "dark"
-            ? "shadow-[1px_3px_0px_0px_#202020] border-[#202020] border-[1.5px]"
-            : "shadow-[2px_2px_0px_0px_#FFCD4D] border-none"
+          theme === 'dark'
+            ? 'shadow-[1px_3px_0px_0px_#202020] border-[#202020] border-[1.5px]'
+            : 'shadow-[2px_2px_0px_0px_#FFCD4D] border-none'
         )}
       >
         {/* <OptionsDropdown
@@ -136,13 +136,10 @@ const DetailLaunchCard = observer(
               height={48}
               objectFit="cover"
               className="rounded-full max-h-12"
-              src={!!pair.logoUrl ? pair.logoUrl : "/images/empty-logo.png"}
+              src={!!pair.logoUrl ? pair.logoUrl : '/images/empty-logo.png'}
             />
           </div>
-          <LaunchProgress
-            pair={pair}
-            className="my-3"
-          />
+          <LaunchProgress pair={pair} className="my-3" />
           <div className="grid grid-cols-3 gap-2 text-black justify-start">
             {/* <div>
               <p className="text-xs opacity-60">Total Raised Token</p>
@@ -166,7 +163,7 @@ const DetailLaunchCard = observer(
                   <span>
                     {pair?.participantsCount
                       ? pair.participantsCount.toFormat(0)
-                      : "-"}
+                      : '-'}
                   </span>
                 </p>
               </div>
@@ -178,19 +175,19 @@ const DetailLaunchCard = observer(
                 <p className="font-semibold">
                   <span className="">
                     {DynamicFormatAmount({
-                      amount: pair.userDepositedRaisedToken?.toString() ?? "0",
+                      amount: pair.userDepositedRaisedToken?.toString() ?? '0',
                       decimals: 2,
-                      // endWith: pair.raiseToken?.symbol,
+                      endWith: pair.raiseToken?.symbol,
                     })}
-                  </span>{" "}
+                  </span>{' '}
                   (
                   <span>
                     {DynamicFormatAmount({
                       amount:
                         pair.userDepositedRaisedTokenUSDAmount?.toString() ??
-                        "0",
+                        '0',
                       decimals: 2,
-                      endWith: "$",
+                      endWith: '$',
                     })}
                   </span>
                   )
@@ -200,14 +197,14 @@ const DetailLaunchCard = observer(
 
             {pair.state === 0 && (
               <>
-                {" "}
+                {' '}
                 <div>
                   <p className="text-xs opacity-60">Token Holders</p>
                   <p className="font-semibold">
                     <span>
                       {pair?.launchedToken?.holderCount
                         ? pair.launchedToken.holderCount
-                        : "--"}
+                        : '--'}
                     </span>
                   </p>
                 </div>
@@ -217,7 +214,7 @@ const DetailLaunchCard = observer(
                     <span>
                       {pair?.launchedToken?.poolCount
                         ? pair.launchedToken.poolCount
-                        : "--"}
+                        : '--'}
                     </span>
                   </p>
                 </div>
@@ -228,10 +225,10 @@ const DetailLaunchCard = observer(
                       {pair?.launchedToken?.volumeUSD
                         ? DynamicFormatAmount({
                             amount: Number(pair.launchedToken.volumeUSD),
-                            beginWith: "$",
+                            beginWith: '$',
                             decimals: 3,
                           })
-                        : "--"}
+                        : '--'}
                     </span>
                   </p>
                 </div>
@@ -245,10 +242,10 @@ const DetailLaunchCard = observer(
                               pair.raisedandLaunchTokenPairPool
                                 ?.totalValueLockedUSD
                             ),
-                            beginWith: "$",
+                            beginWith: '$',
                             decimals: 3,
                           })
-                        : "--"}
+                        : '--'}
                     </span>
                   </p>
                 </div>
@@ -259,10 +256,10 @@ const DetailLaunchCard = observer(
                       {pair?.launchedToken?.derivedUSD
                         ? DynamicFormatAmount({
                             amount: Number(pair.launchedToken.derivedUSD),
-                            beginWith: "$",
+                            beginWith: '$',
                             decimals: 3,
                           })
-                        : "--"}
+                        : '--'}
                     </span>
                   </p>
                 </div>
@@ -273,11 +270,11 @@ const DetailLaunchCard = observer(
                       className={cn(
                         Number(pair?.launchedToken?.priceChange24hPercentage) >
                           1
-                          ? "text-green-500"
-                          : "text-red-500",
+                          ? 'text-green-500'
+                          : 'text-red-500',
                         Number(
                           pair?.launchedToken?.priceChange24hPercentage
-                        ) === 0 && "text-black"
+                        ) === 0 && 'text-black'
                       )}
                     >
                       {pair?.launchedToken?.priceChange24hPercentage &&
@@ -287,7 +284,7 @@ const DetailLaunchCard = observer(
                               pair?.launchedToken?.priceChange24hPercentage
                             ) ?? 0,
                           decimals: 2,
-                          endWith: "%",
+                          endWith: '%',
                         })}
                     </span>
                   </p>
@@ -320,9 +317,9 @@ const TrendingLaunchCard = observer(
     pair: LaunchContract;
     projectType: LaunchContractType;
   }) => {
-    if (getLaunchContractType(pair) === "lbp") return <></>;
-    else if (getLaunchContractType(pair) === "fto") return <></>;
-    else if (getLaunchContractType(pair) === "meme") {
+    if (getLaunchContractType(pair) === 'lbp') return <></>;
+    else if (getLaunchContractType(pair) === 'fto') return <></>;
+    else if (getLaunchContractType(pair) === 'meme') {
       return (
         <Link
           className="flex flex-col gap-y-4 bg-white px-4 py-6 border-none rounded-3xl shadow-[2px_2px_0px_0px_#925425] relative overflow-hidden"
@@ -338,7 +335,7 @@ const TrendingLaunchCard = observer(
             src={
               !!pair.bannerUrl
                 ? pair.bannerUrl
-                : "/images/pumping/trade-card-bg.png"
+                : '/images/pumping/trade-card-bg.png'
             }
           />
           <div className="text-[#202020]">
@@ -357,7 +354,7 @@ const TrendingLaunchCard = observer(
                 height={48}
                 objectFit="cover"
                 className="rounded-full"
-                src={!!pair.logoUrl ? pair.logoUrl : "/images/empty-logo.png"}
+                src={!!pair.logoUrl ? pair.logoUrl : '/images/empty-logo.png'}
               />
             </div>
 
@@ -369,7 +366,7 @@ const TrendingLaunchCard = observer(
                     ? (pair as MemePairContract).depositedRaisedToken?.toFormat(
                         0
                       )
-                    : "-"}
+                    : '-'}
                 </span>
                 <span>
                   {(pair as MemePairContract).raisedTokenMinCap &&
@@ -415,7 +412,7 @@ const TrendingLaunchCard = observer(
                         )
                         .times(100)
                         .toFixed(2)
-                    : "-"}{" "}
+                    : '-'}{' '}
                   %
                 </span>
               </div>
@@ -428,19 +425,19 @@ const TrendingLaunchCard = observer(
 );
 
 const SimpleLaunchCard = observer(
-  ({ pair, theme }: { pair: LaunchContract; theme: "light" | "dark" }) => {
-    if (getLaunchContractType(pair) === "lbp") return <></>;
-    else if (getLaunchContractType(pair) === "fto") return <></>;
-    else if (getLaunchContractType(pair) === "meme") {
+  ({ pair, theme }: { pair: LaunchContract; theme: 'light' | 'dark' }) => {
+    if (getLaunchContractType(pair) === 'lbp') return <></>;
+    else if (getLaunchContractType(pair) === 'fto') return <></>;
+    else if (getLaunchContractType(pair) === 'meme') {
       return (
         <div className="relative group">
           <Link
             href={`/launch-detail/${pair?.launchedToken?.address}`}
             className={cn(
-              "flex flex-col text-sm gap-y-1 bg-white px-4 py-6  rounded-3xl relative transition-all duration-100 overflow-hidden cursor-pointer",
-              theme === "dark"
-                ? "shadow-[1px_3px_0px_0px_#202020] border-[#202020] border-[1.5px]"
-                : "shadow-[2px_2px_0px_0px_#FFCD4D] hover:bg-[#ffe6a8] border-none"
+              'flex flex-col text-sm gap-y-1 bg-white px-4 py-6  rounded-3xl relative transition-all duration-100 overflow-hidden cursor-pointer',
+              theme === 'dark'
+                ? 'shadow-[1px_3px_0px_0px_#202020] border-[#202020] border-[1.5px]'
+                : 'shadow-[2px_2px_0px_0px_#FFCD4D] hover:bg-[#ffe6a8] border-none'
             )}
           >
             <div className="bg-[url('/images/card-container/honey/top-border.svg')] bg-[length:auto_24px] bg-repeat-x pt-6 h-6 absolute top-0 left-0 w-full bg-left-top"></div>
@@ -452,20 +449,20 @@ const SimpleLaunchCard = observer(
                   height={100}
                   objectFit="cover"
                   className="rounded-full"
-                  src={!!pair.logoUrl ? pair.logoUrl : "/images/empty-logo.png"}
+                  src={!!pair.logoUrl ? pair.logoUrl : '/images/empty-logo.png'}
                 />
               </div>
               <div className="grid grid-cols-2 gap-2 flex-grow-[1] text-[#202020]">
                 <div className="flex flex-col gap-y-2">
                   <h3 className="font-bold text-md">
                     <DynamicStringWrapper
-                      string={pair?.launchedToken?.name ?? ""}
+                      string={pair?.launchedToken?.name ?? ''}
                       maxLength={10}
                     />
                   </h3>
                   <p className="text-sm text-[#202020]/[0.67]">
                     <DynamicStringWrapper
-                      string={pair?.launchedToken?.symbol ?? ""}
+                      string={pair?.launchedToken?.symbol ?? ''}
                       maxLength={10}
                     />
                   </p>
@@ -474,17 +471,17 @@ const SimpleLaunchCard = observer(
                   <div>
                     {pair.state === 3 &&
                       pair?.participantsCount &&
-                      pair.participantsCount.toFormat(0) + " Participants"}
+                      pair.participantsCount.toFormat(0) + ' Participants'}
                     {pair.state === 0 &&
                       pair?.launchedToken?.holderCount &&
-                      pair?.launchedToken?.holderCount + " Holders"}
+                      pair?.launchedToken?.holderCount + ' Holders'}
                   </div>
                   {pair.state === 0 && (
                     <div className="font-bold text-lg whitespace-nowrap">
                       {DynamicFormatAmount({
-                        amount: pair.launchedToken?.derivedUSD ?? "0",
+                        amount: pair.launchedToken?.derivedUSD ?? '0',
                         decimals: 3,
-                        endWith: "$",
+                        endWith: '$',
                       })}
                     </div>
                   )}
@@ -515,7 +512,7 @@ const SimpleLaunchCard = observer(
                     </span>
                   </span> */}
                     <span>
-                      Change 24h:{" "}
+                      Change 24h:{' '}
                       <span
                         className={cn(
                           Number(
@@ -524,16 +521,16 @@ const SimpleLaunchCard = observer(
                             Number(
                               pair?.launchedToken?.priceChange24hPercentage
                             ) > 0
-                            ? "text-green-500"
-                            : "text-red-500"
+                            ? 'text-green-500'
+                            : 'text-red-500'
                         )}
                       >
                         {DynamicFormatAmount({
                           amount:
                             pair?.launchedToken?.priceChange24hPercentage ??
-                            "0",
+                            '0',
                           decimals: 2,
-                          endWith: "%",
+                          endWith: '%',
                         })}
                       </span>
                     </span>
@@ -554,12 +551,12 @@ const SimpleLaunchCard = observer(
                   <p className="font-semibold">
                     <span>
                       {pair?.launchedToken?.volumeUSD
-                        ? "$ " +
+                        ? '$ ' +
                           formatAmountWithAlphabetSymbol(
-                            pair.launchedToken?.volumeUSD ?? "0",
+                            pair.launchedToken?.volumeUSD ?? '0',
                             5
                           )
-                        : "--"}
+                        : '--'}
                     </span>
                   </p>
                 </div>
@@ -568,27 +565,27 @@ const SimpleLaunchCard = observer(
                   <p className="font-semibold">
                     <span>
                       {pair?.raisedandLaunchTokenPairPool?.totalValueLockedUSD
-                        ? "$ " +
+                        ? '$ ' +
                           formatAmountWithAlphabetSymbol(
                             pair.raisedandLaunchTokenPairPool
-                              ?.totalValueLockedUSD ?? "0",
+                              ?.totalValueLockedUSD ?? '0',
                             5
                           )
-                        : "--"}
+                        : '--'}
                     </span>
                   </p>
-                </div>{" "}
+                </div>{' '}
                 <div className="text-xs ">
                   <p className="text-xs opacity-60">Market Cap</p>
                   <p className="font-semibold">
                     <span>
                       {pair?.launchedToken?.marketCap
-                        ? "$ " +
+                        ? '$ ' +
                           formatAmountWithAlphabetSymbol(
-                            pair.launchedToken?.marketCap?.toString() ?? "0",
+                            pair.launchedToken?.marketCap?.toString() ?? '0',
                             5
                           )
-                        : "--"}
+                        : '--'}
                     </span>
                   </p>
                 </div>
@@ -615,20 +612,20 @@ const SimpleLaunchCard = observer(
 );
 
 const FeaturedLaunchCard = observer(({ pair }: { pair: LaunchContract }) => {
-  if (getLaunchContractType(pair) === "lbp") return <></>;
-  else if (getLaunchContractType(pair) === "fto") return <></>;
-  else if (getLaunchContractType(pair) === "meme") {
+  if (getLaunchContractType(pair) === 'lbp') return <></>;
+  else if (getLaunchContractType(pair) === 'fto') return <></>;
+  else if (getLaunchContractType(pair) === 'meme') {
     return (
       <div className="flex min-h-[160px] bg-white p-2 sm:p-6 border-none shadow-[2px_2px_0px_0px_#FFCD4D] relative transition-all duration-100 rounded-lg sm:rounded-3xl sm:custom-dashed">
         <div className="flex flex-col sm:flex-row gap-6 w-full">
           <div className="flex flex-row gap-6">
             <Image
-              alt={pair?.launchedToken?.name || "logo"}
+              alt={pair?.launchedToken?.name || 'logo'}
               width={160}
               height={160}
               objectFit="cover"
               sizes="(max-width: 640px) 128px, 160px"
-              src={!!pair.logoUrl ? pair.logoUrl : "/images/empty-logo.png"}
+              src={!!pair.logoUrl ? pair.logoUrl : '/images/empty-logo.png'}
               className="border border-[#202020]/60 rounded-xl size-32 sm:size-40"
             />
             <div className="flex-1 flex-shrink-0 flex flex-col gap-y-2 sm:gap-y-4">
@@ -646,9 +643,9 @@ const FeaturedLaunchCard = observer(({ pair }: { pair: LaunchContract }) => {
                   <span className="text-[#202020]/60">Token Price: </span>
                   <span className="font-bold">
                     {DynamicFormatAmount({
-                      amount: pair.launchedToken?.derivedUSD ?? "0",
+                      amount: pair.launchedToken?.derivedUSD ?? '0',
                       decimals: 5,
-                      beginWith: "$",
+                      beginWith: '$',
                     })}
                   </span>
                 </div>
@@ -657,16 +654,16 @@ const FeaturedLaunchCard = observer(({ pair }: { pair: LaunchContract }) => {
                   <span className="text-[#202020]/60">Price Change(24h): </span>
                   <span
                     className={cn(
-                      "font-bold",
+                      'font-bold',
                       Number(pair?.launchedToken?.priceChange24hPercentage) &&
                         Number(pair?.launchedToken?.priceChange24hPercentage) >
                           0
-                        ? "text-green-500"
-                        : "text-red-500"
+                        ? 'text-green-500'
+                        : 'text-red-500'
                     )}
                   >
                     {formatAmountWithAlphabetSymbol(
-                      pair?.launchedToken?.priceChange24hPercentage ?? "0",
+                      pair?.launchedToken?.priceChange24hPercentage ?? '0',
                       2
                     )}
                     %
@@ -685,7 +682,7 @@ const FeaturedLaunchCard = observer(({ pair }: { pair: LaunchContract }) => {
                   </span>
                   <span className="font-bold">
                     {formatAmountWithAlphabetSymbol(
-                      pair.launchedToken?.marketCap?.toString() ?? "0",
+                      pair.launchedToken?.marketCap?.toString() ?? '0',
                       5
                     )}
                     $
@@ -724,10 +721,10 @@ const FeaturedLaunchCard = observer(({ pair }: { pair: LaunchContract }) => {
                     $
                     {pair?.launchedToken?.volumeUSD
                       ? formatAmountWithAlphabetSymbol(
-                          pair.launchedToken?.volumeUSD ?? "0",
+                          pair.launchedToken?.volumeUSD ?? '0',
                           5
                         )
-                      : "--"}
+                      : '--'}
                   </span>
                 </div>
 
@@ -740,10 +737,10 @@ const FeaturedLaunchCard = observer(({ pair }: { pair: LaunchContract }) => {
                     {pair?.raisedandLaunchTokenPairPool?.totalValueLockedUSD
                       ? formatAmountWithAlphabetSymbol(
                           pair.raisedandLaunchTokenPairPool
-                            ?.totalValueLockedUSD ?? "0",
+                            ?.totalValueLockedUSD ?? '0',
                           5
                         )
-                      : "--"}
+                      : '--'}
                   </span>
                 </div>
               </div>
@@ -784,16 +781,16 @@ export const LaunchCardV3 = observer(
     type,
     action,
     className,
-    theme = "light",
+    theme = 'light',
   }: {
     type?: launchCardVariants;
     pair?: LaunchContract | null;
     action: React.ReactNode;
-    theme?: "light" | "dark";
+    theme?: 'light' | 'dark';
   } & Partial<HTMLAttributes<any>>) => {
     const projectType: LaunchContractType = pair
       ? getLaunchContractType(pair)
-      : "meme";
+      : 'meme';
 
     useEffect(() => {
       if (pair) {
@@ -805,16 +802,16 @@ export const LaunchCardV3 = observer(
     return (
       <>
         {!wallet.currentChain?.blacklist?.memeBlacklist?.includes(
-          pair?.address?.toLowerCase() || ""
+          pair?.address?.toLowerCase() || ''
         ) ? (
           <motion.div
             initial="hidden"
             animate="visible"
             whileInView="visible"
             variants={itemPopUpVariants}
-            className={cn("w-full h-full", className)}
+            className={cn('w-full h-full', className)}
           >
-            {(!type || type === "detail") && pair && (
+            {(!type || type === 'detail') && pair && (
               // FIXME: height issue
               <DetailLaunchCard
                 pair={pair}
@@ -825,21 +822,15 @@ export const LaunchCardV3 = observer(
               />
             )}
 
-            {type === "list" && pair && <div>To be implemented</div>}
+            {type === 'list' && pair && <div>To be implemented</div>}
 
-            {type === "trending" && pair && (
-              <TrendingLaunchCard
-                pair={pair}
-                projectType={projectType}
-              />
+            {type === 'trending' && pair && (
+              <TrendingLaunchCard pair={pair} projectType={projectType} />
             )}
-            {type === "simple" && pair && (
-              <SimpleLaunchCard
-                pair={pair}
-                theme={theme}
-              />
+            {type === 'simple' && pair && (
+              <SimpleLaunchCard pair={pair} theme={theme} />
             )}
-            {type === "featured" && pair && <FeaturedLaunchCard pair={pair} />}
+            {type === 'featured' && pair && <FeaturedLaunchCard pair={pair} />}
           </motion.div>
         ) : (
           <></>

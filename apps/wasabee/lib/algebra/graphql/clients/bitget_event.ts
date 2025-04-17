@@ -1,4 +1,3 @@
-import { infoClient } from '.';
 import {
   BitgetCampaignParticipant,
   GetBitgetEventsParticipantListDocument,
@@ -11,18 +10,31 @@ import {
 } from '../generated/graphql';
 import { isAddress } from 'viem';
 import { zeroAddress } from 'viem';
+import {
+  getSubgraphClientByChainId,
+  useSubgraphClient,
+} from '@honeypot/shared';
+import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
+import { wallet } from '@honeypot/shared';
+import { ApolloClient } from '@apollo/client';
 
 const EVENT_REWARD_EACH_POOL = 400; //BERA
 
 export function useBitgetEvents(user: string) {
+  const infoClient = useSubgraphClient('algebra_info');
+
   const tokenQuery = useGetBitgetEventsQuery({
     variables: { user },
+    client: infoClient,
   });
+
+  console.log('tokenQuery', tokenQuery.data);
 
   return tokenQuery.data?.bitgetCampaigns[0];
 }
 
-export async function getFullBitgetEventsParticipantList() {
+export async function getFullBitgetEventsParticipantList(chainId: string) {
+  const client = getSubgraphClientByChainId(chainId, 'algebra_info');
   let hasMore = true;
   let skip = 0;
   const participants: BitgetCampaignParticipant[] = [];
@@ -36,7 +48,7 @@ export async function getFullBitgetEventsParticipantList() {
   > = {};
 
   while (hasMore) {
-    const tokenQuery = await infoClient.query<
+    const tokenQuery = await client.query<
       GetBitgetEventsParticipantListQuery,
       GetBitgetEventsParticipantListQueryVariables
     >({
@@ -86,8 +98,11 @@ export async function getFullBitgetEventsParticipantList() {
   return output;
 }
 
-export async function getSingleBitgetParticipantInfo(user: string) {
-  const tokenQuery = await infoClient.query<
+export async function getSingleBitgetParticipantInfo(
+  client: ApolloClient<any>,
+  user: string
+) {
+  const tokenQuery = await client.query<
     GetSingleBitgetParticipantInfoQuery,
     GetSingleBitgetParticipantInfoQueryVariables
   >({

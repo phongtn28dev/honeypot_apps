@@ -5,6 +5,7 @@ import {
   CurrencyAmount,
   maxAmountSpend,
   tryParseAmount,
+  WNATIVE,
 } from '@cryptoalgebra/sdk';
 import { useCallback, useMemo, useEffect } from 'react';
 import TokenCard from '../TokenCard';
@@ -21,10 +22,11 @@ import { SwapField, SwapFieldType } from '@/types/algebra/types/swap-field';
 import TokenCardV3 from '../TokenCard/TokenCardV3';
 import { ExchangeSvg } from '@/components/svg/exchange';
 import { chart } from '@/services/chart';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { AlgebraPoolContract } from '@/services/contract/algebra/algebra-pool-contract';
 
 interface SwapPairV3Props {
@@ -133,15 +135,13 @@ const SwapPairV3 = ({
   );
 
   const handleMaxInput = useCallback(() => {
-    console.log('maxInputAmount', maxInputAmount);
     maxInputAmount && onUserInput(SwapField.INPUT, maxInputAmount.toExact());
   }, [maxInputAmount, onUserInput]);
 
-  console.log('parsedAmounts', parsedAmounts);
   const fiatValueInputFormatted = useUSDCValue(
     tryParseAmount(
       parsedAmounts[SwapField.INPUT]?.toSignificant(
-        parsedAmounts[SwapField.INPUT]?.currency.decimals || 6
+        Math.floor((parsedAmounts[SwapField.INPUT]?.currency.decimals || 6) / 2)
       ),
       baseCurrency
     )
@@ -150,7 +150,9 @@ const SwapPairV3 = ({
   const fiatValueOutputFormatted = useUSDCValue(
     tryParseAmount(
       parsedAmounts[SwapField.OUTPUT]?.toSignificant(
-        parsedAmounts[SwapField.OUTPUT]?.currency.decimals || 6
+        Math.floor(
+          (parsedAmounts[SwapField.OUTPUT]?.currency.decimals || 6) / 2
+        )
       ),
       quoteCurrency
     )
@@ -163,8 +165,10 @@ const SwapPairV3 = ({
           independentField as keyof typeof parsedAmounts
         ]?.toExact() ?? ''
       : parsedAmounts[dependentField as keyof typeof parsedAmounts]?.toFixed(
-          parsedAmounts[dependentField as keyof typeof parsedAmounts]?.currency
-            .decimals || 6
+          Math.floor(
+            (parsedAmounts[dependentField as keyof typeof parsedAmounts]
+              ?.currency.decimals || 6) / 2
+          )
         ) ?? '',
   };
 
@@ -174,6 +178,7 @@ const SwapPairV3 = ({
         const token = Token.getToken({
           address: fromTokenAddress,
           isNative: isInputNative,
+          chainId: wallet.currentChainId.toString(),
         });
         // await token.init(false, {
         //   loadIndexerTokenData: true,
@@ -205,6 +210,7 @@ const SwapPairV3 = ({
         const token = Token.getToken({
           address: toTokenAddress,
           isNative: isOutputNative,
+          chainId: wallet.currentChainId.toString(),
         });
         // await token.init(false, {
         //   loadIndexerTokenData: true,
@@ -253,7 +259,10 @@ const SwapPairV3 = ({
       baseCurrency?.wrapped.address == quoteCurrency?.wrapped.address
     ) {
       chart.setChartLabel(`${baseCurrency.wrapped.symbol}`);
-      Token.getToken({ address: baseCurrency.wrapped.address })
+      Token.getToken({
+        address: baseCurrency.wrapped.address,
+        chainId: wallet.currentChainId.toString(),
+      })
         .init()
         .then((token) => {
           chart.setChartTarget(token);
@@ -279,7 +288,12 @@ const SwapPairV3 = ({
       });
     } else if (baseCurrency) {
       chart.setChartLabel(`${baseCurrency.symbol}`);
-      Token.getToken({ address: baseCurrency.wrapped.address })
+      console.log('baseCurrency', baseCurrency);
+      console.log('WNATIVE', WNATIVE);
+      Token.getToken({
+        address: baseCurrency.wrapped.address,
+        chainId: wallet.currentChainId.toString(),
+      })
         .init()
         .then((token) => {
           chart.setCurrencyCode('USD');
@@ -287,7 +301,10 @@ const SwapPairV3 = ({
         });
     } else if (quoteCurrency) {
       chart.setChartLabel(`${quoteCurrency.symbol}`);
-      Token.getToken({ address: quoteCurrency.wrapped.address })
+      Token.getToken({
+        address: quoteCurrency.wrapped.address,
+        chainId: wallet.currentChainId.toString(),
+      })
         .init()
         .then((token) => {
           chart.setCurrencyCode('USD');

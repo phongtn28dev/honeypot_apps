@@ -1,35 +1,35 @@
-import Link from "next/link";
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { observer } from "mobx-react-lite";
-import { wallet } from "@/services/wallet";
-import { Tab, Tabs } from "@nextui-org/react";
-import { NextLayoutPage } from "@/types/nextjs";
-import { useCallback, useEffect, useState } from "react";
-import { LaunchCardV3 } from "@/components/LaunchCard/v3";
-import { FaCrown } from "react-icons/fa";
-import Pagination from "@/components/Pagination/Pagination";
+import Link from 'next/link';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { observer } from 'mobx-react-lite';
+import { wallet } from '@honeypot/shared';
+import { Tab, Tabs } from '@nextui-org/react';
+import { NextLayoutPage } from '@/types/nextjs';
+import { useCallback, useEffect, useState } from 'react';
+import { LaunchCardV3 } from '@/components/LaunchCard/v3';
+import { FaCrown } from 'react-icons/fa';
+import Pagination from '@/components/Pagination/Pagination';
 import launchpad, {
   defaultPairFilters,
   PAGE_LIMIT,
-} from "@/services/launchpad";
-import { Filter } from "@/components/pot2pump/FilterModal";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
-import { defaultContainerVariants, itemPopUpVariants } from "@/lib/animation";
-import { Pot2PumpPottingService } from "@/services/launchpad/pot2pump/potting";
-import { Pot2PumpService } from "@/services/launchpad/pot2pump";
-import { WrappedNextInputSearchBar } from "@/components/wrappedNextUI/SearchBar/WrappedInputSearchBar";
-import { FilterState } from "@/constants/pot2pump.type";
-import { defaultFilterState } from "@/constants/pot2pump";
-import { hasValue, removeEmptyFields } from "@/lib/utils";
-import { Address } from "viem";
+} from '@/services/launchpad';
+import { Filter } from '@/components/pot2pump/FilterModal';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
+import { defaultContainerVariants, itemPopUpVariants } from '@/lib/animation';
+import { Pot2PumpPottingService } from '@/services/launchpad/pot2pump/potting';
+import { Pot2PumpService } from '@/services/launchpad/pot2pump';
+import { WrappedNextInputSearchBar } from '@/components/wrappedNextUI/SearchBar/WrappedInputSearchBar';
+import { FilterState } from '@/constants/pot2pump.type';
+import { defaultFilterState } from '@/constants/pot2pump';
+import { hasValue, removeEmptyFields } from '@/lib/utils';
+import { Address } from 'viem';
 import {
   canClaimPot2Pump,
   canRefundPot2Pump,
-} from "@/lib/algebra/graphql/clients/pot2pump";
-import { Button } from "@/components/button/v3";
-import { cn } from "@/lib/utils";
-import { chain } from "@/services/chain";
+} from '@/lib/algebra/graphql/clients/pot2pump';
+import { Button } from '@/components/button/v3';
+import { cn } from '@/lib/utils';
+import { chain } from '@honeypot/shared';
 
 const MemeLaunchPage: NextLayoutPage = observer(() => {
   const [pottingProjects, setPottingProjects] =
@@ -39,7 +39,7 @@ const MemeLaunchPage: NextLayoutPage = observer(() => {
     MemePairContract[] | null
   >(null);
   const [filters, setFilters] = useState<FilterState>(defaultFilterState);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [canClaimPot2PumpList, setCanClaimPot2PumpList] = useState<
     MemePairContract[]
   >([]);
@@ -61,7 +61,7 @@ const MemeLaunchPage: NextLayoutPage = observer(() => {
   }, [updateMostSuccessProjects]);
 
   useEffect(() => {
-    if (!chain.isInit) {
+    if (!wallet.isInit) {
       return;
     }
     const newProjects = new Pot2PumpPottingService();
@@ -70,9 +70,9 @@ const MemeLaunchPage: NextLayoutPage = observer(() => {
   }, []);
 
   useEffect(() => {
-    console.log("pottingProjects", pottingProjects);
+    console.log('pottingProjects', pottingProjects);
     if (pottingProjects) {
-      console.log("hasValue(filters)", hasValue(filters), filters);
+      console.log('hasValue(filters)', hasValue(filters), filters);
       if (hasValue(filters)) {
         pottingProjects.projectsPage.updateFilter({
           search: search.length > 0 ? search : undefined,
@@ -94,8 +94,8 @@ const MemeLaunchPage: NextLayoutPage = observer(() => {
   }, [filters, pottingProjects, search]);
 
   const onChangeFilter = (data: any) => {
-    console.log("onChangeFilter", data);
-    setSearch("");
+    console.log('onChangeFilter', data);
+    setSearch('');
     setFilters(data);
   };
 
@@ -126,21 +126,21 @@ const MemeLaunchPage: NextLayoutPage = observer(() => {
           <div className="flex flex-col">
             <div className="relative flex flex-row items-end justify-between">
               <Image
-                src={"/images/pumping/lying-bear.png"}
+                src={'/images/pumping/lying-bear.png'}
                 width={150}
                 height={0}
                 alt="lying bear"
                 className="w-20 sm:w-[150px]"
               />
               <Image
-                src={"/images/pumping/Trading.png"}
+                src={'/images/pumping/Trading.png'}
                 width={180}
                 height={0}
                 alt="Trading"
                 className="mb-4 sm:mb-8 absolute left-1/2 transform -translate-x-1/2 w-40 sm:w-[180px]"
               />
               <Image
-                src={"/images/pumping/victory-bear.png"}
+                src={'/images/pumping/victory-bear.png'}
                 width={240}
                 height={0}
                 alt="victory bear"
@@ -160,7 +160,7 @@ const MemeLaunchPage: NextLayoutPage = observer(() => {
                     variants={itemPopUpVariants}
                     key={pair.address}
                     className={
-                      "relative flex-1 " + (idx !== 0 && "hidden lg:block")
+                      'relative flex-1 ' + (idx !== 0 && 'hidden lg:block')
                     }
                   >
                     <motion.div
@@ -263,18 +263,18 @@ const MemeLaunchPage: NextLayoutPage = observer(() => {
                 filtersList={[
                   {
                     key: 2,
-                    label: "Participants Count",
-                    category: "participants",
+                    label: 'Participants Count',
+                    category: 'participants',
                   },
                   {
                     key: 3,
-                    label: "Pumping Percentage",
-                    category: "depositraisedtokenpercentage",
+                    label: 'Pumping Percentage',
+                    category: 'depositraisedtokenpercentage',
                   },
                   {
                     key: 4,
-                    label: "Token",
-                    category: "raiseToken",
+                    label: 'Token',
+                    category: 'raiseToken',
                   },
                 ]}
                 filters={filters}
@@ -299,24 +299,24 @@ const MemeLaunchPage: NextLayoutPage = observer(() => {
           <Tabs
             aria-label="Options"
             classNames={{
-              tabList: "bg-transparent",
-              tabContent: "text-xs sm:text-base p-0 sm:p-2",
+              tabList: 'bg-transparent',
+              tabContent: 'text-xs sm:text-base p-0 sm:p-2',
               tab: cn(
-                "rounded-md sm:rounded-lg",
-                "border-0 backdrop-blur-[100px]",
-                "flex flex-col items-center gap-1 sm:gap-2.5"
+                'rounded-md sm:rounded-lg',
+                'border-0 backdrop-blur-[100px]',
+                'flex flex-col items-center gap-1 sm:gap-2.5'
               ),
             }}
             className="next-tab"
             onSelectionChange={(key) => {
-              launchpad.setCurrentLaunchpadType("meme");
-              if (key === "all") {
+              launchpad.setCurrentLaunchpadType('meme');
+              if (key === 'all') {
                 launchpad.projectsPage.setIsInit(false);
                 launchpad.pairFilterStatus = defaultPairFilters.all.status;
-              } else if (key === "my") {
+              } else if (key === 'my') {
                 launchpad.myLaunches.setIsInit(false);
                 launchpad.pairFilterStatus = defaultPairFilters.myPairs.status;
-              } else if (key === "participated-launch") {
+              } else if (key === 'participated-launch') {
                 launchpad.participatedPairs.setIsInit(false);
                 launchpad.pairFilterStatus =
                   defaultPairFilters.participatedPairs.status;
@@ -337,7 +337,7 @@ const MemeLaunchPage: NextLayoutPage = observer(() => {
                   )}
                   classNames={{
                     itemsContainer:
-                      "grid gap-8 grid-cols-1 md:grid-cols-2 xl:gap-6 xl:grid-cols-3",
+                      'grid gap-8 grid-cols-1 md:grid-cols-2 xl:gap-6 xl:grid-cols-3',
                   }}
                 />
               )}
@@ -358,7 +358,7 @@ const MemeLaunchPage: NextLayoutPage = observer(() => {
                       )}
                       classNames={{
                         itemsContainer:
-                          "grid gap-8 grid-cols-1 md:grid-cols-2 xl:gap-6 xl:grid-cols-3",
+                          'grid gap-8 grid-cols-1 md:grid-cols-2 xl:gap-6 xl:grid-cols-3',
                       }}
                     />
                   )}
@@ -377,7 +377,7 @@ const MemeLaunchPage: NextLayoutPage = observer(() => {
                       )}
                       classNames={{
                         itemsContainer:
-                          "grid gap-8 grid-cols-1 md:grid-cols-2 xl:gap-6 xl:grid-cols-3",
+                          'grid gap-8 grid-cols-1 md:grid-cols-2 xl:gap-6 xl:grid-cols-3',
                       }}
                     />
                   )}

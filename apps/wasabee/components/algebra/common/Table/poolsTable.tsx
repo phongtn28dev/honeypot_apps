@@ -4,7 +4,8 @@ import { Search, Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Tab, Tabs, Tooltip } from '@nextui-org/react';
 import { popmodal } from '@/services/popmodal';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/algebra/ui/button';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
@@ -13,11 +14,11 @@ import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';
 import { formatExtremelyLargeNumber } from '@/lib/format';
 import { observer, useObserver } from 'mobx-react-lite';
-import { wallet } from '@/services/wallet';
+import { wallet } from '@honeypot/shared';
 import { formatUSD } from '@/lib/algebra/utils/common/formatUSD';
 import { optionsPresets } from '@/components/OptionsDropdown/OptionsDropdown';
 import { OptionsDropdown } from '@/components/OptionsDropdown/OptionsDropdown';
-import { TbSwitchHorizontal } from 'react-icons/tb';
+import { TbSwitch, TbSwitchHorizontal } from 'react-icons/tb';
 import { ChevronDown } from 'lucide-react';
 import { useBitgetEvents } from '@/lib/algebra/graphql/clients/bitget_event';
 import Image from 'next/image';
@@ -73,6 +74,11 @@ const PoolsTable = observer(
     const [sortField, setSortField] = useState<SortField>('tvl');
     const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
     const [page, setPage] = useState(1);
+
+    const filters = [
+      { key: 'trending', label: 'All Pools' },
+      { key: 'myPools', label: 'My Pools' },
+    ];
     const bitgetEventsData = useBitgetEvents(wallet.account.toLowerCase());
 
     const [tableData, setTableData] = useState<
@@ -214,8 +220,12 @@ const PoolsTable = observer(
                       popmodal.openModal({
                         content: (
                           <div className="p-6 bg-white rounded-2xl">
-                            <h2 className="text-xl font-bold mb-4 text-black">Connect Wallet</h2>
-                            <p className="text-black mb-4">Please connect your wallet to view your pools.</p>
+                            <h2 className="text-xl font-bold mb-4 text-black">
+                              Connect Wallet
+                            </h2>
+                            <p className="text-black mb-4">
+                              Please connect your wallet to view your pools.
+                            </p>
                             <div className="flex justify-end">
                               <Button
                                 className="border border-[#2D2D2D] bg-[#FFCD4D] hover:bg-[#FFD56A] text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-4 py-2"
@@ -234,16 +244,14 @@ const PoolsTable = observer(
                       return;
                     }
                     setSelectedFilter(key === 'all' ? 'trending' : 'myPools');
+                    setPage(1);
                   }}
                   defaultSelectedKey={
                     selectedFilter === 'trending' ? 'all' : 'myPools'
                   }
                 >
                   <Tab key="all" title="All Pools" />
-                  <Tab
-                    key="myPools"
-                    title="My Pools"
-                  />
+                  <Tab key="myPools" title="My Pools" />
                 </Tabs>
 
                 <div className="flex items-center gap-2">
@@ -345,10 +353,9 @@ const PoolsTable = observer(
           {!loading ? (
             getSortedPools().length === 0 ? (
               <div className="text-center py-8 text-black">
-                {selectedFilter === 'myPools' && wallet.account 
+                {selectedFilter === 'myPools' && wallet.account
                   ? "You don't have any pools yet. Create a pool to get started."
-                  : "No results found."
-                }
+                  : 'No results found.'}
               </div>
             ) : (
               getSortedPools().map((pool: Pool & { userTVLUSD: number }) => (
@@ -370,6 +377,7 @@ const PoolsTable = observer(
                         <TokenLogo
                           token={Token.getToken({
                             address: pool.pair.token0.id,
+                            chainId: wallet.currentChainId.toString(),
                           })}
                           addtionalClasses="translate-x-[25%]"
                           size={20}
@@ -377,6 +385,7 @@ const PoolsTable = observer(
                         <TokenLogo
                           token={Token.getToken({
                             address: pool.pair.token1.id,
+                            chainId: wallet.currentChainId.toString(),
                           })}
                           addtionalClasses="translate-x-[-25%]"
                           size={20}
@@ -509,10 +518,9 @@ const PoolsTable = observer(
                       colSpan={columns.length}
                       className="h-24 text-center text-black"
                     >
-                      {selectedFilter === 'myPools' && wallet.account 
+                      {selectedFilter === 'myPools' && wallet.account
                         ? "You don't have any pools yet. Create a pool to get started."
-                        : "No results found."
-                      }
+                        : 'No results found.'}
                     </td>
                   </tr>
                 ) : (
@@ -535,6 +543,7 @@ const PoolsTable = observer(
                               <TokenLogo
                                 token={Token.getToken({
                                   address: pool.pair.token0.id,
+                                  chainId: wallet.currentChainId.toString(),
                                 })}
                                 addtionalClasses="translate-x-[25%]"
                                 size={24}
@@ -542,6 +551,7 @@ const PoolsTable = observer(
                               <TokenLogo
                                 token={Token.getToken({
                                   address: pool.pair.token1.id,
+                                  chainId: wallet.currentChainId.toString(),
                                 })}
                                 addtionalClasses="translate-x-[-25%]"
                                 size={24}

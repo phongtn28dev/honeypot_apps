@@ -1,11 +1,16 @@
+import CurrencyLogo from '@/components/algebra/common/CurrencyLogo';
 import PageTitle from '@/components/algebra/common/PageTitle';
 import { Skeleton } from '@/components/algebra/ui/skeleton';
 import TokenLogo from '@/components/TokenLogo/TokenLogo';
+import { useCurrency } from '@/lib/algebra/hooks/common/useCurrency';
 import { formatPercent } from '@/lib/algebra/utils/common/formatPercent';
+import { AlgebraPoolContract } from '@/services/contract/algebra/algebra-pool-contract';
 import { Address } from 'viem';
-import { Token } from '@/services/contract/token';
+
+import { Token } from '@honeypot/shared';
 import { Pool } from '@cryptoalgebra/sdk';
 import { observer } from 'mobx-react-lite';
+import { wallet } from '@honeypot/shared';
 import { Button, Link } from '@nextui-org/react';
 import Settings from '@/components/algebra/common/Settings';
 
@@ -29,6 +34,7 @@ const PoolHeader = observer(
               size={40}
               token={Token.getToken({
                 address: token0.address,
+                chainId: wallet.currentChainId.toString(),
               })}
             />
           )}
@@ -39,6 +45,7 @@ const PoolHeader = observer(
               size={40}
               token={Token.getToken({
                 address: token1.address,
+                chainId: wallet.currentChainId.toString(),
               })}
             />
           )}

@@ -1,32 +1,33 @@
-import { useUSDCValue } from "@/lib/algebra/hooks/common/useUSDCValue";
+import { useUSDCValue } from '@/lib/algebra/hooks/common/useUSDCValue';
 import {
   computePoolAddress,
   Currency,
   CurrencyAmount,
   maxAmountSpend,
   tryParseAmount,
-} from "@cryptoalgebra/sdk";
-import { useCallback, useMemo, useEffect } from "react";
-import TokenCard from "../TokenCard";
-import { ArrowLeftRight, ChevronsUpDownIcon } from "lucide-react";
+} from '@cryptoalgebra/sdk';
+import { useCallback, useMemo, useEffect } from 'react';
+import TokenCard from '../TokenCard';
+import { ArrowLeftRight, ChevronsUpDownIcon } from 'lucide-react';
 import useWrapCallback, {
   WrapType,
-} from "@/lib/algebra/hooks/swap/useWrapCallback";
+} from '@/lib/algebra/hooks/swap/useWrapCallback';
 import {
   useDerivedSwapInfo,
   useSwapState,
   useSwapActionHandlers,
-} from "@/lib/algebra/state/swapStore";
-import { SwapField, SwapFieldType } from "@/types/algebra/types/swap-field";
-import TokenCardV3 from "../TokenCard/TokenCardV3";
-import { ExchangeSvg } from "@/components/svg/exchange";
-import { chart } from "@/services/chart";
-import { Token } from "@/services/contract/token";
-import { PairContract } from "@/services/contract/dex/liquidity/pair-contract";
-import { Token as AlgebraToken } from "@cryptoalgebra/sdk";
-import { wallet } from "@/services/wallet";
-import { AlgebraPoolContract } from "@/services/contract/algebra/algebra-pool-contract";
-import { CartoonButton } from "@/components/atoms/CartoonButton/CartoonButton";
+} from '@/lib/algebra/state/swapStore';
+import { SwapField, SwapFieldType } from '@/types/algebra/types/swap-field';
+import TokenCardV3 from '../TokenCard/TokenCardV3';
+import { ExchangeSvg } from '@/components/svg/exchange';
+import { chart } from '@/services/chart';
+
+import { Token } from '@honeypot/shared';
+import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
+import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
+import { wallet } from '@honeypot/shared';
+import { AlgebraPoolContract } from '@/services/contract/algebra/algebra-pool-contract';
+import { CartoonButton } from '@/components/atoms/CartoonButton/CartoonButton';
 
 export interface PresetPair {
   fromToken: Token;
@@ -168,13 +169,13 @@ const SwapPairV3 = ({
   const formattedAmounts = {
     [independentField]: typedValue,
     [dependentField]: showWrap
-      ? (parsedAmounts[
+      ? parsedAmounts[
           independentField as keyof typeof parsedAmounts
-        ]?.toExact() ?? "")
-      : (parsedAmounts[dependentField as keyof typeof parsedAmounts]?.toFixed(
+        ]?.toExact() ?? ''
+      : parsedAmounts[dependentField as keyof typeof parsedAmounts]?.toFixed(
           (parsedAmounts[dependentField as keyof typeof parsedAmounts]?.currency
             .decimals || 6) / 2
-        ) ?? ""),
+        ) ?? '',
   };
 
   useEffect(() => {
@@ -266,7 +267,7 @@ const SwapPairV3 = ({
         .init()
         .then((token) => {
           chart.setChartTarget(token);
-          chart.setCurrencyCode("USD");
+          chart.setCurrencyCode('USD');
         });
     } else if (baseCurrency && quoteCurrency) {
       const pairContract = new AlgebraPoolContract({
@@ -277,7 +278,7 @@ const SwapPairV3 = ({
       });
       pairContract.init().then((pair) => {
         chart.setChartLabel(`${baseCurrency.symbol}/${quoteCurrency.symbol}`);
-        chart.setCurrencyCode("TOKEN");
+        chart.setCurrencyCode('TOKEN');
         chart.setTokenNumber(
           baseCurrency.wrapped.address.toLowerCase() ===
             pair?.token0.value?.address.toLowerCase()
@@ -291,7 +292,7 @@ const SwapPairV3 = ({
       Token.getToken({ address: baseCurrency.wrapped.address })
         .init()
         .then((token) => {
-          chart.setCurrencyCode("USD");
+          chart.setCurrencyCode('USD');
           chart.setChartTarget(token);
         });
     } else if (quoteCurrency) {
@@ -299,7 +300,7 @@ const SwapPairV3 = ({
       Token.getToken({ address: quoteCurrency.wrapped.address })
         .init()
         .then((token) => {
-          chart.setCurrencyCode("USD");
+          chart.setCurrencyCode('USD');
           chart.setChartTarget(token);
         });
     }
@@ -347,7 +348,7 @@ const SwapPairV3 = ({
               }}
             >
               {showPresetInput && pair.fromToken.symbol}
-              {showPresetOutput && showPresetInput && "-"}
+              {showPresetOutput && showPresetInput && '-'}
               {showPresetOutput && pair.toToken.symbol}
             </CartoonButton>
           ))}
@@ -355,7 +356,7 @@ const SwapPairV3 = ({
       )}
       <TokenCardV3
         staticTokenList={staticFromTokenList}
-        value={formattedAmounts[SwapField.INPUT] || ""}
+        value={formattedAmounts[SwapField.INPUT] || ''}
         currency={baseCurrency}
         otherCurrency={quoteCurrency}
         handleTokenSelection={handleInputSelect}
@@ -381,7 +382,7 @@ const SwapPairV3 = ({
 
       <TokenCardV3
         staticTokenList={staticToTokenList}
-        value={formattedAmounts[SwapField.OUTPUT] || ""}
+        value={formattedAmounts[SwapField.OUTPUT] || ''}
         currency={quoteCurrency}
         otherCurrency={baseCurrency}
         handleTokenSelection={handleOutputSelect}

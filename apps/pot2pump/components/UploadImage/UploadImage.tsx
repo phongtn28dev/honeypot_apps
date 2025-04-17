@@ -1,16 +1,16 @@
-import { Tooltip } from "@nextui-org/react";
-import Image from "next/image";
-import React, { useRef } from "react";
-import type { PutBlobResult } from "@vercel/blob";
-import { trpcClient } from "@/lib/trpc";
-import { wallet } from "@/services/wallet";
-import Dropzone from "react-dropzone";
+import { Tooltip } from '@nextui-org/react';
+import Image from 'next/image';
+import React, { useRef } from 'react';
+import type { PutBlobResult } from '@vercel/blob';
+import { trpcClient } from '@/lib/trpc';
+import { wallet } from '@honeypot/shared';
+import Dropzone from 'react-dropzone';
 
 export interface UploadImageProps {
   onUpload: (url: string) => void;
   imagePath: string | null | undefined;
   blobName: string;
-  variant?: "icon" | "banner";
+  variant?: 'icon' | 'banner';
 }
 
 export const uploadFile = async (
@@ -21,7 +21,7 @@ export const uploadFile = async (
   const response = await fetch(
     `/api/upload/upload-project-icon?filename=${blobName}`,
     {
-      method: "POST",
+      method: 'POST',
       body: file,
     }
   );
@@ -44,7 +44,7 @@ export function UploadImage(props: UploadImageProps): JSX.Element {
       const response = await fetch(
         `/api/upload/upload-project-icon?filename=${props.blobName}`,
         {
-          method: "POST",
+          method: 'POST',
           body: file,
         }
       );
@@ -67,9 +67,9 @@ export function UploadImage(props: UploadImageProps): JSX.Element {
         <div {...getRootProps()}>
           <Tooltip content="Upload new project icon">
             <div className="flex justify-center items-center">
-              {(props.variant === "banner" && (
+              {(props.variant === 'banner' && (
                 <Image
-                  src={props?.imagePath ?? "/images/banner-empty.png"}
+                  src={props?.imagePath ?? '/images/banner-empty.png'}
                   alt="banner"
                   className="rounded-[11.712px] hover:bg-[#ECC94E20] w-[3rem] h-[3rem] self-center cursor-pointer object-fill"
                   fill
@@ -80,7 +80,7 @@ export function UploadImage(props: UploadImageProps): JSX.Element {
                   src={
                     !!props.imagePath
                       ? props.imagePath
-                      : "/images/empty-logo.png"
+                      : '/images/empty-logo.png'
                   }
                   alt="icon"
                   className="rounded-[11.712px] hover:bg-[#ECC94E20] w-[3rem] h-[3rem] self-center cursor-pointer  hover:scale-150 transition-all duration-300"

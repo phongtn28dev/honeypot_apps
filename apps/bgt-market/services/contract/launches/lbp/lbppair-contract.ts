@@ -1,16 +1,16 @@
-import { Token } from "@/services/contract/token";
-import { getContract, zeroAddress } from "viem";
-import BigNumber from "bignumber.js";
-import { makeAutoObservable } from "mobx";
-import { AsyncState, ContractWrite } from "@/services/utils";
-import { wallet } from "@/services/wallet";
-import { BaseLaunchContract } from "../base-launch-contract";
-import { LiquidityBootstrapPoolABI } from "@/lib/abis/LiquidityBootstrapPoolAbi";
+import { Token } from '@honeypot/shared';
+import { getContract, zeroAddress } from 'viem';
+import BigNumber from 'bignumber.js';
+import { makeAutoObservable } from 'mobx';
+import { AsyncState, ContractWrite } from '@/services/utils';
+import { wallet } from '@honeypot/shared';
+import { BaseLaunchContract } from '../base-launch-contract';
+import { LiquidityBootstrapPoolABI } from '@/lib/abis/LiquidityBootstrapPoolAbi';
 
 export class LBPPairContract implements BaseLaunchContract {
   databaseId: number | undefined = undefined;
-  address = "";
-  name: string = "";
+  address = '';
+  name: string = '';
   abi = LiquidityBootstrapPoolABI;
   raiseToken: Token | undefined = undefined;
   launchedToken: Token | undefined = undefined;
@@ -18,17 +18,17 @@ export class LBPPairContract implements BaseLaunchContract {
   depositedLaunchedTokenWithoutDecimals: BigNumber | null = null;
   launchedTokenBuyCount: BigNumber | null = null;
   launchedTokenSellCount: BigNumber | null = null;
-  endTime: string = "";
-  startTime: string = "";
-  launchedTokenProvider: string = "";
-  projectName = "";
-  description = "";
-  telegram = "";
-  twitter = "";
-  website = "";
+  endTime: string = '';
+  startTime: string = '';
+  launchedTokenProvider: string = '';
+  projectName = '';
+  description = '';
+  telegram = '';
+  twitter = '';
+  website = '';
   isValidated = false;
   isInit = false;
-  provider = "";
+  provider = '';
   canClaimLP = false;
   canRefund = false;
   isRefundable = false;
@@ -39,10 +39,10 @@ export class LBPPairContract implements BaseLaunchContract {
     link: string;
     icon: string;
   }[] = [];
-  logoUrl = "";
-  bannerUrl = "";
+  logoUrl = '';
+  bannerUrl = '';
   participantsCount = new BigNumber(0);
-  beravoteSpaceId = "";
+  beravoteSpaceId = '';
   vaultBalance = BigInt(0);
   state: number = 0;
 

@@ -1,17 +1,17 @@
-import { FtoPairContract } from "@/services/contract/launches/fto/ftopair-contract";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
-import { IndexerPaginationState, PageInfo } from "@/services/utils";
+import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
+import { IndexerPaginationState, PageInfo } from '@/services/utils';
 import {
   PAGE_LIMIT,
   PairFilter,
   SubgraphProjectFilter,
   defaultPairFilters,
-} from "..";
+} from '..';
 import {
   fetchPot2PumpList,
   subgraphPageRequest,
-} from "@/lib/algebra/graphql/clients/pair";
-import { wallet } from "@/services/wallet";
+} from '@/lib/algebra/graphql/clients/pair';
+import { wallet } from '@honeypot/shared';
 
 export class Pot2PumpService {
   DEFAULT_FILTERS: {
@@ -19,24 +19,24 @@ export class Pot2PumpService {
     MY_PARTICIPATED_PAIRS_FILTER: SubgraphProjectFilter;
   } = {
     MY_LAUNCHES_FILTER: {
-      status: "all",
-      search: "",
+      status: 'all',
+      search: '',
       currentPage: 0,
       limit: PAGE_LIMIT,
       hasNextPage: true,
       creator: wallet.account,
-      orderBy: "endTime",
-      orderDirection: "desc",
+      orderBy: 'endTime',
+      orderDirection: 'desc',
     },
     MY_PARTICIPATED_PAIRS_FILTER: {
-      status: "all",
-      search: "",
+      status: 'all',
+      search: '',
       currentPage: 0,
       limit: PAGE_LIMIT,
       hasNextPage: true,
       participant: wallet.account,
-      orderBy: "endTime",
-      orderDirection: "desc",
+      orderBy: 'endTime',
+      orderDirection: 'desc',
     },
   } as const;
 
@@ -44,7 +44,7 @@ export class Pot2PumpService {
     SubgraphProjectFilter,
     MemePairContract
   >({
-    namespace: "myLaunches",
+    namespace: 'myLaunches',
     LoadNextPageFunction: async (filter) => {
       return await this.LoadMoreMyLaunchesPage(filter);
     },
@@ -55,7 +55,7 @@ export class Pot2PumpService {
     SubgraphProjectFilter,
     MemePairContract
   >({
-    namespace: "participatedPairs",
+    namespace: 'participatedPairs',
     LoadNextPageFunction: async (filter) => {
       return await this.LoadMoreParticipatedPage(filter);
     },
@@ -63,7 +63,7 @@ export class Pot2PumpService {
   });
 
   LoadMoreMyLaunchesPage = async (filter: SubgraphProjectFilter) => {
-    console.log("filter", filter);
+    console.log('filter', filter);
 
     filter.userAccountId = wallet.account.toLowerCase();
     const res = await fetchPot2PumpList({
@@ -71,7 +71,7 @@ export class Pot2PumpService {
       filter: filter,
     });
 
-    if (res.status === "success") {
+    if (res.status === 'success') {
       return { items: res.data.pairs, filterUpdates: res.data.filterUpdates };
     } else {
       return {
@@ -81,14 +81,14 @@ export class Pot2PumpService {
   };
 
   LoadMoreParticipatedPage = async (filter: SubgraphProjectFilter) => {
-    console.log("filter", filter);
+    console.log('filter', filter);
     filter.userAccountId = wallet.account.toLowerCase();
     const res = await fetchPot2PumpList({
       chainId: String(wallet.currentChainId),
       filter: filter,
     });
 
-    if (res.status === "success") {
+    if (res.status === 'success') {
       return { items: res.data.pairs, filterUpdates: res.data.filterUpdates };
     } else {
       return {

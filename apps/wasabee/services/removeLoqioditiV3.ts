@@ -1,10 +1,11 @@
-import { makeAutoObservable } from "mobx";
-import { Token } from "./contract/token";
-import { AsyncState } from "./utils";
-import { AlgebraPoolContract } from "./contract/algebra/algebra-pool-contract";
-import { wallet } from "./wallet";
-import { zeroAddress } from "viem";
-import { chains } from "@/lib/chain";
+import { makeAutoObservable } from 'mobx';
+
+import { Token } from '@honeypot/shared';
+import { AsyncState } from './utils';
+import { AlgebraPoolContract } from './contract/algebra/algebra-pool-contract';
+import { wallet } from '@honeypot/shared';
+import { zeroAddress } from 'viem';
+import { chains } from '@/lib/chain';
 
 class RemoveLiquidityV3 {
   currentRemovePair: AlgebraPoolContract | null = null;

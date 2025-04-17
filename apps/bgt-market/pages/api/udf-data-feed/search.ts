@@ -1,12 +1,12 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from 'next';
 import {
   LibrarySymbolInfo,
   SearchSymbolResultItem,
   SearchSymbolsCallback,
-} from "@/public/static/charting_library/charting_library";
-import { Network, networks, networksMap } from "@/services/network";
-import { appRouter, caller } from "@/server/_app";
+} from '@/public/static/charting_library/charting_library';
+import { Network, networks, networksMap } from '@honeypot/shared';
+import { appRouter, caller } from '@/server/_app';
 
 export default async function handler(
   req: NextApiRequest,
@@ -24,12 +24,12 @@ export default async function handler(
   networks.forEach(async (network) => {
     networksMap[network.chain.id].faucetTokens.map((token) => {
       symbols.push({
-        ticker: token.symbol + ":" + network.chain.id + ":" + token.address,
-        description: token.symbol + ":" + network.chain.name,
-        type: "token",
+        ticker: token.symbol + ':' + network.chain.id + ':' + token.address,
+        description: token.symbol + ':' + network.chain.name,
+        type: 'token',
         exchange: network.chain.name,
         symbol: token.symbol,
-        full_name: token.symbol + ":" + network.chain.name,
+        full_name: token.symbol + ':' + network.chain.name,
       });
     });
 
@@ -42,26 +42,26 @@ export default async function handler(
         symbols.push({
           ticker:
             pair.token0.symbol +
-            "/" +
+            '/' +
             pair.token1.symbol +
-            ":" +
+            ':' +
             network.chain.id +
-            ":" +
+            ':' +
             pair.address,
           description:
             pair.token0.symbol +
-            "/" +
+            '/' +
             pair.token1.symbol +
-            ":" +
+            ':' +
             network.chain.id,
-          type: "pair",
+          type: 'pair',
           exchange: network.chain.name,
-          symbol: pair.token0.symbol + "/" + pair.token1.symbol,
+          symbol: pair.token0.symbol + '/' + pair.token1.symbol,
           full_name:
             pair.token0.symbol +
-            "/" +
+            '/' +
             pair.token1.symbol +
-            ":" +
+            ':' +
             network.chain.id,
         });
       });

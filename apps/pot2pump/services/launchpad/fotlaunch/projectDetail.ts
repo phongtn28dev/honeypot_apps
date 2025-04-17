@@ -1,10 +1,10 @@
-import { makeAutoObservable } from "mobx";
-import { PageController } from "@/services/lib/factory";
-import { createSiweMessage } from "@/lib/siwe";
-import { AsyncState } from "@/services/utils";
-import { wallet } from "@/services/wallet";
-import { trpcClient } from "@/lib/trpc";
-import { FtoPairContract } from "@/services/contract/launches/fto/ftopair-contract";
+import { makeAutoObservable } from 'mobx';
+import { PageController } from '@/services/lib/factory';
+import { createSiweMessage } from '@/lib/siwe';
+import { AsyncState } from '@/services/utils';
+import { wallet } from '@honeypot/shared';
+import { trpcClient } from '@/lib/trpc';
+import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
 
 class ProjectDetail extends PageController {
   updateProject = new AsyncState(
@@ -19,7 +19,7 @@ class ProjectDetail extends PageController {
     }) => {
       await createSiweMessage(
         wallet.account,
-        "Sign In With Honeypot",
+        'Sign In With Honeypot',
         wallet.walletClient
       );
       await trpcClient.projects.createOrUpdateProjectInfo.mutate(data);
