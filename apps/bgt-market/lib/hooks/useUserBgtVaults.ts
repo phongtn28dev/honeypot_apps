@@ -22,8 +22,8 @@ export function useUserBgtVaults() {
     const vaultList = ValidatedVaultAddresses.map((vault) => {
       return BGTVault.getBgtVault({
         address: vault.address as Address,
-        name: vault.metadata.name,
-        logoURI: vault.metadata.logoURI,
+        name: vault.metadata?.name,
+        logoURI: vault.metadata?.logoURI,
       });
     });
 
