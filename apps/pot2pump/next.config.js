@@ -13,13 +13,15 @@ const nextConfig = {
     svgr: false,
   },
   reactStrictMode: false,
+
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
-      'styled-components': path.resolve(
-        '../../node_modules/styled-components/dist/styled-components.esm.js'
-      ), // alias for styled-components ESM build
     };
+    config.resolve.modules = [
+      path.resolve(__dirname, '../../node_modules'), // 👈 prioritize root
+      'node_modules', // fallback to local
+    ];
     return config;
   },
   images: {

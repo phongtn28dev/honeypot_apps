@@ -12,33 +12,11 @@ const nextConfig = {
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
-      'styled-components': path.resolve(
-        'node_modules/styled-components/dist/styled-components.esm.js'
-      ), // alias for styled-components ESM build
-      react: path.resolve(__dirname, '../../node_modules/react'),
-      'react-dom': path.resolve(__dirname, '../../node_modules/react-dom'),
-      'react-toastify': path.resolve(
-        __dirname,
-        '../../node_modules/react-toastify'
-      ),
-      mobx: path.resolve(__dirname, '../../node_modules/mobx'),
-      'mobx-react-lite': path.resolve(
-        __dirname,
-        '../../node_modules/mobx-react-lite'
-      ),
     };
-
-    // ✅ Include shared lib for Babel transpilation
-    config.module.rules.push({
-      test: /\.(js|ts|tsx)$/,
-      include: [path.resolve(__dirname, '../../libs/shared/hpot-sdk')],
-      use: {
-        loader: 'babel-loader',
-        options: {
-          presets: ['next/babel'],
-        },
-      },
-    });
+    config.resolve.modules = [
+      path.resolve(__dirname, '../../node_modules'), // 👈 prioritize root
+      'node_modules', // fallback to local
+    ];
     return config;
   },
   images: {

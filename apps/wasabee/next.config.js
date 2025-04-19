@@ -15,18 +15,11 @@ const nextConfig = {
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
-      react: path.resolve(__dirname, '../../node_modules/react'),
-      'react-dom': path.resolve(__dirname, '../../node_modules/react-dom'),
-      'react-toastify': path.resolve(
-        __dirname,
-        '../../node_modules/react-toastify'
-      ),
-      mobx: path.resolve(__dirname, '../../node_modules/mobx'),
-      'mobx-react-lite': path.resolve(
-        __dirname,
-        '../../node_modules/mobx-react-lite'
-      ),
     };
+    config.resolve.modules = [
+      path.resolve(__dirname, '../../node_modules'), // 👈 prioritize root
+      'node_modules', // fallback to local
+    ];
     return config;
   },
   images: {
