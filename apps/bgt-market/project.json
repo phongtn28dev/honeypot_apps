@@ -12,7 +12,8 @@
     "build": {
       "executor": "@nrwl/next:build",
       "options": {
-        "outputPath": "apps/bgt-market/"
+        "outputPath": "apps/bgt-market/",
+        "postcssConfig": "apps/bgt-market/postcss.config.js"
       }
     }
   }

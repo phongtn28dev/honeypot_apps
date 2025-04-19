@@ -21,7 +21,7 @@ import { NoData } from '../../table';
 import { Copy } from '../../Copy/index';
 import { BiLinkExternal } from 'react-icons/bi';
 import { wallet } from '@honeypot/shared';
-import { TokenLogo } from '@honeypot/shared'; from '../../TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import TruncateMarkup from 'react-truncate-markup';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
@@ -63,6 +63,7 @@ export const TokenSelector = observer(
           }
           const token = Token.getToken({
             address: state.search,
+            chainId: wallet.currentChainId.toString(),
           });
           await token.init();
           state.tokens = [token];

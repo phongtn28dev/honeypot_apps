@@ -5,3 +5,4 @@ export * from './storage';
 export * from './wrappedToastify';
 export * from './calculatePercentageChange';
 export * from './chart.util';
+export * from './address';

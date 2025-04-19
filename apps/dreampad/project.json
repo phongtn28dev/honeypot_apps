@@ -18,7 +18,8 @@
           "outputPath": "apps/dreampad"
         },
         "production": {}
-      }
+      },
+      "postcssConfig": "apps/dreampad/postcss.config.js"
     },
     "serve": {
       "executor": "@nx/next:server",

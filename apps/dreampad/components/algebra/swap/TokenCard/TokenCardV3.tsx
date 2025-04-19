@@ -5,7 +5,7 @@ import { Currency, Percent } from '@cryptoalgebra/sdk';
 import { useEffect, useMemo, useState } from 'react';
 import { useAccount, useBalance, useWatchBlockNumber } from 'wagmi';
 import { Address, zeroAddress } from 'viem';
-import { TokenSelector } from '@/components/TokenSelector/v3';
+import { TokenSelector } from '@honeypot/shared';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
 import { wallet } from '@honeypot/shared';
 import { Token } from '@honeypot/shared';

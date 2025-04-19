@@ -1,6 +1,6 @@
 import { Token } from '@honeypot/shared';
 import { networksMap } from '@honeypot/shared';
-import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
+import { PairContract } from '@honeypot/shared';
 
 export const tokenToSymbol = (token: Token) => {
   return token.symbol;

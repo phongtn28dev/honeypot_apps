@@ -1,5 +1,5 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { TokenSelector } from '@/components/TokenSelector';
+import { TokenSelector } from '@honeypot/shared';
 import { SwapAmount } from '../SwapAmount/index';
 import { liquidity } from '@/services/liquidity';
 import { Button } from '@/components/button';
@@ -317,35 +317,6 @@ export const RemoveLiquidity = observer(
             </div>
           ))}
         </div>
-        // <Table
-        //   rowKey="address"
-        //   columns={[
-        //     {
-        //       title: "Pool Name",
-        //       dataKey: "poolName",
-        //     },
-        //     {
-        //       title: "Self Liquidity",
-        //       dataKey: "myLiquidityDisplay",
-        //     },
-        //     {
-        //       title: "Action",
-        //       key: "action",
-        //       render: (value, record) => {
-        //         return (
-        //           <Button
-        //             onClick={() => {
-        //               liquidity.setCurrentRemovePair(record);
-        //             }}
-        //           >
-        //             Remove
-        //           </Button>
-        //         );
-        //       },
-        //     },
-        //   ]}
-        //   datasource={liquidity.myPairPage.pageItems.value}
-        // ></Table>
       )
     );
   }
@@ -383,6 +354,7 @@ export const LPCard = observer(() => {
       liquidity.setFromToken(
         Token.getToken({
           address: inputCurrency,
+          chainId: wallet.currentChainId.toString(),
         })
       );
     }
@@ -390,6 +362,7 @@ export const LPCard = observer(() => {
       liquidity.setToToken(
         Token.getToken({
           address: outputCurrency,
+          chainId: wallet.currentChainId.toString(),
         })
       );
     }

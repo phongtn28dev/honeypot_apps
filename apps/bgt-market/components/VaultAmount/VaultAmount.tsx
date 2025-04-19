@@ -2,7 +2,7 @@ import { Input } from '@/components/input';
 import { InputProps } from '@nextui-org/react';
 
 import { Token } from '@honeypot/shared';
-import { TokenSelector } from '@/components/TokenSelector/v3';
+import { TokenSelector } from '@honeypot/shared';
 import { cn } from '@/lib/tailwindcss';
 import { TokenLogo } from '@honeypot/shared';
 

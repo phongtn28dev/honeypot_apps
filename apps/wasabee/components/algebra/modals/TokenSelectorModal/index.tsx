@@ -1,4 +1,4 @@
-import { TokenSelector } from "@/components/algebra/common/TokenSelector";
+import { TokenSelector } from '@/components/algebra/common/TokenSelector';
 import {
   Credenza,
   CredenzaBody,
@@ -7,8 +7,8 @@ import {
   CredenzaHeader,
   CredenzaTitle,
   CredenzaTrigger,
-} from "@/components/algebra/ui/credenza";
-import { Currency } from "@cryptoalgebra/sdk";
+} from '@/components/algebra/ui/credenza';
+import { Currency } from '@cryptoalgebra/sdk';
 
 interface ITokenSelectorModal {
   isOpen: boolean;

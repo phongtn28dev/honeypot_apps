@@ -9,7 +9,8 @@
     "build": {
       "executor": "@nrwl/next:build",
       "options": {
-        "outputPath": "apps/wasabee/"
+        "outputPath": "apps/wasabee/",
+        "postcssConfig": "apps/wasabee/postcss.config.js"
       }
     }
   }

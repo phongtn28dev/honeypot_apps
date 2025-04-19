@@ -20,7 +20,7 @@
       "~/*": ["./*"],
       "~/static/*": ["./public/*"],
       "@/components/*": ["./components/*"],
-      "@/styles/*": ["./styles/*"],
+      "@/styles/*": ["styles/*"],
       "@/lib/*": ["./lib/*"],
       "@/hooks/*": ["./hooks/*"],
       "@/utils/*": ["./lib/utils/*"],

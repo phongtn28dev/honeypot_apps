@@ -3,11 +3,8 @@ import { Button } from '@nextui-org/react';
 import EChartsReact from 'echarts-for-react';
 import { useEffect, useMemo, useState } from 'react';
 
-import { Token } from '@honeypot/shared';
+import { PairContract, Token } from '@honeypot/shared';
 import { useAccount } from 'wagmi';
-import { trpcClient } from '@/lib/trpc';
-import { dayjs } from '@/lib/dayjs';
-import { ChartDataResponse } from '@/services/priceFeed/priceFeedTypes';
 import dynamic from 'next/dynamic';
 import Script from 'next/script';
 import {
@@ -15,8 +12,6 @@ import {
   ResolutionString,
 } from '@/public/static/charting_library/charting_library';
 import { pairToTicker, tokenToTicker } from '@/lib/advancedChart.util';
-import { pairQueryOutput } from '@/types/pair';
-//import { TVChartContainer } from "../AdvancedChart/TVChartContainer/TVChartContainer";
 import { chart } from '@/services/chart';
 import { observer } from 'mobx-react-lite';
 import { wallet } from '@honeypot/shared';

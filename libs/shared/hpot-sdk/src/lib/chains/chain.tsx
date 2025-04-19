@@ -84,6 +84,7 @@ export class Network {
     if (args) {
     }
   }
+
   init() {
     this.nativeToken = Token.getToken({
       ...this.nativeToken,
@@ -92,6 +93,7 @@ export class Network {
     });
 
     this.validatedTokens = [];
+    this.validatedTokens.push(this.nativeToken);
 
     Object.entries(this.validatedTokensInfo).forEach(([address, t]) => {
       const token = Token.getToken({

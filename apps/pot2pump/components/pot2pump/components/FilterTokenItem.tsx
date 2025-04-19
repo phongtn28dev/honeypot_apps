@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { Token } from '@honeypot/shared';
-import { TokenSelector } from '@/components/TokenSelector/v3';
+import { TokenSelector } from '@honeypot/shared';
 import { observer } from 'mobx-react-lite';
 
 type Props = {

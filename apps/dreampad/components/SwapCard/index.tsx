@@ -1,5 +1,5 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { TokenSelector } from '@/components/TokenSelector';
+import { TokenSelector } from '@honeypot/shared';
 import { SwapAmount } from '../SwapAmount/index';
 import { swap } from '@/services/swap';
 import { ExchangeSvg } from '../svg/exchange';

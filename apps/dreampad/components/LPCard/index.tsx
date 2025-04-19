@@ -1,5 +1,5 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { TokenSelector } from '@/components/TokenSelector';
+import { TokenSelector } from '@honeypot/shared';
 import { SwapAmount } from '../SwapAmount/index';
 import { liquidity } from '@/services/liquidity';
 import { Button } from '@/components/button';

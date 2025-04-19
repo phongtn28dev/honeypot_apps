@@ -10,25 +10,24 @@ import {
 } from '@nextui-org/react';
 import { IoSearchOutline } from 'react-icons/io5';
 import { IoClose } from 'react-icons/io5';
-
-import { Token } from '@honeypot/shared';
+import { DynamicFormatAmount, Token } from '@honeypot/shared';
 import { Observer, observer, useLocalObservable } from 'mobx-react-lite';
 import { useCallback, useEffect, useState } from 'react';
-import { isEthAddress } from '@/lib/address';
-import { Input } from '../../input/index';
-import { SpinnerContainer } from '../../Spinner';
-import { NoData } from '../../table';
-import { Copy } from '../../Copy/index';
+import { isEthAddress } from '@honeypot/shared';
+import { Input } from './../input';
+import { SpinnerContainer } from './../Spinner';
+import { NoData } from './../DataState/NoData';
+import { Copy } from './../Copy';
 import { BiLinkExternal } from 'react-icons/bi';
 import { wallet } from '@honeypot/shared';
-import { TokenLogo } from '@honeypot/shared'; from '../../TokenLogo/TokenLogo';
+import { TokenLogo } from '@honeypot/shared';
 import TruncateMarkup from 'react-truncate-markup';
 import { motion } from 'framer-motion';
-import { ChevronDown, Info } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import Image from 'next/image';
-import pot2pumpIcon from '@/public/images/bera/smoking_bera.png';
-import { DOMAIN_MAP } from '@/config/allAppPath';
-import bitgetCampaignIcon from '@/public/images/partners/bitget_global_logo.jpeg';
+import pot2pumpIcon from './../../assets/images/bera/smoking_bera.png';
+import { DOMAIN_MAP } from '@honeypot/shared';
+
 type TokenSelectorProps = {
   onSelect: (token: Token) => void;
   value?: Token | null;
@@ -134,9 +133,10 @@ export const TokenSelector = observer(
           classNames={{
             base: [
               // arrow color default
-              'before:bg-default-200',
+              'before:bg-default-200 max-w-[350px]',
             ],
             content: [
+              'max-w-[350px]',
               'py-3 px-4 border border-default-200',
               'bg-gradient-to-br from-white to-default-300',
               'dark:from-default-100 dark:to-default-50',
@@ -174,7 +174,7 @@ export const TokenSelector = observer(
               )}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="flex w-full lg:w-[350px] flex-col items-center gap-4 border border-[color:var(--card-stroke,#F7931A)] [background:var(--card-color,#271A0C)] rounded-xl border-solid">
+          <PopoverContent className="relative flex w-full lg:w-[350px] max-w-[350px] flex-col items-center gap-4 border border-[color:var(--card-stroke,#F7931A)] [background:var(--card-color,#271A0C)] rounded-xl border-solid">
             <Observer>
               {() => (
                 <div className="w-full">
@@ -225,12 +225,12 @@ export const TokenSelector = observer(
                           <NoData></NoData>
                         )
                       ) : (
-                        <div className="max-h-[300px] overflow-auto">
+                        <div className="max-h-[300px] max-w-[350px] overflow-auto">
                           <div>
-                            <h2 className=" opacity-50 font-normal font-sans">
+                            <h2 className="opacity-50 font-normal font-sans">
                               Most Popular
                             </h2>
-                            <div className="flex *:grow w-full flex-wrap gap-2">
+                            <div className="flex *:grow w-full flex-wrap gap-2 max-w-[350px]">
                               {state.tokens.length ? (
                                 state.tokens
                                   .slice()
@@ -255,24 +255,6 @@ export const TokenSelector = observer(
                                         <p className="text-[rgba(255,255,255)] [font-kerning:none] [font-feature-settings:'calt'_off] [font-family:Inter] text-xs font-normal leading-[14px]">
                                           {token.symbol}
                                         </p>
-                                        {token.isBitgetCampaignToken && (
-                                          <Tooltip
-                                            content={
-                                              'this token is in Bitget Campaign'
-                                            }
-                                          >
-                                            <Link
-                                              href={`/bitget-campaign`}
-                                              target="_blank"
-                                            >
-                                              <Image
-                                                src={bitgetCampaignIcon}
-                                                alt="bitget campaign"
-                                                className="size-4 rounded-full"
-                                              />
-                                            </Link>
-                                          </Tooltip>
-                                        )}
                                       </Button>
                                     );
                                   })
@@ -298,32 +280,21 @@ export const TokenSelector = observer(
                                     }}
                                     className="py-[8px] px-[8px] rounded-[8px] flex justify-between items-center cursor-pointer hover:[background:rgba(255,255,255,0.04)]"
                                   >
-                                    <TokenLogo token={token}></TokenLogo>
-                                    <div className="flex-grow-[1] px-2">
-                                      <div>{token.name}</div>
-                                      <div className="text-[rgba(255,255,255,0.50)] [font-kerning:none] [font-feature-settings:'calt'_off] [font-family:Inter] text-xs font-normal leading-[14px]">
-                                        {token.symbol}
+                                    <div className="flex items-center gap-2">
+                                      <TokenLogo token={token}></TokenLogo>
+                                      <div className="px-2">
+                                        <div>{token.name}</div>
+                                        <div className="text-[rgba(255,255,255,0.50)] [font-kerning:none] [font-feature-settings:'calt'_off] [font-family:Inter] text-xs font-normal leading-[14px]">
+                                          {token.symbol}
+                                        </div>
                                       </div>
-                                      {token.isBitgetCampaignToken && (
-                                        <Tooltip
-                                          content={
-                                            'this token is in Bitget Campaign'
-                                          }
-                                        >
-                                          <Link
-                                            href={`/bitget-campaign`}
-                                            target="_blank"
-                                          >
-                                            <Image
-                                              src={bitgetCampaignIcon}
-                                              alt="bitget campaign"
-                                              className="size-4 rounded-full"
-                                            />
-                                          </Link>
-                                        </Tooltip>
-                                      )}
                                     </div>
-                                    <div>{token.balanceFormatted}</div>
+                                    <div>
+                                      {DynamicFormatAmount({
+                                        amount: token.balance.toString(),
+                                        decimals: 5,
+                                      })}
+                                    </div>
                                   </div>
                                 );
                               })
@@ -366,17 +337,6 @@ export const TokenSelector = observer(
                     src={pot2pumpIcon}
                     alt="pot2pump"
                     className="size-4 cursor-pointer"
-                  />
-                </Link>
-              </Tooltip>
-            )}
-            {value.isBitgetCampaignToken && (
-              <Tooltip content="This token is in Bitget Campaign">
-                <Link href={`/bitget-campaign`} target="_blank">
-                  <Image
-                    src={bitgetCampaignIcon}
-                    alt="bitget campaign"
-                    className="size-4 rounded-full"
                   />
                 </Link>
               </Tooltip>

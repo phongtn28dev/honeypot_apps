@@ -29,7 +29,6 @@ import { SwapField, SwapFieldType } from '@/types/algebra/types/swap-field';
 import TokenCardV3 from '../TokenCard/TokenCardV3';
 import { ExchangeSvg } from '@/components/svg/exchange';
 import { chart } from '@/services/chart';
-
 import { Token } from '@honeypot/shared';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
 import { wallet } from '@honeypot/shared';
@@ -38,13 +37,12 @@ import { Address, zeroAddress } from 'viem';
 import TokenCardV3Independent from '../TokenCard/TokenCardVIndependent';
 import { useMediaQuery } from '@/lib/algebra/hooks/common/useMediaQuery';
 import { Button, Checkbox, Input } from '@nextui-org/react';
-
 import {
   ItemSelect,
   SelectState,
   SelectItem,
 } from '@/components/ItemSelect/v3';
-import { TokenSelector } from '@/components/TokenSelector/v3';
+import { TokenSelector } from '@honeypot/shared';
 import { ChevronDoubleRightIcon } from '@heroicons/react/24/outline';
 import { BigNumber } from 'bignumber.js';
 import SwapParamsV3Independent from '../SwapParams/SwapParamsV3Independent';

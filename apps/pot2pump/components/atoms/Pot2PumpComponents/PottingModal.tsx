@@ -6,7 +6,7 @@ import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair
 import { cn, SelectItem } from '@nextui-org/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { Input } from '@/components/input';
-import { TokenSelector } from '@/components/TokenSelector/v3';
+import { TokenSelector } from '@honeypot/shared';
 import { WNATIVE_EXTENDED } from '@/config/algebra/routing';
 import { wallet } from '@honeypot/shared';
 
