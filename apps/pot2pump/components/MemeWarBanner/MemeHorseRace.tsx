@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import raceFieldBg from 'public/images/horserace/race_field.png';
+import raceFieldBg from '@/public/images/horserace/race_field.png';
 
 import { Token, useSubgraphClient } from '@honeypot/shared';
 import { V3SwapCard } from '@/components/algebra/swap/V3SwapCard';
