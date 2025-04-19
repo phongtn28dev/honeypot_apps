@@ -56,14 +56,15 @@ const connectors = [
 //   );
 // }
 
-export const config = getDefaultConfig({
-  connectors,
-  appName: 'Honypot Finance',
-  projectId: '1d1c8b5204bfbd57502685fc0934a57d',
-  // @ts-ignore
-  chains: networks.map((network) => network.chain),
-  ssr: true, // If your dApp uses server side rendering (SSR
-  storage: createStorage({
-    storage: cookieStorage,
-  }),
-});
+export const createWagmiConfig = () =>
+  getDefaultConfig({
+    connectors,
+    appName: 'Honypot Finance',
+    projectId: '1d1c8b5204bfbd57502685fc0934a57d',
+    // @ts-ignore
+    chains: networks.map((network) => network.chain),
+    ssr: true, // If your dApp uses server side rendering (SSR
+    storage: createStorage({
+      storage: cookieStorage,
+    }),
+  });

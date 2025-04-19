@@ -16,6 +16,9 @@
     "baseUrl": ".",
     "paths": {
       "@honeypot/shared": ["libs/shared/hpot-sdk/src/index.ts"],
+      "@GDdark/universal-account": [
+        "./node_modules/@GDdark/universal-account/dist/index.d.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

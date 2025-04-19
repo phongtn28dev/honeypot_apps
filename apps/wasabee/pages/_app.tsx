@@ -12,7 +12,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 import { NextUIProvider } from '@nextui-org/react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { config } from '@/config/wagmi';
+import { createWagmiConfig } from '@honeypot/shared';
 import { trpc, trpcQueryClient } from '../lib/trpc';
 import { useEffect, useState } from 'react';
 import { wallet } from '@honeypot/shared';
@@ -33,6 +33,8 @@ import { DynamicWagmiConnector } from '@dynamic-labs/wagmi-connector';
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 import { deserialize, serialize } from 'wagmi';
 import { useSubgraphClient } from '@honeypot/shared';
+
+const config = createWagmiConfig();
 
 // enableStaticRendering(true)
 const queryClient = new QueryClient({

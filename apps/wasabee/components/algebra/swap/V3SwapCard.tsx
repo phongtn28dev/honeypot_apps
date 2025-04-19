@@ -36,7 +36,7 @@ export function V3SwapCard({
   disableToSelection,
 }: V3SwapCardProps) {
   return (
-    <CardContainer>
+    <CardContainer bordered={bordered}>
       <SwapPairV3
         fromTokenAddress={fromTokenAddress}
         toTokenAddress={toTokenAddress}
