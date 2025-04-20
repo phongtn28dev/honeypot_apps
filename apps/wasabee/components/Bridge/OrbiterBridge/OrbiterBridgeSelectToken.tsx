@@ -15,7 +15,7 @@ export const OrbiterBridgeSelectToken = observer(() => {
         wallet.currentChainId.toString()
       );
       setTokens(tokens);
-      orbiterBridgeService.setSelectedToken(tokens[0]);
+      handleTokenSelect(tokens[0]);
       console.log(tokens);
     }
   }, [wallet.currentChainId]);
@@ -28,6 +28,7 @@ export const OrbiterBridgeSelectToken = observer(() => {
 
   const handleTokenSelect = (token: Token) => {
     orbiterBridgeService.setSelectedToken(token);
+    token.getBalance();
   };
 
   return (
