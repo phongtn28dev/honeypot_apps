@@ -5,6 +5,7 @@ import { resolutionType } from '@/services/priceFeed/priceFeedTypes';
 import { priceFeedRouter } from '@/server/router/priceFeed';
 import Trpc from '../trpc/[trpc]';
 import { appRouter, caller } from '@/server/_app';
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>

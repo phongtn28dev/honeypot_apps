@@ -159,7 +159,7 @@ export const TokenSelector = observer(
                 ></TokenLogo>
               )}
               <TruncateMarkup>
-                <span className="shrink overflow-clip text-ellipsis h-4">
+                <span className="shrink text-ellipsis h-4">
                   {value?.displayName ? value.displayName : 'Select Token'}
                 </span>
               </TruncateMarkup>

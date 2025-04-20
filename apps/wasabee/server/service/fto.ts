@@ -2,7 +2,6 @@ import { MUBAI_FTO_PAIR_ABI } from '@/lib/abis/ftoPair';
 import { MemePairABI } from '@/lib/abis/MemePair';
 import { chains, chainsMap } from '@/lib/chain';
 import { createPublicClientByChain } from '@/lib/client';
-import { exec } from '@/lib/contract';
 import { pg } from '@/lib/db';
 import DataLoader from 'dataloader';
 
