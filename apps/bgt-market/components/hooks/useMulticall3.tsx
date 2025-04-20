@@ -1,10 +1,10 @@
-const MULTICALL_ADDRESS = "0xb9Ace5D41e131906F53237e01119FC42d77bb831";
-import { Multicall, ContractCallContext } from "ethereum-multicall";
-import { type Config, getClient } from "@wagmi/core";
-import { providers } from "ethers";
-import type { Client, Chain, Transport } from "viem";
-import { config } from "@/config/wagmi";
-import { useQuery } from "@tanstack/react-query";
+const MULTICALL_ADDRESS = '0xb9Ace5D41e131906F53237e01119FC42d77bb831';
+import { Multicall, ContractCallContext } from 'ethereum-multicall';
+import { type Config, getClient } from '@wagmi/core';
+import { ethers } from 'ethers';
+import type { Client, Chain, Transport } from 'viem';
+import { config } from '@/config/wagmi';
+import { useQuery } from '@tanstack/react-query';
 
 function clientToProvider(client: Client<Transport, Chain>) {
   const { chain, transport } = client;
@@ -13,13 +13,13 @@ function clientToProvider(client: Client<Transport, Chain>) {
     name: chain.name,
     ensAddress: chain.contracts?.ensRegistry?.address,
   };
-  if (transport.type === "fallback")
-    return new providers.FallbackProvider(
+  if (transport.type === 'fallback')
+    return new ethers.FallbackProvider(
       (transport.transports as ReturnType<Transport>[]).map(
-        ({ value }) => new providers.JsonRpcProvider(value?.url, network)
+        ({ value }) => new ethers.JsonRpcProvider(value?.url, network)
       )
     );
-  return new providers.JsonRpcProvider(transport.url, network);
+  return new ethers.JsonRpcProvider(transport.url, network);
 }
 
 type Payload = {
@@ -39,9 +39,10 @@ const useMulticall3 = ({
   const client = getClient(config, { chainId: config.chains[0].id });
 
   const data = useQuery({
-    queryKey: ["multicall3", ...queryKey],
+    queryKey: ['multicall3', ...queryKey],
     queryFn: async () => {
       const multicall = new Multicall({
+        // @ts-ignore
         ethersProvider: clientToProvider(client!),
         multicallCustomContractAddress: MULTICALL_ADDRESS,
       });

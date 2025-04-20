@@ -1,6 +1,5 @@
-import { providers } from "ethers";
-import { PairFilter } from "../launchpad";
-import { GhostIndexer } from "./indexerProviders/ghost";
+import { PairFilter } from '../launchpad';
+import { GhostIndexer } from './indexerProviders/ghost';
 import {
   GhostAlgebraPairResponse,
   GhostBundleResponse,
@@ -14,8 +13,8 @@ import {
   LaunchTokenData,
   PageRequest,
   TrendingMEMEs,
-} from "./indexerTypes";
-import DataLoader from "dataloader";
+} from './indexerTypes';
+import DataLoader from 'dataloader';
 
 export default class Indexer<T extends IndexerProvider> {
   dataProvider: T;
@@ -38,7 +37,7 @@ export default class Indexer<T extends IndexerProvider> {
     chainId: string,
     provider?: string,
     pageRequest?: PageRequest,
-    projectType?: "fto" | "meme"
+    projectType?: 'fto' | 'meme'
   ): Promise<ApiResponseType<GhostFtoPairResponse>> => {
     return await this.dataProvider.getFilteredFtoPairs(
       filter,
@@ -116,7 +115,7 @@ export default class Indexer<T extends IndexerProvider> {
     walletAddress: string,
     chainId: string,
     pageRequest: PageRequest,
-    type: "fto" | "meme",
+    type: 'fto' | 'meme',
     filter: Partial<PairFilter>
   ): Promise<ApiResponseType<GhostParticipatedProjectsResponse>> => {
     return await this.dataProvider.getParticipatedProjects(
@@ -140,8 +139,8 @@ export default class Indexer<T extends IndexerProvider> {
   ): Promise<ApiResponseType<GhostToken>> => {
     const data = await this.getPairTokensDataLoader.load(tokenAddress);
     return {
-      status: "success",
-      message: "Success",
+      status: 'success',
+      message: 'Success',
       data,
     };
   };
@@ -150,13 +149,10 @@ export default class Indexer<T extends IndexerProvider> {
     async (tokenAddresses) => {
       const res = await this.getPairTokensData(tokenAddresses);
       const data = (res as any).data as GhostToken[];
-      const dataMap = data.reduce(
-        (acc, token) => {
-          acc[token.id.toLowerCase()] = token;
-          return acc;
-        },
-        {} as Record<string, GhostToken>
-      );
+      const dataMap = data.reduce((acc, token) => {
+        acc[token.id.toLowerCase()] = token;
+        return acc;
+      }, {} as Record<string, GhostToken>);
       return tokenAddresses.map((address) => dataMap[address.toLowerCase()]);
     },
     {
@@ -181,8 +177,8 @@ export default class Indexer<T extends IndexerProvider> {
 }
 
 const ghostIndexer = new GhostIndexer(
-  process.env.GHOST_INDEXER_API_KEY ?? "",
-  "https://api.ghostlogs.xyz/gg/pub/"
+  process.env.GHOST_INDEXER_API_KEY ?? '',
+  'https://api.ghostlogs.xyz/gg/pub/'
 );
 
 export const indexer = new Indexer(ghostIndexer);

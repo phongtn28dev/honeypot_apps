@@ -91,7 +91,7 @@ export const pairByTokensLoader = new DataLoader<
           token0Address as `0x${string}`,
           token1Address as `0x${string}`,
         ]);
-        if (pairAddress === ethers.constants.AddressZero) {
+        if (pairAddress === ethers.ZeroAddress) {
           return null;
         }
         // const pairContract = getContract({ address: pairAddress as `0x${string}`, abi: IUniswapV2Pair.abi, client });

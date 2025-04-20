@@ -1,14 +1,13 @@
-import { authProcedure, publicProcedure, router } from "../trpc";
-import z from "zod";
-import PQueue from "p-queue";
-import { ftoService } from "../service/fto";
-import { cacheProvider, getCacheKey } from "@/lib/server/cache";
-import { id } from "ethers/lib/utils";
-import { chain } from "lodash";
+import { authProcedure, publicProcedure, router } from '../trpc';
+import z from 'zod';
+import PQueue from 'p-queue';
+import { ftoService } from '../service/fto';
+import { cacheProvider, getCacheKey } from '@/lib/server/cache';
+import { chain } from 'lodash';
 
 const queue = new PQueue({ concurrency: 10 });
 
-const api_key = process.env.FTO_API_KEY ?? "";
+const api_key = process.env.FTO_API_KEY ?? '';
 
 export const ftoRouter = router({
   createProject: publicProcedure
@@ -24,7 +23,7 @@ export const ftoRouter = router({
         description: z.string().optional(),
         twitter: z.string().optional(),
         website: z.string().optional(),
-        telegram: z.string().optional()
+        telegram: z.string().optional(),
       })
     )
     .mutation(async ({ input }) => {
@@ -39,7 +38,7 @@ export const ftoRouter = router({
     )
     .query(async ({ input }) => {
       return cacheProvider.getOrSet(
-        getCacheKey("getProjectInfo", input),
+        getCacheKey('getProjectInfo', input),
         async () => {
           const info = await ftoService.getProjectInfo({
             ...input,
@@ -58,7 +57,7 @@ export const ftoRouter = router({
     )
     .query(async ({ input }) => {
       return cacheProvider.getOrSet(
-        getCacheKey("getProjectsByAccount", input),
+        getCacheKey('getProjectsByAccount', input),
         async () => ftoService.getFtoProjectsByAccount(input)
       );
     }),
@@ -71,7 +70,7 @@ export const ftoRouter = router({
     )
     .query(async ({ input }) => {
       return cacheProvider.getOrSet(
-        getCacheKey("getProjectsByLaunchToken", input),
+        getCacheKey('getProjectsByLaunchToken', input),
         async () => {
           const launchs = await ftoService.selectProjectByLaunchToken(input);
           return launchs;
@@ -162,7 +161,7 @@ export const ftoRouter = router({
     )
     .query(async ({ input }) => {
       return cacheProvider.getOrSet(
-        getCacheKey("getProjectVotes", input),
+        getCacheKey('getProjectVotes', input),
         async () => ftoService.getProjectVotes(input)
       );
     }),
