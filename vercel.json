@@ -7,15 +7,5 @@
     "env": {
       "NPM_CONFIG_REGISTRY": "https://registry.npmjs.org/"
     }
-  },
-  "functions": {
-    "/apps/pot2pump/pages/api/**.ts": {
-      "memory": 3008,
-      "maxDuration": 10
-    },
-    "/apps/wasabee/pages/api/**.ts": {
-      "memory": 3008,
-      "maxDuration": 10
-    }
   }
 }
