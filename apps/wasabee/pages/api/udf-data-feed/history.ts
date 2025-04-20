@@ -1,29 +1,26 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { trpc, trpcClient, trpcQueryClient } from '@/lib/trpc';
 import { resolutionType } from '@/services/priceFeed/priceFeedTypes';
-import { priceFeedRouter } from '@/server/router/priceFeed';
-import Trpc from '../trpc/[trpc]';
-import { appRouter, caller } from '@/server/_app';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
-  //   Object.entries(req.query).forEach(([key, value]) => {
-  //     console.log(key, value);
-  //   });
+  const { caller } = await import('@/server/_app');
 
   const ticker = req.query.symbol as string;
   const resolution = req.query.resolution as resolutionType;
   const from = req.query.from as string;
   const to = req.query.to as string;
 
-  const symbol = ticker.split(':')[0];
-  const chain = ticker.split(':')[1];
-  const address = ticker.split(':')[2];
-  const tokenNumber = ticker.split(':')[3];
-  const currencyCode = ticker.split(':')[4];
+  if (!ticker || !from || !to || !resolution) {
+    return res
+      .status(400)
+      .json({ s: 'error', errmsg: 'Missing required query parameters' });
+  }
+  const [symbol, chain, address, tokenNumber, currencyCode] = (
+    ticker || ''
+  ).split(':');
 
   const data = await caller.priceFeed.getChartData({
     chainId: chain,
