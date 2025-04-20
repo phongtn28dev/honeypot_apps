@@ -1,13 +1,13 @@
 import DataLoader from 'dataloader';
 
 import { getContract } from 'viem';
-import { ethers } from 'ethers';
 import { createPublicClientByChain } from '../client';
 import { getCacheKey } from '../cache';
 import { factoryABI } from '../abis/factory';
 import { ERC20ABI } from '../abis/erc20';
 import { kv } from '../kv';
 import { networksMap } from '@honeypot/shared';
+import { ethers } from 'ethers';
 
 // 2. Set up your client with desired chain & transport.
 
@@ -91,7 +91,7 @@ export const pairByTokensLoader = new DataLoader<
           token0Address as `0x${string}`,
           token1Address as `0x${string}`,
         ]);
-        if (pairAddress === ethers.constants.AddressZero) {
+        if (pairAddress === ethers.ZeroAddress) {
           return null;
         }
         // const pairContract = getContract({ address: pairAddress as `0x${string}`, abi: IUniswapV2Pair.abi, client });
