@@ -51,6 +51,8 @@ const SwapButtonV3 = ({ onSwapSuccess }: { onSwapSuccess?: () => void }) => {
     typedValue
   );
 
+  console.log('wrap debug', { currencies, wrapType });
+
   const wrapToast = useToastify({
     title: wrapType === WrapType.WRAP ? 'Wrap' : 'Unwrap',
     message: isWrapLoading
