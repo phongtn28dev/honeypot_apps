@@ -22,7 +22,7 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['@vercel/kv', 'postgres'],
   },
-
+  output: 'standalone',
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
