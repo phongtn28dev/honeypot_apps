@@ -12,7 +12,7 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
-  reactStrictMode: false,
+  reactStrictMode: true,
   modularizeImports: {
     '@/*': {
       transform: '@/*',
@@ -41,7 +41,6 @@ const nextConfig = {
       },
     ],
   },
-  productionBrowserSourceMaps: true,
   transpilePackages: ['styled-components'],
 };
 
