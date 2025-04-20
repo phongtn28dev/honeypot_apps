@@ -13,6 +13,12 @@ const nextConfig = {
     svgr: false,
   },
   reactStrictMode: false,
+  modularizeImports: {
+    '@/*': {
+      transform: '@/*',
+      preventFullImport: true,
+    },
+  },
 
   webpack: (config) => {
     config.resolve.alias = {
