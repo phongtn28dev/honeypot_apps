@@ -19,6 +19,9 @@ const nextConfig = {
       preventFullImport: true,
     },
   },
+  experimental: {
+    serverComponentsExternalPackages: ['@vercel/kv', 'postgres'],
+  },
 
   webpack: (config) => {
     config.resolve.alias = {
