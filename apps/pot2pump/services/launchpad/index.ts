@@ -667,7 +667,7 @@ class LaunchPad {
               name: tokenName,
               symbol: tokenSymbol,
               swapHandler: wallet.currentChain.contracts
-                .algebraSwapRouter as `0x${string}`,
+                .algebraPositionManager as `0x${string}`,
             },
           ]);
         }
