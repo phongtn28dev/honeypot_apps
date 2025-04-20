@@ -6,7 +6,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
-  const { caller } = await import('@/server/_app');
+  const { priceFeedCaller } = await import('@/server/routers/priceFeedCaller');
 
   const ticker = req.query.symbol as string;
   const resolution = req.query.resolution as resolutionType;
@@ -22,7 +22,7 @@ export default async function handler(
     ticker || ''
   ).split(':');
 
-  const data = await caller.priceFeed.getChartData({
+  const data = await priceFeedCaller.priceFeed.getChartData({
     chainId: chain,
     tokenAddress: address,
     from: parseInt(from),

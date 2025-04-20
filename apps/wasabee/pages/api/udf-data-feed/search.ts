@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { SearchSymbolResultItem } from '@/public/static/charting_library/charting_library';
-import { networks, networksMap } from '@honeypot/shared';
+import { networks, networksMap } from '@honeypot/shared/lib/chains';
 import { caller } from '@/server/_app';
 
 export default async function handler(

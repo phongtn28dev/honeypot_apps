@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@honeypot/shared": ["libs/shared/hpot-sdk/src/index.ts"],
+      "@honeypot/shared/*": ["libs/shared/hpot-sdk/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]
