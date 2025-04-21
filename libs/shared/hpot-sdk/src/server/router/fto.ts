@@ -1,9 +1,6 @@
 import { authProcedure, publicProcedure, router } from '../trpc';
 import z from 'zod';
-import PQueue from 'p-queue';
 import { ftoService } from '../service/fto';
-
-const queue = new PQueue({ concurrency: 10 });
 
 const api_key = process.env['FTO_API_KEY'] ?? '';
 

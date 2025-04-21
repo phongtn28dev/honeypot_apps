@@ -24,6 +24,10 @@ const nextConfig = {
     ];
     return config;
   },
+  experimental: {
+    optimizeCss: true,
+    optimizePackageImports: ['viem'],
+  },
   images: {
     remotePatterns: [
       {

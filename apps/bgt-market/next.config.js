@@ -14,6 +14,10 @@ const nextConfig = {
     svgr: false,
   },
   reactStrictMode: false,
+  experimental: {
+    optimizeCss: true,
+    optimizePackageImports: ['viem'],
+  },
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
