@@ -6,7 +6,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
-  const { priceFeedCaller } = await import('@/server/routers/priceFeedCaller');
+  const { priceFeedCaller } = await import('@honeypot/shared/server/callers');
 
   const ticker = req.query.symbol as string;
   const resolution = req.query.resolution as resolutionType;

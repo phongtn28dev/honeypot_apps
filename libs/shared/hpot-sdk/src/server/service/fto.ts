@@ -1,11 +1,11 @@
-import { MUBAI_FTO_PAIR_ABI } from '@/lib/abis/ftoPair';
-import { MemePairABI } from '@/lib/abis/MemePair';
-import { chains, chainsMap } from '@/lib/chain';
-import { createPublicClientByChain } from '@/lib/client';
-import { pg } from '@/lib/db';
+import { MUBAI_FTO_PAIR_ABI } from '../../lib/abis/ftoPair';
+import { MemePairABI } from '../../lib/abis/MemePair';
+import { chains, chainsMap } from '../../lib/chains';
+import { createPublicClientByChain } from '../../lib/wallet';
+import { pg } from '../../lib/db';
 import DataLoader from 'dataloader';
 
-const super_api_key = process.env.FTO_API_KEY ?? '';
+const super_api_key = process.env['FTO_API_KEY'] ?? '';
 
 const fto_api_key_list = [
   'b3a3a02a-a665-4fb5-bb17-153d05863efe', //bera boyz
@@ -31,7 +31,7 @@ const fotProjectDataloader = new DataLoader(
   }
 );
 
-interface projectColumn {
+export interface projectColumn {
   id: number;
   twitter?: string;
   telegram?: string;

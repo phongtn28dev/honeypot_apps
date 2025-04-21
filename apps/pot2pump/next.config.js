@@ -13,27 +13,6 @@ const nextConfig = {
     svgr: false,
   },
   reactStrictMode: true,
-  modularizeImports: {
-    '@/*': {
-      transform: '@/*',
-      preventFullImport: true,
-    },
-    '@honeypot/shared': {
-      transform: '@honeypot/shared',
-      preventFullImport: true,
-    },
-    '@honeypot/shared/*': {
-      transform: '@honeypot/shared/*',
-      preventFullImport: true,
-    },
-    '/public/*': {
-      transform: '/public/*',
-      preventFullImport: true,
-    },
-  },
-  experimental: {
-    serverComponentsExternalPackages: ['@vercel/kv', 'postgres'],
-  },
   output: 'standalone',
   webpack: (config) => {
     config.resolve.alias = {

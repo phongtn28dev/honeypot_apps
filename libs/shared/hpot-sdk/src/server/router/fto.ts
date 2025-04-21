@@ -2,12 +2,10 @@ import { authProcedure, publicProcedure, router } from '../trpc';
 import z from 'zod';
 import PQueue from 'p-queue';
 import { ftoService } from '../service/fto';
-import { cacheProvider, getCacheKey } from '@/lib/server/cache';
-import { chain } from 'lodash';
 
 const queue = new PQueue({ concurrency: 10 });
 
-const api_key = process.env.FTO_API_KEY ?? '';
+const api_key = process.env['FTO_API_KEY'] ?? '';
 
 export const ftoRouter = router({
   createProject: publicProcedure
@@ -37,16 +35,11 @@ export const ftoRouter = router({
       })
     )
     .query(async ({ input }) => {
-      return cacheProvider.getOrSet(
-        getCacheKey('getProjectInfo', input),
-        async () => {
-          const info = await ftoService.getProjectInfo({
-            ...input,
-            creator_api_key: api_key,
-          });
-          return info;
-        }
-      );
+      const info = await ftoService.getProjectInfo({
+        ...input,
+        creator_api_key: api_key,
+      });
+      return info;
     }),
   getProjectsByAccount: publicProcedure
     .input(
@@ -56,10 +49,7 @@ export const ftoRouter = router({
       })
     )
     .query(async ({ input }) => {
-      return cacheProvider.getOrSet(
-        getCacheKey('getProjectsByAccount', input),
-        async () => ftoService.getFtoProjectsByAccount(input)
-      );
+      return ftoService.getFtoProjectsByAccount(input);
     }),
   getProjectsByLaunchToken: publicProcedure
     .input(
@@ -69,13 +59,7 @@ export const ftoRouter = router({
       })
     )
     .query(async ({ input }) => {
-      return cacheProvider.getOrSet(
-        getCacheKey('getProjectsByLaunchToken', input),
-        async () => {
-          const launchs = await ftoService.selectProjectByLaunchToken(input);
-          return launchs;
-        }
-      );
+      return ftoService.selectProjectByLaunchToken(input);
     }),
   createOrUpdateProjectInfo: authProcedure
     .input(
@@ -160,10 +144,7 @@ export const ftoRouter = router({
       })
     )
     .query(async ({ input }) => {
-      return cacheProvider.getOrSet(
-        getCacheKey('getProjectVotes', input),
-        async () => ftoService.getProjectVotes(input)
-      );
+      return ftoService.getProjectVotes(input);
     }),
   revalidateProjectType: publicProcedure
     .input(
