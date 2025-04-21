@@ -4,7 +4,7 @@ import { cn, Tooltip } from '@nextui-org/react';
 import { IconType } from 'react-icons/lib';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import clsx from 'clsx';
-import CopyToClipboard from 'react-copy-to-clipboard';
+import { CopyToClipboard as CopyToClipboardComponent } from 'react-copy-to-clipboard';
 
 interface CopyButtonProps {
   value: string;
@@ -13,7 +13,7 @@ interface CopyButtonProps {
   copyTip?: string;
 }
 
-const CopyButton: React.FC<CopyButtonProps> = ({
+export const CopyButton: React.FC<CopyButtonProps> = ({
   value,
   label,
   className,
@@ -39,8 +39,6 @@ const CopyButton: React.FC<CopyButtonProps> = ({
     </div>
   );
 };
-
-export default CopyButton;
 
 export const CopyTrigger = observer(
   ({
@@ -114,7 +112,7 @@ export const Copy = observer(
       },
     }));
     return (
-      <CopyToClipboard
+      <CopyToClipboardComponent
         text={value}
         onCopy={() => {
           console.log('copied');
@@ -126,7 +124,7 @@ export const Copy = observer(
           state={state}
           {...props}
         ></CopyTrigger>
-      </CopyToClipboard>
+      </CopyToClipboardComponent>
     );
   }
 );
