@@ -1,10 +1,46 @@
-import { Tooltip } from "@nextui-org/react";
-import clsx from "clsx";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import React, { HTMLAttributes } from "react";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { IconType } from "react-icons/lib";
-import { VscCopy } from "react-icons/vsc";
+import React, { HTMLAttributes } from 'react';
+import { VscCopy } from 'react-icons/vsc';
+import { cn, Tooltip } from '@nextui-org/react';
+import { IconType } from 'react-icons/lib';
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import clsx from 'clsx';
+import CopyToClipboard from 'react-copy-to-clipboard';
+
+interface CopyButtonProps {
+  value: string;
+  label?: string;
+  className?: string;
+  copyTip?: string;
+}
+
+const CopyButton: React.FC<CopyButtonProps> = ({
+  value,
+  label,
+  className,
+  copyTip = 'Copy',
+}) => {
+  return (
+    <div className={cn('space-y-0.5 sm:space-y-2', className)}>
+      {label && (
+        <div className="text-white text-sm font-medium leading-[normal]">
+          {label}
+        </div>
+      )}
+      <Copy
+        className="w-full"
+        content={copyTip}
+        value={value}
+        displayContent={
+          <div className="size-5 sm:size-6 cursor-pointer flex items-center justify-center bg-white text-[#202020] border border-[#202020] rounded-md drop-shadow-[1px_1px_0px_#000] [stroke-width:0.75px] stroke-[#202020] hover:bg-[#FFCD4D]">
+            <VscCopy className="size-3 sm:size-4" />
+          </div>
+        }
+      />
+    </div>
+  );
+};
+
+export default CopyButton;
 
 export const CopyTrigger = observer(
   ({
@@ -29,10 +65,10 @@ export const CopyTrigger = observer(
     return (
       <Tooltip
         isOpen={state.isTooltipOpen}
-        content={state.copied ? copiedContent ?? "Copied" : content ?? "Copy"}
+        content={state.copied ? copiedContent ?? 'Copied' : content ?? 'Copy'}
         classNames={{
-          base: "",
-          content: "bg-[#6B4311]",
+          base: '',
+          content: 'bg-[#6B4311]',
         }}
       >
         <span
@@ -44,7 +80,7 @@ export const CopyTrigger = observer(
             state.setCopied(false);
           }}
           className={clsx(
-            "inline-block cursor-pointer hover:text-primary",
+            'inline-block cursor-pointer hover:text-primary',
             className
           )}
           {...props}
@@ -81,7 +117,7 @@ export const Copy = observer(
       <CopyToClipboard
         text={value}
         onCopy={() => {
-          console.log("copied");
+          console.log('copied');
           state.setCopied(true);
         }}
       >

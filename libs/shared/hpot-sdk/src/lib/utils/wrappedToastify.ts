@@ -1,6 +1,6 @@
 import { toast, ToastContent, ToastOptions } from 'react-toastify';
-import { CustomToastifyContainer } from '@honeypot/shared';
-import { ToastifyIconTemplates } from '@honeypot/shared';
+import { CustomToastifyContainer } from '../../components/CustomToastify/CustomToastifyContainer';
+import { ToastifyIconTemplates } from '../../components/CustomToastify/IconTemplates';
 import 'react-toastify/dist/ReactToastify.css';
 
 export interface wrappedToastifyArgs {

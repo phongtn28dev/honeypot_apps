@@ -1,4 +1,3 @@
-import { networks } from '@honeypot/shared';
 import { connectorsForWallets, getDefaultConfig } from '@rainbow-me/rainbowkit';
 import {
   rainbowWallet,
@@ -9,9 +8,7 @@ import {
 } from '@rainbow-me/rainbowkit/wallets';
 import { injected, safe } from 'wagmi/connectors';
 import { createConfig, http, cookieStorage, createStorage, mock } from 'wagmi';
-// import { holdstationWallet } from "./holdstationWallet";
-// import { capsuleWallet } from "./capsualWallet";
-// import { berasigWallet } from "./berasigWallet";
+import { networks } from '../../lib/chains';
 
 const pId = '1d1c8b5204bfbd57502685fc0934a57d';
 

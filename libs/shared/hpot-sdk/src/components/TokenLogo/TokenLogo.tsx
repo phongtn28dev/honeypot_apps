@@ -1,10 +1,11 @@
 import { cn } from '@nextui-org/react';
-import { Token, wallet } from '@honeypot/shared';
+import { Token } from './../../lib/contract/token/token';
 import { Tooltip } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect } from 'react';
+import { wallet } from '../../lib/wallet/wallet';
 
 interface TokenLogoProps {
   size?: number;

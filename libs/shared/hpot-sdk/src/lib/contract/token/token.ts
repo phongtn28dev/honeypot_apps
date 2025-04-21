@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { BaseContract } from '../baseContract';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '../../../wallet';
 import { get, makeAutoObservable, reaction } from 'mobx';
 import { Address, getContract, zeroAddress } from 'viem';
 import { ContractWrite } from '../../utils/utils';

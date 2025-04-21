@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '../../../lib/wallet/wallet';
 import { ViewSvg } from './../../../components/svg/View';
 
 // FIXME: update toastify style

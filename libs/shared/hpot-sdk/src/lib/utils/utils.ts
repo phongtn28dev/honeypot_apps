@@ -1,12 +1,12 @@
 import { ToastOptions, toast } from 'react-toastify';
-import { wallet } from '@honeypot/shared';
-import { TransactionPendingToastify } from '@honeypot/shared';
+import { wallet } from '../wallet/wallet';
+import { TransactionPendingToastify } from '../../components/CustomToastify/TransactionPendingToastify/TransactionPendingToastify';
 import { localforage } from '../utils/storage';
 import { LRUCache } from 'lru-cache';
 import { debounce, max, initial } from 'lodash';
 import { PageRequest } from '../../types/pagination';
 import { visualEffects } from '../visualeffect/visualeffects';
-import { WrappedToastify } from '@honeypot/shared';
+import { WrappedToastify } from '../utils/wrappedToastify';
 import { makeAutoObservable } from 'mobx';
 
 export type PageInfo = {

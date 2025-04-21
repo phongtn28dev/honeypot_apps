@@ -16,7 +16,8 @@ import { Address } from 'viem';
 import { Token } from '../../contract/token/token';
 import { poolQueryToContract } from './pool';
 import BigNumber from 'bignumber.js';
-import { useSubgraphClient, wallet } from '@honeypot/shared';
+import { useSubgraphClient } from './../../../hooks/useSubgraphClients';
+import { wallet } from '../../wallet/wallet';
 import { ApolloClient } from '@apollo/client';
 import { createClientHook } from '../clientUtils';
 

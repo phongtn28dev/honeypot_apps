@@ -193,6 +193,7 @@
     "@types/react-window": "^1.8.8",
     "@types/request-ip": "^0.0.41",
     "@types/styled-components": "^5.1.34",
+    "@vercel/nft": "^0.29.2",
     "@wagmi/cli": "^2.2.0",
     "autoprefixer": "^10.4.21",
     "babel-jest": "^29.7.0",

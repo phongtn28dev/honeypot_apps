@@ -16,7 +16,6 @@ export const tokenRouter = router({
     )
     .query(async ({ input, ctx }) => {
       const { req } = ctx;
-      // const ip = requestIp.getClientIp(req);
       const cachedValue = await ipCache.get<{
         claimableUntil: number;
       }>(input.address);

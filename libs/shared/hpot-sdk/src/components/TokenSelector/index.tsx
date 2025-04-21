@@ -10,23 +10,23 @@ import {
 } from '@nextui-org/react';
 import { IoSearchOutline } from 'react-icons/io5';
 import { IoClose } from 'react-icons/io5';
-import { DynamicFormatAmount, Token } from '@honeypot/shared';
 import { Observer, observer, useLocalObservable } from 'mobx-react-lite';
 import { useCallback, useEffect, useState } from 'react';
-import { isEthAddress } from '@honeypot/shared';
 import { Input } from './../input';
 import { SpinnerContainer } from './../Spinner';
 import { NoData } from './../DataState/NoData';
 import { Copy } from './../Copy';
 import { BiLinkExternal } from 'react-icons/bi';
-import { wallet } from '@honeypot/shared';
-import { TokenLogo } from '@honeypot/shared';
 import TruncateMarkup from 'react-truncate-markup';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 import pot2pumpIcon from './../../assets/images/bera/smoking_bera.png';
-import { DOMAIN_MAP } from '@honeypot/shared';
+import { Token } from '../../lib/contract';
+import { wallet } from '../../lib/wallet/wallet';
+import { DynamicFormatAmount, isEthAddress } from '../../lib/utils';
+import TokenLogo from '../TokenLogo/TokenLogo';
+import { DOMAIN_MAP } from '../../config/allAppPath';
 
 type TokenSelectorProps = {
   onSelect: (token: Token) => void;

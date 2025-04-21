@@ -1,11 +1,11 @@
-import { TokenPriceDataFeed } from '@honeypot/shared';
+import { TokenPriceDataFeed } from './../../lib/priceFeed/tokenPriceDataFeed';
 import { publicProcedure, router } from '../trpc';
 import z from 'zod';
-import { DefinedPriceFeed } from '@honeypot/shared';
+import { DefinedPriceFeed } from './../../lib/priceFeed/PriceFeedProviders/';
 import {
   ChartDataResponse,
   TokenCurrentPriceResponseType,
-} from '@honeypot/shared';
+} from './../../lib/priceFeed/priceFeedTypes';
 
 const definedApiKey = process.env['DEFINED_API_KEY'] || '';
 const priceFeed = new TokenPriceDataFeed(new DefinedPriceFeed(definedApiKey));

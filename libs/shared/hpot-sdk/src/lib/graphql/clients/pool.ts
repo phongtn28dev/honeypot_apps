@@ -23,7 +23,7 @@ import BigNumber from 'bignumber.js';
 import { object } from 'zod';
 import { PairContract } from '../../contract/dex/liquidity/pair-contract';
 import { Token } from '../../contract/token/token';
-import { useSubgraphClient } from '@honeypot/shared';
+import { useSubgraphClient } from './../../../hooks/useSubgraphClients';
 import { ApolloClient } from '@apollo/client';
 import { createClientHook } from '../clientUtils';
 import { useObserver } from 'mobx-react-lite';
