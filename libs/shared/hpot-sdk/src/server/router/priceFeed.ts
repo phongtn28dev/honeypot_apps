@@ -6,7 +6,6 @@ import {
   ChartDataResponse,
   TokenCurrentPriceResponseType,
 } from '@honeypot/shared';
-import { cacheProvider, getCacheKey } from '@/lib/server/cache';
 
 const definedApiKey = process.env['DEFINED_API_KEY'] || '';
 const priceFeed = new TokenPriceDataFeed(new DefinedPriceFeed(definedApiKey));
@@ -23,28 +22,23 @@ export const priceFeedRouter = router({
       async ({
         input,
       }): Promise<ApiResponseType<TokenCurrentPriceResponseType>> => {
-        return cacheProvider.getOrSet(
-          getCacheKey('getSingleTokenPrice', input),
-          async () => {
-            const res = await priceFeed.getTokenCurrentPrice(
-              input.tokenAddress,
-              input.chainId
-            );
-
-            if (res.status === 'error') {
-              return {
-                status: 'error',
-                message: res.message,
-              };
-            } else {
-              return {
-                status: 'success',
-                data: res.data,
-                message: 'Success',
-              };
-            }
-          }
+        const res = await priceFeed.getTokenCurrentPrice(
+          input.tokenAddress,
+          input.chainId
         );
+
+        if (res.status === 'error') {
+          return {
+            status: 'error',
+            message: res.message,
+          };
+        } else {
+          return {
+            status: 'success',
+            data: res.data,
+            message: 'Success',
+          };
+        }
       }
     ),
   getMultipleTokenPrice: publicProcedure
@@ -58,28 +52,23 @@ export const priceFeedRouter = router({
       async ({
         input,
       }): Promise<ApiResponseType<TokenCurrentPriceResponseType[]>> => {
-        return cacheProvider.getOrSet(
-          getCacheKey('getMultipleTokenPrice', input),
-          async () => {
-            const res = await priceFeed.getMultipleTokenCurrentPrice(
-              input.tokenAddresses,
-              input.chainId
-            );
-
-            if (res.status === 'error') {
-              return {
-                status: 'error',
-                message: 'Error fetching token prices',
-              };
-            } else {
-              return {
-                status: 'success',
-                data: res.data,
-                message: 'Success',
-              };
-            }
-          }
+        const res = await priceFeed.getMultipleTokenCurrentPrice(
+          input.tokenAddresses,
+          input.chainId
         );
+
+        if (res.status === 'error') {
+          return {
+            status: 'error',
+            message: 'Error fetching token prices',
+          };
+        } else {
+          return {
+            status: 'success',
+            data: res.data,
+            message: 'Success',
+          };
+        }
       }
     ),
   getChartData: publicProcedure
@@ -114,36 +103,28 @@ export const priceFeedRouter = router({
         if (input.resolution === '60') return '1h';
         return 5 * 1000;
       };
-      return cacheProvider.getOrSet(
-        getCacheKey('getChartData', input),
-        async () => {
-          const res = await priceFeed.getChartData({
-            address: input.tokenAddress,
-            networkId: input.chainId,
-            from: input.from,
-            to: input.to,
-            resolution: input.resolution,
-            tokenNumber: input.tokenNumber,
-            currencyCode: input.currencyCode,
-          });
+      const res = await priceFeed.getChartData({
+        address: input.tokenAddress,
+        networkId: input.chainId,
+        from: input.from,
+        to: input.to,
+        resolution: input.resolution,
+        tokenNumber: input.tokenNumber,
+        currencyCode: input.currencyCode,
+      });
 
-          if (res.status === 'error') {
-            return {
-              status: 'error',
-              message: res.message,
-            };
-          } else {
-            return {
-              status: 'success',
-              data: res.data,
-              message: 'Success',
-            };
-          }
-        },
-        {
-          ttl: ttl(),
-        }
-      );
+      if (res.status === 'error') {
+        return {
+          status: 'error',
+          message: res.message,
+        };
+      } else {
+        return {
+          status: 'success',
+          data: res.data,
+          message: 'Success',
+        };
+      }
     }),
   getTokenHistoricalPrice: publicProcedure
     .input(
@@ -158,30 +139,25 @@ export const priceFeedRouter = router({
       async ({
         input,
       }): Promise<ApiResponseType<TokenCurrentPriceResponseType[]>> => {
-        return cacheProvider.getOrSet(
-          getCacheKey('getTokenHistoricalPrice', input),
-          async () => {
-            const res = await priceFeed.getTokenHistoricalPrice(
-              input.tokenAddress,
-              input.chainId,
-              input.from,
-              input.to
-            );
-
-            if (res.status === 'error') {
-              return {
-                status: 'error',
-                message: res.message,
-              };
-            } else {
-              return {
-                status: 'success',
-                data: res.data,
-                message: 'Success',
-              };
-            }
-          }
+        const res = await priceFeed.getTokenHistoricalPrice(
+          input.tokenAddress,
+          input.chainId,
+          input.from,
+          input.to
         );
+
+        if (res.status === 'error') {
+          return {
+            status: 'error',
+            message: res.message,
+          };
+        } else {
+          return {
+            status: 'success',
+            data: res.data,
+            message: 'Success',
+          };
+        }
       }
     ),
 });

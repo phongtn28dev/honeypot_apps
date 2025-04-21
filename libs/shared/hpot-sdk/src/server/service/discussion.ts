@@ -1,5 +1,4 @@
-import { pg } from "@/lib/db";
-import { get } from "lodash";
+import { pg } from '../../lib/db';
 
 export const discussionService = {
   createComment: async (data: {

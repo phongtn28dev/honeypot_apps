@@ -1,5 +1,5 @@
 import { publicProcedure, router } from '../trpc';
-import { pg } from '@/lib/db';
+import { pg } from '../../lib/db';
 
 export const metadataRouter = router({
   getServerMetadata: publicProcedure.query(async () => {
