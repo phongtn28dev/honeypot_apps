@@ -1,13 +1,13 @@
-import { defaultContainerVariants, itemSlideVariants } from "@/lib/animation";
-import { PaginationState } from "@/services/utils";
-import { Pagination, PaginationProps, Spinner } from "@nextui-org/react";
-import { motion } from "framer-motion";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { use, useEffect } from "react";
+import { defaultContainerVariants, itemSlideVariants } from '@/lib/animation';
+import { PaginationState } from '@honeypot/shared/lib/utils/utils';
+import { Pagination, PaginationProps, Spinner } from '@nextui-org/react';
+import { motion } from 'framer-motion';
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import { use, useEffect } from 'react';
 
 export type Column<T> = {
   title: string;
-  dataKey?: keyof T | "_action";
+  dataKey?: keyof T | '_action';
   key?: string;
   render?: (value: any, row: T) => JSX.Element;
 };
