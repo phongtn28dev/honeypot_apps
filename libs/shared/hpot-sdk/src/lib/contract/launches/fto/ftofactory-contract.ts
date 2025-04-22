@@ -2,7 +2,7 @@ import { BaseContract } from '../../baseContract';
 import { wallet } from '../../../wallet/wallet';
 import { Address, getContract } from 'viem';
 import { makeAutoObservable } from 'mobx';
-import { ContractWrite, AsyncState } from '../../../utils/utils';
+import { ContractWrite, AsyncState } from '../../../utils';
 import { ftoFactoryABI } from '../../../abis/ftoFactory';
 
 export class FtoFactoryContract implements BaseContract {

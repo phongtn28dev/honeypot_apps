@@ -2,7 +2,7 @@ import { BaseContract } from '../../baseContract';
 import { wallet } from '../../../wallet/wallet';
 import { Address, getContract, GetContractReturnType } from 'viem';
 import { makeAutoObservable } from 'mobx';
-import { ContractWrite, AsyncState } from '../../../utils/utils';
+import { ContractWrite, AsyncState } from '../../../utils';
 import { MemeFactoryABI } from '../../../abis/MemeFactory';
 import { pot2PumpFactoryABI } from '../../../abis/Pot2Pump/pot2PumpFactory';
 

@@ -3,7 +3,7 @@ import { makeAutoObservable, reaction, runInAction } from 'mobx';
 import { Address, getContract, GetContractReturnType, zeroAddress } from 'viem';
 import { LiquidityBootstrapPoolABI } from '../../../abis/LiquidityBootstrapPoolAbi';
 import dayjs, { Dayjs } from 'dayjs';
-import { ContractWrite } from '../../../utils/utils';
+import { ContractWrite } from '../../../utils';
 import { Token } from '../../token/token';
 import { DEFAULT_CHAIN_ID } from '../../../../config/algebra/default-chain-id';
 import { wallet } from '../../../wallet';

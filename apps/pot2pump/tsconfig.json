@@ -29,7 +29,6 @@
       "@/public/images/*": ["./public/images/*"],
       "@honeypot/shared": ["../../libs/shared/hpot-sdk/src/index.ts"],
       "@honeypot/shared/*": ["../../libs/shared/hpot-sdk/src/*"],
-
       "@honeypot/shared/server/callers": [
         "../../libs/shared/hpot-sdk/src/server/callers/index.ts"
       ]

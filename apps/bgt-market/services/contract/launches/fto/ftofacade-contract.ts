@@ -4,7 +4,7 @@ import { wallet } from '@honeypot/shared';
 import { getContract } from 'viem';
 import { makeAutoObservable } from 'mobx';
 import { ftoFacadeABI } from '@/lib/abis/ftoFacade';
-import { ContractWrite } from '../../../utils';
+import { ContractWrite } from '@honeypot/shared/lib/utils/utils';
 
 export class FtoFacadeContract implements BaseContract {
   address = '';
