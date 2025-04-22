@@ -66,6 +66,10 @@ export class OrbiterBridge {
       return 'No trade pairs found';
     }
 
+    if (Number(this.fromAmount) > Number(this.selectedToken?.balance)) {
+      return 'Insufficient balance';
+    }
+
     return undefined;
   }
 
