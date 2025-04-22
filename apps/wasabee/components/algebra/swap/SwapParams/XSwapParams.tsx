@@ -1,5 +1,5 @@
 import Loader from '@/components/algebra/common/Loader';
-import { TokenLogo } from '@honeypot/shared';
+import { DynamicFormatAmount, TokenLogo } from '@honeypot/shared';
 import { MAX_UINT128 } from '@/config/algebra/max-uint128';
 import { wallet } from '@honeypot/shared';
 import { usePoolPlugins } from '@/lib/algebra/hooks/pools/usePoolPlugins';
@@ -174,10 +174,6 @@ const XSwapParams = ({
     }
   }, [trade]);
 
-  const LPFeeString = realizedLPFee
-    ? `${realizedLPFee.toSignificant(4)} ${realizedLPFee.currency.symbol}`
-    : '-';
-
   const userHasSpecifiedInputOutput = Boolean(
     currencies[SwapField.INPUT] &&
       currencies[SwapField.OUTPUT] &&
@@ -189,13 +185,6 @@ const XSwapParams = ({
 
   if (wrapType !== WrapType.NOT_APPLICABLE) return;
 
-  if (routeNotFound && typedValue)
-    return (
-      <div className="text-md mb-1 text-center text-black bg-card-dark py-2 px-3 rounded-lg">
-        Insufficient liquidity for this trade.
-      </div>
-    );
-
   return trade ? (
     <div className="flex flex-col w-full rounded-2xl cursor-pointer">
       <div className="w-full custom-dashed p-4">
@@ -206,7 +195,7 @@ const XSwapParams = ({
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center gap-2 w-full justify-between text-black font-bold text-base">
               <div className="flex items-center py-3 justify-between">
-                <span className="flex flex-col items-center">
+                <span className="flex flex-col items-center text-sm">
                   Price Impact <PriceImpact priceImpact={priceImpact} />
                 </span>
               </div>
@@ -233,16 +222,22 @@ const XSwapParams = ({
                 </span>
                 <span className="text-black text-sm font-medium text-right">
                   {trade.tradeType === TradeType.EXACT_INPUT
-                    ? `${trade
-                        .minimumAmountOut(allowedSlippage)
-                        .toSignificant(6)} ${
-                        trade.outputAmount.currency.symbol
-                      }`
-                    : `${trade
-                        .maximumAmountIn(allowedSlippage)
-                        .toSignificant(6)} ${
-                        trade.inputAmount.currency.symbol
-                      }`}
+                    ? DynamicFormatAmount({
+                        amount:
+                          trade
+                            .minimumAmountOut(allowedSlippage)
+                            .toSignificant(4) ?? 0,
+                        decimals: 2,
+                        endWith: trade.outputAmount.currency.symbol,
+                      })
+                    : DynamicFormatAmount({
+                        amount:
+                          trade
+                            .maximumAmountIn(allowedSlippage)
+                            .toSignificant(4) ?? 0,
+                        decimals: 2,
+                        endWith: trade.inputAmount.currency.symbol,
+                      })}
                 </span>
               </div>
 
@@ -251,7 +246,11 @@ const XSwapParams = ({
                   LP Fee <br />({slidingFee && `${slidingFee?.toFixed(2)}%`})
                 </span>
                 <span className="text-black text-sm font-medium text-right">
-                  {LPFeeString}
+                  {DynamicFormatAmount({
+                    amount: realizedLPFee?.toSignificant(4) ?? 0,
+                    decimals: 3,
+                    endWith: trade.inputAmount.currency.symbol,
+                  })}
                 </span>
               </div>
 
@@ -270,10 +269,14 @@ const XSwapParams = ({
     </div>
   ) : trade !== undefined || tradeState.state === TradeState.LOADING ? (
     <div className="flex justify-center mb-1 bg-card-dark py-3 px-3 rounded-lg">
-      <Loader size={17} />
+      <Loader size={17} className="text-black" color="black" />
+    </div>
+  ) : routeNotFound ? (
+    <div className="text-sm mb-1 text-center text-black bg-card-dark py-2 px-3 rounded-lg">
+      Insufficient liquidity for this trade.
     </div>
   ) : (
-    <div className="text-md mb-1 text-center text-black bg-card-dark py-2 px-3 rounded-lg">
+    <div className="text-sm mb-1 text-center text-black bg-card-dark py-2 px-3 rounded-lg">
       Select an amount
     </div>
   );

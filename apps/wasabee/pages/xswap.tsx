@@ -61,8 +61,8 @@ const XSwapPage = observer(() => {
   }
 
   return (
-    <div className="w-full px-4 py-4 flex gap-4 justify-start items-start ">
-      <HoneyContainer className="w-full max-w-[1240px] mx-auto">
+    <div className="w-full px-4 py-4 flex gap-4 justify-start items-start text-xs">
+      <HoneyContainer className="w-full max-w-[1024px] mx-auto">
         {!isMobile && (
           <div className="md:grid hidden w-full  grid-cols-12  bg-white p-2 rounded-lg items-center justify-center text-center">
             <div className="col-span-1">
