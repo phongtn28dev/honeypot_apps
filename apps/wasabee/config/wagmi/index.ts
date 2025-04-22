@@ -15,10 +15,12 @@ import { createConfig, http, cookieStorage, createStorage, mock } from 'wagmi';
 
 const pId = '1d1c8b5204bfbd57502685fc0934a57d';
 
+// Only include WalletConnect in browser environments to prevent multiple initializations
+const isBrowser = typeof window !== 'undefined';
 let customWallets = [
   metaMaskWallet,
   rainbowWallet,
-  walletConnectWallet,
+  ...(isBrowser ? [walletConnectWallet] : []),
   bitgetWallet,
   okxWallet,
   // holdstationWallet,

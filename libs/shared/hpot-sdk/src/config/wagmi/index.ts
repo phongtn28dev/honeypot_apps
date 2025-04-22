@@ -12,10 +12,11 @@ import { networks } from '../../lib/chains';
 
 const pId = '1d1c8b5204bfbd57502685fc0934a57d';
 
+const isBrowser = typeof window !== 'undefined';
 let customWallets = [
   metaMaskWallet,
   rainbowWallet,
-  walletConnectWallet,
+  ...(isBrowser ? [walletConnectWallet] : []),
   bitgetWallet,
   okxWallet,
   // holdstationWallet,
