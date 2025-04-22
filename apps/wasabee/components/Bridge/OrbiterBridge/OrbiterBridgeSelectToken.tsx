@@ -9,15 +9,17 @@ export const OrbiterBridgeSelectToken = observer(() => {
   const [tokens, setTokens] = useState<Token[]>([]);
 
   useEffect(() => {
-    if (wallet.currentChainId) {
+    if (wallet.currentChainId && orbiterBridgeService.orbiter) {
       const tokens = orbiterBridgeService.getAvailableTokens(
         wallet.currentChainId.toString()
       );
       setTokens(tokens);
-      handleTokenSelect(tokens[0]);
+      if (tokens.length > 0) {
+        handleTokenSelect(tokens[0]);
+      }
       console.log(tokens);
     }
-  }, [wallet.currentChainId]);
+  }, [wallet.currentChainId, orbiterBridgeService.orbiter]);
 
   useEffect(() => {
     if (orbiterBridgeService.selectedToken) {
