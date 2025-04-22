@@ -4,7 +4,7 @@ import { makeAutoObservable } from 'mobx';
 import { Address, getContract, zeroAddress } from 'viem';
 import { ICHIVaultABI } from '@/lib/abis/aquabera/ICHIVault';
 import { writeContract } from 'viem/actions';
-import { ContractWrite } from '@/services/utils';
+import { ContractWrite } from '@honeypot/shared';
 import BigNumber from 'bignumber.js';
 
 import { Token } from '@honeypot/shared';

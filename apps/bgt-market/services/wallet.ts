@@ -7,7 +7,7 @@ import { FtoFactoryContract } from './contract/launches/fto/ftofactory-contract'
 import { FtoFacadeContract } from './contract/launches/fto/ftofacade-contract';
 import { makeAutoObservable, reaction } from 'mobx';
 import { createPublicClientByChain } from '@/lib/client';
-import { StorageState } from './utils';
+import { StorageState } from '@honeypot/shared';
 import { MemeFactoryContract } from '@/services/contract/launches/pot2pump/memefactory-contract';
 import { MEMEFacadeContract } from '@/services/contract/launches/pot2pump/memefacade-contract';
 

@@ -8,7 +8,7 @@ import { Trade, TradeType } from '@cryptoalgebra/sdk';
 import { Currency } from '@cryptoalgebra/sdk';
 import { SwapCallEstimate } from '@/lib/algebra/hooks/swap/useSwapCallback';
 import { SuccessfulCall } from '@/lib/algebra/hooks/swap/useSwapCallback';
-import { ContractWrite } from './utils';
+import { ContractWrite } from '@honeypot/shared';
 import { Token as IndexerToken } from '@/lib/algebra/graphql/generated/graphql';
 import {
   ApprovalState,

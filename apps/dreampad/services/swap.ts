@@ -5,7 +5,7 @@ import { wallet } from '@honeypot/shared';
 import { liquidity } from '@/services/liquidity';
 import { exec } from '~/lib/contract';
 import { autorun, makeAutoObservable, reaction, when } from 'mobx';
-import { AsyncState } from './utils';
+import { AsyncState } from '@honeypot/shared';
 import { debounce } from 'lodash';
 import dayjs from 'dayjs';
 import { chart } from './chart';

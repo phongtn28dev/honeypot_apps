@@ -2,7 +2,7 @@ import DataLoader from 'dataloader';
 
 import { getContract } from 'viem';
 import { ethers } from 'ethers';
-import { createPublicClientByChain } from '../client';
+import { createPublicClientByChain } from '@honeypot/shared/lib/wallet';
 import { getCacheKey } from '../cache';
 import { networksMap } from '@honeypot/shared';
 import { factoryABI } from '../abis/factory';

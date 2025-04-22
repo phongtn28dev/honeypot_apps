@@ -39,6 +39,12 @@ export const MemeView = observer(() => {
   }, [pairData]);
 
   useEffect(() => {
+    if (pair) {
+      pair.getProjectInfo(true);
+    }
+  }, [pair]);
+
+  useEffect(() => {
     if (!pair?.launchedToken) {
       return;
     }

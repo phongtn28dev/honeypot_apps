@@ -7,11 +7,12 @@ import {
   UserActivePositionsQueryVariables,
   useUserActivePositionsQuery,
   Pool,
-  UserActivePositionsQueryResult,
-  useNativePriceQuery,
   SinglePoolQuery,
   SinglePoolQueryVariables,
   SinglePoolDocument,
+  PoolsByTokenPairBatchQuery,
+  PoolsByTokenPairBatchQueryVariables,
+  PoolsByTokenPairBatchDocument,
 } from '../generated/graphql';
 import { Address, getContract } from 'viem';
 import { useEffect, useState } from 'react';
@@ -20,7 +21,6 @@ import { wallet } from '../../wallet/wallet';
 import { CurrencyAmount, Token as AlgebranToken } from '@cryptoalgebra/sdk';
 import { unwrappedToken } from '@cryptoalgebra/sdk';
 import BigNumber from 'bignumber.js';
-import { object } from 'zod';
 import { PairContract } from '../../contract/dex/liquidity/pair-contract';
 import { Token } from '../../contract/token/token';
 import { useSubgraphClient } from './../../../hooks/useSubgraphClients';
@@ -30,6 +30,38 @@ import { useObserver } from 'mobx-react-lite';
 import { calculatePercentageChange } from '../../utils/calculatePercentageChange';
 import { algebraPositionManagerABI } from '../../abis/algebra-contracts/ABIs';
 import { algebraPositionManagerAddress } from '../../../wagmi-generated';
+
+let poolsByTokenPairRequestIds: string[] = [];
+let poolsByTokenPairRequestTimeout: NodeJS.Timeout | null = null;
+let poolsByTokenPairRequestResolvers: ((pools: Pool[]) => void)[] = [];
+
+const bulkGetPoolsByTokenPair = async (tokens: string[]): Promise<Pool[]> => {
+  poolsByTokenPairRequestIds.push(...tokens);
+
+  return new Promise((resolve) => {
+    poolsByTokenPairRequestResolvers.push(resolve);
+
+    if (poolsByTokenPairRequestTimeout) {
+      clearTimeout(poolsByTokenPairRequestTimeout);
+    }
+
+    poolsByTokenPairRequestTimeout = setTimeout(async () => {
+      const idsToFetch = [...new Set(poolsByTokenPairRequestIds)]; // de-dupe
+      const multipleTokenData = await getPoolsByTokenPairBatch(idsToFetch);
+
+      // Clear queue before resolving
+      poolsByTokenPairRequestIds = [];
+      poolsByTokenPairRequestTimeout = null;
+
+      // Resolve all waiting promises
+      for (const r of poolsByTokenPairRequestResolvers) {
+        r(multipleTokenData);
+      }
+
+      poolsByTokenPairRequestResolvers = [];
+    }, 100);
+  });
+};
 
 export const poolQueryToContract = (pool: Pool): PairContract => {
   const pairContract = new PairContract({
@@ -111,15 +143,12 @@ export const poolsByTokenPair = async (
   token0: string,
   token1: string
 ) => {
-  const { data } = await client.query<
-    PoolsByTokenPairQuery,
-    PoolsByTokenPairQueryVariables
-  >({
-    query: PoolsByTokenPairDocument,
-    variables: { token0, token1 },
-  });
-
-  return data?.pools;
+  const pools = await bulkGetPoolsByTokenPair([token0, token1]);
+  return pools.filter(
+    (pool) =>
+      (pool.token0.id === token0 && pool.token1.id === token1) ||
+      (pool.token0.id === token1 && pool.token1.id === token0)
+  );
 };
 
 export const userPools = async (
@@ -294,4 +323,17 @@ export const poolExists = async (poolAddress: string) => {
   });
 
   return data?.pool !== null;
+};
+
+const getPoolsByTokenPairBatch = async (tokens: string[]): Promise<Pool[]> => {
+  const infoClient = useSubgraphClient('algebra_info');
+  const { data } = await infoClient.query<
+    PoolsByTokenPairBatchQuery,
+    PoolsByTokenPairBatchQueryVariables
+  >({
+    query: PoolsByTokenPairBatchDocument,
+    variables: { tokens },
+  });
+
+  return data.pools as Pool[];
 };

@@ -1,6 +1,6 @@
 import { wallet } from '@honeypot/shared';
 import { PAGE_LIMIT, SubgraphProjectFilter } from '..';
-import { IndexerPaginationState } from '@/services/utils';
+import { IndexerPaginationState } from '@honeypot/shared';
 import {
   fetchPot2PumpList,
   fetchPot2Pumps,

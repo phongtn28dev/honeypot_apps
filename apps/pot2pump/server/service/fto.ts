@@ -1,7 +1,7 @@
 import { MUBAI_FTO_PAIR_ABI } from '@/lib/abis/ftoPair';
 import { MemePairABI } from '@/lib/abis/MemePair';
 import { chainsMap } from '@/lib/chain';
-import { createPublicClientByChain } from '@/lib/client';
+import { createPublicClientByChain } from '@honeypot/shared/lib/wallet';
 import { pg } from '@/lib/db';
 import DataLoader from 'dataloader';
 
@@ -91,16 +91,18 @@ export const ftoService = {
       chain_id: data.chain_id.toString(),
     });
 
-    console.log('project: ', {
-      pair: data.pair,
-      chain_id: data.chain_id,
-      project: project,
-    });
-
     let updateFlag = false;
     const publicClient = createPublicClientByChain(chainsMap[data.chain_id]);
     const readQueue = [];
-    if (!project || !project.provider) {
+    console.log('getProjectInfoproject: ', project);
+    if (!project) {
+      project = {
+        id: -8888,
+        pair: data.pair,
+        chain_id: data.chain_id,
+        provider: '',
+        project_type: null,
+      };
       updateFlag = true;
       readQueue.push(
         publicClient
@@ -138,9 +140,16 @@ export const ftoService = {
 
     await Promise.all(readQueue);
 
+    console.log('readQueue done: ', project);
+
     if (updateFlag) {
       console.log('updateFtoProject: ', project);
-      await updateFtoProject(project);
+      await updateFtoProject({
+        pair: data.pair,
+        chain_id: data.chain_id,
+        provider: project.provider ?? '',
+        creator_api_key: data.creator_api_key ?? super_api_key,
+      });
     }
     if (project?.creator_api_key) {
       project.creator_api_key = '********';
@@ -305,6 +314,9 @@ export const updateFtoProject = async (
     const fieldsToUpdate = Object.entries(data)
       .filter(([key, value]) => {
         if (key === 'creator_api_key') {
+          return false;
+        }
+        if (key === 'id') {
           return false;
         }
         return !!value;

@@ -2,7 +2,7 @@ import { createCache, kv } from '@/lib/kv';
 import { publicProcedure, router } from '../trpc';
 import requestIp from 'request-ip';
 import { TRPCError } from '@trpc/server';
-import { createPublicClientByChain } from '@/lib/client';
+import { createPublicClientByChain } from '@honeypot/shared/lib/wallet';
 import BigNumber from 'bignumber.js';
 import {
   createWalletClient,

@@ -8,7 +8,7 @@ import {
   PageInfo,
   PaginationState,
   ValueState,
-} from './../utils';
+} from '@honeypot/shared';
 import { trpc, trpcClient } from '@/lib/trpc';
 import { createSiweMessage } from '@/lib/siwe';
 

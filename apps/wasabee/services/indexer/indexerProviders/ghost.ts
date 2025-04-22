@@ -18,7 +18,7 @@ import {
   GhostAlgebraPairResponse,
 } from './../indexerTypes';
 import { networksMap } from '@honeypot/shared';
-import { PageInfo } from '@/services/utils';
+import { PageInfo } from '@honeypot/shared';
 import dayjs from 'dayjs';
 
 const memeGraphHandle = '5e83143f-8481-4564-afc2-7b7a766afef9/ghostgraph';

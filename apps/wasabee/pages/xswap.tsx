@@ -11,7 +11,7 @@ import { SwapCallEstimate } from '@/lib/algebra/hooks/swap/useSwapCallback';
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
 
 import { Token } from '@honeypot/shared';
-import { ContractWrite } from '@/services/utils';
+import { ContractWrite } from '@honeypot/shared';
 import { wallet } from '@honeypot/shared';
 import { xSwap } from '@/services/xswap';
 import { Trade } from '@cryptoalgebra/sdk';

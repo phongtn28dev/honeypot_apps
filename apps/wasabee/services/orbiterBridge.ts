@@ -10,7 +10,7 @@ import { Token } from '@honeypot/shared';
 import { action, makeAutoObservable, reaction } from 'mobx';
 import { wallet } from '@honeypot/shared';
 import BigNumber from 'bignumber.js';
-import { ContractWrite } from './utils';
+import { ContractWrite } from '@honeypot/shared';
 import { OrbiterRouterV3 } from './contract/orbiter/OrbiterRouterV3';
 import { simulateContract } from 'viem/actions';
 import Web3 from 'web3';

@@ -152,6 +152,17 @@ export const POOL_FEE_DATA = gql`
   }
 `;
 
+export const POOLS_BY_TOKEN_PAIR_BATCH = gql`
+  query PoolsByTokenPairBatch($tokens: [ID!]!) {
+    pools(
+      where: { token0_: { id_in: $tokens }, token1_: { id_in: $tokens } }
+      first: 1000
+    ) {
+      ...PoolFields
+    }
+  }
+`;
+
 export const POOLS_BY_TOKEN_PAIR = gql`
   query PoolsByTokenPair($token0: ID!, $token1: ID!) {
     pools(where: { token0_: { id: $token0 }, token1_: { id: $token1 } }) {

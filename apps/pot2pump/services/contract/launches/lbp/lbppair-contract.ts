@@ -2,7 +2,7 @@ import { Token } from '@honeypot/shared';
 import { getContract, zeroAddress } from 'viem';
 import BigNumber from 'bignumber.js';
 import { makeAutoObservable } from 'mobx';
-import { AsyncState, ContractWrite } from '@/services/utils';
+import { AsyncState, ContractWrite } from '@honeypot/shared';
 import { wallet } from '@honeypot/shared';
 import { BaseLaunchContract } from '../base-launch-contract';
 import { LiquidityBootstrapPoolABI } from '@/lib/abis/LiquidityBootstrapPoolAbi';

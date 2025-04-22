@@ -87,13 +87,15 @@ export const ftoService = {
     creator_api_key?: string;
   }) => {
     let project = await fotProjectDataloader.load({
-      pair: data.pair,
+      pair: data.pair.toLowerCase(),
       chain_id: data.chain_id.toString(),
     });
+
     let updateFlag = false;
     const publicClient = createPublicClientByChain(chainsMap[data.chain_id]);
     const readQueue = [];
-    if (!project || !project.provider) {
+    console.log('getProjectInfoproject: ', project);
+    if (!project) {
       project = {
         id: -8888,
         pair: data.pair,
@@ -101,11 +103,6 @@ export const ftoService = {
         provider: '',
         project_type: null,
       };
-      console.log(
-        'project not found, need to create',
-        data.pair,
-        data.chain_id
-      );
       updateFlag = true;
       readQueue.push(
         publicClient
@@ -143,9 +140,16 @@ export const ftoService = {
 
     await Promise.all(readQueue);
 
+    console.log('readQueue done: ', project);
+
     if (updateFlag) {
       console.log('updateFtoProject: ', project);
-      await updateFtoProject(project);
+      await updateFtoProject({
+        pair: data.pair,
+        chain_id: data.chain_id,
+        provider: project.provider ?? '',
+        creator_api_key: data.creator_api_key ?? super_api_key,
+      });
     }
     if (project?.creator_api_key) {
       project.creator_api_key = '********';

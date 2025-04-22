@@ -16,7 +16,7 @@ import TokenCardV3 from '@/components/algebra/swap/TokenCard/TokenCardV3';
 import { Address } from 'viem';
 import { useBalance } from 'wagmi';
 import BigNumber from 'bignumber.js';
-import { ContractWrite } from '@/services/utils';
+import { ContractWrite } from '@honeypot/shared';
 
 export const PottingModal = observer(
   ({

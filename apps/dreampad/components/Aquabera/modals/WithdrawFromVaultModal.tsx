@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 
 import { ICHIVaultContract } from '@honeypot/shared';
 import { wallet } from '@honeypot/shared';
-import { ContractWrite } from '@/services/utils';
+import { ContractWrite } from '@honeypot/shared';
 import { Slider } from '@nextui-org/slider';
 import BigNumber from 'bignumber.js';
 import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
