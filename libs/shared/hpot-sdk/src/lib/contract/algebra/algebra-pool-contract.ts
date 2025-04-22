@@ -1,12 +1,12 @@
-import { BaseContract } from '../../../base-contract';
+import { BaseContract } from '../baseContract';
 import { wallet } from './../../wallet';
 import { Signer, ethers } from 'ethers';
 import { Contract } from 'ethcall';
 import BigNumber from 'bignumber.js';
 import { makeAutoObservable } from 'mobx';
-import { getContract } from 'viem';
-import { algebraPoolABI } from '../../../abis/algebra-contracts/ABIs';
-import { AsyncState } from '../../../services/utils';
+import { getContract, GetContractReturnType } from 'viem';
+import { algebraPoolABI } from '../../abis/algebra-contracts/ABIs';
+import { AsyncState } from '../../utils';
 import { Token } from '../token/token';
 
 export class AlgebraPoolContract implements BaseContract {
@@ -39,7 +39,10 @@ export class AlgebraPoolContract implements BaseContract {
   abi = algebraPoolABI;
   isInit = false;
 
-  get contract() {
+  get contract(): GetContractReturnType<
+    typeof algebraPoolABI,
+    typeof wallet.walletClient
+  > {
     return getContract({
       address: this.address as `0x${string}`,
       abi: this.abi,

@@ -18,7 +18,7 @@ import { createSiweMessage } from '@/lib/siwe';
 const payContract = '0x166a064C9D0E243fea5d9afA3E7B06a8b94E05F9';
 const ethersProvider =
   typeof window !== 'undefined' && window.ethereum
-    ? new ethers.providers.Web3Provider(window.ethereum)
+    ? new ethers.BrowserProvider(window.ethereum)
     : null;
 
 function toDataURL(src: string, callback: (arg0: string) => void) {
@@ -307,16 +307,18 @@ const BeraVoteForm = observer(
       if (!signer) {
         return;
       }
-      const fetchPaymentFee = async () => {
-        const paymentContract = new ethers.Contract(
-          payContract,
-          APIAccessPayment,
-          signer
-        );
-        const fee = await paymentContract.accessFee();
-        setPaymentFee(fee);
-      };
-      fetchPaymentFee();
+      signer.then((signerRes) => {
+        const fetchPaymentFee = async () => {
+          const paymentContract = new ethers.Contract(
+            payContract,
+            APIAccessPayment,
+            signerRes
+          );
+          const fee = await paymentContract.accessFee();
+          setPaymentFee(fee);
+        };
+        fetchPaymentFee();
+      });
     }, [signer]);
 
     return (
@@ -337,7 +339,9 @@ const BeraVoteForm = observer(
           console.log('Form Data:', values);
           if (values.createDaoSpace === true) {
             values.logo = logoBase64;
-            signer && handleYes(values, signer, paymentFee, pair);
+            signer?.then((signerRes) => {
+              handleYes(values, signerRes, paymentFee, pair);
+            });
           }
         }}
       >
@@ -361,7 +365,7 @@ const BeraVoteForm = observer(
                 </p>
                 <p>
                   cost of dao creation:{' '}
-                  {paymentFee && ethers.utils.formatEther(paymentFee)} Bera
+                  {paymentFee && ethers.formatEther(paymentFee)} Bera
                 </p>
               </div>
 

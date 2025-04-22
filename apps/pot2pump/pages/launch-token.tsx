@@ -5,12 +5,8 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { wallet } from '@honeypot/shared';
 import launchpad from '@/services/launchpad';
 import { Button } from '@nextui-org/react';
-import { Button as FTOButton } from '@/components/button';
 import { NextLayoutPage } from '@/types/nextjs';
-import { RocketSvg } from '@/components/svg/Rocket';
-import { PeddingSvg } from '@/components/svg/Pedding';
 import { DreampadSvg } from '@/components/svg/Dreampad';
-import { now, getLocalTimeZone, fromDate } from '@internationalized/date';
 import { dayjs } from '@/lib/dayjs';
 import {
   Accordion,
@@ -38,9 +34,6 @@ import { TokenLogo } from '@honeypot/shared';
 
 import { Token } from '@honeypot/shared';
 import { amountFormatted, formatAmount } from '@/lib/format';
-import { trpcClient } from '@/lib/trpc';
-import { Blob, File } from 'buffer';
-import { base64ToFile } from '@/lib/blob/uploadProjectIcon';
 import AITokenGenerator, {
   TokenGeneratedSuccessValues,
 } from '@/components/AI/AITokenGenerator/AITokenGenerator';
@@ -194,6 +187,8 @@ const MEMELaunchModal: NextLayoutPage = observer(() => {
     },
   }));
 
+  console.log('state.raisedTokenAddress:', state.raisedTokenAddress);
+
   const onSubmit = async (data: FormValues) => {
     try {
       const [pairAddress] = await launchpad.createLaunchProject.call({
@@ -228,7 +223,7 @@ const MEMELaunchModal: NextLayoutPage = observer(() => {
   useEffect(() => {
     if (wallet.isInit) {
       state.setRaisedTokenAddress(
-        wallet.currentChain.raisedTokenData[1].address
+        wallet.currentChain.raisedTokenData[0].address
       );
     }
   }, [wallet.isInit]);

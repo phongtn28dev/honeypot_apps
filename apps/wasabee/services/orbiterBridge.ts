@@ -10,17 +10,11 @@ import { Token } from '@honeypot/shared';
 import { action, makeAutoObservable, reaction } from 'mobx';
 import { wallet } from '@honeypot/shared';
 import BigNumber from 'bignumber.js';
-import { ContractWrite } from './utils';
+import { ContractWrite } from '@honeypot/shared';
 import { OrbiterRouterV3 } from './contract/orbiter/OrbiterRouterV3';
 import { simulateContract } from 'viem/actions';
 import Web3 from 'web3';
 import { ethAddressUtils } from '@/lib/utils';
-
-const orbiter = await OrbiterClient.create({
-  apiEndpoint: ENDPOINT.MAINNET,
-  apiKey: 'xxxxxx', //optional
-  channelId: 'xxxxxx', //optional
-});
 
 export class OrbiterBridge {
   selectedToken: Token | null = null;
@@ -29,8 +23,16 @@ export class OrbiterBridge {
   fromAmount: string = '';
   tradePairs: TradePair[] = [];
   router: Router | null = null;
+  orbiter: OrbiterClient | null = null;
 
   constructor() {
+    OrbiterClient.create({
+      apiEndpoint: ENDPOINT.MAINNET,
+      apiKey: 'xxxxxx', //optional
+      channelId: 'xxxxxx', //optional
+    }).then((orbiter) => {
+      this.orbiter = orbiter;
+    });
     makeAutoObservable(this);
     reaction(
       () => this.fromChainId,
@@ -64,6 +66,10 @@ export class OrbiterBridge {
       return 'No trade pairs found';
     }
 
+    if (Number(this.fromAmount) > Number(this.selectedToken?.balance)) {
+      return 'Insufficient balance';
+    }
+
     return undefined;
   }
 
@@ -82,6 +88,10 @@ export class OrbiterBridge {
   }
 
   updateRouter() {
+    if (!this.orbiter) {
+      console.log('no orbiter service');
+      return;
+    }
     if (!this.fromChainId || !this.toChainId || !this.selectedToken) {
       console.log('no fromChainId or toChainId or selectedToken');
       return;
@@ -103,13 +113,17 @@ export class OrbiterBridge {
       return;
     }
 
-    this.router = orbiter.createRouter(tradePair);
+    this.router = this.orbiter.createRouter(tradePair);
 
     console.log(this.router);
   }
 
   getAvailableTokens(chainId: string): Token[] {
-    const tokens: OrbiterToken[] = orbiter.getAvailableTokens(chainId);
+    if (!this.orbiter) {
+      console.log('no orbiter service');
+      return [];
+    }
+    const tokens: OrbiterToken[] = this.orbiter.getAvailableTokens(chainId);
 
     return tokens.map((token) => {
       const outToken = Token.getToken({
@@ -223,11 +237,15 @@ export class OrbiterBridge {
   }
 
   updateAvailableTradePairs() {
+    if (!this.orbiter) {
+      console.log('no orbiter service');
+      return;
+    }
     if (!this.fromChainId || !this.selectedToken) {
       return;
     }
 
-    this.tradePairs = orbiter
+    this.tradePairs = this.orbiter
       .getAvailableTradePairs(this.fromChainId, this.selectedToken?.symbol)
       .filter((pair) => pair.srcChainId === this.fromChainId);
   }

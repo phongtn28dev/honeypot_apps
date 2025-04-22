@@ -1,5 +1,3 @@
-import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
-import { AsyncState, ValueState } from '@/services/utils';
 import { wallet } from '@honeypot/shared';
 import { card, Input, Select, SelectItem } from '@nextui-org/react';
 import { Button } from '../button';
@@ -8,8 +6,6 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useBalance } from 'wagmi';
-
 import { Token } from '@honeypot/shared';
 import { DiscussionArea } from '../Discussion/DiscussionArea/DiscussionArea';
 import { amountFormatted } from '@/lib/format';

@@ -8,3 +8,4 @@ export * from './lib/graphql/clients/lbp';
 export * from './components';
 export * from './lib/utils';
 export * from './assets';
+export * from './lib/priceFeed';

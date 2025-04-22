@@ -27,16 +27,24 @@
       "@/ui/*": ["./components/ui/*"],
       "@/public/*": ["./public/*"],
       "@/public/images/*": ["./public/images/*"],
-      "@honeypot/shared": ["../../libs/shared/hpot-sdk/src/index.ts"]
+      "@honeypot/shared": ["../../libs/shared/hpot-sdk/src/index.ts"],
+      "@honeypot/shared/*": ["../../libs/shared/hpot-sdk/src/*"],
+      "@honeypot/shared/server/callers": [
+        "../../libs/shared/hpot-sdk/src/server/callers/index.ts"
+      ]
     }
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "config/wagmi/holdstationWallet.js",
-    "**/*.ts",
-    "**/*.tsx"
+    "config/wagmi/holdstationWallet.js"
   ],
-  "exclude": ["node_modules", "jest.config.ts", "**/*.spec.ts", "**/*.test.ts"]
+  "exclude": [
+    "node_modules",
+    "jest.config.ts",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "public/charting_library"
+  ]
 }

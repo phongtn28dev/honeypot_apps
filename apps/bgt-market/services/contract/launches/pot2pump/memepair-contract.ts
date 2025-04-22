@@ -4,7 +4,7 @@ import { dayjs } from '@/lib/dayjs';
 import BigNumber from 'bignumber.js';
 import { trpcClient } from '@/lib/trpc';
 import { makeAutoObservable } from 'mobx';
-import { AsyncState, ContractWrite } from '@/services/utils';
+import { AsyncState, ContractWrite } from '@honeypot/shared';
 import { pot2PumpPairABI } from '@/lib/abis/Pot2Pump/pot2PumpPair';
 import { formatAmountWithAlphabetSymbol } from '@/lib/algebra/utils/common/formatAmount';
 import {

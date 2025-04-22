@@ -3,7 +3,7 @@ import { wallet } from '@honeypot/shared';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Address, getContract, zeroAddress } from 'viem';
 import { ICHIVaultFactoryABI } from '@/lib/abis/aquabera/ICHIVaultFactory';
-import { ContractWrite } from '@/services/utils';
+import { ContractWrite } from '@honeypot/shared';
 import { RewardVaultABI } from '@/lib/abis/bgt-market/RewardVaultABI';
 import { chain } from '@/services/chain';
 

@@ -15,7 +15,7 @@ import {
   useReadIchiVaultAllowToken0,
   useReadIchiVaultAllowToken1,
 } from '@/wagmi-generated';
-import { ContractWrite } from '@/services/utils';
+import { ContractWrite } '@honeypot/shared';
 import BigNumber from 'bignumber.js';
 import { observer } from 'mobx-react-lite';
 

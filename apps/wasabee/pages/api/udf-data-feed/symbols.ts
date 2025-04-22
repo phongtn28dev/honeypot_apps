@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from "next";
-import { LibrarySymbolInfo } from "@/public/static/charting_library/charting_library";
-import { chains, chainsMap } from "@/lib/chain";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { LibrarySymbolInfo } from '@/public/static/charting_library/charting_library';
+import { chainsMap } from '@/lib/chain';
 
 export default function handler(
   req: NextApiRequest,
@@ -12,21 +12,21 @@ export default function handler(
     return res.status(400);
   }
 
-  const symbol = ticker.split(":")[0];
-  const chain = ticker.split(":")[1];
-  const address = ticker.split(":")[2];
-  const chainName = chainsMap[chain]?.name ?? "";
+  const symbol = ticker.split(':')[0];
+  const chain = ticker.split(':')[1];
+  const address = ticker.split(':')[2];
+  const chainName = chainsMap[chain]?.name ?? '';
 
   res.status(200).json({
-    name: symbol + ":" + chainName,
+    name: symbol + ':' + chainName,
     ticker: ticker,
-    description: "",
-    type: "",
-    session: "0000-0000",
+    description: '',
+    type: '',
+    session: '0000-0000',
     exchange: chainsMap[chain].name,
-    listed_exchange: "",
-    timezone: "Etc/UTC",
-    format: "price",
+    listed_exchange: '',
+    timezone: 'Etc/UTC',
+    format: 'price',
     pricescale: 100000000,
     minmov: 1,
   });

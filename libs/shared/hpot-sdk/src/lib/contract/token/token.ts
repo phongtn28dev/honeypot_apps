@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { BaseContract } from '../baseContract';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '../../wallet/wallet';
 import { get, makeAutoObservable, reaction } from 'mobx';
 import { Address, getContract, zeroAddress } from 'viem';
 import { ContractWrite } from '../../utils/utils';
@@ -127,6 +127,24 @@ export class Token implements BaseContract {
   constructor(args: Partial<Token>) {
     this.setData(args);
     makeAutoObservable(this);
+
+    reaction(
+      () => wallet.currentChainId,
+      () => {
+        if (this.chainId === wallet.currentChainId.toString()) {
+          this.getBalance();
+        }
+      }
+    );
+
+    reaction(
+      () => wallet.account,
+      () => {
+        if (this.chainId === wallet.currentChainId.toString()) {
+          this.getBalance();
+        }
+      }
+    );
   }
 
   get faucet() {
@@ -483,7 +501,7 @@ export class Token implements BaseContract {
       amount: this.balanceWithoutDecimals
         .div(new BigNumber(10).pow(this.decimals))
         .toString(),
-      decimals: this.decimals,
+      decimals: 5,
     });
   }
 

@@ -28,6 +28,7 @@
       "@/public/*": ["./public/*"],
       "@/public/images/*": ["./public/images/*"],
       "@honeypot/shared": ["../../libs/shared/hpot-sdk/src/index.ts"],
+      "@honeypot/shared/*": ["../../libs/shared/hpot-sdk/src/*"],
       "@GDdark/universal-account": [
         "./../../node_modules/@GDdark/universal-account/dist/index.d.ts"
       ]

@@ -3,7 +3,7 @@ import { wallet } from '@honeypot/shared';
 import { makeAutoObservable } from 'mobx';
 import { getContract } from 'viem';
 import { algebraPoolABI } from '@/lib/abis/algebra-contracts/ABIs';
-import { AsyncState, ContractWrite } from '@/services/utils';
+import { AsyncState, ContractWrite } from '@honeypot/shared';
 import { Token } from '@honeypot/shared';
 
 export class AlgebraPoolContract implements BaseContract {

@@ -7,10 +7,10 @@ import {
   LbpPool,
   useLbpPairsQuery,
 } from '../generated/graphql';
-import { LbpLaunch, lbpMetadatas, wallet } from '@honeypot/shared';
+import { LbpLaunch } from '../../contract/launches/lbp/lbpPair';
 import { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
-import { useSubgraphClient } from '@honeypot/shared';
+import { useSubgraphClient } from './../../../hooks/useSubgraphClients';
 import { ApolloClient } from '@apollo/client';
 
 export const useLbpLaunchList = () => {

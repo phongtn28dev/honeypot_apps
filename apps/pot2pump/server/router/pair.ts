@@ -4,7 +4,7 @@ import { publicProcedure, router } from '../trpc';
 import z from 'zod';
 import { pairByTokensLoader, tokenLoader } from '@/lib/dataloader/pair';
 import { Address, getContract } from 'viem';
-import { createPublicClientByChain } from '@/lib/client';
+import { createPublicClientByChain } from '@honeypot/shared/lib/wallet';
 import IUniswapV2Pair from '@uniswap/v2-core/build/IUniswapV2Pair.json';
 import PQueue from 'p-queue';
 import { networksMap } from '@honeypot/shared';

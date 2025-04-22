@@ -8,7 +8,7 @@ import {
   PageInfo,
   PaginationState,
   ValueState,
-} from './../utils';
+} from '@honeypot/shared';
 import { trpc, trpcClient } from '@/lib/trpc';
 import { createSiweMessage } from '@/lib/siwe';
 import { Token } from '@honeypot/shared';
@@ -667,7 +667,7 @@ class LaunchPad {
               name: tokenName,
               symbol: tokenSymbol,
               swapHandler: wallet.currentChain.contracts
-                .algebraSwapRouter as `0x${string}`,
+                .algebraPositionManager as `0x${string}`,
             },
           ]);
         }

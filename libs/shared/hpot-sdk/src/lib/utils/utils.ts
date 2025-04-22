@@ -1,13 +1,14 @@
 import { ToastOptions, toast } from 'react-toastify';
-import { wallet } from '@honeypot/shared';
-import { TransactionPendingToastify } from '@honeypot/shared';
+import { wallet } from '../wallet/wallet';
+import { TransactionPendingToastify } from '../../components/CustomToastify/TransactionPendingToastify/TransactionPendingToastify';
 import { localforage } from '../utils/storage';
 import { LRUCache } from 'lru-cache';
 import { debounce, max, initial } from 'lodash';
 import { PageRequest } from '../../types/pagination';
 import { visualEffects } from '../visualeffect/visualeffects';
-import { WrappedToastify } from '@honeypot/shared';
+import { WrappedToastify } from '../utils/wrappedToastify';
 import { makeAutoObservable } from 'mobx';
+import { TransactionReceipt } from 'viem';
 
 export type PageInfo = {
   hasNextPage: boolean;
@@ -142,6 +143,7 @@ export class ContractWrite<T extends (...args: any) => any> {
   failMsg: string = '';
   silent: boolean = false;
   isSuccessEffect: boolean = false;
+  successCallBack: (transaction: TransactionReceipt) => any = () => {};
   private _call: (...args: any) => any;
   constructor(func: T, options?: Partial<ContractWrite<T>>) {
     this._call = func;
@@ -186,7 +188,8 @@ export class ContractWrite<T extends (...args: any) => any> {
       const transaction = await wallet.publicClient.waitForTransactionReceipt({
         confirmations: 2,
         hash,
-        timeout: 1000 * 60 * 5,
+        pollingInterval: 5000,
+        timeout: undefined,
       });
       console.log('transaction', transaction);
       toast.dismiss(pendingPopup);
@@ -210,6 +213,10 @@ export class ContractWrite<T extends (...args: any) => any> {
           default:
             throw new Error(`Transaction ${hash} Pending`);
         }
+      }
+
+      if (this.successCallBack) {
+        this.successCallBack(transaction);
       }
       return transaction;
     } catch (error: any) {
@@ -242,7 +249,8 @@ export class ContractWrite<T extends (...args: any) => any> {
       const transaction = await wallet.publicClient.waitForTransactionReceipt({
         confirmations: 2,
         hash,
-        timeout: 1000 * 60 * 5,
+        pollingInterval: 5000,
+        timeout: undefined,
       });
       console.log('transaction', transaction);
       toast.dismiss(pendingPopup);
@@ -263,6 +271,10 @@ export class ContractWrite<T extends (...args: any) => any> {
           default:
             throw new Error(`Transaction ${hash} Pending`);
         }
+      }
+
+      if (this.successCallBack) {
+        this.successCallBack(transaction);
       }
       return transaction;
     } catch (error: any) {

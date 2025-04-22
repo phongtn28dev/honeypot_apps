@@ -3,7 +3,7 @@ import { Signer, ethers } from 'ethers';
 import { Contract } from 'ethcall';
 import BigNumber from 'bignumber.js';
 import { makeAutoObservable } from 'mobx';
-import { getContract } from 'viem';
+import { getContract, GetContractReturnType } from 'viem';
 import { algebraFactoryABI } from '../../abis/algebra-contracts/ABIs';
 import { ContractWrite } from '../../utils/utils';
 import { BaseContract } from '../baseContract';
@@ -18,7 +18,10 @@ export class AlgebraFactoryContract implements BaseContract {
     makeAutoObservable(this);
   }
 
-  get contract() {
+  get contract(): GetContractReturnType<
+    typeof algebraFactoryABI,
+    typeof wallet.walletClient
+  > {
     return getContract({
       address: this.address as `0x${string}`,
       abi: this.abi,

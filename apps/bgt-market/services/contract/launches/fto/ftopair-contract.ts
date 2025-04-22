@@ -2,7 +2,7 @@ import { BaseContract } from '../..';
 
 import { wallet } from '@honeypot/shared';
 import { getContract } from 'viem';
-import { AsyncState, ContractWrite } from '../../../utils';
+import { AsyncState, ContractWrite } from '@honeypot/shared';
 import { makeAutoObservable } from 'mobx';
 import { MUBAI_FTO_PAIR_ABI } from '@/lib/abis/ftoPair';
 import BigNumber from 'bignumber.js';

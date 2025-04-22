@@ -2,7 +2,6 @@ import { orbiterBridgeService } from '@/services/orbiterBridge';
 import { wallet } from '@honeypot/shared';
 import { useEffect, useState } from 'react';
 import { TokenSelector } from '@honeypot/shared';
-
 import { Token } from '@honeypot/shared';
 import { observer } from 'mobx-react-lite';
 
@@ -10,15 +9,17 @@ export const OrbiterBridgeSelectToken = observer(() => {
   const [tokens, setTokens] = useState<Token[]>([]);
 
   useEffect(() => {
-    if (wallet.currentChainId) {
+    if (wallet.currentChainId && orbiterBridgeService.orbiter) {
       const tokens = orbiterBridgeService.getAvailableTokens(
         wallet.currentChainId.toString()
       );
       setTokens(tokens);
-      orbiterBridgeService.setSelectedToken(tokens[0]);
+      if (tokens.length > 0) {
+        handleTokenSelect(tokens[0]);
+      }
       console.log(tokens);
     }
-  }, [wallet.currentChainId]);
+  }, [wallet.currentChainId, orbiterBridgeService.orbiter]);
 
   useEffect(() => {
     if (orbiterBridgeService.selectedToken) {
@@ -28,6 +29,7 @@ export const OrbiterBridgeSelectToken = observer(() => {
 
   const handleTokenSelect = (token: Token) => {
     orbiterBridgeService.setSelectedToken(token);
+    token.getBalance();
   };
 
   return (

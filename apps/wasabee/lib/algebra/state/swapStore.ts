@@ -218,15 +218,6 @@ export function useDerivedSwapInfo(): {
 
   const trade = (isExactIn ? bestTradeExactIn : bestTradeExactOut) ?? undefined;
 
-  console.log(
-    'trade.trade?.inputAmount.toSignificant(2)',
-    trade.trade?.inputAmount.toSignificant(2)
-  );
-  console.log(
-    'trade.trade?.outputAmount.toSignificant(2)',
-    trade.trade?.outputAmount.toSignificant(2)
-  );
-
   const [addressA, addressB] = [
     inputCurrency?.isNative ? undefined : inputCurrency?.address || '',
     outputCurrency?.isNative ? undefined : outputCurrency?.address || '',
@@ -391,15 +382,6 @@ export function useDerivedSwapInfoWithoutSwapState({
   );
 
   const trade = (isExactIn ? bestTradeExactIn : bestTradeExactOut) ?? undefined;
-
-  // console.log(
-  //   'trade.trade?.inputAmount.toSignificant(2)',
-  //   trade.trade?.inputAmount.toSignificant(2)
-  // );
-  // console.log(
-  //   'trade.trade?.outputAmount.toSignificant(2)',
-  //   trade.trade?.outputAmount.toSignificant(2)
-  // );
 
   const [addressA, addressB] = [
     inputCurrency?.isNative ? undefined : inputCurrency?.address || '',

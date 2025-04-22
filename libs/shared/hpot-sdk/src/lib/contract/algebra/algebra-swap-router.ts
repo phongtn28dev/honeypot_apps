@@ -1,10 +1,7 @@
 import { BaseContract } from './../baseContract';
 import { wallet } from './../../wallet';
-import { Signer, ethers } from 'ethers';
-import { Contract } from 'ethcall';
-import BigNumber from 'bignumber.js';
 import { makeAutoObservable } from 'mobx';
-import { getContract } from 'viem';
+import { getContract, GetContractReturnType } from 'viem';
 import { algebraRouterABI } from '../../abis/algebra-contracts/ABIs';
 
 export class AlgebraSwapRouterContract implements BaseContract {
@@ -17,7 +14,10 @@ export class AlgebraSwapRouterContract implements BaseContract {
     makeAutoObservable(this);
   }
 
-  get contract() {
+  get contract(): GetContractReturnType<
+    typeof algebraRouterABI,
+    typeof wallet.walletClient
+  > {
     return getContract({
       address: this.address as `0x${string}`,
       abi: this.abi,

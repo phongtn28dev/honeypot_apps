@@ -3,7 +3,7 @@ import { action, makeAutoObservable, reaction } from 'mobx';
 import { Token } from '@honeypot/shared';
 
 import { PairContract } from '@honeypot/shared';
-import { AsyncState } from './utils';
+import { AsyncState } from '@honeypot/shared';
 import { ChartDataResponse, resolutionType } from './priceFeed/priceFeedTypes';
 import { wallet } from '@honeypot/shared';
 import { trpcClient } from '@/lib/trpc';

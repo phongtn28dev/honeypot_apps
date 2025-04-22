@@ -1,0 +1,11 @@
+{
+  "functions": {
+    "api/**/*.ts": {
+      "maxDuration": 60,
+      "memory": 1024,
+      "ulimits": {
+        "nofile": 65535
+      }
+    }
+  }
+}

@@ -1,6 +1,7 @@
-import { GhostIndexer } from "./indexerProviders/ghost";
-import { PageInfo } from "../utils";
-import { Address } from "viem";
+import { GhostIndexer } from './indexerProviders/ghost';
+
+import { PageInfo } from '@honeypot/shared/lib/utils/utils';
+import { Address } from 'viem';
 export type IndexerProvider = GhostIndexer;
 
 export type GhostFtoPairResponse = {
@@ -72,10 +73,10 @@ export type PairFilter = {
   searchString: string;
   limit: number;
   sortingTarget?:
-    | "trackedReserveETH"
-    | "trackedReserveUSD"
-    | "tradingVolumeYesterday";
-  sortingDirection?: "asc" | "desc";
+    | 'trackedReserveETH'
+    | 'trackedReserveUSD'
+    | 'tradingVolumeYesterday';
+  sortingDirection?: 'asc' | 'desc';
 };
 
 export type GhostFtoTokensResponse = {
@@ -83,7 +84,7 @@ export type GhostFtoTokensResponse = {
 };
 
 export type PageRequest = {
-  direction: "next" | "prev";
+  direction: 'next' | 'prev';
   cursor?: string;
   pageNum?: number;
   orderBy?: string;

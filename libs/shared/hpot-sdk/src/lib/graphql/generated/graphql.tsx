@@ -15135,6 +15135,13 @@ export type PoolFeeDataQueryVariables = Exact<{
 
 export type PoolFeeDataQuery = { __typename?: 'Query', poolDayDatas: Array<{ __typename?: 'PoolDayData', feesUSD: any }> };
 
+export type PoolsByTokenPairBatchQueryVariables = Exact<{
+  tokens: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
+}>;
+
+
+export type PoolsByTokenPairBatchQuery = { __typename?: 'Query', pools: Array<{ __typename?: 'Pool', id: string, fee: any, sqrtPrice: any, liquidity: any, tick: any, tickSpacing: any, totalValueLockedUSD: any, volumeUSD: any, feesUSD: any, untrackedFeesUSD: any, token0Price: any, token1Price: any, txCount: any, createdAtTimestamp: any, aprPercentage: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any, derivedUSD: any, initialUSD: any, txCount: any, holderCount: any, totalSupply: any, volumeUSD: any, totalValueLockedUSD: any, marketCap: any, poolCount: any, priceChange24hPercentage: any, pot2Pump?: { __typename?: 'Pot2Pump', id: string } | null, tokenHourData: Array<{ __typename?: 'TokenHourData', periodStartUnix: number, priceUSD: any, feesUSD: any, untrackedVolumeUSD: any }> }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any, derivedUSD: any, initialUSD: any, txCount: any, holderCount: any, totalSupply: any, volumeUSD: any, totalValueLockedUSD: any, marketCap: any, poolCount: any, priceChange24hPercentage: any, pot2Pump?: { __typename?: 'Pot2Pump', id: string } | null, tokenHourData: Array<{ __typename?: 'TokenHourData', periodStartUnix: number, priceUSD: any, feesUSD: any, untrackedVolumeUSD: any }> }, poolHourData: Array<{ __typename?: 'PoolHourData', feesUSD: any, id: string, tvlUSD: any, txCount: any, volumeUSD: any, periodStartUnix: number }>, poolDayData: Array<{ __typename?: 'PoolDayData', feesUSD: any, id: string, txCount: any, volumeUSD: any, tvlUSD: any, date: number }>, poolWeekData: Array<{ __typename?: 'PoolWeekData', feesUSD: any, tvlUSD: any, volumeUSD: any, id: string, week: number }>, poolMonthData: Array<{ __typename?: 'PoolMonthData', feesUSD: any, tvlUSD: any, volumeUSD: any, id: string, month: number }> }> };
+
 export type PoolsByTokenPairQueryVariables = Exact<{
   token0: Scalars['ID']['input'];
   token1: Scalars['ID']['input'];
@@ -16782,6 +16789,49 @@ export type PoolFeeDataQueryHookResult = ReturnType<typeof usePoolFeeDataQuery>;
 export type PoolFeeDataLazyQueryHookResult = ReturnType<typeof usePoolFeeDataLazyQuery>;
 export type PoolFeeDataSuspenseQueryHookResult = ReturnType<typeof usePoolFeeDataSuspenseQuery>;
 export type PoolFeeDataQueryResult = Apollo.QueryResult<PoolFeeDataQuery, PoolFeeDataQueryVariables>;
+export const PoolsByTokenPairBatchDocument = gql`
+    query PoolsByTokenPairBatch($tokens: [ID!]!) {
+  pools(
+    where: {token0_: {id_in: $tokens}, token1_: {id_in: $tokens}}
+    first: 1000
+  ) {
+    ...PoolFields
+  }
+}
+    ${PoolFieldsFragmentDoc}`;
+
+/**
+ * __usePoolsByTokenPairBatchQuery__
+ *
+ * To run a query within a React component, call `usePoolsByTokenPairBatchQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePoolsByTokenPairBatchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePoolsByTokenPairBatchQuery({
+ *   variables: {
+ *      tokens: // value for 'tokens'
+ *   },
+ * });
+ */
+export function usePoolsByTokenPairBatchQuery(baseOptions: Apollo.QueryHookOptions<PoolsByTokenPairBatchQuery, PoolsByTokenPairBatchQueryVariables> & ({ variables: PoolsByTokenPairBatchQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PoolsByTokenPairBatchQuery, PoolsByTokenPairBatchQueryVariables>(PoolsByTokenPairBatchDocument, options);
+      }
+export function usePoolsByTokenPairBatchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PoolsByTokenPairBatchQuery, PoolsByTokenPairBatchQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PoolsByTokenPairBatchQuery, PoolsByTokenPairBatchQueryVariables>(PoolsByTokenPairBatchDocument, options);
+        }
+export function usePoolsByTokenPairBatchSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PoolsByTokenPairBatchQuery, PoolsByTokenPairBatchQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PoolsByTokenPairBatchQuery, PoolsByTokenPairBatchQueryVariables>(PoolsByTokenPairBatchDocument, options);
+        }
+export type PoolsByTokenPairBatchQueryHookResult = ReturnType<typeof usePoolsByTokenPairBatchQuery>;
+export type PoolsByTokenPairBatchLazyQueryHookResult = ReturnType<typeof usePoolsByTokenPairBatchLazyQuery>;
+export type PoolsByTokenPairBatchSuspenseQueryHookResult = ReturnType<typeof usePoolsByTokenPairBatchSuspenseQuery>;
+export type PoolsByTokenPairBatchQueryResult = Apollo.QueryResult<PoolsByTokenPairBatchQuery, PoolsByTokenPairBatchQueryVariables>;
 export const PoolsByTokenPairDocument = gql`
     query PoolsByTokenPair($token0: ID!, $token1: ID!) {
   pools(where: {token0_: {id: $token0}, token1_: {id: $token1}}) {

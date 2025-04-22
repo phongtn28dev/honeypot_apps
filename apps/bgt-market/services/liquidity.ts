@@ -11,7 +11,7 @@ import {
   OldIndexerPaginationState,
   StorageState,
   ValueState,
-} from './utils';
+} from '@honeypot/shared';
 import { add, debounce, forEach } from 'lodash';
 import dayjs from 'dayjs';
 import { PageRequest, PairFilter } from './indexer/indexerTypes';

@@ -38,6 +38,9 @@ export default function useWrapCallback(
   inputError?: string;
   isSuccess?: boolean;
 } {
+  const currentChain = useObserver(() => {
+    return wallet.currentChain;
+  });
   const { address: account } = useAccount();
 
   const inputAmount = useMemo(
@@ -46,16 +49,11 @@ export default function useWrapCallback(
   );
 
   const { data: wrapConfig } = useSimulateWrappedNativeDeposit({
-    address: wallet.currentChain.nativeToken.address as Address,
+    address: currentChain.nativeToken.address as Address,
     value: inputAmount ? BigInt(inputAmount.quotient.toString()) : undefined,
   });
 
   const { data: wrapData, writeContract: wrap } = useContractWrite();
-  const { currentChain } = useObserver(() => {
-    return {
-      currentChain: wallet.currentChain,
-    };
-  });
 
   const {
     isLoading: isWrapLoading,
@@ -63,12 +61,12 @@ export default function useWrapCallback(
     isSuccess: isWrapSuccess,
   } = useTransactionAwait(wrapData, {
     title: `Wrap ${inputAmount?.toSignificant(3)} ${DEFAULT_NATIVE_SYMBOL}`,
-    tokenA: wallet.currentChain.nativeToken.address as Address,
+    tokenA: currentChain.nativeToken.address as Address,
     type: TransactionType.SWAP,
   });
 
   const { data: unwrapConfig } = useSimulateWrappedNativeWithdraw({
-    address: wallet.currentChain.nativeToken.address as Address,
+    address: currentChain.nativeToken.address as Address,
     args: inputAmount ? [BigInt(inputAmount.quotient.toString())] : undefined,
   });
 
@@ -81,7 +79,7 @@ export default function useWrapCallback(
 
   const { isLoading: isUnwrapLoading } = useTransactionAwait(unwrapData, {
     title: `Unwrap ${inputAmount?.toSignificant(3)} W${DEFAULT_NATIVE_SYMBOL}`,
-    tokenA: wallet.currentChain.nativeToken.address as Address,
+    tokenA: currentChain.nativeToken.address as Address,
     type: TransactionType.SWAP,
   });
 
@@ -98,12 +96,6 @@ export default function useWrapCallback(
   return useMemo(() => {
     if (!currentChain || !inputCurrency || !outputCurrency)
       return NOT_APPLICABLE;
-    const weth = ExtendedNative.onChain(
-      currentChain.chainId,
-      currentChain.nativeToken.symbol,
-      currentChain.nativeToken.name
-    );
-    if (!weth) return NOT_APPLICABLE;
 
     const hasInputAmount = Boolean(inputAmount?.greaterThan('0'));
     const sufficientBalance =
@@ -111,7 +103,11 @@ export default function useWrapCallback(
       balance &&
       Number(balance.formatted) >= Number(inputAmount.toSignificant(18));
 
-    if (inputCurrency.isNative && weth.equals(outputCurrency)) {
+    if (
+      inputCurrency.isNative &&
+      outputCurrency.isToken &&
+      outputCurrency.wrapped.address === currentChain.nativeToken.address
+    ) {
       return {
         wrapType: WrapType.WRAP,
         execute:
@@ -126,7 +122,11 @@ export default function useWrapCallback(
           : `Enter ${DEFAULT_NATIVE_SYMBOL} amount`,
         isSuccess: isWrapSuccess,
       };
-    } else if (weth.equals(inputCurrency) && outputCurrency.isNative) {
+    } else if (
+      inputCurrency.isToken &&
+      inputCurrency.wrapped.address === currentChain.nativeToken.address &&
+      outputCurrency.isNative
+    ) {
       return {
         wrapType: WrapType.UNWRAP,
         execute:

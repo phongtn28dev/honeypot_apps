@@ -1,11 +1,11 @@
-import { defaultContainerVariants, itemPopUpVariants } from "@/lib/animation";
-import { Button } from "../button";
-import { motion } from "framer-motion";
-import { IndexerPaginationState } from "@/services/utils";
-import { observer } from "mobx-react-lite";
-import HoneyStickSvg from "../svg/HoneyStick";
-import { cn } from "@nextui-org/react";
-import { DataContainer, DataContainerProps } from "../DataContainer";
+import { defaultContainerVariants, itemPopUpVariants } from '@/lib/animation';
+import { Button } from '../button';
+import { motion } from 'framer-motion';
+import { IndexerPaginationState } from '@honeypot/shared/lib/utils/utils';
+import { observer } from 'mobx-react-lite';
+import HoneyStickSvg from '../svg/HoneyStick';
+import { cn } from '@nextui-org/react';
+import { DataContainer, DataContainerProps } from '../DataContainer';
 
 type PaginationProps<FilterT extends Record<string, any>, ItemT> = {
   paginationState: IndexerPaginationState<FilterT, ItemT>;
@@ -20,10 +20,10 @@ type PaginationProps<FilterT extends Record<string, any>, ItemT> = {
 export const Pagination = observer(
   <FilterT extends Record<string, any>, ItemT>(
     props: PaginationProps<FilterT, ItemT> &
-      Omit<DataContainerProps, "children">
+      Omit<DataContainerProps, 'children'>
   ) => {
     return (
-      <div className={cn("overflow-hidden", props.classNames?.base)}>
+      <div className={cn('overflow-hidden', props.classNames?.base)}>
         <DataContainer
           isLoading={props.paginationState.isLoading}
           isInit={props.paginationState.isInit}
@@ -35,7 +35,7 @@ export const Pagination = observer(
                 variants={defaultContainerVariants}
                 initial="hidden"
                 animate="visible"
-                className={props.classNames?.itemsContainer ?? ""}
+                className={props.classNames?.itemsContainer ?? ''}
               >
                 {props.paginationState.pageItems.value.map((pair, idx) => (
                   <motion.div key={idx} variants={itemPopUpVariants}>
@@ -52,8 +52,8 @@ export const Pagination = observer(
                     isDisabled={props.paginationState.isLoading}
                   >
                     {props.paginationState.isLoading
-                      ? "Loading..."
-                      : "Load More"}
+                      ? 'Loading...'
+                      : 'Load More'}
                   </Button>
                 )}
               </div>

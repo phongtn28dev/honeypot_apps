@@ -3,7 +3,7 @@ import { wallet } from '../../../wallet/wallet';
 import { getContract } from 'viem';
 import { makeAutoObservable } from 'mobx';
 import { ftoFacadeABI } from '../../../abis/ftoFacade';
-import { ContractWrite } from '../../../utils/utils';
+import { ContractWrite } from '../../../utils';
 
 export class FtoFacadeContract implements BaseContract {
   address = '';

@@ -107,45 +107,41 @@ export default function App({
 
   return (
     <ErrorBoundary>
-      <trpc.Provider client={trpcQueryClient} queryClient={queryClient}>
-        <Analytics />
-        <WagmiProvider config={config}>
+      <WagmiProvider config={config}>
+        <QueryClientProvider client={queryClient}>
           <PersistQueryClientProvider
             client={queryClient}
             persistOptions={{ persister }}
           >
             <ApolloProvider client={infoClient}>
-              <RainbowKitProvider
-                avatar={CustomAvatar}
-                // capsule={capsuleClient}
-                // capsuleIntegratedProps={capsuleModalProps}
-              >
-                <NextUIProvider>
-                  <Provider>
-                    <Inspector
-                      keys={['Ctrl', 'Shift', 'Z']}
-                      onClickElement={({ codeInfo }: InspectParams) => {
-                        if (!codeInfo) {
-                          return;
-                        }
-
-                        window.open(
-                          `cursor://file/${codeInfo.absolutePath}:${codeInfo.lineNumber}:${codeInfo.columnNumber}`,
-                          '_blank'
-                        );
-                      }}
-                    ></Inspector>
-                    <ComponentLayout className={`${dmSans.className}`}>
-                      <Component {...pageProps} />
-                    </ComponentLayout>
-                  </Provider>
-                  <ToastContainer></ToastContainer>
-                </NextUIProvider>
-              </RainbowKitProvider>
+              <trpc.Provider client={trpcQueryClient} queryClient={queryClient}>
+                <RainbowKitProvider avatar={CustomAvatar}>
+                  <NextUIProvider>
+                    <Provider>
+                      {' '}
+                      <Inspector
+                        keys={['Ctrl', 'Shift', 'Z']}
+                        onClickElement={({ codeInfo }: InspectParams) => {
+                          if (!codeInfo) {
+                            return;
+                          }
+                          window.open(
+                            `cursor://file/${codeInfo.absolutePath}:${codeInfo.lineNumber}:${codeInfo.columnNumber}`,
+                            '_blank'
+                          );
+                        }}
+                      ></Inspector>
+                      <ComponentLayout className={`${dmSans.className}`}>
+                        <Component {...pageProps} />
+                      </ComponentLayout>
+                    </Provider>
+                  </NextUIProvider>
+                </RainbowKitProvider>
+              </trpc.Provider>
             </ApolloProvider>
           </PersistQueryClientProvider>
-        </WagmiProvider>
-      </trpc.Provider>
+        </QueryClientProvider>
+      </WagmiProvider>
     </ErrorBoundary>
   );
 }

@@ -1,11 +1,11 @@
 {
- "github": {
-  "enabled": false,
-  "silent": true
- },
- "build": {
-  "env": {
-   "NPM_CONFIG_REGISTRY": "https://registry.npmjs.org/"
+  "github": {
+    "enabled": false,
+    "silent": true
+  },
+  "build": {
+    "env": {
+      "NPM_CONFIG_REGISTRY": "https://registry.npmjs.org/"
+    }
   }
- }
 }

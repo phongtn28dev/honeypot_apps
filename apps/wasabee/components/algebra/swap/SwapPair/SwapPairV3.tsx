@@ -3,6 +3,7 @@ import {
   computePoolAddress,
   Currency,
   CurrencyAmount,
+  ExtendedNative,
   maxAmountSpend,
   tryParseAmount,
   WNATIVE,
@@ -179,30 +180,34 @@ const SwapPairV3 = ({
           isNative: isInputNative,
           chainId: wallet.currentChainId.toString(),
         });
-        // await token.init(false, {
-        //   loadIndexerTokenData: true,
-        //   loadLogoURI: true,
-        // });
 
-        if (!token) {
-          return;
+        if (token) {
+          if (isInputNative) {
+            handleInputSelect(
+              ExtendedNative.onChain(
+                Number(wallet.currentChainId),
+                wallet.currentChain.nativeToken.symbol,
+                wallet.currentChain.nativeToken.name
+              )
+            );
+          }
+
+          handleInputSelect(
+            Object.assign(
+              new AlgebraToken(
+                Number(wallet.currentChainId),
+                token.address,
+                Number(token.decimals),
+                token.symbol,
+                token.name
+              ),
+              {
+                isNative: isInputNative,
+                isToken: !isInputNative,
+              }
+            )
+          );
         }
-
-        handleInputSelect(
-          Object.assign(
-            new AlgebraToken(
-              wallet.currentChainId,
-              token.address,
-              Number(token.decimals),
-              token.symbol,
-              token.name
-            ),
-            {
-              isNative: isInputNative,
-              isToken: !isInputNative,
-            }
-          )
-        );
       }
 
       if (toTokenAddress) {
@@ -211,41 +216,37 @@ const SwapPairV3 = ({
           isNative: isOutputNative,
           chainId: wallet.currentChainId.toString(),
         });
-        // await token.init(false, {
-        //   loadIndexerTokenData: true,
-        //   loadLogoURI: true,
-        // });
-        if (!token) {
-          return;
+        if (token) {
+          if (isOutputNative) {
+            handleOutputSelect(
+              ExtendedNative.onChain(
+                Number(wallet.currentChainId),
+                wallet.currentChain.nativeToken.symbol,
+                wallet.currentChain.nativeToken.name
+              )
+            );
+          }
+          handleOutputSelect(
+            Object.assign(
+              new AlgebraToken(
+                Number(wallet.currentChainId),
+                token.address,
+                Number(token.decimals),
+                token.symbol,
+                token.name
+              ),
+              {
+                isNative: isOutputNative,
+                isToken: !isOutputNative,
+              }
+            )
+          );
         }
-
-        handleOutputSelect(
-          Object.assign(
-            new AlgebraToken(
-              wallet.currentChainId,
-              token.address,
-              Number(token.decimals),
-              token.symbol,
-              token.name
-            ),
-            {
-              isNative: isOutputNative,
-              isToken: !isOutputNative,
-            }
-          )
-        );
       }
     };
 
     initializeTokens();
-  }, [
-    fromTokenAddress,
-    handleInputSelect,
-    handleOutputSelect,
-    isInputNative,
-    isOutputNative,
-    toTokenAddress,
-  ]);
+  }, [fromTokenAddress, toTokenAddress]);
 
   useEffect(() => {
     if (!isUpdatingPriceChart) {

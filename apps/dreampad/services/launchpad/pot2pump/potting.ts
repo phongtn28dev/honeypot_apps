@@ -1,6 +1,6 @@
 import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
 import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
-import { IndexerPaginationState, PageInfo } from '@/services/utils';
+import { IndexerPaginationState, PageInfo } from '@honeypot/shared';
 import {
   PAGE_LIMIT,
   PairFilter,

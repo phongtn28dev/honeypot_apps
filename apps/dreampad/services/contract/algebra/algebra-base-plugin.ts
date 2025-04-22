@@ -8,7 +8,7 @@ import { makeAutoObservable } from 'mobx';
 import { get } from 'http';
 import { getContract } from 'viem';
 import { algebraBasePluginAbi } from '@/wagmi-generated';
-import { ContractWrite } from '@/services/utils';
+import { ContractWrite } from '@honeypot/shared';
 import { usePublicClient } from 'wagmi';
 
 export class AlgebraBasePluginContract implements BaseContract {

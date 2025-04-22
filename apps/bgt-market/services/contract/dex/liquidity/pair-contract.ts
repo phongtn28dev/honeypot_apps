@@ -5,7 +5,7 @@ import { wallet } from '@honeypot/shared';
 import IUniswapV2Pair from '@uniswap/v2-core/build/IUniswapV2Pair.json';
 import { makeAutoObservable } from 'mobx';
 import { getContract, zeroAddress } from 'viem';
-import { AsyncState } from '@/services/utils';
+import { AsyncState } from '@honeypot/shared';
 import { toCompactLocaleString } from '@/lib/utils';
 import { amountFormatted, formatAmount } from '@/lib/format';
 import dayjs from 'dayjs';

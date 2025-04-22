@@ -1,7 +1,7 @@
-import { providers } from 'ethers';
 import { useMemo } from 'react';
 import type { Chain, Client, Transport, WalletClient } from 'viem';
 import { Config, useClient } from 'wagmi';
+import { ethers } from 'ethers';
 
 export function clientToProvider(client: WalletClient) {
   const { chain, transport } = client;
@@ -17,12 +17,12 @@ export function clientToProvider(client: WalletClient) {
   };
 
   if (transport.type === 'fallback')
-    return new providers.FallbackProvider(
+    return new ethers.FallbackProvider(
       (transport.transports as ReturnType<Transport>[]).map(
-        ({ value }) => new providers.JsonRpcProvider(value?.url, network)
+        ({ value }) => new ethers.JsonRpcProvider(value?.url, network)
       )
     );
-  return new providers.JsonRpcProvider(transport.url, network);
+  return new ethers.JsonRpcProvider(transport.url, network);
 }
 
 /** Hook to convert a viem Client to an ethers.js Provider. */

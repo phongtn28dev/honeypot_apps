@@ -454,6 +454,13 @@ export const berachainNetwork = new Network({
       decimals: 18,
       logoURI: '/images/icons/tokens/burr_bear_logo.webp',
     },
+    '0x009af46df68db0e76bfe9ea35663f6ed17877956': {
+      name: 'Ooga Token',
+      symbol: 'OOGA',
+      decimals: 18,
+      logoURI:
+        'https://app.oogabooga.io/_next/image?url=https%3A%2F%2Fimages.oogabooga.io%2Fooga.png&w=64&q=75',
+    },
   },
   validatedFtoAddresses: [],
   validatedMemeAddresses: [],

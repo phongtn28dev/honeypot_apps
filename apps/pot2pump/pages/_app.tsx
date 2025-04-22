@@ -23,6 +23,7 @@ import { ApolloProvider } from '@apollo/client';
 import Image from 'next/image';
 import SafeProvider from '@safe-global/safe-apps-react-sdk';
 import { berachainNetwork } from '@honeypot/shared';
+
 // enableStaticRendering(true)
 const queryClient = new QueryClient({
   defaultOptions: {

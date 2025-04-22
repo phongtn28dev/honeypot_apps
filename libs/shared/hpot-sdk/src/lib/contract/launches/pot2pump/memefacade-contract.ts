@@ -2,7 +2,7 @@ import { BaseContract } from '../../baseContract';
 import { wallet } from '../../../wallet/wallet';
 import { getContract } from 'viem';
 import { makeAutoObservable } from 'mobx';
-import { ContractWrite } from '../../../utils/utils';
+import { ContractWrite } from '../../../utils';
 import { pot2PumpFacadeABI } from '../../../abis/Pot2Pump/pot2PumpFacade';
 
 export class MEMEFacadeContract implements BaseContract {

@@ -1,13 +1,13 @@
-import { lbpMetadatas } from '@honeypot/shared';
 import BigNumber from 'bignumber.js';
 import { makeAutoObservable, reaction, runInAction } from 'mobx';
 import { Address, getContract, GetContractReturnType, zeroAddress } from 'viem';
-import { Token } from '@honeypot/shared';
 import { LiquidityBootstrapPoolABI } from '../../../abis/LiquidityBootstrapPoolAbi';
-import { wallet } from '@honeypot/shared';
-import { DEFAULT_CHAIN_ID } from '@honeypot/shared';
 import dayjs, { Dayjs } from 'dayjs';
-import { ContractWrite } from '../../../utils/utils';
+import { ContractWrite } from '../../../utils';
+import { Token } from '../../token/token';
+import { DEFAULT_CHAIN_ID } from '../../../../config/algebra/default-chain-id';
+import { wallet } from '../../../wallet';
+import { lbpMetadatas } from '../../../../config/lbpmetadata';
 
 export enum LAUNCH_STATUS {
   NOT_STARTED,
