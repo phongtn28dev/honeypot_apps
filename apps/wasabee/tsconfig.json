@@ -20,7 +20,7 @@
       "~/*": ["./*"],
       "~/static/*": ["./public/*"],
       "@/components/*": ["./components/*"],
-      "@/styles/*": ["styles/*"],
+      "@/styles/*": ["./styles/*"],
       "@/lib/*": ["./lib/*"],
       "@/hooks/*": ["./hooks/*"],
       "@/utils/*": ["./lib/utils/*"],
@@ -39,9 +39,8 @@
     "**/*.ts",
     "**/*.tsx",
     "config/wagmi/holdstationWallet.js",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "../../libs/shared/hpot-sdk/src/services/chart.ts"
   ],
   "exclude": ["node_modules", "jest.config.ts", "**/*.spec.ts", "**/*.test.ts"]
 }

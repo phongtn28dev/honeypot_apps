@@ -7,7 +7,7 @@ import Image from 'next/image';
 export const EvmAddressDisplay = observer(function EvmAddressDisplay() {
   return (
     <Tooltip
-      content={`EVM Address: ${wallet.universalAccountInfo?.smartAccountAddress}`}
+      content={`EVM Address: ${wallet.universalAccount?.evmSmartAccountAddress}`}
       closeDelay={0}
     >
       <Image

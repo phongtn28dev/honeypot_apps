@@ -2,7 +2,7 @@ import React from 'react';
 import { observe } from 'mobx';
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { chart } from '@/services/chart';
+import { chart } from '@honeypot/shared/services';
 import { observer } from 'mobx-react-lite';
 import { wallet } from '@honeypot/shared';
 import { useSearchParams } from 'next/navigation';
@@ -98,7 +98,7 @@ const SwapPage = observer(() => {
           initial="hidden"
           animate="visible"
           transition={{ duration: 0.5 }}
-          className="w-full col-span-2"
+          className="w-full col-span-2 h-full"
         >
           <SwapTransactionHistory />
         </motion.div>

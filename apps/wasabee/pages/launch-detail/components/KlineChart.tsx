@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { chart } from '@/services/chart';
+import { chart } from '@honeypot/shared/services';
 import { TokenLogo } from '@honeypot/shared';
 
 import { Token } from '@honeypot/shared';

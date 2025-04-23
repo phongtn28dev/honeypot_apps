@@ -123,7 +123,6 @@ const SwapTransactionHistory = () => {
                     </td>
                     <td className="py-1 px-1.5 sm:py-2 sm:px-4 font-mono whitespace-nowrap hidden md:table-cell">
                       <div className="flex items-center gap-1 sm:gap-2">
-                        {console.log(tx) === undefined && <></>}
                         <a
                           href={`${wallet.currentChain.chain.blockExplorers?.default.url}address/${tx.origin}`}
                           target="_blank"

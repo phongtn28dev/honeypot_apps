@@ -7,7 +7,7 @@ import Image from 'next/image';
 export const SolAddressDisplay = observer(function SolAddressDisplay() {
   return (
     <Tooltip
-      content={`Solana Address: ${wallet.universalAccountInfo?.smartAccountAddress}`}
+      content={`Solana Address: ${wallet.universalAccount?.solanaSmartAccountAddress}`}
       closeDelay={0}
     >
       <Image

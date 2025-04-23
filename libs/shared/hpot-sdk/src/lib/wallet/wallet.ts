@@ -12,11 +12,7 @@ import { ICHIVaultFactoryContract } from '../contract/aquabera/ICHIVaultFactory-
 import { DEFAULT_CHAIN_ID } from '../../config/algebra/default-chain-id';
 import { ICHIVaultVolatilityCheckContract } from '../contract/aquabera/ICHIVaultVolatilityCheckContract';
 import { AlgebraSwapRouterContract } from '../contract/algebra/algebra-swap-router';
-import {
-  UniversalAccount,
-  IAssetsResponse,
-  ISmartAccountOptions,
-} from '@GDdark/universal-account';
+import { UniversalAccount } from './universalAccount';
 
 export class Wallet {
   account: string = '';
@@ -42,17 +38,17 @@ export class Wallet {
       return acc;
     }, {} as Record<number, Network>);
   }
-  //universal account
-  universalAccount: undefined | UniversalAccount;
-  universalAccountAssetValueUSD: IAssetsResponse | undefined;
-  universalAccountInfo: ISmartAccountOptions | undefined;
+  universalAccount: UniversalAccount | undefined = undefined;
 
   get currentChain() {
     return this.networksMap[this.currentChainId];
   }
 
   constructor(args: Partial<Wallet>) {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {
+      networksMap: false,
+      currentChain: false,
+    });
     reaction(
       () => this.walletClient?.account,
       () => {
@@ -117,38 +113,19 @@ export class Wallet {
     await StorageState.sync();
 
     if (this.account && this.account !== zeroAddress) {
-      this.universalAccount = new UniversalAccount({
-        projectId: 'bc651b6d-e34f-44f5-b661-32369a8494bd',
-        ownerAddress: this.account,
-        tradeConfig: {
-          // If this is not set, it will use auto slippage
-          slippageBps: 100, // 100 means 1%, max is 10000
-          // Use $PARTI to pay for fees
-          // Otherwise, the SDK will use the primary tokens (e.g. USDC, ETH)
-          // universalGas: true,
-        },
+      runInAction(() => {
+        this.universalAccount = new UniversalAccount(this.account);
       });
-      await this.loadUniversalAccountInfo();
+      await this.universalAccount?.loadUniversalAccountInfo();
     } else {
-      this.universalAccount = undefined;
-      this.universalAccountInfo = undefined;
-      this.universalAccountAssetValueUSD = undefined;
+      runInAction(() => {
+        this.universalAccount = undefined;
+      });
     }
-
-    console.log('universalAccount', this.universalAccount);
 
     runInAction(() => {
       this.isInit = true;
     });
-  }
-
-  async loadUniversalAccountInfo() {
-    if (this.universalAccount) {
-      this.universalAccountAssetValueUSD =
-        await this.universalAccount.getPrimaryAssets();
-      this.universalAccountInfo =
-        await this.universalAccount.getSmartAccountOptions();
-    }
   }
 }
 

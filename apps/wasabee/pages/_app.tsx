@@ -24,12 +24,6 @@ import Image from 'next/image';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import * as Sentry from '@sentry/nextjs';
-
-import {
-  DynamicContextProvider,
-  DynamicWidget,
-} from '@dynamic-labs/sdk-react-core';
-import { DynamicWagmiConnector } from '@dynamic-labs/wagmi-connector';
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 import { deserialize, serialize } from 'wagmi';
 import { useSubgraphClient } from '@honeypot/shared';
@@ -117,6 +111,7 @@ export default function App({
               <trpc.Provider client={trpcQueryClient} queryClient={queryClient}>
                 <RainbowKitProvider avatar={CustomAvatar}>
                   <NextUIProvider>
+                    <ToastContainer />
                     <Provider>
                       {' '}
                       <Inspector

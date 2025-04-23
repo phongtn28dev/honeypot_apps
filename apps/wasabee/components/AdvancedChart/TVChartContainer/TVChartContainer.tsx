@@ -10,7 +10,7 @@ import {
 import { getBaseUrl } from '@/lib/trpc';
 import { observable } from 'mobx';
 import { ParseTicker } from '@/lib/advancedChart.util';
-import { chart } from '@/services/chart';
+import { chart } from '@honeypot/shared/services';
 import { wallet } from '@honeypot/shared';
 
 export const TVChartContainer = (

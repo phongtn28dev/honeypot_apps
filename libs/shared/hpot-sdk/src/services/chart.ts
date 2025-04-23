@@ -1,12 +1,15 @@
 import { action, makeAutoObservable, reaction } from 'mobx';
-import { Token } from '@honeypot/shared';
-import { PairContract } from '@honeypot/shared';
-import { AsyncState } from '@honeypot/shared';
-import { ChartDataResponse, resolutionType } from './priceFeed/priceFeedTypes';
-import { wallet } from '@honeypot/shared';
-import { trpcClient } from '@/lib/trpc';
-import { dayjs } from '@/lib/dayjs';
-import { AlgebraPoolContract } from './contract/algebra/algebra-pool-contract';
+import { Token } from '../lib/contract';
+import { PairContract } from '../lib/contract';
+import { AsyncState } from '../lib/utils';
+import {
+  ChartDataResponse,
+  resolutionType,
+} from '../lib/priceFeed/priceFeedTypes';
+import { wallet } from '../lib/wallet';
+import { trpcClient } from '../lib/trpc/trpc';
+import dayjs from 'dayjs';
+import { AlgebraPoolContract } from '../lib/contract/algebra/algebra-pool-contract';
 
 type Range = '5M' | '15M' | '30M' | '4H' | '1D';
 
