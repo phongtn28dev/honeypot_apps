@@ -1,4 +1,4 @@
-import { chart, chartTimeRanges } from '@/services/chart';
+import { chart, chartTimeRanges } from '@honeypot/shared/services';
 import { Button, cn } from '@nextui-org/react';
 import { ApexOptions } from 'apexcharts';
 import dayjs from 'dayjs';
