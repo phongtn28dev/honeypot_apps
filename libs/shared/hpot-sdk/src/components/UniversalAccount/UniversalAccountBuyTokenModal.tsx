@@ -7,13 +7,16 @@ import { useMemo, useState } from 'react';
 import { SolAddressDisplay } from './AddressDisaplay/SolAddressDisplay';
 import { OwnerAddressDisplay } from './AddressDisaplay/OwnerAddressDisplay';
 import { BuyTokenSelection } from './BuyTokenSelection';
-import { Token } from '../../lib/contract';
 import buyWithUniversalAccountService from '../../services/particleUniversalAccount/buyWithUniversalAccountService';
 import { Button } from '../button';
+import { Button as NextuiButton } from '@nextui-org/react';
 import Image from 'next/image';
 import { particleIcon } from '../../assets/images/partners';
 import { ChainNotSupport } from './AccountStatus/ChainNotSupport';
+import { DepositModal } from './DepositModal/DepositModal';
+
 export const UniversalAccountBuyTokenModal = observer(() => {
+  const [open, setOpen] = useState(false);
   const notConnected = useMemo(() => {
     const isNotConnected =
       !wallet.isInit ||
@@ -49,12 +52,15 @@ export const UniversalAccountBuyTokenModal = observer(() => {
       </div>
       <div className="flex justify-between items-center gap-x-2">
         <span className="font-bold">Account Balance:</span>{' '}
-        <span>
+        <span className="grow text-right">
           {DynamicFormatAmount({
             amount: wallet.universalAccount?.accountUsdValue ?? 0,
             decimals: 5,
             endWith: 'USD',
           })}
+        </span>
+        <span>
+          <NextuiButton onPress={() => setOpen(true)}>Deposit</NextuiButton>
         </span>
       </div>
       <div className="">Buy Token with Universal Account</div>
@@ -87,6 +93,7 @@ export const UniversalAccountBuyTokenModal = observer(() => {
           <div>Particle</div>
         </div>
       </div>
+      <DepositModal isOpen={open} onClose={() => setOpen(false)} />
     </div>
   );
 });

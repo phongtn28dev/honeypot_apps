@@ -3,9 +3,6 @@ import {
   TokenTop10HoldersDocument,
   TokenTop10HoldersQuery,
   TokenTop10HoldersQueryVariables,
-  SingleTokenDocument,
-  SingleTokenQuery,
-  SingleTokenQueryVariables,
   MultipleTokensQuery,
   MultipleTokensQueryVariables,
   MultipleTokensDocument,
@@ -44,7 +41,7 @@ const bulkGetTokenDebounce = async (tokenId: string): Promise<Token[]> => {
         r(multipleTokenData);
       }
       tokenRequestResolvers = [];
-    }, 100);
+    }, 300);
   });
 };
 

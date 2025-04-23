@@ -34,6 +34,13 @@ interface TokenSwapCardProps {
   showSettings?: boolean;
   staticTokenList?: Token[];
   showAdvancedInput?: boolean;
+  classNames?: {
+    textColors?: {
+      all?: string;
+      maxButton?: string;
+      balance?: string;
+    };
+  };
 }
 
 const TokenCard = observer(
@@ -53,6 +60,7 @@ const TokenCard = observer(
     disableSelection,
     staticTokenList,
     showAdvancedInput = true,
+    classNames,
   }: TokenSwapCardProps) => {
     const { address: account } = useAccount();
     useWatchBlockNumber({
@@ -92,13 +100,13 @@ const TokenCard = observer(
     };
 
     return (
-      <div className="flex-1 w-full flex flex-col gap-y-3">
+      <div className="flex-1 w-full flex flex-col gap-y-3 ">
         <div className="text-black flex items-center justify-between px-2">
           <span>{label}</span>
           <div className="flex items-center gap-x-2">
             {currency && account && showBalance && (
-              <div className="flex items-center gap-x-2">
-                <div>
+              <div className={cn('flex items-center gap-x-2')}>
+                <div className={cn(classNames?.textColors?.balance)}>
                   <span>Balance: </span>
                   <span>
                     {DynamicFormatAmount({
@@ -112,7 +120,10 @@ const TokenCard = observer(
                 </div>
                 {showMaxButton && (
                   <button
-                    className="cursor-pointer text-[#63b4ff]"
+                    className={cn(
+                      'cursor-pointer text-[#63b4ff]',
+                      classNames?.textColors?.maxButton
+                    )}
                     onClick={handleMaxValue}
                   >
                     Max
@@ -123,7 +134,7 @@ const TokenCard = observer(
           </div>
         </div>
 
-        <div className="w-full  rounded-2xl border bg-card-dark shadow-[0px_332px_93px_0px_rgba(0,0,0,0.00),0px_212px_85px_0px_rgba(0,0,0,0.01),0px_119px_72px_0px_rgba(0,0,0,0.05),0px_53px_53px_0px_rgba(0,0,0,0.09),0px_13px_29px_0px_rgba(0,0,0,0.10)] flex items-center justify-between px-4 py-2.5 gap-x-2">
+        <div className="w-full bg-white rounded-2xl border bg-card-dark shadow-[0px_332px_93px_0px_rgba(0,0,0,0.00),0px_212px_85px_0px_rgba(0,0,0,0.01),0px_119px_72px_0px_rgba(0,0,0,0.05),0px_53px_53px_0px_rgba(0,0,0,0.09),0px_13px_29px_0px_rgba(0,0,0,0.10)] flex items-center justify-between px-4 py-2.5 gap-x-2">
           <div className="grid grid-cols-[max-content_auto] w-full">
             <div className="flex-grow">
               <TokenSelector

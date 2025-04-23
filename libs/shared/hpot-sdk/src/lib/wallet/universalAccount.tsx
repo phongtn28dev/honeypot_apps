@@ -9,6 +9,8 @@ import { Token } from '../contract';
 import { WrappedToastify } from '../utils';
 import { ExternalLinkIcon } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { SUPPORTED_PRIMARY_TOKENS } from '@GDdark/universal-account';
+import { BigNumber } from 'bignumber.js';
 
 export class UniversalAccount {
   ownerAddress: string;
@@ -34,6 +36,18 @@ export class UniversalAccount {
       },
     });
     makeAutoObservable(this);
+  }
+
+  get currentChainSupportedTokens() {
+    return SUPPORTED_PRIMARY_TOKENS.filter((token) => {
+      return token.chainId === wallet.currentChain.chainId;
+    }).map((token) => {
+      return Token.getToken({
+        address: token.address,
+        chainId: token.chainId.toString(),
+        isNative: token.address === zeroAddress,
+      });
+    });
   }
 
   async loadUniversalAccountInfo() {
@@ -112,6 +126,23 @@ export class UniversalAccount {
       });
     } finally {
       toast.dismiss(pendingToastId);
+    }
+  }
+
+  async deposit(token: Token, amount: string) {
+    try {
+      token.transfer.call([
+        this.evmSmartAccountAddress,
+        BigInt(
+          new BigNumber(amount).multipliedBy(10 ** token.decimals).toFixed()
+        ),
+      ]);
+    } catch (error: any) {
+      console.log({ error });
+      WrappedToastify.error({
+        title: 'Error depositing token',
+        message: error.message,
+      });
     }
   }
 }

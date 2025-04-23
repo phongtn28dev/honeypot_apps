@@ -59,7 +59,7 @@ const bulkGetPoolsByTokenPair = async (tokens: string[]): Promise<Pool[]> => {
       }
 
       poolsByTokenPairRequestResolvers = [];
-    }, 100);
+    }, 300);
   });
 };
 
