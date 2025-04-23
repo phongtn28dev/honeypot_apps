@@ -12,7 +12,7 @@ import buyWithUniversalAccountService from '../../services/particleUniversalAcco
 import { Button } from '../button';
 import Image from 'next/image';
 import { particleIcon } from '../../assets/images/partners';
-
+import { ChainNotSupport } from './AccountStatus/ChainNotSupport';
 export const UniversalAccountBuyTokenModal = observer(() => {
   const notConnected = useMemo(() => {
     const isNotConnected =
@@ -28,6 +28,10 @@ export const UniversalAccountBuyTokenModal = observer(() => {
     wallet.universalAccount,
     wallet.universalAccount?.accountUsdValue,
   ]);
+
+  if (!wallet.currentChain.supportUniversalAccount) {
+    return <ChainNotSupport />;
+  }
 
   if (notConnected) {
     return <NotConnected />;
