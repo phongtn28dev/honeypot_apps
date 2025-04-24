@@ -2,5 +2,11 @@
 const withBaseConfig = require('../../next.base.config');
 
 module.exports = withBaseConfig({
-  // App-specific overrides can go here if needed
+  redirects: async () => [
+    {
+      source: '/',
+      destination: '/launchpad-projects',
+      permanent: true,
+    },
+  ],
 });
