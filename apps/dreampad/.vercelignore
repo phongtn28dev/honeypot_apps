@@ -1,0 +1,30 @@
+# Dependencies
+node_modules
+.nx
+.git
+.github
+.vscode
+.idea
+
+# Build outputs
+dist
+.next
+out
+
+# Test files
+test
+coverage
+*.test.*
+*.spec.*
+
+# Documentation
+docs
+*.md
+
+# Environment files
+.env*
+!.env.example
+
+# Misc
+.DS_Store
+*.log 
