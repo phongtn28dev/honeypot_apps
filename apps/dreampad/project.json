@@ -11,7 +11,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/dreampad/.next"
+        "outputPath": "apps/dreampad"
       },
       "configurations": {
         "development": {
