@@ -1,5 +1,5 @@
 import { FormattedPosition } from '@/types/algebra/types/formatted-position';
-import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { DynamicFormatAmount } from '@honeypot/shared';
 import { ChevronRight } from 'lucide-react';
 
 interface MyPositionsCardProps {
@@ -8,24 +8,22 @@ interface MyPositionsCardProps {
   onSelectPosition: (positionId: number) => void;
 }
 
-const MyPositionsCard = ({ 
-  positions, 
-  selectedPosition, 
-  onSelectPosition 
+const MyPositionsCard = ({
+  positions,
+  selectedPosition,
+  onSelectPosition,
 }: MyPositionsCardProps) => {
   if (positions.length === 0) {
     return (
-      <div className="p-6 text-center text-gray-500">
-        No positions found
-      </div>
+      <div className="p-6 text-center text-gray-500">No positions found</div>
     );
   }
 
   return (
     <div className="divide-y divide-gray-100">
       {positions.map((position) => (
-        <div 
-          key={position.id} 
+        <div
+          key={position.id}
           className={`p-4 cursor-pointer transition-colors ${
             Number(selectedPosition) === Number(position.id) ? 'bg-gray-50' : ''
           }`}
@@ -53,7 +51,8 @@ const MyPositionsCard = ({
           <div className="grid grid-cols-2 gap-y-2 mb-3">
             <div className="text-gray-500 text-sm">Liquidity:</div>
             <div className="text-right font-medium">
-              ${DynamicFormatAmount({
+              $
+              {DynamicFormatAmount({
                 amount: position.liquidityUSD?.toString() || '0',
                 decimals: 2,
                 endWith: '',
@@ -62,7 +61,8 @@ const MyPositionsCard = ({
 
             <div className="text-gray-500 text-sm">Fees:</div>
             <div className="text-right font-medium">
-              ${DynamicFormatAmount({
+              $
+              {DynamicFormatAmount({
                 amount: position.feesUSD?.toString() || '0',
                 decimals: 6,
                 endWith: '',
@@ -71,7 +71,9 @@ const MyPositionsCard = ({
 
             <div className="text-gray-500 text-sm">APR:</div>
             <div className="text-right font-medium text-[#F7931A]">
-              {position.apr ? `${parseFloat(position.apr.toString()).toFixed(2)}%` : '0.00%'}
+              {position.apr
+                ? `${parseFloat(position.apr.toString()).toFixed(2)}%`
+                : '0.00%'}
             </div>
           </div>
 
@@ -91,4 +93,4 @@ const MyPositionsCard = ({
   );
 };
 
-export default MyPositionsCard; 
+export default MyPositionsCard;

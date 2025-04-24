@@ -8,7 +8,7 @@ import { Multicall3ABI } from '@/lib/abis/Multicall3';
 import { useMediaQuery } from '@/lib/algebra/hooks/common/useMediaQuery';
 import { SuccessfulCall } from '@/lib/algebra/hooks/swap/useSwapCallback';
 import { SwapCallEstimate } from '@/lib/algebra/hooks/swap/useSwapCallback';
-import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { DynamicFormatAmount } from '@honeypot/shared';
 
 import { Token } from '@honeypot/shared';
 import { ContractWrite } from '@honeypot/shared';

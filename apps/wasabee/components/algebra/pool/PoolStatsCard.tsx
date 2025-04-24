@@ -2,7 +2,7 @@ import {
   Pool,
   useActiveFarmingsQuery,
 } from '@/lib/algebra/graphql/generated/graphql';
-import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { DynamicFormatAmount } from '@honeypot/shared';
 import { useMemo } from 'react';
 import { calculatePercentageChange } from '@/lib/utils';
 import { Address } from 'viem';

@@ -10,7 +10,7 @@ import dayjs from 'dayjs';
 import { WarningBanner } from './WarningBanner';
 import { networksMap } from '@honeypot/shared';
 import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
-import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { DynamicFormatAmount } from '@honeypot/shared';
 import { useLbpLaunch } from '@honeypot/shared';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';

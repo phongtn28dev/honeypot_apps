@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { amountFormatted } from '@/lib/format';
 import { Skeleton } from '@nextui-org/react';
 import BigNumber from 'bignumber.js';
-import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { DynamicFormatAmount } from '@honeypot/shared';
 
 import { Token } from '@honeypot/shared';
 

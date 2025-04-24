@@ -15,7 +15,11 @@ const baseConfig = {
   },
   reactStrictMode: true,
   output: 'standalone',
-  webpack: (config) => {
+  experimental: {
+    optimizeCss: true,
+    swcMinify: true,
+  },
+  webpack: (config, { isServer }) => {
     config.resolve.alias = {
       ...config.resolve.alias,
       '@honeypot/shared': path.resolve(__dirname, 'libs/shared/hpot-sdk/src'),
@@ -24,6 +28,47 @@ const baseConfig = {
       path.resolve(__dirname, 'node_modules'), // 👈 prioritize root
       'node_modules', // fallback to local
     ];
+
+    // Optimize memory usage
+    config.optimization = {
+      ...config.optimization,
+      splitChunks: {
+        chunks: 'all',
+        minSize: 20000,
+        maxSize: 244000,
+        cacheGroups: {
+          default: false,
+          vendors: false,
+          commons: {
+            name: 'commons',
+            chunks: 'all',
+            minChunks: 2,
+          },
+          vendor: {
+            name: 'vendor',
+            test: /[\\/]node_modules[\\/]/,
+            chunks: 'all',
+            priority: 10,
+          },
+        },
+      },
+      minimize: true,
+      minimizer: [
+        /** @param {import('webpack').Compiler} compiler */
+        (compiler) => {
+          const TerserPlugin = require('terser-webpack-plugin');
+          new TerserPlugin({
+            parallel: true,
+            terserOptions: {
+              compress: {
+                drop_console: true,
+              },
+            },
+          }).apply(compiler);
+        },
+      ],
+    };
+
     return config;
   },
   images: {
@@ -77,9 +122,6 @@ const baseConfig = {
       'framer-motion',
       'react-toastify',
     ],
-    experimental: {
-      optimizeCss: true,
-    },
   }),
 };
 

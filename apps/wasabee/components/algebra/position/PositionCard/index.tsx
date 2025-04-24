@@ -18,7 +18,7 @@ import { useDerivedMintInfo } from '@/lib/algebra/state/mintStore';
 import { formatUSD } from '@/lib/algebra/utils/common/formatUSD';
 import { Farming } from '@/types/algebra/types/farming-info';
 import { FormattedPosition } from '@/types/algebra/types/formatted-position';
-import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { DynamicFormatAmount } from '@honeypot/shared';
 import { useTransactionAwait } from '@/lib/algebra/hooks/common/useTransactionAwait';
 import { NonfungiblePositionManager } from '@cryptoalgebra/sdk';
 import { usePositionFees } from '@/lib/algebra/hooks/positions/usePositionFees';

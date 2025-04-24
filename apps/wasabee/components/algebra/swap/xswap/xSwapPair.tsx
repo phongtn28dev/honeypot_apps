@@ -49,7 +49,7 @@ import SwapParamsV3Independent from '../SwapParams/SwapParamsV3Independent';
 import XSwapParams from '../SwapParams/XSwapParams';
 import { xSwap } from '@/services/xswap';
 import { observer } from 'mobx-react-lite';
-import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { DynamicFormatAmount } from '@honeypot/shared';
 import { ApprovalState } from '@/types/algebra/types/approve-state';
 import { useApproveCallbackFromTrade } from '@/lib/algebra/hooks/common/useApprove';
 

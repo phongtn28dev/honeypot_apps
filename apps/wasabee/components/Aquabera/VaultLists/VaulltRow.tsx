@@ -1,7 +1,7 @@
 import { TokenLogo } from '@honeypot/shared';
 
 import { getSingleVaultDetails } from '@honeypot/shared';
-import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { DynamicFormatAmount } from '@honeypot/shared';
 import { useSubgraphClient } from '@honeypot/shared';
 import { ICHIVaultContract } from '@honeypot/shared';
 import { Token } from '@honeypot/shared';

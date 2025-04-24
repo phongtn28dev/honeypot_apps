@@ -6,7 +6,6 @@ import { localforage } from '@/lib/storage';
 import { LRUCache } from 'lru-cache';
 import { cache } from '../lib/cache';
 import { debounce, max, initial } from 'lodash';
-import { PageRequest, PairFilter } from './indexer/indexerTypes';
 import { visualEffects } from './visualeffects';
 import { WrappedToastify } from '@/lib/wrappedToastify';
 import BigNumber from 'bignumber.js';
@@ -395,7 +394,13 @@ export class OldIndexerPaginationState<
   });
   LoadNextPageFunction: (
     filter: FilterT,
-    pageRequest: PageRequest
+    pageRequest: {
+      direction: 'next' | 'prev';
+      cursor?: string;
+      pageNum?: number;
+      orderBy?: string;
+      orderDirection?: string;
+    }
   ) => Promise<{ items: ItemT[]; pageInfo: PageInfo }> = async () =>
     Promise.resolve({ items: [], pageInfo: this.pageInfo });
 

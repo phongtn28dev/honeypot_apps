@@ -8,7 +8,7 @@ import { wallet } from '@honeypot/shared';
 import { ContractWrite } from '@honeypot/shared';
 import { Slider } from '@nextui-org/slider';
 import BigNumber from 'bignumber.js';
-import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { DynamicFormatAmount } from '@honeypot/shared';
 import { TokenLogo } from '@honeypot/shared';
 
 interface WithdrawFromVaultModalProps {

@@ -8,10 +8,6 @@ import { cn } from '@/lib/tailwindcss';
 import NotConnetctedDisplay from '../NotConnetctedDisplay/NotConnetctedDisplay';
 import ConfettiComponent from '../atoms/Confetti/Confetti';
 import PopOverModal from '../PopOverModal/PopOverModal';
-import { trpcClient } from '@/lib/trpc';
-import { popmodal } from '@/services/popmodal';
-import { metadata } from '@/config/metadata';
-import AnnouncementBar from './AnnouncementBar';
 import Link from 'next/link';
 import ChatWidget from '../ServiceChat';
 import Script from 'next/script';
@@ -148,7 +144,6 @@ export const Layout = ({
         strategy="beforeInteractive"
       />
 
-      <AnnouncementBar slogans={slogans} interval={5000} />
       {/* <GuideModal /> */}
       <ChatWidget />
 

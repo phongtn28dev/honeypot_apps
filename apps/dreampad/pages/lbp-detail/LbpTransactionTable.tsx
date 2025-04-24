@@ -2,10 +2,9 @@ import { truncate } from '@/lib/format';
 import { LbpLaunch } from '@honeypot/shared';
 import { Tooltip } from '@nextui-org/react';
 import { useState } from 'react';
-import { useEffect } from 'react';
 import dayjs from 'dayjs';
 import Image from 'next/image';
-import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { DynamicFormatAmount } from '@honeypot/shared';
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from 'react-icons/hi';
 
 export const LbpTransactionTable = ({

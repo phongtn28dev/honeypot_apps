@@ -1,18 +1,7 @@
 import { useState } from 'react';
 import { debounce } from 'lodash';
-import { Link, Tooltip } from '@nextui-org/react';
-import { useTotalUsers } from '@/lib/hooks/useTotalUsers';
 import CardContainer from '@/components/CardContianer/v3';
-import { useLeaderboard } from '@/lib/hooks/useLeaderboard';
-import { shortenAddressString, formatVolume } from '@/lib/utils';
-import { wallet } from '@honeypot/shared';
-import {
-  useAccounts,
-  useTopSwapAccounts,
-  useTopPot2PumpDeployer,
-  useTopParticipateAccounts,
-} from '@/lib/hooks/useAccounts';
-import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { DynamicFormatAmount } from '@honeypot/shared';
 import { launchedProjects } from '@/config/launchedProjects';
 import Image from 'next/image';
 interface LeaderboardItem {

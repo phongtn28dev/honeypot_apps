@@ -3,10 +3,9 @@ import dayjs from 'dayjs';
 import Countdown from 'react-countdown';
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
-import TokenCardV3 from '@/components/algebra/swap/TokenCard/TokenCardV3';
 import { TokenSelector } from '@honeypot/shared';
 import { Button, cn } from '@nextui-org/react';
-import { Input } from '@/components/algebra/ui/input';
+import { Input } from '@nextui-org/react';
 import { debounce } from 'lodash';
 import { wallet } from '@honeypot/shared';
 
@@ -173,7 +172,6 @@ const LbpStartedComponent = observer(
                   ),
                 }}
                 placeholder="0.0"
-                maxDecimals={18}
               />
             </div>
           </div>
@@ -235,7 +233,6 @@ const LbpStartedComponent = observer(
                   ),
                 }}
                 placeholder="0.0"
-                maxDecimals={18}
               />
             </div>
           </div>

@@ -1,21 +1,13 @@
-import { ftoRouter } from "./router/fto";
-import { pairRouter } from "./router/pair";
-import { priceFeedRouter } from "./router/priceFeed";
-import { indexerFeedRouter } from "./router/indexer";
-import { discussionRouter } from "./router/discussion";
-import { publicProcedure, router, t } from "./trpc";
-import { tokenRouter } from "./router/token";
-import { metadataRouter } from "./router/metadata";
-import { aiLaunchProjectRouter } from "./router/AILaunchProject";
+import { ftoRouter } from './router/fto';
+import { discussionRouter } from './router/discussion';
+import { publicProcedure, router, t } from './trpc';
+import { tokenRouter } from './router/token';
+import { aiLaunchProjectRouter } from './router/AILaunchProject';
 
 export const appRouter = router({
-  pair: pairRouter,
   projects: ftoRouter,
-  priceFeed: priceFeedRouter,
-  indexerFeedRouter: indexerFeedRouter,
   discussionRouter: discussionRouter,
   token: tokenRouter,
-  metadata: metadataRouter,
   aiLaunchProject: aiLaunchProjectRouter,
 });
 

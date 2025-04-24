@@ -20,7 +20,7 @@ import {
   useReadAlgebraPoolToken0,
   useReadAlgebraPoolToken1,
 } from '@/wagmi-generated';
-import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { DynamicFormatAmount } from '@honeypot/shared';
 import { useParams, useSearchParams } from 'next/navigation';
 import { Button } from '@nextui-org/react';
 type NewPositionPageParams = Record<'pool', Address>;

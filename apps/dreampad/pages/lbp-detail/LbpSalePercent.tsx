@@ -1,4 +1,4 @@
-import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { DynamicFormatAmount } from '@honeypot/shared';
 import { LbpLaunch } from '@honeypot/shared';
 
 export const LbpSalePercent = ({ lbpLaunch }: { lbpLaunch: LbpLaunch }) => {

@@ -10,7 +10,7 @@ import { itemSlideVariants } from '@/lib/animation';
 import { useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import { portfolio } from '@/services/portfolio';
-import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { DynamicFormatAmount } from '@honeypot/shared';
 
 interface TokenBalanceCardProps {
   token: Token;

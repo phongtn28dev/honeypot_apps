@@ -1,4 +1,3 @@
-import { exec } from '~/lib/contract';
 import { BaseContract } from './..';
 import { wallet } from '@honeypot/shared';
 import { Signer, ethers } from 'ethers';

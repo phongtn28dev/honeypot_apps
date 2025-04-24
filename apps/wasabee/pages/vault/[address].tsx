@@ -14,7 +14,7 @@ import { WithdrawFromVaultModal } from '@/components/Aquabera/modals/WithdrawFro
 import { getSingleVaultDetails } from '@honeypot/shared';
 import { SingleVaultDetailsQuery } from '@/lib/algebra/graphql/generated/graphql';
 import BigNumber from 'bignumber.js';
-import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { DynamicFormatAmount } from '@honeypot/shared';
 import { observer } from 'mobx-react-lite';
 import Link from 'next/link';
 import CardContainer from '@/components/CardContianer/v3';

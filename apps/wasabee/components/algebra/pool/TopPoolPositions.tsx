@@ -7,7 +7,7 @@ import {
 import { useMemo, useState } from 'react';
 import { Button, Link } from '@nextui-org/react';
 import { LoadingContainer } from '@/components/LoadingDisplay/LoadingDisplay';
-import { DynamicFormatAmount } from '@/lib/algebra/utils/common/formatAmount';
+import { DynamicFormatAmount } from '@honeypot/shared';
 import { Copy } from '@/components/Copy';
 import { truncate } from '@/lib/format';
 import { ChevronUp, ChevronDown } from 'lucide-react';
@@ -157,7 +157,7 @@ export default function TopPoolPositions({
         {/* Mobile View */}
         <div className="md:hidden w-full">
           <div className="flex justify-between mb-4">
-            <div 
+            <div
               className="flex items-center gap-2 text-sm font-medium cursor-pointer text-[#4D4D4D]"
               onClick={() => handleSort(Position_OrderBy.TickUpperPrice0)}
             >
@@ -181,7 +181,7 @@ export default function TopPoolPositions({
                 />
               </div>
             </div>
-            <div 
+            <div
               className="flex items-center gap-2 text-sm font-medium cursor-pointer text-[#4D4D4D]"
               onClick={() => handleSort(Position_OrderBy.Liquidity)}
             >
@@ -214,7 +214,10 @@ export default function TopPoolPositions({
           ) : (
             <div className="space-y-4">
               {positions.map((position) => (
-                <div key={position.id} className="border border-[#ECECEC] rounded-xl p-4 shadow-sm">
+                <div
+                  key={position.id}
+                  className="border border-[#ECECEC] rounded-xl p-4 shadow-sm"
+                >
                   <PositionRow
                     key={position.id}
                     position={position as Position}
@@ -264,7 +267,7 @@ export default function TopPoolPositions({
 export const PositionRow = ({
   position,
   poolEntity,
-  isMobile = false
+  isMobile = false,
 }: {
   position: Position;
   poolEntity: Pool;
@@ -286,7 +289,9 @@ export const PositionRow = ({
     return (
       <div className="flex flex-col gap-3">
         <div>
-          <p className="text-sm font-medium text-[#4D4D4D] mb-1 uppercase">Range</p>
+          <p className="text-sm font-medium text-[#4D4D4D] mb-1 uppercase">
+            Range
+          </p>
           <p className="text-black font-medium">
             {Number(position.tickUpper.price0) > Number.MAX_SAFE_INTEGER ? (
               'FULL RANGE'
@@ -304,12 +309,16 @@ export const PositionRow = ({
               </>
             )}
             <br />
-            <span className="text-[#6F6F6F] text-sm">{position.token0.symbol}/{position.token1.symbol}</span>
+            <span className="text-[#6F6F6F] text-sm">
+              {position.token0.symbol}/{position.token1.symbol}
+            </span>
           </p>
         </div>
-        
+
         <div>
-          <p className="text-sm font-medium text-[#4D4D4D] mb-1 uppercase">Liquidity</p>
+          <p className="text-sm font-medium text-[#4D4D4D] mb-1 uppercase">
+            Liquidity
+          </p>
           <p className="text-black font-medium">
             {DynamicFormatAmount({
               amount: position.depositedToken0,
@@ -326,14 +335,16 @@ export const PositionRow = ({
             <span className="text-[#6F6F6F]"> {position.token1.symbol}</span>
           </p>
         </div>
-        
+
         <div className="mt-4 flex justify-center">
-          <Button 
+          <Button
             className="w-full border border-[#2D2D2D] bg-[#FFCD4D] hover:bg-[#FFD56A] text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-3 py-2 text-sm font-medium"
             onPress={() => {
               const url = `/new-position/${position.pool.id}?leftrange=${
                 positionEntity?.token0PriceLower.toFixed(18) ?? '0'
-              }&rightrange=${positionEntity?.token0PriceUpper.toFixed(18) ?? '0'}`;
+              }&rightrange=${
+                positionEntity?.token0PriceUpper.toFixed(18) ?? '0'
+              }`;
               window.location.href = url;
             }}
           >
@@ -379,12 +390,14 @@ export const PositionRow = ({
         })}
       </td>
       <td className="py-4 px-6 text-black text-center">
-        <Button 
+        <Button
           className="border border-[#2D2D2D] bg-[#FFCD4D] hover:bg-[#FFD56A] text-black rounded-2xl shadow-[2px_2px_0px_0px_#000] px-3 py-1.5 text-xs"
           onClick={() => {
             const url = `/new-position/${position.pool.id}?leftrange=${
               positionEntity?.token0PriceLower.toFixed(18) ?? '0'
-            }&rightrange=${positionEntity?.token0PriceUpper.toFixed(18) ?? '0'}`;
+            }&rightrange=${
+              positionEntity?.token0PriceUpper.toFixed(18) ?? '0'
+            }`;
             window.location.href = url;
           }}
         >

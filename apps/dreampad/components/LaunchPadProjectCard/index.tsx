@@ -1,12 +1,12 @@
-import clsx from "clsx";
-import { observer } from "mobx-react-lite";
-import React from "react";
-import Countdown from "react-countdown";
-import { Button } from "../button/button-next";
-import { shortenAddress } from "@/lib/format";
-import { Address } from "viem";
-import Link from "next/link";
-import { DynamicFormatAmount } from "@/lib/algebra/utils/common/formatAmount";
+import clsx from 'clsx';
+import { observer } from 'mobx-react-lite';
+import React from 'react';
+import Countdown from 'react-countdown';
+import { Button } from '../button/button-next';
+import { shortenAddress } from '@/lib/format';
+import { Address } from 'viem';
+import Link from 'next/link';
+import { DynamicFormatAmount } from '@honeypot/shared';
 
 type ILaunchPadProjectCard = {
   status: string;
@@ -20,7 +20,7 @@ type ILaunchPadProjectCard = {
   assetTokenSymbol?: string;
   shareTokenSymbol?: string;
   pairAddress: Address;
-  variant?: "list" | "grid";
+  variant?: 'list' | 'grid';
 };
 
 const ProjectCardStatus = observer(({ status }: { status: string }) => {
@@ -28,26 +28,26 @@ const ProjectCardStatus = observer(({ status }: { status: string }) => {
     <div className="flex items-center ">
       <div
         className={clsx(
-          "flex justify-center items-center w-[18px] h-[18px] rounded-full",
+          'flex justify-center items-center w-[18px] h-[18px] rounded-full',
           {
-            "bg-[#F7941D1A]": status === "comming",
-            "bg-[#43d9a3]/10": status === "live",
+            'bg-[#F7941D1A]': status === 'comming',
+            'bg-[#43d9a3]/10': status === 'live',
           }
         )}
       >
         <div
           className={clsx(
-            "flex justify-center items-center w-[8px] h-[8px] rounded-full",
+            'flex justify-center items-center w-[8px] h-[8px] rounded-full',
             {
-              "bg-[#F7941D]": status === "comming",
-              "bg-[#43d9a3]": status === "live",
+              'bg-[#F7941D]': status === 'comming',
+              'bg-[#43d9a3]': status === 'live',
             }
           )}
         ></div>
       </div>
       <div className="font-bold text-white text-[1rem] leading-[1.3rem] min-w-[110px] text-center">
-        {status != "ended" && (
-          <div>{status == "live" ? "Live now" : "Coming Soon"}</div>
+        {status != 'ended' && (
+          <div>{status == 'live' ? 'Live now' : 'Coming Soon'}</div>
         )}
       </div>
     </div>
@@ -74,7 +74,7 @@ const TokenInfo = observer(
               onError={({ currentTarget }) => {
                 currentTarget.onerror = null;
                 currentTarget.src =
-                  "/images/icons/tokens/thpot-token-yellow-icon.png";
+                  '/images/icons/tokens/thpot-token-yellow-icon.png';
               }}
             />
           </div>
@@ -110,17 +110,17 @@ const LaunchPadProjectBody = observer(
     status,
     endDate,
     startDate,
-    symbol = "tHpot",
+    symbol = 'tHpot',
     fundsRaised,
   }: ILaunchPadProjectBody) => {
-    console.log("end date: ", endDate);
+    console.log('end date: ', endDate);
 
     return (
       <div className="my-[10px] py-[8px] flex items-center flex-col justify-between w-full bg-[#31220C] rounded-2xl gap-[18px]">
         <ProjectCardStatus status={status} />
 
         <Countdown
-          date={status == "live" ? endDate : startDate}
+          date={status == 'live' ? endDate : startDate}
           renderer={({ days, hours, minutes, seconds, completed }) => {
             if (completed) {
               return (
@@ -140,37 +140,37 @@ const LaunchPadProjectBody = observer(
                 <div className="font-bold text-lg flex items-center gap-[14px]">
                   <div className="flex flex-col text-center gap-[5px]">
                     <span className="leading-[26px]">
-                      {days > 0 ? days : "00"}
+                      {days > 0 ? days : '00'}
                     </span>
                     <span className="text-[9px] leading-3 text-[#FFFFFF70]">
-                      {days > 1 ? "Days" : "Day"}
+                      {days > 1 ? 'Days' : 'Day'}
                     </span>
                   </div>
                   <div>:</div>
                   <div className="flex flex-col text-center gap-[5px]">
                     <span className="leading-[26px]">
-                      {hours > 0 ? hours : "00"}
+                      {hours > 0 ? hours : '00'}
                     </span>
                     <span className="text-[9px] leading-3 text-[#FFFFFF70]">
-                      {hours > 1 ? "Hours" : "Hour"}
+                      {hours > 1 ? 'Hours' : 'Hour'}
                     </span>
                   </div>
                   <div>:</div>
                   <div className="flex flex-col text-center gap-[5px]">
                     <span className="leading-[26px]">
-                      {minutes > 0 ? minutes : "00"}
+                      {minutes > 0 ? minutes : '00'}
                     </span>
                     <span className="text-[9px] leading-3 text-[#FFFFFF70]">
-                      {minutes > 1 ? "Minutes" : "Minute"}
+                      {minutes > 1 ? 'Minutes' : 'Minute'}
                     </span>
                   </div>
                   <div>:</div>
                   <div className="flex flex-col text-center gap-[5px]">
                     <span className="leading-[26px]">
-                      {seconds > 0 ? seconds : "00"}
+                      {seconds > 0 ? seconds : '00'}
                     </span>
                     <span className="text-[9px] leading-3 text-[#FFFFFF70]">
-                      {seconds > 1 ? "Secs" : "Sec"}
+                      {seconds > 1 ? 'Secs' : 'Sec'}
                     </span>
                   </div>
                 </div>
@@ -196,13 +196,13 @@ const LaunchPadProjectCard = observer(
     assetTokenSymbol,
     shareTokenSymbol,
     pairAddress,
-    variant = "grid",
+    variant = 'grid',
   }: ILaunchPadProjectCard) => {
-    if (variant === "grid") {
+    if (variant === 'grid') {
       return (
         <div
           className={clsx(
-            "min-w-[18.5rem]   rounded-[20px] bg-[#202020] border border-[#F7931A0D] overflow-hidden"
+            'min-w-[18.5rem]   rounded-[20px] bg-[#202020] border border-[#F7931A0D] overflow-hidden'
           )}
         >
           {isShowCoverImage && (
@@ -214,7 +214,7 @@ const LaunchPadProjectCard = observer(
                   className="object-cover h-[78px] w-full"
                   onError={({ currentTarget }) => {
                     currentTarget.onerror = null;
-                    currentTarget.className = "hidden";
+                    currentTarget.className = 'hidden';
                   }}
                 />
               )}
@@ -224,7 +224,7 @@ const LaunchPadProjectCard = observer(
             <TokenInfo
               symbol={
                 shareTokenSymbol ||
-                "/images/icons/tokens/thpot-token-yellow-icon.png"
+                '/images/icons/tokens/thpot-token-yellow-icon.png'
               }
               name={tokenName}
               author={projectAuthor}
@@ -239,7 +239,7 @@ const LaunchPadProjectCard = observer(
             />
           </div>
           <div className="p-[10px]">
-            {status === "live" ? (
+            {status === 'live' ? (
               <Link href={`/lbp-detail/${pairAddress}`}>
                 <Button className="w-full outline-2">
                   <span className="font-bold text-[12px]">Buy Token</span>
@@ -255,7 +255,7 @@ const LaunchPadProjectCard = observer(
           </div>
         </div>
       );
-    } else if (variant === "list") {
+    } else if (variant === 'list') {
       return (
         <>
           <td className="flex items-center gap-2 p-2">
@@ -263,14 +263,14 @@ const LaunchPadProjectCard = observer(
               <img
                 src={
                   shareTokenSymbol ||
-                  "/images/icons/tokens/thpot-token-yellow-icon.png"
+                  '/images/icons/tokens/thpot-token-yellow-icon.png'
                 }
                 alt={tokenName}
                 className="w-full h-full object-cover rounded-full"
                 onError={({ currentTarget }) => {
-                  if (currentTarget.src.includes(shareTokenSymbol ?? "")) {
+                  if (currentTarget.src.includes(shareTokenSymbol ?? '')) {
                     currentTarget.src =
-                      "/images/icons/tokens/thpot-token-yellow-icon.png";
+                      '/images/icons/tokens/thpot-token-yellow-icon.png';
                   }
                 }}
               />
@@ -294,7 +294,7 @@ const LaunchPadProjectCard = observer(
 
           <td className="">
             <div className="flex items-center justify-center text-base leading-[20px] font-bold text-white">
-              <span className="text-[#F7941D] mr-1">Raised: </span>{" "}
+              <span className="text-[#F7941D] mr-1">Raised: </span>{' '}
               <span>
                 {DynamicFormatAmount({
                   amount: fundsRaised,
