@@ -12,6 +12,7 @@ import { ICHIVaultFactoryContract } from '../contract/aquabera/ICHIVaultFactory-
 import { DEFAULT_CHAIN_ID } from '../../config/algebra/default-chain-id';
 import { ICHIVaultVolatilityCheckContract } from '../contract/aquabera/ICHIVaultVolatilityCheckContract';
 import { AlgebraSwapRouterContract } from '../contract/algebra/algebra-swap-router';
+import { UniversalAccount } from './universalAccount';
 
 export class Wallet {
   account: string = '';
@@ -37,13 +38,17 @@ export class Wallet {
       return acc;
     }, {} as Record<number, Network>);
   }
+  universalAccount: UniversalAccount | undefined = undefined;
 
   get currentChain() {
     return this.networksMap[this.currentChainId];
   }
 
   constructor(args: Partial<Wallet>) {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {
+      networksMap: false,
+      currentChain: false,
+    });
     reaction(
       () => this.walletClient?.account,
       () => {
@@ -106,6 +111,17 @@ export class Wallet {
     }
     this.currentChain.init();
     await StorageState.sync();
+
+    if (this.account && this.account !== zeroAddress) {
+      runInAction(() => {
+        this.universalAccount = new UniversalAccount(this.account);
+      });
+      await this.universalAccount?.loadUniversalAccountInfo();
+    } else {
+      runInAction(() => {
+        this.universalAccount = undefined;
+      });
+    }
 
     runInAction(() => {
       this.isInit = true;

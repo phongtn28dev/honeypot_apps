@@ -20,7 +20,7 @@
       "~/*": ["./*"],
       "~/static/*": ["./public/*"],
       "@/components/*": ["./components/*"],
-      "@/styles/*": ["styles/*"],
+      "@/styles/*": ["./styles/*"],
       "@/lib/*": ["./lib/*"],
       "@/hooks/*": ["./hooks/*"],
       "@/utils/*": ["./lib/utils/*"],
@@ -28,7 +28,10 @@
       "@/public/*": ["./public/*"],
       "@/public/images/*": ["./public/images/*"],
       "@honeypot/shared": ["../../libs/shared/hpot-sdk/src/index.ts"],
-      "@honeypot/shared/*": ["../../libs/shared/hpot-sdk/src/*"]
+      "@honeypot/shared/*": ["../../libs/shared/hpot-sdk/src/*"],
+      "@GDdark/universal-account": [
+        "./../../node_modules/@GDdark/universal-account/dist/index.d.ts"
+      ]
     }
   },
   "include": [
@@ -36,8 +39,8 @@
     "**/*.ts",
     "**/*.tsx",
     "config/wagmi/holdstationWallet.js",
-    "**/*.ts",
-    "**/*.tsx"
+    ".next/types/**/*.ts",
+    "../../libs/shared/hpot-sdk/src/services/chart.ts"
   ],
   "exclude": ["node_modules", "jest.config.ts", "**/*.spec.ts", "**/*.test.ts"]
 }

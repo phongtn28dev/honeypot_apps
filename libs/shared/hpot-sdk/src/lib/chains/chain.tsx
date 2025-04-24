@@ -32,6 +32,7 @@ export class Network {
   supportBridge: boolean = false;
   supportLBP: boolean = false;
   supportPot2Pump: boolean = false;
+  supportUniversalAccount: boolean = false;
   isActive: boolean = true;
   iconUrl: string = '';
   get chainId() {
@@ -189,6 +190,7 @@ export const berachainNetwork = new Network({
   supportBridge: true,
   supportLBP: true,
   supportPot2Pump: true,
+  supportUniversalAccount: true,
   iconUrl:
     'https://cdn.prod.website-files.com/633c67ced5457aa4dec572be/67b845abe842d21521095c26_667ac3022260a22071b3cf37_u_b_f51944d0-b527-11ee-be26-a5e0a0cc15ce.png',
   chain: berachainMainnet,

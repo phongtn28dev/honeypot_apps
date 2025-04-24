@@ -159,6 +159,12 @@ export class Token implements BaseContract {
     });
   }
 
+  get transfer() {
+    return new ContractWrite(this.contract.write?.transfer, {
+      action: 'Transfer',
+    });
+  }
+
   get deposit() {
     return new ContractWrite(this.contract.write?.deposit, {
       action: 'Swap BERA to WBERA',
@@ -490,7 +496,6 @@ export class Token implements BaseContract {
   }
 
   get balance() {
-    // console.log('this.balanceWithoutDecimals', this.balanceWithoutDecimals)
     return this.balanceWithoutDecimals.div(
       new BigNumber(10).pow(this.decimals)
     );

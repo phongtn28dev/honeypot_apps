@@ -12,7 +12,8 @@ import {
   ResolutionString,
 } from '@/public/static/charting_library/charting_library';
 import { pairToTicker, tokenToTicker } from '@/lib/advancedChart.util';
-import { chart } from '@/services/chart';
+
+import { chart } from '@honeypot/shared/services';
 import { observer } from 'mobx-react-lite';
 import { wallet } from '@honeypot/shared';
 

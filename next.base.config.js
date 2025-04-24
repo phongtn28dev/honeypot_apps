@@ -74,6 +74,7 @@ const baseConfig = {
       '@safe-global/safe-apps-sdk',
       '@safe-global/safe-apps-react-sdk',
       'framer-motion',
+      'react-toastify',
     ],
     experimental: {
       optimizeCss: true,
