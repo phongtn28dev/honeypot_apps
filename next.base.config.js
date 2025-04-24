@@ -18,6 +18,7 @@ const baseConfig = {
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
+      '@honeypot/shared': path.resolve(__dirname, 'libs/shared/hpot-sdk/src'),
     };
     config.resolve.modules = [
       path.resolve(__dirname, 'node_modules'), // 👈 prioritize root
