@@ -7,7 +7,14 @@ import {
   metaMaskWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 import { injected, safe } from 'wagmi/connectors';
-import { createConfig, http, cookieStorage, createStorage, mock } from 'wagmi';
+import {
+  createConfig,
+  http,
+  cookieStorage,
+  createStorage,
+  mock,
+  Config,
+} from 'wagmi';
 import { networks } from '../../lib/chains';
 
 const pId = '1d1c8b5204bfbd57502685fc0934a57d';
@@ -54,7 +61,7 @@ const connectors = [
 //   );
 // }
 
-export const createWagmiConfig = () =>
+export const createWagmiConfig = (overrideConfig?: Partial<Config>) =>
   getDefaultConfig({
     connectors,
     appName: 'Honypot Finance',
@@ -65,4 +72,5 @@ export const createWagmiConfig = () =>
     storage: createStorage({
       storage: cookieStorage,
     }),
+    ...overrideConfig,
   });

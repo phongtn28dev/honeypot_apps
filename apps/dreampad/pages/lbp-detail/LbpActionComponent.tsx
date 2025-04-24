@@ -23,12 +23,12 @@ export const LbpActionComponent = observer(
           return <LbpNotStartedComponent lbpLaunch={lbpLaunch} />;
         case LAUNCH_STATUS.STARTED:
           return <LbpStartedComponent lbpLaunch={lbpLaunch} />;
+        case LAUNCH_STATUS.CLOSED:
+          return <LbpClosedComponent lbpLaunch={lbpLaunch} />;
         case LAUNCH_STATUS.ENDED:
           return <LbpEndedComponent lbpLaunch={lbpLaunch} />;
         case LAUNCH_STATUS.CANCELLED:
           return <LbpCancelledComponent lbpLaunch={lbpLaunch} />;
-        case LAUNCH_STATUS.CLOSED:
-          return <LbpClosedComponent lbpLaunch={lbpLaunch} />;
         default:
           return null;
       }
@@ -259,16 +259,18 @@ const LbpEndedComponent = ({ lbpLaunch }: { lbpLaunch: LbpLaunch }) => {
     <div className="bg-white rounded-[16px] border border-black p-4 text-center">
       <div className="text-lg font-bold mb-2">Sale Ended</div>
       <div className="text-sm text-[#4D4D4D] mb-4">
-        The token sale has ended. Tokens can be redeemed by clicking the
-        &apos;Claim Tokens Here&apos; button below.
-      </div>
-      <div className="text-sm text-[#4D4D4D] mb-4">
-        Some tokens may have a claim delay as set by the sale creator.
+        The token sale has ended. Close this Sale to redeem tokens.
       </div>
       <div className="border-t border-black pt-4">
-        <div className="flex items-center justify-between text-sm">
-          <span>Purchased tokens:</span>
-          <span>0 OVL</span>
+        <div className="flex w-full items-center justify-center text-sm">
+          <Button
+            className="bg-black text-white border-none rounded-lg"
+            onPress={() => {
+              lbpLaunch.closeSale();
+            }}
+          >
+            Close Sale
+          </Button>
         </div>
       </div>
     </div>
@@ -283,36 +285,42 @@ const LbpCancelledComponent = ({ lbpLaunch }: { lbpLaunch: LbpLaunch }) => {
   );
 };
 
-const LbpClosedComponent = ({ lbpLaunch }: { lbpLaunch: LbpLaunch }) => {
-  const redeemTokens = () => {
-    lbpLaunch.redeemTokens().then(() => {
-      lbpLaunch.assetToken?.getBalance();
-      lbpLaunch.shareToken?.getBalance();
-      lbpLaunch.loadUserPurchasedShares();
-    });
-  };
-  return (
-    <div className="bg-white rounded-[16px] border border-black p-4 text-center">
-      <div className="text-lg font-bold mb-2">Sale Closed</div>
-      <div className="flex flex-col items-center justify-between gap-4">
-        <div className="text-sm text-[#4D4D4D]">
-          Your Shares:{' '}
-          <span>
-            {lbpLaunch.userPurchasedShares.toFixed(5).toString() ?? 0}{' '}
-            {lbpLaunch.shareToken?.symbol}
-          </span>
-        </div>
-        <div>
-          <Button
-            isDisabled={lbpLaunch.userPurchasedShares.eq(0)}
-            onPress={redeemTokens}
-          >
-            Redeem Tokens
-          </Button>
+const LbpClosedComponent = observer(
+  ({ lbpLaunch }: { lbpLaunch: LbpLaunch }) => {
+    const redeemTokens = () => {
+      lbpLaunch.redeemTokens().then(() => {
+        lbpLaunch.assetToken?.getBalance();
+        lbpLaunch.shareToken?.getBalance();
+        lbpLaunch.loadUserPurchasedShares();
+      });
+    };
+    return (
+      <div className="bg-white rounded-[16px] border border-black p-4 text-center">
+        <div className="text-lg font-bold mb-2">Sale Closed</div>
+        <div className="flex flex-col items-center justify-between gap-4">
+          <div className="text-sm text-[#4D4D4D]">
+            Your Shares:{' '}
+            <span>
+              {lbpLaunch.userPurchasedShares.toFixed(5).toString() ?? 0}{' '}
+              {lbpLaunch.shareToken?.symbol}
+            </span>
+          </div>
+          <div>
+            <Button
+              className={cn(
+                'bg-black text-white border-none rounded-lg',
+                lbpLaunch.userPurchasedShares.eq(0) && 'opacity-50'
+              )}
+              isDisabled={lbpLaunch.userPurchasedShares.eq(0)}
+              onPress={redeemTokens}
+            >
+              Redeem Tokens
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+);
 
 export default LbpActionComponent;

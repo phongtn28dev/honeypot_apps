@@ -12,7 +12,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 import { NextUIProvider } from '@nextui-org/react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { createWagmiConfig } from '@honeypot/shared';
+import { createWagmiConfig, networks } from '@honeypot/shared';
 import { trpc, trpcQueryClient } from '../lib/trpc';
 import { useEffect, useState } from 'react';
 import { wallet } from '@honeypot/shared';
@@ -28,7 +28,12 @@ import { deserialize, serialize } from 'wagmi';
 import { useSubgraphClient } from '@honeypot/shared';
 import { ErrorBoundary } from '@sentry/nextjs';
 
-const config = createWagmiConfig();
+const config = createWagmiConfig({
+  // @ts-ignore
+  chains: networks
+    .filter((network) => network.supportLBP)
+    .map((network) => network.chain),
+});
 
 // enableStaticRendering(true)
 const queryClient = new QueryClient({

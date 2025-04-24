@@ -17,7 +17,6 @@ import { LaunchCardV3 } from '@/components/LaunchCard/v3';
 import { HoneyContainer } from '@/components/CardContianer';
 import { useLbpLaunchList } from '@honeypot/shared';
 import { Address } from 'viem';
-import { lbpMetadatas } from '@honeypot/shared';
 import { PaginationState } from '@honeypot/shared';
 
 const LbpProjectList = observer(() => {

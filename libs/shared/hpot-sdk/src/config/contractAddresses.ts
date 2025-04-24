@@ -27,6 +27,11 @@ export interface ContractAddresses {
   //aquabera vault
   vaultFactory: Address;
   vaultVolatilityCheck: Address;
+  //hpot
+  hpotToken: {
+    token: Address;
+    tokenVesting: Address;
+  };
 }
 
 export const contractAddresses: Record<string, ContractAddresses> = {
@@ -49,14 +54,22 @@ export const contractAddresses: Record<string, ContractAddresses> = {
     algebraPluginFactory: zeroAddress,
     algebraProxy: zeroAddress,
     algebraInterfaceMulticall: zeroAddress,
+
     //launchpad
     ftoFactory: zeroAddress,
     ftoFacade: zeroAddress,
     memeFactory: zeroAddress,
     memeFacade: zeroAddress,
+
     //aquabera vault
     vaultFactory: zeroAddress,
     vaultVolatilityCheck: zeroAddress,
+
+    //hpot
+    hpotToken: {
+      token: zeroAddress,
+      tokenVesting: zeroAddress,
+    },
   },
   // berachain mainnet
   '80094': {
@@ -90,6 +103,12 @@ export const contractAddresses: Record<string, ContractAddresses> = {
     //aquabera vault
     vaultFactory: '0x1bf5e51eCacdfEA65ae9276fd228bB8719ffcA7E',
     vaultVolatilityCheck: '0x97BF8CB6Be6757ab46D44853eAbEFD0D4C153037',
+
+    //hpot
+    hpotToken: {
+      token: zeroAddress,
+      tokenVesting: zeroAddress,
+    },
   },
   '80069': {
     //algebra
@@ -121,5 +140,11 @@ export const contractAddresses: Record<string, ContractAddresses> = {
     //aquabera vault
     vaultFactory: '0xBc4996968b09087Cb85BBDE6Bf58953ceb393Ec9',
     vaultVolatilityCheck: zeroAddress,
+
+    //hpot
+    hpotToken: {
+      token: '0x2160e65c07aafd809f4f39a94513a21fbe20b615',
+      tokenVesting: '0x559066e029787e27153bc99dcf9e540111f346f4',
+    },
   },
 };

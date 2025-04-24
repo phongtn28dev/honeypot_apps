@@ -1,6 +1,7 @@
 import { LbpLaunch } from '../lib/contract/launches/lbp/lbpPair';
 import { BigNumber } from 'bignumber.js';
 import { Address } from 'viem';
+import { FjordLbpMetadataResponse } from '../types/lbpmetadata';
 
 export const lbpMetadatas: Record<
   number,

@@ -543,4 +543,21 @@ export class LbpLaunch {
 
     console.log('tx', tx);
   }
+
+  async closeSale() {
+    if (!this.address) {
+      return;
+    }
+    try {
+      const tx = await new ContractWrite(this.contract.write.close, {
+        action: 'Close Sale',
+      }).call();
+
+      this.closed = true;
+
+      console.log('tx', tx);
+    } catch (error) {
+      console.error('error', error);
+    }
+  }
 }

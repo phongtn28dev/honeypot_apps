@@ -137,6 +137,7 @@ export const berachainBepoliaNetwork = new Network({
   supportVault: true,
   supportBridge: true,
   supportPot2Pump: true,
+  supportLBP: true,
   iconUrl:
     'https://cdn.prod.website-files.com/633c67ced5457aa4dec572be/67b845abe842d21521095c26_667ac3022260a22071b3cf37_u_b_f51944d0-b527-11ee-be26-a5e0a0cc15ce.png',
   chain: berachainBepoliaTestnet,
@@ -157,7 +158,7 @@ export const berachainBepoliaNetwork = new Network({
     },
   ],
   platformTokenAddress: {
-    HPOT: zeroAddress.toLowerCase(),
+    HPOT: '0x2160E65c07aAFD809f4f39a94513a21FbE20b615'.toLowerCase(),
   },
   faucetTokens: [],
   contracts: contractAddresses['80069'],
@@ -180,6 +181,13 @@ export const berachainBepoliaNetwork = new Network({
       isRouterToken: true,
       isPopular: true,
       isStableCoin: true,
+    },
+    '0x2160e65c07aafd809f4f39a94513a21fbe20b615': {
+      name: 'Honeypot Finance',
+      symbol: 'HPOT',
+      decimals: 18,
+      logoURI: '/images/icons/tokens/thpot-token-icon.jpg',
+      isRouterToken: true,
     },
   },
 });

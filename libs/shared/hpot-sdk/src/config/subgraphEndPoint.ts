@@ -31,7 +31,7 @@ export const subgraphAddresses: Record<string, SubgraphAddresses> = {
     algebra_farming:
       'https://api.goldsky.com/api/public/project_cm78242tjtmme01uvcbkaay27/subgraphs/hpot-algebra-farming-bepolia/1.0.0/gn',
     bgt_market: '',
-    lbp: '',
+    lbp: 'https://api.goldsky.com/api/public/project_cm78242tjtmme01uvcbkaay27/subgraphs/hpot-lbp-berachain-bepolia/1.0.0/gn',
   },
   //ethereum sepolia
   '11155111': {

@@ -1,10 +1,10 @@
-import { ConnectButton } from "@usecapsule/rainbowkit";
-import { ButtonHTMLAttributes } from "react";
-import Image from "next/image";
-import { useConnect, useConnectors } from "wagmi";
-import { BiWallet } from "react-icons/bi";
-import { BsPerson } from "react-icons/bs";
-import Link from "next/link";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ButtonHTMLAttributes } from 'react';
+import Image from 'next/image';
+import { useConnect, useConnectors } from 'wagmi';
+import { BiWallet } from 'react-icons/bi';
+import { BsPerson } from 'react-icons/bs';
+import Link from 'next/link';
 
 const ConnectButtonCustom = (props: ButtonHTMLAttributes<any>) => {
   return (
@@ -19,7 +19,7 @@ export const WalletConnect = () => {
   const { connect } = useConnect();
   const connectors = useConnectors();
 
-  const mockConnector = connectors.find((connector) => connector.id === "mock");
+  const mockConnector = connectors.find((connector) => connector.id === 'mock');
   return (
     <div className="flex flex-col items-center">
       <Image
@@ -50,21 +50,21 @@ export const WalletConnect = () => {
           }) => {
             // Note: If your app doesn't use authentication, you
             // can remove all 'authenticationStatus' checks
-            const ready = mounted && authenticationStatus !== "loading";
+            const ready = mounted && authenticationStatus !== 'loading';
             const connected =
               ready &&
               account &&
               chain &&
               (!authenticationStatus ||
-                authenticationStatus === "authenticated");
+                authenticationStatus === 'authenticated');
             return (
               <div
                 {...(!ready && {
-                  "aria-hidden": true,
+                  'aria-hidden': true,
                   style: {
                     opacity: 0,
-                    pointerEvents: "none",
-                    userSelect: "none",
+                    pointerEvents: 'none',
+                    userSelect: 'none',
                   },
                 })}
               >
@@ -75,7 +75,7 @@ export const WalletConnect = () => {
                         {/* <NetworkSelect /> */}
                         <ConnectButtonCustom
                           onClick={() => {
-                            if (process.env.NEXT_PUBLIC_MOCK === "true") {
+                            if (process.env.NEXT_PUBLIC_MOCK === 'true') {
                               connect({ connector: mockConnector! });
                             } else {
                               openConnectModal();
@@ -103,7 +103,7 @@ export const WalletConnect = () => {
                         className="flex min-w-[126px] cursor-pointer bg-[#202020] text-white px-4 py-2 rounded-2xl gap-2 items-center"
                       >
                         <Image
-                          src={"/images/empty-logo.png"}
+                          src={'/images/empty-logo.png'}
                           alt="icon"
                           width={20}
                           height={20}
