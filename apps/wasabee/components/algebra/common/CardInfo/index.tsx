@@ -1,5 +1,5 @@
-import { cn } from "@/lib/tailwindcss";
-import React, { FC } from "react";
+import { cn } from '@nextui-org/theme';
+import React, { FC } from 'react';
 
 interface CardInfoProps {
   title: string;
@@ -17,7 +17,7 @@ const CardInfo: FC<CardInfoProps> = ({
   return (
     <div
       className={cn(
-        "flex items-start flex-col gap-2 rounded-3xl border-border border bg-card-dark p-4",
+        'flex items-start flex-col gap-2 rounded-3xl border-border border bg-card-dark p-4',
         className
       )}
     >

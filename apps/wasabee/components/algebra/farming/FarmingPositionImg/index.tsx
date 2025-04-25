@@ -1,6 +1,6 @@
-import { cn } from "@/lib/tailwindcss";
-import { useReadAlgebraPositionManagerTokenUri } from "@/wagmi-generated";
-import { useEffect, useRef } from "react";
+import { cn } from '@nextui-org/theme';
+import { useReadAlgebraPositionManagerTokenUri } from '@/wagmi-generated';
+import { useEffect, useRef } from 'react';
 
 export const FarmingPositionImg = ({
   positionId,
@@ -18,7 +18,7 @@ export const FarmingPositionImg = ({
   const imgRef = useRef<any>();
 
   const json =
-    uri && JSON.parse(atob(uri.slice("data:application/json;base64,".length)));
+    uri && JSON.parse(atob(uri.slice('data:application/json;base64,'.length)));
 
   useEffect(() => {
     if (!imgRef?.current || !json) return;
@@ -29,11 +29,11 @@ export const FarmingPositionImg = ({
   return (
     <div
       className={cn(
-        "rounded-full flex items-center justify-center overflow-hidden w-12",
+        'rounded-full flex items-center justify-center overflow-hidden w-12',
         className
       )}
       style={{
-        background: "linear-gradient(181.1deg, #686EFF 0.93%, #141520 99.07%)",
+        background: 'linear-gradient(181.1deg, #686EFF 0.93%, #141520 99.07%)',
         width: `${size / 4}rem`,
       }}
     >

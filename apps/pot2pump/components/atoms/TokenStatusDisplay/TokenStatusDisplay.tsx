@@ -1,9 +1,9 @@
-import { cn } from "@/lib/tailwindcss";
-import { FtoPairContract } from "@/services/contract/launches/fto/ftopair-contract";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
-import { motion, useMotionValue, useTime } from "framer-motion";
-import { observer } from "mobx-react-lite";
-import { useEffect } from "react";
+import { cn } from '@nextui-org/theme';
+import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
+import { motion, useMotionValue, useTime } from 'framer-motion';
+import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
 
 interface ProjectStatusDisplayProps {
   pair: FtoPairContract | MemePairContract | null | undefined;
@@ -23,10 +23,10 @@ export const ProjectStatusDisplay = observer(
           transition={{
             duration: 1,
             repeat: Infinity,
-            repeatType: "reverse",
+            repeatType: 'reverse',
           }}
           className={cn(
-            "flex px-[8px] h-[29px] justify-center items-center gap-[5px]  rounded-[20px] select-none",
+            'flex px-[8px] h-[29px] justify-center items-center gap-[5px]  rounded-[20px] select-none',
             pair?.ftoStatusDisplay?.color
           )}
         >
@@ -34,7 +34,7 @@ export const ProjectStatusDisplay = observer(
           <span className="text-ss  text-current">
             {pair?.ftoStatusDisplay?.status}
           </span>
-        </motion.div>{" "}
+        </motion.div>{' '}
         {pair?.isValidated && (
           <motion.div
             animate={{
@@ -46,10 +46,10 @@ export const ProjectStatusDisplay = observer(
             transition={{
               duration: 1,
               repeat: Infinity,
-              repeatType: "reverse",
+              repeatType: 'reverse',
             }}
             className={cn(
-              "flex px-[8px] h-[29px] justify-center items-center gap-[5px] rounded-[20px]  bg-[#4bbdea58] text-white select-none"
+              'flex px-[8px] h-[29px] justify-center items-center gap-[5px] rounded-[20px]  bg-[#4bbdea58] text-white select-none'
             )}
           >
             <div className="rounded-full bg-current w-2 h-2"></div>

@@ -1,8 +1,9 @@
-import type { ComponentProps } from "react";
-import React from "react";
-import { m, LazyMotion, domAnimation } from "framer-motion";
-import { useControlledState } from "@/hooks";
-import { cn } from "@/lib/tailwindcss";
+import type { ComponentProps } from 'react';
+import React from 'react';
+import { m, LazyMotion, domAnimation } from 'framer-motion';
+import { useControlledState } from '@/hooks';
+
+import { cn } from '@nextui-org/theme';
 
 export type VerticalStepProps = {
   className?: string;
@@ -57,7 +58,7 @@ export interface VerticalStepsProps
   onStepChange?: (stepIndex: number) => void;
 }
 
-function CheckIcon(props: ComponentProps<"svg">) {
+function CheckIcon(props: ComponentProps<'svg'>) {
   return (
     <svg
       {...props}
@@ -74,8 +75,8 @@ function CheckIcon(props: ComponentProps<"svg">) {
         strokeLinejoin="round"
         transition={{
           delay: 0.2,
-          type: "tween",
-          ease: "easeOut",
+          type: 'tween',
+          ease: 'easeOut',
           duration: 0.3,
         }}
       />
@@ -106,7 +107,7 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
     return (
       <nav aria-label="Progress" className="w-full">
         <ol
-          className={cn("flex flex-col gap-y-3", className)}
+          className={cn('flex flex-col gap-y-3', className)}
           style={{
             gap: `${STEP_SPACE}px`,
           }}
@@ -114,10 +115,10 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
           {steps?.map((step, stepIdx) => {
             const status =
               currentStep === stepIdx
-                ? "active"
+                ? 'active'
                 : currentStep < stepIdx
-                ? "inactive"
-                : "complete";
+                ? 'inactive'
+                : 'complete';
 
             return (
               <li key={stepIdx} className="relative">
@@ -125,9 +126,9 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                   <button
                     key={stepIdx}
                     ref={ref}
-                    aria-current={status === "active" ? "step" : undefined}
+                    aria-current={status === 'active' ? 'step' : undefined}
                     className={cn(
-                      "relative group flex w-fit cursor-pointer items-center justify-center gap-4 rounded-large",
+                      'relative group flex w-fit cursor-pointer items-center justify-center gap-4 rounded-large',
                       stepClassName
                     )}
                     onClick={() =>
@@ -142,9 +143,9 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                           <m.div
                             animate={status}
                             className={cn(
-                              "border-medium text-large text-default-foreground relative flex h-[42px] w-[42px] items-center justify-center rounded-full font-semibold",
+                              'border-medium text-large text-default-foreground relative flex h-[42px] w-[42px] items-center justify-center rounded-full font-semibold',
                               {
-                                "shadow-lg": status === "complete",
+                                'shadow-lg': status === 'complete',
                               }
                             )}
                             data-status={status}
@@ -152,23 +153,23 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                             transition={{ duration: 0.25 }}
                             variants={{
                               inactive: {
-                                backgroundColor: "rgb(var(--bg-inactive))",
-                                borderColor: "rgb(var(--bg-inactive))",
-                                color: "rgb(var(--text-inactive))",
+                                backgroundColor: 'rgb(var(--bg-inactive))',
+                                borderColor: 'rgb(var(--bg-inactive))',
+                                color: 'rgb(var(--text-inactive))',
                               },
                               active: {
-                                backgroundColor: "rgb(var(--bg-active))",
-                                borderColor: "rgb(var(--bg-active))",
-                                color: "rgb(var(--text-active))",
+                                backgroundColor: 'rgb(var(--bg-active))',
+                                borderColor: 'rgb(var(--bg-active))',
+                                color: 'rgb(var(--text-active))',
                               },
                               complete: {
-                                backgroundColor: "rgb(var(--bg-active))",
-                                borderColor: "rgb(var(--bg-active))",
+                                backgroundColor: 'rgb(var(--bg-active))',
+                                borderColor: 'rgb(var(--bg-active))',
                               },
                             }}
                           >
                             <div className="flex items-center justify-center">
-                              {status === "complete" || step.isValid ? (
+                              {status === 'complete' || step.isValid ? (
                                 <CheckIcon className="h-7 w-7 text-black" />
                               ) : (
                                 <span className="text-black text-[25px]">
@@ -183,7 +184,7 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                         <div
                           aria-hidden="true"
                           className={cn(
-                            "pointer-events-none absolute left-1/2 -bottom-3 flex -translate-x-1/2 translate-y-full items-center px-4"
+                            'pointer-events-none absolute left-1/2 -bottom-3 flex -translate-x-1/2 translate-y-full items-center px-4'
                           )}
                           style={{
                             height: `${STEP_SPACE - 12 * 2}px`,
@@ -191,11 +192,11 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                         >
                           <div
                             className={cn(
-                              "relative h-full w-0.5 bg-default-200 transition-colors duration-300",
+                              'relative h-full w-0.5 bg-default-200 transition-colors duration-300',
                               "after:absolute after:block after:h-full after:w-full after:origin-top after:scale-y-0 after:bg-primary-400 after:transition-all after:duration-300 after:content-['']",
                               "before:absolute before:block before:h-full before:w-full before:bg-white before:opacity-50 before:duration-300 before:content-['']",
                               {
-                                "after:scale-y-100": stepIdx < currentStep,
+                                'after:scale-y-100': stepIdx < currentStep,
                               }
                             )}
                           />
@@ -206,9 +207,9 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                   <div className="flex-1 text-center">
                     <div
                       className={cn(
-                        "flex text-[25px] font-semibold text-left text-white transition-[color,opacity] duration-300 w-fit",
+                        'flex text-[25px] font-semibold text-left text-white transition-[color,opacity] duration-300 w-fit',
                         {
-                          "text-white opacity-50": status === "inactive",
+                          'text-white opacity-50': status === 'inactive',
                         }
                       )}
                     >
@@ -225,6 +226,6 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
   }
 );
 
-VerticalSteps.displayName = "VerticalSteps";
+VerticalSteps.displayName = 'VerticalSteps';
 
 export default VerticalSteps;

@@ -79,7 +79,6 @@ const baseConfig = {
       },
     ],
   },
-  transpilePackages: ['styled-components'],
   async headers() {
     return [
       {
@@ -120,6 +119,7 @@ const baseConfig = {
       '@safe-global/safe-apps-sdk',
       '@safe-global/safe-apps-react-sdk',
       'framer-motion',
+      '@rainbow-me/rainbowkit',
       'react-toastify',
     ],
   }),

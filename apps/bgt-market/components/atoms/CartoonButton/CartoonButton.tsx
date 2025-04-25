@@ -1,4 +1,4 @@
-import { cn } from "@/lib/tailwindcss";
+import { cn } from '@nextui-org/theme';
 
 interface CartoonButtonProps {
   children: React.ReactNode;
@@ -13,12 +13,12 @@ export const CartoonButton = ({
 }: CartoonButtonProps) => {
   return (
     <div
-      className={cn(onClick && "cursor-pointer", "relative")}
+      className={cn(onClick && 'cursor-pointer', 'relative')}
       onClick={onClick}
     >
       <div
         className={cn(
-          "rounded-small dark:bg-default bg-[#FFCD4D] border border-black shadow-[2px_2px_0px_0px_#000000] text-sm inline-block p-2",
+          'rounded-small dark:bg-default bg-[#FFCD4D] border border-black shadow-[2px_2px_0px_0px_#000000] text-sm inline-block p-2',
           className
         )}
       >

@@ -1,3 +1,4 @@
+'use client';
 import { cn } from '@nextui-org/react';
 import { Token } from './../../lib/contract/token/token';
 import { Tooltip } from '@nextui-org/react';

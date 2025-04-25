@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import * as React from "react";
+import * as React from 'react';
 
-import { cn } from "@/lib/tailwindcss";
-import { useMediaQuery } from "@/lib/algebra/hooks/common/useMediaQuery";
+import { cn } from '@nextui-org/theme';
+import { useMediaQuery } from '@/lib/algebra/hooks/common/useMediaQuery';
 import {
   Dialog,
   DialogClose,
@@ -13,7 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/algebra/ui/dialog";
+} from '@/components/algebra/ui/dialog';
 import {
   Drawer,
   DrawerClose,
@@ -23,7 +23,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/algebra/ui/drawer";
+} from '@/components/algebra/ui/drawer';
 
 interface BaseProps {
   children: React.ReactNode;
@@ -39,7 +39,7 @@ interface CredenzaProps extends BaseProps {
   asChild?: true;
 }
 
-const desktop = "(min-width: 768px)";
+const desktop = '(min-width: 768px)';
 
 const Credenza = ({ children, ...props }: RootCredenzaProps) => {
   const isDesktop = useMediaQuery(desktop);
@@ -127,7 +127,7 @@ const CredenzaTitle = ({ className, children, ...props }: CredenzaProps) => {
 
 const CredenzaBody = ({ className, children, ...props }: CredenzaProps) => {
   return (
-    <div className={cn("px-4 md:px-0", className)} {...props}>
+    <div className={cn('px-4 md:px-0', className)} {...props}>
       {children}
     </div>
   );

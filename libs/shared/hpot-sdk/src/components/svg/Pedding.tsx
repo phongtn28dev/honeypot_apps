@@ -1,11 +1,11 @@
-import { cn } from "@/lib/tailwindcss";
+import { cn } from '@nextui-org/theme';
 
 // TODO: merge rocket and pedding svg
 
 export const PeddingSvg = ({ className }: { className?: string }) => {
   return (
     <svg
-      className={cn("animate-spin", className)}
+      className={cn('animate-spin', className)}
       width="100"
       height="100"
       fill="none"

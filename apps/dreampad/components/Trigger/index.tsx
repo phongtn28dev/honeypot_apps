@@ -1,5 +1,6 @@
-import React from "react";
-import { cn } from "@/lib/tailwindcss";
+import React from 'react';
+
+import { cn } from '@nextui-org/theme';
 
 interface TriggerProps<T extends string = string> {
   tab: T;
@@ -23,7 +24,7 @@ export function Trigger({
   return (
     <div
       className={cn(
-        "flex rounded-2xl border border-[#202020] bg-white p-4 shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020] py-2 px-3.5",
+        'flex rounded-2xl border border-[#202020] bg-white p-4 shadow-[4px_4px_0px_0px_#202020,-4px_4px_0px_0px_#202020] py-2 px-3.5',
         className
       )}
     >
@@ -35,10 +36,10 @@ export function Trigger({
             callback && callback(option);
           }}
           className={cn(
-            "relative flex-1 px-3 py-1.5 text-sm font-medium transition-all rounded-lg text-center",
+            'relative flex-1 px-3 py-1.5 text-sm font-medium transition-all rounded-lg text-center',
             tab === option
-              ? "bg-[#202020] text-white"
-              : "text-[#202020] hover:bg-[#20202010]"
+              ? 'bg-[#202020] text-white'
+              : 'text-[#202020] hover:bg-[#20202010]'
           )}
         >
           {capitalize

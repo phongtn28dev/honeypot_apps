@@ -1,14 +1,15 @@
-import React from "react";
-import { cn } from "@/lib/tailwindcss";
-import { Button } from "@/components/button";
-import { popmodal } from "@/services/popmodal";
-import store from "store2";
-import { useRouter } from "next/router";
+import React from 'react';
+
+import { cn } from '@nextui-org/theme';
+import { Button } from '@/components/button';
+import { popmodal } from '@/services/popmodal';
+import store from 'store2';
+import { useRouter } from 'next/router';
 
 const InstructionMarker = ({ className }: { className?: string }) => (
   <div
     className={cn(
-      "w-9 h-9 bg-[#271A0C] rounded-[50%] flex justify-center items-center",
+      'w-9 h-9 bg-[#271A0C] rounded-[50%] flex justify-center items-center',
       className
     )}
   >
@@ -35,13 +36,13 @@ const renderSteps = (steps: Step[], level: number) => {
   return (
     <ul
       className={[
-        "ml-4 flex flex-col gap-1",
+        'ml-4 flex flex-col gap-1',
         level === 1
-          ? "text-xs md:text-sm list-decimal"
+          ? 'text-xs md:text-sm list-decimal'
           : level == 0
-          ? "list-disc text-sm md:text-base"
-          : "",
-      ].join(" ")}
+          ? 'list-disc text-sm md:text-base'
+          : '',
+      ].join(' ')}
     >
       {steps.map((step, index) => (
         <li key={index}>
@@ -81,13 +82,13 @@ const Instruction: React.FC<InstructionProps> = ({
               </div>
               <div
                 className={cn(
-                  "bg-[#3e2a0f] px-5 py-2 ml-2 md:ml-8 rounded-[2rem] relative overflow-visible",
-                  "sm:px-6 sm:py-3 sm:ml-10", // 添加响应式的 padding 和 margin
+                  'bg-[#3e2a0f] px-5 py-2 ml-2 md:ml-8 rounded-[2rem] relative overflow-visible',
+                  'sm:px-6 sm:py-3 sm:ml-10', // 添加响应式的 padding 和 margin
                   idx !== 0 && idx !== steps.length - 1
-                    ? "my-2"
+                    ? 'my-2'
                     : idx === 0
-                    ? "mb-2"
-                    : "mt-2"
+                    ? 'mb-2'
+                    : 'mt-2'
                 )}
               >
                 {step.content}
@@ -101,7 +102,7 @@ const Instruction: React.FC<InstructionProps> = ({
         className="w-full mt-4"
         onClick={() => {
           popmodal.closeModal();
-          store.set("pot2pump_notice_read" + "_" + router.pathname, true);
+          store.set('pot2pump_notice_read' + '_' + router.pathname, true);
         }}
       >
         {buttonText}

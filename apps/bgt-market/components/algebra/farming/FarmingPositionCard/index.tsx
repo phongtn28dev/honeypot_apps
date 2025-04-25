@@ -1,6 +1,7 @@
-import { Deposit } from "@/lib/algebra/graphql/generated/graphql";
-import { cn } from "@/lib/tailwindcss";
-import { FarmingPositionImg } from "../FarmingPositionImg";
+import { Deposit } from '@/lib/algebra/graphql/generated/graphql';
+
+import { cn } from '@nextui-org/theme';
+import { FarmingPositionImg } from '../FarmingPositionImg';
 
 interface FarmingPositionCardProps {
   position: Deposit;
@@ -19,7 +20,7 @@ const FarmingPositionCard = ({
     <div
       onClick={onClick}
       className={cn(
-        "w-fit p-4 cursor-pointer flex gap-4 bg-card-dark rounded-3xl border border-border/60 hover:border-border transition-all ease-in-out duration-200",
+        'w-fit p-4 cursor-pointer flex gap-4 bg-card-dark rounded-3xl border border-border/60 hover:border-border transition-all ease-in-out duration-200',
         className
       )}
     >
@@ -29,14 +30,14 @@ const FarmingPositionCard = ({
         <div>
           <div
             className={cn(
-              "flex gap-2 items-center",
-              status === "In range" ? "text-green-300" : "text-red-300"
+              'flex gap-2 items-center',
+              status === 'In range' ? 'text-green-300' : 'text-red-300'
             )}
           >
             <div
               className={cn(
-                "w-2 h-2 rounded-full",
-                status === "In range" ? "bg-green-300" : "bg-red-300"
+                'w-2 h-2 rounded-full',
+                status === 'In range' ? 'bg-green-300' : 'bg-red-300'
               )}
             ></div>
             <p className="text-sm">{status}</p>

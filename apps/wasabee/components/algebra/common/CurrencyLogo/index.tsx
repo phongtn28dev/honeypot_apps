@@ -1,13 +1,14 @@
-import { Currency } from "@cryptoalgebra/sdk";
-import React from "react";
-import { Address } from "viem";
-import USDTLogo from "@/assets/algebra/tokens/usdt.png";
-import USDCLogo from "@/assets/algebra/tokens/usdc.svg";
-import WBTCLogo from "@/assets/algebra/tokens/wbtc.svg";
-import EtherLogo from "@/assets/algebra/tokens/ether.svg";
-import { cn } from "@/lib/tailwindcss";
-import { Skeleton } from "@/components/algebra/ui/skeleton";
-import Image from "next/image";
+import { Currency } from '@cryptoalgebra/sdk';
+import React from 'react';
+import { Address } from 'viem';
+import USDTLogo from '@/assets/algebra/tokens/usdt.png';
+import USDCLogo from '@/assets/algebra/tokens/usdc.svg';
+import WBTCLogo from '@/assets/algebra/tokens/wbtc.svg';
+import EtherLogo from '@/assets/algebra/tokens/ether.svg';
+
+import { cn } from '@nextui-org/theme';
+import { Skeleton } from '@/components/algebra/ui/skeleton';
+import Image from 'next/image';
 
 interface CurrencyLogoProps {
   currency: Currency | undefined | null;
@@ -19,20 +20,20 @@ interface CurrencyLogoProps {
 export const specialTokens: {
   [key: Address]: { symbol: string; logo: string };
 } = {
-  ["0x94373a4919b3240d86ea41593d5eba789fef3848"]: {
-    symbol: "ETH",
+  ['0x94373a4919b3240d86ea41593d5eba789fef3848']: {
+    symbol: 'ETH',
     logo: EtherLogo,
   },
-  ["0x7d98346b3b000c55904918e3d9e2fc3f94683b01"]: {
-    symbol: "USDT",
+  ['0x7d98346b3b000c55904918e3d9e2fc3f94683b01']: {
+    symbol: 'USDT',
     logo: USDTLogo.src,
   },
-  ["0x9dad8a1f64692adeb74aca26129e0f16897ff4bb"]: {
-    symbol: "WBTC",
+  ['0x9dad8a1f64692adeb74aca26129e0f16897ff4bb']: {
+    symbol: 'WBTC',
     logo: WBTCLogo,
   },
-  ["0x6581e59a1c8da66ed0d313a0d4029dce2f746cc5"]: {
-    symbol: "USDC",
+  ['0x6581e59a1c8da66ed0d313a0d4029dce2f746cc5']: {
+    symbol: 'USDC',
     logo: USDCLogo,
   },
 };
@@ -81,7 +82,7 @@ const CurrencyLogo = ({
     return (
       <Image
         src={WBTCLogo}
-        alt={"ETH"}
+        alt={'ETH'}
         width={size}
         height={size}
         className={classString}

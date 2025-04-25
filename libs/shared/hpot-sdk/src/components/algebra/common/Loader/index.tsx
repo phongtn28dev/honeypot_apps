@@ -1,5 +1,5 @@
-import { cn } from "@/lib/tailwindcss";
-import { Loader2Icon } from "lucide-react";
+import { cn } from '@nextui-org/theme';
+import { Loader2Icon } from 'lucide-react';
 
 interface LoaderProps {
   size?: number;
@@ -7,11 +7,11 @@ interface LoaderProps {
   className?: string;
 }
 
-const Loader = ({ size = 22, color = "white", className }: LoaderProps) => (
+const Loader = ({ size = 22, color = 'white', className }: LoaderProps) => (
   <Loader2Icon
     size={size}
     color={color}
-    className={cn("animate-spin", className)}
+    className={cn('animate-spin', className)}
   />
 );
 

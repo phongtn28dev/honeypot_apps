@@ -1,3 +1,4 @@
+'use client';
 import { Network, networks } from '../chains/chain';
 import BigNumber from 'bignumber.js';
 import { Address, PublicClient, WalletClient, zeroAddress } from 'viem';

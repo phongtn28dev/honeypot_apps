@@ -1,39 +1,40 @@
-import styles from "./PopUp.module.scss";
+import styles from './PopUp.module.scss';
 
-import Popup from "reactjs-popup";
-import { PopupActions } from "reactjs-popup/dist/types";
-import { cn } from "@/lib/tailwindcss";
+import Popup from 'reactjs-popup';
+import { PopupActions } from 'reactjs-popup/dist/types';
+
+import { cn } from '@nextui-org/theme';
 //icons
-import xIcon from "@/public/images/pop-up/x-icon.svg";
-import successIcon from "@/public/images/pop-up/pop-up-success-icon.svg";
-import pendingIcon from "@/public/images/pop-up/pop-up-pending-icon.svg";
-import warningIcon from "@/public/images/pop-up/pop-up-warning-icon.svg";
-import { useRef, useState } from "react";
-import Image from "next/image";
+import xIcon from '@/public/images/pop-up/x-icon.svg';
+import successIcon from '@/public/images/pop-up/pop-up-success-icon.svg';
+import pendingIcon from '@/public/images/pop-up/pop-up-pending-icon.svg';
+import warningIcon from '@/public/images/pop-up/pop-up-warning-icon.svg';
+import { useRef, useState } from 'react';
+import Image from 'next/image';
 
 interface PopUpProps extends React.HTMLProps<HTMLDivElement> {
-  info: "success" | "error" | "warning" | "pending" | "normal";
+  info: 'success' | 'error' | 'warning' | 'pending' | 'normal';
   trigger: JSX.Element;
   contents: JSX.Element;
   open?: boolean;
   onClose?: () => void;
 }
 
-export default function PopUp({ info = "normal", ...props }: PopUpProps) {
+export default function PopUp({ info = 'normal', ...props }: PopUpProps) {
   const popupRef = useRef<PopupActions>(null);
 
   const popUpIcon = () => {
     switch (info) {
-      case "success":
+      case 'success':
         return successIcon;
-      case "error":
+      case 'error':
         return warningIcon;
-      case "warning":
+      case 'warning':
         return warningIcon;
-      case "pending":
+      case 'pending':
         return pendingIcon;
       default:
-        return "";
+        return '';
     }
   };
 
@@ -46,11 +47,11 @@ export default function PopUp({ info = "normal", ...props }: PopUpProps) {
       ref={popupRef}
       trigger={props.trigger}
     >
-      <div className={cn(styles["pop-up"], styles[info])}>
-        <div className={styles["pop-up-container"]}>
+      <div className={cn(styles['pop-up'], styles[info])}>
+        <div className={styles['pop-up-container']}>
           {popUpIcon() && (
             <Image
-              className={styles["pop-up-type-img"]}
+              className={styles['pop-up-type-img']}
               src={popUpIcon()}
               alt=""
               width={50}
@@ -58,11 +59,11 @@ export default function PopUp({ info = "normal", ...props }: PopUpProps) {
             />
           )}
 
-          <div className={styles["pop-up-content"]}>{props.contents}</div>
+          <div className={styles['pop-up-content']}>{props.contents}</div>
 
           <div>
             <Image
-              className={styles["pop-up-close-button"]}
+              className={styles['pop-up-close-button']}
               src={xIcon}
               alt=""
               onClick={() => popupRef.current?.close()}

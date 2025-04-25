@@ -1,21 +1,22 @@
-import Loader from "@/components/algebra/common/Loader";
-import FarmingPositionCard from "@/components/algebra/farming/FarmingPositionCard";
-import { Button } from "@/components/algebra/ui/button";
+import Loader from '@/components/algebra/common/Loader';
+import FarmingPositionCard from '@/components/algebra/farming/FarmingPositionCard';
+import { Button } from '@/components/algebra/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/algebra/ui/dialog";
-import { useFarmApprove } from "@/lib/algebra/hooks/farming/useFarmApprove";
-import { useFarmCheckApprove } from "@/lib/algebra/hooks/farming/useFarmCheckApprove";
-import { cn } from "@/lib/tailwindcss";
-import { useState } from "react";
-import { useFarmStake } from "@/lib/algebra/hooks/farming/useFarmStake";
-import { Deposit } from "@/lib/algebra/graphql/generated/graphql";
-import { Farming } from "@/types/algebra/types/farming-info";
-import { FormattedPosition } from "@/types/algebra/types/formatted-position";
+} from '@/components/algebra/ui/dialog';
+import { useFarmApprove } from '@/lib/algebra/hooks/farming/useFarmApprove';
+import { useFarmCheckApprove } from '@/lib/algebra/hooks/farming/useFarmCheckApprove';
+
+import { cn } from '@nextui-org/theme';
+import { useState } from 'react';
+import { useFarmStake } from '@/lib/algebra/hooks/farming/useFarmStake';
+import { Deposit } from '@/lib/algebra/graphql/generated/graphql';
+import { Farming } from '@/types/algebra/types/farming-info';
+import { FormattedPosition } from '@/types/algebra/types/formatted-position';
 
 interface SelectPositionFarmModalProps {
   positions: Deposit[];
@@ -75,7 +76,7 @@ export function SelectPositionFarmModal({
       </DialogTrigger>
       <DialogContent
         className="max-w-[500px] rounded-3xl bg-card"
-        style={{ borderRadius: "32px" }}
+        style={{ borderRadius: '32px' }}
       >
         <DialogHeader>
           <DialogTitle className="font-bold select-none my-2 max-md:mx-auto">
@@ -94,17 +95,17 @@ export function SelectPositionFarmModal({
                   <FarmingPositionCard
                     key={position.id}
                     className={cn(
-                      "w-full row-span-1 col-span-1",
+                      'w-full row-span-1 col-span-1',
                       selectedPosition?.id === position.id
-                        ? "border-primary-button hover:border-primary-button"
-                        : ""
+                        ? 'border-primary-button hover:border-primary-button'
+                        : ''
                     )}
                     onClick={() => handleSelectPosition(position)}
                     position={position}
                     status={
                       currentFormattedPosition.outOfRange
-                        ? "Out of range"
-                        : "In range"
+                        ? 'Out of range'
+                        : 'In range'
                     }
                   />
                 );
@@ -141,7 +142,7 @@ export function SelectPositionFarmModal({
                 className="w-1/2"
                 onClick={handleStake}
               >
-                {isStakeLoading ? <Loader /> : "2. Deposit"}
+                {isStakeLoading ? <Loader /> : '2. Deposit'}
               </Button>
             </>
           ) : (

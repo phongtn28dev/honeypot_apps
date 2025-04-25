@@ -1,10 +1,11 @@
-import { Button } from "@/components/algebra/ui/button";
-import { formatPlural } from "@/lib/algebra/utils/common/formatPlural";
-import { formatUSD } from "@/lib/algebra/utils/common/formatUSD";
-import { Address } from "viem";
-import { FormattedPosition } from "@/types/algebra/types/formatted-position";
-import Link from "next/link";
-import { cn } from "@/lib/tailwindcss";
+import { Button } from '@/components/algebra/ui/button';
+import { formatPlural } from '@/lib/algebra/utils/common/formatPlural';
+import { formatUSD } from '@/lib/algebra/utils/common/formatUSD';
+import { Address } from 'viem';
+import { FormattedPosition } from '@/types/algebra/types/formatted-position';
+import Link from 'next/link';
+
+import { cn } from '@nextui-org/theme';
 
 interface MyPositionsToolbar {
   positionsData: FormattedPosition[];
@@ -28,7 +29,7 @@ const MyPositionsToolbar = ({ positionsData, poolId }: MyPositionsToolbar) => {
         <h3 className="font-semibold text-xl text-left">My Positions</h3>
         <div className="text-gray-600 font-semibold">{`${
           positionsData?.length
-        } ${formatPlural(positionsData.length, "position", "positions")}`}</div>
+        } ${formatPlural(positionsData.length, 'position', 'positions')}`}</div>
         <div className="text-cyan-600 font-semibold">{`${formatUSD.format(
           myLiquidityUSD || 0
         )} TVL`}</div>
@@ -42,7 +43,7 @@ const MyPositionsToolbar = ({ positionsData, poolId }: MyPositionsToolbar) => {
         </FilterPopover> */}
         <Link
           className={cn(
-            "flex items-center gap-x-1 p-2.5 cursor-pointer border border-[#E18A20]/40 bg-[#E18A20] rounded-[10px]"
+            'flex items-center gap-x-1 p-2.5 cursor-pointer border border-[#E18A20]/40 bg-[#E18A20] rounded-[10px]'
           )}
           href={`/new-position/${poolId}`}
         >

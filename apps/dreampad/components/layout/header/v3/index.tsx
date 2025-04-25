@@ -1,14 +1,15 @@
-import clsx from "clsx";
-import Link from "next/link";
-import Image from "next/image";
-import { cn } from "@/lib/tailwindcss";
-import { useRouter } from "next/router";
-import { IoClose } from "react-icons/io5";
-import { CustomNavbar } from "./components/Navbar";
-import { Navbar, NavbarContent } from "@nextui-org/react";
-import React, { HtmlHTMLAttributes, useState } from "react";
-import { WalletConnect } from "@/components/walletconnect/v3";
-import { Menu, appPathsList as menuList } from "@/config/allAppPath";
+import clsx from 'clsx';
+import Link from 'next/link';
+import Image from 'next/image';
+
+import { cn } from '@nextui-org/theme';
+import { useRouter } from 'next/router';
+import { IoClose } from 'react-icons/io5';
+import { CustomNavbar } from './components/Navbar';
+import { Navbar, NavbarContent } from '@nextui-org/react';
+import React, { HtmlHTMLAttributes, useState } from 'react';
+import { WalletConnect } from '@/components/walletconnect/v3';
+import { Menu, appPathsList as menuList } from '@/config/allAppPath';
 
 export const Header = (props: HtmlHTMLAttributes<any>) => {
   const router = useRouter();
@@ -20,11 +21,11 @@ export const Header = (props: HtmlHTMLAttributes<any>) => {
         <div key={m.title} className="w-full">
           <div
             className={cn(
-              "p-3 text-white text-lg font-medium w-full",
+              'p-3 text-white text-lg font-medium w-full',
               m.path.some((p) => router.pathname.includes(p.path))
-                ? "bg-[rgba(225,138,32,0.40)] border-2 border-solid border-[rgba(225,138,32,0.60)] rounded-lg"
-                : "",
-              isSub ? "pl-8" : ""
+                ? 'bg-[rgba(225,138,32,0.40)] border-2 border-solid border-[rgba(225,138,32,0.60)] rounded-lg'
+                : '',
+              isSub ? 'pl-8' : ''
             )}
             onClick={() => setIsMenuOpen(false)}
           >
@@ -37,11 +38,11 @@ export const Header = (props: HtmlHTMLAttributes<any>) => {
           key={m.title}
           href={m.path as string}
           className={cn(
-            "block p-3 text-white text-lg font-medium w-full",
+            'block p-3 text-white text-lg font-medium w-full',
             router.pathname === m.path
-              ? "bg-[rgba(225,74,32,0.40)] border-2 border-solid border-[rgba(225,74,32,0.6)] rounded-lg"
-              : "",
-            isSub ? "pl-8" : ""
+              ? 'bg-[rgba(225,74,32,0.40)] border-2 border-solid border-[rgba(225,74,32,0.6)] rounded-lg'
+              : '',
+            isSub ? 'pl-8' : ''
           )}
           onClick={() => setIsMenuOpen(false)}
         >
@@ -53,15 +54,16 @@ export const Header = (props: HtmlHTMLAttributes<any>) => {
 
   return (
     <>
-      <div className={clsx("relative mb-5", props.className)}>
+      <div className={clsx('relative mb-5', props.className)}>
         <Navbar
           classNames={{
-            wrapper: "xl:max-w-[1200px] 2xl:max-w-[1500px] !px-0 !h-auto items-start ",
-            base: "bg-transparent",
+            wrapper:
+              'xl:max-w-[1200px] 2xl:max-w-[1500px] !px-0 !h-auto items-start ',
+            base: 'bg-transparent',
           }}
           className="bg-transparent"
           style={{
-            backdropFilter: "none",
+            backdropFilter: 'none',
           }}
         >
           <NavbarContent
@@ -82,7 +84,7 @@ export const Header = (props: HtmlHTMLAttributes<any>) => {
                 alt="Honeypot Finance"
                 width={200}
                 height={100}
-                className={cn("w-[200px]", isMenuOpen ? "sm:block hidden" : "")}
+                className={cn('w-[200px]', isMenuOpen ? 'sm:block hidden' : '')}
               />
             </Link>
           </NavbarContent>
@@ -96,21 +98,21 @@ export const Header = (props: HtmlHTMLAttributes<any>) => {
       {/* Mobile Menu */}
       <div
         className={cn(
-          "sm:hidden fixed inset-0 z-[1000] transition-opacity duration-300",
-          isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          'sm:hidden fixed inset-0 z-[1000] transition-opacity duration-300',
+          isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         )}
       >
         <div
           className={cn(
-            "fixed inset-0 bg-black/30 backdrop-blur-sm transition-opacity duration-300",
-            isMenuOpen ? "opacity-100" : "opacity-0"
+            'fixed inset-0 bg-black/30 backdrop-blur-sm transition-opacity duration-300',
+            isMenuOpen ? 'opacity-100' : 'opacity-0'
           )}
           onClick={() => setIsMenuOpen(false)}
         />
         <div
           className={cn(
-            "fixed inset-x-0 top-[80px] bottom-0 bg-[#1A1A1A]/90 backdrop-blur-md overflow-y-auto border-t border-[#FFCD4D]/30 transition-all duration-300 ease-out pt-10",
-            isMenuOpen ? "translate-y-0" : "translate-y-4 opacity-0"
+            'fixed inset-x-0 top-[80px] bottom-0 bg-[#1A1A1A]/90 backdrop-blur-md overflow-y-auto border-t border-[#FFCD4D]/30 transition-all duration-300 ease-out pt-10',
+            isMenuOpen ? 'translate-y-0' : 'translate-y-4 opacity-0'
           )}
         >
           <button

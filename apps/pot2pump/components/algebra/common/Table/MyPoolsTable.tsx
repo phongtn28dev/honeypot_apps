@@ -1,4 +1,4 @@
-import { Button } from "@/components/algebra/ui/button";
+import { Button } from '@/components/algebra/ui/button';
 import {
   Table,
   TableBody,
@@ -6,7 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/algebra/ui/table";
+} from '@/components/algebra/ui/table';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -17,16 +17,17 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import { useEffect, useState } from "react";
-import { LoadingState } from "./loadingState";
-import { Input } from "@/components/algebra/ui/input";
-import { Search, Plus, LayoutGrid } from "lucide-react";
-import { Switch } from "@/components/algebra/ui/switch";
-import { Modal, ModalContent, ModalHeader, ModalBody } from "@nextui-org/react";
-import CreatePoolForm from "../../create-pool/CreatePoolForm";
-import { cn } from "@/lib/tailwindcss";
-import { HoneyContainer } from "@/components/CardContianer";
+} from '@tanstack/react-table';
+import { useEffect, useState } from 'react';
+import { LoadingState } from './loadingState';
+import { Input } from '@/components/algebra/ui/input';
+import { Search, Plus, LayoutGrid } from 'lucide-react';
+import { Switch } from '@/components/algebra/ui/switch';
+import { Modal, ModalContent, ModalHeader, ModalBody } from '@nextui-org/react';
+import CreatePoolForm from '../../create-pool/CreatePoolForm';
+
+import { cn } from '@nextui-org/theme';
+import { HoneyContainer } from '@/components/CardContianer';
 
 interface PoolsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -70,7 +71,7 @@ const MyPoolsTable = <TData, TValue>({
       row.original.isMyPool === value,
   });
 
-  const searchID = "pair";
+  const searchID = 'pair';
 
   const totalRows = table.getFilteredRowModel().rows.length;
   const startsFromRow =
@@ -224,7 +225,7 @@ const MyPoolsTable = <TData, TValue>({
                 return (
                   <TableRow
                     key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
+                    data-state={row.getIsSelected() && 'selected'}
                     className="border-card-border/40 bg-card-dark hover:bg-card-hover cursor-pointer border-black hover:bg-black"
                     onClick={() => {
                       if (action) {

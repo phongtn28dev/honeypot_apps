@@ -1,16 +1,17 @@
-import React from "react";
-import { useRouter } from "next/router";
-import { cn } from "@/lib/tailwindcss";
+import React from 'react';
+import { useRouter } from 'next/router';
+
+import { cn } from '@nextui-org/theme';
 import {
   Button,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-} from "@nextui-org/react";
-import { Menu } from "@/config/allAppPath";
-import Image from "next/image";
-import { Key } from "react";
+} from '@nextui-org/react';
+import { Menu } from '@/config/allAppPath';
+import Image from 'next/image';
+import { Key } from 'react';
 
 interface NavbarProps {
   menuList: Menu[];
@@ -41,19 +42,22 @@ export const CustomNavbar: React.FC<NavbarProps> = ({ menuList }) => {
         <div className="flex gap-2 py-1">
           {menuList.map((menu) =>
             Array.isArray(menu.path) ? (
-              <Dropdown 
-                key={menu.title} 
+              <Dropdown
+                key={menu.title}
                 placement="bottom-start"
                 classNames={{
-                  content: "bg-transparent p-0"
-                }}>
+                  content: 'bg-transparent p-0',
+                }}
+              >
                 <DropdownTrigger>
                   <Button
                     className={cn(
-                      "min-h-[32px] h-8 py-0 font-bold bg-transparent text-black hover:bg-[#202020] hover:text-white",
-                      (menu.path as SubMenu[]).some(item => item.routePath === router.pathname)
-                        ? "bg-[#202020] text-white"
-                        : ""
+                      'min-h-[32px] h-8 py-0 font-bold bg-transparent text-black hover:bg-[#202020] hover:text-white',
+                      (menu.path as SubMenu[]).some(
+                        (item) => item.routePath === router.pathname
+                      )
+                        ? 'bg-[#202020] text-white'
+                        : ''
                     )}
                   >
                     {menu.title}
@@ -75,10 +79,10 @@ export const CustomNavbar: React.FC<NavbarProps> = ({ menuList }) => {
                     <DropdownItem
                       key={subMenu.routePath}
                       className={cn(
-                        "font-bold data-[hover=true]:bg-[#202020] data-[hover=true]:text-white p-2",
+                        'font-bold data-[hover=true]:bg-[#202020] data-[hover=true]:text-white p-2',
                         router.pathname === subMenu.routePath
-                          ? "bg-[#202020] text-white"
-                          : "text-[#202020]"
+                          ? 'bg-[#202020] text-white'
+                          : 'text-[#202020]'
                       )}
                       startContent={
                         subMenu.icon && (
@@ -101,11 +105,13 @@ export const CustomNavbar: React.FC<NavbarProps> = ({ menuList }) => {
               <Button
                 key={menu.title}
                 className={cn(
-                  "min-h-[32px] h-8 py-0 font-bold bg-transparent text-black hover:bg-[#202020]/70 hover:text-white",
-                  menu.routePath === router.pathname ? "bg-[#202020] text-white" : ""
+                  'min-h-[32px] h-8 py-0 font-bold bg-transparent text-black hover:bg-[#202020]/70 hover:text-white',
+                  menu.routePath === router.pathname
+                    ? 'bg-[#202020] text-white'
+                    : ''
                 )}
                 onPress={() => {
-                  if (typeof menu.path === "string") {
+                  if (typeof menu.path === 'string') {
                     router.push(menu.path);
                   }
                 }}

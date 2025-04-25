@@ -1,14 +1,15 @@
-import { FtoPairContract } from "@/services/contract/launches/fto/ftopair-contract";
-import { MemePairContract } from "@/services/contract/launches/pot2pump/memepair-contract";
-import { cn } from "@/lib/tailwindcss";
-import BigNumber from "bignumber.js";
-import { observer } from "mobx-react-lite";
-import ProgressBar from "../../../atoms/ProgressBar/ProgressBar";
-import TimeLineComponent from "./TimeLineComponent";
+import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
+import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
+
+import { cn } from '@nextui-org/theme';
+import BigNumber from 'bignumber.js';
+import { observer } from 'mobx-react-lite';
+import ProgressBar from '../../../atoms/ProgressBar/ProgressBar';
+import TimeLineComponent from './TimeLineComponent';
 import {
   getLaunchContractType,
   LaunchContract,
-} from "@/services/contract/launches/base-launch-contract";
+} from '@/services/contract/launches/base-launch-contract';
 
 interface LaunchProgressProps {
   pair: LaunchContract;
@@ -19,9 +20,9 @@ interface LaunchProgressProps {
 export const LaunchProgress = observer(
   ({ pair, className, barOnly }: LaunchProgressProps) => {
     if (!pair) return <></>;
-    else if (getLaunchContractType(pair) === "lbp") return <></>;
-    else if (getLaunchContractType(pair) === "fto") return <></>;
-    else if (getLaunchContractType(pair) === "meme") {
+    else if (getLaunchContractType(pair) === 'lbp') return <></>;
+    else if (getLaunchContractType(pair) === 'fto') return <></>;
+    else if (getLaunchContractType(pair) === 'meme') {
       // 计算进度百分比
       const progressPercentage = new BigNumber(
         (pair as MemePairContract).depositedRaisedToken?.toNumber() ?? 0
@@ -36,7 +37,7 @@ export const LaunchProgress = observer(
 
       // 如果进度超过100%，不显示组件
       if (Number(progressPercentage) >= 100) {
-        return <div className={cn("mt-4", className)}></div>;
+        return <div className={cn('mt-4', className)}></div>;
       }
 
       if (barOnly) {
@@ -54,27 +55,27 @@ export const LaunchProgress = observer(
       }
 
       return (
-        <div className={cn("space-y-1.5 text-[#202020]", className)}>
-          {" "}
+        <div className={cn('space-y-1.5 text-[#202020]', className)}>
+          {' '}
           <div className="flex items-center justify-between text-sm *:flex-grow-[1]">
             <span className="space-x-0.5">
               <span>
-                {(pair as MemePairContract)?.depositedRaisedToken?.toFormat(2)}{" "}
+                {(pair as MemePairContract)?.depositedRaisedToken?.toFormat(2)}{' '}
               </span>
               <span>
-                {" "}
+                {' '}
                 {(pair as MemePairContract)?.raiseToken?.displayName}
               </span>
               <span>
                 {(pair as MemePairContract)?.depositedRaisedToken &&
                 (pair as MemePairContract).raiseToken
-                  ? "$" +
+                  ? '$' +
                     (pair as MemePairContract).depositedRaisedToken
                       ?.multipliedBy(
                         (pair as MemePairContract).raiseToken?.derivedUSD || 0
                       )
                       .toFormat(3)
-                  : "-"}
+                  : '-'}
               </span>
             </span>
           </div>

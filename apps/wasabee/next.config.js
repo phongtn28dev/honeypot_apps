@@ -8,7 +8,7 @@ module.exports = withSentryConfig(
       {
         source: '/',
         destination: '/swap',
-        permanent: true,
+        permanent: false,
       },
     ],
   }),

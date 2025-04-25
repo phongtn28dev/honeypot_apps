@@ -1,7 +1,7 @@
-import React, { HtmlHTMLAttributes, useRef, useState } from "react";
-import { Logo } from "../../svg/logo";
-import { WalletConnect, WalletConnectMobile } from "../../walletconnect";
-import clsx from "clsx";
+import React, { HtmlHTMLAttributes, useRef, useState } from 'react';
+import { Logo } from '../../svg/logo';
+import { WalletConnect, WalletConnectMobile } from '../../walletconnect';
+import clsx from 'clsx';
 import {
   Dropdown,
   DropdownItem,
@@ -14,15 +14,16 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
-} from "@nextui-org/react";
-import { useRouter } from "next/router";
-import Link from "next/link";
-import { cn } from "@/lib/tailwindcss";
-import { Menu, appPathsList as menuList } from "@/config/allAppPath";
+} from '@nextui-org/react';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+
+import { cn } from '@nextui-org/theme';
+import { Menu, appPathsList as menuList } from '@/config/allAppPath';
 import {
   WarppedNextDropdownMenu,
   WarppedNextDropdown,
-} from "../../wrappedNextUI/Dropdown/Dropdown";
+} from '../../wrappedNextUI/Dropdown/Dropdown';
 
 export const Header = (props: HtmlHTMLAttributes<any>) => {
   const router = useRouter();
@@ -34,11 +35,11 @@ export const Header = (props: HtmlHTMLAttributes<any>) => {
         <div key={m.title}>
           <NavbarMenuItem
             className={cn(
-              "p-[8px]",
+              'p-[8px]',
               m.path.some((p) => router.pathname.includes(p.path))
-                ? "[background:rgba(225,138,32,0.40)] border-2 border-solid border-[rgba(225,138,32,0.60)]"
-                : "",
-              isSub ? "pl-[2rem]" : ""
+                ? '[background:rgba(225,138,32,0.40)] border-2 border-solid border-[rgba(225,138,32,0.60)]'
+                : '',
+              isSub ? 'pl-[2rem]' : ''
             )}
             onClick={() => setIsMenuOpen(false)}
           >
@@ -50,16 +51,16 @@ export const Header = (props: HtmlHTMLAttributes<any>) => {
         <NavbarMenuItem
           key={m.title}
           className={cn(
-            "p-[8px]",
+            'p-[8px]',
             router.pathname === m.path
-              ? "[background:rgba(225,74,32,0.40)] border-2 border-solid border-[rgba(225,74,32,0.6)]"
-              : "",
-            isSub ? "ml-[2rem]" : ""
+              ? '[background:rgba(225,74,32,0.40)] border-2 border-solid border-[rgba(225,74,32,0.6)]'
+              : '',
+            isSub ? 'ml-[2rem]' : ''
           )}
           isActive={router.pathname === m.path}
           onClick={() => setIsMenuOpen(false)}
         >
-          <Link className={cn("w-full inline-block")} href={m.path as string}>
+          <Link className={cn('w-full inline-block')} href={m.path as string}>
             {m.title}
           </Link>
         </NavbarMenuItem>
@@ -71,18 +72,18 @@ export const Header = (props: HtmlHTMLAttributes<any>) => {
     <Navbar
       onMenuOpenChange={setIsMenuOpen}
       classNames={{
-        wrapper: "max-w-[1200px] px-4 sm:px-6",
+        wrapper: 'max-w-[1200px] px-4 sm:px-6',
       }}
-      className={clsx("h-[63px] bg-transparent", props.className)}
+      className={clsx('h-[63px] bg-transparent', props.className)}
       style={{
-        backdropFilter: "none",
+        backdropFilter: 'none',
       }}
       isMenuOpen={isMenuOpen}
     >
       <NavbarContent>
         <NavbarMenuToggle
           aria-setsize={1}
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
           className="sm:hidden  text-[white] scale-75"
         />
         <NavbarBrand className="space-x-1 sm:space-x-2">
@@ -156,12 +157,12 @@ function WrapedDropdownItem({
     >
       <NavbarItem
         className={cn(
-          "flex items-center justify-center  px-5 py-2.5 text-base font-normal leading-[normal] cursor-pointer",
+          'flex items-center justify-center  px-5 py-2.5 text-base font-normal leading-[normal] cursor-pointer',
           dropdownMenu.path.some((p) => router.pathname.includes(p.path))
-            ? router.pathname === "/launch"
-              ? "font-bold"
-              : " [background:#271A0C] border-[color:var(--button-stroke,rgba(247,147,26,0.20))] border rounded-[100px] border-solid"
-            : "hover:opacity-100 opacity-60"
+            ? router.pathname === '/launch'
+              ? 'font-bold'
+              : ' [background:#271A0C] border-[color:var(--button-stroke,rgba(247,147,26,0.20))] border rounded-[100px] border-solid'
+            : 'hover:opacity-100 opacity-60'
         )}
         isActive={dropdownMenu.path.some((p) =>
           router.pathname.includes(p.path)
@@ -175,7 +176,7 @@ function WrapedDropdownItem({
             router.push(dropdownMenu.path[0].path);
           }}
         >
-          <span className={cn("w-full inline-block")}>
+          <span className={cn('w-full inline-block')}>
             {dropdownMenu.title}
           </span>
         </DropdownTrigger>
@@ -186,16 +187,16 @@ function WrapedDropdownItem({
             closeOnSelect
             key={p.title}
             className={cn(
-              "flex items-center justify-center text-base font-normal leading-[normal] border-0",
+              'flex items-center justify-center text-base font-normal leading-[normal] border-0',
               router.pathname === p.path
-                ? router.pathname === "/launch"
-                  ? "font-bold"
-                  : " [background:#271A0C] border-[color:var(--button-stroke,rgba(247,147,26,0.20))] border rounded-[100px] border-solid"
-                : "hover:opacity-100 opacity-60"
+                ? router.pathname === '/launch'
+                  ? 'font-bold'
+                  : ' [background:#271A0C] border-[color:var(--button-stroke,rgba(247,147,26,0.20))] border rounded-[100px] border-solid'
+                : 'hover:opacity-100 opacity-60'
             )}
             onClick={() => setIsMenuOpen(false)}
           >
-            <Link className={cn("w-full inline-block")} href={p.path as string}>
+            <Link className={cn('w-full inline-block')} href={p.path as string}>
               {p.title}
             </Link>
           </DropdownItem>
@@ -225,16 +226,16 @@ function ListToElement({ list }: { list: Menu[] }) {
       <NavbarMenuItem
         key={m.title}
         className={cn(
-          "flex items-center justify-center  px-5 py-2.5 text-base font-normal leading-[normal]",
+          'flex items-center justify-center  px-5 py-2.5 text-base font-normal leading-[normal]',
           router.pathname === m.path
-            ? router.pathname === "/launch"
-              ? "font-bold"
-              : " [background:#271A0C] border-[color:var(--button-stroke,rgba(247,147,26,0.20))] border rounded-[100px] border-solid"
-            : "hover:opacity-100 opacity-60"
+            ? router.pathname === '/launch'
+              ? 'font-bold'
+              : ' [background:#271A0C] border-[color:var(--button-stroke,rgba(247,147,26,0.20))] border rounded-[100px] border-solid'
+            : 'hover:opacity-100 opacity-60'
         )}
         isActive={router.pathname === m.path}
       >
-        <Link className={cn("w-full inline-block")} href={m.path as string}>
+        <Link className={cn('w-full inline-block')} href={m.path as string}>
           {m.title}
         </Link>
       </NavbarMenuItem>

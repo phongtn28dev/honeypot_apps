@@ -1,29 +1,30 @@
-import { TokenFieldsFragment } from "@/lib/algebra/graphql/generated/graphql";
-import { useAlgebraToken } from "@/lib/algebra/hooks/common/useAlgebraToken";
-import { useCurrency } from "@/lib/algebra/hooks/common/useCurrency";
-import useDebounce from "@/lib/algebra/hooks/common/useDebounce";
-import { useFuse } from "@/lib/algebra/hooks/common/useFuse";
-import { useAllTokens } from "@/lib/algebra/hooks/tokens/useAllTokens";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { FixedSizeList } from "react-window";
-import { Address, isAddress } from "viem";
-import { useAccount, useBalance } from "wagmi";
-import CurrencyLogo from "../CurrencyLogo";
+import { TokenFieldsFragment } from '@/lib/algebra/graphql/generated/graphql';
+import { useAlgebraToken } from '@/lib/algebra/hooks/common/useAlgebraToken';
+import { useCurrency } from '@/lib/algebra/hooks/common/useCurrency';
+import useDebounce from '@/lib/algebra/hooks/common/useDebounce';
+import { useFuse } from '@/lib/algebra/hooks/common/useFuse';
+import { useAllTokens } from '@/lib/algebra/hooks/tokens/useAllTokens';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { FixedSizeList } from 'react-window';
+import { Address, isAddress } from 'viem';
+import { useAccount, useBalance } from 'wagmi';
+import CurrencyLogo from '../CurrencyLogo';
 import {
   ADDRESS_ZERO,
   Currency,
   ExtendedNative,
   Token,
-} from "@cryptoalgebra/sdk";
-import { useTokensState } from "@/lib/algebra/state/tokensStore";
-import { Copy } from "lucide-react";
-import { cn } from "@/lib/tailwindcss";
-import { formatBalance } from "@/lib/algebra/utils/common/formatBalance";
+} from '@cryptoalgebra/sdk';
+import { useTokensState } from '@/lib/algebra/state/tokensStore';
+import { Copy } from 'lucide-react';
+
+import { cn } from '@nextui-org/theme';
+import { formatBalance } from '@/lib/algebra/utils/common/formatBalance';
 
 const TokenSelectorView = {
-  DEFAULT_LIST: "DEFAULT_LIST",
-  IMPORT_TOKEN: "IMPORT_TOKEN",
-  NOT_FOUND: "NOT_FOUND",
+  DEFAULT_LIST: 'DEFAULT_LIST',
+  IMPORT_TOKEN: 'IMPORT_TOKEN',
+  NOT_FOUND: 'NOT_FOUND',
 };
 
 type TokenSelectorViewType =
@@ -47,7 +48,7 @@ const Search = ({
 
   const fuseOptions = useMemo(
     () => ({
-      keys: ["id", "symbol", "name"],
+      keys: ['id', 'symbol', 'name'],
       threshold: 0,
     }),
     []
@@ -109,7 +110,7 @@ const TokenRow = ({
   });
 
   const balanceString = useMemo(() => {
-    if (isLoading || !balance) return "Loading...";
+    if (isLoading || !balance) return 'Loading...';
 
     return formatBalance(balance.formatted);
   }, [balance, isLoading]);
@@ -145,7 +146,7 @@ const TokenRow = ({
             <button
               className={cn(
                 'relative duration-75 hover:text-white/70 after:absolute after:text-xs after:left-5 after:top-1 after:content-["Copied"] after:duration-100',
-                isCopied ? "after:block" : "after:hidden"
+                isCopied ? 'after:block' : 'after:hidden'
               )}
               onClick={handleCopy}
             >
@@ -155,7 +156,7 @@ const TokenRow = ({
           <div className="text-sm">{token.name}</div>
         </div>
       </div>
-      <div>{isLoading ? "Loading..." : balance ? balanceString : ""}</div>
+      <div>{isLoading ? 'Loading...' : balance ? balanceString : ''}</div>
     </button>
   );
 };
@@ -233,8 +234,8 @@ export const TokenSelector = ({
   const handleImport = (token: Token) => {
     importToken(
       token.address as Address,
-      token.symbol || "Unknown",
-      token.name || "Unknown",
+      token.symbol || 'Unknown',
+      token.name || 'Unknown',
       token.decimals,
       token.chainId
     );
@@ -284,13 +285,13 @@ export const TokenSelector = ({
             itemData={[]}
             itemCount={4}
             itemSize={76}
-            width={"100%"}
+            width={'100%'}
           >
             {LoadingRow}
           </FixedSizeList>
         ) : (
           <FixedSizeList
-            width={"100%"}
+            width={'100%'}
             height={304}
             itemData={filteredTokens}
             itemCount={filteredTokens.length}

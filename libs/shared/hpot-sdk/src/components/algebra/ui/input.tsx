@@ -1,5 +1,5 @@
-import * as React from "react";
-import { Input as BaseInput } from "@/components/input";
+import * as React from 'react';
+import { Input as BaseInput } from '@nextui-org/react';
 
 export interface InputProps {
   onUserInput?: (value: string) => void;
@@ -27,15 +27,15 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     ref
   ) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      let newValue = e.target.value.replace(/,/g, ".");
+      let newValue = e.target.value.replace(/,/g, '.');
       newValue =
-        newValue.indexOf(".") >= 0
-          ? newValue.slice(0, newValue.indexOf(".") + maxDecimals + 1)
+        newValue.indexOf('.') >= 0
+          ? newValue.slice(0, newValue.indexOf('.') + maxDecimals + 1)
           : newValue;
 
       if (
-        newValue === "" ||
-        inputRegex.test(newValue.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+        newValue === '' ||
+        inputRegex.test(newValue.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
       ) {
         onChange?.(e);
         onUserInput?.(newValue);
@@ -44,11 +44,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     const handleClear = () => {
       const e = {
-        target: { value: "" },
+        target: { value: '' },
       } as React.ChangeEvent<HTMLInputElement>;
 
       onChange?.(e);
-      onUserInput?.("");
+      onUserInput?.('');
     };
 
     return (
@@ -72,6 +72,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
   }
 );
 
-Input.displayName = "Input";
+Input.displayName = 'Input';
 
 export { Input };

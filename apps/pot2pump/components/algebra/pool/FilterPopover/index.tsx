@@ -1,14 +1,15 @@
-import { Switch } from "@/components/algebra/ui/switch";
+import { Switch } from '@/components/algebra/ui/switch';
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-} from "@/components/algebra/ui/popover";
-import React, { useState } from "react";
-import { Button } from "@/components/algebra/ui/button";
-import { cn } from "@/lib/tailwindcss";
-import { usePositionFilterStore } from "@/lib/algebra/state/positionFilterStore";
-import { PositionsStatus } from "@/types/algebra/types/position-filter-status";
+} from '@/components/algebra/ui/popover';
+import React, { useState } from 'react';
+import { Button } from '@/components/algebra/ui/button';
+
+import { cn } from '@nextui-org/theme';
+import { usePositionFilterStore } from '@/lib/algebra/state/positionFilterStore';
+import { PositionsStatus } from '@/types/algebra/types/position-filter-status';
 
 const FilterPopover = ({ children }: { children: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -21,11 +22,11 @@ const FilterPopover = ({ children }: { children: React.ReactNode }) => {
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant={"ghost"}
-          size={"md"}
+          variant={'ghost'}
+          size={'md'}
           className={cn(
-            "bg-transparent border border-card-border/60",
-            isOpen && "bg-card"
+            'bg-transparent border border-card-border/60',
+            isOpen && 'bg-card'
           )}
           aria-label="Update dimensions"
         >

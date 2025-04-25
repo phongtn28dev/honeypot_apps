@@ -5,8 +5,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/algebra/ui/table";
-import { cn } from "@/lib/tailwindcss";
+} from '@/components/algebra/ui/table';
+
+import { cn } from '@nextui-org/theme';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -16,12 +17,12 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import { ChevronDown } from "lucide-react";
-import { useCallback, useState } from "react";
-import { LoadingState } from "./loadingState";
-import { usePositionFilterStore } from "@/lib/algebra/state/positionFilterStore";
-import { PositionsStatus } from "@/types/algebra/types/position-filter-status";
+} from '@tanstack/react-table';
+import { ChevronDown } from 'lucide-react';
+import { useCallback, useState } from 'react';
+import { LoadingState } from './loadingState';
+import { usePositionFilterStore } from '@/lib/algebra/state/positionFilterStore';
+import { PositionsStatus } from '@/types/algebra/types/position-filter-status';
 
 interface MyPositionsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -104,26 +105,26 @@ const MyPositionsTable = <TData, TValue>({
           return (
             <TableRow
               key={row.id}
-              data-state={row.getIsSelected() && "selected"}
+              data-state={row.getIsSelected() && 'selected'}
               className={`border-b border-gray-100 ${
-                isSelected ? "bg-gray-50" : ""
-              } ${(action || link) && "cursor-pointer"} ${
+                isSelected ? 'bg-gray-50' : ''
+              } ${(action || link) && 'cursor-pointer'} ${
                 action || link
                   ? isSelected
-                    ? "hover:bg-gray-100"
-                    : "hover:bg-gray-50"
-                  : ""
+                    ? 'hover:bg-gray-100'
+                    : 'hover:bg-gray-50'
+                  : ''
               } ${
-                isStatusActive && !expandActive && "collapse border-0 opacity-0"
+                isStatusActive && !expandActive && 'collapse border-0 opacity-0'
               } ${
                 isStatusOnFarming &&
                 !expandOnFarming &&
-                "collapse border-0 opacity-0"
+                'collapse border-0 opacity-0'
               }
                             ${
                               isStatusClosed &&
                               !expandClosed &&
-                              "collapse border-0 opacity-0"
+                              'collapse border-0 opacity-0'
                             }`}
               onClick={() => {
                 if (action) {

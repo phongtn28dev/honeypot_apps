@@ -1,13 +1,14 @@
-import { Button } from "../button";
-import Link from "next/link";
-import { BiLinkExternal } from "react-icons/bi";
-import PopUp from "../PopUp/PopUp";
-import { useRef } from "react";
-import { PopupActions } from "reactjs-popup/dist/types";
-import { text } from "stream/consumers";
-import Image from "next/image";
-import { popmodal } from "@/services/popmodal";
-import { cn } from "@/lib/tailwindcss";
+import { Button } from '../button';
+import Link from 'next/link';
+import { BiLinkExternal } from 'react-icons/bi';
+import PopUp from '../PopUp/PopUp';
+import { useRef } from 'react';
+import { PopupActions } from 'reactjs-popup/dist/types';
+import { text } from 'stream/consumers';
+import Image from 'next/image';
+import { popmodal } from '@/services/popmodal';
+
+import { cn } from '@nextui-org/theme';
 
 interface IShareSocialMedialPopUpProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -20,8 +21,8 @@ interface IShareSocialMedialPopUpProps
 export function ShareMediaDisplay(props: IShareSocialMedialPopUpProps) {
   return (
     <div>
-      <div className={cn("m-2 text-right text-white gap-2", props.className)}>
-        {" "}
+      <div className={cn('m-2 text-right text-white gap-2', props.className)}>
+        {' '}
         <Link
           className="cursor-pointer flex items-center gap-2 hover:text-primary flex-col"
           target="_blank"

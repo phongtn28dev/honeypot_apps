@@ -1,10 +1,10 @@
-import { cn } from "@/lib/tailwindcss";
-import { ReactNode } from "react";
+import { cn } from '@nextui-org/theme';
+import { ReactNode } from 'react';
 
 interface HoneyContainerProps {
   children: ReactNode;
   bordered?: boolean;
-  variant?: "default" | "wide";
+  variant?: 'default' | 'wide';
   className?: string;
   showTopBorder?: boolean;
   showBottomBorder?: boolean;
@@ -14,7 +14,7 @@ function CardContainer({
   children,
   className,
   bordered = true,
-  variant = "default",
+  variant = 'default',
   showTopBorder = true,
   showBottomBorder = true,
 }: HoneyContainerProps) {
@@ -25,32 +25,32 @@ function CardContainer({
           backgroundImage: `${[
             showTopBorder
               ? "url('/images/card-container/honey/honey-border.png')"
-              : "",
+              : '',
             showBottomBorder
               ? `url('${
-                  variant === "wide"
-                    ? "/images/card-container/honey/bottom-border.svg"
-                    : "/images/card-container/dark/bottom-border.svg"
+                  variant === 'wide'
+                    ? '/images/card-container/honey/bottom-border.svg'
+                    : '/images/card-container/dark/bottom-border.svg'
                 }')`
-              : "",
+              : '',
           ]
             .filter(Boolean)
-            .join(", ")}`,
+            .join(', ')}`,
         } as React.CSSProperties
       }
       className={cn(
-        "flex flex-col h-full w-full gap-y-4 justify-center items-center bg-[#FFCD4D] rounded-2xl text-[#202020]",
+        'flex flex-col h-full w-full gap-y-4 justify-center items-center bg-[#FFCD4D] rounded-2xl text-[#202020]',
         bordered &&
           [
-            "px-4",
-            showTopBorder && "pt-[80px]",
-            showBottomBorder && "pb-[80px]",
-            "bg-[position:-65px_top,_left_bottom]",
-            "bg-[size:auto_70px,_auto_70px]",
-            "bg-repeat-x",
+            'px-4',
+            showTopBorder && 'pt-[80px]',
+            showBottomBorder && 'pb-[80px]',
+            'bg-[position:-65px_top,_left_bottom]',
+            'bg-[size:auto_70px,_auto_70px]',
+            'bg-repeat-x',
           ]
             .filter(Boolean)
-            .join(" "),
+            .join(' '),
         className
       )}
     >

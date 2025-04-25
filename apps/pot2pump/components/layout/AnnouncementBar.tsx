@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import style from "./AnnouncementBar.module.css";
-import announceIcon from "@/public/images/icons/announcement-icon.png";
-import Image from "next/image";
-import { cn } from "@/lib/tailwindcss";
-import { useGetLatestPumpingTokenQuery } from "@/lib/algebra/graphql/generated/graphql";
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import style from './AnnouncementBar.module.css';
+import announceIcon from '@/public/images/icons/announcement-icon.png';
+import Image from 'next/image';
+
+import { cn } from '@nextui-org/theme';
+import { useGetLatestPumpingTokenQuery } from '@/lib/algebra/graphql/generated/graphql';
 
 interface AnnouncementBarProps {
   slogans: React.ReactNode[];
   interval: number;
 }
 
-const STORAGE_KEY = "latest_pumping_token_id";
+const STORAGE_KEY = 'latest_pumping_token_id';
 
 const AnnouncementBar: React.FC<AnnouncementBarProps> = ({
   slogans: initialSlogans,
@@ -22,10 +23,10 @@ const AnnouncementBar: React.FC<AnnouncementBarProps> = ({
   const [timer, setTimer] = useState<NodeJS.Timeout>();
   const [localSlogans, setLocalSlogans] = useState(initialSlogans);
   const [lastTokenId, setLastTokenId] = useState<string>(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem(STORAGE_KEY) || "";
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem(STORAGE_KEY) || '';
     }
-    return "";
+    return '';
   });
 
   const { data: latestPumpingToken, refetch } = useGetLatestPumpingTokenQuery({
@@ -90,8 +91,8 @@ const AnnouncementBar: React.FC<AnnouncementBarProps> = ({
               <Image src={announceIcon} alt="" width={60} height={60} />
               <div
                 className={cn(
-                  style["arrow_box"],
-                  "hover:scale-105 transition-all relative"
+                  style['arrow_box'],
+                  'hover:scale-105 transition-all relative'
                 )}
               >
                 {localSlogans[currentIndex]}
