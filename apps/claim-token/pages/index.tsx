@@ -9,6 +9,7 @@ import { formatEther } from 'viem';
 import { Button } from '@nextui-org/react';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { ADDRESS_ZERO } from '@cryptoalgebra/sdk';
 
 const ClaimTokenPage = observer(() => {
   const { chains, switchChain } = useSwitchChain();
@@ -43,7 +44,7 @@ const ClaimTokenPage = observer(() => {
     }, 15000); // Refresh every 15 seconds
 
     return () => clearInterval(interval);
-  }, []);
+  }, [wallet.currentChain, wallet.account]);
 
   useEffect(() => {
     if (chain !== 80094) {
@@ -66,14 +67,6 @@ const ClaimTokenPage = observer(() => {
     }
   };
 
-  if (chain !== 80094 && chain !== 80069) {
-    return (
-      <div className="w-full flex flex-col items-center justify-center py-8">
-        <div>Switching to Berachain to continue</div>
-      </div>
-    );
-  }
-
   const formatDate = (timestamp?: bigint) => {
     if (!timestamp) return 'N/A';
     return new Date(Number(timestamp) * 1000).toLocaleDateString();
@@ -91,7 +84,21 @@ const ClaimTokenPage = observer(() => {
       vestingContract.currentUserClaimableAmount <= BigInt(0)
     );
   };
+  if (!wallet.account || wallet.account === ADDRESS_ZERO) {
+    return (
+      <div className="w-full flex flex-col items-center justify-center py-8">
+        <div>Please connect your wallet to continue</div>
+      </div>
+    );
+  }
 
+  if (chain !== 80094 && chain !== 80069) {
+    return (
+      <div className="w-full flex flex-col items-center justify-center py-8">
+        <div>Switching to Berachain to continue</div>
+      </div>
+    );
+  }
   return (
     <div className="w-full flex flex-col items-center justify-center py-8">
       <CardContainer className="mx-auto max-w-[800px] w-full">
