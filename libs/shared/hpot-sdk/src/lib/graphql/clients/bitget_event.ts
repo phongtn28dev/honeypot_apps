@@ -11,7 +11,7 @@ import {
 import { isAddress } from 'viem';
 import { zeroAddress } from 'viem';
 import {
-  getInfoClientByChainId,
+  getSubgraphClientByChainId,
   useSubgraphClient,
 } from '../../../hooks/useSubgraphClients';
 import { DEFAULT_CHAIN_ID } from '../../../config/algebra/default-chain-id';
@@ -34,7 +34,7 @@ export function useBitgetEvents(user: string) {
 }
 
 export async function getFullBitgetEventsParticipantList(chainId: string) {
-  const client = getInfoClientByChainId(chainId);
+  const client = getSubgraphClientByChainId(chainId, 'algebra_info');
   let hasMore = true;
   let skip = 0;
   const participants: BitgetCampaignParticipant[] = [];
