@@ -47,7 +47,10 @@ export const TokenLogo = observer(
           href={
             disableLink
               ? '#'
-              : `${wallet.currentChain.chain.blockExplorers?.default.url}address/${token.address}`
+              : `${wallet.currentChain.chain.blockExplorers?.default.url}/address/${token.address}`.replace(
+                  '//',
+                  '/'
+                )
           }
           target={disableLink ? '' : '_blank'}
         >

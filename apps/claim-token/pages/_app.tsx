@@ -29,7 +29,7 @@ import { useSubgraphClient } from '@honeypot/shared/hooks';
 const config = createWagmiConfig({
   // @ts-ignore
   chains: networks
-    .filter((network) => network.chainId === 80094)
+    .filter((network) => network.chainId === 80094 || network.chainId === 80069)
     .map((network) => network.chain),
 });
 
