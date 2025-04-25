@@ -17,6 +17,8 @@ const ClaimTokenPage = observer(() => {
   const [vestingContract, setVestingContract] =
     useState<TokenVestingContract>();
   const [claimLoading, setClaimLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [dataInitialized, setDataInitialized] = useState(false);
 
   useEffect(() => {
     if (!wallet.currentChain.contracts.hpotToken.tokenVesting) {
@@ -33,7 +35,11 @@ const ClaimTokenPage = observer(() => {
 
     // Initialize the contract data
     if (contract.address) {
-      contract.init();
+      setInitialLoading(true);
+      contract.init().finally(() => {
+        setInitialLoading(false);
+        setDataInitialized(true);
+      });
     }
 
     // Re-fetch data when wallet changes
@@ -115,18 +121,16 @@ const ClaimTokenPage = observer(() => {
             Claim Your Tokens
           </h1>
 
-          {vestingContract?.isLoading ? (
+          {initialLoading ? (
             <div className="flex items-center justify-center py-10">
               <Loader2 className="h-10 w-10 animate-spin text-primary" />
               <span className="ml-2 text-white">
                 Loading vesting information...
               </span>
             </div>
-          ) : !wallet.account ? (
+          ) : !dataInitialized ? (
             <div className="text-center py-6">
-              <p className="mb-4 text-white">
-                Please connect your wallet to view your vesting schedule
-              </p>
+              <p className="mb-4 text-white">Failed to load vesting data</p>
             </div>
           ) : !vestingContract?.currentUserVestingInfo ? (
             <div className="text-center py-6">
@@ -210,7 +214,7 @@ const ClaimTokenPage = observer(() => {
             </div>
           )}
 
-          {vestingContract?.error && (
+          {vestingContract?.error && !initialLoading && (
             <div className="w-full bg-destructive/10 border border-destructive rounded-lg p-4 mt-4">
               <p className="text-white font-medium">
                 Error: {vestingContract.error.message}
