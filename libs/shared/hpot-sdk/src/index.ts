@@ -10,3 +10,4 @@ export * from './lib/utils';
 export * from './assets';
 export * from './lib/priceFeed';
 export * from './services';
+export * from './components/TruncateText';

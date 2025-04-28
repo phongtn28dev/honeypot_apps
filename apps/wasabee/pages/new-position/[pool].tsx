@@ -23,14 +23,15 @@ import {
 import { DynamicFormatAmount } from '@honeypot/shared';
 import { useParams, useSearchParams } from 'next/navigation';
 import { Button } from '@nextui-org/react';
+
 type NewPositionPageParams = Record<'pool', Address>;
 
 const NewPositionPage = () => {
   const router = useRouter();
   const { pool: poolAddress } = router.query as { pool: Address };
   const searchParams = useSearchParams();
-  const leftrange = searchParams.get('leftrange');
-  const rightrange = searchParams.get('rightrange');
+  const leftrange = searchParams?.get('leftrange');
+  const rightrange = searchParams?.get('rightrange');
   const [useNative, setUseNative] = useState(true);
 
   const { data: token0 } = useReadAlgebraPoolToken0({

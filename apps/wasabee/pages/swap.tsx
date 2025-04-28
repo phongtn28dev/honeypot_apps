@@ -15,13 +15,14 @@ import SwapTransactionHistory from '@/components/SwapTransactionHistory';
 import { Tab, Tabs } from '@nextui-org/react';
 import { cn } from '@/lib/tailwindcss';
 import { UniversalAccountBuyTokenModal } from '@honeypot/shared';
+
 const SwapPage = observer(() => {
-  const inputCurrency = useSearchParams().get('inputCurrency');
-  const outputCurrency = useSearchParams().get('outputCurrency');
+  const inputCurrency = useSearchParams()?.get('inputCurrency');
+  const outputCurrency = useSearchParams()?.get('outputCurrency');
 
   const isInit = wallet.isInit;
 
-  if (!wallet.currentChain.supportDEX) {
+  if (!wallet.currentChain?.supportDEX) {
     return (
       <div className="w-full flex items-center justify-center pb-6 sm:pb-12 overflow-x-hidden">
         <div className="text-center">
@@ -30,6 +31,10 @@ const SwapPage = observer(() => {
       </div>
     );
   }
+
+  const defaultOutputToken = wallet.currentChain?.validatedTokens?.find(
+    (token) => token.isStableCoin
+  )?.address;
 
   return isInit ? (
     <div className="w-full flex items-center justify-center pb-6 sm:pb-12 pt-8">
@@ -55,6 +60,7 @@ const SwapPage = observer(() => {
           className="relative w-full flex flex-col items-center justify-start col-span-2 lg:col-span-1 overflow-visible"
         >
           <Tabs
+            destroyInactiveTabPanel={false}
             classNames={{
               tab: 'px-2 sm:px-3 sm:h-10 text-xs sm:text-sm',
               base: 'relative w-full',
@@ -78,12 +84,7 @@ const SwapPage = observer(() => {
               <V3SwapCard
                 bordered={false}
                 fromTokenAddress={inputCurrency ?? undefined}
-                toTokenAddress={
-                  outputCurrency ??
-                  wallet.currentChain.validatedTokens.filter(
-                    (token) => token.isStableCoin
-                  )[0].address
-                }
+                toTokenAddress={outputCurrency ?? defaultOutputToken}
                 isUpdatingPriceChart={true}
               />
             </Tab>

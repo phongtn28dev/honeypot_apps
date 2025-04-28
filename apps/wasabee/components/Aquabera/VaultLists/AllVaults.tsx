@@ -53,7 +53,7 @@ export function AllAquaberaVaults({
 
   useEffect(() => {
     const initVaults = async () => {
-      if (!wallet.isInit) return;
+      if (!wallet.isInit || !infoClient) return;
 
       try {
         // Load data regardless of searchString
@@ -69,7 +69,7 @@ export function AllAquaberaVaults({
     };
 
     initVaults();
-  }, [wallet.isInit, searchString, onDataLoaded]);
+  }, [wallet.isInit, searchString, onDataLoaded, infoClient]);
 
   useEffect(() => {
     if (!wallet.isInit || !vaults?.ichiVaults?.length) {

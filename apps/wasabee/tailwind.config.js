@@ -3,6 +3,10 @@ import { textStrokePlugin } from './styles/text-stroke';
 import { textShadowPlugin } from './styles/text-shadow';
 
 const config = {
+  corePlugins: {
+    // Disable `:has()` variant
+    has: false,
+  },
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',

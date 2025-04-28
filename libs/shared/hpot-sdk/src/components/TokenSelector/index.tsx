@@ -18,7 +18,7 @@ import { SpinnerContainer } from './../Spinner';
 import { NoData } from './../DataState/NoData';
 import { Copy } from './../Copy';
 import { BiLinkExternal } from 'react-icons/bi';
-import TruncateMarkup from 'react-truncate-markup';
+import { TruncateText } from '../TruncateText';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import Image from 'next/image';
@@ -159,11 +159,9 @@ export const TokenSelector = observer(
                   token={value}
                 ></TokenLogo>
               )}
-              <TruncateMarkup>
-                <span className="shrink text-ellipsis h-4">
-                  {value?.displayName ? value.displayName : 'Select Token'}
-                </span>
-              </TruncateMarkup>
+              <TruncateText className="shrink h-4">
+                {value?.displayName ? value.displayName : 'Select Token'}
+              </TruncateText>
               {!disableSelection && (
                 <motion.div
                   variants={animationVariants.dropDownIcon}

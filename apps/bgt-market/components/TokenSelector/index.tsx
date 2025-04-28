@@ -10,7 +10,6 @@ import {
 import { DropdownSvg } from '../svg/dropdown';
 import { IoSearchOutline } from 'react-icons/io5';
 import { IoClose } from 'react-icons/io5';
-
 import { Token } from '@honeypot/shared';
 import { Observer, observer, useLocalObservable } from 'mobx-react-lite';
 import { liquidity } from '@/services/liquidity';
@@ -24,7 +23,7 @@ import { Copy } from '../Copy/index';
 import { BiLinkExternal } from 'react-icons/bi';
 import { wallet } from '@honeypot/shared';
 import { TokenLogo } from '@honeypot/shared';
-import TruncateMarkup from 'react-truncate-markup';
+import { TruncateText } from '@honeypot/shared';
 import { motion } from 'framer-motion';
 
 type TokenSelectorProps = {
@@ -63,6 +62,7 @@ export const TokenSelector = observer(
           }
           const token = Token.getToken({
             address: state.search,
+            chainId: wallet.currentChain?.chain.id.toString(),
           });
           await token.init();
           state.tokens = [token];
@@ -144,11 +144,9 @@ export const TokenSelector = observer(
                   token={value}
                 ></TokenLogo>
               )}
-              <TruncateMarkup>
-                <span className="shrink overflow-clip text-ellipsis h-4">
-                  {value?.displayName ? value.displayName : 'Select Token'}
-                </span>
-              </TruncateMarkup>
+              <TruncateText className="shrink overflow-clip h-4">
+                {value?.displayName ? value.displayName : 'Select Token'}
+              </TruncateText>
               <motion.div
                 variants={animationVariants.dropDownIcon}
                 initial={animationVariants.dropDownIcon.initial}

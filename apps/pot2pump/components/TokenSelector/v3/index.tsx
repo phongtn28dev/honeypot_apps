@@ -22,7 +22,7 @@ import { Copy } from '../../Copy/index';
 import { BiLinkExternal } from 'react-icons/bi';
 import { wallet } from '@honeypot/shared';
 import { TokenLogo } from '@honeypot/shared';
-import TruncateMarkup from 'react-truncate-markup';
+import { TruncateText } from '@honeypot/shared';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import Image from 'next/image';
@@ -153,11 +153,9 @@ export const TokenSelector = observer(
                   token={value}
                 ></TokenLogo>
               )}
-              <TruncateMarkup>
-                <span className="shrink overflow-clip text-ellipsis h-4">
-                  {value?.displayName ? value.displayName : 'Select Token'}
-                </span>
-              </TruncateMarkup>
+              <TruncateText className="shrink overflow-clip h-4">
+                {value?.displayName ? value.displayName : 'Select Token'}
+              </TruncateText>
               {!disableSelection && (
                 <motion.div
                   variants={animationVariants.dropDownIcon}

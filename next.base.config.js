@@ -15,11 +15,13 @@ const baseConfig = {
   },
   reactStrictMode: true,
   output: 'standalone',
+  productionBrowserSourceMaps: true,
   experimental: {
     optimizeCss: true,
     swcMinify: true,
   },
   webpack: (config, { isServer }) => {
+    config.devtool = 'source-map';
     config.resolve.alias = {
       ...config.resolve.alias,
       '@honeypot/shared': path.resolve(__dirname, 'libs/shared/hpot-sdk/src'),
