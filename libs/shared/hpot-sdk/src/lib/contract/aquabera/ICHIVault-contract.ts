@@ -11,6 +11,8 @@ import { VaultWithdraw } from '../../graphql/generated/graphql';
 import { VaultCollectFee } from '../../graphql/generated/graphql';
 import { ReactNode } from 'react';
 import { PairContract } from '../dex/liquidity/pair-contract';
+import { BGTVaultFactory } from '../rewardVault/bgt-vault-factory';
+
 type VaultTag = {
   tag: string;
   bgColor: string;
@@ -40,6 +42,7 @@ export class ICHIVaultContract implements BaseContract {
     }
     return vault;
   }
+
   static setVault(address: `0x${string}`, vault: ICHIVaultContract) {
     this.vaultsMap.set(address.toLowerCase(), vault);
   }
@@ -81,7 +84,7 @@ export class ICHIVaultContract implements BaseContract {
   };
   vaultTag: VaultTag | undefined = undefined;
   vaultDescription: string | ReactNode | undefined = undefined;
-
+  bgtVaultAddress: Address | undefined = undefined;
   recentTransactions: (VaultDeposit | VaultWithdraw | VaultCollectFee)[] = [];
 
   get tvlUSD() {
@@ -266,15 +269,19 @@ export class ICHIVaultContract implements BaseContract {
     Object.assign(this, args);
   }
 
-  // async getFee() {
-  //   const fee = await this.contract.read.fee();
-  //   this.fee = fee;
-  //   return fee;
-  // }
+  async getBgtVaultAddress() {
+    if (!wallet.contracts.rewardVaultFactory || !this.address) {
+      return;
+    }
 
-  // async collectFees() {
-  //   return await new ContractWrite(this.contract.write.collectFees, {
-  //     action: "Collect Fees",
-  //   }).call();
-  // }
+    if (this.bgtVaultAddress !== undefined) return this.bgtVaultAddress;
+
+    const bgtVaultAddress =
+      await wallet.contracts.rewardVaultFactory.loadBgtVaultAddressByStakingToken(
+        this.address
+      );
+
+    this.bgtVaultAddress = bgtVaultAddress;
+    return bgtVaultAddress;
+  }
 }

@@ -27,6 +27,10 @@ export interface ContractAddresses {
   //aquabera vault
   vaultFactory: Address;
   vaultVolatilityCheck: Address;
+  //aquabera vault staker
+  vaultStakerFactory: Address;
+  //berachain reward vault
+  rewardVaultFactory: Address;
   //hpot
   hpotToken: {
     token: Address;
@@ -64,6 +68,12 @@ export const contractAddresses: Record<string, ContractAddresses> = {
     //aquabera vault
     vaultFactory: zeroAddress,
     vaultVolatilityCheck: zeroAddress,
+
+    //aquabera vault staker
+    vaultStakerFactory: zeroAddress,
+
+    //berachain reward vault
+    rewardVaultFactory: zeroAddress,
 
     //hpot
     hpotToken: {
@@ -104,6 +114,12 @@ export const contractAddresses: Record<string, ContractAddresses> = {
     vaultFactory: '0x1bf5e51eCacdfEA65ae9276fd228bB8719ffcA7E',
     vaultVolatilityCheck: '0x97BF8CB6Be6757ab46D44853eAbEFD0D4C153037',
 
+    //aquabera vault staker
+    vaultStakerFactory: '0xe45bD1E16da218aDA95C6774Cc512797C7B69101',
+
+    //berachain reward vault
+    rewardVaultFactory: '0x94Ad6Ac84f6C6FbA8b8CCbD71d9f4f101def52a8',
+
     //hpot
     hpotToken: {
       token: zeroAddress,
@@ -140,6 +156,12 @@ export const contractAddresses: Record<string, ContractAddresses> = {
     //aquabera vault
     vaultFactory: '0xBc4996968b09087Cb85BBDE6Bf58953ceb393Ec9',
     vaultVolatilityCheck: zeroAddress,
+
+    //aquabera vault staker
+    vaultStakerFactory: zeroAddress,
+
+    //berachain reward vault
+    rewardVaultFactory: zeroAddress,
 
     //hpot
     hpotToken: {
