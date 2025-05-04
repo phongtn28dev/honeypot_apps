@@ -1,21 +1,13 @@
 import { wallet } from '@honeypot/shared';
-import { Currency } from '@cryptoalgebra/sdk';
-
 import { Token } from '@honeypot/shared';
 import { useEffect, useState, useMemo } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/algebra/ui/button';
-import { DepositToVaultModal } from '../modals/DepositToVaultModal';
-import {
-  getSingleVaultDetails,
-  getVaultPageData,
-} from '@/lib/algebra/graphql/clients/vaults';
+import { getVaultPageData } from '@/lib/algebra/graphql/clients/vaults';
 import { VaultsSortedByHoldersQuery } from '@/lib/algebra/graphql/generated/graphql';
 import { ICHIVaultContract } from '@honeypot/shared';
 import VaultRow from './VaulltRow';
 import { useSubgraphClient } from '@honeypot/shared';
-
-import { TokenLogo } from '@honeypot/shared';
 import VaultCard from './VaultCard';
 
 type SortField =
@@ -48,8 +40,6 @@ export function AllAquaberaVaults({
   const [page, setPage] = useState(1);
   const rowsPerPage = 10;
   const infoClient = useSubgraphClient('algebra_info');
-
-  console.log('vaultsContracts', vaultsContracts);
 
   useEffect(() => {
     const initVaults = async () => {

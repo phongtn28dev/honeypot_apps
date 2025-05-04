@@ -82,5 +82,5 @@ export async function getMultipleTokensData(
     query: MultipleTokensDocument,
     variables: { tokenIds },
   });
-  return tokenQuery.data.tokens as Token[];
+  return (tokenQuery?.data?.tokens as Token[]) || [];
 }

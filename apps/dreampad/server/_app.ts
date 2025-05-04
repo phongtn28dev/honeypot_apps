@@ -3,12 +3,14 @@ import { discussionRouter } from './router/discussion';
 import { publicProcedure, router, t } from './trpc';
 import { tokenRouter } from './router/token';
 import { aiLaunchProjectRouter } from './router/AILaunchProject';
+import { lbpRouter } from './router/lbp';
 
 export const appRouter = router({
   projects: ftoRouter,
   discussionRouter: discussionRouter,
   token: tokenRouter,
   aiLaunchProject: aiLaunchProjectRouter,
+  lbp: lbpRouter,
 });
 
 // Export only the type of a router!

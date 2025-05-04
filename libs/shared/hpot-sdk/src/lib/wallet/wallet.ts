@@ -14,6 +14,8 @@ import { DEFAULT_CHAIN_ID } from '../../config/algebra/default-chain-id';
 import { ICHIVaultVolatilityCheckContract } from '../contract/aquabera/ICHIVaultVolatilityCheckContract';
 import { AlgebraSwapRouterContract } from '../contract/algebra/algebra-swap-router';
 import { UniversalAccount } from './universalAccount';
+import { BGTVaultFactory } from '../contract/rewardVault/bgt-vault-factory';
+import { VaultStakerFactory } from '../contract/aquabera/VaultStaker/VaultStakerFactory';
 
 export class Wallet {
   account: string = '';
@@ -30,6 +32,8 @@ export class Wallet {
     vaultFactory: ICHIVaultFactoryContract;
     vaultVolatilityCheck: ICHIVaultVolatilityCheckContract;
     algebraSwapRouter: AlgebraSwapRouterContract;
+    rewardVaultFactory: BGTVaultFactory;
+    vaultStakerFactory: VaultStakerFactory;
   } = {} as any;
   publicClient!: PublicClient;
   isInit = false;
@@ -79,6 +83,9 @@ export class Wallet {
     const mockAccount = localStorage.getItem('mockAccount');
     this.account = mockAccount || walletClient?.account?.address || zeroAddress;
     this.contracts = {
+      rewardVaultFactory: new BGTVaultFactory({
+        address: this.currentChain.contracts.rewardVaultFactory as Address,
+      }),
       algebraSwapRouter: new AlgebraSwapRouterContract({
         address: this.currentChain.contracts.algebraSwapRouter as `0x${string}`,
       }),
@@ -99,6 +106,9 @@ export class Wallet {
       }),
       vaultVolatilityCheck: new ICHIVaultVolatilityCheckContract({
         address: this.currentChain.contracts.vaultVolatilityCheck as Address,
+      }),
+      vaultStakerFactory: new VaultStakerFactory({
+        address: this.currentChain.contracts.vaultStakerFactory as Address,
       }),
     };
     this.publicClient = createPublicClientByChain(

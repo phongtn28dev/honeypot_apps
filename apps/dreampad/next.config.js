@@ -6,6 +6,7 @@ module.exports = withBaseConfig({
     {
       source: '/',
       destination: '/launchpad-projects',
+      permanent: false,
     },
   ],
 });
