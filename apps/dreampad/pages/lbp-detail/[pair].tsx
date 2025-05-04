@@ -4,9 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import CardContainer from '@/components/CardContianer/v3';
 import { useRouter } from 'next/router';
-import BigNumber from 'bignumber.js';
 import { Address } from 'viem';
-import dayjs from 'dayjs';
 import { WarningBanner } from './WarningBanner';
 import { networksMap } from '@honeypot/shared';
 import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
@@ -140,10 +138,16 @@ const LBPDetailPage = observer(() => {
                 width={500}
                 height={500}
                 priority
+                onError={(e) => {
+                  e.currentTarget.src = '/images/empty-logo.png';
+                }}
               />
               <Image
                 src={lbpLaunch?.lbpBanner || lbpLaunch?.bannerUrl || ''}
                 alt="Banner"
+                onError={(e) => {
+                  e.currentTarget.src = '/images/homepage.png';
+                }}
                 className="relative w-full h-full object-cover col-span-3"
                 width={500}
                 height={500}
@@ -167,7 +171,7 @@ const LBPDetailPage = observer(() => {
                     <div className="text-sm text-[#4D4D4D] mb-2 text-center">
                       Price per {lbpLaunch?.assetToken?.symbol}
                     </div>
-                    <div className="text-[24px] text-white text-shadow-[1.481px_2.963px_0px_#AF7F3D] text-stroke-1 text-stroke-black text-center">
+                    <div className="text-[24px] text-[#4D4D4D]text-shadow-[1.481px_2.963px_0px_#AF7F3D] text-stroke-1 text-stroke-black text-center">
                       {DynamicFormatAmount({
                         amount:
                           lbpLaunch?.assetTokenPerShareToken.toString() ?? 0,
@@ -180,7 +184,7 @@ const LBPDetailPage = observer(() => {
                     <div className="text-sm text-[#4D4D4D] mb-2 text-center">
                       Funds Raised
                     </div>
-                    <div className="text-[24px] text-white text-shadow-[1.481px_2.963px_0px_#AF7F3D] text-stroke-1 text-stroke-black text-center">
+                    <div className="text-[24px] text-[#4D4D4D] text-shadow-[1.481px_2.963px_0px_#AF7F3D] text-stroke-1 text-stroke-black text-center">
                       {DynamicFormatAmount({
                         amount: lbpLaunch?.fundsRaised.toString() ?? 0,
                         decimals: 2,
@@ -192,7 +196,7 @@ const LBPDetailPage = observer(() => {
                     <div className="text-sm text-[#171414] mb-2 text-center">
                       Sale Marketcap
                     </div>
-                    <div className="text-[24px] text-white text-shadow-[1.481px_2.963px_0px_#AF7F3D] text-stroke-1 text-stroke-black text-center">
+                    <div className="text-[24px] text-[#4D4D4D] text-shadow-[1.481px_2.963px_0px_#AF7F3D] text-stroke-1 text-stroke-black text-center">
                       {DynamicFormatAmount({
                         amount: lbpLaunch?.maxAssets?.toString() ?? 0,
                         decimals: 2,

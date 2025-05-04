@@ -8,6 +8,7 @@ import { Token } from '../../token/token';
 import { DEFAULT_CHAIN_ID } from '../../../../config/algebra/default-chain-id';
 import { wallet } from '../../../wallet';
 import { lbpMetadatas } from '../../../../config/lbpmetadata';
+import { trpcClient } from '@honeypot/shared/lib/trpc/trpc';
 
 export enum LAUNCH_STATUS {
   NOT_STARTED,
@@ -509,6 +510,14 @@ export class LbpLaunch {
         ),
         wallet.account as `0x${string}`,
       ]);
+
+      await trpcClient.lbp.createLbpTransaction.mutate({
+        tx_hash: tx.transactionHash,
+        buy_amount: this.amountIn.toFixed(18),
+        lbp_address: this.address,
+        chain_id: this.chainId,
+        wallet_address: wallet.account as `0x${string}`,
+      });
       console.log('tx', tx);
     } catch (error) {
       console.error('error', error);
