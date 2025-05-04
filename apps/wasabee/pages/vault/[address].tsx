@@ -208,7 +208,7 @@ export const VaultDetail = observer(() => {
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {vault?.bgtVaultAddress && (
               <div className="rounded-[24px] border border-black bg-orange-300 px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D] sm:col-span-2 md:col-span-3">
                 <div className="flex  gap-2 justify-between items-center">
@@ -288,8 +288,6 @@ export const VaultDetail = observer(() => {
                 </div>
                 <div className="space-y-1">
                   <p>
-                    {/* Mini Vault Staker:{' '}
-                    {miniVaultStaker.map((s) => s).join(', ')} */}
                     Stake your vault token to a mini vault staker to earn
                   </p>
                   <p>
@@ -476,7 +474,7 @@ export const VaultDetail = observer(() => {
                 {volatility}%
               </p>
             </div>
-          </div>
+          </div> */}
 
           {/* Vault Info */}
           <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D]">
