@@ -8,6 +8,7 @@ import { Button, cn } from '@nextui-org/react';
 import { Input } from '@nextui-org/react';
 import { debounce } from 'lodash';
 import { wallet } from '@honeypot/shared';
+import { trpcClient } from '@honeypot/shared/lib/trpc/trpc';
 
 export const LbpActionComponent = observer(
   ({ lbpLaunch }: { lbpLaunch: LbpLaunch }) => {
@@ -112,6 +113,19 @@ const LbpStartedComponent = observer(
 
     return (
       <div className="bg-white rounded-[16px] border border-black p-4 text-center">
+        <button
+          onClick={() => {
+            trpcClient.lbp.createLbpTransaction.mutate({
+              tx_hash: '0x123',
+              buy_amount: '0.01',
+              lbp_address: '0x123',
+              chain_id: 1,
+              wallet_address: wallet.account as `0x${string}`,
+            });
+          }}
+        >
+          test
+        </button>
         <div className="text-lg font-bold mb-2">Sale Started</div>
         <div>
           <div className="text-left text-sm text-[#4D4D4D]">
