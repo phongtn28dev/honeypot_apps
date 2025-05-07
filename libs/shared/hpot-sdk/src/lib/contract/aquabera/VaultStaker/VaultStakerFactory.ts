@@ -6,7 +6,6 @@ import { VaultStakerFactoryABI } from '../../../abis/VaultStakerFactory/VaultSta
 import { ContractWrite } from '@honeypot/shared/lib/utils';
 import { BGTVault } from '../../rewardVault/bgt-vault';
 import { ICHIVaultContract } from '../ICHIVault-contract';
-import { simulateContract } from 'viem/actions';
 
 export class VaultStakerFactory implements BaseContract {
   address: Address = zeroAddress;
@@ -29,8 +28,12 @@ export class VaultStakerFactory implements BaseContract {
     });
   }
 
-  async createVaultStakerDefault(lbgtReceiver: Address, bgtVault: BGTVault) {
-    return this.createMiniVaultStaker(lbgtReceiver, bgtVault, 1);
+  async createVaultStakerDefault(
+    lbgtReceiver: Address,
+    bgtVault: BGTVault,
+    amount: number
+  ) {
+    return this.createMiniVaultStaker(lbgtReceiver, bgtVault, amount);
   }
 
   async createMiniVaultStaker(
@@ -84,13 +87,13 @@ export class VaultStakerFactory implements BaseContract {
   }
 
   async unstakeMiniVaultStaker(bgtVaultAddress: Address) {
-    const res = await wallet.publicClient.simulateContract({
-      address: this.address as `0x${string}`,
-      abi: this.abi,
-      functionName: 'unStake',
-      account: wallet.account as Address,
-      args: [bgtVaultAddress],
-    });
+    // const res = await wallet.publicClient.simulateContract({
+    //   address: this.address as `0x${string}`,
+    //   abi: this.abi,
+    //   functionName: 'unStake',
+    //   account: wallet.account as Address,
+    //   args: [bgtVaultAddress],
+    // });
 
     return new ContractWrite(this.contract.write.unStake).call([
       bgtVaultAddress,
@@ -102,13 +105,16 @@ export class VaultStakerFactory implements BaseContract {
   }
 
   async mintLbgt(stakerIndexes: bigint[], rewardVaultAddress: Address) {
-    const res = await wallet.publicClient.simulateContract({
-      address: this.address as `0x${string}`,
-      abi: this.abi,
-      functionName: 'mintLBGT',
-      account: wallet.account as Address,
-      args: [stakerIndexes, rewardVaultAddress],
-    });
+    // const res = await wallet.publicClient.simulateContract({
+    //   address: this.address as `0x${string}`,
+    //   abi: this.abi,
+    //   functionName: 'mintLBGT',
+    //   account: wallet.account as Address,
+    //   args: [stakerIndexes, rewardVaultAddress],
+    // });
+
+    console.log('mintLbgt', stakerIndexes, rewardVaultAddress);
+
     return new ContractWrite(this.contract.write.mintLBGT).call([
       stakerIndexes,
       rewardVaultAddress,
