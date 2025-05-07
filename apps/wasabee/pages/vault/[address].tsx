@@ -204,101 +204,21 @@ export const VaultDetail = observer(() => {
                   Withdraw
                 </Button>
               )}
+              {vault?.bgtVaultAddress && (
+                <Link
+                  href={`https://hub.berachain.com/vaults/${vault.bgtVaultAddress}/`}
+                  target="_blank"
+                >
+                  <Button className="w-full md:w-auto ml-[-1px] rounded-[8px] border border-black bg-[#FFCD4D] p-2 text-[#202020] shadow-[2px_2px_0px_0px_#000] hover:translate-y-[2px] hover:shadow-[2px_1px_0px_0px_#000] active:translate-y-[2px] active:shadow-none disabled:opacity-50 disabled:cursor-not-allowed">
+                    Stake
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
 
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {vault?.bgtVaultAddress && (
-              <div className="rounded-[24px] border border-black bg-orange-300 px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D] sm:col-span-2 md:col-span-3">
-                <div className="flex  gap-2 justify-between items-center">
-                  <h3 className="text-base text-[#202020] mb-2">
-                    <span className="text-sm text-black rounded-full bg-white px-2 py-1">
-                      Mini Vault Staker
-                    </span>
-                  </h3>
-                  <div className="flex gap-2">
-                    {miniVaultStaker.length === 0 && (
-                      <Button
-                        onClick={() =>
-                          wallet.contracts.vaultStakerFactory
-                            .createVaultStakerDefault(
-                              wallet.account as Address,
-                              new BGTVault({
-                                address: vault?.bgtVaultAddress as Address,
-                              })
-                            )
-                            .then(() => {
-                              wallet.contracts.vaultStakerFactory
-                                .getMiniVaultStaker(
-                                  vault?.bgtVaultAddress as Address
-                                )
-                                .then((stakers) =>
-                                  setMiniVaultStaker(
-                                    stakers.map((s) => s.toString())
-                                  )
-                                );
-                            })
-                        }
-                        disabled={!wallet.account || !wallet.walletClient}
-                        className="w-full md:w-auto ml-[-1px] rounded-[8px] border border-black bg-[#FFCD4D] p-2 text-[#202020] shadow-[2px_2px_0px_0px_#000] hover:translate-y-[2px] hover:shadow-[2px_1px_0px_0px_#000] active:translate-y-[2px] active:shadow-none disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        Create Vault Staker
-                      </Button>
-                    )}
-                    {vault?.userShares && vault?.userShares > BigInt(0) && (
-                      <Button
-                        onClick={() =>
-                          wallet.contracts.vaultStakerFactory
-                            .stakeMiniVaultStakerDefault(
-                              vault.bgtVaultAddress as Address,
-                              vault
-                            )
-                            .then(() => refreshVaultData())
-                        }
-                        disabled={!wallet.account || !wallet.walletClient}
-                        className="w-full md:w-auto ml-[-1px] rounded-[8px] border border-black bg-[#FFCD4D] p-2 text-[#202020] shadow-[2px_2px_0px_0px_#000] hover:translate-y-[2px] hover:shadow-[2px_1px_0px_0px_#000] active:translate-y-[2px] active:shadow-none disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        Stake
-                      </Button>
-                    )}
-                    <Button
-                      onClick={() =>
-                        wallet.contracts.vaultStakerFactory.unstakeMiniVaultStaker(
-                          vault.bgtVaultAddress as Address
-                        )
-                      }
-                      disabled={!wallet.account || !wallet.walletClient}
-                      className="w-full md:w-auto ml-[-1px] rounded-[8px] border border-black bg-[#FFCD4D] p-2 text-[#202020] shadow-[2px_2px_0px_0px_#000] hover:translate-y-[2px] hover:shadow-[2px_1px_0px_0px_#000] active:translate-y-[2px] active:shadow-none disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      Unstake
-                    </Button>
-                    <Button
-                      onClick={() =>
-                        wallet.contracts.vaultStakerFactory.mintLbgtDefault(
-                          vault.bgtVaultAddress as Address
-                        )
-                      }
-                      disabled={!wallet.account || !wallet.walletClient}
-                      className="w-full md:w-auto ml-[-1px] rounded-[8px] border border-black bg-[#FFCD4D] p-2 text-[#202020] shadow-[2px_2px_0px_0px_#000] hover:translate-y-[2px] hover:shadow-[2px_1px_0px_0px_#000] active:translate-y-[2px] active:shadow-none disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      Mint LBGT
-                    </Button>
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <p>Stake your vault token to a mini vault staker to earn</p>
-                  <p>
-                    Your Unstaked Shares:{' '}
-                    {vault?.userShares && vault?.userShares > BigInt(0)
-                      ? vault?.userShares.toString()
-                      : 0}
-                  </p>
-                  <p>Staked Shares: ?</p>
-                </div>
-              </div>
-            )}
-
             {vault?.vaultDescription && (
               <div className="rounded-[24px] border border-black bg-white px-4 md:px-10 py-6 shadow-[4px_4px_0px_0px_#D29A0D] sm:col-span-2 md:col-span-3">
                 <h3 className="text-base text-[#202020] mb-2">
