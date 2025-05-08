@@ -76,7 +76,7 @@ export const UniversalAccountBuyTokenModal = observer(() => {
           buyWithUniversalAccountService.buyToken &&
           wallet.universalAccount?.buyToken(
             buyWithUniversalAccountService.buyToken,
-            buyWithUniversalAccountService.buyTokenAmount
+            buyWithUniversalAccountService.accountSpendAmountUSD
           )
         }
       >

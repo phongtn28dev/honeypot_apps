@@ -3,6 +3,7 @@ import { Token } from '../../lib/contract';
 import BigNumber from 'bignumber.js';
 import { wallet } from '../../lib/wallet';
 import { chart } from '../chart';
+
 class BuyWithUniversalAccountService {
   buyToken: Token | undefined = undefined;
   accountSpendAmountUSD: string = '0';
