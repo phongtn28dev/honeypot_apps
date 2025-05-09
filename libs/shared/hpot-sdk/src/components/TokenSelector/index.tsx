@@ -36,6 +36,7 @@ type TokenSelectorProps = {
   staticTokenList?: Token[];
   disableSearch?: boolean;
   disableTools?: boolean;
+  showBalance?: boolean;
 };
 
 export const TokenSelector = observer(
@@ -46,6 +47,7 @@ export const TokenSelector = observer(
     staticTokenList,
     disableTools,
     disableSearch,
+    showBalance,
   }: TokenSelectorProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const state = useLocalObservable(() => ({
@@ -216,7 +218,9 @@ export const TokenSelector = observer(
                                       {token.symbol}
                                     </div>
                                   </div>
-                                  <div>{token.balanceFormatted}</div>
+                                  {showBalance && (
+                                    <div>{token.balanceFormatted}</div>
+                                  )}
                                 </div>
                               );
                             })

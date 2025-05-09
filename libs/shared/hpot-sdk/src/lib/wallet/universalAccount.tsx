@@ -1,16 +1,21 @@
-import { IAssetsResponse, ITransaction } from '@GDdark/universal-account';
+import {
+  IAssetsResponse,
+  ITransaction,
+  SUPPORTED_TOKEN_TYPE,
+  SUPPORTED_PRIMARY_TOKENS,
+} from '@GDdark/universal-account';
 import { ISmartAccountOptions } from '@GDdark/universal-account';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { UniversalAccount as PartialUniversalAccount } from '@GDdark/universal-account';
 import { universalAccountProjectId } from '../../config/particleUniversalAccount';
-import { Address, SignableMessage, zeroAddress } from 'viem';
+import { Address, parseEther, SignableMessage, zeroAddress } from 'viem';
 import { wallet } from './wallet';
 import { Token } from '../contract';
 import { WrappedToastify } from '../utils';
 import { ExternalLinkIcon } from 'lucide-react';
 import { toast } from 'react-toastify';
-import { SUPPORTED_PRIMARY_TOKENS } from '@GDdark/universal-account';
 import { BigNumber } from 'bignumber.js';
+import { toBeHex } from 'ethers';
 
 export class UniversalAccount {
   ownerAddress: string;
@@ -48,6 +53,10 @@ export class UniversalAccount {
         isNative: token.address === zeroAddress,
       });
     });
+  }
+
+  async getAccountTokenBalance(token: Token) {
+    return await token.contract.read.balanceOf([this.evmSmartAccountAddress]);
   }
 
   async loadUniversalAccountInfo() {
@@ -144,5 +153,59 @@ export class UniversalAccount {
         message: error.message,
       });
     }
+  }
+
+  async withdraw(token: Token, amount: string) {
+    if (!this.universalAccount) {
+      throw new Error('Universal account not found');
+    }
+
+    const pendingToastId = WrappedToastify.pending({
+      title: 'Withdrawing token...',
+      message: `Withdrawing ${token.symbol}`,
+    });
+
+    const transaction = await this.universalAccount.createTransferTransaction({
+      receiver: wallet.account,
+      amount: amount,
+      token: {
+        chainId: wallet.currentChain.chainId,
+        address: token.address,
+      },
+      rpcUrl: wallet.currentChain.chain.rpcUrls.default.http[0],
+    });
+
+    const signature = await wallet.walletClient.request({
+      method: 'personal_sign',
+      params: [
+        transaction?.rootHash as `0x${string}`,
+        wallet.account as `0x${string}`,
+      ],
+    });
+
+    const result = await this.universalAccount?.sendTransaction(
+      transaction as ITransaction,
+      signature as `0x${string}`
+    );
+
+    console.log({ result });
+
+    WrappedToastify.success({
+      title: 'Token withdrawn successfully',
+      message: (
+        <div>
+          <p>Token Withdrawn</p>
+          <p>
+            <a
+              className="flex items-center gap-1 text-yellow-500"
+              target="_blank"
+              href={`https://universalx.app/activity/details?id=${result.transactionId}`}
+            >
+              View Transaction <ExternalLinkIcon className="w-4 h-4" />
+            </a>
+          </p>
+        </div>
+      ),
+    });
   }
 }

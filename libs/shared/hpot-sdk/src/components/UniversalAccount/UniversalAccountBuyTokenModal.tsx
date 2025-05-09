@@ -15,9 +15,10 @@ import Image from 'next/image';
 import { particleIcon } from '../../assets/images/partners';
 import { ChainNotSupport } from './AccountStatus/ChainNotSupport';
 import { DepositModal } from './DepositModal/DepositModal';
-
+import { WithdrawModal } from './WithdrawModal/WithdrawModal';
 export const UniversalAccountBuyTokenModal = observer(() => {
-  const [open, setOpen] = useState(false);
+  const [depositOpen, setDepositOpen] = useState(false);
+  const [withdrawOpen, setWithdrawOpen] = useState(false);
   const notConnected = useMemo(() => {
     const isNotConnected =
       !wallet.isInit ||
@@ -52,16 +53,24 @@ export const UniversalAccountBuyTokenModal = observer(() => {
         </div>
       </div>
       <div className="flex justify-between items-center gap-x-2">
-        <span className="font-bold">Account Balance:</span>{' '}
-        <span className="grow text-right">
+        <span className="font-bold shrink">Account Balance:</span>{' '}
+        <span className="grow text-right whitespace-nowrap">
           {DynamicFormatAmount({
             amount: wallet.universalAccount?.accountUsdValue ?? 0,
             decimals: 5,
-            endWith: 'USD',
+            endWith: '$',
           })}
         </span>
-        <span>
-          <NextuiButton onPress={() => setOpen(true)}>Deposit</NextuiButton>
+        <span className="flex flex-col items-center gap-2">
+          <NextuiButton className="w-full" onPress={() => setDepositOpen(true)}>
+            Deposit
+          </NextuiButton>
+          <NextuiButton
+            className="w-full"
+            onPress={() => setWithdrawOpen(true)}
+          >
+            Withdraw
+          </NextuiButton>
         </span>
       </div>
       <div className="">Buy Token with Universal Account</div>
@@ -94,7 +103,14 @@ export const UniversalAccountBuyTokenModal = observer(() => {
           <div>Particle</div>
         </div>
       </div>
-      <DepositModal isOpen={open} onClose={() => setOpen(false)} />
+      <DepositModal
+        isOpen={depositOpen}
+        onClose={() => setDepositOpen(false)}
+      />
+      <WithdrawModal
+        isOpen={withdrawOpen}
+        onClose={() => setWithdrawOpen(false)}
+      />
     </div>
   );
 });
