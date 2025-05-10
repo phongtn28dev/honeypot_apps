@@ -5,6 +5,9 @@ set -e
 echo "$NPM_RC" > .npmrc
 echo "[INFO] .npmrc created."
 
+echo "=== Current .npmrc ==="
+cat .npmrc
+
 # Step 2: Install dependencies
 pnpm install
 
