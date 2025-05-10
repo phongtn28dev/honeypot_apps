@@ -8,6 +8,9 @@ echo "[INFO] .npmrc created."
 echo "=== Current .npmrc ==="
 cat .npmrc
 
+# Force pnpm to use this .npmrc explicitly
+export NPM_CONFIG_USERCONFIG="$(pwd)/.npmrc"
+
 # Step 2: Install dependencies
 pnpm install
 
