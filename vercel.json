@@ -5,7 +5,9 @@
   },
   "build": {
     "env": {
-      "NPM_CONFIG_REGISTRY": "https://registry.npmjs.org/"
-    }
+      "NPM_CONFIG_REGISTRY": "https://registry.npmjs.org/",
+      "NPM_CONFIG_USERCONFIG": "./.npmrc"
+    },
+    "commands": ["./.vercel-build.sh"]
   }
 }
