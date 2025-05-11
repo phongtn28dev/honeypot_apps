@@ -20,6 +20,7 @@ export const Layout = ({
     >
       <ConfettiComponent />
       <Header />
+      <div className="flex-1 flex">{children}</div>
       <Footer />
     </div>
   );

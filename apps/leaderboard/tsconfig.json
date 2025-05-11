@@ -1,38 +1,21 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "es2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
+    "jsx": "preserve",
     "strict": true,
     "noEmit": true,
+    "emitDeclarationOnly": false,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
+    "skipLibCheck": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
     "incremental": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./*"],
-      "~/*": ["./*"],
-      "~/static/*": ["./public/*"],
-      "@/components/*": ["./components/*"],
-      "@/styles/*": ["./styles/*"],
-      "@/lib/*": ["./lib/*"],
-      "@/hooks/*": ["./hooks/*"],
-      "@/utils/*": ["./lib/utils/*"],
-      "@/ui/*": ["./components/ui/*"],
-      "@/public/*": ["./public/*"],
-      "@/public/images/*": ["./public/images/*"],
-      "@honeypot/shared": ["../../libs/shared/hpot-sdk/src/index.ts"],
-      "@honeypot/shared/*": ["../../libs/shared/hpot-sdk/src/*"],
-      "@GDdark/universal-account": [
-        "./../../node_modules/@GDdark/universal-account/dist/index.d.ts"
-      ]
-    },
     "plugins": [
       {
         "name": "next"
@@ -43,9 +26,10 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
     ".next/types/**/*.ts",
-    "../../libs/shared/hpot-sdk/src/services/chart.ts",
-    "../../apps/wasabee/.next/types/**/*.ts"
+    "../../libs/shared/hpot-sdk/src/"
   ],
   "exclude": ["node_modules", "jest.config.ts", "**/*.spec.ts", "**/*.test.ts"]
 }

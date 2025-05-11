@@ -1,9 +1,9 @@
-import '@/styles/globals.css';
-import '@/styles/overrides/reactjs-popup.css';
-import '@/styles/overrides/toastify.css';
+import './../styles/globals.css';
+import './../styles/overrides/reactjs-popup.css';
+import './../styles/overrides/toastify.css';
 //@ts-ignore
 import type { AppProps } from 'next/app';
-import { Layout } from '@/components/layout';
+import { Layout } from '../components/layout';
 import { WagmiProvider, useWalletClient } from 'wagmi';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { AvatarComponent, RainbowKitProvider } from '@rainbow-me/rainbowkit';
@@ -14,13 +14,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { createWagmiConfig } from '@honeypot/shared';
 import { trpc, trpcQueryClient } from '@honeypot/shared/lib/trpc/trpc';
 import { useEffect, useState } from 'react';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet/wallet';
 import { DM_Sans, Inter } from 'next/font/google';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { ApolloProvider } from '@apollo/client';
 import Image from 'next/image';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
-import * as Sentry from '@sentry/nextjs';
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 import { deserialize, serialize } from 'wagmi';
 import { useSubgraphClient } from '@honeypot/shared';
@@ -72,14 +71,6 @@ const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
     />
   );
 };
-
-// 在文件顶部初始化 Sentry
-Sentry.init({
-  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
-  tracesSampleRate: 1.0,
-  // 建议在生产环境调低采样率
-  // tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.2 : 1.0,
-});
 
 export default function App({ Component, pageProps }: AppProps) {
   const infoClient = useSubgraphClient('algebra_info');

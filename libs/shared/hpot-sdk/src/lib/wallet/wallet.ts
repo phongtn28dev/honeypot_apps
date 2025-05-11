@@ -1,4 +1,3 @@
-'use client';
 import { Network, networks } from '../chains/chain';
 import BigNumber from 'bignumber.js';
 import { Address, PublicClient, WalletClient, zeroAddress } from 'viem';
@@ -82,45 +81,56 @@ export class Wallet {
     this.currentChainId = walletClient?.chain?.id || DEFAULT_CHAIN_ID;
     const mockAccount = localStorage.getItem('mockAccount');
     this.account = mockAccount || walletClient?.account?.address || zeroAddress;
+
+    // Ensure networks are initialized before accessing currentChain
+    if (!this.networks.length) {
+      console.error('Networks not initialized');
+      return;
+    }
+
+    const currentChain = this.networksMap[this.currentChainId];
+    if (!currentChain) {
+      console.error('Current chain not found');
+      return;
+    }
+
     this.contracts = {
       rewardVaultFactory: new BGTVaultFactory({
-        address: this.currentChain.contracts.rewardVaultFactory as Address,
+        address: currentChain.contracts.rewardVaultFactory as Address,
       }),
       algebraSwapRouter: new AlgebraSwapRouterContract({
-        address: this.currentChain.contracts.algebraSwapRouter as `0x${string}`,
+        address: currentChain.contracts.algebraSwapRouter as `0x${string}`,
       }),
       ftofactory: new FtoFactoryContract({
-        address: this.currentChain.contracts.ftoFactory,
+        address: currentChain.contracts.ftoFactory,
       }),
       ftofacade: new FtoFacadeContract({
-        address: this.currentChain.contracts.ftoFacade,
+        address: currentChain.contracts.ftoFacade,
       }),
       memeFactory: new MemeFactoryContract({
-        address: this.currentChain.contracts.memeFactory,
+        address: currentChain.contracts.memeFactory,
       }),
       memeFacade: new MEMEFacadeContract({
-        address: this.currentChain.contracts.memeFacade,
+        address: currentChain.contracts.memeFacade,
       }),
       vaultFactory: new ICHIVaultFactoryContract({
-        address: this.currentChain.contracts.vaultFactory as Address,
+        address: currentChain.contracts.vaultFactory as Address,
       }),
       vaultVolatilityCheck: new ICHIVaultVolatilityCheckContract({
-        address: this.currentChain.contracts.vaultVolatilityCheck as Address,
+        address: currentChain.contracts.vaultVolatilityCheck as Address,
       }),
       vaultStakerFactory: new VaultStakerFactory({
-        address: this.currentChain.contracts.vaultStakerFactory as Address,
+        address: currentChain.contracts.vaultStakerFactory as Address,
       }),
     };
-    this.publicClient = createPublicClientByChain(
-      this.currentChain.chain
-    ) as any;
+    this.publicClient = createPublicClientByChain(currentChain.chain) as any;
     if (walletClient) {
       this.walletClient = walletClient;
       walletClient.switchChain({
         id: this.currentChainId,
       });
     }
-    this.currentChain.init();
+    currentChain.init();
     await StorageState.sync();
 
     if (this.account && this.account !== zeroAddress) {

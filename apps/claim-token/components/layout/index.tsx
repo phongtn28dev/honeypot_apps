@@ -6,7 +6,7 @@ import { cn } from '@nextui-org/theme';
 import ConfettiComponent from '@honeypot/shared/components/effects/Confetti/Confetti';
 import { Footer } from './footer';
 import _ from 'lodash';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet/wallet';
 
 export const Layout = ({
   children,
@@ -34,7 +34,7 @@ export const Layout = ({
       <div className="flex flex-col min-h-screen w-screen justify-between">
         <Header showProfile={false} />
         {!showInviteModal ? (
-          wallet.currentChain && <div className="flex-1 flex">{children}</div>
+          currentChain && <div className="flex-1 flex">{children}</div>
         ) : (
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center">
