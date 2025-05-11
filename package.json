@@ -9,11 +9,12 @@
     "wb": "nx build wasabee",
     "wasabee": "nx dev wasabee --port 9002",
     "bgt-market": "nx dev bgt-market --port 9003",
-    "build": "./.vercel-build.sh"
+    "build": "./.vercel-build.sh",
+    "postinstall": "echo \"@GDdark:registry=https://npm.pkg.github.com/\\n//npm.pkg.github.com/:_authToken=${NPM_TOKEN}\" > .npmrc"
   },
   "private": true,
   "dependencies": {
-    "@GDdark/universal-account": "1.0.11",
+    "@GDdark/universal-account": "^1.0.12",
     "@apollo/client": "^3.13.6",
     "@cryptoalgebra/sdk": "npm:@hongming-wang/algebra-sdk@^1.5.0",
     "@dynamic-labs/sdk-react-core": "^4.8.2",
