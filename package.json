@@ -11,6 +11,7 @@
     "bgt-market": "nx dev bgt-market --port 9003",
     "build": "./.vercel-build.sh"
   },
+  "packageManager": "pnpm@9.1.1",
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.13.6",
