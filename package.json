@@ -14,6 +14,7 @@
   "packageManager": "pnpm@9.1.1",
   "private": true,
   "dependencies": {
+    "@GDdark/universal-account": "^1.0.12",
     "@apollo/client": "^3.13.6",
     "@cryptoalgebra/sdk": "npm:@hongming-wang/algebra-sdk@^1.5.0",
     "@dynamic-labs/sdk-react-core": "^4.8.2",
@@ -71,7 +72,7 @@
     "@vercel/kv": "^1.0.1",
     "@wagmi/core": "^2.16.5",
     "@web3modal/wagmi": "^5.1.11",
-    "apexcharts": "^4.7.0",
+    "apexcharts": "^3.54.1",
     "apollo3-cache-persist": "^0.15.0",
     "axios": "^1.8.1",
     "bentocache": "1.0.0-beta.9",
