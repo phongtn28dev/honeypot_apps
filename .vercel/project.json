@@ -1,1 +1,15 @@
-{"projectId":"prj_l1jJ60wagBQ3Zs6bx1n5bAYyb0pW","orgId":"team_dCs65bzVJj28sSzZmqcXJ8Gy"}
+{
+  "projectId": "prj_l1jJ60wagBQ3Zs6bx1n5bAYyb0pW",
+  "orgId": "team_dCs65bzVJj28sSzZmqcXJ8Gy",
+  "settings": {
+    "createdAt": 1741053529578,
+    "framework": "nextjs",
+    "devCommand": null,
+    "installCommand": null,
+    "buildCommand": "npx nx build pot2pump --prod",
+    "outputDirectory": "./apps/pot2pump/.next",
+    "rootDirectory": null,
+    "directoryListing": false,
+    "nodeVersion": "22.x"
+  }
+}

@@ -3,8 +3,6 @@
     "enabled": false,
     "silent": true
   },
-  "buildCommand": "pnpm install && pnpm build",
-  "installCommand": "pnpm install",
   "build": {
     "env": {
       "COREPACK_ENABLE_STRICT": "0"
