@@ -1,3 +1,3 @@
 corepack enable
-corepack prepare pnpm@latest-7 --activate
+corepack prepare pnpm@latest --activate
 pnpm install
