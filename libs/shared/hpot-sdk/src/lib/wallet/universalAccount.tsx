@@ -172,7 +172,6 @@ export class UniversalAccount {
         chainId: wallet.currentChain.chainId,
         address: token.address,
       },
-      rpcUrl: wallet.currentChain.chain.rpcUrls.default.http[0],
     });
 
     const signature = await wallet.walletClient.request({

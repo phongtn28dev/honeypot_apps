@@ -76,7 +76,6 @@ export class Wallet {
   }
 
   async initWallet(walletClient?: WalletClient) {
-    console.log('initWallet');
     this.networks = networks;
     this.currentChainId = walletClient?.chain?.id || DEFAULT_CHAIN_ID;
     const mockAccount = localStorage.getItem('mockAccount');
