@@ -7,5 +7,6 @@
     "env": {
       "COREPACK_ENABLE_STRICT": "0"
     }
-  }
+  },
+  "installCommand": "pnpm run vercel-install"
 }
