@@ -18,12 +18,11 @@
       "@GDdark/universal-account": [
         "./node_modules/@GDdark/universal-account/dist/index.d.ts"
       ],
-      "@honeypot/share": ["libs/shared/hpot-sdk/src/index.ts"],
       "@honeypot/shared": ["libs/shared/hpot-sdk/src/index.ts"],
-      "@honeypot/shared/*": ["libs/shared/hpot-sdk/src/*"],
       "@honeypot/shared/server/callers": [
         "libs/shared/hpot-sdk/src/server/callers/index.ts"
-      ]
+      ],
+      "@honeypot/shared/*": ["libs/shared/hpot-sdk/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

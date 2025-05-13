@@ -8,13 +8,11 @@
     "w": "nx dev wasabee --port 9002",
     "wb": "nx build wasabee",
     "wasabee": "nx dev wasabee --port 9002",
-    "bgt-market": "nx dev bgt-market --port 9003",
-    "build": "./.vercel-build.sh",
-    "vercel-install": "./vercel-install.sh"
+    "bgt-market": "nx dev bgt-market --port 9003"
   },
   "private": true,
   "dependencies": {
-    "@GDdark/universal-account": "^1.0.12",
+    "@GDdark/universal-account": "1.0.11",
     "@apollo/client": "^3.13.6",
     "@cryptoalgebra/sdk": "npm:@hongming-wang/algebra-sdk@^1.5.0",
     "@dynamic-labs/sdk-react-core": "^4.8.2",
@@ -124,7 +122,7 @@
     "postgres": "^3.4.5",
     "radix-ui": "^1.1.3",
     "react": "^18.3.1",
-    "react-apexcharts": "1.7.0",
+    "react-apexcharts": "^1.7.0",
     "react-confetti": "^6.4.0",
     "react-copy-to-clipboard": "^5.1.0",
     "react-countdown": "^2.3.6",
@@ -232,6 +230,5 @@
     "tslib": "^2.8.1",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.0"
-  },
-  "packageManager": "pnpm@9.15.9+sha512.68046141893c66fad01c079231128e9afb89ef87e2691d69e4d40eee228988295fd4682181bae55b58418c3a253bde65a505ec7c5f9403ece5cc3cd37dcf2531"
+  }
 }

@@ -15,19 +15,20 @@ const baseConfig = {
   },
   reactStrictMode: true,
   output: 'standalone',
+  productionBrowserSourceMaps: true,
   experimental: {
     optimizeCss: true,
     swcMinify: true,
   },
   webpack: (config, { isServer }) => {
+    config.devtool = 'source-map';
     config.resolve.alias = {
       ...config.resolve.alias,
       '@honeypot/shared': path.resolve(__dirname, 'libs/shared/hpot-sdk/src'),
     };
     config.resolve.modules = [
-      path.resolve(__dirname, 'libs/shared/hpot-sdk/src'), // 👈 prioritize shared library
-      path.resolve(__dirname, 'node_modules'),
-      'node_modules',
+      path.resolve(__dirname, 'node_modules'), // 👈 prioritize root
+      'node_modules', // fallback to local
     ];
 
     // Optimize memory usage
@@ -54,6 +55,20 @@ const baseConfig = {
         },
       },
       minimize: true,
+      minimizer: [
+        /** @param {import('webpack').Compiler} compiler */
+        (compiler) => {
+          const TerserPlugin = require('terser-webpack-plugin');
+          new TerserPlugin({
+            parallel: true,
+            terserOptions: {
+              compress: {
+                drop_console: true,
+              },
+            },
+          }).apply(compiler);
+        },
+      ],
     };
 
     return config;
