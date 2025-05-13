@@ -57,7 +57,7 @@ out
 .env.test.local
 
 
-.npmrc
+# .npmrc
 
 apps/*/.vercel/*
 .vercel
