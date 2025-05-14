@@ -8,11 +8,11 @@ import {
 } from '@rainbow-me/rainbowkit/wallets';
 import { injected, safe } from 'wagmi/connectors';
 import { cookieStorage, createStorage, Config } from 'wagmi';
-import { networks } from '../../lib/chains';
+import { networks } from '@honeypot/shared/lib/chains';
 
 const pId = '23b1ff4e22147bdf7cab13c0ee4bed90';
 
-let customWallets = () => [
+let customWallets = [
   metaMaskWallet,
   rainbowWallet,
   walletConnectWallet,
@@ -28,22 +28,23 @@ let customWallets = () => [
 
 // Create Capsule wallet connector
 
-const connectors = () => [
-  safe(),
-  injected(),
-  ...connectorsForWallets(
-    [
-      {
-        groupName: 'Recommended',
-        wallets: customWallets(),
-      },
-    ],
-    {
-      appName: 'honeypot-finance',
-      projectId: pId,
-    }
-  ),
-];
+// REMOVE the 'connectors' variable definition as it's not used by getDefaultConfig directly
+// const connectors = [
+//   safe(),
+//   injected(),
+//   ...connectorsForWallets(
+//     [
+//       {
+//         groupName: 'Recommended',
+//         wallets: customWallets,
+//       },
+//     ],
+//     {
+//       appName: 'honeypot-finance',
+//       projectId: pId,
+//     }
+//   ),
+// ];
 
 // if (process.env.NODE_ENV === "development") {
 //   connectors.push(
@@ -53,16 +54,13 @@ const connectors = () => [
 //   );
 // }
 
-export const createWagmiConfig = (overrideConfig?: Partial<Config>) =>
-  getDefaultConfig({
-    connectors: connectors(),
-    appName: 'honeypot-finance',
-    projectId: pId,
-    // @ts-ignore
-    chains: networks.map((network) => network.chain),
-    ssr: true, // If your dApp uses server side rendering (SSR
-    storage: createStorage({
-      storage: cookieStorage,
-    }),
-    ...overrideConfig,
-  });
+export const createWagmiConfig = getDefaultConfig({
+  appName: 'honeypot-finance',
+  projectId: pId,
+  // @ts-ignore
+  chains: networks.map((network) => network.chain),
+  ssr: true, // If your dApp uses server side rendering (SSR
+  storage: createStorage({
+    storage: cookieStorage,
+  }),
+});
