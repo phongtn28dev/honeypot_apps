@@ -160,7 +160,7 @@
     "tween-functions": "^1.2.0",
     "use-sync-external-store": "^1.4.0",
     "vaul": "^1.1.2",
-    "viem": "^2.23.6",
+    "viem": "^2.18.0",
     "wagmi": "^2.14.12",
     "web3": "^4.16.0",
     "zod": "^3.24.2",
