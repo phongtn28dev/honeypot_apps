@@ -2,11 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "es2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -20,47 +16,21 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "~/*": [
-        "./*"
-      ],
-      "~/static/*": [
-        "./public/*"
-      ],
-      "@/components/*": [
-        "./components/*"
-      ],
-      "@/styles/*": [
-        "./styles/*"
-      ],
-      "@/lib/*": [
-        "./lib/*"
-      ],
-      "@/hooks/*": [
-        "./hooks/*"
-      ],
-      "@/utils/*": [
-        "./lib/utils/*"
-      ],
-      "@/ui/*": [
-        "./components/ui/*"
-      ],
-      "@/public/*": [
-        "./public/*"
-      ],
-      "@/public/images/*": [
-        "./public/images/*"
-      ],
-      "@honeypot/shared": [
-        "../../libs/shared/hpot-sdk/src/index.ts"
-      ],
-      "@honeypot/shared/*": [
-        "../../libs/shared/hpot-sdk/src/*"
-      ],
-      "@GDdark/universal-account": [
-        "./../../node_modules/@GDdark/universal-account/dist/index.d.ts"
+      "@/*": ["./*"],
+      "~/*": ["./*"],
+      "~/static/*": ["./public/*"],
+      "@/components/*": ["./components/*"],
+      "@/styles/*": ["./styles/*"],
+      "@/lib/*": ["./lib/*"],
+      "@/hooks/*": ["./hooks/*"],
+      "@/utils/*": ["./lib/utils/*"],
+      "@/ui/*": ["./components/ui/*"],
+      "@/public/*": ["./public/*"],
+      "@/public/images/*": ["./public/images/*"],
+      "@honeypot/shared": ["../../libs/shared/hpot-sdk/src/index.ts"],
+      "@honeypot/shared/*": ["../../libs/shared/hpot-sdk/src/*"],
+      "@particle-network/universal-account-sdk": [
+        "./../../node_modules/@particle-network/universal-account-sdk/dist/index.d.ts"
       ]
     },
     "plugins": [
@@ -77,10 +47,5 @@
     "../../libs/shared/hpot-sdk/src/services/chart.ts",
     "../../apps/wasabee/.next/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "jest.config.ts",
-    "**/*.spec.ts",
-    "**/*.test.ts"
-  ]
+  "exclude": ["node_modules", "jest.config.ts", "**/*.spec.ts", "**/*.test.ts"]
 }

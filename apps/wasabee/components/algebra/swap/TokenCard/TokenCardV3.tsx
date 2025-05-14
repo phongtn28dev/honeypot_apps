@@ -12,7 +12,7 @@ import { wallet } from '@honeypot/shared';
 import { Token } from '@honeypot/shared';
 import { Slider } from '@nextui-org/react';
 import { debounce } from 'lodash';
-import NativeCurrency from '@cryptoalgebra/sdk/dist/entities/NativeCurrency';
+
 import {
   ItemSelect,
   SelectState,

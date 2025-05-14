@@ -3,10 +3,10 @@ import {
   ITransaction,
   SUPPORTED_TOKEN_TYPE,
   SUPPORTED_PRIMARY_TOKENS,
-} from '@GDdark/universal-account';
-import { ISmartAccountOptions } from '@GDdark/universal-account';
+} from '@particle-network/universal-account-sdk';
+import { ISmartAccountOptions } from '@particle-network/universal-account-sdk';
 import { makeAutoObservable, runInAction } from 'mobx';
-import { UniversalAccount as PartialUniversalAccount } from '@GDdark/universal-account';
+import { UniversalAccount as PartialUniversalAccount } from '@particle-network/universal-account-sdk';
 import { universalAccountProjectId } from '../../config/particleUniversalAccount';
 import { Address, parseEther, SignableMessage, zeroAddress } from 'viem';
 import { wallet } from './wallet';
@@ -15,7 +15,6 @@ import { WrappedToastify } from '../utils';
 import { ExternalLinkIcon } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { BigNumber } from 'bignumber.js';
-import { toBeHex } from 'ethers';
 
 export class UniversalAccount {
   ownerAddress: string;
@@ -172,7 +171,6 @@ export class UniversalAccount {
         chainId: wallet.currentChain.chainId,
         address: token.address,
       },
-      rpcUrl: wallet.currentChain.chain.rpcUrls.default.http[0],
     });
 
     const signature = await wallet.walletClient.request({

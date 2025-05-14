@@ -47,7 +47,7 @@ export const TokenSelector = observer(
     staticTokenList,
     disableTools,
     disableSearch,
-    showBalance,
+    showBalance = true,
   }: TokenSelectorProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const state = useLocalObservable(() => ({
@@ -161,7 +161,7 @@ export const TokenSelector = observer(
                   token={value}
                 ></TokenLogo>
               )}
-              <TruncateText className="shrink h-4">
+              <TruncateText className="shrink h-5">
                 {value?.displayName ? value.displayName : 'Select Token'}
               </TruncateText>
               {!disableSelection && (
@@ -218,9 +218,7 @@ export const TokenSelector = observer(
                                       {token.symbol}
                                     </div>
                                   </div>
-                                  {showBalance && (
-                                    <div>{token.balanceFormatted}</div>
-                                  )}
+                                  <div>{token.balanceFormatted}</div>
                                 </div>
                               );
                             })
@@ -292,12 +290,14 @@ export const TokenSelector = observer(
                                         </div>
                                       </div>
                                     </div>
-                                    <div>
-                                      {DynamicFormatAmount({
-                                        amount: token.balance.toString(),
-                                        decimals: 5,
-                                      })}
-                                    </div>
+                                    {showBalance && (
+                                      <div>
+                                        {DynamicFormatAmount({
+                                          amount: token.balance.toString(),
+                                          decimals: 5,
+                                        })}
+                                      </div>
+                                    )}
                                   </div>
                                 );
                               })
