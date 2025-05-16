@@ -10,11 +10,6 @@
     "wasabee": "nx dev wasabee --port 9002",
     "bgt-market": "nx dev bgt-market --port 9003"
   },
-  "pnpm": {
-    "overrides": {
-      "viem": "2.29.2"
-    }
-  },
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.13.6",
