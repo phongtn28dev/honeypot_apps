@@ -1,8 +1,16 @@
 //@ts-check
 
 const { composePlugins, withNx } = require('@nx/next');
+const { withSentryConfig } = require('@sentry/nextjs');
 const path = require('path');
 const isProd = process.env.NODE_ENV === 'production';
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: !isProd,
+});
+const withSentry = require('@sentry/nextjs').withSentryConfig({
+  org: 'honeypot',
+  silent: true,
+});
 
 /**
  * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
@@ -11,6 +19,7 @@ const baseConfig = {
   nx: {
     // Set this to true if you would like to use SVGR
     // See: https://github.com/gregberge/svgr
+
     svgr: false,
   },
   reactStrictMode: true,
@@ -18,58 +27,39 @@ const baseConfig = {
   productionBrowserSourceMaps: true,
   experimental: {
     optimizeCss: true,
-    swcMinify: true,
   },
   webpack: (config, { isServer }) => {
     config.devtool = 'source-map';
     config.resolve.alias = {
       ...config.resolve.alias,
       '@honeypot/shared': path.resolve(__dirname, 'libs/shared/hpot-sdk/src'),
+      '@react-native-async-storage/async-storage': false,
+      viem: path.resolve(__dirname, 'node_modules/viem'), // monorepo root  // 👇 forcibly redirect any deep WalletConnect references to root viem
+      '@walletconnect/logger/node_modules/viem': path.resolve(
+        __dirname,
+        'node_modules/viem'
+      ),
+      '@walletconnect/core/node_modules/viem': path.resolve(
+        __dirname,
+        'node_modules/viem'
+      ),
+      '@walletconnect/sign-client/node_modules/viem': path.resolve(
+        __dirname,
+        'node_modules/viem'
+      ),
+      '@walletconnect/universal-provider/node_modules/viem': path.resolve(
+        __dirname,
+        'node_modules/viem'
+      ),
+      '@safe-global/safe-apps-sdk/node_modules/viem': path.resolve(
+        __dirname,
+        'node_modules/viem'
+      ),
     };
     config.resolve.modules = [
       path.resolve(__dirname, 'node_modules'), // 👈 prioritize root
       'node_modules', // fallback to local
     ];
-
-    // Optimize memory usage
-    config.optimization = {
-      ...config.optimization,
-      splitChunks: {
-        chunks: 'all',
-        minSize: 20000,
-        maxSize: 244000,
-        cacheGroups: {
-          default: false,
-          vendors: false,
-          commons: {
-            name: 'commons',
-            chunks: 'all',
-            minChunks: 2,
-          },
-          vendor: {
-            name: 'vendor',
-            test: /[\\/]node_modules[\\/]/,
-            chunks: 'all',
-            priority: 10,
-          },
-        },
-      },
-      minimize: true,
-      minimizer: [
-        /** @param {import('webpack').Compiler} compiler */
-        (compiler) => {
-          const TerserPlugin = require('terser-webpack-plugin');
-          new TerserPlugin({
-            parallel: true,
-            terserOptions: {
-              compress: {
-                drop_console: true,
-              },
-            },
-          }).apply(compiler);
-        },
-      ],
-    };
 
     return config;
   },
@@ -114,23 +104,47 @@ const baseConfig = {
       },
     ];
   },
-  ...(isProd && {
-    transpilePackages: [
-      'styled-components',
-      'viem',
-      '@safe-global/safe-apps-sdk',
-      '@safe-global/safe-apps-react-sdk',
-      'framer-motion',
-      '@rainbow-me/rainbowkit',
-      'react-toastify',
-    ],
-  }),
+  transpilePackages: ['styled-components', 'framer-motion', 'react-toastify'],
 };
 
 const plugins = [
   // Add more Next.js plugins to this list if needed.
+  withBundleAnalyzer,
   withNx,
 ];
 
 module.exports = (customConfig = {}) =>
-  withNx({ ...baseConfig, ...customConfig });
+  withSentryConfig(
+    composePlugins(...plugins)({ ...baseConfig, ...customConfig }),
+    {
+      // For all available options, see:
+      // https://www.npmjs.com/package/@sentry/webpack-plugin#options
+
+      org: 'hongming-wang',
+      project: 'hpot',
+
+      // Only print logs for uploading source maps in CI
+      silent: !process.env.CI,
+
+      // For all available options, see:
+      // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+
+      // Upload a larger set of source maps for prettier stack traces (increases build time)
+      widenClientFileUpload: true,
+
+      // Uncomment to route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
+      // This can increase your server load as well as your hosting bill.
+      // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
+      // side errors will fail.
+      // tunnelRoute: "/monitoring",
+
+      // Automatically tree-shake Sentry logger statements to reduce bundle size
+      disableLogger: true,
+
+      // Enables automatic instrumentation of Vercel Cron Monitors. (Does not yet work with App Router route handlers.)
+      // See the following for more information:
+      // https://docs.sentry.io/product/crons/
+      // https://vercel.com/docs/cron-jobs
+      automaticVercelMonitors: true,
+    }
+  );

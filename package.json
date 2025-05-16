@@ -10,6 +10,11 @@
     "wasabee": "nx dev wasabee --port 9002",
     "bgt-market": "nx dev bgt-market --port 9003"
   },
+  "pnpm": {
+    "overrides": {
+      "viem": "2.29.2"
+    }
+  },
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.13.6",
@@ -48,7 +53,7 @@
     "@react-stately/data": "^3.12.1",
     "@safe-global/safe-apps-react-sdk": "^4.7.2",
     "@safe-global/safe-apps-sdk": "^9.1.0",
-    "@sentry/nextjs": "^9.5.0",
+    "@sentry/nextjs": "^9.19.0",
     "@tanstack/query-core": "^5.74.4",
     "@tanstack/query-sync-storage-persister": "^5.67.3",
     "@tanstack/react-query": "^5.67.1",
@@ -173,6 +178,7 @@
     "@eslint/eslintrc": "^2.1.4",
     "@eslint/js": "^9.21.0",
     "@locator/babel-jsx": "^0.4.4",
+    "@next/bundle-analyzer": "^15.3.2",
     "@nrwl/next": "^19.8.4",
     "@nx/eslint": "20.4.6",
     "@nx/eslint-plugin": "20.4.6",
@@ -231,7 +237,8 @@
     "ts-node": "10.9.1",
     "tslib": "^2.8.1",
     "typescript": "^5.8.2",
-    "typescript-eslint": "^8.26.0"
+    "typescript-eslint": "^8.26.0",
+    "webpack-bundle-analyzer": "^4.10.2"
   },
   "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39"
 }

@@ -67,3 +67,5 @@ apps/*/.vercel/*
 *pnpm-lock.yaml
 *yarn.lock
 *package-lock.json
+# Sentry Config File
+.env.sentry-build-plugin
