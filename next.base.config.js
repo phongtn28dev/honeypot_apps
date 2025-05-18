@@ -4,14 +4,11 @@ const { composePlugins, withNx } = require('@nx/next');
 const { withSentryConfig } = require('@sentry/nextjs');
 const path = require('path');
 const isProd = process.env.NODE_ENV === 'production';
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: !isProd,
-});
-const withSentry = require('@sentry/nextjs').withSentryConfig({
-  org: 'honeypot',
-  silent: true,
-});
 
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  // enabled: !isProd,
+  enabled: false,
+});
 /**
  * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
  **/
@@ -30,31 +27,10 @@ const baseConfig = {
   },
   webpack: (config, { isServer }) => {
     config.devtool = 'source-map';
+    config.resolve.symlinks = false;
     config.resolve.alias = {
       ...config.resolve.alias,
       '@honeypot/shared': path.resolve(__dirname, 'libs/shared/hpot-sdk/src'),
-      '@react-native-async-storage/async-storage': false,
-      viem: path.resolve(__dirname, 'node_modules/viem'), // monorepo root  // 👇 forcibly redirect any deep WalletConnect references to root viem
-      '@walletconnect/logger/node_modules/viem': path.resolve(
-        __dirname,
-        'node_modules/viem'
-      ),
-      '@walletconnect/core/node_modules/viem': path.resolve(
-        __dirname,
-        'node_modules/viem'
-      ),
-      '@walletconnect/sign-client/node_modules/viem': path.resolve(
-        __dirname,
-        'node_modules/viem'
-      ),
-      '@walletconnect/universal-provider/node_modules/viem': path.resolve(
-        __dirname,
-        'node_modules/viem'
-      ),
-      '@safe-global/safe-apps-sdk/node_modules/viem': path.resolve(
-        __dirname,
-        'node_modules/viem'
-      ),
     };
     config.resolve.modules = [
       path.resolve(__dirname, 'node_modules'), // 👈 prioritize root
@@ -104,7 +80,12 @@ const baseConfig = {
       },
     ];
   },
-  transpilePackages: ['styled-components', 'framer-motion', 'react-toastify'],
+  transpilePackages: [
+    'styled-components',
+    'framer-motion',
+    'react-toastify',
+    '@honeypot/shared',
+  ],
 };
 
 const plugins = [
@@ -113,38 +94,40 @@ const plugins = [
   withNx,
 ];
 
+const sentryConfig = {
+  // For all available options, see:
+  // https://www.npmjs.com/package/@sentry/webpack-plugin#options
+
+  org: 'hongming-wang',
+  project: 'hpot',
+
+  // Only print logs for uploading source maps in CI
+  silent: !process.env.CI,
+
+  // For all available options, see:
+  // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+
+  // Upload a larger set of source maps for prettier stack traces (increases build time)
+  widenClientFileUpload: true,
+
+  // Uncomment to route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
+  // This can increase your server load as well as your hosting bill.
+  // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
+  // side errors will fail.
+  // tunnelRoute: "/monitoring",
+
+  // Automatically tree-shake Sentry logger statements to reduce bundle size
+  disableLogger: true,
+
+  // Enables automatic instrumentation of Vercel Cron Monitors. (Does not yet work with App Router route handlers.)
+  // See the following for more information:
+  // https://docs.sentry.io/product/crons/
+  // https://vercel.com/docs/cron-jobs
+  automaticVercelMonitors: true,
+};
+
 module.exports = (customConfig = {}) =>
   withSentryConfig(
     composePlugins(...plugins)({ ...baseConfig, ...customConfig }),
-    {
-      // For all available options, see:
-      // https://www.npmjs.com/package/@sentry/webpack-plugin#options
-
-      org: 'hongming-wang',
-      project: 'hpot',
-
-      // Only print logs for uploading source maps in CI
-      silent: !process.env.CI,
-
-      // For all available options, see:
-      // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
-
-      // Upload a larger set of source maps for prettier stack traces (increases build time)
-      widenClientFileUpload: true,
-
-      // Uncomment to route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
-      // This can increase your server load as well as your hosting bill.
-      // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
-      // side errors will fail.
-      // tunnelRoute: "/monitoring",
-
-      // Automatically tree-shake Sentry logger statements to reduce bundle size
-      disableLogger: true,
-
-      // Enables automatic instrumentation of Vercel Cron Monitors. (Does not yet work with App Router route handlers.)
-      // See the following for more information:
-      // https://docs.sentry.io/product/crons/
-      // https://vercel.com/docs/cron-jobs
-      automaticVercelMonitors: true,
-    }
+    sentryConfig
   );
