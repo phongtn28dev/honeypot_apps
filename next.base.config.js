@@ -124,6 +124,19 @@ const sentryConfig = {
   // https://docs.sentry.io/product/crons/
   // https://vercel.com/docs/cron-jobs
   automaticVercelMonitors: true,
+  /**
+   * Automatically instrument Next.js data fetching methods and Next.js API routes with error and performance monitoring.
+   * Defaults to `true`.
+   */
+  autoInstrumentServerFunctions: false,
+  /**
+   * Automatically instrument Next.js middleware with error and performance monitoring. Defaults to `true`.
+   */
+  autoInstrumentMiddleware: false,
+  /**
+   * Automatically instrument components in the `app` directory with error monitoring. Defaults to `true`.
+   */
+  autoInstrumentAppDirectory: false,
 };
 
 module.exports = (customConfig = {}) =>
