@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { cn } from '@/lib/tailwindcss';
 import { trpcClient } from '@/lib/trpc';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { Button } from '@nextui-org/react';
 import { PeddingSvg } from '@/components/svg/Pedding';
 import { PoweredByAlphaKek } from '@/components/algebra/common/PoweredByAlgebra';

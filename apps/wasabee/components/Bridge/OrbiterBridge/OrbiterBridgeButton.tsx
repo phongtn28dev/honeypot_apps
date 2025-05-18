@@ -1,7 +1,7 @@
 import { Button } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { orbiterBridgeService } from '@/services/orbiterBridge';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 export const OrbiterBridgeButton = observer(() => {
   if (!wallet.isInit) {

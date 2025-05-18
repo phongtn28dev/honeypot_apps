@@ -15,7 +15,7 @@ import {
   useSubgraphClient,
 } from '@honeypot/shared';
 import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { ApolloClient } from '@apollo/client';
 
 const EVENT_REWARD_EACH_POOL = 400; //BERA

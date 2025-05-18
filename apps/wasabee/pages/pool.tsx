@@ -1,6 +1,6 @@
 import CreatePoolForm from '@/components/algebra/create-pool/CreatePoolForm';
 import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { Tab, Tabs } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';

@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { NextLayoutPage } from '@/types/nextjs';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import Image from 'next/image';
 import { chart } from '@/services/chart';
 import Action from './components/Action';

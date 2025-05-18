@@ -7,7 +7,7 @@ import { computePoolAddress, Currency } from '@cryptoalgebra/sdk';
 
 import { ICHIVaultContract } from '@honeypot/shared';
 import { Button } from '@/components/button';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { TokenSelector } from '@honeypot/shared';
 import { PoolState, usePool } from '@/lib/algebra/hooks/pools/usePool';
 import { Address } from 'viem';

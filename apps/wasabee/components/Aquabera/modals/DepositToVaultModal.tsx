@@ -7,7 +7,7 @@ import { ICHIVaultContract } from '@honeypot/shared';
 import { Token } from '@honeypot/shared';
 import { Address, maxInt256 } from 'viem';
 import TokenCardV3 from '@/components/algebra/swap/TokenCard/TokenCardV3';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { Currency, tryParseAmount } from '@cryptoalgebra/sdk';
 import { useBalance } from 'wagmi';
 import {

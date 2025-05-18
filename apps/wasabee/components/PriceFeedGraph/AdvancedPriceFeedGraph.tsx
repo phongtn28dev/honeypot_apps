@@ -15,7 +15,7 @@ import { pairToTicker, tokenToTicker } from '@/lib/advancedChart.util';
 
 import { chart } from '@honeypot/shared/services';
 import { observer } from 'mobx-react-lite';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 const TVChartContainer = dynamic(
   () =>

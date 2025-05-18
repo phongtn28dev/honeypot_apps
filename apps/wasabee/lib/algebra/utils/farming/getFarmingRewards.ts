@@ -1,4 +1,4 @@
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { farmingCenterAbi, farmingCenterAddress } from '@/wagmi-generated';
 import { Address, getContract } from 'viem';
 

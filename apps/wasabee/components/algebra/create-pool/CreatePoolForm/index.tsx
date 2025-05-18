@@ -27,7 +27,7 @@ import { useSimulateAlgebraPositionManagerMulticall } from '@/wagmi-generated';
 import { useToastify } from '@/lib/hooks/useContractToastify';
 import { Input } from '@/components/algebra/ui/input';
 import HoneyContainer from '@/components/CardContianer/HoneyContainer';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { useObserver } from 'mobx-react-lite';
 
 const FEE_TIERS = [

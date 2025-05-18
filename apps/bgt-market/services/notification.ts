@@ -1,7 +1,7 @@
 import { canClaimPot2Pump } from '@/lib/algebra/graphql/clients/pot2pump';
 import { canRefundPot2Pump } from '@/lib/algebra/graphql/clients/pot2pump';
 import { makeAutoObservable } from 'mobx';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 class NotificationService {
   isClaimableProject = false;

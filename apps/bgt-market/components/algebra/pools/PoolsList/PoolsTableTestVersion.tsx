@@ -17,7 +17,7 @@ import PoolCardList from './PoolCardList';
 import { SortingState } from '@tanstack/react-table';
 import { id } from 'ethers/lib/utils';
 import { useUserPools } from '@/lib/algebra/graphql/clients/pool';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import BigNumber from 'bignumber.js';
 import { observer } from 'mobx-react-lite';
 const mappingSortKeys: Record<any, Pool_OrderBy> = {

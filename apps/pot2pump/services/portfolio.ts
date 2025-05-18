@@ -1,7 +1,7 @@
 import { makeAutoObservable, reaction } from 'mobx';
 
 import { Token } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import BigNumber from 'bignumber.js';
 import { AsyncState } from '@honeypot/shared';
 import { getMultipleTokensData } from '@/lib/algebra/graphql/clients/token';

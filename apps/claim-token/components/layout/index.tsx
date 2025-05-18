@@ -6,7 +6,7 @@ import { cn } from '@nextui-org/theme';
 import ConfettiComponent from '@honeypot/shared/components/effects/Confetti/Confetti';
 import { Footer } from './footer';
 import _ from 'lodash';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 export const Layout = ({
   children,

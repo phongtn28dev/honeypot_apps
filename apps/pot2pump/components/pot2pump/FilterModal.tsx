@@ -18,7 +18,7 @@ import { useState, useEffect } from 'react';
 import FilterTokenItem from './components/FilterTokenItem';
 
 import { Token } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 interface FilterProps {
   filters: FilterState;

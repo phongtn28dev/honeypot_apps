@@ -15,7 +15,7 @@ import { defaultFilterState } from '@/constants/pot2pump';
 import HoneyContainer from '@/components/CardContianer/HoneyContainer';
 import { hasValue } from '@/lib/utils';
 import { PAGE_LIMIT } from '@/services/launchpad';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 const MemeLaunchPage: NextLayoutPage = observer(() => {
   const [pumpingProjects, setPumpingProjects] =

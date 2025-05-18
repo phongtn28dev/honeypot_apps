@@ -4,7 +4,7 @@ import { Button } from '@/components/button/button-next';
 import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
 import { LaunchDetailSwapCard } from '@/components/SwapCard/MemeSwap';
 import PottingModal from '@/components/atoms/Pot2PumpComponents/PottingModal';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 import { SwapField } from '@/types/algebra/types/swap-field';
 import { useDerivedSwapInfo } from '@/lib/algebra/state/swapStore';

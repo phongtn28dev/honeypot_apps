@@ -11,7 +11,7 @@ import {
   fetchPot2PumpList,
   subgraphPageRequest,
 } from '@/lib/algebra/graphql/clients/pair';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 export class Pot2PumpService {
   DEFAULT_FILTERS: {

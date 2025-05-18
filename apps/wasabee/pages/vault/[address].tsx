@@ -6,7 +6,7 @@ import { Address, isAddress, zeroAddress } from 'viem';
 import { Button } from '@/components/algebra/ui/button';
 import { TokenLogo } from '@honeypot/shared';
 import { DepositToVaultModal } from '@/components/Aquabera/modals/DepositToVaultModal';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
 import { WithdrawFromVaultModal } from '@/components/Aquabera/modals/WithdrawFromVaultModal';
 import { getSingleVaultDetails } from '@honeypot/shared';

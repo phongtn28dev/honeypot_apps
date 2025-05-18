@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Address, formatEther } from 'viem';
 import { LoadingDisplay } from '../LoadingDisplay/LoadingDisplay';
 import Button from '../button/v3';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { ADDRESS_ZERO } from '@cryptoalgebra/sdk';
 import { truncate } from '@/lib/format';
 import { Tooltip } from '@nextui-org/react';

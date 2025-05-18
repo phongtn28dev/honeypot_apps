@@ -15,7 +15,7 @@ import { Token } from '@honeypot/shared';
 import { BiLink, BiWallet } from 'react-icons/bi';
 import { popmodal } from '@/services/popmodal';
 import { WrappedToastify } from '@/lib/wrappedToastify';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 type optionItem = {
   icon: JSX.Element;

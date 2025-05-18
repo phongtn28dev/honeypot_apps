@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { NativeFaucetContract } from './contract/faucet-contract';
 
 class fauset {

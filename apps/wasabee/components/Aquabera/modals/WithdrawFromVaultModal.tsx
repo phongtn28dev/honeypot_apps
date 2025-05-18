@@ -4,7 +4,7 @@ import { Button } from '@/components/button/button-next';
 import { useCallback, useState } from 'react';
 
 import { ICHIVaultContract } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { ContractWrite } from '@honeypot/shared';
 import { Slider } from '@nextui-org/slider';
 import BigNumber from 'bignumber.js';

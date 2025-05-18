@@ -1,5 +1,5 @@
 import { BaseContract } from './..';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { makeAutoObservable } from 'mobx';
 import { Address, getContract, parseEther, zeroAddress } from 'viem';
 import { ICHIVaultFactoryABI } from '@/lib/abis/aquabera/ICHIVaultFactory';

@@ -25,7 +25,7 @@ import { HoneyContainer } from '@/components/CardContianer/HoneyContainer';
 import { popmodal } from '@/services/popmodal';
 import { Pool } from './poolsColumns';
 import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { useObserver } from 'mobx-react-lite';
 
 interface PoolsTableProps<TData, TValue> {

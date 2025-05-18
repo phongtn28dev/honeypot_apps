@@ -2,7 +2,7 @@ import { Address } from 'viem';
 import { Currency, ExtendedNative, Token } from '@cryptoalgebra/sdk';
 import { ADDRESS_ZERO } from '@cryptoalgebra/sdk';
 import { useAlgebraToken } from './useAlgebraToken';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { useObserver } from 'mobx-react-lite';
 
 export function useCurrency(

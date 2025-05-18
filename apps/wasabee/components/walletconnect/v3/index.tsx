@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { formatNumberWithUnit } from '@/lib/utils';
 import { mock } from 'wagmi/connectors';
 import { useObserver } from 'mobx-react-lite';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 const ConnectButtonCustom = (props: ButtonHTMLAttributes<any>) => {
   return (

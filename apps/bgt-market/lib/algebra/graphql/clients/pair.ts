@@ -28,7 +28,7 @@ import {
 } from '../generated/graphql';
 import { filter } from 'lodash';
 import { calculateToken24hPriceChange } from '../utils/calculateToken24hChange';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { gql } from '@apollo/client';
 
 type SubgraphToken = {

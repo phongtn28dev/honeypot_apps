@@ -1,5 +1,5 @@
 import { makeAutoObservable, reaction, autorun } from 'mobx';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 import { Token } from '@honeypot/shared';
 import { SwapFieldType } from '@/types/algebra/types/swap-field';

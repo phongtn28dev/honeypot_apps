@@ -25,7 +25,7 @@ import { chart } from '@honeypot/shared/services';
 
 import { Token } from '@honeypot/shared';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { AlgebraPoolContract } from '@/services/contract/algebra/algebra-pool-contract';
 import { Address } from 'viem';
 import TokenCardV3Independent from '../TokenCard/TokenCardVIndependent';

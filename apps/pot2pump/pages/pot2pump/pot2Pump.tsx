@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { observer } from 'mobx-react-lite';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { useEffect, useState } from 'react';
 import { Tab, Tabs } from '@nextui-org/react';
 import { NextLayoutPage } from '@/types/nextjs';

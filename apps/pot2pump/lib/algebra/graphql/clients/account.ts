@@ -1,5 +1,5 @@
 import { getSubgraphClientByChainId } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import {
   AllAccountsQuery,
   SingleAccountDetailsDocument,

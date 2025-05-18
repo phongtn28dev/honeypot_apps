@@ -11,7 +11,7 @@ import {
   MultipleTokensDocument,
   Token,
 } from '../generated/graphql';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { getSubgraphClientByChainId } from '@honeypot/shared';
 
 let tokenRequestIds: string[] = [];

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { observer } from 'mobx-react-lite';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { Tab, Tabs } from '@nextui-org/react';
 import { NextLayoutPage } from '@/types/nextjs';
 import { useCallback, useEffect, useState } from 'react';

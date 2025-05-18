@@ -9,7 +9,7 @@ import { Address } from 'viem';
 import { useDepositsQuery } from '../../graphql/generated/graphql';
 import { useReadAlgebraPositionManagerBalanceOf } from '@/wagmi-generated';
 import { useObserver } from 'mobx-react-lite';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { useSubgraphClient } from '@honeypot/shared';
 
 export interface PositionFromTokenId {

@@ -1,5 +1,5 @@
 import { stargateBridgeService } from '@/services/stargateBridge';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { useEffect, useState } from 'react';
 import { TokenSelector } from '@honeypot/shared';
 

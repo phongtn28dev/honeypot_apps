@@ -8,7 +8,7 @@ import { Address } from 'viem';
 import { farmingCenterABI } from '@/lib/abis/algebra-contracts/ABIs';
 import { Deposit } from '../../graphql/generated/graphql';
 import { TransactionType } from '../../state/pendingTransactionsStore';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { useSubgraphClient } from '@honeypot/shared';
 
 export function useFarmStake({

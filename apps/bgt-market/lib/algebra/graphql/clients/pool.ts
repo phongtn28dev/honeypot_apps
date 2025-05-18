@@ -18,7 +18,7 @@ import { algebraPositionManagerAddress } from '@/wagmi-generated';
 import { algebraPositionManagerAbi } from '@/wagmi-generated';
 import { useEffect, useState } from 'react';
 import { MAX_UINT128 } from '@/config/algebra/max-uint128';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { getSubgraphClientByChainId } from '@honeypot/shared';
 import { CurrencyAmount, Token as AlgebranToken } from '@cryptoalgebra/sdk';
 import { unwrappedToken } from '@cryptoalgebra/sdk';

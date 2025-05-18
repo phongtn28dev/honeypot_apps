@@ -1,5 +1,5 @@
 import { truncate } from '@/lib/format';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { observer } from 'mobx-react-lite';
 import Link from 'next/link';
 import CardContainer from '@/components/CardContianer/v3';

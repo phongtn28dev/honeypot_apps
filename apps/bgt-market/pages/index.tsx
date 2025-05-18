@@ -15,7 +15,7 @@ import {
 } from '../components/BGT-Vault/new-order';
 import { usePollingBlockNumber } from '@/lib/hooks/useBlockNumber';
 import { useEffect } from 'react';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 const HomePage: NextLayoutPage = observer(() => {
   const { block } = usePollingBlockNumber();

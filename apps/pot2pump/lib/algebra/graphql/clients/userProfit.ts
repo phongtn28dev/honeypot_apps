@@ -6,7 +6,7 @@ import {
   PoolHourData,
 } from '../generated/graphql';
 import { getSubgraphClientByChainId } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 export interface UserPoolProfit {
   account: string;

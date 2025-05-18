@@ -14,7 +14,7 @@ import Script from 'next/script';
 import { Footer } from './footer';
 import { chatService, presetQuestions, questionTitles } from '@/services/chat';
 import _ from 'lodash';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { useObserver } from 'mobx-react-lite';
 
 export const Layout = ({

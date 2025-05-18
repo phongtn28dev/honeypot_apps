@@ -4,7 +4,7 @@ import { CommentCard } from '../CommentCard/CommentCard';
 import CardContainer from '@/components/CardContianer/CardContianer';
 import Image from 'next/image';
 import { trpcClient } from '@/lib/trpc';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';
 import { useRouter } from 'next/router';

@@ -11,7 +11,7 @@ import {
   getParticipantDetail,
   subgraphPot2PumpToMemePair,
 } from '@/lib/algebra/graphql/clients/pot2pump';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { ICHIVaultContract } from '../../aquabera/ICHIVault-contract';
 import { BaseLaunchContract } from '../base-launch-contract';
 import { Pool } from '@/lib/algebra/graphql/generated/graphql';

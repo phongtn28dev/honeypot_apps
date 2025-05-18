@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { useEffect, useState, useMemo } from 'react';
 import {
   Link,

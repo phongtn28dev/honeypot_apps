@@ -14,7 +14,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { trpc, trpcQueryClient } from '../lib/trpc';
 import { useEffect, useState } from 'react';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { DM_Sans, Inter } from 'next/font/google';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { Analytics } from '@vercel/analytics/react';
@@ -26,9 +26,9 @@ import * as Sentry from '@sentry/nextjs';
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 import { deserialize, serialize } from 'wagmi';
 import { useSubgraphClient } from '@honeypot/shared';
-import { createWagmiConfig } from '@/config/wagmi';
+import { createWagmiConfig } from '@honeypot/shared/config/wagmi';
 
-const config = createWagmiConfig;
+const config = createWagmiConfig();
 
 // enableStaticRendering(true)
 const queryClient = new QueryClient({
@@ -92,7 +92,6 @@ export default function App({
 }) {
   const infoClient = useSubgraphClient('algebra_info');
   const ComponentLayout = Component.Layout || Layout;
-
   const persister = createSyncStoragePersister({
     serialize,
     storage: undefined,

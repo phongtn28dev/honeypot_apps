@@ -7,7 +7,7 @@ import { useSubgraphClient } from '@honeypot/shared';
 import { ICHIVaultContract } from '@honeypot/shared';
 
 import { Token } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import {
   useReadIchiVaultAllowToken0,
   useReadIchiVaultAllowToken1,

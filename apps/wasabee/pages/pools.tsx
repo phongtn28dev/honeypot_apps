@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { observer } from 'mobx-react-lite';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { Tab, Tabs } from '@nextui-org/react';
 import { NextLayoutPage } from '@/types/nextjs';
 import { useCallback, useEffect, useState } from 'react';

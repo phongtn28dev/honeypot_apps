@@ -13,7 +13,7 @@ import { TbChartArea, TbChartHistogram } from 'react-icons/tb';
 import Link from 'next/link';
 import Image from 'next/image';
 import codexIcon from '@/public/images/partners/codex_white.png';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import dynamic from 'next/dynamic';
 
 // 为 Window 对象添加 TradingView 相关的类型定义

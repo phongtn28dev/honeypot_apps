@@ -4,7 +4,7 @@ import { Address } from 'viem';
 import { Token } from '@cryptoalgebra/sdk';
 import { ExtendedNative } from '@cryptoalgebra/sdk';
 import { ADDRESS_ZERO } from '@cryptoalgebra/sdk';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { useObserver } from 'mobx-react-lite';
 
 export function useAlgebraToken(address: Address | undefined) {

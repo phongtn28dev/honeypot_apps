@@ -1,5 +1,5 @@
 import { MAX_UINT128 } from '@/config/algebra/max-uint128';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import {
   algebraPositionManagerAbi,
   algebraPositionManagerAddress,

@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { ToastOptions, toast } from 'react-toastify';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import TransactionPendingToastify from '@/components/CustomToastify/TransactionPendingToastify/TransactionPendingToastify';
 import { localforage } from '@/lib/storage';
 import { LRUCache } from 'lru-cache';

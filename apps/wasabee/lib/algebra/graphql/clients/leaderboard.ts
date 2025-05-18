@@ -3,7 +3,7 @@ import {
   getSubgraphClientByChainId,
   useSubgraphClient,
 } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 export const LEADERBOARD_QUERY = gql`
   query leaderboardStatus {

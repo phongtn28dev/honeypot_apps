@@ -1,5 +1,5 @@
 import { BaseContract } from '..';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { Signer, ethers } from 'ethers';
 import { Contract } from 'ethcall';
 import BigNumber from 'bignumber.js';

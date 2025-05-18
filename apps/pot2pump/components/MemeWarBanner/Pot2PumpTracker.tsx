@@ -7,7 +7,7 @@ import { LaunchDetailSwapCard } from '../SwapCard/MemeSwap';
 import { TokenLogo } from '@honeypot/shared';
 import { useEffect, useState } from 'react';
 import { fetchMemetrackerList, Pair } from '@/lib/algebra/graphql/clients/pair';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 import { Token } from '@honeypot/shared';
 import { trpcClient } from '@/lib/trpc';

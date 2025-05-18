@@ -1,6 +1,6 @@
 import { trpcClient } from '@/lib/trpc';
 import { useEffect, useState } from 'react';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 interface ProjectInfo {
   id?: number;

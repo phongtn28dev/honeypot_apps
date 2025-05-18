@@ -19,7 +19,7 @@ import { Tooltip, useDisclosure } from '@nextui-org/react';
 import { WrappedTooltip } from '@/components/wrappedNextUI/Tooltip/Tooltip';
 import { optionsPresets } from '@/components/OptionsDropdown/OptionsDropdown';
 import { LucideFileEdit } from 'lucide-react';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { toast } from 'react-toastify';
 
 interface ProjectTitleProps {

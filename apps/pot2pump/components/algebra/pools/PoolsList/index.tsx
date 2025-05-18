@@ -15,7 +15,7 @@ import {
 import PoolCardList from './PoolCardList';
 import { SortingState } from '@tanstack/react-table';
 import { useUserPools } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import BigNumber from 'bignumber.js';
 
 const mappingSortKeys: Record<any, Pool_OrderBy> = {

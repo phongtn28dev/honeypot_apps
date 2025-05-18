@@ -8,7 +8,7 @@ import { useContractReads } from 'wagmi';
 import { useAllRoutes } from './useAllRoutes';
 import { algebraQuoterV2ABI } from '@/lib/abis/algebra-contracts/ABIs';
 import { useObserver } from 'mobx-react-lite';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 export function useQuotesResults({
   exactInput,

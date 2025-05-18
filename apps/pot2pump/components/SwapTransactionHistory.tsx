@@ -10,7 +10,7 @@ import { SwapField } from '@/types/algebra/types/swap-field';
 import { useDerivedSwapInfo } from '@/lib/algebra/state/swapStore';
 import { zeroAddress } from 'viem';
 import { HoneyContainer } from '@/components/CardContianer';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 const SwapTransactionHistory = () => {
   const [transactions, setTransactions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

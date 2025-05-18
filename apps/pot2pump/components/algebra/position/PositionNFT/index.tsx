@@ -1,5 +1,5 @@
 import { ALGEBRA_POSITION_MANAGER } from '@/config/algebra/addresses';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { useReadAlgebraPositionManagerTokenUri } from '@/wagmi-generated';
 import { ExternalLinkIcon } from 'lucide-react';
 import { useEffect, useRef } from 'react';

@@ -3,7 +3,7 @@ import { TokenLogo } from '@honeypot/shared';
 import { useBitgetEvents } from '@/lib/algebra/graphql/clients/bitget_event';
 import { DynamicFormatAmount } from '@honeypot/shared/lib/utils';
 import { Token } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { Button } from '@/components/ui/button';
 import { observer } from 'mobx-react-lite';
 import Link from 'next/link';

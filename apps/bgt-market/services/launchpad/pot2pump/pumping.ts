@@ -1,4 +1,4 @@
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { PAGE_LIMIT, SubgraphProjectFilter } from '..';
 import { IndexerPaginationState } from '@honeypot/shared';
 import { fetchPot2PumpList } from '@/lib/algebra/graphql/clients/pair';

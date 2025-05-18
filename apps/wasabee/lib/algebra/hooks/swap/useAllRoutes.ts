@@ -12,7 +12,7 @@ import { useChainId } from 'wagmi';
 import { Address } from 'viem';
 import { useUserState } from '../../state/userStore';
 import { useObserver } from 'mobx-react-lite';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 /**
  * Returns true if poolA is equivalent to poolB

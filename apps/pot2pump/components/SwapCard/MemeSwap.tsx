@@ -4,7 +4,7 @@ import { Token, useSubgraphClient } from '@honeypot/shared';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { isEthAddress } from '@/lib/address';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { LoadingContainer } from '../LoadingDisplay/LoadingDisplay';
 import { SelectState } from '../ItemSelect/v3';
 import { cn } from '@nextui-org/react';

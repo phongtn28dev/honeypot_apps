@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Controller, set, useForm } from 'react-hook-form';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import launchpad from '@/services/launchpad';
 import { Button } from '@nextui-org/react';
 import { NextLayoutPage } from '@/types/nextjs';

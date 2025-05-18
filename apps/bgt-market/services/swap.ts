@@ -1,7 +1,7 @@
 import { Token } from '@honeypot/shared';
 import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';
 import BigNumber from 'bignumber.js';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { liquidity } from '@/services/liquidity';
 
 import { autorun, makeAutoObservable, reaction, when } from 'mobx';

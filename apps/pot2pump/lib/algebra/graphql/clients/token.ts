@@ -11,7 +11,7 @@ import {
   MultipleTokensDocument,
 } from '../generated/graphql';
 import { getSubgraphClientByChainId } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 export async function getTokenTop10Holders(tokenId: string) {
   const infoClient = getSubgraphClientByChainId(

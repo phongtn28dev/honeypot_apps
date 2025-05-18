@@ -12,7 +12,7 @@ import {
   Transaction,
 } from '../generated/graphql';
 import { getSubgraphClientByChainId } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 type ParticipantTransaction = {
   id: string;

@@ -3,7 +3,7 @@ import {
   optionsPresets,
 } from '@/components/OptionsDropdown/OptionsDropdown';
 import { trpcClient } from '@/lib/trpc';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { LucideFileEdit } from 'lucide-react';
 import { toast } from 'react-toastify';
 import SaleProgress from './SaleProgress';

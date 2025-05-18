@@ -11,7 +11,7 @@ import { getBaseUrl } from '@/lib/trpc';
 import { observable } from 'mobx';
 import { ParseTicker } from '@/lib/advancedChart.util';
 import { chart } from '@/services/chart';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 export const TVChartContainer = (
   props: Partial<ChartingLibraryWidgetOptions>

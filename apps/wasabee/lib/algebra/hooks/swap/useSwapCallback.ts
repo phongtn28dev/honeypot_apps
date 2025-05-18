@@ -12,7 +12,7 @@ import {
   algebraRouterAbi,
   useSimulateAlgebraRouterMulticall,
 } from '@/wagmi-generated';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { SwapField } from '@/types/algebra/types/swap-field';
 import { useSwapActionHandlers } from '../../state/swapStore';
 import { useObserver } from 'mobx-react-lite';

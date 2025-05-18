@@ -14,7 +14,7 @@ import {
 } from '@/lib/algebra/utils/swap/prices';
 import { AlgebraBasePluginContract } from '@/services/contract/algebra/algebra-base-plugin';
 import { AlgebraPoolContract } from '@/services/contract/algebra/algebra-pool-contract';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { SwapField } from '@/types/algebra/types/swap-field';
 import { TradeState } from '@/types/algebra/types/trade-state';
 import {

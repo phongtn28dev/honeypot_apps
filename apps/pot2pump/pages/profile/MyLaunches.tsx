@@ -1,7 +1,7 @@
 import { LaunchCardV3 } from '@/components/LaunchCard/v3';
 import launchpad from '@/services/launchpad';
 import { Pot2PumpService } from '@/services/launchpad/pot2pump';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { Button as NextButton } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { useState, useEffect } from 'react';

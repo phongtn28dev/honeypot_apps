@@ -1,6 +1,6 @@
 import { Tooltip } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { ethereumLogo } from '@honeypot/shared';
 import Image from 'next/image';
 import { Wallet } from 'lucide-react';

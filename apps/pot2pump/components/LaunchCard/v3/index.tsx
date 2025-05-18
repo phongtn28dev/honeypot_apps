@@ -9,7 +9,7 @@ import { itemPopUpVariants } from '@/lib/animation';
 import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
 import ProgressBar from '../../atoms/ProgressBar/ProgressBar';
 import BigNumber from 'bignumber.js';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import {
   LaunchProgress,
   FtoProjectActions,

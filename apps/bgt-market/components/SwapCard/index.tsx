@@ -10,7 +10,7 @@ import { SpinnerContainer } from '../Spinner';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { isEthAddress } from '@/lib/address';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { amountFormatted } from '../../lib/format';
 import { AmountFormat } from '../AmountFormat';
 import ChartData from '../svg/chartData';

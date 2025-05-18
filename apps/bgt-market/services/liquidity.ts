@@ -1,4 +1,4 @@
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 import { Token } from '@honeypot/shared';
 import { PairContract } from '@/services/contract/dex/liquidity/pair-contract';

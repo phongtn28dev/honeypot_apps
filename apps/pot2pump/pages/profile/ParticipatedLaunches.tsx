@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useState, useEffect } from 'react';
 import { Pot2PumpService } from '@/services/launchpad/pot2pump';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { Tab, Tabs } from '@nextui-org/react';
 import Pagination from '@/components/Pagination/Pagination';
 import { LaunchCardV3 } from '@/components/LaunchCard/v3';

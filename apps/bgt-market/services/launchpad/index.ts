@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import BigNumber from 'bignumber.js';
 import { FtoPairContract } from '../contract/launches/fto/ftopair-contract';
 import {

@@ -12,7 +12,7 @@ import { DynamicFormatAmount } from '@honeypot/shared';
 
 import { Token } from '@honeypot/shared';
 import { ContractWrite } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { xSwap } from '@/services/xswap';
 import { Trade } from '@cryptoalgebra/sdk';
 import { Button } from '@nextui-org/react';

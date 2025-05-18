@@ -16,7 +16,7 @@ import { Footer } from './footer';
 import { chatService, questionTitles } from '@/services/chat';
 import _ from 'lodash';
 import { notificationService } from '@/services/notification';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { InvitationCodeModal } from '../InvitationCodeModal/InvitationCodeModal';
 
 export const Layout = observer(

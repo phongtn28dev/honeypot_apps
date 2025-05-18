@@ -6,7 +6,7 @@ import { getSingleVaultDetails } from '@honeypot/shared';
 import { ICHIVaultContract } from '@honeypot/shared';
 
 import { Token } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '@nextui-org/react';

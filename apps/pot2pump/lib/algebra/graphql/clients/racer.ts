@@ -1,6 +1,6 @@
 import { AllRacersDocument, AllRacersQuery } from '../generated/graphql';
 import { getSubgraphClientByChainId } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 export interface Racer {
   tokenAddress: string;

@@ -49,6 +49,10 @@ export class Wallet {
     return this.networksMap[this.currentChainId];
   }
 
+  get isUserConnected() {
+    return this.account && this.account !== zeroAddress;
+  }
+
   constructor(args: Partial<Wallet>) {
     makeAutoObservable(this, {
       networksMap: false,

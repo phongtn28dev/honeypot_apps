@@ -5,7 +5,7 @@ import FormInput from '../../Input';
 import { BtnWrapper, FormContainer } from './styled';
 import { ethers } from 'ethers';
 import APIAccessPayment from '@/lib/abis/beravote/abi/APIAccessPayment.json';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { WrappedToastify } from '@/lib/wrappedToastify';
 import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
 import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';

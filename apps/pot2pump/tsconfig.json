@@ -41,7 +41,9 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "config/wagmi/holdstationWallet.js"
+    "config/wagmi/holdstationWallet.js",
+    "../../libs/shared/hpot-sdk/**/*.ts",
+    "../../libs/shared/hpot-sdk/**/*.tsx"
   ],
   "exclude": [
     "node_modules",

@@ -4,7 +4,7 @@ import { Token } from '@honeypot/shared';
 import { IDerivedMintInfo } from '@/lib/algebra/state/mintStore';
 import { useMemo } from 'react';
 import { zeroAddress } from 'viem';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 interface TokenRatioProps {
   mintInfo: IDerivedMintInfo;

@@ -3,7 +3,7 @@ import Image from 'next/image';
 import React, { useRef } from 'react';
 import type { PutBlobResult } from '@vercel/blob';
 import { trpcClient } from '@/lib/trpc';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import Dropzone from 'react-dropzone';
 
 export interface UploadImageProps {

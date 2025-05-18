@@ -21,7 +21,7 @@ import {
 } from '@/lib/algebra/utils/common/formatAmount';
 import { observer } from 'mobx-react-lite';
 import BigNumber from 'bignumber.js';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 interface Pair {
   token0: TokenFieldsFragment;

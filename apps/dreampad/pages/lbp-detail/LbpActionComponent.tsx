@@ -7,7 +7,7 @@ import { TokenSelector } from '@honeypot/shared';
 import { Button, cn } from '@nextui-org/react';
 import { Input } from '@nextui-org/react';
 import { debounce } from 'lodash';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { trpcClient } from '@honeypot/shared/lib/trpc/trpc';
 
 export const LbpActionComponent = observer(

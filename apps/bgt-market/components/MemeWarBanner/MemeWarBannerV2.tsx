@@ -1,6 +1,6 @@
 import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
 import { AsyncState, ValueState } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { card, Input, Select, SelectItem } from '@nextui-org/react';
 import { Button } from '../button';
 import { animate, motion, Variants } from 'framer-motion';

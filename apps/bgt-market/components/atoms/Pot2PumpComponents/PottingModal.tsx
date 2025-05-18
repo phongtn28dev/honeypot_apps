@@ -8,7 +8,7 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { Input } from '@/components/input';
 import { TokenSelector } from '@honeypot/shared';
 import { WNATIVE_EXTENDED } from '@/config/algebra/routing';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 import { Token } from '@honeypot/shared';
 import { useEffect, useState } from 'react';

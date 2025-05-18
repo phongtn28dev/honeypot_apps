@@ -8,7 +8,7 @@ import {
 
 import { Token } from '@honeypot/shared';
 import { action, makeAutoObservable, reaction } from 'mobx';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import BigNumber from 'bignumber.js';
 import { ContractWrite } from '@honeypot/shared';
 import { OrbiterRouterV3 } from './contract/orbiter/OrbiterRouterV3';

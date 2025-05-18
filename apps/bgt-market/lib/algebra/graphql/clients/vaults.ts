@@ -21,7 +21,7 @@ import { Token } from '@honeypot/shared';
 import { poolQueryToContract } from './pool';
 import BigNumber from 'bignumber.js';
 import { getSubgraphClientByChainId } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 export const vaultQueryResToVaultContract = (
   vault: IchiVault

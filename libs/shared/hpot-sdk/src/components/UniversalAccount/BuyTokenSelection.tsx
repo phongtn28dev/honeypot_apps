@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { TokenSelector } from '../TokenSelector';
 import TokenCard from '../TokenCard/TokenCard';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { Token as AlgebraToken, ExtendedNative } from '@cryptoalgebra/sdk';
 import { Token } from '../../lib/contract';
 import buyWithUniversalAccountService from '../../services/particleUniversalAccount/buyWithUniversalAccountService';

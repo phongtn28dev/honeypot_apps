@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState, useCallback } from 'react';
 import launchpad from '@/services/launchpad';
 import { NextLayoutPage } from '@/types/nextjs';
 import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { Button } from '@/components/button/button-next';
 import Image from 'next/image';
 import {

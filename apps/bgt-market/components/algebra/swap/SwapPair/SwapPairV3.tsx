@@ -24,7 +24,7 @@ import { chart } from '@/services/chart';
 
 import { Token } from '@honeypot/shared';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { AlgebraPoolContract } from '@/services/contract/algebra/algebra-pool-contract';
 import { CartoonButton } from '@/components/atoms/CartoonButton/CartoonButton';
 

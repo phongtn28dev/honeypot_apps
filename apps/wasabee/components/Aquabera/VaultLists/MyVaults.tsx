@@ -6,7 +6,7 @@ import { AccountVaultSharesQuery } from '@/lib/algebra/graphql/generated/graphql
 import { ICHIVaultContract } from '@honeypot/shared';
 
 import { Token } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { useEffect, useState } from 'react';
 import { Currency } from '@cryptoalgebra/sdk';
 import { DepositToVaultModal } from '../modals/DepositToVaultModal';

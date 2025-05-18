@@ -17,7 +17,7 @@ import { Footer } from './footer';
 import { chatService, presetQuestions, questionTitles } from '@/services/chat';
 import _ from 'lodash';
 import { InvitationCodeModal } from '../InvitationCodeModal/InvitationCodeModal';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 export const Layout = ({
   children,

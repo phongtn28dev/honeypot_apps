@@ -5,7 +5,7 @@ import raceFieldBg from 'public/images/horserace/race_field.png';
 
 import { Token } from '@honeypot/shared';
 import { V3SwapCard } from '@/components/algebra/swap/V3SwapCard';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { observer } from 'mobx-react-lite';
 import { getAllRacers, Racer } from '@/lib/algebra/graphql/clients/racer';
 import {

@@ -7,7 +7,7 @@ import { useAccount, useBalance, useWatchBlockNumber } from 'wagmi';
 import { Address, zeroAddress } from 'viem';
 import { TokenSelector } from '@honeypot/shared';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 import { Token } from '@honeypot/shared';
 import { Slider } from '@nextui-org/react';

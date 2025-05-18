@@ -14,7 +14,7 @@ import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';
 import { formatExtremelyLargeNumber } from '@/lib/format';
 import { observer, useObserver } from 'mobx-react-lite';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { formatUSD } from '@/lib/algebra/utils/common/formatUSD';
 import { optionsPresets } from '@/components/OptionsDropdown/OptionsDropdown';
 import { OptionsDropdown } from '@/components/OptionsDropdown/OptionsDropdown';

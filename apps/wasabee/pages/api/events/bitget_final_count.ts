@@ -1,7 +1,7 @@
 import { put } from '@vercel/blob';
 import type { NextApiResponse, NextApiRequest, PageConfig } from 'next';
 import { getFullBitgetEventsParticipantList } from '@/lib/algebra/graphql/clients/bitget_event';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 export default async function handler(
   request: NextApiRequest,

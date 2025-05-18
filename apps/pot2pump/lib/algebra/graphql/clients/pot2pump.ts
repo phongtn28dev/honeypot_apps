@@ -18,7 +18,7 @@ import {
 } from '../generated/graphql';
 import { pot2PumpListToMemePairList, pot2PumpToMemePair } from './pair';
 import { getSubgraphClientByChainId } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 export const getPot2PumpContractByLaunchToken = async (launchToken: string) => {
   const pot2Pump = await getPot2PumpByLaunchToken(launchToken);

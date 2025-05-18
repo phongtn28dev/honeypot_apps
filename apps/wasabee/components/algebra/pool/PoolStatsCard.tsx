@@ -9,7 +9,7 @@ import { Address } from 'viem';
 
 import { Token } from '@honeypot/shared';
 import { TokenLogo } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { useSubgraphClient } from '@honeypot/shared';
 
 interface PoolStatsCardProps {

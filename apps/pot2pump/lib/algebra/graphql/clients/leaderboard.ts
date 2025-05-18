@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { getSubgraphClientByChainId } from '@honeypot/shared';
 
 export const LEADERBOARD_QUERY = gql`

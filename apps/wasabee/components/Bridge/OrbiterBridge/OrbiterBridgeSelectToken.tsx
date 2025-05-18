@@ -1,5 +1,5 @@
 import { orbiterBridgeService } from '@/services/orbiterBridge';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { useEffect, useState } from 'react';
 import { TokenSelector } from '@honeypot/shared';
 import { Token } from '@honeypot/shared';

@@ -3,7 +3,7 @@ import { PageController } from '../lib/factory';
 import { createSiweMessage } from '@/lib/siwe';
 import { AsyncState } from '../utils';
 
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { trpcClient } from '@/lib/trpc';
 
 class ProjectDetail extends PageController {

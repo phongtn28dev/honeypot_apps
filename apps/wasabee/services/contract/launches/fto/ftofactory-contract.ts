@@ -1,6 +1,6 @@
 import { BaseContract } from '../..';
 
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { Address, getContract } from 'viem';
 import { makeAutoObservable } from 'mobx';
 import { ContractWrite, AsyncState } from '@honeypot/shared/lib/utils/utils';

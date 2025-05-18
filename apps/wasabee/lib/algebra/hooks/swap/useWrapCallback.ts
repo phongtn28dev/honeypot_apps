@@ -17,7 +17,7 @@ import {
 } from '@/wagmi-generated';
 import { TransactionType } from '../../state/pendingTransactionsStore';
 import { useToastify } from '@/lib/hooks/useContractToastify';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { useObserver } from 'mobx-react-lite';
 export const WrapType = {
   NOT_APPLICABLE: 'NOT_APPLICABLE',

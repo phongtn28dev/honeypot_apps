@@ -21,7 +21,7 @@ import { SpinnerContainer } from '../Spinner';
 import { NoData } from '../table';
 import { Copy } from '../Copy/index';
 import { BiLinkExternal } from 'react-icons/bi';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { TokenLogo } from '@honeypot/shared';
 import { TruncateText } from '@honeypot/shared';
 import { motion } from 'framer-motion';

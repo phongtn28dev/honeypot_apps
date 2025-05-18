@@ -1,5 +1,5 @@
 import { BaseContract } from '../baseContract';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Address, getContract, GetContractReturnType, zeroAddress } from 'viem';
 import { RewardVaultFactoryABI } from '../../abis/rewardVault/RewardVaultFactoryABI';

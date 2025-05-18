@@ -9,7 +9,7 @@ import { Token } from '@honeypot/shared';
 import { TokenLogo } from '@honeypot/shared';
 import { cn } from '@/lib/utils';
 import { HiOutlineSwitchHorizontal, HiSwitchVertical } from 'react-icons/hi';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 interface EnterAmountsCardProps {
   currency: Currency | undefined;

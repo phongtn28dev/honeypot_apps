@@ -14,7 +14,7 @@ import { Address, zeroAddress } from 'viem';
 import { useDerivedSwapInfoWithoutSwapState } from '@/lib/algebra/state/swapStore';
 import { useApproveCallbackFromTrade } from '@/lib/algebra/hooks/common/useApprove';
 import { Token as AlgebraToken } from '@cryptoalgebra/sdk';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 interface V3SwapCardProps {
   fromToken: Token;

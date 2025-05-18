@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 import { getSubgraphClientByChainId } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 type SwapTransaction = {
   id: string;

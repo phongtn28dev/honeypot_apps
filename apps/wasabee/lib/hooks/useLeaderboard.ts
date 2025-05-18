@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import { LEADERBOARD_QUERY } from '../algebra/graphql/clients/leaderboard';
 import BigNumber from 'bignumber.js';
 import type { FactoryData } from '../algebra/graphql/clients/leaderboard';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import { usePoolsListQuery } from '@/lib/algebra/graphql/generated/graphql';
 
 export function useLeaderboard() {

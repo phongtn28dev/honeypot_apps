@@ -10,7 +10,7 @@ import { PlusSvg } from '../svg/plus';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { isEthAddress } from '@/lib/address';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 import {
   Checkbox,
   Slider,

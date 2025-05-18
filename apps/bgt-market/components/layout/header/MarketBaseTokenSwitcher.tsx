@@ -3,7 +3,7 @@ import { globalService } from '@/services/global';
 import { observer } from 'mobx-react-lite';
 import { CardContainer, HoneyContainer } from '@/components/CardContianer';
 import { TokenLogo } from '@honeypot/shared';
-import { wallet } from '@honeypot/shared';
+import { wallet } from '@honeypot/shared/lib/wallet';
 
 import { Token } from '@honeypot/shared';
 
