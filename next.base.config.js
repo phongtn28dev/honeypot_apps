@@ -26,7 +26,6 @@ const baseConfig = {
     optimizeCss: true,
   },
   webpack: (config, { isServer }) => {
-    config.devtool = 'source-map';
     config.resolve.alias = {
       ...config.resolve.alias,
       '@honeypot/shared': path.resolve(__dirname, 'libs/shared/hpot-sdk/src'),

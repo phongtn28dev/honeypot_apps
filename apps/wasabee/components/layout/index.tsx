@@ -16,8 +16,8 @@ import Script from 'next/script';
 import { Footer } from './footer';
 import { chatService, presetQuestions, questionTitles } from '@/services/chat';
 import _ from 'lodash';
-import { InvitationCodeModal } from '../InvitationCodeModal/InvitationCodeModal';
 import { wallet } from '@honeypot/shared/lib/wallet';
+import { useObserver } from 'mobx-react-lite';
 
 export const Layout = ({
   children,
@@ -27,8 +27,10 @@ export const Layout = ({
   className?: string;
 }) => {
   const router = useRouter();
-  const currentChain = wallet.currentChain;
+  const currentchain = useObserver(() => wallet.currentChain);
   const [showInviteModal, setShowInviteModal] = useState(false);
+
+  console.log('currentchain', currentchain);
 
   useEffect(() => {
     //if its user first time visit, open chat
@@ -44,46 +46,6 @@ export const Layout = ({
       window.localStorage.setItem(`pageVisited`, 'true');
     }
   }, [router.pathname]);
-
-  // useEffect(() => {
-  //   trpcClient.metadata.getServerMetadata.query().then((res) => {
-  //     if (
-  //       res.latest_version === metadata.version ||
-  //       process.env.NODE_ENV === 'development'
-  //     )
-  //       return;
-  //     popmodal.openModal({
-  //       content: (
-  //         <div className="min-h-[300px] line-[24px]">
-  //           <div className="text-center  font-bold text-[30px]">
-  //             Announcement
-  //           </div>
-  //           <h1 className="mt-[24px]">
-  //             This version is outdated, please check our newest link:&nbsp;{' '}
-  //             <a
-  //               className="hover:text-orange-500 transition-all underline"
-  //               href={res.latest_site}
-  //             >
-  //               {res.latest_site}.
-  //             </a>
-  //           </h1>
-  //           <p>
-  //             Pls have fun with brand new features with pot2pump meme launch. we
-  //             will not update and maintain this version anymore so feel free to
-  //             migrate your assets to our new version
-  //           </p>
-  //         </div>
-  //       ),
-  //     });
-  //   });
-  // }, []);
-
-  // useEffect(() => {
-  //   const inviteCode = localStorage.getItem("inviteCode");
-  //   if (!inviteCode) {
-  //     setShowInviteModal(true);
-  //   }
-  // }, []);
 
   const handleInviteCodeSubmit = async (code: string) => {
     try {
@@ -154,7 +116,7 @@ export const Layout = ({
       <PopOverModal />
       <Header />
       {!showInviteModal ? (
-        wallet.currentChain && <div className="flex-1 flex">{children}</div>
+        currentchain && <div className="flex-1 flex">{children}</div>
       ) : (
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">

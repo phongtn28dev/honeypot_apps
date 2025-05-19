@@ -4,7 +4,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from '@nextui-org/modal';
+} from '@nextui-org/react';
 import { Button } from '../../button';
 import { useEffect, useState } from 'react';
 import { TokenSelector } from '../../TokenSelector';

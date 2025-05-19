@@ -9,7 +9,6 @@ import { WagmiProvider, useWalletClient } from 'wagmi';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { AvatarComponent, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
-import { NextUIProvider } from '@nextui-org/react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { trpc, trpcQueryClient } from '../lib/trpc';
@@ -22,11 +21,11 @@ import { ApolloProvider } from '@apollo/client';
 import Image from 'next/image';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import ErrorBoundary from '@/components/ErrorBoundary';
-import * as Sentry from '@sentry/nextjs';
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 import { deserialize, serialize } from 'wagmi';
 import { useSubgraphClient } from '@honeypot/shared';
 import { createWagmiConfig } from '@honeypot/shared/config/wagmi';
+import { NextUIProvider } from '@nextui-org/react';
 
 const config = createWagmiConfig();
 
@@ -75,14 +74,6 @@ const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
     />
   );
 };
-
-// 在文件顶部初始化 Sentry
-Sentry.init({
-  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
-  tracesSampleRate: 1.0,
-  // 建议在生产环境调低采样率
-  // tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.2 : 1.0,
-});
 
 export default function App({
   Component,

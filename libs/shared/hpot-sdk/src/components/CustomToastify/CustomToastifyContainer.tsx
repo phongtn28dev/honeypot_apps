@@ -1,7 +1,8 @@
+import { ReactNode } from 'react';
 interface CustomToastifyContainerProps {
-  title: React.ReactNode;
-  children: React.ReactNode;
-  icon?: React.ReactNode;
+  title: ReactNode;
+  children: ReactNode;
+  icon?: ReactNode;
 }
 
 export function CustomToastifyContainer(props: CustomToastifyContainerProps) {

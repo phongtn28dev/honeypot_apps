@@ -1,12 +1,12 @@
 // components/Aquabera/modals/WithdrawFromVaultModal.tsx
-import { Modal, ModalContent, ModalHeader, ModalBody } from '@nextui-org/modal';
+import { Modal, ModalContent, ModalHeader, ModalBody } from '@nextui-org/react';
 import { Button } from '@/components/button/button-next';
 import { useCallback, useState } from 'react';
 
 import { ICHIVaultContract } from '@honeypot/shared';
 import { wallet } from '@honeypot/shared/lib/wallet';
 import { ContractWrite } from '@honeypot/shared';
-import { Slider } from '@nextui-org/slider';
+import { Slider } from '@nextui-org/react';
 import BigNumber from 'bignumber.js';
 import { DynamicFormatAmount } from '@honeypot/shared';
 import { TokenLogo } from '@honeypot/shared';

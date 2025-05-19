@@ -1,4 +1,4 @@
-import { Modal, ModalContent, ModalHeader, ModalBody } from '@nextui-org/modal';
+import { Modal, ModalContent, ModalHeader, ModalBody } from '@nextui-org/react';
 import { Button } from '@/components/button/button-next';
 import { useCallback, useState } from 'react';
 
