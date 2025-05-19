@@ -21,7 +21,13 @@ const baseConfig = {
   },
   reactStrictMode: true,
   output: 'standalone',
+  productionBrowserSourceMaps: true,
+  experimental: {
+    optimizeCss: true,
+  },
   webpack: (config, { isServer }) => {
+    config.devtool = 'source-map';
+    config.resolve.symlinks = false;
     config.resolve.alias = {
       ...config.resolve.alias,
       '@honeypot/shared': path.resolve(__dirname, 'libs/shared/hpot-sdk/src'),
@@ -74,12 +80,17 @@ const baseConfig = {
       },
     ];
   },
-  transpilePackages: ['styled-components', 'framer-motion', 'react-toastify'],
+  transpilePackages: [
+    'styled-components',
+    'framer-motion',
+    'react-toastify',
+    '@honeypot/shared',
+  ],
 };
 
 const plugins = [
   // Add more Next.js plugins to this list if needed.
-  // withBundleAnalyzer,
+  withBundleAnalyzer,
   withNx,
 ];
 
@@ -128,11 +139,8 @@ const sentryConfig = {
   autoInstrumentAppDirectory: false,
 };
 
-// module.exports = (customConfig = {}) =>
-//   withSentryConfig(
-//     composePlugins(...plugins)({ ...baseConfig, ...customConfig }),
-//     sentryConfig
-//   );
-
 module.exports = (customConfig = {}) =>
-  composePlugins(...plugins)({ ...baseConfig, ...customConfig });
+  withSentryConfig(
+    composePlugins(...plugins)({ ...baseConfig, ...customConfig }),
+    sentryConfig
+  );
