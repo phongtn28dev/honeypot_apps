@@ -80,12 +80,7 @@ const baseConfig = {
       },
     ];
   },
-  transpilePackages: [
-    'styled-components',
-    'framer-motion',
-    'react-toastify',
-    '@honeypot/shared',
-  ],
+  transpilePackages: ['@honeypot/shared'],
 };
 
 const plugins = [
