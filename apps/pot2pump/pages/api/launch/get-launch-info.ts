@@ -1,16 +1,15 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from "next";
-import { caller } from "@/server/_app";
-import { ftoService } from "@/server/service/fto";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { ftoService } from '@/server/service/fto';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ApiResponseType<any>>
 ) {
-  if (req.method !== "GET") {
+  if (req.method !== 'GET') {
     return res.status(405).json({
-      status: "error",
-      message: "Method Not Allowed",
+      status: 'error',
+      message: 'Method Not Allowed',
     });
   }
 
@@ -18,8 +17,8 @@ export default async function handler(
 
   if (!launchaddress || !chainid) {
     return res.status(400).json({
-      status: "error",
-      message: "Invalid request params",
+      status: 'error',
+      message: 'Invalid request params',
     });
   }
 
@@ -30,14 +29,14 @@ export default async function handler(
 
   if (!data) {
     return res.status(404).json({
-      status: "error",
-      message: "No data found",
+      status: 'error',
+      message: 'No data found',
     });
   }
 
   res.status(200).json({
-    status: "success",
+    status: 'success',
     data: data,
-    message: "Success",
+    message: 'Success',
   });
 }

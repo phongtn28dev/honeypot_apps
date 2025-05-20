@@ -1,20 +1,14 @@
 import { Button } from '@/components/button/button-next';
 import { SelectState, ItemSelect } from '@/components/ItemSelect';
-import { TokenLogo } from '@honeypot/shared';
 import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
 import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
 import { cn, SelectItem } from '@nextui-org/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { Input } from '@/components/input';
 import { TokenSelector } from '@honeypot/shared';
-import { WNATIVE_EXTENDED } from '@/config/algebra/routing';
 import { wallet } from '@honeypot/shared/lib/wallet';
-
 import { Token } from '@honeypot/shared';
 import { useEffect, useState } from 'react';
-import TokenCardV3 from '@/components/algebra/swap/TokenCard/TokenCardV3';
-import { Address } from 'viem';
-import { useBalance } from 'wagmi';
 import BigNumber from 'bignumber.js';
 import { ContractWrite } from '@honeypot/shared';
 
@@ -129,7 +123,7 @@ export const PottingModal = observer(
                   type="number"
                   isClearable={false}
                   max={selectedToken?.balance.toFixed()}
-                  onChange={(e) => {
+                  onChange={(e: any) => {
                     state.setDepositAmount(e.target.value);
                   }}
                   onBlur={() => {

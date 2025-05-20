@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { cacheProvider, getCacheKey } from '@/lib/server/cache';
-import { DEFAULT_CHAIN_ID, subgraphAddresses } from '@honeypot/shared';
+import { DEFAULT_CHAIN_ID, subgraphAddresses } from '@honeypot/shared/config';
 
 type ENDPOINTS = 'info' | 'farming';
 

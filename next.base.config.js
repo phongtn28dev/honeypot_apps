@@ -78,7 +78,32 @@ const baseConfig = {
       },
     ];
   },
-  transpilePackages: ['@honeypot/shared'],
+  transpilePackages: [
+    '@nextui-org/react',
+    '@nextui-org/system',
+    '@nextui-org/theme',
+    '@nextui-org/accordion',
+    '@nextui-org/alert',
+    '@nextui-org/autocomplete',
+    '@nextui-org/badge',
+    '@nextui-org/breadcrumbs',
+    '@nextui-org/framer-transitions',
+    '@radix-ui/react-avatar',
+    '@radix-ui/react-dialog',
+    '@radix-ui/react-hover-card',
+    '@radix-ui/react-popover',
+    '@radix-ui/react-scroll-area',
+    '@radix-ui/react-separator',
+    '@radix-ui/react-slider',
+    '@radix-ui/react-slot',
+    '@radix-ui/react-switch',
+    '@radix-ui/react-tabs',
+    '@radix-ui/react-toast',
+    '@rainbow-me/rainbowkit',
+    '@heroicons/react',
+    'lucide-react',
+    'vaul',
+  ],
 };
 
 const plugins = [
