@@ -307,20 +307,6 @@ const MemeLaunchPage: NextLayoutPage = observer(() => {
               ),
             }}
             className="next-tab"
-            onSelectionChange={(key) => {
-              launchpad.setCurrentLaunchpadType('meme');
-              if (key === 'all') {
-                launchpad.projectsPage.setIsInit(false);
-                launchpad.pairFilterStatus = defaultPairFilters.all.status;
-              } else if (key === 'my') {
-                launchpad.myLaunches.setIsInit(false);
-                launchpad.pairFilterStatus = defaultPairFilters.myPairs.status;
-              } else if (key === 'participated-launch') {
-                launchpad.participatedPairs.setIsInit(false);
-                launchpad.pairFilterStatus =
-                  defaultPairFilters.participatedPairs.status;
-              }
-            }}
           >
             <Tab key="all" title="All MEMEs">
               {pottingProjects && (

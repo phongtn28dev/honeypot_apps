@@ -11,7 +11,7 @@ import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contra
 import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
 import Link from 'next/link';
 import { observer } from 'mobx-react-lite';
-import { trpcClient } from '@/lib/trpc';
+import { trpcClient } from '@honeypot/shared/lib/trpc/trpc';
 import { toast } from 'react-toastify';
 import { createSiweMessage } from '@/lib/siwe';
 

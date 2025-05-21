@@ -1,16 +1,16 @@
-import { trpcClient } from "@/lib/trpc";
-import React, { useEffect, useState, useCallback } from "react";
-import dynamic from "next/dynamic";
-import { ApexOptions } from "apexcharts";
-import dayjs from "dayjs";
-import { LaunchTokenData } from "@/services/indexer/indexerTypes";
-import { useRouter } from "next/router";
+import { trpcClient } from '@/lib/trpc';
+import React, { useEffect, useState, useCallback } from 'react';
+import dynamic from 'next/dynamic';
+import { ApexOptions } from 'apexcharts';
+import dayjs from 'dayjs';
+import { LaunchTokenData } from '@/services/indexer/indexerTypes';
+import { useRouter } from 'next/router';
 
 interface LaunchChartProps {
   decimals: number;
 }
 
-const Chart = dynamic(() => import("react-apexcharts"), {
+const Chart = dynamic(() => import('react-apexcharts'), {
   loading: () => <p>Loading...</p>,
   ssr: false,
 });
@@ -25,19 +25,19 @@ const LaunchChart: React.FC<LaunchChartProps> = ({ decimals }) => {
     series: [
       {
         data: [],
-        color: "#43D9A3",
-        name: "amount",
+        color: '#43D9A3',
+        name: 'amount',
       },
     ],
     options: {
       chart: {
-        id: "area-datetime",
-        type: "area",
+        id: 'area-datetime',
+        type: 'area',
         zoom: {
           autoScaleYaxis: true,
           allowMouseWheelZoom: false,
         },
-        foreColor: "#fff",
+        foreColor: '#fff',
         toolbar: {
           show: false,
           autoSelected: undefined,
@@ -45,7 +45,7 @@ const LaunchChart: React.FC<LaunchChartProps> = ({ decimals }) => {
       },
       dataLabels: {
         enabled: false,
-        textAnchor: "end",
+        textAnchor: 'end',
         formatter: function (val, opts) {
           if (opts.dataPointIndex === opts.w.config.series[0].data.length - 1) {
             return (val as any)?.toFixed(5);
@@ -56,7 +56,7 @@ const LaunchChart: React.FC<LaunchChartProps> = ({ decimals }) => {
         size: 0,
       },
       xaxis: {
-        type: "datetime",
+        type: 'datetime',
         min: 0,
         max: dayjs().unix() * 1000,
         tickAmount: 6,
@@ -68,7 +68,7 @@ const LaunchChart: React.FC<LaunchChartProps> = ({ decimals }) => {
         },
         labels: {
           style: {
-            colors: "#fff",
+            colors: '#fff',
           },
         },
         tooltip: {
@@ -81,7 +81,7 @@ const LaunchChart: React.FC<LaunchChartProps> = ({ decimals }) => {
             return val?.toFixed(3);
           },
           style: {
-            colors: "#fff",
+            colors: '#fff',
           },
         },
         tickAmount: 4,
@@ -92,22 +92,22 @@ const LaunchChart: React.FC<LaunchChartProps> = ({ decimals }) => {
       tooltip: {
         enabled: true,
         x: {
-          format: "dd MMM HH:mm",
+          format: 'dd MMM HH:mm',
         },
         y: {
           formatter: function (val) {
             return val?.toFixed(3);
           },
         },
-        theme: "dark",
+        theme: 'dark',
         fillSeriesColor: true,
         fixed: {
           enabled: true,
-          position: "topRight",
+          position: 'topRight',
         },
       },
       fill: {
-        type: "gradient",
+        type: 'gradient',
         gradient: {
           shadeIntensity: 1,
           opacityFrom: 1,
@@ -116,17 +116,17 @@ const LaunchChart: React.FC<LaunchChartProps> = ({ decimals }) => {
           colorStops: [
             {
               offset: 0,
-              color: "#43D9A3",
+              color: '#43D9A3',
               opacity: 1,
             },
             {
               offset: 70,
-              color: "#43D9A3",
+              color: '#43D9A3',
               opacity: 0.5,
             },
             {
               offset: 100,
-              color: "#43D9A3",
+              color: '#43D9A3',
               opacity: 0,
             },
           ],
@@ -151,8 +151,8 @@ const LaunchChart: React.FC<LaunchChartProps> = ({ decimals }) => {
       series: [
         {
           data: chartData,
-          color: "#43D9A3",
-          name: "amount",
+          color: '#43D9A3',
+          name: 'amount',
         },
       ],
       options: {
@@ -166,19 +166,6 @@ const LaunchChart: React.FC<LaunchChartProps> = ({ decimals }) => {
       },
     }));
   }, [data, decimals]);
-
-  useEffect(() => {
-    if (pairAddress) {
-      trpcClient.indexerFeedRouter.getMemeGraphData
-        .query({
-          tokenAddress: pairAddress as string,
-        })
-        .then((data) => {
-          console.log("chart data", data);
-          setData(data as any);
-        });
-    }
-  }, [pairAddress]);
 
   useEffect(() => {
     updateChartData();

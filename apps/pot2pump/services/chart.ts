@@ -6,7 +6,7 @@ import { PairContract } from '@honeypot/shared';
 import { AsyncState } from '@honeypot/shared';
 import { ChartDataResponse, resolutionType } from './priceFeed/priceFeedTypes';
 import { wallet } from '@honeypot/shared/lib/wallet';
-import { trpcClient } from '@/lib/trpc';
+import { trpcClient } from '@honeypot/shared/lib/trpc/trpc';
 import { dayjs } from '@/lib/dayjs';
 import { AlgebraPoolContract } from './contract/algebra/algebra-pool-contract';
 import BigNumber from 'bignumber.js';

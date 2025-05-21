@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { cn } from '@/lib/tailwindcss';
 import ConfettiComponent from '../atoms/Confetti/Confetti';
 import PopOverModal from '../PopOverModal/PopOverModal';
-import { trpcClient } from '@/lib/trpc';
+import { trpcClient } from '@honeypot/shared/lib/trpc/trpc';
 import { popmodal } from '@/services/popmodal';
 import { metadata } from '@/config/metadata';
 import AnnouncementBar from './AnnouncementBar';

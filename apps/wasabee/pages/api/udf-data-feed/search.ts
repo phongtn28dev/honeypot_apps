@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { SearchSymbolResultItem } from '@/public/static/charting_library/charting_library';
 import { networks, networksMap } from '@honeypot/shared/lib/chains';
-import { caller } from '@/server/_app';
+import { caller } from '@honeypot/shared/server/_app';
 
 export default async function handler(
   req: NextApiRequest,
@@ -29,39 +29,39 @@ export default async function handler(
       });
     });
 
-    const pairs = await caller.pair.getPairs({
-      chainId: network.chain.id as number,
-    });
+    // const pairs = await caller.pair.getPairs({
+    //   chainId: network.chain.id as number,
+    // });
 
-    if (pairs) {
-      Object.values(pairs).map((pair) => {
-        symbols.push({
-          ticker:
-            pair.token0.symbol +
-            '/' +
-            pair.token1.symbol +
-            ':' +
-            network.chain.id +
-            ':' +
-            pair.address,
-          description:
-            pair.token0.symbol +
-            '/' +
-            pair.token1.symbol +
-            ':' +
-            network.chain.id,
-          type: 'pair',
-          exchange: network.chain.name,
-          symbol: pair.token0.symbol + '/' + pair.token1.symbol,
-          full_name:
-            pair.token0.symbol +
-            '/' +
-            pair.token1.symbol +
-            ':' +
-            network.chain.id,
-        });
-      });
-    }
+    // if (pairs) {
+    //   Object.values(pairs).map((pair) => {
+    //     symbols.push({
+    //       ticker:
+    //         pair.token0.symbol +
+    //         '/' +
+    //         pair.token1.symbol +
+    //         ':' +
+    //         network.chain.id +
+    //         ':' +
+    //         pair.address,
+    //       description:
+    //         pair.token0.symbol +
+    //         '/' +
+    //         pair.token1.symbol +
+    //         ':' +
+    //         network.chain.id,
+    //       type: 'pair',
+    //       exchange: network.chain.name,
+    //       symbol: pair.token0.symbol + '/' + pair.token1.symbol,
+    //       full_name:
+    //         pair.token0.symbol +
+    //         '/' +
+    //         pair.token1.symbol +
+    //         ':' +
+    //         network.chain.id,
+    //     });
+    //   });
+    // }
 
     res
       .status(200)

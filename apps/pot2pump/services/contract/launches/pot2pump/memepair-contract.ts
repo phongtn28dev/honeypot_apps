@@ -2,7 +2,7 @@ import { getSubgraphClientByChainId, Token } from '@honeypot/shared';
 import { getContract, zeroAddress } from 'viem';
 import { dayjs } from '@/lib/dayjs';
 import BigNumber from 'bignumber.js';
-import { trpcClient } from '@/lib/trpc';
+import { trpcClient } from '@honeypot/shared/lib/trpc/trpc';
 import { makeAutoObservable } from 'mobx';
 import { AsyncState, ContractWrite } from '@honeypot/shared';
 import { pot2PumpPairABI } from '@/lib/abis/Pot2Pump/pot2PumpPair';

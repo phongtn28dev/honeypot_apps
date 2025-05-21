@@ -9,7 +9,8 @@ import BigNumber from 'bignumber.js';
 import { Token } from '@honeypot/shared';
 import { dayjs } from '@/lib/dayjs';
 import { cn } from '@/lib/tailwindcss';
-import { trpcClient } from '@/lib/trpc';
+import { trpcClient } from '@honeypot/shared/lib/trpc/trpc';
+
 import { ZodError } from 'zod';
 import launchpad, { statusTextToNumber } from '../../../launchpad';
 import { BaseLaunchContract } from '@/services/contract/launches/base-launch-contract';

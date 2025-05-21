@@ -1,17 +1,8 @@
-import {
-  OptionsDropdown,
-  optionsPresets,
-} from '@/components/OptionsDropdown/OptionsDropdown';
-import { trpcClient } from '@/lib/trpc';
+import { trpcClient } from '@honeypot/shared/lib/trpc/trpc';
 import { wallet } from '@honeypot/shared/lib/wallet';
-import { LucideFileEdit } from 'lucide-react';
-import { toast } from 'react-toastify';
 import SaleProgress from './SaleProgress';
-import TokenAddress from './TokenAddress';
-import TokenDetails from './TokenDetails';
 import TokenRaised from './TokenRaised';
 import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
-import { FtoPairContract } from '@/services/contract/launches/fto/ftopair-contract';
 import { useDisclosure } from '@nextui-org/react';
 import { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';

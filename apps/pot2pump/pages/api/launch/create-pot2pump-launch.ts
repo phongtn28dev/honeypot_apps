@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { ftoService } from '@/server/service/fto';
+import { ftoService } from '@honeypot/shared/server/service/fto';
 import { MemePairContract } from '@/services/contract/launches/pot2pump/memepair-contract';
 
 export default async function handler(

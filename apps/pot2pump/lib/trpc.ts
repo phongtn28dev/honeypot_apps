@@ -1,6 +1,6 @@
 import { createTRPCClient, httpBatchLink } from '@trpc/client';
 import { createTRPCNext } from '@trpc/next';
-import type { AppRouter } from '@/server/_app';
+import type { AppRouter } from '@honeypot/shared/server/_app';
 import superjson from 'superjson';
 import { createTRPCReact } from '@trpc/react-query';
 import { toast } from 'react-toastify';

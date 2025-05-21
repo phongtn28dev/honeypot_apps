@@ -150,6 +150,7 @@ export const chains = [
   berachain,
   berachainTestnet,
   berachainBartioTestnet,
+  berachainBepoliaTestnet,
   polygonMumbaiChain,
   arbitrumSepoliaTestnet,
   arbitrumMainnet,

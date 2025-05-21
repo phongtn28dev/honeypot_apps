@@ -4,8 +4,7 @@ import { createSiweMessage } from '@/lib/siwe';
 import { AsyncState } from '@honeypot/shared/lib/utils';
 
 import { wallet } from '@honeypot/shared/lib/wallet';
-import { trpcClient } from '@/lib/trpc';
-
+import { trpcClient } from '@honeypot/shared/lib/trpc/trpc';
 class ProjectDetail extends PageController {
   updateProject = new AsyncState(
     async (data: {

@@ -1,4 +1,4 @@
-import { trpcClient } from '@/lib/trpc';
+import { trpcClient } from '@honeypot/shared/lib/trpc/trpc';
 import { useEffect, useState } from 'react';
 import { wallet } from '@honeypot/shared/lib/wallet';
 
