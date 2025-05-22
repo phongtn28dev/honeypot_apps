@@ -1,4 +1,3 @@
-export * from './lib/chains';
 export * from './lib/wallet';
 export * from './config';
 export * from './lib/contract';

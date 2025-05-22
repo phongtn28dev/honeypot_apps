@@ -7,7 +7,7 @@ import {
 } from '@apollo/client';
 import { useObserver } from 'mobx-react-lite';
 import { wallet } from '../lib/wallet/wallet';
-import { networksMap } from '../lib/chains/chain';
+import { networksMap } from '../config/chains/chain';
 import { SubgraphEndpointType } from '../config/subgraphEndPoint';
 
 const ApolloClientsRecord: Record<

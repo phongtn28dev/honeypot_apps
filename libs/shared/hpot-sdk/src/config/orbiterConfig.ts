@@ -1,4 +1,4 @@
-import { networks } from '../lib/chains/chain';
+import { networks } from './chains/chain';
 
 export const orbiterNetworks = networks.map((network) => ({
   id: network.chainId,

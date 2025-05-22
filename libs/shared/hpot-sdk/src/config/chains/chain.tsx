@@ -1,4 +1,4 @@
-import { Token } from '../contract/token/token';
+import { Token } from '../../lib/contract/token/token';
 import { Chain } from 'viem/chains';
 import {
   berachainMainnet,
@@ -13,18 +13,12 @@ import {
   arbitrumSepoliaTestnet,
   sepoliaTestnet,
 } from './chainBaseConfig';
-import { ICHIVaultContract } from '../contract/aquabera/ICHIVault-contract';
-import { getMultipleTokensData } from '../graphql/clients/token';
-import { Token as IndexerToken } from '../graphql/generated/graphql';
+import { ICHIVaultContract } from '../../lib/contract/aquabera/ICHIVault-contract';
+import { getMultipleTokensData } from '../../lib/graphql/clients/token';
+import { Token as IndexerToken } from '../../lib/graphql/generated/graphql';
 import { zeroAddress } from 'viem';
-import {
-  contractAddresses,
-  ContractAddresses,
-} from './../../config/contractAddresses';
-import {
-  subgraphAddresses,
-  SubgraphAddresses,
-} from './../../config/subgraphEndPoint';
+import { contractAddresses, ContractAddresses } from '../contractAddresses';
+import { subgraphAddresses, SubgraphAddresses } from '../subgraphEndPoint';
 
 export class Network {
   supportDEX: boolean = false;

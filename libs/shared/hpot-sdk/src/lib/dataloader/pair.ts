@@ -4,7 +4,7 @@ import { getContract } from 'viem';
 import { ethers } from 'ethers';
 import { createPublicClientByChain } from '@honeypot/shared/lib/wallet';
 import { getCacheKey } from '@honeypot/shared/lib/kv/cache';
-import { networksMap } from '@honeypot/shared/lib/chains';
+import { networksMap } from '@honeypot/shared/config/chains';
 import { factoryABI } from '@honeypot/shared/lib/abis/factory';
 import { ERC20ABI } from '@honeypot/shared/lib/abis/erc20';
 import { kv } from '@honeypot/shared/lib/kv/kv';

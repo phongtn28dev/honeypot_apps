@@ -1,5 +1,5 @@
 'use client';
-import { Network, networks } from '../chains/chain';
+import { Network, networks } from '../../config/chains/chain';
 import BigNumber from 'bignumber.js';
 import { Address, PublicClient, WalletClient, zeroAddress } from 'viem';
 import { FtoFactoryContract } from '../contract/launches/fto/ftofactory-contract';

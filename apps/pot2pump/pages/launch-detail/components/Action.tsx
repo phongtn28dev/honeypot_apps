@@ -74,13 +74,13 @@ const FailAction = observer(
             Provider Withdraw
           </Button>
         )}
-        {pair instanceof MemePairContract && pair.canRefund ? (
+        {(pair as MemePairContract).canRefund ? (
           <Button
             className="w-full"
             onClick={() => {
-              pair.refund.call();
+              (pair as MemePairContract).refund.call();
             }}
-            isLoading={pair.refund.loading}
+            isLoading={(pair as MemePairContract).refund.loading}
             style={{
               backgroundColor: 'green',
             }}

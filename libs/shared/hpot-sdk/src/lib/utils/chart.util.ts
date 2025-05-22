@@ -1,5 +1,5 @@
 import { Token } from '../contract/token/token';
-import { networksMap } from '../chains/chain';
+import { networksMap } from '../../config/chains/chain';
 import { PairContract } from '../contract/dex/liquidity/pair-contract';
 
 export const tokenToSymbol = (token: Token) => {

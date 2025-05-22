@@ -1,4 +1,4 @@
-import { Network, networksMap, NetworkManager } from './../../lib/chains';
+import { Network, networksMap, NetworkManager } from '../../config/chains';
 import React, { useState, useEffect } from 'react';
 
 const NetworkSelect: React.FC = () => {

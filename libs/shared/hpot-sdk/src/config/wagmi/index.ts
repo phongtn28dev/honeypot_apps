@@ -8,7 +8,7 @@ import {
 } from '@rainbow-me/rainbowkit/wallets';
 import { injected, safe } from 'wagmi/connectors';
 import { cookieStorage, createStorage, Config } from 'wagmi';
-import { networks } from '../../lib/chains';
+import { networks } from '../chains';
 
 const pId = '23b1ff4e22147bdf7cab13c0ee4bed90';
 

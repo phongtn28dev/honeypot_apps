@@ -4,3 +4,4 @@ export * from './contractAddresses';
 export * from './subgraphEndPoint';
 export * from './algebra/default-chain-id';
 export * from './wagmi';
+export * from './chains';

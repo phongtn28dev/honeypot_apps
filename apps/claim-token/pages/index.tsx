@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { useSwitchChain, useChainId } from 'wagmi';
-import { networks } from '@honeypot/shared/lib/chains';
+import { networks } from '@honeypot/shared/config/chains';
 import { useEffect, useState } from 'react';
 import { Token, TokenLogo, wallet } from '@honeypot/shared';
 import { CardContainer } from '@honeypot/shared/components/CardContianer';

@@ -120,7 +120,9 @@ export const berachainMainnet: Chain = {
     symbol: 'BERA',
   },
   rpcUrls: {
-    default: { http: ['https://rpc.berachain.com/'] },
+    default: {
+      http: ['https://rpc.berachain.com/'],
+    },
   },
   blockExplorers: {
     default: {
@@ -147,7 +149,6 @@ export const sepoliaTestnet: Chain = {
 
 export const chains = [
   sepoliaTestnet,
-  berachain,
   berachainTestnet,
   berachainBartioTestnet,
   berachainBepoliaTestnet,
