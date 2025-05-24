@@ -29,7 +29,7 @@ export default async function handler(
       });
     });
 
-    // const pairs = await caller..getPairs({
+    // const pairs = await caller.getPairs({
     //   chainId: network.chain.id as number,
     // });
 

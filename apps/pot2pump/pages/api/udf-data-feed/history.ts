@@ -32,6 +32,8 @@ export default async function handler(
     currencyCode: currencyCode as 'USD' | 'TOKEN' | undefined,
   });
 
+  console.log('data', data);
+
   if (data.status === 'success') {
     res.status(200).json({
       s: 'ok',

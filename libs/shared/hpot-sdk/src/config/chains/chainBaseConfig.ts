@@ -149,6 +149,7 @@ export const sepoliaTestnet: Chain = {
 
 export const chains = [
   sepoliaTestnet,
+  berachainMainnet,
   berachainTestnet,
   berachainBartioTestnet,
   berachainBepoliaTestnet,
