@@ -103,6 +103,8 @@ const baseConfig = {
     '@heroicons/react',
     'lucide-react',
     'vaul',
+    'viem',
+    'wagmi',
     '@honeypot-frontend/hpot-sdk',
     '@honeypot/shared',
   ],
