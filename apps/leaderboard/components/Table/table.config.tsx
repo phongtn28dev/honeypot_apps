@@ -2,7 +2,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import GenericTanstackTable, {
   createActionCell,
   type TableAction,
-} from './GenericTable';
+} from './generic-table';
 
 export interface StakingData {
   id: string;
