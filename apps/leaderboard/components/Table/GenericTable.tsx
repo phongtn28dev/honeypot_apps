@@ -11,10 +11,49 @@ import {
   type ColumnDef,
   type SortingState,
   type ColumnFiltersState,
+  type FilterFn,
 } from '@tanstack/react-table';
 import { ChevronUp, ChevronDown, Search } from 'lucide-react';
 import { Input } from '../input';
 import { Button } from '../button';
+
+// Custom global filter function that searches across all visible data
+const globalFilterFn: FilterFn<any> = (row, columnId, value, addMeta) => {
+  const safeValue = (() => {
+    if (typeof value === 'string') return value;
+    if (typeof value === 'number') return String(value);
+    if (value == null) return '';
+    return String(value);
+  })();
+
+  if (safeValue === '') return true;
+
+  // Get all cell values from the row and convert them to searchable strings
+  const searchableValues: string[] = [];
+  
+  row.getAllCells().forEach(cell => {
+    const cellValue = cell.getValue();
+    
+    // Handle different types of cell values
+    if (cellValue != null) {
+      if (typeof cellValue === 'string' || typeof cellValue === 'number') {
+        searchableValues.push(String(cellValue));
+      } else if (typeof cellValue === 'object' && 'label' in cellValue) {
+        // Handle action objects that have a label property
+        searchableValues.push(String((cellValue as any).label));
+      } else {
+        // Convert other objects to string
+        searchableValues.push(String(cellValue));
+      }
+    }
+  });
+
+  // Check if any value contains the search term (case insensitive)
+  const searchTerm = safeValue.toLowerCase();
+  return searchableValues.some(val => 
+    val.toLowerCase().includes(searchTerm)
+  );
+};
 
 export interface TableAction {
   label: string;
@@ -71,6 +110,7 @@ export default function GenericTanstackTable<T>({
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: globalFilterFn,
     state: {
       sorting,
       columnFilters,
@@ -85,9 +125,9 @@ export default function GenericTanstackTable<T>({
 
   return (
     <div
-      className={`border-2 border-dashed border-gray-400 bg-white/90 rounded-lg shadow-[4px_4px_0px_0px_rgba(255, 255, 255 ,0.8)] ${className}`}
+      className={`border-2 border-dashed border-black bg-white/90 rounded-lg shadow-[0px_0px_4px_4px_rgba(255, 255, 255, 1)] ${className}`}
     >
-      {/* Search Filter */}
+      {/* Search Input */}
       {enableFiltering && (
         <div className="p-4 border-b border-gray-200">
           <div className="relative">
@@ -95,8 +135,8 @@ export default function GenericTanstackTable<T>({
             <Input
               placeholder={searchPlaceholder}
               value={globalFilter ?? ''}
-              onChange={(event) => setGlobalFilter(String(event.target.value))}
-              className="pl-10 bg-white border-gray-300"
+              onChange={(e) => setGlobalFilter(e.target.value)}
+              className="pl-10 bg-white border-gray-300 shadow-sm"
             />
           </div>
         </div>
@@ -221,14 +261,14 @@ export default function GenericTanstackTable<T>({
 // Helper function to create action cell
 export const createActionCell = (action: TableAction) => {
   return (
-    <Button
-      size="sm"
-      //   variant={action.variant || 'default'}
-      className={action.className || ''}
-      disabled={action.isDisabled}
-      onClick={action.onClick}
-    >
-      {action.label}
-    </Button>
+    <div className="flex justify-center items-center w-full">
+      <button
+        className={action.className || ''}
+        disabled={action.isDisabled}
+        onClick={action.onClick}
+      >
+        {action.label}
+      </button>
+    </div>
   );
 };

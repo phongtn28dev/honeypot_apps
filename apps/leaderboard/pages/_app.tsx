@@ -106,7 +106,6 @@ export default function App({
             client={queryClient}
             persistOptions={{ persister }}
           >
-            <ApolloProvider client={infoClient}>
               <RainbowKitProvider avatar={CustomAvatar}>
                 <NextUIProvider>
                   <ToastContainer />
@@ -130,7 +129,6 @@ export default function App({
                   </Provider>
                 </NextUIProvider>
               </RainbowKitProvider>
-            </ApolloProvider>
           </PersistQueryClientProvider>
         </QueryClientProvider>
       </WagmiProvider>
