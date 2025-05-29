@@ -19,7 +19,12 @@ export const columns: ColumnDef<StakingData>[] = [
     cell: ({ row }) => (
       <span className="font-medium">{row.getValue('id')}</span>
     ),
-    enableSorting: false,
+    enableSorting: true,
+    sortingFn: (rowA, rowB, columnId) => {
+      const valueA = parseInt(rowA.getValue(columnId) as string, 10);
+      const valueB = parseInt(rowB.getValue(columnId) as string, 10);
+      return valueA - valueB;
+    },
   },
   {
     accessorKey: 'cooldown',
