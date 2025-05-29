@@ -1,5 +1,6 @@
 import CardContainer from '@/components/CardContianer/v3';
 import InputSection from '@/components/select/select';
+import SummaryCard from '@/components/summary/summary';
 import GenericTanstackTable from '@/components/Table/GenericTable';
 import { tableData } from '@/components/Table/mockdata';
 import { columns } from '@/components/Table/table.config';
@@ -18,29 +19,32 @@ export default function AllInOneVault() {
     weightPerToken: '-',
     balance: '-',
     receiptWeight: '-',
+    estimatedWeight: '-',
   });
 
   const handleTokenChange = (token: string) => {
-    setSelectedToken(token)
+    setSelectedToken(token);
     if (token && amount) {
       setSummaryData({
-        weightPerToken: "2.5",
-        balance: "15.0",
-        receiptWeight: "25.0",
-      })
+        weightPerToken: '2.5',
+        balance: '15.0',
+        receiptWeight: '25.0',
+        estimatedWeight: '30.0',
+      });
     }
-  }
+  };
 
   const handleAmountChange = (newAmount: string) => {
-    setAmount(newAmount)
+    setAmount(newAmount);
     if (selectedToken && newAmount) {
       setSummaryData({
-        weightPerToken: "2.5",
-        balance: "15.0",
-        receiptWeight: "25.0",
-      })
+        weightPerToken: '2.5',
+        balance: '15.0',
+        receiptWeight: '25.0',
+        estimatedWeight: '30.0',
+      });
     }
-  }
+  };
 
   return (
     <div className="w-full flex flex-col justify-center items-center px-4 font-gliker">
@@ -80,6 +84,7 @@ export default function AllInOneVault() {
           onAmountChange={handleAmountChange}
           className={`w-full`}
         />
+        <SummaryCard className="w-full mb-6" data={summaryData} />
       </CardContainer>
     </div>
   );

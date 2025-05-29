@@ -51,9 +51,10 @@ export default function InputSection({
           className="w-full"
           classNames={{
             trigger:
-              'h-[48px] bg-white border-gray-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow',
-            value: 'text-gray-900 font-medium',
+              'h-[48px] bg-white border-gray-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200',
             popoverContent: 'bg-white border border-gray-300 shadow-lg',
+            listboxWrapper: 'p-0',
+            listbox: 'p-0',
           }}
         >
           {tokenOptions.map((token) => (
@@ -61,11 +62,11 @@ export default function InputSection({
               key={token.key}
               value={token.key}
               startContent={<span className="text-lg mr-2">{token.icon}</span>}
-              className="hover:bg-gray-50"
+              className="hover:bg-black group/item"
             >
               <div className="flex flex-col">
-                <span className="font-medium text-gray-900">{token.label}</span>
-                <span className="text-xs text-gray-500">{token.symbol}</span>
+                <span className="font-medium text-gray-900 group-hover/item:text-white">{token.label}</span>
+                <span className="text-xs text-gray-500 group-hover/item:text-gray-300">{token.symbol}</span>
               </div>
             </SelectItem>
           ))}
@@ -79,7 +80,7 @@ export default function InputSection({
           placeholder="Enter amount"
           value={amount}
           onChange={(e) => onAmountChange?.(e.target.value)}
-          className="h-[48px] bg-white border-gray-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow text-gray-900 font-medium rounded-lg"
+          className="h-[48px] bg-white border-gray-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow text-gray-900 font-medium rounded-xl"
           type="number"
           min="0"
           step="0.01"
