@@ -46,6 +46,10 @@ export default function AllInOneVault() {
     }
   };
 
+  const handleBurn2Vault = () => {
+    console.log('Burn2vault clicked', { selectedToken, amount });
+  };
+
   return (
     <div className="w-full flex flex-col justify-center items-center px-4 font-gliker">
       <CardContainer className="xl:max-w-[1200px]">
@@ -85,6 +89,14 @@ export default function AllInOneVault() {
           className={`w-full`}
         />
         <SummaryCard className="w-full mb-6" data={summaryData} />
+
+        <button
+          onClick={handleBurn2Vault}
+          disabled={!selectedToken || !amount}
+          className="w-full bg-orange-400 hover:bg-black text-black hover:text-orange-400 py-3 text-lg font-medium rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-[4px_4px_0px_0px_rgba(255,169,49,1)] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+        >
+          Burn2vault
+        </button>
       </CardContainer>
     </div>
   );
