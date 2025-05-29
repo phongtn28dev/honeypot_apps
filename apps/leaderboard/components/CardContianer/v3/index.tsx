@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { ReactNode } from 'react';
 
 import { cn } from '@nextui-org/theme';
-import { LoadingDisplay } from '@/components/LoadingDisplay/LoadingDisplay';
+import { LoadingDisplay } from '@/components/LoadingDisplay/loading-display';
 
 interface HoneyContainerProps {
   empty?: boolean;

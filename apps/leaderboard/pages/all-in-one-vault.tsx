@@ -1,8 +1,8 @@
 import CardContainer from '@/components/CardContianer/v3';
 import InputSection from '@/components/select/select';
 import SummaryCard from '@/components/summary/summary';
-import GenericTanstackTable from '@/components/Table/GenericTable';
-import { tableData } from '@/components/Table/mockdata';
+import GenericTanstackTable from '@/components/Table/generic-table';
+import { tableData } from '@/components/Table/mock-data';
 import { columns } from '@/components/Table/table.config';
 import { Card } from '@nextui-org/react';
 import { useState } from 'react';
