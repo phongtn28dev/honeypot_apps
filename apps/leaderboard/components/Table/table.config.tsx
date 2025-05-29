@@ -19,6 +19,7 @@ export const columns: ColumnDef<StakingData>[] = [
     cell: ({ row }) => (
       <span className="font-medium">{row.getValue('id')}</span>
     ),
+    enableSorting: false,
   },
   {
     accessorKey: 'cooldown',
