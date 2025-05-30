@@ -2,7 +2,8 @@ import { ColumnDef } from '@tanstack/react-table';
 import GenericTanstackTable, {
   createActionCell,
   type TableAction,
-} from './GenericTable';
+} from './generic-table';
+import { CountdownTimer } from '../countdown-timer';
 
 export interface StakingData {
   id: string;
@@ -10,6 +11,7 @@ export interface StakingData {
   weight: number;
   rewards: string;
   action: TableAction;
+  isCooldownActive?: boolean;
 }
 
 export const columns: ColumnDef<StakingData>[] = [
@@ -31,15 +33,39 @@ export const columns: ColumnDef<StakingData>[] = [
     header: 'Cooldown time',
     cell: ({ row }) => {
       const cooldown = row.getValue('cooldown') as string;
+      const data = row.original;
+      
+      // If cooldown is already at 00:00:00, just display the string
+      if (cooldown === '00:00:00' || !data.isCooldownActive) {
+        return (
+          <span
+            className={
+              cooldown === '00:00:00'
+                ? 'text-green-500 font-medium'
+                : 'text-gray-600'
+            }
+          >
+            {cooldown}
+          </span>
+        );
+      }
+      
+      // Otherwise, use the countdown timer
       return (
-        <span
-          className={
-            cooldown === '00:00:00'
-              ? 'text-green-500 font-medium'
-              : 'text-gray-600'
-          }
-        >
-          {cooldown}
+        <span className="text-orange-500 font-medium">
+          <CountdownTimer 
+            initialTime={cooldown} 
+            onComplete={() => {
+              // Update action button when timer completes
+              if (data.action.label === "Cooldown") {
+                data.action.label = "Claim";
+                data.action.isDisabled = false;
+                data.action.className = "bg-orange-400 hover:bg-orange-500 text-white px-2 py-1 rounded-md";
+                // Force a re-render of the component
+                window.dispatchEvent(new CustomEvent('cooldown-complete', { detail: data.id }));
+              }
+            }}
+          />
         </span>
       );
     },

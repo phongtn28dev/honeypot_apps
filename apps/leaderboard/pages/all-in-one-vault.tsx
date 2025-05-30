@@ -1,11 +1,11 @@
 import CardContainer from '@/components/CardContianer/v3';
 import InputSection from '@/components/select/select';
 import SummaryCard from '@/components/summary/summary';
-import GenericTanstackTable from '@/components/Table/GenericTable';
-import { tableData } from '@/components/Table/mockdata';
+import GenericTanstackTable from '@/components/Table/generic-table';
+import { tableData } from '@/components/Table/mock-data';
 import { columns } from '@/components/Table/table.config';
 import { Card } from '@nextui-org/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function AllInOneVault() {
   const statsData = [
@@ -21,6 +21,39 @@ export default function AllInOneVault() {
     receiptWeight: '-',
     estimatedWeight: '-',
   });
+  const [currentTableData, setCurrentTableData] = useState(tableData);
+  
+  // Listen for cooldown completion events
+  useEffect(() => {
+    const handleCooldownComplete = (event: CustomEvent) => {
+      const receiptId = event.detail;
+      // Update the table data when a cooldown completes
+      setCurrentTableData(prevData => 
+        prevData.map(item => {
+          if (item.id === receiptId) {
+            return {
+              ...item,
+              isCooldownActive: false,
+              cooldown: "00:00:00",
+              action: {
+                ...item.action,
+                label: "Claim",
+                isDisabled: false,
+                className: "bg-orange-400 hover:bg-orange-500 text-white px-2 py-1 rounded-md",
+              }
+            };
+          }
+          return item;
+        })
+      );
+    };
+
+    window.addEventListener('cooldown-complete', handleCooldownComplete as EventListener);
+    
+    return () => {
+      window.removeEventListener('cooldown-complete', handleCooldownComplete as EventListener);
+    };
+  }, []);
 
   const handleTokenChange = (token: string) => {
     setSelectedToken(token);
@@ -45,9 +78,63 @@ export default function AllInOneVault() {
       });
     }
   };
+  
+  // Function to handle claiming a receipt
+  const handleClaim = (receiptId: string) => {
+    // In a real implementation, this would call the contract claim function
+    console.log(`Claiming receipt ${receiptId}`);
+    
+    // Update the UI to show claimed status
+    setCurrentTableData(
+      currentTableData.map(receipt => {
+        if (receipt.id === receiptId) {
+          return {
+            ...receipt,
+            action: {
+              label: "Claimed",
+              variant: "outline" as const,
+              isDisabled: true,
+              className: "bg-gray-300 text-white px-2 py-1 rounded-md",
+              onClick: () => console.log(`Already claimed receipt ${receiptId}`),
+            }
+          };
+        }
+        return receipt;
+      })
+    );
+  };
 
   const handleBurn2Vault = () => {
     console.log('Burn2vault clicked', { selectedToken, amount });
+    
+    // Create a new receipt with a cooldown
+    const newReceipt = {
+      id: (Math.floor(Math.random() * 1000)).toString(),
+      cooldown: "00:30:00", // 30 minute cooldown for testing
+      weight: Number(amount) * 2.5, // Example weight calculation
+      rewards: `${(Number(amount) * 0.5).toFixed(1)} LBGT`,
+      isCooldownActive: true,
+      action: {
+        label: "Cooldown",
+        variant: "secondary" as const,
+        isDisabled: true,
+        className: "bg-gray-300 text-white px-2 py-1 rounded-md",
+        onClick: () => console.log(`Cooldown for new receipt`),
+      },
+    };
+    
+    // Add the new receipt to the table
+    setCurrentTableData([...currentTableData, newReceipt]);
+    
+    // Reset form
+    setSelectedToken('');
+    setAmount('');
+    setSummaryData({
+      weightPerToken: '-',
+      balance: '-',
+      receiptWeight: '-',
+      estimatedWeight: '-',
+    });
   };
 
   return (
@@ -72,7 +159,7 @@ export default function AllInOneVault() {
         </div>
 
         <GenericTanstackTable
-          data={tableData}
+          data={currentTableData}
           columns={columns}
           className="mb-6 w-full shadow-[4px_4px_0px_0px_rgba(255,255,255,0.8)]"
           enableSorting={true}
