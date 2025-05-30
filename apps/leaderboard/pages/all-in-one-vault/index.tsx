@@ -3,16 +3,41 @@ import InputSection from '@/components/select/select';
 import SummaryCard from '@/components/summary/summary';
 import GenericTanstackTable from '@/components/Table/generic-table';
 import { tableData } from '@/components/Table/mock-data';
-import { columns } from '@/components/Table/table.config';
+import { columns, ReceiptTableData } from '@/components/Table/table.config';
 import { Card } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
+import { useAccount, useReadContract } from 'wagmi';
+import { AllInOneVaultABI } from '@/lib/abis/AllInOneVault';
+import { ALL_IN_ONE_VAULT_PROXY } from '@/config/algebra/addresses';
+import { useClaimReceipt } from '@/hooks/useClaimReceipt';
+import { useGetReceipt } from '@/hooks/useGetReceipt';
+import { useReceipt } from '@/hooks/useReceipt';
+import { calculateSummaryData } from './helper-function';
 
 export default function AllInOneVault() {
+  const { address } = useAccount();
+  
+  const { data: totalWeight } = useReadContract({
+    address: ALL_IN_ONE_VAULT_PROXY,
+    abi: AllInOneVaultABI,
+    functionName: 'totalWeight',
+  });
+  
+  const { data: nextReceiptID } = useReadContract({
+    address: ALL_IN_ONE_VAULT_PROXY,
+    abi: AllInOneVaultABI,
+    functionName: 'nextReceiptID',
+  });
+
+  const { receipt, refetch } = useReceipt();
+  console.log('Receipts:', receipt);
+  
   const statsData = [
-    { label: 'Total Weight', value: '30' },
+    { label: 'Total Weight', value: totalWeight ? totalWeight.toString() : '30' },
     { label: 'LBGT Balance', value: '7.0' },
     { label: 'LBGT Lifetime', value: '10.5' },
   ];
+
   const [selectedToken, setSelectedToken] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
   const [summaryData, setSummaryData] = useState({
@@ -21,13 +46,11 @@ export default function AllInOneVault() {
     receiptWeight: '-',
     estimatedWeight: '-',
   });
-  const [currentTableData, setCurrentTableData] = useState(tableData);
+  const [currentTableData, setCurrentTableData] = useState<ReceiptTableData[]>(tableData);
   
-  // Listen for cooldown completion events
   useEffect(() => {
     const handleCooldownComplete = (event: CustomEvent) => {
       const receiptId = event.detail;
-      // Update the table data when a cooldown completes
       setCurrentTableData(prevData => 
         prevData.map(item => {
           if (item.id === receiptId) {
@@ -58,84 +81,93 @@ export default function AllInOneVault() {
   const handleTokenChange = (token: string) => {
     setSelectedToken(token);
     if (token && amount) {
-      setSummaryData({
-        weightPerToken: '2.5',
-        balance: '15.0',
-        receiptWeight: '25.0',
-        estimatedWeight: '30.0',
-      });
+      const newSummaryData = calculateSummaryData(token, amount, totalWeight);
+      if (newSummaryData) {
+        setSummaryData(newSummaryData);
+      }
     }
   };
 
   const handleAmountChange = (newAmount: string) => {
     setAmount(newAmount);
     if (selectedToken && newAmount) {
-      setSummaryData({
-        weightPerToken: '2.5',
-        balance: '15.0',
-        receiptWeight: '25.0',
-        estimatedWeight: '30.0',
-      });
+      const newSummaryData = calculateSummaryData(selectedToken, newAmount, totalWeight);
+      if (newSummaryData) {
+        setSummaryData(newSummaryData);
+      }
     }
   };
   
-  // Function to handle claiming a receipt
+  const { claimReceipt, claimingReceiptId, isPending, isConfirming, isConfirmed } = useClaimReceipt();
+  
   const handleClaim = (receiptId: string) => {
-    // In a real implementation, this would call the contract claim function
-    console.log(`Claiming receipt ${receiptId}`);
-    
-    // Update the UI to show claimed status
-    setCurrentTableData(
-      currentTableData.map(receipt => {
-        if (receipt.id === receiptId) {
-          return {
-            ...receipt,
-            action: {
-              label: "Claimed",
-              variant: "outline" as const,
-              isDisabled: true,
-              className: "bg-gray-300 text-white px-2 py-1 rounded-md",
-              onClick: () => console.log(`Already claimed receipt ${receiptId}`),
-            }
-          };
-        }
-        return receipt;
-      })
-    );
+    claimReceipt(receiptId);
+    console.log(`Claim clicked for receipt ID: ${receiptId}`);
   };
+
+  const { getReceipt, processing, isPending: isGetReceiptPending, isConfirming: isGetReceiptConfirming, isConfirmed: isGetReceiptConfirmed } = useGetReceipt();
 
   const handleBurn2Vault = () => {
     console.log('Burn2vault clicked', { selectedToken, amount });
     
-    // Create a new receipt with a cooldown
-    const newReceipt = {
-      id: (Math.floor(Math.random() * 1000)).toString(),
-      cooldown: "00:30:00", // 30 minute cooldown for testing
-      weight: Number(amount) * 2.5, // Example weight calculation
-      rewards: `${(Number(amount) * 0.5).toFixed(1)} LBGT`,
-      isCooldownActive: true,
-      action: {
-        label: "Cooldown",
-        variant: "secondary" as const,
-        isDisabled: true,
-        className: "bg-gray-300 text-white px-2 py-1 rounded-md",
-        onClick: () => console.log(`Cooldown for new receipt`),
-      },
+    if (selectedToken && amount) {
+      getReceipt(selectedToken, amount);
+      
+      // Use the helper function to calculate the weight
+      const summaryData = calculateSummaryData(selectedToken, amount, totalWeight);
+      const receiptWeight = summaryData ? parseFloat(summaryData.receiptWeight) : Number(amount) * 2.5;
+      
+      const newReceipt = {
+        id: "pending",
+        cooldown: "Pending...",
+        weight: receiptWeight, 
+        rewards: `${(Number(amount) * 0.5).toFixed(1)} LBGT`,
+        isCooldownActive: true,
+        action: {
+          label: "Processing",
+          variant: "secondary" as const,
+          isDisabled: true,
+          className: "bg-gray-300 text-white px-2 py-1 rounded-md",
+          onClick: () => console.log(`Transaction in progress`),
+        },
+      };
+      
+      // setCurrentTableData([...currentTableData, newReceipt]);
+      refetch();
+      setCurrentTableData(prevData => [...prevData, newReceipt]);
+      
+      setSelectedToken('');
+      setAmount('');
+      setSummaryData({
+        weightPerToken: '-',
+        balance: '-',
+        receiptWeight: '-',
+        estimatedWeight: '-',
+      });
     };
-    
-    // Add the new receipt to the table
-    setCurrentTableData([...currentTableData, newReceipt]);
-    
-    // Reset form
-    setSelectedToken('');
-    setAmount('');
-    setSummaryData({
-      weightPerToken: '-',
-      balance: '-',
-      receiptWeight: '-',
-      estimatedWeight: '-',
-    });
   };
+
+  useEffect(() => {
+    if (isConfirmed && claimingReceiptId) {
+      setCurrentTableData(prevData => 
+        prevData.map(item => {
+          if (item.id === claimingReceiptId) {
+            return {
+              ...item,
+              action: {
+                label: "Claimed",
+                variant: "outline" as const,
+                isDisabled: true,
+                className: "bg-gray-300 text-white px-2 py-1 rounded-md",
+                onClick: () => console.log(`Already claimed receipt ${claimingReceiptId}`),
+              }
+            };
+          }
+          return item;
+        })
+      );
+    }
+  }, [isConfirmed, claimingReceiptId]);
 
   return (
     <div className="w-full flex flex-col justify-center items-center px-4 font-gliker">

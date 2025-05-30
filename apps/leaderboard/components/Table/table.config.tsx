@@ -14,7 +14,22 @@ export interface StakingData {
   isCooldownActive?: boolean;
 }
 
-export const columns: ColumnDef<StakingData>[] = [
+export interface ReceiptTableData {
+  id: string;
+  cooldown: string;
+  weight: number;
+  rewards: string;
+  isCooldownActive: boolean;
+  action: {
+    label: string;
+    variant?: 'default' | 'outline' | 'secondary';
+    isDisabled: boolean;
+    className: string;
+    onClick: () => void;
+  };
+}
+
+export const columns: ColumnDef<ReceiptTableData>[] = [
   {
     accessorKey: 'id',
     header: 'Receipt ID',
