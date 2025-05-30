@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 interface CountdownTimerProps {
-  initialTime: string; // Format: "HH:MM:SS"
+  initialTime: string
   onComplete?: () => void;
 }
 
