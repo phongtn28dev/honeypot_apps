@@ -1,1 +1,1 @@
-export * from "./allInOneVault";
+export * from "./all-in-one-vault";
