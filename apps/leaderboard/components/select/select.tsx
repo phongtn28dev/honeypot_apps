@@ -84,6 +84,8 @@ export default function InputSection({
           type="number"
           min="0"
           step="0.01"
+          isClearable={true}
+          onClear={() => onAmountChange?.('')}
         />
       </div>
     </div>
