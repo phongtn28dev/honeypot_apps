@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createPublicClient, http } from 'viem';
 import { base } from 'viem/chains';
-import { AllInOneVaultABI } from '@/lib/abis/AllInOneVault';
+import { AllInOneVaultABI } from '@/lib/abis/all-in-one-vault';
 import { ALL_IN_ONE_VAULT_PROXY } from '@/config/algebra/addresses';
 
 // Create a public client for querying the blockchain

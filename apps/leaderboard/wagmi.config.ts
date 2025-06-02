@@ -1,7 +1,7 @@
 import { ContractConfig, defineConfig } from '@wagmi/cli';
 import { actions, react } from '@wagmi/cli/plugins';
 import { ALL_IN_ONE_VAULT } from './config/algebra/addresses';
-import { AllInOneVaultABI } from './lib/abis/AllInOneVault';
+import { AllInOneVaultABI } from './lib/abis/all-in-one-vault';
 
 const contracts: ContractConfig[] = [
   {

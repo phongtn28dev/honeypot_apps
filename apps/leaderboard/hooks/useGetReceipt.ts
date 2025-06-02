@@ -1,5 +1,5 @@
 import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
-import { AllInOneVaultABI } from '@/lib/abis/AllInOneVault';
+import { AllInOneVaultABI } from '@/lib/abis/all-in-one-vault';
 import { ALL_IN_ONE_VAULT_PROXY } from '@/config/algebra/addresses';
 import { useState } from 'react';
 
