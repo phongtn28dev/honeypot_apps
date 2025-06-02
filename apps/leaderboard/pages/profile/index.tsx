@@ -1,4 +1,4 @@
-import CardContainer from '@/components/CardContianer/v3';
+import CardContainer from '@/components/card-contianer/v3';
 import { Copy } from '@honeypot/shared/components/Copy';
 import Image from 'next/image';
 import React from 'react';
