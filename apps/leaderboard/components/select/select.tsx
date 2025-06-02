@@ -67,11 +67,19 @@ export default function InputSection({
               key={token.key}
               value={token.key}
               startContent={<span className="text-lg mr-2">{token.icon}</span>}
-              className="hover:bg-black group/item"
+              className="hover:bg-black focus:bg-black data-[hover=true]:bg-black data-[focus=true]:bg-black group/item transition-colors duration-150"
+              classNames={{
+                base: 'hover:bg-black focus:bg-black data-[hover=true]:bg-black data-[focus=true]:bg-black',
+                wrapper: 'group-hover/item:text-white group-focus/item:text-white',
+              }}
             >
               <div className="flex flex-col">
-                <span className="font-medium text-gray-900 group-hover/item:text-white">{token.label}</span>
-                <span className="text-xs text-gray-500 group-hover/item:text-gray-300">{token.symbol}</span>
+                <span className="font-medium text-gray-900 group-hover/item:text-white group-focus/item:text-white transition-colors duration-150">
+                  {token.label}
+                </span>
+                <span className="text-xs text-gray-500 group-hover/item:text-gray-300 group-focus/item:text-gray-300 transition-colors duration-150">
+                  {token.symbol}
+                </span>
               </div>
             </SelectItem>
           ))}
