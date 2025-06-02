@@ -1,7 +1,7 @@
 import { Input } from '../input';
 import { WarppedNextSelect } from '../wrappedNextUI/Select/Select';
 import { SelectItem } from '@nextui-org/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Define token options
 const tokenOptions = [
@@ -31,6 +31,11 @@ export default function InputSection({
   const [internalSelectedToken, setInternalSelectedToken] = useState<string>(
     selectedToken || ''
   );
+
+  // Update internal state when selectedToken prop changes
+  useEffect(() => {
+    setInternalSelectedToken(selectedToken || '');
+  }, [selectedToken]);
 
   const handleTokenChange = (keys: any) => {
     const selectedKey = Array.from(keys)[0] as string;

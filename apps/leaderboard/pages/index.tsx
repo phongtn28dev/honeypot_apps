@@ -1,4 +1,3 @@
-import CardContainer from '@/components/CardContianer/v3';
 
 export function Index() {
   return (

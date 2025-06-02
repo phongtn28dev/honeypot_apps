@@ -1,56 +1,50 @@
-import CardContainer from '@/components/CardContianer/v3';
+import CardContainer from '@/components/card-contianer/v3';
 import InputSection from '@/components/select/select';
 import SummaryCard from '@/components/summary/summary';
 import GenericTanstackTable from '@/components/Table/generic-table';
 import { tableData } from '@/components/Table/mock-data';
 import { columns, ReceiptTableData } from '@/components/Table/table.config';
 import { Card } from '@nextui-org/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAccount, useReadContract } from 'wagmi';
 import { AllInOneVaultABI } from '@/lib/abis/all-in-one-vault';
 import { ERC20ABI } from '@/lib/abis/erc20';
 import { useClaimReceipt } from '@/hooks/useClaimReceipt';
 import { useGetReceipt } from '@/hooks/useGetReceipt';
 import { useReceipt } from '@/hooks/useReceipt';
-import { calculateSummaryData, tokenAddressMap } from './helper-function';
+import { 
+  calculateSummaryData, 
+  tokenAddressMap, 
+  handleTokenChange,
+  handleAmountChange,
+  handleCooldownComplete,
+  updateClaimedReceipt,
+  resetFormState
+} from './helper-function';
 import { toast } from 'react-toastify';
 import { ALGEBRA_POSITION_MANAGER, ALL_IN_ONE_VAULT_PROXY } from '@/config/algebra/addresses';
+import { useApprove } from '@/lib/algebra/hooks/common/useApprove';
+import { CurrencyAmount, Token } from '@cryptoalgebra/sdk';
+import Insufficient from '@/components/insufficient/insufficient';
 
 export default function AllInOneVault() {
   const { address } = useAccount();
-  console.log('🔗 %cUser Address:', 'color: #3b82f6; font-weight: bold;', address);
-  
+
   const { data: balanceOf } = useReadContract({
     address: ALGEBRA_POSITION_MANAGER,
     abi: ERC20ABI,
     functionName: 'balanceOf',
     args: address ? [address] : undefined,
-  })
-  console.log('Balance:', balanceOf);
-  
-  useEffect(() => {
-    if (balanceOf) {
-      console.log('🏦 Vault Balance Updated:', {
-        value: balanceOf.toString(),
-        formatted: (Number(balanceOf) / 1e18).toFixed(4) + ' tokens'
-      });
-    }
-  }, [balanceOf]);
+  });
 
   const { data: totalWeight } = useReadContract({
     address: ALL_IN_ONE_VAULT_PROXY,
     abi: AllInOneVaultABI,
     functionName: 'totalWeight',
   });
-  
-  const { data: nextReceiptID } = useReadContract({
-    address: ALL_IN_ONE_VAULT_PROXY,
-    abi: AllInOneVaultABI,
-    functionName: 'nextReceiptID',
-  });
 
   const { receipt, refetch } = useReceipt();
-  
+
   const statsData = [
     { label: 'Total Weight', value: totalWeight ? totalWeight.toString() : '30' },
     { label: 'LBGT Balance', value: '7.0' },
@@ -66,10 +60,9 @@ export default function AllInOneVault() {
   });
   const [currentTableData, setCurrentTableData] = useState<ReceiptTableData[]>(tableData);
   const [insufficientBalance, setInsufficientBalance] = useState<boolean>(false);
-  
-  // Get the token balance using ERC20 balanceOf
+
   const { data: tokenBalance } = useReadContract({
-    address: selectedToken ? tokenAddressMap[selectedToken] as `0x${string}` : undefined,
+    address: selectedToken ? (tokenAddressMap[selectedToken] as `0x${string}`) : undefined,
     abi: ERC20ABI,
     functionName: 'balanceOf',
     args: address ? [address] : undefined,
@@ -77,174 +70,90 @@ export default function AllInOneVault() {
       enabled: !!selectedToken && !!address && !!tokenAddressMap[selectedToken],
     },
   });
-  
-  useEffect(() => {
-    const handleCooldownComplete = (event: CustomEvent) => {
-      const receiptId = event.detail;
-      setCurrentTableData(prevData => 
-        prevData.map(item => {
-          if (item.id === receiptId) {
-            return {
-              ...item,
-              isCooldownActive: false,
-              cooldown: "00:00:00",
-              action: {
-                ...item.action,
-                label: "Claim",
-                isDisabled: false,
-                className: "bg-orange-400 hover:bg-orange-500 text-white px-2 py-1 rounded-md",
-              }
-            };
-          }
-          return item;
-        })
-      );
-    };
 
-    window.addEventListener('cooldown-complete', handleCooldownComplete as EventListener);
-    
-    return () => {
-      window.removeEventListener('cooldown-complete', handleCooldownComplete as EventListener);
-    };
+  const amountToApprove = useMemo(() => {
+    if (!selectedToken || !amount) return undefined;
+    const tokenAddress = tokenAddressMap[selectedToken];
+    if (!tokenAddress) return undefined;
+
+    try {
+      const token = new Token(1, tokenAddress, 18, selectedToken, selectedToken);
+      const amountValue = BigInt(parseFloat(amount) * 1e18);
+      return CurrencyAmount.fromRawAmount(token, amountValue.toString());
+    } catch (error) {
+      console.error('Error creating currency amount:', error);
+      return undefined;
+    }
+  }, [selectedToken, amount]);
+  
+  const { approvalState, approvalCallback } = useApprove(amountToApprove, ALGEBRA_POSITION_MANAGER);
+
+  const { claimReceipt, claimingReceiptId, isPending, isConfirming, isConfirmed } = useClaimReceipt();
+  const { getReceipt, processing, isPending: isGetReceiptPending, isConfirming: isGetReceiptConfirming, isConfirmed: isGetReceiptConfirmed } = useGetReceipt();
+
+  // Event listeners
+  useEffect(() => {
+    const cooldownHandler = (event: CustomEvent) => handleCooldownComplete(event, setCurrentTableData);
+    window.addEventListener('cooldown-complete', cooldownHandler as EventListener);
+    return () => window.removeEventListener('cooldown-complete', cooldownHandler as EventListener);
   }, []);
 
-  const handleTokenChange = (token: string) => {
-    setSelectedToken(token);
-    setInsufficientBalance(false); // Reset error state when token changes
-    if (token && amount) {
-      const newSummaryData = calculateSummaryData(token, amount, totalWeight, tokenBalance);
-      if (newSummaryData) {
-        setSummaryData(newSummaryData);
-        
-        // Check balance with new token
-        const amountValue = parseFloat(amount);
-        const balanceValue = parseFloat(newSummaryData.balance);
-        
-        if (amountValue > balanceValue) {
-          setInsufficientBalance(true);
-        }
-      }
+  useEffect(() => {
+    if (isConfirmed && claimingReceiptId) {
+      updateClaimedReceipt(claimingReceiptId, setCurrentTableData);
     }
+  }, [isConfirmed, claimingReceiptId]);
+
+  // Handler functions
+  const onTokenChange = (token: string) => {
+    handleTokenChange(token, amount, totalWeight, tokenBalance, setSelectedToken, setInsufficientBalance, setSummaryData);
   };
 
-  const handleAmountChange = (newAmount: string) => {
-    setAmount(newAmount);
-    if (selectedToken && newAmount) {
-      const newSummaryData = calculateSummaryData(selectedToken, newAmount, totalWeight, tokenBalance);
-      if (newSummaryData) {
-        setSummaryData(newSummaryData);
-        
-        // Check if amount exceeds balance
-        const amountValue = parseFloat(newAmount);
-        const balanceValue = parseFloat(newSummaryData.balance);
-        
-        if (amountValue > balanceValue) {
-          setInsufficientBalance(true);
-          toast.error(`Insufficient balance! You only have ${balanceValue} ${selectedToken} tokens available.`, {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
-        } else {
-          setInsufficientBalance(false);
-        }
-      }
-    } else {
-      setInsufficientBalance(false);
-    }
+  const onAmountChange = (newAmount: string) => {
+    handleAmountChange(newAmount, selectedToken, totalWeight, tokenBalance, setAmount, setInsufficientBalance, setSummaryData);
   };
-  
-  const { claimReceipt, claimingReceiptId, isPending, isConfirming, isConfirmed } = useClaimReceipt();
-  
+
   const handleClaim = (receiptId: string) => {
     claimReceipt(receiptId);
     console.log(`Claim clicked for receipt ID: ${receiptId}`);
   };
 
-  const { getReceipt, processing, isPending: isGetReceiptPending, isConfirming: isGetReceiptConfirming, isConfirmed: isGetReceiptConfirmed } = useGetReceipt();
+  const handleBurn2Vault = async () => {
+    if (!selectedToken || !amount) return;
 
-  const handleBurn2Vault = () => {
-    console.log('Burn2vault clicked', { selectedToken, amount });
-    
-    if (selectedToken && amount) {
-      // Check if amount exceeds balance before proceeding
-      const summaryData = calculateSummaryData(selectedToken, amount, totalWeight, tokenBalance);
-      if (summaryData) {
-        const amountValue = parseFloat(amount);
-        const balanceValue = parseFloat(summaryData.balance);
-        
-        if (amountValue > balanceValue) {
-          toast.error(`Insufficient balance! You only have ${balanceValue} ${selectedToken} tokens available.`, {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
-          return;
-        }
+    const summaryData = calculateSummaryData(selectedToken, amount, totalWeight, tokenBalance);
+    if (summaryData) {
+      const amountValue = parseFloat(amount);
+      const balanceValue = parseFloat(summaryData.balance);
+
+      if (amountValue > balanceValue) {
+        toast.error(`Insufficient balance! You only have ${balanceValue} ${selectedToken} tokens available.`, {
+          position: 'top-right',
+          autoClose: 3000,
+        });
+        return;
       }
-      
-      getReceipt(selectedToken, amount);
-      
-      // Use the helper function to calculate the weight
-      const receiptWeight = summaryData ? parseFloat(summaryData.receiptWeight) : Number(amount) * 2.5;
-      
-      const newReceipt = {
-        id: "pending",
-        cooldown: "Pending...",
-        weight: receiptWeight, 
-        rewards: `${(Number(amount) * 0.5).toFixed(1)} LBGT`,
-        isCooldownActive: true,
-        action: {
-          label: "Processing",
-          variant: "secondary" as const,
-          isDisabled: true,
-          className: "bg-gray-300 text-white px-2 py-1 rounded-md",
-          onClick: () => console.log(`Transaction in progress`),
-        },
-      };
-      
-      // setCurrentTableData([...currentTableData, newReceipt]);
-      refetch();
-      setCurrentTableData(prevData => [...prevData, newReceipt]);
-      
-      setSelectedToken('');
-      setAmount('');
-      setInsufficientBalance(false);
-      setSummaryData({
-        weightPerToken: '-',
-        balance: '-',
-        receiptWeight: '-',
-      });
-    };
-  };
-
-  useEffect(() => {
-    if (isConfirmed && claimingReceiptId) {
-      setCurrentTableData(prevData => 
-        prevData.map(item => {
-          if (item.id === claimingReceiptId) {
-            return {
-              ...item,
-              action: {
-                label: "Claimed",
-                variant: "outline" as const,
-                isDisabled: true,
-                className: "bg-gray-300 text-white px-2 py-1 rounded-md",
-                onClick: () => console.log(`Already claimed receipt ${claimingReceiptId}`),
-              }
-            };
-          }
-          return item;
-        })
-      );
     }
-  }, [isConfirmed, claimingReceiptId]);
+
+    try {
+      await approvalCallback();
+      toast.info('Token approval submitted. Please wait for confirmation...', {
+        position: 'top-right',
+        autoClose: 3000,
+      });
+    } catch (error) {
+      console.error('Token approval failed:', error);
+      toast.error('Token approval failed. Please try again.', {
+        position: 'top-right',
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    getReceipt(selectedToken, amount);
+    refetch();
+    resetFormState(setSelectedToken, setAmount, setInsufficientBalance, setSummaryData);
+  };
 
   return (
     <div className="w-full flex flex-col justify-center items-center px-4 font-gliker">
@@ -252,15 +161,10 @@ export default function AllInOneVault() {
         <div className="flex flex-col justify-center w-full rounded-2xl gap-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             {statsData.map((stat, index) => (
-              <Card
-                key={index}
-                className="border-2 border-dashed border-black bg-white/90 shadow-[4px_4px_0px_0px_rgba(255,255,255,0.8)]"
-              >
+              <Card key={index} className="border-2 border-dashed border-black bg-white/90 shadow-[4px_4px_0px_0px_rgba(255,255,255,0.8)]">
                 <div className="p-4 text-center">
                   <div className="text-sm text-gray-600 mb-1">{stat.label}</div>
-                  <div className="text-2xl font-bold text-gray-800">
-                    {stat.value}
-                  </div>
+                  <div className="text-2xl font-bold text-gray-800">{stat.value}</div>
                 </div>
               </Card>
             ))}
@@ -280,29 +184,15 @@ export default function AllInOneVault() {
         <InputSection
           selectedToken={selectedToken}
           amount={amount}
-          onTokenChange={handleTokenChange}
-          onAmountChange={handleAmountChange}
-          className={`w-full`}
+          onTokenChange={onTokenChange}
+          onAmountChange={onAmountChange}
+          className="w-full"
         />
-        
-        {/* Insufficient Balance Warning */}
+
         {insufficientBalance && (
-          <div className="w-full mb-4 p-3 bg-red-50 border-l-4 border-red-400 rounded-r-md">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div className="ml-3">
-                <p className="text-sm text-red-700">
-                  <span className="font-medium">Insufficient balance!</span> You only have {summaryData.balance} {selectedToken} tokens available.
-                </p>
-              </div>
-            </div>
-          </div>
+          <Insufficient balance={summaryData.balance} selectedToken={selectedToken} />
         )}
-        
+
         <SummaryCard className="w-full mb-6" data={summaryData} />
 
         <button
