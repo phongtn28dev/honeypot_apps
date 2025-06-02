@@ -4,7 +4,6 @@ interface SummaryData {
   weightPerToken: string | number;
   balance: string | number;
   receiptWeight: string | number;
-  estimatedWeight: string | number;
 }
 
 interface SummaryCardProps {
@@ -18,7 +17,6 @@ export default function SummaryCard({
     weightPerToken: '-',
     balance: '-',
     receiptWeight: '-',
-    estimatedWeight: '-',
   },
   className = '',
   isLoading = false,
@@ -36,7 +34,7 @@ export default function SummaryCard({
       className={`border-2 border-dashed border-gray-400 bg-white/90 mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] ${className}`}
     >
       <div className="p-4">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        <div className="grid grid-cols-3 gap-4 text-center">
           <div>
             <div className="text-sm text-gray-600 mb-1">Weight/Token</div>
             <div
@@ -65,16 +63,6 @@ export default function SummaryCard({
               }`}
             >
               {formatValue(data.receiptWeight)}
-            </div>
-          </div>
-          <div>
-            <div className="text-sm text-gray-600 mb-1">Estimated-weight</div>
-            <div
-              className={`text-lg font-medium ${
-                isLoading ? 'animate-pulse' : ''
-              }`}
-            >
-              {formatValue(data.estimatedWeight)}
             </div>
           </div>
         </div>

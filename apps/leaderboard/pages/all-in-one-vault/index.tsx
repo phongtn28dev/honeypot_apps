@@ -7,7 +7,7 @@ import { columns, ReceiptTableData } from '@/components/Table/table.config';
 import { Card } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
 import { useAccount, useReadContract } from 'wagmi';
-import { AllInOneVaultABI } from '@/lib/abis/AllInOneVault';
+import { AllInOneVaultABI } from '@/lib/abis/all-in-one-vault';
 import { ALL_IN_ONE_VAULT_PROXY } from '@/config/algebra/addresses';
 import { useClaimReceipt } from '@/hooks/useClaimReceipt';
 import { useGetReceipt } from '@/hooks/useGetReceipt';
@@ -30,7 +30,6 @@ export default function AllInOneVault() {
   });
 
   const { receipt, refetch } = useReceipt();
-  console.log('Receipts:', receipt);
   
   const statsData = [
     { label: 'Total Weight', value: totalWeight ? totalWeight.toString() : '30' },

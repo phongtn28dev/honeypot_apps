@@ -16,16 +16,12 @@ export const calculateSummaryData = (
 
   const weightPerToken = 2.5;
   const amountValue = parseFloat(amountStr);
-  const receiptWeight = (amountValue * weightPerToken).toFixed(1);
-  const currentTotalWeight = totalWeight ? parseFloat(totalWeight.toString()) : 30;
-  const estimatedWeight = (currentTotalWeight + amountValue * weightPerToken).toFixed(1);
-  
+  const receiptWeight = (weightPerToken * amountValue).toFixed(1);
   const tokenBalance = 15.0;
   
   return {
     weightPerToken: weightPerToken.toString(),
     balance: tokenBalance.toFixed(1),
     receiptWeight: receiptWeight,
-    estimatedWeight: estimatedWeight,
   };
 };
