@@ -7,8 +7,8 @@ import {
   metaMaskWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 import { injected, safe } from 'wagmi/connectors';
-import { cookieStorage, createStorage, Config } from 'wagmi';
-import { networks } from '../chains';
+import { cookieStorage, createStorage, Config, http } from 'wagmi';
+import { berachainMainnet, networks } from '../chains';
 
 const pId = '23b1ff4e22147bdf7cab13c0ee4bed90';
 
@@ -58,6 +58,17 @@ export const createWagmiConfig = (overrideConfig?: Partial<Config>) =>
     connectors: connectors(),
     appName: 'honeypot-finance',
     projectId: pId,
+    transports: {
+      ...Object.fromEntries(
+        networks.map((network) => [
+          network.chainId,
+          http(network.chain.rpcUrls.default.http[0]),
+        ])
+      ),
+      [berachainMainnet.id]: http(
+        'https://api.henlo-winnie.dev/v1/mainnet/08c3ed43-6326-4be6-9dc2-78a5f77b7382'
+      ),
+    },
     // @ts-ignore
     chains: networks.map((network) => network.chain),
     ssr: true, // If your dApp uses server side rendering (SSR
