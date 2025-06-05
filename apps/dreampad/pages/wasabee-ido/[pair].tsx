@@ -12,6 +12,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { observer } from 'mobx-react-lite';
 import { WasabeeIDO } from '@honeypot/shared';
+import WasabeeIDOActionComponent from './WasabeeIDOActionComponent';
 
 const WasabeeIDOPage = observer(() => {
   const router = useRouter();
@@ -134,7 +135,7 @@ const WasabeeIDOPage = observer(() => {
         >
           <CardContainer className="col-span-6 lg:col-span-4">
             <div className="space-y-6 w-full">
-              <div className="lg:grid lg:grid-cols-[220px_1fr] gap-6 items-start ">
+              <div className="lg:grid lg:grid-cols-[220px_1fr] gap-6 items-start h-full">
                 <div className="space-y-4 mb-2">
                   <div className="bg-white rounded-[16px] border border-black p-5 shadow-[4px_4px_0px_0px_#D29A0D] hover:shadow-[2px_2px_0px_0px_#D29A0D] transition-shadow">
                     <div className="text-sm text-[#4D4D4D] mb-2 text-center">
@@ -152,7 +153,7 @@ const WasabeeIDOPage = observer(() => {
                     <div className="text-sm text-[#4D4D4D] mb-2 text-center">
                       Total Amount
                     </div>
-                    <div className="text-[24px] text-[#4D4D4D] text-shadow-[1.481px_2.963px_0px_#AF7F3D] text-stroke-1 text-stroke-black text-center">
+                    <div className="text-[24px] text-[#4D4D4D] text-shadow-[1.481px_2.963px_0px_0px_#AF7F3D] text-stroke-1 text-stroke-black text-center">
                       {DynamicFormatAmount({
                         amount: wasabeeIDO?.idoTotalAmount.toString() ?? 0,
                         decimals: 2,
@@ -164,13 +165,90 @@ const WasabeeIDOPage = observer(() => {
                     <div className="text-sm text-[#171414] mb-2 text-center">
                       Sold Amount
                     </div>
-                    <div className="text-[24px] text-[#4D4D4D] text-shadow-[1.481px_2.963px_0px_#AF7F3D] text-stroke-1 text-stroke-black text-center">
+                    <div className="text-[24px] text-[#4D4D4D] text-shadow-[1.481px_2.963px_0px_0px_#AF7F3D] text-stroke-1 text-stroke-black text-center">
                       {DynamicFormatAmount({
                         amount: wasabeeIDO?.idoSold.toString() ?? 0,
                         decimals: 2,
                         endWith: wasabeeIDO?.idoToken?.symbol ?? '',
                       })}
                     </div>
+                  </div>
+                  <div className="bg-white rounded-[16px] border border-black p-5 shadow-[4px_4px_0px_0px_#D29A0D] hover:shadow-[2px_2px_0px_0px_#D29A0D] transition-shadow">
+                    <div className="text-sm text-[#171414] mb-2 text-center">
+                      Remaining Balance
+                    </div>
+                    <div className="text-[24px] text-[#4D4D4D] text-shadow-[1.481px_2.963px_0px_0px_#AF7F3D] text-stroke-1 text-stroke-black text-center">
+                      {DynamicFormatAmount({
+                        amount: wasabeeIDO?.contractBalance?.toString() ?? 0,
+                        decimals: 2,
+                        endWith: wasabeeIDO?.idoToken?.symbol ?? '',
+                      })}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col h-full">
+                  <div className="text-lg font-semibold mb-4">
+                    Purchase History
+                  </div>
+                  <div className="bg-white rounded-[16px] border border-black p-5 shadow-[4px_4px_0px_0px_#D29A0D] flex-1 flex flex-col">
+                    <div className="overflow-x-auto flex-1">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="text-sm text-[#4D4D4D] border-b border-black">
+                            <th className="py-2 text-left">Buyer</th>
+                            <th className="py-2 text-right">BERA Amount</th>
+                            <th className="py-2 text-right">Token Amount</th>
+                            <th className="py-2 text-right">Time</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {wasabeeIDO?.purchaseHistory.map(
+                            (purchase, index) => (
+                              <tr
+                                key={index}
+                                className="text-sm border-b border-gray-200 last:border-0"
+                              >
+                                <td className="py-2 text-left">
+                                  {`${purchase.buyer.slice(
+                                    0,
+                                    6
+                                  )}...${purchase.buyer.slice(-4)}`}
+                                </td>
+                                <td className="py-2 text-right">
+                                  {DynamicFormatAmount({
+                                    amount: purchase.ethAmount.toString(),
+                                    decimals: 4,
+                                    endWith: 'BERA',
+                                  })}
+                                </td>
+                                <td className="py-2 text-right">
+                                  {DynamicFormatAmount({
+                                    amount: purchase.tokenAmount.toString(),
+                                    decimals: 4,
+                                    endWith: wasabeeIDO?.idoToken?.symbol ?? '',
+                                  })}
+                                </td>
+                                <td className="py-2 text-right">
+                                  {new Date(
+                                    purchase.timestamp * 1000
+                                  ).toLocaleString()}
+                                </td>
+                              </tr>
+                            )
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                    {wasabeeIDO?.purchaseHistoryHasMore && (
+                      <div className="mt-4 text-center">
+                        <button
+                          onClick={() => wasabeeIDO?.loadMorePurchaseHistory()}
+                          className="px-4 py-2 bg-[#FFCD4D] text-black rounded-lg hover:bg-[#FFD700] transition-colors"
+                        >
+                          Load More
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -180,13 +258,15 @@ const WasabeeIDOPage = observer(() => {
           <div className="col-span-6 lg:col-span-2 h-full">
             <CardContainer>
               <div className="space-y-4 w-full">
-                {/* TODO: Add IDO action component */}
+                {wasabeeIDO && (
+                  <WasabeeIDOActionComponent wasabeeIDO={wasabeeIDO} />
+                )}
               </div>
             </CardContainer>
           </div>
         </CardContainer>
 
-        <CardContainer
+        {/* <CardContainer
           className="bg-white border-3 border-[#FFCD4D] px-[50px] py-[100px]"
           showBottomBorder={false}
         >
@@ -202,7 +282,7 @@ const WasabeeIDOPage = observer(() => {
           >
             {wasabeeIDO?.description}
           </ReactMarkdown>
-        </CardContainer>
+        </CardContainer> */}
       </div>
     </div>
   );

@@ -32,6 +32,15 @@ export class WasabeeIDO {
   maxEthPerWallet: BigNumber = new BigNumber(0);
   feeRate: BigNumber = new BigNumber(0);
   ethPurchased: BigNumber = new BigNumber(0);
+  contractBalance: BigNumber = new BigNumber(0);
+  purchaseHistory: {
+    buyer: string;
+    ethAmount: BigNumber;
+    tokenAmount: BigNumber;
+    timestamp: number;
+  }[] = [];
+  purchaseHistoryPage = 0;
+  purchaseHistoryHasMore = true;
 
   // Metadata
   chainId: number = DEFAULT_CHAIN_ID;
@@ -93,6 +102,81 @@ export class WasabeeIDO {
     }
   }
 
+  async loadPurchaseHistory(page = 0, pageSize = 20) {
+    if (!this.address) {
+      return;
+    }
+
+    try {
+      // Get current block number
+      const currentBlock = await wallet.publicClient.getBlockNumber();
+      // Look back 10,000 blocks per page (approximately 2.5 hours on Berachain)
+      const blockRange = BigInt(10000);
+      const fromBlock = currentBlock - blockRange * BigInt(page + 1);
+      const toBlock = currentBlock - blockRange * BigInt(page);
+
+      const events = await wallet.publicClient.getLogs({
+        address: this.address,
+        event: {
+          type: 'event',
+          name: 'Purchased',
+          inputs: [
+            { type: 'address', name: 'buyer', indexed: true },
+            { type: 'uint256', name: 'ethAmount', indexed: false },
+            { type: 'uint256', name: 'tokenAmount', indexed: false },
+          ],
+        },
+        fromBlock,
+        toBlock,
+      });
+
+      // Sort by block number (most recent first)
+      const sortedEvents = events
+        .sort((a, b) => Number(b.blockNumber) - Number(a.blockNumber))
+        .slice(0, pageSize);
+
+      // Get block timestamps for each event
+      const blocks = await Promise.all(
+        sortedEvents.map((event) =>
+          wallet.publicClient.getBlock({ blockNumber: event.blockNumber })
+        )
+      );
+
+      const newHistory = sortedEvents.map((event, index) => {
+        if (!event.args.ethAmount || !event.args.tokenAmount) {
+          throw new Error('Invalid event data');
+        }
+        return {
+          buyer: event.args.buyer as string,
+          ethAmount: new BigNumber(event.args.ethAmount.toString()).div(1e18),
+          tokenAmount: new BigNumber(event.args.tokenAmount.toString()).div(
+            10 ** (this.idoToken?.decimals ?? 18)
+          ),
+          timestamp: Number(blocks[index].timestamp),
+        };
+      });
+
+      if (page === 0) {
+        this.purchaseHistory = newHistory;
+      } else {
+        this.purchaseHistory = [...this.purchaseHistory, ...newHistory];
+      }
+
+      this.purchaseHistoryPage = page;
+      this.purchaseHistoryHasMore = events.length >= pageSize;
+
+      return this.purchaseHistory;
+    } catch (error) {
+      console.error('Error loading purchase history:', error);
+      return [];
+    }
+  }
+
+  async loadMorePurchaseHistory() {
+    if (!this.purchaseHistoryHasMore) return;
+    return this.loadPurchaseHistory(this.purchaseHistoryPage + 1);
+  }
+
   async loadOnchainData() {
     if (!this.address) {
       return;
@@ -108,7 +192,18 @@ export class WasabeeIDO {
       this.loadMaxEthPerWallet(),
       this.loadFeeRate(),
       this.loadEthPurchased(),
+      this.loadPurchaseHistory(0), // Load first page
     ]);
+
+    // Load contract balance after IDO token is loaded
+    if (this.idoToken) {
+      const balance = await this.idoToken.contract.read['balanceOf']([
+        this.address,
+      ]);
+      this.contractBalance = new BigNumber(balance.toString()).div(
+        10 ** (this.idoToken?.decimals ?? 18)
+      );
+    }
   }
 
   async loadIDOToken() {
@@ -247,18 +342,99 @@ export class WasabeeIDO {
     }
 
     try {
-      const tx = await new ContractWrite(this.contract.write['buy']).call([
-        BigInt(
-          this.amountIn
-            .times(10 ** (this.idoToken?.decimals ?? 18))
-            .toFixed(0)
-            .toString()
-        ),
-      ]);
+      // Check if this purchase would exceed maxEthPerWallet
+      const totalAfterPurchase = this.ethPurchased.plus(this.amountIn);
+      if (totalAfterPurchase.gt(this.maxEthPerWallet)) {
+        throw new Error(
+          `This purchase would exceed the maximum BERA per wallet limit of ${this.maxEthPerWallet.toString()} BERA. You have already purchased ${this.ethPurchased.toString()} BERA.`
+        );
+      }
 
-      console.log('tx', tx);
+      // Calculate token amount based on BERA amount and price
+      const tokenAmount = this.amountIn.div(this.priceInETH);
+      const tokenAmountInWei = BigInt(
+        tokenAmount
+          .times(10 ** (this.idoToken?.decimals ?? 18))
+          .toFixed(0)
+          .toString()
+      );
+      const beraAmountInWei = BigInt(
+        this.amountIn.times(1e18).toFixed(0).toString()
+      );
+
+      // Check if contract has enough tokens
+      if (this.contractBalance.lt(tokenAmount)) {
+        throw new Error(
+          `Contract has insufficient tokens. Required: ${tokenAmount.toString()} ${
+            this.idoToken?.symbol
+          }, Available: ${this.contractBalance.toString()} ${
+            this.idoToken?.symbol
+          }`
+        );
+      }
+
+      // Check if user has enough ETH
+      const userBalance = await wallet.publicClient.getBalance({
+        address: wallet.account as `0x${string}`,
+      });
+      if (userBalance < beraAmountInWei) {
+        throw new Error(
+          `Insufficient BERA balance. Required: ${this.amountIn.toString()} BERA, Available: ${new BigNumber(
+            userBalance.toString()
+          )
+            .div(1e18)
+            .toString()} BERA`
+        );
+      }
+
+      const debugInfo = {
+        amountIn: this.amountIn.toString(),
+        priceInETH: this.priceInETH.toString(),
+        tokenAmount: tokenAmount.toString(),
+        tokenAmountInWei: tokenAmountInWei.toString(),
+        beraAmountInWei: beraAmountInWei.toString(),
+        tokenDecimals: this.idoToken?.decimals ?? 18,
+        idoTokenSymbol: this.idoToken?.symbol,
+        ethPurchased: this.ethPurchased.toString(),
+        maxEthPerWallet: this.maxEthPerWallet.toString(),
+        contractBalance: this.contractBalance.toString(),
+        userBalance: new BigNumber(userBalance.toString()).div(1e18).toString(),
+      };
+      console.log('ETH Purchase Debug:', debugInfo);
+
+      // Simulate the transaction first
+      try {
+        const simulateResult = await this.contract.simulate['buy'](
+          [tokenAmountInWei],
+          {
+            account: wallet.account as `0x${string}`,
+            value: beraAmountInWei,
+          }
+        );
+        console.log('Simulation result:', simulateResult);
+        console.log('Transaction simulation successful');
+      } catch (simError: any) {
+        console.error('Transaction simulation failed:', simError);
+        throw new Error(
+          `Transaction would fail: ${simError.message || 'Unknown error'}`
+        );
+      }
+
+      // If simulation succeeds, proceed with actual transaction
+      const tx = await new ContractWrite(this.contract.write['buy']).call(
+        [tokenAmountInWei],
+        {
+          value: beraAmountInWei,
+        }
+      );
+
+      console.log('Transaction successful:', tx);
+
+      // Refresh data after successful purchase
+      await this.refreshAfterPurchase();
     } catch (error) {
-      console.error('error', error);
+      console.error('Transaction Error:', error);
+      throw error;
     }
   }
 
@@ -267,26 +443,106 @@ export class WasabeeIDO {
       return;
     }
 
-    await this.weth?.approveIfNoAllowance({
-      amount: this.amountIn.times(1e18).toFixed(0).toString(),
-      spender: this.address,
-    });
-
     try {
+      // Check if this purchase would exceed maxEthPerWallet
+      const totalAfterPurchase = this.ethPurchased.plus(this.amountIn);
+      if (totalAfterPurchase.gt(this.maxEthPerWallet)) {
+        throw new Error(
+          `This purchase would exceed the maximum BERA per wallet limit of ${this.maxEthPerWallet.toString()} BERA. You have already purchased ${this.ethPurchased.toString()} BERA.`
+        );
+      }
+
+      // Calculate token amount based on WBERA amount and price
+      const tokenAmount = this.amountIn.div(this.priceInETH);
+      const tokenAmountInWei = BigInt(
+        tokenAmount
+          .times(10 ** (this.idoToken?.decimals ?? 18))
+          .toFixed(0)
+          .toString()
+      );
+      const wberaAmountInWei = BigInt(
+        this.amountIn.times(1e18).toFixed(0).toString()
+      );
+
+      // Check if contract has enough tokens
+      const contractBalance = await this.idoToken?.contract.read['balanceOf']([
+        this.address,
+      ]);
+      if (
+        !contractBalance ||
+        BigInt(contractBalance.toString()) < tokenAmountInWei
+      ) {
+        throw new Error(
+          `Contract has insufficient tokens. Required: ${tokenAmount.toString()} ${
+            this.idoToken?.symbol
+          }, Available: ${new BigNumber(contractBalance?.toString() ?? '0')
+            .div(10 ** (this.idoToken?.decimals ?? 18))
+            .toString()} ${this.idoToken?.symbol}`
+        );
+      }
+
+      const debugInfo = {
+        amountIn: this.amountIn.toString(),
+        priceInETH: this.priceInETH.toString(),
+        tokenAmount: tokenAmount.toString(),
+        tokenAmountInWei: tokenAmountInWei.toString(),
+        wberaAmountInWei: wberaAmountInWei.toString(),
+        tokenDecimals: this.idoToken?.decimals ?? 18,
+        idoTokenSymbol: this.idoToken?.symbol,
+        ethPurchased: this.ethPurchased.toString(),
+        maxEthPerWallet: this.maxEthPerWallet.toString(),
+        contractBalance: contractBalance
+          ? new BigNumber(contractBalance.toString())
+              .div(10 ** (this.idoToken?.decimals ?? 18))
+              .toString()
+          : '0',
+      };
+      console.log('WETH Purchase Debug:', debugInfo);
+
+      await this.contract.simulate['buyWithWETH']([tokenAmountInWei], {
+        account: wallet.account as `0x${string}`,
+      });
+
+      // If simulation succeeds, proceed with approval and transaction
+      await this.weth?.approveIfNoAllowance({
+        amount: wberaAmountInWei.toString(),
+        spender: this.address,
+      });
+
       const tx = await new ContractWrite(
         this.contract.write['buyWithWETH']
-      ).call([
-        BigInt(
-          this.amountIn
-            .times(10 ** (this.idoToken?.decimals ?? 18))
-            .toFixed(0)
-            .toString()
-        ),
-      ]);
+      ).call([tokenAmountInWei]);
 
-      console.log('tx', tx);
+      console.log('Transaction successful:', tx);
+
+      // Refresh data after successful purchase
+      await this.refreshAfterPurchase();
     } catch (error) {
-      console.error('error', error);
+      console.error('Transaction Error:', error);
+      throw error;
     }
+  }
+
+  async refreshAfterPurchase() {
+    // Refresh all relevant data
+    await Promise.all([
+      this.loadIDOSold(),
+      this.loadEthPurchased(),
+      this.loadContractBalance(),
+      this.loadPurchaseHistory(0), // Reset to first page
+    ]);
+  }
+
+  async loadContractBalance() {
+    if (!this.address || !this.idoToken) {
+      return;
+    }
+    const balance = await this.idoToken.contract.read['balanceOf']([
+      this.address,
+    ]);
+    this.contractBalance = new BigNumber(balance.toString()).div(
+      10 ** (this.idoToken?.decimals ?? 18)
+    );
+    return this.contractBalance;
   }
 }
