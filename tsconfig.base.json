@@ -16,7 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@particle-network/universal-account-sdk": [
-        "./node_modules/@particle-network/universal-account-sdk/dist/index.d.ts"
+        "node_modules/@particle-network/universal-account-sdk/dist/index"
       ],
       "@honeypot-frontend/universal-account": [
         "libs/shared/universal-account/src/index.ts"
