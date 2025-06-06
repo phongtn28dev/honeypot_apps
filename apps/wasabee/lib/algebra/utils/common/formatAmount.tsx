@@ -5,12 +5,10 @@ import { ReactNode } from 'react';
 //marking the threshold to  1 trillion common for most AMM to have this range for real world assets 
 const INFINITY_THRESHOLD=1e12
 
-
 export function formatAmountWithAlphabetSymbol(
   amount: string,
   decimals = 2
 ): string {
-
 
   if (Number(amount) === 0) return '0';
 
