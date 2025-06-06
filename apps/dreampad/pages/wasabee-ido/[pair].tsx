@@ -13,11 +13,19 @@ import remarkGfm from 'remark-gfm';
 import { observer } from 'mobx-react-lite';
 import { WasabeeIDO } from '@honeypot/shared';
 import WasabeeIDOActionComponent from './WasabeeIDOActionComponent';
+import { useWasabeeIDO } from '@honeypot/shared';
+import BigNumber from 'bignumber.js';
+import { wasabeeIDOmetadata } from '@honeypot/shared';
 
 const WasabeeIDOPage = observer(() => {
   const router = useRouter();
-  const [wasabeeIDO, setWasabeeIDO] = useState<WasabeeIDO | null>(null);
   const { pair: pairAddress } = router.query;
+  const { data, loading, error, refetch } = useWasabeeIDO(
+    pairAddress?.toString().toLowerCase() as Address
+  );
+  const [wasabeeIDO, setWasabeeIDO] = useState<WasabeeIDO | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
 
   useEffect(() => {
     if (pairAddress) {
@@ -30,6 +38,14 @@ const WasabeeIDOPage = observer(() => {
     }
   }, [pairAddress]);
 
+  const totalPages = Math.ceil(
+    (data?.idopools[0]?.purchases?.length ?? 0) / pageSize
+  );
+  const paginatedPurchases = data?.idopools[0]?.purchases?.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
   return (
     <div className="min-h-screen relative w-full font-gliker">
       <div className="container mx-auto max-w-[1520px] space-y-[72px]">
@@ -38,13 +54,15 @@ const WasabeeIDOPage = observer(() => {
             <div className="w-full space-y-4 lg:col-span-2 lg:pr-5 mb-5">
               <div className="space-y-2">
                 <div className="flex justify-center items-center w-[74px] h-[32px] bg-white rounded-[4px] border-[0.75px] border-[#202020] shadow-[1px_1px_0px_0px_#000] text-[14px]">
-                  ${wasabeeIDO?.idoToken?.symbol}
+                  {wasabeeIDO?.idoToken?.symbol}
                 </div>
 
                 <h1 className="text-[30px] text-[#0D0D0D] font-gliker text-stroke-0.5 text-stroke-white text-shadow-[1px_2px_0px_#AF7F3D]">
                   {wasabeeIDO?.idoToken?.name}
                 </h1>
-                <p className="text-[#4D4D4D]">{wasabeeIDO?.description}</p>
+                <p className="text-[#4D4D4D]">
+                  {wasabeeIDOmetadata.tokenDescription}
+                </p>
               </div>
 
               <div className="rounded-[16px] border border-black bg-white shadow-[4px_4px_0px_0px_#D29A0D] p-4">
@@ -84,7 +102,7 @@ const WasabeeIDOPage = observer(() => {
                     <div className="text-[#202020] text-base flex items-center gap-1 text-right">
                       Honeypot Finance
                       <Image
-                        src="/images/lbp-detail/logo/honeypot.png"
+                        src={wasabeeIDOmetadata.tokenIcon}
                         alt="honeypot"
                         width={16}
                         height={16}
@@ -104,7 +122,7 @@ const WasabeeIDOPage = observer(() => {
             {/* Right Column - Logo */}
             <div className="relative w-full h-[400px] object-contain col-span-3 lg:pl-[50px]">
               <Image
-                src={wasabeeIDO?.imageUrl ?? ''}
+                src={wasabeeIDOmetadata.tokenIcon}
                 alt="Logo"
                 className="absolute h-[150px] w-[150px] object-cover top-[50%] left-[50%] lg:left-[0px] translate-x-[-50%] lg:translate-x-[-10%] translate-y-[-50%] z-10 rounded-full border-amber-300 border-[1rem] bg-amber-300 "
                 width={500}
@@ -115,7 +133,7 @@ const WasabeeIDOPage = observer(() => {
                 }}
               />
               <Image
-                src={wasabeeIDO?.bannerUrl || ''}
+                src={wasabeeIDOmetadata.tokenBanner}
                 alt="Banner"
                 onError={(e) => {
                   e.currentTarget.src = '/images/homepage.png';
@@ -145,7 +163,7 @@ const WasabeeIDOPage = observer(() => {
                       {DynamicFormatAmount({
                         amount: wasabeeIDO?.priceInETH.toString() ?? 0,
                         decimals: 2,
-                        endWith: 'ETH',
+                        endWith: 'BERA',
                       })}
                     </div>
                   </div>
@@ -175,7 +193,7 @@ const WasabeeIDOPage = observer(() => {
                   </div>
                   <div className="bg-white rounded-[16px] border border-black p-5 shadow-[4px_4px_0px_0px_#D29A0D] hover:shadow-[2px_2px_0px_0px_#D29A0D] transition-shadow">
                     <div className="text-sm text-[#171414] mb-2 text-center">
-                      Remaining Balance
+                      Remaining Balance in contract
                     </div>
                     <div className="text-[24px] text-[#4D4D4D] text-shadow-[1.481px_2.963px_0px_0px_#AF7F3D] text-stroke-1 text-stroke-black text-center">
                       {DynamicFormatAmount({
@@ -202,8 +220,8 @@ const WasabeeIDOPage = observer(() => {
                           </tr>
                         </thead>
                         <tbody>
-                          {wasabeeIDO?.purchaseHistory.map(
-                            (purchase, index) => (
+                          {paginatedPurchases?.map(
+                            (purchase: any, index: number) => (
                               <tr
                                 key={index}
                                 className="text-sm border-b border-gray-200 last:border-0"
@@ -216,21 +234,32 @@ const WasabeeIDOPage = observer(() => {
                                 </td>
                                 <td className="py-2 text-right">
                                   {DynamicFormatAmount({
-                                    amount: purchase.ethAmount.toString(),
+                                    amount: new BigNumber(
+                                      purchase.ethAmount.toString()
+                                    )
+                                      .div(1e18)
+                                      .toString(),
                                     decimals: 4,
                                     endWith: 'BERA',
                                   })}
                                 </td>
                                 <td className="py-2 text-right">
                                   {DynamicFormatAmount({
-                                    amount: purchase.tokenAmount.toString(),
+                                    amount: new BigNumber(
+                                      purchase.tokenAmount.toString()
+                                    )
+                                      .div(
+                                        10 **
+                                          (wasabeeIDO?.idoToken?.decimals ?? 18)
+                                      )
+                                      .toString(),
                                     decimals: 4,
                                     endWith: wasabeeIDO?.idoToken?.symbol ?? '',
                                   })}
                                 </td>
                                 <td className="py-2 text-right">
                                   {new Date(
-                                    purchase.timestamp * 1000
+                                    Number(purchase.timestamp) * 1000
                                   ).toLocaleString()}
                                 </td>
                               </tr>
@@ -239,13 +268,24 @@ const WasabeeIDOPage = observer(() => {
                         </tbody>
                       </table>
                     </div>
-                    {wasabeeIDO?.purchaseHistoryHasMore && (
-                      <div className="mt-4 text-center">
+                    {totalPages > 1 && (
+                      <div className="mt-4 flex justify-center">
                         <button
-                          onClick={() => wasabeeIDO?.loadMorePurchaseHistory()}
-                          className="px-4 py-2 bg-[#FFCD4D] text-black rounded-lg hover:bg-[#FFD700] transition-colors"
+                          onClick={() => setCurrentPage(currentPage - 1)}
+                          disabled={currentPage === 1}
+                          className="px-4 py-2 bg-[#FFCD4D] text-black rounded-lg hover:bg-[#FFD700] transition-colors disabled:opacity-50"
                         >
-                          Load More
+                          Previous
+                        </button>
+                        <span className="mx-4 py-2">
+                          Page {currentPage} of {totalPages}
+                        </span>
+                        <button
+                          onClick={() => setCurrentPage(currentPage + 1)}
+                          disabled={currentPage === totalPages}
+                          className="px-4 py-2 bg-[#FFCD4D] text-black rounded-lg hover:bg-[#FFD700] transition-colors disabled:opacity-50"
+                        >
+                          Next
                         </button>
                       </div>
                     )}
@@ -259,7 +299,10 @@ const WasabeeIDOPage = observer(() => {
             <CardContainer>
               <div className="space-y-4 w-full">
                 {wasabeeIDO && (
-                  <WasabeeIDOActionComponent wasabeeIDO={wasabeeIDO} />
+                  <WasabeeIDOActionComponent
+                    wasabeeIDO={wasabeeIDO}
+                    refetchPurchaseHistory={refetch}
+                  />
                 )}
               </div>
             </CardContainer>

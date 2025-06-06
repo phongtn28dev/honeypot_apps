@@ -3,6 +3,7 @@ export interface SubgraphAddresses {
   algebra_farming: string;
   bgt_market: string;
   lbp: string;
+  wasabee_ido: string;
 }
 
 export type SubgraphEndpointType = keyof SubgraphAddresses;
@@ -13,6 +14,7 @@ export const subgraphAddresses: Record<string, SubgraphAddresses> = {
     algebra_farming: '',
     bgt_market: '',
     lbp: '',
+    wasabee_ido: '',
   },
   // berachain mainnet
   '80094': {
@@ -23,6 +25,8 @@ export const subgraphAddresses: Record<string, SubgraphAddresses> = {
     bgt_market:
       'https://api.goldsky.com/api/public/project_cm78242tjtmme01uvcbkaay27/subgraphs/hpot-bgt-market/bgt-market/gn',
     lbp: 'https://api.goldsky.com/api/public/project_cm78242tjtmme01uvcbkaay27/subgraphs/hpot-lbp/1.0.1/gn',
+    wasabee_ido:
+      'https://api.goldsky.com/api/public/project_cm78242tjtmme01uvcbkaay27/subgraphs/wasabee-ido-berachain-mainnet/1.0.0/gn',
   },
   // bepolia
   '80069': {
@@ -32,6 +36,7 @@ export const subgraphAddresses: Record<string, SubgraphAddresses> = {
       'https://api.goldsky.com/api/public/project_cm78242tjtmme01uvcbkaay27/subgraphs/hpot-algebra-farming-bepolia/1.0.0/gn',
     bgt_market: '',
     lbp: 'https://api.goldsky.com/api/public/project_cm78242tjtmme01uvcbkaay27/subgraphs/hpot-lbp-berachain-bepolia/1.0.0/gn',
+    wasabee_ido: '',
   },
   //ethereum sepolia
   '11155111': {
@@ -39,5 +44,6 @@ export const subgraphAddresses: Record<string, SubgraphAddresses> = {
     algebra_farming: '',
     bgt_market: '',
     lbp: 'https://api.goldsky.com/api/public/project_cm78242tjtmme01uvcbkaay27/subgraphs/hpot-lbp-sepolia/1.0.1/gn',
+    wasabee_ido: '',
   },
 };

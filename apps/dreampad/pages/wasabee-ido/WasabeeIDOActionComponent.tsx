@@ -12,7 +12,13 @@ import BigNumber from 'bignumber.js';
 import { runInAction } from 'mobx';
 
 export const WasabeeIDOActionComponent = observer(
-  ({ wasabeeIDO }: { wasabeeIDO: WasabeeIDO }) => {
+  ({
+    wasabeeIDO,
+    refetchPurchaseHistory,
+  }: {
+    wasabeeIDO: WasabeeIDO;
+    refetchPurchaseHistory?: () => void;
+  }) => {
     const idoStatus = wasabeeIDO.idoStatus;
     const startsAt = wasabeeIDO.startsAt;
     const endsAt = wasabeeIDO.endsAt;
@@ -23,7 +29,12 @@ export const WasabeeIDOActionComponent = observer(
         case IDO_STATUS.NOT_STARTED:
           return <IDONotStartedComponent wasabeeIDO={wasabeeIDO} />;
         case IDO_STATUS.STARTED:
-          return <IDOStartedComponent wasabeeIDO={wasabeeIDO} />;
+          return (
+            <IDOStartedComponent
+              wasabeeIDO={wasabeeIDO}
+              refetchPurchaseHistory={refetchPurchaseHistory}
+            />
+          );
         case IDO_STATUS.ENDED:
           return <IDOEndedComponent wasabeeIDO={wasabeeIDO} />;
         default:
@@ -84,7 +95,13 @@ export const WasabeeIDOActionComponent = observer(
 );
 
 const IDOStartedComponent = observer(
-  ({ wasabeeIDO }: { wasabeeIDO: WasabeeIDO }) => {
+  ({
+    wasabeeIDO,
+    refetchPurchaseHistory,
+  }: {
+    wasabeeIDO: WasabeeIDO;
+    refetchPurchaseHistory?: () => void;
+  }) => {
     const [useWETH, setUseWETH] = useState(false);
     const inputDebounce = debounce((value: string) => {
       wasabeeIDO.setAmountIn(!!value ? value : '0');
@@ -132,6 +149,11 @@ const IDOStartedComponent = observer(
         wasabeeIDO.idoToken?.getBalance();
         wasabeeIDO.loadEthPurchased();
         wasabeeIDO.setAmountIn('0');
+        if (refetchPurchaseHistory) {
+          setTimeout(() => {
+            refetchPurchaseHistory();
+          }, 2000);
+        }
       } catch (error: any) {
         console.error('Transaction Error:', error);
         // Show more user-friendly error message
@@ -279,8 +301,17 @@ const IDOEndedComponent = ({ wasabeeIDO }: { wasabeeIDO: WasabeeIDO }) => {
   return (
     <div className="bg-white rounded-[16px] border border-black p-4 text-center">
       <div className="text-lg font-bold mb-2">Sale Ended</div>
+      <div className="text-left text-sm text-[#4D4D4D]">
+        <span>Purchased: </span> {wasabeeIDO.ethPurchased.toString() ?? 0} BERA
+      </div>
     </div>
   );
 };
 
-export default WasabeeIDOActionComponent;
+// Pass refetchPurchaseHistory down to IDOStartedComponent
+// eslint-disable-next-line react/display-name
+export default observer(
+  (props: { wasabeeIDO: WasabeeIDO; refetchPurchaseHistory?: () => void }) => (
+    <WasabeeIDOActionComponent {...props} />
+  )
+);

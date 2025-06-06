@@ -33,14 +33,6 @@ export class WasabeeIDO {
   feeRate: BigNumber = new BigNumber(0);
   ethPurchased: BigNumber = new BigNumber(0);
   contractBalance: BigNumber = new BigNumber(0);
-  purchaseHistory: {
-    buyer: string;
-    ethAmount: BigNumber;
-    tokenAmount: BigNumber;
-    timestamp: number;
-  }[] = [];
-  purchaseHistoryPage = 0;
-  purchaseHistoryHasMore = true;
 
   // Metadata
   chainId: number = DEFAULT_CHAIN_ID;
@@ -101,82 +93,6 @@ export class WasabeeIDO {
         return 'Started';
     }
   }
-
-  async loadPurchaseHistory(page = 0, pageSize = 20) {
-    if (!this.address) {
-      return;
-    }
-
-    try {
-      // Get current block number
-      const currentBlock = await wallet.publicClient.getBlockNumber();
-      // Look back 10,000 blocks per page (approximately 2.5 hours on Berachain)
-      const blockRange = BigInt(10000);
-      const fromBlock = currentBlock - blockRange * BigInt(page + 1);
-      const toBlock = currentBlock - blockRange * BigInt(page);
-
-      const events = await wallet.publicClient.getLogs({
-        address: this.address,
-        event: {
-          type: 'event',
-          name: 'Purchased',
-          inputs: [
-            { type: 'address', name: 'buyer', indexed: true },
-            { type: 'uint256', name: 'ethAmount', indexed: false },
-            { type: 'uint256', name: 'tokenAmount', indexed: false },
-          ],
-        },
-        fromBlock,
-        toBlock,
-      });
-
-      // Sort by block number (most recent first)
-      const sortedEvents = events
-        .sort((a, b) => Number(b.blockNumber) - Number(a.blockNumber))
-        .slice(0, pageSize);
-
-      // Get block timestamps for each event
-      const blocks = await Promise.all(
-        sortedEvents.map((event) =>
-          wallet.publicClient.getBlock({ blockNumber: event.blockNumber })
-        )
-      );
-
-      const newHistory = sortedEvents.map((event, index) => {
-        if (!event.args.ethAmount || !event.args.tokenAmount) {
-          throw new Error('Invalid event data');
-        }
-        return {
-          buyer: event.args.buyer as string,
-          ethAmount: new BigNumber(event.args.ethAmount.toString()).div(1e18),
-          tokenAmount: new BigNumber(event.args.tokenAmount.toString()).div(
-            10 ** (this.idoToken?.decimals ?? 18)
-          ),
-          timestamp: Number(blocks[index].timestamp),
-        };
-      });
-
-      if (page === 0) {
-        this.purchaseHistory = newHistory;
-      } else {
-        this.purchaseHistory = [...this.purchaseHistory, ...newHistory];
-      }
-
-      this.purchaseHistoryPage = page;
-      this.purchaseHistoryHasMore = events.length >= pageSize;
-
-      return this.purchaseHistory;
-    } catch (error) {
-      console.error('Error loading purchase history:', error);
-      return [];
-    }
-  }
-
-  async loadMorePurchaseHistory() {
-    if (!this.purchaseHistoryHasMore) return;
-    return this.loadPurchaseHistory(this.purchaseHistoryPage + 1);
-  }
-
   async loadOnchainData() {
     if (!this.address) {
       return;
@@ -192,7 +108,6 @@ export class WasabeeIDO {
       this.loadMaxEthPerWallet(),
       this.loadFeeRate(),
       this.loadEthPurchased(),
-      this.loadPurchaseHistory(0), // Load first page
     ]);
 
     // Load contract balance after IDO token is loaded
@@ -529,7 +444,6 @@ export class WasabeeIDO {
       this.loadIDOSold(),
       this.loadEthPurchased(),
       this.loadContractBalance(),
-      this.loadPurchaseHistory(0), // Reset to first page
     ]);
   }
 
