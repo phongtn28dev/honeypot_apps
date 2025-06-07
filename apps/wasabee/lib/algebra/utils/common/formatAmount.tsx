@@ -1,12 +1,19 @@
 import BigNumber from 'bignumber.js';
 import { ReactNode } from 'react';
 
+
+//marking the threshold to  1 trillion common for most AMM to have this range for real world assets 
+const INFINITY_THRESHOLD=1e12
+
 export function formatAmountWithAlphabetSymbol(
   amount: string,
   decimals = 2
 ): string {
+
   if (Number(amount) === 0) return '0';
 
+  if (Number(amount) > INFINITY_THRESHOLD) return '∞';
+  
   const USformatter = new Intl.NumberFormat('en-US', {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
