@@ -1,14 +1,16 @@
-import { ApolloClient, gql } from '@apollo/client';
-import { RECEIPTS_LIST } from '../queries/receipts-list';
+import { ApolloClient } from '@apollo/client';
+import { Receipt, ReceiptsListDocument } from '../__generated__/graphql';
+import { createClientHook } from '../clientUtils';
+import { useSubgraphClient } from '@honeypot/shared';
 
 export async function fetchListReceiptsPerUser(
   client: ApolloClient<any>,
   accountId: string
 ) {
-  const { data } = await client.query({
-    query: RECEIPTS_LIST,
+  const { data } = await client.query<{ receipts: Receipt[] }>({
+    query: ReceiptsListDocument,
     fetchPolicy: 'network-only',
-    variables: { user: accountId },
+    variables: { user: accountId.toLowerCase() },
   });
   return data;
 }

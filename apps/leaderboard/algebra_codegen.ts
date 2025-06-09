@@ -2,7 +2,7 @@ import type { CodegenConfig } from '@graphql-codegen/cli'
  
 const config: CodegenConfig = {
   overwrite: true,
-  schema: 'https://app.ghostlogs.xyz/playgrounds/96ff5ab9-9c87-47cb-ab46-73a276d93c8b',
+  schema: 'https://api.ghostlogs.xyz/gg/pub/96ff5ab9-9c87-47cb-ab46-73a276d93c8b',
   documents: 'lib/algebra/graphql/queries/!(*.d).{ts,tsx}',
   ignoreNoDocuments: true,
   generates: {
