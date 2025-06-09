@@ -9,6 +9,7 @@ interface SummaryData {
 interface SummaryCardProps {
   data?: SummaryData;
   className?: string;
+  weightPerCurrentToken?: string;
   isLoading?: boolean;
 }
 
@@ -33,6 +34,7 @@ export default function SummaryCard({
     <Card
       className={`border-2 border-dashed border-gray-400 bg-white/90 mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] ${className}`}
     >
+      {/* <span>100 {weightPerCurrentToken}</span> */}
       <div className="p-4">
         <div className="grid grid-cols-3 gap-4 text-center">
           <div>

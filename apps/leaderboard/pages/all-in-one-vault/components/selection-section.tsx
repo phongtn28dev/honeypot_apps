@@ -27,6 +27,7 @@ const tokenAddressMap: Record<string, string> = {
 export default function SelectionSection() {
   const { address } = useAccount();
   const [selectedToken, setSelectedToken] = useState<string>('');
+  const [weightPerCurrentToken, setWeightPerCurrentToken] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
   const [insufficientBalance, setInsufficientBalance] =
     useState<boolean>(false);
@@ -35,7 +36,6 @@ export default function SelectionSection() {
     balance: '-',
     receiptWeight: '-',
   });
-  console.log(selectedToken);
   const tokenSupportClient = useMemo(() => new ApolloClient({
     uri: 'https://api.ghostlogs.xyz/gg/pub/96ff5ab9-9c87-47cb-ab46-73a276d93c8b',
     cache: new InMemoryCache(),
@@ -65,38 +65,28 @@ export default function SelectionSection() {
   });
 
   const onTokenChange = (token: string) => {
-    handleTokenChange(
-      token,
-      amount,
-      totalWeight,
-      tokenBalance,
-      setSelectedToken,
-      setInsufficientBalance,
-      setSummaryData
-    );
+    setSelectedToken(token);
+    setInsufficientBalance(false);
   };
 
   const onAmountChange = (newAmount: string) => {
-    handleAmountChange(
-      newAmount,
-      selectedToken,
-      totalWeight,
-      tokenBalance,
-      setAmount,
-      setInsufficientBalance,
-      setSummaryData
-    );
+    setAmount(newAmount);
+    setInsufficientBalance(false);
   };
 
   return (
     <>
       <InputSection
         selectedToken={selectedToken}
-        setSelectedToken={setSelectedToken}
+        setSummaryData={setSummaryData}
+        setWeightPerCurrentToken={setWeightPerCurrentToken}
+        setInsufficientBalance={setInsufficientBalance}
         amount={amount}
         onTokenChange={onTokenChange}
         onAmountChange={onAmountChange}
         tokenSupportClient={tokenSupportClient}
+        totalWeight={totalWeight}
+        tokenBalance={tokenBalance}
         className="w-full"
       />
 
@@ -107,7 +97,11 @@ export default function SelectionSection() {
         />
       )}
 
-      <SummaryCard className="w-full mb-6" data={summaryData} />
+      <SummaryCard 
+        className="w-full mb-6" 
+        data={summaryData} 
+        weightPerCurrentToken={weightPerCurrentToken}
+      />
 
       <ApproveAndBurnButton
         tokenAddress={NATIVE_TOKEN_WRAPPED}
