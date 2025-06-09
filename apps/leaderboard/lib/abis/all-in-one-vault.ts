@@ -692,6 +692,31 @@ export const AllInOneVaultABI = [
   },
   {
     type: 'event',
+    name: 'UnStaked',
+    inputs: [
+      {
+        name: 'admin',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
+      },
+      {
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+      {
+        name: 'timestamp',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
     name: 'Upgraded',
     inputs: [
       {
@@ -765,6 +790,17 @@ export const AllInOneVaultABI = [
     type: 'error',
     name: 'NotInitializing',
     inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'SafeERC20FailedOperation',
+    inputs: [
+      {
+        name: 'token',
+        type: 'address',
+        internalType: 'address',
+      },
+    ],
   },
   {
     type: 'error',
