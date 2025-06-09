@@ -3,110 +3,29 @@ import CardContainer from '@/components/card-contianer/v3';
 import GenericTanstackTable from '@/components/Table/generic-table';
 import { tableData } from '@/components/Table/mock-data';
 import { columns, ReceiptTableData } from '@/components/Table/table.config';
-import { Card } from '@nextui-org/react';
 import { useEffect, useMemo, useState } from 'react';
 import { useAccount, useReadContract } from 'wagmi';
 import { useClaimReceipt } from '@/hooks/useClaimReceipt';
-import { AllInOneVaultABI } from '@/lib/abis/all-in-one-vault';
-import { ERC20ABI } from '@/lib/abis/erc20';
 import {
-  ALGEBRA_POSITION_MANAGER,
   ALL_IN_ONE_VAULT,
-  ALL_IN_ONE_VAULT_PROXY,
-  NATIVE_TOKEN_WRAPPED,
 } from '@/config/algebra/addresses';
 import {
-  calculateSummaryData,
   tokenAddressMap,
-  handleTokenChange,
-  handleAmountChange,
   handleCooldownComplete,
   updateClaimedReceipt,
   resetFormState,
 } from './helper-function';
-import { toast } from 'react-toastify';
-import { useApprove } from '@/lib/algebra/hooks/common/useApprove';
 import { CurrencyAmount, Token } from '@cryptoalgebra/sdk';
-import Insufficient from '@/components/insufficient/insufficient';
-import { ApproveAndBurnButton } from '@/components/button/button-approve-and-burn';
 import StatCard from './components/stat-card';
 import SelectionSection from './components/selection-section';
 
 export default function AllInOneVault() {
   const { address } = useAccount();
 
-  const { data: balanceOf } = useReadContract({
-    address: ALGEBRA_POSITION_MANAGER,
-    abi: ERC20ABI,
-    functionName: 'balanceOf',
-    args: address ? [address] : undefined,
-  });
-
-  const { data: totalWeight } = useReadContract({
-    address: ALL_IN_ONE_VAULT_PROXY,
-    abi: AllInOneVaultABI,
-    functionName: 'totalWeight',
-  });
-
   const [selectedToken, setSelectedToken] = useState<string>('');
-  const [amount, setAmount] = useState<string>('');
-  const [summaryData, setSummaryData] = useState({
-    weightPerToken: '-',
-    balance: '-',
-    receiptWeight: '-',
-  });
   const [currentTableData, setCurrentTableData] =
     useState<ReceiptTableData[]>(tableData);
-  const [insufficientBalance, setInsufficientBalance] =
-    useState<boolean>(false);
 
-  const { data: tokenBalance } = useReadContract({
-    address: selectedToken
-      ? (tokenAddressMap[selectedToken] as `0x${string}`)
-      : undefined,
-    abi: ERC20ABI,
-    functionName: 'balanceOf',
-    args: address ? [address] : undefined,
-    query: {
-      enabled: !!selectedToken && !!address && !!tokenAddressMap[selectedToken],
-    },
-  });
-
-  const amountToApprove = useMemo(() => {
-    if (!selectedToken || !amount) return undefined;
-    const tokenAddress = tokenAddressMap[selectedToken];
-    if (!tokenAddress) return undefined;
-
-    try {
-      const token = new Token(
-        1,
-        tokenAddress,
-        18,
-        selectedToken,
-        selectedToken
-      );
-      const amountValue = BigInt(parseFloat(amount) * 1e18);
-      return CurrencyAmount.fromRawAmount(token, amountValue.toString());
-    } catch (error) {
-      console.error('Error creating currency amount:', error);
-      return undefined;
-    }
-  }, [selectedToken, amount]);
-
-  console.log(
-    '%c💰 Amount to approve:',
-    'background: #4CAF50; color: white; font-weight: bold; padding: 4px 8px; border-radius: 4px;',
-    amountToApprove
-  );
-  console.log(
-    '%c🏛️ Contract all-in-one-vault:',
-    'background: #2196F3; color: white; font-weight: bold; padding: 4px 8px; border-radius: 4px;',
-    ALL_IN_ONE_VAULT
-  );
-  const { approvalState, approvalCallback } = useApprove(
-    amountToApprove,
-    ALL_IN_ONE_VAULT
-  );
   const { claimingReceiptId, isConfirmed } = useClaimReceipt();
 
   useEffect(() => {
