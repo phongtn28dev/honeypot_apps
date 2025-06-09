@@ -3,26 +3,18 @@ import CardContainer from '@/components/card-contianer/v3';
 import GenericTanstackTable from '@/components/Table/generic-table';
 import { tableData } from '@/components/Table/mock-data';
 import { columns, ReceiptTableData } from '@/components/Table/table.config';
-import { useEffect, useMemo, useState } from 'react';
-import { useAccount, useReadContract } from 'wagmi';
+import { useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
 import { useClaimReceipt } from '@/hooks/useClaimReceipt';
 import {
-  ALL_IN_ONE_VAULT,
-} from '@/config/algebra/addresses';
-import {
-  tokenAddressMap,
   handleCooldownComplete,
   updateClaimedReceipt,
-  resetFormState,
 } from './helper-function';
-import { CurrencyAmount, Token } from '@cryptoalgebra/sdk';
 import StatCard from './components/stat-card';
 import SelectionSection from './components/selection-section';
 
 export default function AllInOneVault() {
-  const { address } = useAccount();
 
-  const [selectedToken, setSelectedToken] = useState<string>('');
   const [currentTableData, setCurrentTableData] =
     useState<ReceiptTableData[]>(tableData);
 

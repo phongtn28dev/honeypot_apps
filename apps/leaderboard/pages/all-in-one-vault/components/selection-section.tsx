@@ -3,8 +3,6 @@ import InputSection from '@/components/select/select';
 import SummaryCard from '@/components/summary/summary';
 import { ApproveAndBurnButton } from '@/components/button/button-approve-and-burn';
 import {
-  ALGEBRA_POSITION_MANAGER,
-  ALL_IN_ONE_VAULT,
   ALL_IN_ONE_VAULT_PROXY,
   NATIVE_TOKEN_WRAPPED,
 } from '@/config/algebra/addresses';
