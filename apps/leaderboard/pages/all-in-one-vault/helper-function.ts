@@ -1,6 +1,7 @@
 import { toast } from 'react-toastify';
 import { ReceiptTableData } from '@/components/Table/table.config';
 
+// List of supported tokens from the graph
 export const tokenAddressMap: Record<string, string> = {
   LBGT: '0xLBGT_ADDRESS',
   BERA: '0xBERA_ADDRESS',
