@@ -7,7 +7,6 @@ import {
   NATIVE_TOKEN_WRAPPED,
 } from '@/config/algebra/addresses';
 import {
-  tokenAddressMap,
   handleTokenChange,
   handleAmountChange,
 } from '../helper-function';
@@ -17,6 +16,13 @@ import { AllInOneVaultABI } from '@/lib/abis';
 import { ERC20ABI } from '@/lib/abis/erc20';
 import Insufficient from '@/components/insufficient/insufficient';
 
+const tokenAddressMap: Record<string, string> = 
+  {
+    "0x0555e30da8f98308edb960aa94c0db47230d2b9c": "2000",
+    "0x36d31f9aec845f2c1789aed3364418c92e17b768": "3000",
+    "0x6969696969696969696969696969696969696969": "1000"
+  }
+    
 export default function SelectionSection() {
   const { address } = useAccount();
   const [selectedToken, setSelectedToken] = useState<string>('');
