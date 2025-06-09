@@ -51,11 +51,6 @@ export function ApproveAndBurnButton({
       enabled: !!userAddress,
     },
   });
-  console.log(
-    '%c🔍 User Balance:',
-    'background-color: #3b82f6; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold;',
-    userBalance
-  );
 
   const currencyAmount = useMemo(() => {
     if (!parsedAmount || !tokenAddress) return undefined;
@@ -64,11 +59,6 @@ export function ApproveAndBurnButton({
 
     return CurrencyAmount.fromRawAmount(token, parsedAmount.toString());
   }, [parsedAmount, tokenAddress, tokenDecimals, tokenSymbol]);
-  console.log(
-    '%c💰 Currency Amount:',
-    'background-color: #4caf50; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold;',
-    currencyAmount
-  );
 
   const { approvalState, approvalCallback } = useApprove(
     currencyAmount,

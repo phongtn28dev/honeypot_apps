@@ -35,6 +35,7 @@ export default function SelectionSection() {
     balance: '-',
     receiptWeight: '-',
   });
+  console.log(selectedToken);
   const tokenSupportClient = useMemo(() => new ApolloClient({
     uri: 'https://api.ghostlogs.xyz/gg/pub/96ff5ab9-9c87-47cb-ab46-73a276d93c8b',
     cache: new InMemoryCache(),
@@ -91,6 +92,7 @@ export default function SelectionSection() {
     <>
       <InputSection
         selectedToken={selectedToken}
+        setSelectedToken={setSelectedToken}
         amount={amount}
         onTokenChange={onTokenChange}
         onAmountChange={onAmountChange}

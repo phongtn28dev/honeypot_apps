@@ -41,11 +41,6 @@ export default function InputSection({
     notifyOnNetworkStatusChange: true,
   });
 
-  console.log(
-    '%c🔍 Token supports data (Apollo):',
-    'background-color: #4CAF50; color: white; padding: 4px 8px; border-radius: 4px;',
-    tokenSupportData?.supportReceipts?.items
-  );
   const tokenSupportList = tokenSupportData?.supportReceipts?.items || [];
 
   useEffect(() => {
