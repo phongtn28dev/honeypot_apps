@@ -17,7 +17,6 @@ import { ChevronUp, ChevronDown, Search } from 'lucide-react';
 import { Input } from '../input';
 import { Button } from '../button';
 
-// Custom global filter function that searches across all visible data
 const globalFilterFn: FilterFn<any> = (row, columnId, value, addMeta) => {
   const safeValue = (() => {
     if (typeof value === 'string') return value;
@@ -28,22 +27,22 @@ const globalFilterFn: FilterFn<any> = (row, columnId, value, addMeta) => {
 
   if (safeValue === '') return true;
 
-  // Get all cell values from the row and convert them to searchable strings
   const searchableValues: string[] = [];
   
   row.getAllCells().forEach(cell => {
-    const cellValue = cell.getValue();
+    const columnDef = cell.column.columnDef;
     
-    // Handle different types of cell values
-    if (cellValue != null) {
-      if (typeof cellValue === 'string' || typeof cellValue === 'number') {
-        searchableValues.push(String(cellValue));
-      } else if (typeof cellValue === 'object' && 'label' in cellValue) {
-        // Handle action objects that have a label property
-        searchableValues.push(String((cellValue as any).label));
-      } else {
-        // Convert other objects to string
-        searchableValues.push(String(cellValue));
+    // @ts-ignore
+    if (columnDef.accessorKey === 'id') {
+      const cellValue = cell.getValue();
+      if (cellValue != null) {
+        if (typeof cellValue === 'string' || typeof cellValue === 'number') {
+          searchableValues.push(String(cellValue));
+        } else if (typeof cellValue === 'object' && 'label' in cellValue) {
+          searchableValues.push(String((cellValue as any).label));
+        } else {
+          searchableValues.push(String(cellValue));
+        }
       }
     }
   });
