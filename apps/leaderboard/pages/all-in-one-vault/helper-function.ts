@@ -20,12 +20,8 @@ export const calculateSummaryData = (
 
   const weightPerToken = 2.5;
   const amountValue = parseFloat(amountStr);
-
-  // Apply the refactored formula: receiptWeight = weightPerToken * amountValue
   const receiptWeight = (weightPerToken * amountValue).toFixed(1);
-
-  // Use real token balance from ERC20 balanceOf, fallback to 15.0 if not available
-  const balance = tokenBalance ? Number(tokenBalance) / 1e18 : 15.0; // Assuming 18 decimals
+  const balance = tokenBalance ? Number(tokenBalance) / 1e18 : 15.0; 
 
   return {
     weightPerToken: weightPerToken.toString(),

@@ -107,11 +107,8 @@ export default function AllInOneVault() {
     amountToApprove,
     ALL_IN_ONE_VAULT
   );
-  console.log('Approval state:', approvalState);
-
   const { claimingReceiptId, isConfirmed } = useClaimReceipt();
 
-  // Event listeners
   useEffect(() => {
     const cooldownHandler = (event: CustomEvent) =>
       handleCooldownComplete(event, setCurrentTableData);
@@ -132,80 +129,6 @@ export default function AllInOneVault() {
     }
   }, [isConfirmed, claimingReceiptId]);
 
-  // Handler functions
-  const onTokenChange = (token: string) => {
-    handleTokenChange(
-      token,
-      amount,
-      totalWeight,
-      tokenBalance,
-      setSelectedToken,
-      setInsufficientBalance,
-      setSummaryData
-    );
-  };
-
-  const onAmountChange = (newAmount: string) => {
-    handleAmountChange(
-      newAmount,
-      selectedToken,
-      totalWeight,
-      tokenBalance,
-      setAmount,
-      setInsufficientBalance,
-      setSummaryData
-    );
-  };
-
-  // const handleBurn2Vault = async () => {
-  //   if (!selectedToken || !amount) return;
-
-  //   const summaryData = calculateSummaryData(
-  //     selectedToken,
-  //     amount,
-  //     totalWeight,
-  //     tokenBalance
-  //   );
-  //   if (summaryData) {
-  //     const amountValue = parseFloat(amount);
-  //     const balanceValue = parseFloat(summaryData.balance);
-
-  //     if (amountValue > balanceValue) {
-  //       toast.error(
-  //         `Insufficient balance! You only have ${balanceValue} ${selectedToken} tokens available.`,
-  //         {
-  //           position: 'top-right',
-  //           autoClose: 3000,
-  //         }
-  //       );
-  //       return;
-  //     }
-  //   }
-
-  //   try {
-  //     await approvalCallback();
-  //     toast.info('Token approval submitted. Please wait for confirmation...', {
-  //       position: 'top-right',
-  //       autoClose: 3000,
-  //     });
-  //   } catch (error) {
-  //     console.error('Token approval failed:', error);
-  //     toast.error('Token approval failed. Please try again.', {
-  //       position: 'top-right',
-  //       autoClose: 3000,
-  //     });
-  //     return;
-  //   }
-
-  //   getReceipt(selectedToken, amount);
-  //   refetch();
-  //   resetFormState(
-  //     setSelectedToken,
-  //     setAmount,
-  //     setInsufficientBalance,
-  //     setSummaryData
-  //   );
-  // };
 
   return (
     <div className="w-full flex flex-col justify-center items-center px-4 font-gliker">
