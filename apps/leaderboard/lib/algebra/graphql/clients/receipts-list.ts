@@ -1,16 +1,20 @@
 import { ApolloClient } from '@apollo/client';
 import { Receipt, ReceiptsListDocument } from '../__generated__/graphql';
-import { createClientHook } from '../clientUtils';
-import { useSubgraphClient } from '@honeypot/shared';
+import { getSubgraphClientByChainId, wallet } from '@honeypot/shared';
 
 export async function fetchListReceiptsPerUser(
   client: ApolloClient<any>,
   accountId: string
 ) {
-  const { data } = await client.query<{ receipts: Receipt[] }>({
+  const infoClient = getSubgraphClientByChainId(
+      wallet.currentChainId.toString(),
+      'algebra_info'
+  );
+  const listReceiptsPerUsers = await infoClient.query<any>({
     query: ReceiptsListDocument,
+    variables: { accountId: accountId.toLowerCase() },
     fetchPolicy: 'network-only',
-    variables: { user: accountId.toLowerCase() },
   });
-  return data;
+
+  return listReceiptsPerUsers.data.receipts as Receipt[];
 }

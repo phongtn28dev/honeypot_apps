@@ -1,18 +1,70 @@
 import GenericTanstackTable from '@/components/Table/generic-table';
 import { columns, ReceiptTableData } from '@/components/Table/table.config';
 import { useClaimReceipt } from '@/hooks/useClaimReceipt';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   handleCooldownComplete,
   updateClaimedReceipt,
 } from '../helper-function';
 import { tableData } from '@/components/Table/mock-data';
+import {
+  ApolloClient,
+  InMemoryCache,
+  useQuery as useApolloQuery,
+} from '@apollo/client';
+import { RECEIPTS_LIST } from '@/lib/algebra/graphql/queries/receipts-list';
+import { useSubgraphClient } from '@honeypot/shared';
+import { useAccount } from 'wagmi';
+import { LoadingDisplay } from '@/components/loading-display/loading-display';
+import ErrorIcon from '@/components/svg/ErrorIcon';
 
 export default function AllInOneVaultTable() {
   const [currentTableData, setCurrentTableData] =
     useState<ReceiptTableData[]>(tableData);
-
+  const { address } = useAccount();
+  const allInOneVaultClient = useMemo(
+    () =>
+      new ApolloClient({
+        uri: 'https://api.ghostlogs.xyz/gg/pub/96ff5ab9-9c87-47cb-ab46-73a276d93c8b',
+        cache: new InMemoryCache(),
+        defaultOptions: {
+          query: {
+            errorPolicy: 'all',
+          },
+        },
+      }),
+    []
+  );
   const { claimingReceiptId, isConfirmed } = useClaimReceipt();
+
+  const {
+    data: receiptsData,
+    loading: receiptsLoading,
+    error: receiptsError,
+    refetch: refetchReceipts,
+  } = useApolloQuery(RECEIPTS_LIST, {
+    client: allInOneVaultClient,
+    variables: { user: address || '' },
+    skip: !address,
+    errorPolicy: 'all',
+    notifyOnNetworkStatusChange: true,
+  });
+
+  useEffect(() => {
+    if (receiptsData?.receipts?.items) {
+      const transformedData: ReceiptTableData[] =
+        receiptsData.receipts.items.map((receipt: any) => ({
+          id: receipt.id,
+          receiptId: receipt.receiptId,
+          token: receipt.token,
+          user: receipt.user,
+          receiptWeight: receipt.receiptWeight,
+          claimableAt: receipt.claimableAt,
+          isClaimed: receipt.isClaimed,
+        }));
+      setCurrentTableData(transformedData);
+    }
+  }, [receiptsData]);
 
   useEffect(() => {
     const cooldownHandler = (event: CustomEvent) =>
@@ -31,8 +83,43 @@ export default function AllInOneVaultTable() {
   useEffect(() => {
     if (isConfirmed && claimingReceiptId) {
       updateClaimedReceipt(claimingReceiptId, setCurrentTableData);
+      refetchReceipts();
     }
-  }, [isConfirmed, claimingReceiptId]);
+  }, [isConfirmed, claimingReceiptId, refetchReceipts]);
+
+  if (receiptsError) {
+    console.error('Error loading receipts:', receiptsError);
+    return (
+      <div className="mb-6 w-full shadow-[4px_4px_0px_0px_rgba(255,255,255,0.8)] bg-white rounded-xl p-6">
+        <div className="flex flex-col items-center justify-center py-8">
+          <ErrorIcon />
+          <h3 className="text-lg font-semibold text-gray-900 mt-4 mb-2">
+            Failed to load receipts
+          </h3>
+          <p className="text-gray-600 text-center mb-4">
+            There was an error loading your receipt data. Please try again.
+          </p>
+          <button
+            onClick={() => refetchReceipts()}
+            className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (receiptsLoading && !receiptsData) {
+    return (
+      <div className="mb-6 w-full shadow-[4px_4px_0px_0px_rgba(255,255,255,0.8)] bg-white rounded-xl p-6">
+        <div className="flex flex-col items-center justify-center py-8">
+          <LoadingDisplay size={100} text="Loading receipts..." />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <GenericTanstackTable
       data={currentTableData}
