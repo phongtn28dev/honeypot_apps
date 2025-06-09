@@ -8,16 +8,5 @@ export const TOKEN_SUPPORT_QUERY = gql`
         weight
       }
     }
-    receipts {
-      items {
-        claimableAt
-        id
-        isClaimed
-        receiptId
-        receiptWeight
-        token
-        user
-      }
-    }
   }
 `;

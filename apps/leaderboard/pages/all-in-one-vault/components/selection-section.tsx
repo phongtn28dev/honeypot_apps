@@ -35,8 +35,6 @@ export default function SelectionSection() {
     balance: '-',
     receiptWeight: '-',
   });
-  console.log('🎯 Selected Token:', selectedToken);
-  console.log('📍 Mapped Token Address:', tokenAddressMap[selectedToken]);
 
   const { data: totalWeight } = useReadContract({
     address: ALL_IN_ONE_VAULT_PROXY,
