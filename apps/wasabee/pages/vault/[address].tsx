@@ -301,7 +301,7 @@ export const VaultDetail = observer(() => {
                         Number(vault?.totalsupplyShares)) *
                         100,
                       decimals: 3,
-                      endWith: '%'
+                      endWith: ''
                     })
                   : '0'}
                 %
