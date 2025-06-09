@@ -295,13 +295,14 @@ export const VaultDetail = observer(() => {
                 Your Share Percentage
               </h3>
               <p className="text-xs md:text-xl font-bold text-[#202020]">
-                {vault?.totalsupplyShares &&
-                vault?.totalsupplyShares > BigInt(0)
-                  ? (
-                      (Number(vault?.userShares) /
+                {vault?.totalsupplyShares && vault?.totalsupplyShares > BigInt(0)
+                  ? DynamicFormatAmount({
+                      amount: (Number(vault?.userShares) /
                         Number(vault?.totalsupplyShares)) *
-                      100
-                    ).toFixed(2)
+                        100,
+                      decimals: 3,
+                      endWith: ''
+                    })
                   : '0'}
                 %
               </p>
