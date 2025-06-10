@@ -8,8 +8,6 @@ import { Address } from 'viem';
 import { networksMap } from '@honeypot/shared';
 import { DEFAULT_CHAIN_ID } from '@/config/algebra/default-chain-id';
 import { DynamicFormatAmount } from '@honeypot/shared';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import { observer } from 'mobx-react-lite';
 import { WasabeeIDO } from '@honeypot/shared';
 import WasabeeIDOActionComponent from './WasabeeIDOActionComponent';
@@ -53,7 +51,7 @@ const WasabeeIDOPage = observer(() => {
           <div className="w-full lg:grid lg:grid-cols-5 gap-8 p-8">
             <div className="w-full space-y-4 lg:col-span-2 lg:pr-5 mb-5">
               <div className="space-y-2">
-                <div className="flex justify-center items-center w-[74px] h-[32px] bg-white rounded-[4px] border-[0.75px] border-[#202020] shadow-[1px_1px_0px_0px_#000] text-[14px]">
+                <div className="flex justify-center items-center min-w-[74px] px-3 h-[32px] bg-white rounded-[4px] border-[0.75px] border-[#202020] shadow-[1px_1px_0px_0px_#000] text-[14px]">
                   {wasabeeIDO?.idoToken?.symbol}
                 </div>
 
@@ -186,18 +184,6 @@ const WasabeeIDOPage = observer(() => {
                     <div className="text-[24px] text-[#4D4D4D] text-shadow-[1.481px_2.963px_0px_0px_#AF7F3D] text-stroke-1 text-stroke-black text-center">
                       {DynamicFormatAmount({
                         amount: wasabeeIDO?.idoSold.toString() ?? 0,
-                        decimals: 2,
-                        endWith: wasabeeIDO?.idoToken?.symbol ?? '',
-                      })}
-                    </div>
-                  </div>
-                  <div className="bg-white rounded-[16px] border border-black p-5 shadow-[4px_4px_0px_0px_#D29A0D] hover:shadow-[2px_2px_0px_0px_#D29A0D] transition-shadow">
-                    <div className="text-sm text-[#171414] mb-2 text-center">
-                      Remaining Balance in contract
-                    </div>
-                    <div className="text-[24px] text-[#4D4D4D] text-shadow-[1.481px_2.963px_0px_0px_#AF7F3D] text-stroke-1 text-stroke-black text-center">
-                      {DynamicFormatAmount({
-                        amount: wasabeeIDO?.contractBalance?.toString() ?? 0,
                         decimals: 2,
                         endWith: wasabeeIDO?.idoToken?.symbol ?? '',
                       })}

@@ -10,6 +10,7 @@ import { debounce } from 'lodash';
 import { wallet } from '@honeypot/shared/lib/wallet';
 import BigNumber from 'bignumber.js';
 import { runInAction } from 'mobx';
+import { WrappedToastify } from '@/lib/wrappedToastify';
 
 export const WasabeeIDOActionComponent = observer(
   ({
@@ -103,11 +104,13 @@ const IDOStartedComponent = observer(
     refetchPurchaseHistory?: () => void;
   }) => {
     const [useWETH, setUseWETH] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const inputDebounce = debounce((value: string) => {
       wasabeeIDO.setAmountIn(!!value ? value : '0');
     }, 300);
 
     const buyTokens = async () => {
+      setIsLoading(true);
       try {
         if (!wallet.account) {
           throw new Error('No wallet account connected');
@@ -158,12 +161,17 @@ const IDOStartedComponent = observer(
         console.error('Transaction Error:', error);
         // Show more user-friendly error message
         if (error.message.includes('ERC20InsufficientBalance')) {
-          alert(
-            'Insufficient token balance. Please check your balance and try again.'
-          );
+          WrappedToastify.error({
+            message:
+              'Insufficient token balance. Please check your balance and try again.',
+          });
         } else {
-          alert(`Transaction failed: ${error.message}`);
+          WrappedToastify.error({
+            message: `Transaction failed: ${error.message}`,
+          });
         }
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -213,9 +221,15 @@ const IDOStartedComponent = observer(
               <div className="flex items-center gap-2 w-full">
                 <Input
                   disabled={false}
-                  type="text"
+                  type="number"
+                  min="0"
+                  step="any"
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    inputDebounce(e.target.value);
+                    const value = e.target.value;
+                    // Only allow positive numbers and decimal points
+                    if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                      inputDebounce(value);
+                    }
                   }}
                   className={cn(
                     'text-right',
@@ -272,16 +286,26 @@ const IDOStartedComponent = observer(
         </div>
         <div>
           <div className="text-left text-sm text-[#4D4D4D]">
-            <span>Purchased: </span> {wasabeeIDO.ethPurchased.toString() ?? 0}{' '}
-            BERA
+            <span>Purchased: </span>{' '}
+            {DynamicFormatAmount({
+              amount: wasabeeIDO.ethPurchased
+                .div(wasabeeIDO.priceInETH)
+                .toString(),
+              decimals: 6,
+              endWith: wasabeeIDO.idoToken?.symbol ?? '',
+            })}
           </div>
         </div>
         <div className="mt-4">
           <Button
             onPress={buyTokens}
+            isLoading={isLoading}
+            isDisabled={isLoading}
             className="w-full bg-black text-white hover:bg-gray-800"
           >
-            Buy with {useWETH ? 'WBERA' : 'BERA'}
+            {isLoading
+              ? 'Processing...'
+              : `Buy with ${useWETH ? 'WBERA' : 'BERA'}`}
           </Button>
         </div>
       </div>
@@ -302,7 +326,12 @@ const IDOEndedComponent = ({ wasabeeIDO }: { wasabeeIDO: WasabeeIDO }) => {
     <div className="bg-white rounded-[16px] border border-black p-4 text-center">
       <div className="text-lg font-bold mb-2">Sale Ended</div>
       <div className="text-left text-sm text-[#4D4D4D]">
-        <span>Purchased: </span> {wasabeeIDO.ethPurchased.toString() ?? 0} BERA
+        <span>Purchased: </span>{' '}
+        {DynamicFormatAmount({
+          amount: wasabeeIDO.ethPurchased.div(wasabeeIDO.priceInETH).toString(),
+          decimals: 6,
+          endWith: wasabeeIDO.idoToken?.symbol ?? '',
+        })}
       </div>
     </div>
   );
