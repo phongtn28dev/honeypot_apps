@@ -48,11 +48,6 @@ const createContractCallContext = (tokens: string[]) => {
         methodName: 'totalSupply',
         methodParameters: [],
       },
-      {
-        reference: 'balanceOf',
-        methodName: 'balanceOf',
-        methodParameters: [],
-      },
     ],
   }));
 };
