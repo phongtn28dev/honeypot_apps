@@ -64,6 +64,7 @@ const config = {
       },
       fontFamily: {
         display: 'Oswald, ui-serif',
+        theader: 'DM Sans, sans-serif',
         gliker: ['Gliker', 'sans-serif'],
       },
       backgroundColor: {
