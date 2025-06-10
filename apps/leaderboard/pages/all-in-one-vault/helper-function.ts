@@ -14,13 +14,17 @@ export const tokenAddressMap: Record<string, string> = {
 export const calculateSummaryData = (
   token: string,
   amountStr: string,
+  weightPerToken: number,
   totalWeight?: bigint | null,
   tokenBalance?: bigint | null
 ) => {
-  if (!token || !amountStr) return;
+  if (!token || !amountStr || amountStr.trim() === '' || !weightPerToken) return;
 
-  const weightPerToken = 2.5;
   const amountValue = parseFloat(amountStr);
+  
+  // Return undefined for invalid amounts
+  if (isNaN(amountValue) || amountValue <= 0) return;
+
   const receiptWeight = (weightPerToken * amountValue).toFixed(1);
   const balance = tokenBalance ? Number(tokenBalance) / 1e18 : 15.0; 
 
@@ -34,6 +38,7 @@ export const calculateSummaryData = (
 export const handleTokenChange = (
   token: string,
   amount: string,
+  weightPerToken: number,
   totalWeight: bigint | null | undefined,
   tokenBalance: bigint | null | undefined,
   setSelectedToken: (token: string) => void,
@@ -43,10 +48,11 @@ export const handleTokenChange = (
   setSelectedToken(token);
   setInsufficientBalance(false);
 
-  if (token && amount) {
+  if (token && amount && weightPerToken) {
     const newSummaryData = calculateSummaryData(
       token,
       amount,
+      weightPerToken,
       totalWeight,
       tokenBalance
     );
@@ -66,6 +72,7 @@ export const handleTokenChange = (
 export const handleAmountChange = (
   newAmount: string,
   selectedToken: string,
+  weightPerToken: number,
   totalWeight: bigint | null | undefined,
   tokenBalance: bigint | null | undefined,
   setAmount: (amount: string) => void,
@@ -74,10 +81,11 @@ export const handleAmountChange = (
 ) => {
   setAmount(newAmount);
 
-  if (selectedToken && newAmount) {
+  if (selectedToken && newAmount && weightPerToken) {
     const newSummaryData = calculateSummaryData(
       selectedToken,
       newAmount,
+      weightPerToken,
       totalWeight,
       tokenBalance
     );

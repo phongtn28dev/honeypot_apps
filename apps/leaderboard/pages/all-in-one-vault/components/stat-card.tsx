@@ -19,7 +19,7 @@ export default function StatCard() {
             className="border-2 border-dashed border-black bg-white/90 shadow-[4px_4px_0px_0px_rgba(255,255,255,0.8)]"
           >
             <div className="p-4 text-center">
-              <div className="text-sm text-gray-600 mb-1">{stat.label}</div>
+              <div className="text-sm text-gray-600 mb-1 font-theader">{stat.label}</div>
               <div className="text-2xl font-bold text-gray-800">
                 {stat.value}
               </div>

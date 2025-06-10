@@ -45,7 +45,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "../../libs/shared/hpot-sdk/src/services/chart.ts",
-    "../../apps/wasabee/.next/types/**/*.ts"
+    "../../apps/leaderboard/.next/types/**/*.ts"
   ],
   "exclude": ["node_modules", "jest.config.ts", "**/*.spec.ts", "**/*.test.ts"]
 }

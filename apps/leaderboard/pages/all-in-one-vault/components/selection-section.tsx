@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import InputSection from '@/components/select/select';
 import SummaryCard from '@/components/summary/summary';
 import { ApproveAndBurnButton } from '@/components/button/button-approve-and-burn';
@@ -6,27 +6,28 @@ import {
   ALL_IN_ONE_VAULT_PROXY,
   NATIVE_TOKEN_WRAPPED,
 } from '@/config/algebra/addresses';
-import {
-  handleTokenChange,
-  handleAmountChange,
-} from '../helper-function';
+import { useQuery as useTanstackQuery } from '@tanstack/react-query';
+import { useQuery as useApolloQuery, ApolloClient, InMemoryCache } from '@apollo/client';
+import { handleTokenChange, handleAmountChange } from '../helper-function';
 import { CurrencyAmount, Token } from '@cryptoalgebra/sdk';
 import { useAccount, useReadContract } from 'wagmi';
 import { AllInOneVaultABI } from '@/lib/abis';
 import { ERC20ABI } from '@/lib/abis/erc20';
 import Insufficient from '@/components/insufficient/insufficient';
+import { TOKEN_SUPPORT_QUERY } from '@/lib/algebra/graphql/queries/token-support';
+import { gql } from '@apollo/client';
+import { useSubgraphClient } from '@honeypot/shared';
 
-const tokenAddressMap: Record<string, string> = 
-  {
-    "0x0555e30da8f98308edb960aa94c0db47230d2b9c": "2000",
-    "0x36d31f9aec845f2c1789aed3364418c92e17b768": "3000",
-    "0x6969696969696969696969696969696969696969": "1000"
-  }
-    
+const tokenAddressMap: Record<string, string> = {
+  '0x0555e30da8f98308edb960aa94c0db47230d2b9c': '2000',
+  '0x36d31f9aec845f2c1789aed3364418c92e17b768': '3000',
+  '0x6969696969696969696969696969696969696969': '1000',
+};
+
 export default function SelectionSection() {
   const { address } = useAccount();
   const [selectedToken, setSelectedToken] = useState<string>('');
-
+  const [weightPerCurrentToken, setWeightPerCurrentToken] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
   const [insufficientBalance, setInsufficientBalance] =
     useState<boolean>(false);
@@ -35,8 +36,15 @@ export default function SelectionSection() {
     balance: '-',
     receiptWeight: '-',
   });
-  console.log('🎯 Selected Token:', selectedToken);
-  console.log('📍 Mapped Token Address:', tokenAddressMap[selectedToken]);
+  const tokenSupportClient = useMemo(() => new ApolloClient({
+    uri: 'https://api.ghostlogs.xyz/gg/pub/96ff5ab9-9c87-47cb-ab46-73a276d93c8b',
+    cache: new InMemoryCache(),
+    defaultOptions: {
+      query: {
+        errorPolicy: 'all'
+      }
+    }
+  }), []);
 
   const { data: totalWeight } = useReadContract({
     address: ALL_IN_ONE_VAULT_PROXY,
@@ -56,57 +64,29 @@ export default function SelectionSection() {
     },
   });
 
-    const amountToApprove = useMemo(() => {
-    if (!selectedToken || !amount) return undefined;
-    const tokenAddress = tokenAddressMap[selectedToken];
-    if (!tokenAddress) return undefined;
-
-    try {
-      const token = new Token(
-        1,
-        tokenAddress,
-        18,
-        selectedToken,
-      );
-      const amountValue = BigInt(parseFloat(amount) * 1e18);
-      return CurrencyAmount.fromRawAmount(token, amountValue.toString());
-    } catch (error) {
-      console.error('Error creating currency amount:', error);
-      return undefined;
-    }
-  }, [selectedToken, amount]);
-  
   const onTokenChange = (token: string) => {
-    handleTokenChange(
-      token,
-      amount,
-      totalWeight,
-      tokenBalance,
-      setSelectedToken,
-      setInsufficientBalance,
-      setSummaryData
-    );
+    setSelectedToken(token);
+    setInsufficientBalance(false);
   };
 
   const onAmountChange = (newAmount: string) => {
-    handleAmountChange(
-      newAmount,
-      selectedToken,
-      totalWeight,
-      tokenBalance,
-      setAmount,
-      setInsufficientBalance,
-      setSummaryData
-    );
+    setAmount(newAmount);
+    setInsufficientBalance(false);
   };
 
   return (
     <>
       <InputSection
         selectedToken={selectedToken}
+        setSummaryData={setSummaryData}
+        setWeightPerCurrentToken={setWeightPerCurrentToken}
+        setInsufficientBalance={setInsufficientBalance}
         amount={amount}
         onTokenChange={onTokenChange}
         onAmountChange={onAmountChange}
+        tokenSupportClient={tokenSupportClient}
+        totalWeight={totalWeight}
+        tokenBalance={tokenBalance}
         className="w-full"
       />
 
@@ -117,8 +97,12 @@ export default function SelectionSection() {
         />
       )}
 
-      <SummaryCard className="w-full mb-6" data={summaryData} />
-
+      <SummaryCard
+        className="w-full mb-6"
+        data={summaryData}
+        weightPerCurrentToken={weightPerCurrentToken}
+      />
+      
       <ApproveAndBurnButton
         tokenAddress={NATIVE_TOKEN_WRAPPED}
         tokenDecimals={18}

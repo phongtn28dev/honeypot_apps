@@ -2,43 +2,144 @@ import { Input } from '../input';
 import { WarppedNextSelect } from '../wrappedNextUI/Select/Select';
 import { SelectItem } from '@nextui-org/react';
 import { useState, useEffect } from 'react';
-
-const tokenOptions = [
-  { key: 'LBGT', label: 'LBGT' },
-  { key: 'BERA', label: 'BERA' },
-  { key: 'HONEY', label: 'HONEY' },
-  { key: 'BGT', label: 'BGT' },
-  { key: 'USDC', label: 'USDC' },
-  { key: 'WETH', label: 'WETH' },
-];
+import {
+  useQuery as useApolloQuery,
+  ApolloClient,
+  InMemoryCache,
+} from '@apollo/client';
+import { TOKEN_SUPPORT_QUERY } from '@/lib/algebra/graphql/queries/token-support';
+import { LoadingDisplay } from '@/components/loading-display/loading-display';
+import ErrorIcon from '@/components/svg/ErrorIcon';
+import { calculateSummaryData } from '@/pages/all-in-one-vault/helper-function';
 
 interface InputSectionProps {
   onTokenChange?: (value: string) => void;
   onAmountChange?: (value: string) => void;
   selectedToken?: string;
+  setSummaryData?: (data: any) => void;
+  setWeightPerCurrentToken?: (weight: string) => void;
+  setInsufficientBalance?: (insufficient: boolean) => void;
   amount?: string;
   className?: string;
+  tokenSupportClient?: ApolloClient<any>;
+  totalWeight?: bigint | null;
+  tokenBalance?: bigint | null;
 }
 
 export default function InputSection({
   onTokenChange,
   onAmountChange,
   selectedToken,
+  setSummaryData,
+  setWeightPerCurrentToken,
+  setInsufficientBalance,
   amount,
   className = '',
+  tokenSupportClient,
+  totalWeight,
+  tokenBalance,
 }: InputSectionProps) {
   const [internalSelectedToken, setInternalSelectedToken] = useState<string>(
     selectedToken || ''
   );
+  const {
+    data: tokenSupportData,
+    loading: tokenSupportLoading,
+    error: tokenSupportError,
+  } = useApolloQuery(TOKEN_SUPPORT_QUERY, {
+    client: tokenSupportClient,
+    errorPolicy: 'all',
+    notifyOnNetworkStatusChange: true,
+  });
+
+  const tokenSupportList = tokenSupportData?.supportReceipts?.items || [];
+  console.log('Token Support List:', tokenSupportList);
 
   useEffect(() => {
     setInternalSelectedToken(selectedToken || '');
   }, [selectedToken]);
 
+  // Effect to recalculate summary data when amount changes
+  useEffect(() => {
+    if (!setSummaryData) return;
+
+    // If amount is empty or cleared, reset summary data
+    if (!amount || amount.trim() === '') {
+      setSummaryData({
+        weightPerToken: selectedToken && tokenSupportList.length > 0 
+          ? tokenSupportList.find((token: { id: string; weight: string }) => token.id === selectedToken)?.weight || '-'
+          : '-',
+        balance: '-',
+        receiptWeight: '-',
+      });
+      if (setInsufficientBalance) {
+        setInsufficientBalance(false);
+      }
+      return;
+    }
+
+    // Calculate summary data if both amount and token are available
+    if (amount && selectedToken) {
+      const selectedTokenData = tokenSupportList.find((token: { id: string; weight: string }) => token.id === selectedToken);
+      if (selectedTokenData) {
+        const weightValue = parseFloat(selectedTokenData.weight);
+        const newSummaryData = calculateSummaryData(
+          selectedToken,
+          amount,
+          weightValue,
+          totalWeight,
+          tokenBalance
+        );
+        if (newSummaryData) {
+          setSummaryData(newSummaryData);
+          
+          // Check for insufficient balance
+          if (setInsufficientBalance) {
+            const amountValue = parseFloat(amount);
+            const balanceValue = parseFloat(newSummaryData.balance);
+            setInsufficientBalance(amountValue > balanceValue);
+          }
+        }
+      }
+    }
+  }, [amount, selectedToken, tokenSupportList, totalWeight, tokenBalance, setSummaryData, setInsufficientBalance]);
+
   const handleTokenChange = (keys: any) => {
     const selectedKey = Array.from(keys)[0] as string;
     setInternalSelectedToken(selectedKey);
     onTokenChange?.(selectedKey);
+    
+    // Find the selected token's weight and update summary data
+    const selectedTokenData = tokenSupportList.find((token: { id: string; weight: string }) => token.id === selectedKey);
+    if (selectedTokenData) {
+      const weightValue = parseFloat(selectedTokenData.weight);
+      console.log('🔥 Selected token weight:', selectedTokenData.weight, 'for token:', selectedKey);
+      
+      if (setWeightPerCurrentToken) {
+        setWeightPerCurrentToken(selectedTokenData.weight);
+      }
+      
+      // Calculate and set summary data if amount is available
+      if (setSummaryData && amount && amount.trim() !== '') {
+        const newSummaryData = calculateSummaryData(
+          selectedKey,
+          amount,
+          weightValue,
+          totalWeight,
+          tokenBalance
+        );
+        if (newSummaryData) {
+          setSummaryData(newSummaryData);
+        }
+      } else if (setSummaryData) {
+        // Set initial summary data with just the weight when no amount
+        setSummaryData({
+          weightPerToken: selectedTokenData.weight,
+          balance: '-',
+          receiptWeight: '-',
+        });
+      }
+    }
   };
 
   return (
@@ -60,10 +161,10 @@ export default function InputSection({
             listbox: 'p-0',
           }}
         >
-          {tokenOptions.map((token) => (
+          {tokenSupportList.map((token: { id: string; weight: string }) => (
             <SelectItem
-              key={token.key}
-              value={token.key}
+              key={token.id}
+              value={token.id}
               className="hover:bg-black focus:bg-black data-[hover=true]:bg-black data-[focus=true]:bg-black group/item transition-colors duration-150"
               classNames={{
                 base: 'hover:bg-black focus:bg-black data-[hover=true]:bg-black data-[focus=true]:bg-black',
@@ -73,7 +174,7 @@ export default function InputSection({
             >
               <div className="flex flex-col">
                 <span className="font-medium text-gray-900 group-hover/item:text-white group-focus/item:text-white transition-colors duration-150">
-                  {token.label}
+                  {token.id}
                 </span>
               </div>
             </SelectItem>
