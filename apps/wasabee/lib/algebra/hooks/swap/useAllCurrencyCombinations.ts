@@ -4,40 +4,6 @@ import { useObserver } from 'mobx-react-lite';
 import { useMemo } from 'react';
 import { useChainId } from 'wagmi';
 
-// Safe Token creation utility function
-function safeCreateToken(params: {
-  chainId: number;
-  address: string;
-  decimals: number;
-  symbol: string;
-  name: string;
-}): Token | null {
-  try {
-    if (
-      !params.chainId ||
-      !params.address ||
-      typeof params.decimals !== 'number' ||
-      params.decimals < 0 ||
-      params.decimals > 255 ||
-      !params.symbol ||
-      !params.name
-    ) {
-      throw new Error('Missing or invalid token params');
-    }
-    
-    return new Token(
-      params.chainId,
-      params.address,
-      params.decimals,
-      params.symbol,
-      params.name
-    ).wrapped;
-  } catch (err) {
-    console.error('Failed to create Token:', err, params);
-    return null;
-  }
-}
-
 export function useAllCurrencyCombinations(
   currencyA?: Currency,
   currencyB?: Currency
@@ -55,19 +21,19 @@ export function useAllCurrencyCombinations(
 
   const bases: Token[] = useMemo(() => {
     if (!chainId) return [];
+
     return (
-      currentChain.validatedTokens
-        .map((token) =>
-          safeCreateToken({
+      currentChain.validatedTokens.map(
+        (token) =>
+          new Token(
             chainId,
-            address: token.address,
-            decimals: token.decimals,
-            symbol: token.symbol,
-            name: token.name,
-          })
-        )
-        .filter((t): t is Token => t !== null)
-    ) ?? [];
+            token.address,
+            token.decimals,
+            token.symbol,
+            token.name
+          ).wrapped
+      ) ?? []
+    );
   }, [chainId, currentChain]);
 
   const basePairs: [Token, Token][] = useMemo(
