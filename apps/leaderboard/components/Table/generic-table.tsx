@@ -28,10 +28,10 @@ const globalFilterFn: FilterFn<any> = (row, columnId, value, addMeta) => {
   if (safeValue === '') return true;
 
   const searchableValues: string[] = [];
-  
-  row.getAllCells().forEach(cell => {
+
+  row.getAllCells().forEach((cell) => {
     const columnDef = cell.column.columnDef;
-    
+
     // @ts-ignore
     if (columnDef.accessorKey === 'id') {
       const cellValue = cell.getValue();
@@ -49,9 +49,7 @@ const globalFilterFn: FilterFn<any> = (row, columnId, value, addMeta) => {
 
   // Check if any value contains the search term (case insensitive)
   const searchTerm = safeValue.toLowerCase();
-  return searchableValues.some(val => 
-    val.toLowerCase().includes(searchTerm)
-  );
+  return searchableValues.some((val) => val.toLowerCase().includes(searchTerm));
 };
 
 export interface TableAction {
@@ -126,21 +124,20 @@ export default function GenericTanstackTable<T>({
     <div
       className={`border-2 border-dashed border-black bg-white/90 rounded-lg shadow-[0px_0px_4px_4px_rgba(255, 255, 255, 1)] ${className}`}
     >
-
       {/* Table */}
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead>
+          <thead className="font-theader text-sm leading-[150%] tracking-0 text-center text-gray-500">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className="border-b border-gray-200">
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="px-4 py-3 text-center text-sm font-semibold text-gray-700 bg-gray-50/50"
+                    className="px-4 py-3 text-center text-sm  text-gray-500 bg-gray-50/50"
                   >
                     {header.isPlaceholder ? null : (
                       <div
-                        className={`flex items-center justify-center gap-2 ${
+                        className={`flex items-center justify-center gap-2 font-medium ${
                           header.column.getCanSort()
                             ? 'cursor-pointer select-none hover:text-gray-900'
                             : ''
@@ -150,24 +147,6 @@ export default function GenericTanstackTable<T>({
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
-                        )}
-                        {enableSorting && header.column.getCanSort() && (
-                          <span className="flex flex-col">
-                            <ChevronUp
-                              className={`h-3 w-3 ${
-                                header.column.getIsSorted() === 'asc'
-                                  ? 'text-gray-900'
-                                  : 'text-gray-400'
-                              }`}
-                            />
-                            <ChevronDown
-                              className={`h-3 w-3 -mt-1 ${
-                                header.column.getIsSorted() === 'desc'
-                                  ? 'text-gray-900'
-                                  : 'text-gray-400'
-                              }`}
-                            />
-                          </span>
                         )}
                       </div>
                     )}
