@@ -3,11 +3,13 @@ import React from 'react';
 interface InsufficientProps {
   balance: string | number;
   selectedToken: string;
+  tokenName: string;
 }
 
 export default function Insufficient({
   balance,
   selectedToken,
+  tokenName,
 }: InsufficientProps) {
   return (
     <div className="w-full mb-4 p-3 bg-red-50 border-l-4 border-red-400 rounded-r-md">

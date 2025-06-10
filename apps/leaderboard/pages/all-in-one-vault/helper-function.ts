@@ -1,16 +1,6 @@
 import { toast } from 'react-toastify';
 import { ReceiptTableData } from '@/components/Table/table.config';
 
-// List of supported tokens from the graph
-export const tokenAddressMap: Record<string, string> = {
-  LBGT: '0xLBGT_ADDRESS',
-  BERA: '0xBERA_ADDRESS',
-  HONEY: '0xHONEY_ADDRESS',
-  BGT: '0xBGT_ADDRESS',
-  USDC: '0xUSDC_ADDRESS',
-  WETH: '0xWETH_ADDRESS',
-};
-
 export const calculateSummaryData = (
   token: string,
   amountStr: string,
@@ -26,7 +16,7 @@ export const calculateSummaryData = (
   if (isNaN(amountValue) || amountValue <= 0) return;
 
   const receiptWeight = (weightPerToken * amountValue).toFixed(1);
-  const balance = tokenBalance ? Number(tokenBalance) / 1e18 : 15.0; 
+  const balance = Number(tokenBalance) / 1e18;
 
   return {
     weightPerToken: weightPerToken.toString(),

@@ -3,23 +3,24 @@ import InputSection from '@/components/select/select';
 import SummaryCard from '@/components/summary/summary';
 import { ApproveAndBurnButton } from '@/components/button/button-approve-and-burn';
 import {
-  ALL_IN_ONE_VAULT_PROXY,
   NATIVE_TOKEN_WRAPPED,
 } from '@/config/algebra/addresses';
-import { useQuery as useApolloQuery, ApolloClient, InMemoryCache } from '@apollo/client';
+import {
+  useQuery as useApolloQuery,
+  ApolloClient,
+  InMemoryCache,
+} from '@apollo/client';
 import { useAccount, useReadContract } from 'wagmi';
 import { AllInOneVaultABI } from '@/lib/abis';
 import Insufficient from '@/components/insufficient/insufficient';
-
-const tokenAddressMap: Record<string, string> = {
-  '0x0555e30da8f98308edb960aa94c0db47230d2b9c': '2000',
-  '0x36d31f9aec845f2c1789aed3364418c92e17b768': '3000',
-  '0x6969696969696969696969696969696969696969': '1000',
-};
+import { erc20Abi } from 'viem';
 
 export default function SelectionSection() {
+  const { address } = useAccount();
   const [selectedToken, setSelectedToken] = useState<string>('');
-  const [weightPerCurrentToken, setWeightPerCurrentToken] = useState<string>('');
+  const [tokenName, setTokenName] = useState<string>('');
+  const [weightPerCurrentToken, setWeightPerCurrentToken] =
+    useState<string>('');
   const [amount, setAmount] = useState<string>('');
   const [insufficientBalance, setInsufficientBalance] =
     useState<boolean>(false);
@@ -29,23 +30,29 @@ export default function SelectionSection() {
     receiptWeight: '-',
     estimatedRewards: '-',
   });
-  const tokenSupportClient = useMemo(() => new ApolloClient({
-    uri: 'https://api.ghostlogs.xyz/gg/pub/96ff5ab9-9c87-47cb-ab46-73a276d93c8b',
-    cache: new InMemoryCache(),
-    defaultOptions: {
-      query: {
-        errorPolicy: 'all'
-      }
-    }
-  }), []);
+  const tokenSupportClient = useMemo(
+    () =>
+      new ApolloClient({
+        uri: 'https://api.ghostlogs.xyz/gg/pub/96ff5ab9-9c87-47cb-ab46-73a276d93c8b',
+        cache: new InMemoryCache(),
+        defaultOptions: {
+          query: {
+            errorPolicy: 'all',
+          },
+        },
+      }),
+    []
+  );
 
-  const { data: totalWeight } = useReadContract({
-    address: ALL_IN_ONE_VAULT_PROXY,
-    abi: AllInOneVaultABI,
-    functionName: 'totalWeight',
+  const { data: tokenBalance } = useReadContract({
+    address: selectedToken as `0x${string}`,
+    abi: erc20Abi,
+    functionName: 'balanceOf',
+    args: address ? [address] : undefined,
+    query: {
+      enabled: !!selectedToken && !!address,
+    },
   });
-
-
 
   const onTokenChange = (token: string) => {
     setSelectedToken(token);
@@ -68,7 +75,7 @@ export default function SelectionSection() {
         onTokenChange={onTokenChange}
         onAmountChange={onAmountChange}
         tokenSupportClient={tokenSupportClient}
-        totalWeight={totalWeight}
+        tokenBalance={tokenBalance}
         className="w-full"
       />
 
@@ -76,6 +83,7 @@ export default function SelectionSection() {
         <Insufficient
           balance={summaryData.balance}
           selectedToken={selectedToken}
+          tokenName={tokenName}
         />
       )}
 
@@ -85,7 +93,7 @@ export default function SelectionSection() {
         currentToken={selectedToken}
         weightPerCurrentToken={weightPerCurrentToken}
       />
-      
+
       <ApproveAndBurnButton
         tokenAddress={NATIVE_TOKEN_WRAPPED}
         tokenDecimals={18}
