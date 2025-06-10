@@ -53,10 +53,17 @@ export const columns: ColumnDef<ReceiptTableData>[] = [
       const claimableAt = parseInt(data.claimableAt);
       const now = Math.floor(Date.now() / 1000);
       const isClaimable = now >= claimableAt;
-      
+      const isZero = cooldown === '0';
+      if (isZero) {
+        return <span className={`text-red-500`}>{cooldown}</span>;
+      }
       return (
-        <span 
-          className={isClaimable ? 'text-green-500 font-medium' : 'text-orange-500 font-medium'}
+        <span
+          className={
+            isClaimable
+              ? 'text-green-500 font-medium'
+              : 'text-orange-500 font-medium'
+          }
         >
           {cooldown}
         </span>
@@ -83,15 +90,16 @@ export const columns: ColumnDef<ReceiptTableData>[] = [
       const claimableAt = parseInt(data.claimableAt);
       const now = Math.floor(Date.now() / 1000);
       const isClaimable = now >= claimableAt;
-      
+
       let actionConfig;
-      
+
       if (!isClaimable) {
         // Cooldown period - not yet claimable
         actionConfig = {
           label: 'Cooldown',
           isDisabled: true,
-          className: 'bg-gray-400 text-gray-700 px-3 py-1 rounded-md cursor-not-allowed',
+          className:
+            'bg-gray-400 text-gray-700 px-3 py-1 rounded-md cursor-not-allowed',
           onClick: () => {},
         };
       } else if (isClaimable && !data.isClaimed) {
@@ -99,7 +107,8 @@ export const columns: ColumnDef<ReceiptTableData>[] = [
         actionConfig = {
           label: 'Claim',
           isDisabled: false,
-          className: 'px-3 py-1 rounded-md text-black cursor-pointer hover:opacity-80 transition-opacity',
+          className:
+            'px-3 py-1 rounded-md text-black cursor-pointer hover:opacity-80 transition-opacity',
           style: { background: 'rgba(255, 169, 49, 1)' },
           onClick: () => {
             // TODO: Implement claim functionality
@@ -116,7 +125,7 @@ export const columns: ColumnDef<ReceiptTableData>[] = [
           onClick: () => {},
         };
       }
-      
+
       return (
         <button
           className={actionConfig.className}
