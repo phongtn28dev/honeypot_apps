@@ -45,7 +45,7 @@ export default function AllInOneVaultTable() {
     refetch: refetchReceipts,
   } = useApolloQuery(RECEIPTS_LIST, {
     client: allInOneVaultClient,
-    variables: { user: '0x8ef3fd2bf7ae8a190e437aa6248d419c34428804' },
+    variables: { user: address || '' },
     skip: !address,
     errorPolicy: 'all',
     notifyOnNetworkStatusChange: true,
