@@ -54,7 +54,6 @@ export default function InputSection({
   });
   const tokenSupportList = tokenSupportData?.supportReceipts?.items || [];
 
-  // Extract token addresses for multicall
   const tokenAddresses = tokenSupportList.map(
     (token: { id: string }) => token.id
   );
@@ -131,18 +130,9 @@ export default function InputSection({
     );
     if (selectedTokenData) {
       const weightValue = parseFloat(selectedTokenData.weight);
-      console.log(
-        '🔥 Selected token weight:',
-        selectedTokenData.weight,
-        'for token:',
-        selectedKey
-      );
-
       if (setWeightPerCurrentToken) {
         setWeightPerCurrentToken(selectedTokenData.weight);
       }
-
-      // Calculate and set summary data if amount is available
       if (setSummaryData && amount && amount.trim() !== '') {
         const newSummaryData = calculateSummaryData(
           selectedKey,

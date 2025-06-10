@@ -47,17 +47,6 @@ const SummaryCard = memo(function SummaryCard({
     [isLoading]
   );
 
-  const { data: tokenBalance } = useReadContract({
-    address: currentToken as `0x${string}`,
-    abi: erc20Abi,
-    functionName: 'balanceOf',
-    args: address ? [address] : undefined,
-    query: {
-      enabled: !!currentToken,
-    },
-  });
-  console.log('🎯 Token Balance:', tokenBalance);
-
   const summaryItems = useMemo(
     () => [
       {
