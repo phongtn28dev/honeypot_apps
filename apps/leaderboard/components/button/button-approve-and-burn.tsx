@@ -42,15 +42,15 @@ export function ApproveAndBurnButton({
     }
   }, [userAmount, tokenDecimals]);
 
-  const { data: userBalance } = useReadContract({
-    address: tokenAddress,
-    abi: ERC20ABI,
-    functionName: 'balanceOf',
-    args: [userAddress as Address],
-    query: {
-      enabled: !!userAddress,
-    },
-  });
+  // const { data: userBalance } = useReadContract({
+  //   address: tokenAddress,
+  //   abi: ERC20ABI,
+  //   functionName: 'balanceOf',
+  //   args: [userAddress as Address],
+  //   query: {
+  //     enabled: !!userAddress,
+  //   },
+  // });
 
   const currencyAmount = useMemo(() => {
     if (!parsedAmount || !tokenAddress) return undefined;
@@ -76,17 +76,17 @@ export function ApproveAndBurnButton({
   });
 
   const { writeContractAsync: executeGetReceipt } = useWriteContract();
-
-  const hasSufficientBalance = useMemo(() => {
-    if (!userBalance || !parsedAmount) return false;
-    return userBalance >= parsedAmount;
-  }, [userBalance, parsedAmount]);
+  // console.log(userBalance, parsedAmount, tokenSymbol);
+  // const hasSufficientBalance = useMemo(() => {
+  //   if (!userBalance || !parsedAmount) return false;
+  //   return userBalance >= parsedAmount;
+  // }, [userBalance, parsedAmount]);
 
   const handleApprove = async () => {
-    if (!hasSufficientBalance) {
-      onError?.(`Insufficient ${tokenSymbol} balance`);
-      return;
-    }
+    // if (!hasSufficientBalance) {
+    //   onError?.(`Insufficient ${tokenSymbol} balance`);
+    //   return;
+    // }
 
     try {
       setIsProcessing(true);
@@ -128,13 +128,13 @@ export function ApproveAndBurnButton({
       return { text: 'Enter Amount', disabled: true, onClick: () => {} };
     }
 
-    if (!hasSufficientBalance) {
-      return {
-        text: `Insufficient ${tokenSymbol}`,
-        disabled: true,
-        onClick: () => {},
-      };
-    }
+    // if (!hasSufficientBalance) {
+    //   return {
+    //     text: `Insufficient ${tokenSymbol}`,
+    //     disabled: true,
+    //     onClick: () => {},
+    //   };
+    // }
 
     if (approvalState === ApprovalState.NOT_APPROVED) {
       return {
@@ -154,7 +154,7 @@ export function ApproveAndBurnButton({
 
     if (approvalState === ApprovalState.APPROVED) {
       return {
-        text: isProcessing ? 'Processing...' : 'burn2Vault',
+        text: isProcessing ? 'Processing...' : 'Burn2Vault',
         disabled: isProcessing,
         onClick: handleBurnToVault,
       };
@@ -170,12 +170,12 @@ export function ApproveAndBurnButton({
       onClick={buttonConfig.onClick}
       disabled={buttonConfig.disabled}
       className={`
-        px-6 py-3 rounded-lg font-medium transition-colors w-full
-        ${
-          buttonConfig.disabled
-            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            : 'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800'
-        }
+      px-6 py-3 rounded-lg font-medium transition-all w-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] duration-300
+      ${
+        buttonConfig.disabled
+          ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          : 'bg-amber-500 text-white hover:bg-amber-600 active:bg-amber-600'
+      }
       `}
     >
       {buttonConfig.text}

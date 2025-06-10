@@ -5,17 +5,15 @@ import { useState, useEffect } from 'react';
 import {
   useQuery as useApolloQuery,
   ApolloClient,
-  InMemoryCache,
 } from '@apollo/client';
 import { TOKEN_SUPPORT_QUERY } from '@/lib/algebra/graphql/queries/token-support';
-import { LoadingDisplay } from '@/components/loading-display/loading-display';
-import ErrorIcon from '@/components/svg/ErrorIcon';
 import { calculateSummaryData } from '@/pages/all-in-one-vault/helper-function';
 import useGetSupportTokenInfo from '@/hooks/useGetSupportTokenInfo';
 
 interface InputSectionProps {
   onTokenChange?: (value: string) => void;
   onAmountChange?: (value: string) => void;
+  setDecimals?: (decimals: number) => void;
   selectedToken?: string;
   setSummaryData?: (data: any) => void;
   setWeightPerCurrentToken?: (weight: string) => void;
@@ -32,6 +30,7 @@ export default function InputSection({
   onTokenChange,
   onAmountChange,
   selectedToken,
+  setDecimals,
   setSummaryData,
   setWeightPerCurrentToken,
   setInsufficientBalance,
@@ -55,6 +54,7 @@ export default function InputSection({
     notifyOnNetworkStatusChange: true,
   });
   const tokenSupportList = tokenSupportData?.supportReceipts?.items || [];
+  
 
   const tokenAddresses = tokenSupportList.map(
     (token: { id: string }) => token.id
@@ -67,6 +67,7 @@ export default function InputSection({
   useEffect(() => {
     setInternalSelectedToken(selectedToken || '');
   }, [selectedToken]);
+  setDecimals?.(tokenInfoData?.[internalSelectedToken]?.decimals || 18);
 
   useEffect(() => {
     if (!setSummaryData) return;
