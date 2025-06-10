@@ -56,15 +56,15 @@ export default function InputSection({
   console.log('🔍 Token Support List:', tokenSupportList);
 
   // Extract token addresses for multicall
-  const tokenAddresses = tokenSupportList.map((token: { id: string }) => token.id);
-  console.log('🔍 Token Addresses:', tokenAddresses);
+  const tokenAddresses = tokenSupportList.map(
+    (token: { id: string }) => token.id
+  );
   const {
     data: tokenInfoData,
     isLoading: tokenInfoLoading,
-    error: tokenInfoError
+    error: tokenInfoError,
   } = useGetSupportTokenInfo({ tokens: tokenAddresses });
   console.log('🔍 Token Info Data:', tokenInfoData);
-
   useEffect(() => {
     setInternalSelectedToken(selectedToken || '');
   }, [selectedToken]);
@@ -73,9 +73,13 @@ export default function InputSection({
     if (!setSummaryData) return;
     if (!amount || amount.trim() === '') {
       setSummaryData({
-        weightPerToken: selectedToken && tokenSupportList.length > 0 
-          ? tokenSupportList.find((token: { id: string; weight: string }) => token.id === selectedToken)?.weight || '-'
-          : '-',
+        weightPerToken:
+          selectedToken && tokenSupportList.length > 0
+            ? tokenSupportList.find(
+                (token: { id: string; weight: string }) =>
+                  token.id === selectedToken
+              )?.weight || '-'
+            : '-',
         balance: '-',
         receiptWeight: '-',
       });
@@ -86,7 +90,9 @@ export default function InputSection({
     }
 
     if (amount && selectedToken) {
-      const selectedTokenData = tokenSupportList.find((token: { id: string; weight: string }) => token.id === selectedToken);
+      const selectedTokenData = tokenSupportList.find(
+        (token: { id: string; weight: string }) => token.id === selectedToken
+      );
       if (selectedTokenData) {
         const weightValue = parseFloat(selectedTokenData.weight);
         const newSummaryData = calculateSummaryData(
@@ -98,7 +104,7 @@ export default function InputSection({
         );
         if (newSummaryData) {
           setSummaryData(newSummaryData);
-          
+
           if (setInsufficientBalance) {
             const amountValue = parseFloat(amount);
             const balanceValue = parseFloat(newSummaryData.balance);
@@ -107,22 +113,37 @@ export default function InputSection({
         }
       }
     }
-  }, [amount, selectedToken, tokenSupportList, totalWeight, tokenBalance, setSummaryData, setInsufficientBalance]);
+  }, [
+    amount,
+    selectedToken,
+    tokenSupportList,
+    totalWeight,
+    tokenBalance,
+    setSummaryData,
+    setInsufficientBalance,
+  ]);
 
   const handleTokenChange = (keys: any) => {
     const selectedKey = Array.from(keys)[0] as string;
     setInternalSelectedToken(selectedKey);
     onTokenChange?.(selectedKey);
-    
-    const selectedTokenData = tokenSupportList.find((token: { id: string; weight: string }) => token.id === selectedKey);
+
+    const selectedTokenData = tokenSupportList.find(
+      (token: { id: string; weight: string }) => token.id === selectedKey
+    );
     if (selectedTokenData) {
       const weightValue = parseFloat(selectedTokenData.weight);
-      console.log('🔥 Selected token weight:', selectedTokenData.weight, 'for token:', selectedKey);
-      
+      console.log(
+        '🔥 Selected token weight:',
+        selectedTokenData.weight,
+        'for token:',
+        selectedKey
+      );
+
       if (setWeightPerCurrentToken) {
         setWeightPerCurrentToken(selectedTokenData.weight);
       }
-      
+
       // Calculate and set summary data if amount is available
       if (setSummaryData && amount && amount.trim() !== '') {
         const newSummaryData = calculateSummaryData(
@@ -164,24 +185,29 @@ export default function InputSection({
             listbox: 'p-0',
           }}
         >
-          {tokenSupportList.map((token: { id: string; weight: string }) => (
-            <SelectItem
-              key={token.id}
-              value={token.id}
-              className="hover:bg-black focus:bg-black data-[hover=true]:bg-black data-[focus=true]:bg-black group/item transition-colors duration-150"
-              classNames={{
-                base: 'hover:bg-black focus:bg-black data-[hover=true]:bg-black data-[focus=true]:bg-black',
-                wrapper:
-                  'group-hover/item:text-white group-focus/item:text-white',
-              }}
-            >
-              <div className="flex flex-col">
-                <span className="font-medium text-gray-900 group-hover/item:text-white group-focus/item:text-white transition-colors duration-150">
-                  {token.id}
-                </span>
-              </div>
-            </SelectItem>
-          ))}
+          {tokenSupportList.map((token: { id: string; weight: string }) => {
+            const tokenInfo = tokenInfoData?.[token.id];
+            return (
+              <SelectItem
+                key={token.id}
+                value={token.id}
+                className="hover:bg-black focus:bg-black data-[hover=true]:bg-black data-[focus=true]:bg-black group/item transition-colors duration-150"
+                classNames={{
+                  base: 'hover:bg-black focus:bg-black data-[hover=true]:bg-black data-[focus=true]:bg-black',
+                  wrapper:
+                    'group-hover/item:text-white group-focus/item:text-white',
+                }}
+              >
+                <div className="flex flex-col">
+                  <span className="font-medium text-gray-900 group-hover/item:text-white group-focus/item:text-white transition-colors duration-150">
+                    {tokenInfo
+                      ? `${tokenInfo.symbol} (${tokenInfo.name})`
+                      : token.id}
+                  </span>
+                </div>
+              </SelectItem>
+            );
+          })}
         </WarppedNextSelect>
       </div>
       <div>
