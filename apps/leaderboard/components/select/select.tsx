@@ -53,7 +53,6 @@ export default function InputSection({
     notifyOnNetworkStatusChange: true,
   });
   const tokenSupportList = tokenSupportData?.supportReceipts?.items || [];
-  console.log('🔍 Token Support List:', tokenSupportList);
 
   // Extract token addresses for multicall
   const tokenAddresses = tokenSupportList.map(
@@ -64,7 +63,6 @@ export default function InputSection({
     isLoading: tokenInfoLoading,
     error: tokenInfoError,
   } = useGetSupportTokenInfo({ tokens: tokenAddresses });
-  console.log('🔍 Token Info Data:', tokenInfoData);
   useEffect(() => {
     setInternalSelectedToken(selectedToken || '');
   }, [selectedToken]);

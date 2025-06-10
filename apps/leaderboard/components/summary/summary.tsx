@@ -1,5 +1,8 @@
+import { ERC20ABI } from '@/lib/abis/erc20';
 import { Card } from '@nextui-org/react';
 import { memo, useMemo } from 'react';
+import { erc20Abi } from 'viem';
+import { useAccount, useReadContract } from 'wagmi';
 
 interface SummaryData {
   weightPerToken: string | number;
@@ -11,6 +14,7 @@ interface SummaryData {
 interface SummaryCardProps {
   data?: SummaryData;
   className?: string;
+  currentToken?: string;
   weightPerCurrentToken?: string;
   isLoading?: boolean;
 }
@@ -25,41 +29,60 @@ const DEFAULT_DATA: SummaryData = {
 const SummaryCard = memo(function SummaryCard({
   data = DEFAULT_DATA,
   className = '',
+  currentToken,
   isLoading = false,
 }: SummaryCardProps) {
-  const formatValue = useMemo(() => (value: string | number) => {
-    if (isLoading) return '...';
-    if (typeof value === 'number') {
-      return value.toLocaleString('en-US', {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 6,
-      });
-    }
-    return value || '-';
-  }, [isLoading]);
+  const { address } = useAccount();
+  const formatValue = useMemo(
+    () => (value: string | number) => {
+      if (isLoading) return '...';
+      if (typeof value === 'number') {
+        return value.toLocaleString('en-US', {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 6,
+        });
+      }
+      return value || '-';
+    },
+    [isLoading]
+  );
 
-  const summaryItems = useMemo(() => [
-    {
-      label: 'Weight/Token',
-      value: data.weightPerToken,
-      key: 'weightPerToken',
+  const { data: tokenBalance } = useReadContract({
+    address: currentToken as `0x${string}`,
+    abi: erc20Abi,
+    functionName: 'balanceOf',
+    args: address ? [address] : undefined,
+    query: {
+      enabled: !!currentToken,
     },
-    {
-      label: 'Balance',
-      value: data.balance,
-      key: 'balance',
-    },
-    {
-      label: 'Receipt-weight',
-      value: data.receiptWeight,
-      key: 'receiptWeight',
-    },
-    {
-      label: 'Estimated Rewards',
-      value: data.estimatedRewards || '-',
-      key: 'estimatedRewards',
-    },
-  ], [data]);
+  });
+  console.log('🎯 Token Balance:', tokenBalance);
+
+  const summaryItems = useMemo(
+    () => [
+      {
+        label: 'Weight/Token',
+        value: data.weightPerToken,
+        key: 'weightPerToken',
+      },
+      {
+        label: 'Balance',
+        value: data.balance,
+        key: 'balance',
+      },
+      {
+        label: 'Receipt-weight',
+        value: data.receiptWeight,
+        key: 'receiptWeight',
+      },
+      {
+        label: 'Estimated Rewards',
+        value: data.estimatedRewards || '-',
+        key: 'estimatedRewards',
+      },
+    ],
+    [data]
+  );
 
   return (
     <Card
