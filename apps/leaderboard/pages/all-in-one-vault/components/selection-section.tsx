@@ -6,17 +6,10 @@ import {
   ALL_IN_ONE_VAULT_PROXY,
   NATIVE_TOKEN_WRAPPED,
 } from '@/config/algebra/addresses';
-import { useQuery as useTanstackQuery } from '@tanstack/react-query';
 import { useQuery as useApolloQuery, ApolloClient, InMemoryCache } from '@apollo/client';
-import { handleTokenChange, handleAmountChange } from '../helper-function';
-import { CurrencyAmount, Token } from '@cryptoalgebra/sdk';
 import { useAccount, useReadContract } from 'wagmi';
 import { AllInOneVaultABI } from '@/lib/abis';
-import { ERC20ABI } from '@/lib/abis/erc20';
 import Insufficient from '@/components/insufficient/insufficient';
-import { TOKEN_SUPPORT_QUERY } from '@/lib/algebra/graphql/queries/token-support';
-import { gql } from '@apollo/client';
-import { useSubgraphClient } from '@honeypot/shared';
 
 const tokenAddressMap: Record<string, string> = {
   '0x0555e30da8f98308edb960aa94c0db47230d2b9c': '2000',
@@ -25,7 +18,6 @@ const tokenAddressMap: Record<string, string> = {
 };
 
 export default function SelectionSection() {
-  const { address } = useAccount();
   const [selectedToken, setSelectedToken] = useState<string>('');
   const [weightPerCurrentToken, setWeightPerCurrentToken] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
@@ -53,17 +45,7 @@ export default function SelectionSection() {
     functionName: 'totalWeight',
   });
 
-  const { data: tokenBalance } = useReadContract({
-    address: selectedToken
-      ? (tokenAddressMap[selectedToken] as `0x${string}`)
-      : undefined,
-    abi: ERC20ABI,
-    functionName: 'balanceOf',
-    args: address ? [address] : undefined,
-    query: {
-      enabled: !!selectedToken && !!address && !!tokenAddressMap[selectedToken],
-    },
-  });
+
 
   const onTokenChange = (token: string) => {
     setSelectedToken(token);
@@ -87,7 +69,6 @@ export default function SelectionSection() {
         onAmountChange={onAmountChange}
         tokenSupportClient={tokenSupportClient}
         totalWeight={totalWeight}
-        tokenBalance={tokenBalance}
         className="w-full"
       />
 
@@ -101,6 +82,7 @@ export default function SelectionSection() {
       <SummaryCard
         className="w-full mb-6"
         data={summaryData}
+        currentToken={selectedToken}
         weightPerCurrentToken={weightPerCurrentToken}
       />
       
