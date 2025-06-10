@@ -35,6 +35,7 @@ export default function SelectionSection() {
     weightPerToken: '-',
     balance: '-',
     receiptWeight: '-',
+    estimatedRewards: '-',
   });
   const tokenSupportClient = useMemo(() => new ApolloClient({
     uri: 'https://api.ghostlogs.xyz/gg/pub/96ff5ab9-9c87-47cb-ab46-73a276d93c8b',

@@ -59,11 +59,8 @@ export default function InputSection({
     setInternalSelectedToken(selectedToken || '');
   }, [selectedToken]);
 
-  // Effect to recalculate summary data when amount changes
   useEffect(() => {
     if (!setSummaryData) return;
-
-    // If amount is empty or cleared, reset summary data
     if (!amount || amount.trim() === '') {
       setSummaryData({
         weightPerToken: selectedToken && tokenSupportList.length > 0 
@@ -78,7 +75,6 @@ export default function InputSection({
       return;
     }
 
-    // Calculate summary data if both amount and token are available
     if (amount && selectedToken) {
       const selectedTokenData = tokenSupportList.find((token: { id: string; weight: string }) => token.id === selectedToken);
       if (selectedTokenData) {
@@ -93,7 +89,6 @@ export default function InputSection({
         if (newSummaryData) {
           setSummaryData(newSummaryData);
           
-          // Check for insufficient balance
           if (setInsufficientBalance) {
             const amountValue = parseFloat(amount);
             const balanceValue = parseFloat(newSummaryData.balance);
@@ -152,10 +147,10 @@ export default function InputSection({
           placeholder="Select a token"
           selectedKeys={internalSelectedToken ? [internalSelectedToken] : []}
           onSelectionChange={handleTokenChange}
-          className="w-full"
+          className="w-full border-1 rounded-[12px] solid border-black"
           classNames={{
             trigger:
-              'h-[48px] bg-white border-gray-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200',
+              'h-[48px] bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200',
             popoverContent: 'bg-white border border-gray-300 shadow-lg',
             listboxWrapper: 'p-0',
             listbox: 'p-0',
@@ -189,7 +184,7 @@ export default function InputSection({
           placeholder="Enter amount"
           value={amount}
           onChange={(e) => onAmountChange?.(e.target.value)}
-          className="h-[48px] bg-white border-gray-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow text-gray-900 font-medium rounded-xl"
+          className="h-[48px] bg-white border-1 rounded-[12px] solid border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow text-gray-900 font-medium"
           type="number"
           min="0"
           step="0.01"
