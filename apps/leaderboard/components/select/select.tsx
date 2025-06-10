@@ -11,6 +11,7 @@ import { TOKEN_SUPPORT_QUERY } from '@/lib/algebra/graphql/queries/token-support
 import { LoadingDisplay } from '@/components/loading-display/loading-display';
 import ErrorIcon from '@/components/svg/ErrorIcon';
 import { calculateSummaryData } from '@/pages/all-in-one-vault/helper-function';
+import useGetSupportTokenInfo from '@/hooks/useGetSupportTokenInfo';
 
 interface InputSectionProps {
   onTokenChange?: (value: string) => void;
@@ -51,9 +52,18 @@ export default function InputSection({
     errorPolicy: 'all',
     notifyOnNetworkStatusChange: true,
   });
-
   const tokenSupportList = tokenSupportData?.supportReceipts?.items || [];
-  console.log('Token Support List:', tokenSupportList);
+  console.log('🔍 Token Support List:', tokenSupportList);
+
+  // Extract token addresses for multicall
+  const tokenAddresses = tokenSupportList.map((token: { id: string }) => token.id);
+  console.log('🔍 Token Addresses:', tokenAddresses);
+  const {
+    data: tokenInfoData,
+    isLoading: tokenInfoLoading,
+    error: tokenInfoError
+  } = useGetSupportTokenInfo({ tokens: tokenAddresses });
+  console.log('🔍 Token Info Data:', tokenInfoData);
 
   useEffect(() => {
     setInternalSelectedToken(selectedToken || '');
@@ -104,7 +114,6 @@ export default function InputSection({
     setInternalSelectedToken(selectedKey);
     onTokenChange?.(selectedKey);
     
-    // Find the selected token's weight and update summary data
     const selectedTokenData = tokenSupportList.find((token: { id: string; weight: string }) => token.id === selectedKey);
     if (selectedTokenData) {
       const weightValue = parseFloat(selectedTokenData.weight);
@@ -127,7 +136,6 @@ export default function InputSection({
           setSummaryData(newSummaryData);
         }
       } else if (setSummaryData) {
-        // Set initial summary data with just the weight when no amount
         setSummaryData({
           weightPerToken: selectedTokenData.weight,
           balance: '-',
