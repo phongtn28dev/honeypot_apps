@@ -71,6 +71,7 @@ export default function SelectionSection() {
         setSummaryData={setSummaryData}
         setWeightPerCurrentToken={setWeightPerCurrentToken}
         setInsufficientBalance={setInsufficientBalance}
+        setTokenName={setTokenName}
         amount={amount}
         onTokenChange={onTokenChange}
         onAmountChange={onAmountChange}

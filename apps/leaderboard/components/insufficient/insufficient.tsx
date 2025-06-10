@@ -31,7 +31,7 @@ export default function Insufficient({
         <div className="ml-3">
           <p className="text-sm text-red-700">
             <span className="font-medium">Insufficient balance!</span> You only
-            have {balance} {selectedToken} tokens available.
+            have {balance} {tokenName} tokens available.
           </p>
         </div>
       </div>

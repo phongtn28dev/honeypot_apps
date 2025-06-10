@@ -20,6 +20,7 @@ interface InputSectionProps {
   setSummaryData?: (data: any) => void;
   setWeightPerCurrentToken?: (weight: string) => void;
   setInsufficientBalance?: (insufficient: boolean) => void;
+  setTokenName?: (name: string) => void;
   amount?: string;
   className?: string;
   tokenSupportClient?: ApolloClient<any>;
@@ -34,6 +35,7 @@ export default function InputSection({
   setSummaryData,
   setWeightPerCurrentToken,
   setInsufficientBalance,
+  setTokenName,
   amount,
   className = '',
   tokenSupportClient,
@@ -128,6 +130,13 @@ export default function InputSection({
     const selectedTokenData = tokenSupportList.find(
       (token: { id: string; weight: string }) => token.id === selectedKey
     );
+    
+    // Set token name from tokenInfoData
+    const tokenInfo = tokenInfoData?.[selectedKey];
+    if (setTokenName && tokenInfo) {
+      setTokenName(tokenInfo.symbol);
+    }
+    
     if (selectedTokenData) {
       const weightValue = parseFloat(selectedTokenData.weight);
       if (setWeightPerCurrentToken) {
