@@ -96,10 +96,10 @@ export default function SelectionSection() {
       />
 
       <ApproveAndBurnButton
-        tokenAddress={NATIVE_TOKEN_WRAPPED}
+        tokenAddress={selectedToken as `0x${string}`}
         tokenDecimals={18}
-        tokenSymbol="TOKEN"
-        userAmount="100"
+        tokenSymbol={tokenName}
+        userAmount={tokenBalance}
         onSuccess={() => console.log('Burn successful!')}
         onError={(error) => console.error(error)}
       />
