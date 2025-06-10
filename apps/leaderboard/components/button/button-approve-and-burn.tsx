@@ -17,7 +17,7 @@ interface ApproveAndBurnButtonProps {
   tokenAddress: Address;
   tokenDecimals: number;
   tokenSymbol: string;
-  userAmount: string; // Amount entered by user as string
+  userAmount: bigint | undefined;
   onSuccess?: () => void;
   onError?: (error: string) => void;
 }
@@ -34,9 +34,9 @@ export function ApproveAndBurnButton({
   const [isProcessing, setIsProcessing] = useState(false);
 
   const parsedAmount = useMemo(() => {
-    if (!userAmount || userAmount === '0') return undefined;
+    if (!userAmount || userAmount === BigInt(0)) return undefined;
     try {
-      return parseUnits(userAmount, tokenDecimals);
+      return parseUnits(userAmount.toString(), tokenDecimals);
     } catch {
       return undefined;
     }
