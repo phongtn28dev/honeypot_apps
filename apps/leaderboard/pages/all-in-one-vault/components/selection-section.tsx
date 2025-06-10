@@ -97,12 +97,12 @@ export default function SelectionSection() {
         />
       )}
 
-      <SummaryCard 
-        className="w-full mb-6" 
-        data={summaryData} 
+      <SummaryCard
+        className="w-full mb-6"
+        data={summaryData}
         weightPerCurrentToken={weightPerCurrentToken}
       />
-
+      
       <ApproveAndBurnButton
         tokenAddress={NATIVE_TOKEN_WRAPPED}
         tokenDecimals={18}

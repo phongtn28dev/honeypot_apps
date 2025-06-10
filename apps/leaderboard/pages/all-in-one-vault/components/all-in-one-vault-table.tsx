@@ -13,14 +13,15 @@ import {
   useQuery as useApolloQuery,
 } from '@apollo/client';
 import { RECEIPTS_LIST } from '@/lib/algebra/graphql/queries/receipts-list';
-import { useSubgraphClient } from '@honeypot/shared';
 import { useAccount } from 'wagmi';
 import { LoadingDisplay } from '@/components/loading-display/loading-display';
 import ErrorIcon from '@/components/svg/ErrorIcon';
+import { transformReceiptData } from './utils/helper';
 
 export default function AllInOneVaultTable() {
   const [currentTableData, setCurrentTableData] =
     useState<ReceiptTableData[]>(tableData);
+  const [refreshKey, setRefreshKey] = useState(0);
   const { address } = useAccount();
   const allInOneVaultClient = useMemo(
     () =>
@@ -44,26 +45,29 @@ export default function AllInOneVaultTable() {
     refetch: refetchReceipts,
   } = useApolloQuery(RECEIPTS_LIST, {
     client: allInOneVaultClient,
-    variables: { user: address || '' },
+    variables: { user: '0x8ef3fd2bf7ae8a190e437aa6248d419c34428804' },
     skip: !address,
     errorPolicy: 'all',
     notifyOnNetworkStatusChange: true,
   });
+  const listReceipts = receiptsData?.receipts?.items || [];
 
   useEffect(() => {
-    if (receiptsData?.receipts?.items) {
-      const transformedData: ReceiptTableData[] =
-        receiptsData.receipts.items.map((receipt: any) => ({
-          id: receipt.id,
-          receiptId: receipt.receiptId,
-          token: receipt.token,
-          user: receipt.user,
-          receiptWeight: receipt.receiptWeight,
-          claimableAt: receipt.claimableAt,
-          isClaimed: receipt.isClaimed,
-        }));
+    if (listReceipts) {
+      const transformedData = transformReceiptData(listReceipts);
       setCurrentTableData(transformedData);
     }
+  }, [receiptsData, refreshKey]);
+
+  // Set up interval to refresh table data every second for real-time countdown
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (listReceipts) {
+        setRefreshKey((prev) => prev + 1);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, [receiptsData]);
 
   useEffect(() => {

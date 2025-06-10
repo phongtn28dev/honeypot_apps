@@ -126,20 +126,6 @@ export default function GenericTanstackTable<T>({
     <div
       className={`border-2 border-dashed border-black bg-white/90 rounded-lg shadow-[0px_0px_4px_4px_rgba(255, 255, 255, 1)] ${className}`}
     >
-      {/* Search Input */}
-      {enableFiltering && (
-        <div className="p-4 border-b border-gray-200">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <Input
-              placeholder={searchPlaceholder}
-              value={globalFilter ?? ''}
-              onChange={(e) => setGlobalFilter(e.target.value)}
-              className="pl-10 bg-white border-gray-300 shadow-sm"
-            />
-          </div>
-        </div>
-      )}
 
       {/* Table */}
       <div className="overflow-x-auto">

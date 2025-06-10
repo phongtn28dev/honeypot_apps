@@ -170,7 +170,7 @@ export function ApproveAndBurnButton({
       onClick={buttonConfig.onClick}
       disabled={buttonConfig.disabled}
       className={`
-        px-6 py-3 rounded-lg font-medium transition-colors
+        px-6 py-3 rounded-lg font-medium transition-colors w-full
         ${
           buttonConfig.disabled
             ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
