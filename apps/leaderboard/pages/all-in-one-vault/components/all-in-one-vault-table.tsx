@@ -6,7 +6,6 @@ import {
   handleCooldownComplete,
   updateClaimedReceipt,
 } from '../helper-function';
-import { tableData } from '@/components/Table/mock-data';
 import {
   ApolloClient,
   InMemoryCache,
@@ -20,7 +19,7 @@ import { transformReceiptData } from './utils/helper';
 
 export default function AllInOneVaultTable() {
   const [currentTableData, setCurrentTableData] =
-    useState<ReceiptTableData[]>(tableData);
+    useState<ReceiptTableData[]>([]);
   const [refreshKey, setRefreshKey] = useState(0);
   const { address } = useAccount();
   const allInOneVaultClient = useMemo(

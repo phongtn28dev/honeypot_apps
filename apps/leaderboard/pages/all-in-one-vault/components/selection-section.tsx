@@ -79,7 +79,7 @@ export default function SelectionSection() {
     address: selectedToken as `0x${string}`,
     abi: erc20Abi,
     functionName: 'allowance',
-    args: [address as `0x${string}`, ALL_IN_ONE_VAULT_PROXY],
+    args: [address as `0x${string}`, `0x20F4b92054F745c19ea3f3053B77372e73332945`],
     query: {
       enabled: !!selectedToken && !!address,
     },

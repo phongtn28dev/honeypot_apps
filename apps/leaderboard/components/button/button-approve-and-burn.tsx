@@ -36,55 +36,17 @@ export function ApproveAndBurnButton({
 }: ApproveAndBurnButtonProps) {
   const { address: userAddress } = useAccount();
   const [isProcessing, setIsProcessing] = useState(false);
-
-  const parsedAmount = useMemo(() => {
-    if (!userAmount || userAmount === BigInt(0)) return undefined;
-    try {
-      return parseUnits(userAmount.toString(), tokenDecimals);
-    } catch {
-      return undefined;
-    }
-  }, [userAmount, tokenDecimals]);
-
   const currencyAmount = useMemo(() => {
-    if (!parsedAmount || !tokenAddress) return undefined;
+    if (!userAmount || !tokenAddress) return undefined;
     console.log('User Amount:', userAmount);
     const token = new Token(80094, tokenAddress, tokenDecimals, tokenSymbol);
-    return CurrencyAmount.fromRawAmount(token, parsedAmount.toString());
-  }, [parsedAmount, tokenAddress, tokenDecimals, tokenSymbol]);
+    return CurrencyAmount.fromRawAmount(token, userAmount.toString());
+  }, [userAmount, tokenAddress, tokenDecimals, tokenSymbol]);
   const { approvalState, approvalCallback } = useApprove(
     currencyAmount,
-    ALL_IN_ONE_VAULT_PROXY
+    `0x20F4b92054F745c19ea3f3053B77372e73332945`
   );
-
-  console.log(
-    '%c📊 Approval State:',
-    'color: #3B82F6; background-color: #EFF6FF; padding: 2px 6px; border-radius: 4px;',
-    approvalState
-  );
-  console.log(
-    '%c🏦 ALL_IN_ONE_VAULT:',
-    'color: #059669; background-color: #ECFDF5; padding: 2px 6px; border-radius: 4px;',
-    ALL_IN_ONE_VAULT
-  );
-    console.log(
-    '%c🏦 ALL_IN_ONE_VAULT_PROXY:',
-    'color: #059669; background-color: #ECFDF5; padding: 2px 6px; border-radius: 4px;',
-    ALL_IN_ONE_VAULT_PROXY
-  );
-  console.log(
-    '%c🪙 Token Address:',
-    'color: #D97706; background-color: #FFFBEB; padding: 2px 6px; border-radius: 4px;',
-    tokenAddress
-  );
-  console.log(
-    '%c💰 Parsed Amount:',
-    'color: #7C3AED; background-color: #F3E8FF; padding: 2px 6px; border-radius: 4px;',
-    parsedAmount
-  );
-
   const { writeContractAsync: executeGetReceipt } = useWriteContract();
-
   const handleApprove = async () => {
     try {
       setIsProcessing(true);
@@ -98,7 +60,7 @@ export function ApproveAndBurnButton({
   };
 
   const handleBurnToVault = async () => {
-  if (!parsedAmount) {
+  if (!userAmount) {
     onError?.('Invalid amount');
     return;
   }
@@ -106,11 +68,13 @@ export function ApproveAndBurnButton({
   try {
     setIsProcessing(true);
     console.log('Executing burn to vault directly');
+    console.log('User Amount:', userAmount);
+    console.log('Token Address:', tokenAddress);
     const hash = await executeGetReceipt({
-      address: ALL_IN_ONE_VAULT_PROXY,
+      address: `0x20F4b92054F745c19ea3f3053B77372e73332945`,
       abi: AllInOneVaultABI,
       functionName: 'getReceipt',
-      args: [tokenAddress, parsedAmount],
+      args: [tokenAddress, userAmount],
     });
     console.log('Transaction hash:', hash);
     const receipt = await waitForTransactionReceipt(config, { hash });
@@ -129,7 +93,7 @@ export function ApproveAndBurnButton({
       return { text: 'Connect Wallet', disabled: true, onClick: () => {} };
     }
 
-    if (!parsedAmount || parsedAmount === BigInt(0)) {
+    if (!userAmount || userAmount === BigInt(0)) {
       return { text: 'Enter Amount', disabled: true, onClick: () => {} };
     }
 

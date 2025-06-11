@@ -1,6 +1,14 @@
 import React from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { TableAction } from './generic-table';
+import {
+  formatDistanceToNow,
+  format,
+  differenceInSeconds,
+  differenceInDays,
+  formatDuration,
+  intervalToDuration,
+} from 'date-fns';
 
 export interface StakingData {
   id: string;
@@ -30,6 +38,39 @@ export interface ReceiptTableData {
   };
 }
 
+const formatCooldownTime = (claimableAt: string): string => {
+  const claimableAtTimestamp = parseInt(claimableAt);
+  const now = Math.floor(Date.now() / 1000);
+
+  if (now >= claimableAtTimestamp) {
+    return '00:00:00';
+  }
+
+  const claimableDate = new Date(claimableAtTimestamp * 1000);
+  const currentDate = new Date();
+  const duration = intervalToDuration({
+    start: currentDate,
+    end: claimableDate,
+  });
+
+  const days = duration.days || 0;
+  const hours = duration.hours || 0;
+  const minutes = duration.minutes || 0;
+  const seconds = duration.seconds || 0;
+
+  if (days > 0) {
+    return `${days.toString().padStart(2, '0')}:${hours
+      .toString()
+      .padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds
+      .toString()
+      .padStart(2, '0')}`;
+  } else {
+    return `${hours.toString().padStart(2, '0')}:${minutes
+      .toString()
+      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+};
+
 export const columns: ColumnDef<ReceiptTableData>[] = [
   {
     accessorKey: 'receiptId',
@@ -48,25 +89,24 @@ export const columns: ColumnDef<ReceiptTableData>[] = [
     accessorKey: 'cooldown',
     header: 'Cooldown time',
     cell: ({ row }) => {
-      const cooldown = row.getValue('cooldown') as string;
       const data = row.original;
       const claimableAt = parseInt(data.claimableAt);
       const now = Math.floor(Date.now() / 1000);
       const isClaimable = now >= claimableAt;
-      const isZero = cooldown === '0';
+
+      const formattedCooldown = formatCooldownTime(data.claimableAt);
+      const isZero = formattedCooldown === '00:00:00';
+
       if (isZero) {
-        return <span className={`text-red-500`}>{cooldown}</span>;
+        return (
+          <span className="text-green-500 font-medium">
+            {formattedCooldown}
+          </span>
+        );
       }
+
       return (
-        <span
-          className={
-            isClaimable
-              ? 'text-green-500 font-medium'
-              : 'text-orange-500 font-medium'
-          }
-        >
-          {cooldown}
-        </span>
+        <span className="text-orange-500 font-medium">{formattedCooldown}</span>
       );
     },
   },
@@ -94,7 +134,6 @@ export const columns: ColumnDef<ReceiptTableData>[] = [
       let actionConfig;
 
       if (!isClaimable) {
-        // Cooldown period - not yet claimable
         actionConfig = {
           label: 'Cooldown',
           isDisabled: true,
@@ -103,7 +142,6 @@ export const columns: ColumnDef<ReceiptTableData>[] = [
           onClick: () => {},
         };
       } else if (isClaimable && !data.isClaimed) {
-        // Claimable - ready to claim
         actionConfig = {
           label: 'Claim',
           isDisabled: false,
@@ -111,12 +149,10 @@ export const columns: ColumnDef<ReceiptTableData>[] = [
             'px-3 py-1 rounded-md text-black cursor-pointer hover:opacity-80 transition-opacity',
           style: { background: 'rgba(255, 169, 49, 1)' },
           onClick: () => {
-            // TODO: Implement claim functionality
             console.log('Claiming receipt:', data.receiptId);
           },
         };
       } else {
-        // Already claimed
         actionConfig = {
           label: 'Claimed',
           isDisabled: true,
