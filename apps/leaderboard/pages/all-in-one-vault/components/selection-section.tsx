@@ -53,6 +53,7 @@ export default function SelectionSection() {
       }),
     []
   );
+  
   console.log('🔗 Token Support Client:', selectedToken);
   const { data: tokenBalance } = useReadContract({
     address: selectedToken as `0x${string}`,

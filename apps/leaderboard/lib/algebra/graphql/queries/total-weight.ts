@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
-export const POOL_REWARD = gql`
-query PoolRewards {
+export const TOTAL_WEIGHT = gql`
+query TotalWeight {
   globals {
     items {
       totalWeight
