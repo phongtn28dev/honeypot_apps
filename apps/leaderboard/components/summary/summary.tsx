@@ -38,10 +38,16 @@ const SummaryCard = memo(function SummaryCard({
   isLoading = false,
 }: SummaryCardProps) {
   const formatValue = useMemo(
-    () => (value: string | number) => {
+    () => (value: string | number | bigint) => {
       if (isLoading) return '...';
       if (typeof value === 'number') {
         return value.toLocaleString('en-US', {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 6,
+        });
+      }
+      if (typeof value === 'bigint') {
+        return Number(value).toLocaleString('en-US', {
           minimumFractionDigits: 0,
           maximumFractionDigits: 6,
         });
@@ -51,10 +57,10 @@ const SummaryCard = memo(function SummaryCard({
     [isLoading]
   );
 
-  const tokenSupportClient = useMemo(
+  const totalWeightClient = useMemo(
     () =>
       new ApolloClient({
-        uri: 'https://api.ghostlogs.xyz/gg/pub/96ff5ab9-9c87-47cb-ab46-73a276d93c8b',
+        uri: 'https://api.ghostlogs.xyz/gg/pub/948b257a-20a9-442f-b38f-70fec580a732',
         cache: new InMemoryCache(),
         defaultOptions: {
           query: {
@@ -71,7 +77,7 @@ const SummaryCard = memo(function SummaryCard({
     loading: totalWeightLoading,
     error: totalWeightError,
   } = useApolloQuery(TOTAL_WEIGHT, {
-    client: tokenSupportClient,
+    client: totalWeightClient,
     errorPolicy: 'all',
     notifyOnNetworkStatusChange: true,
   });
@@ -81,8 +87,11 @@ const SummaryCard = memo(function SummaryCard({
     functionName: 'balanceOf',
     args: ALL_IN_ONE_VAULT ? [ALL_IN_ONE_VAULT as `0x${string}`] : undefined,
   });
-  console.log('🏆 Pool Rewards Data:', totalWeight, totalWeightError);
-  console.log('🔗 Pool Rewards:', poolReward);
+  const totalWeightItems = totalWeight?.globals?.items[0].totalWeight || {};
+  const estimatedRewards =
+    poolReward && data.receiptWeight && totalWeightItems
+      ? Number((BigInt(data.receiptWeight) * poolReward) / totalWeightItems)
+      : 0;
 
   const summaryItems = useMemo(
     () => [
@@ -103,11 +112,11 @@ const SummaryCard = memo(function SummaryCard({
       },
       {
         label: 'Estimated Rewards',
-        value: data.estimatedRewards || '-',
+        value: estimatedRewards,
         key: 'estimatedRewards',
       },
     ],
-    [data]
+    [data, estimatedRewards]
   );
 
   return (
