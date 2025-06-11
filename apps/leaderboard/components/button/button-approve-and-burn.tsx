@@ -3,13 +3,19 @@ import { Address, formatUnits, parseUnits } from 'viem';
 import {
   useAccount,
   useReadContract,
+  useWaitForTransactionReceipt,
   useWriteContract,
 } from 'wagmi';
 import { useApprove } from '@/lib/algebra/hooks/common/useApprove';
-import { ALL_IN_ONE_VAULT } from '@/config/algebra/addresses';
+import {
+  ALL_IN_ONE_VAULT,
+  ALL_IN_ONE_VAULT_PROXY,
+} from '@/config/algebra/addresses';
 import { CurrencyAmount, Token } from '@cryptoalgebra/sdk';
 import { ApprovalState } from '@/types/algebra/types/approve-state';
 import { AllInOneVaultABI } from '@/lib/abis';
+import { waitForTransactionReceipt } from '@wagmi/core';
+import { config } from '@/config/wagmi';
 
 interface ApproveAndBurnButtonProps {
   tokenAddress: Address;
@@ -50,13 +56,34 @@ export function ApproveAndBurnButton({
 
   const { approvalState, approvalCallback } = useApprove(
     currencyAmount,
-    ALL_IN_ONE_VAULT
+    ALL_IN_ONE_VAULT_PROXY
   );
 
-  console.log('%c📊 Approval State:', 'color: #3B82F6; background-color: #EFF6FF; padding: 2px 6px; border-radius: 4px;', approvalState);
-  console.log('%c🏦 ALL_IN_ONE_VAULT:', 'color: #059669; background-color: #ECFDF5; padding: 2px 6px; border-radius: 4px;', ALL_IN_ONE_VAULT);
-  console.log('%c🪙 Token Address:', 'color: #D97706; background-color: #FFFBEB; padding: 2px 6px; border-radius: 4px;', tokenAddress);
-  console.log('%c💰 Parsed Amount:', 'color: #7C3AED; background-color: #F3E8FF; padding: 2px 6px; border-radius: 4px;', parsedAmount);
+  console.log(
+    '%c📊 Approval State:',
+    'color: #3B82F6; background-color: #EFF6FF; padding: 2px 6px; border-radius: 4px;',
+    approvalState
+  );
+  console.log(
+    '%c🏦 ALL_IN_ONE_VAULT:',
+    'color: #059669; background-color: #ECFDF5; padding: 2px 6px; border-radius: 4px;',
+    ALL_IN_ONE_VAULT
+  );
+    console.log(
+    '%c🏦 ALL_IN_ONE_VAULT_PROXY:',
+    'color: #059669; background-color: #ECFDF5; padding: 2px 6px; border-radius: 4px;',
+    ALL_IN_ONE_VAULT_PROXY
+  );
+  console.log(
+    '%c🪙 Token Address:',
+    'color: #D97706; background-color: #FFFBEB; padding: 2px 6px; border-radius: 4px;',
+    tokenAddress
+  );
+  console.log(
+    '%c💰 Parsed Amount:',
+    'color: #7C3AED; background-color: #F3E8FF; padding: 2px 6px; border-radius: 4px;',
+    parsedAmount
+  );
 
   const { writeContractAsync: executeGetReceipt } = useWriteContract();
 
@@ -73,28 +100,31 @@ export function ApproveAndBurnButton({
   };
 
   const handleBurnToVault = async () => {
-    if (!parsedAmount) {
-      onError?.('Invalid amount');
-      return;
-    }
+  if (!parsedAmount) {
+    onError?.('Invalid amount');
+    return;
+  }
 
-    try {
-      setIsProcessing(true);
-      console.log('Executing burn to vault directly');
-      await executeGetReceipt({
-        address: ALL_IN_ONE_VAULT,
-        abi: AllInOneVaultABI,
-        functionName: 'getReceipt',
-        args: [tokenAddress, parsedAmount],
-      });
-      onSuccess?.();
-    } catch (error) {
-      console.error('Burn to vault failed:', error);
-      onError?.('Burn to vault failed');
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+  try {
+    setIsProcessing(true);
+    console.log('Executing burn to vault directly');
+    const hash = await executeGetReceipt({
+      address: ALL_IN_ONE_VAULT_PROXY,
+      abi: AllInOneVaultABI,
+      functionName: 'getReceipt',
+      args: [tokenAddress, parsedAmount],
+    });
+    console.log('Transaction hash:', hash);
+    const receipt = await waitForTransactionReceipt(config, { hash });
+    console.log('Transaction receipt:', receipt);
+    onSuccess?.();
+  } catch (error) {
+    console.error('Burn to vault failed:', error);
+    onError?.('Burn to vault failed');
+  } finally {
+    setIsProcessing(false);
+  }
+};
 
   const getButtonConfig = () => {
     if (!userAddress) {
