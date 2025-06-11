@@ -4,7 +4,6 @@ import {
   useAccount,
   useReadContract,
   useWriteContract,
-  useSimulateContract,
 } from 'wagmi';
 import { useApprove } from '@/lib/algebra/hooks/common/useApprove';
 import { ALL_IN_ONE_VAULT } from '@/config/algebra/addresses';
@@ -41,16 +40,6 @@ export function ApproveAndBurnButton({
     }
   }, [userAmount, tokenDecimals]);
 
-  // const { data: userBalance } = useReadContract({
-  //   address: tokenAddress,
-  //   abi: ERC20ABI,
-  //   functionName: 'balanceOf',
-  //   args: [userAddress as Address],
-  //   query: {
-  //     enabled: !!userAddress,
-  //   },
-  // });
-
   const currencyAmount = useMemo(() => {
     if (!parsedAmount || !tokenAddress) return undefined;
     console.log('User Amount:', userAmount);
@@ -64,32 +53,14 @@ export function ApproveAndBurnButton({
     ALL_IN_ONE_VAULT
   );
 
-  console.log('Approval State:', approvalState);
-  console.log(ALL_IN_ONE_VAULT, tokenAddress, parsedAmount);
-  const { data: receiptConfig } = useSimulateContract({
-    address: ALL_IN_ONE_VAULT,
-    abi: AllInOneVaultABI,
-    functionName: 'getReceipt',
-    args: [tokenAddress, parsedAmount || BigInt(0)],
-    query: {
-      enabled: approvalState === ApprovalState.APPROVED && !!parsedAmount,
-    },
-  });
-  console.log('🔥 Receipt Config:', receiptConfig);
+  console.log('%c📊 Approval State:', 'color: #3B82F6; background-color: #EFF6FF; padding: 2px 6px; border-radius: 4px;', approvalState);
+  console.log('%c🏦 ALL_IN_ONE_VAULT:', 'color: #059669; background-color: #ECFDF5; padding: 2px 6px; border-radius: 4px;', ALL_IN_ONE_VAULT);
+  console.log('%c🪙 Token Address:', 'color: #D97706; background-color: #FFFBEB; padding: 2px 6px; border-radius: 4px;', tokenAddress);
+  console.log('%c💰 Parsed Amount:', 'color: #7C3AED; background-color: #F3E8FF; padding: 2px 6px; border-radius: 4px;', parsedAmount);
 
   const { writeContractAsync: executeGetReceipt } = useWriteContract();
-  // console.log(userBalance, parsedAmount, tokenSymbol);
-  // const hasSufficientBalance = useMemo(() => {
-  //   if (!userBalance || !parsedAmount) return false;
-  //   return userBalance >= parsedAmount;
-  // }, [userBalance, parsedAmount]);
 
   const handleApprove = async () => {
-    // if (!hasSufficientBalance) {
-    //   onError?.(`Insufficient ${tokenSymbol} balance`);
-    //   return;
-    // }
-
     try {
       setIsProcessing(true);
       await approvalCallback?.();
@@ -101,17 +72,21 @@ export function ApproveAndBurnButton({
     }
   };
 
-  // Handle burn to vault action
   const handleBurnToVault = async () => {
-    if (!receiptConfig) {
-      onError?.('Unable to prepare transaction');
+    if (!parsedAmount) {
+      onError?.('Invalid amount');
       return;
     }
 
     try {
       setIsProcessing(true);
-      console.log('Executing burn to vault with config:', receiptConfig);
-      await executeGetReceipt(receiptConfig.request);
+      console.log('Executing burn to vault directly');
+      await executeGetReceipt({
+        address: ALL_IN_ONE_VAULT,
+        abi: AllInOneVaultABI,
+        functionName: 'getReceipt',
+        args: [tokenAddress, parsedAmount],
+      });
       onSuccess?.();
     } catch (error) {
       console.error('Burn to vault failed:', error);
@@ -121,7 +96,6 @@ export function ApproveAndBurnButton({
     }
   };
 
-  // Determine button state and text
   const getButtonConfig = () => {
     if (!userAddress) {
       return { text: 'Connect Wallet', disabled: true, onClick: () => {} };
