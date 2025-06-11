@@ -8,7 +8,6 @@ import {
 } from 'wagmi';
 import { useApprove } from '@/lib/algebra/hooks/common/useApprove';
 import { ALL_IN_ONE_VAULT } from '@/config/algebra/addresses';
-import { ERC20ABI } from '@/lib/abis/erc20';
 import { CurrencyAmount, Token } from '@cryptoalgebra/sdk';
 import { ApprovalState } from '@/types/algebra/types/approve-state';
 import { AllInOneVaultABI } from '@/lib/abis';
@@ -54,17 +53,19 @@ export function ApproveAndBurnButton({
 
   const currencyAmount = useMemo(() => {
     if (!parsedAmount || !tokenAddress) return undefined;
-
+    console.log('User Amount:', userAmount);
     const token = new Token(80094, tokenAddress, tokenDecimals, tokenSymbol);
-
     return CurrencyAmount.fromRawAmount(token, parsedAmount.toString());
   }, [parsedAmount, tokenAddress, tokenDecimals, tokenSymbol]);
+  console.log('Currency Amount:', currencyAmount);
 
   const { approvalState, approvalCallback } = useApprove(
     currencyAmount,
     ALL_IN_ONE_VAULT
   );
 
+  console.log('Approval State:', approvalState);
+  console.log(ALL_IN_ONE_VAULT, tokenAddress, parsedAmount);
   const { data: receiptConfig } = useSimulateContract({
     address: ALL_IN_ONE_VAULT,
     abi: AllInOneVaultABI,
@@ -74,6 +75,7 @@ export function ApproveAndBurnButton({
       enabled: approvalState === ApprovalState.APPROVED && !!parsedAmount,
     },
   });
+  console.log('🔥 Receipt Config:', receiptConfig);
 
   const { writeContractAsync: executeGetReceipt } = useWriteContract();
   // console.log(userBalance, parsedAmount, tokenSymbol);
@@ -108,6 +110,7 @@ export function ApproveAndBurnButton({
 
     try {
       setIsProcessing(true);
+      console.log('Executing burn to vault with config:', receiptConfig);
       await executeGetReceipt(receiptConfig.request);
       onSuccess?.();
     } catch (error) {

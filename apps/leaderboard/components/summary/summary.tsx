@@ -1,8 +1,11 @@
-import { ERC20ABI } from '@/lib/abis/erc20';
+import { POOL_REWARD } from '@/lib/algebra/graphql/queries/pool-reward';
+import {
+  useQuery as useApolloQuery,
+  ApolloClient,
+  InMemoryCache,
+} from '@apollo/client';
 import { Card } from '@nextui-org/react';
 import { memo, useMemo } from 'react';
-import { erc20Abi } from 'viem';
-import { useAccount, useReadContract } from 'wagmi';
 
 interface SummaryData {
   weightPerToken: string | number;
@@ -29,10 +32,8 @@ const DEFAULT_DATA: SummaryData = {
 const SummaryCard = memo(function SummaryCard({
   data = DEFAULT_DATA,
   className = '',
-  currentToken,
   isLoading = false,
 }: SummaryCardProps) {
-  const { address } = useAccount();
   const formatValue = useMemo(
     () => (value: string | number) => {
       if (isLoading) return '...';
@@ -46,6 +47,30 @@ const SummaryCard = memo(function SummaryCard({
     },
     [isLoading]
   );
+
+  const tokenSupportClient = useMemo(
+    () =>
+      new ApolloClient({
+        uri: 'https://api.ghostlogs.xyz/gg/pub/96ff5ab9-9c87-47cb-ab46-73a276d93c8b',
+        cache: new InMemoryCache(),
+        defaultOptions: {
+          query: {
+            errorPolicy: 'all',
+          },
+        },
+      }),
+    []
+  );
+  const {
+    data: poolRewards,
+    loading: poolRewardsLoading,
+    error: poolRewardsError,
+  } = useApolloQuery(POOL_REWARD, {
+    client: tokenSupportClient,
+    errorPolicy: 'all',
+    notifyOnNetworkStatusChange: true,
+  });
+  console.log('🏆 Pool Rewards Data:', poolRewards, poolRewardsError);
 
   const summaryItems = useMemo(
     () => [
