@@ -64,10 +64,15 @@ export default function InputSection({
     isLoading: tokenInfoLoading,
     error: tokenInfoError,
   } = useGetSupportTokenInfo({ tokens: tokenAddresses });
+  console.log(
+    'Token Info Data:',
+    tokenInfoData,)
   useEffect(() => {
     setInternalSelectedToken(selectedToken || '');
   }, [selectedToken]);
   setDecimals?.(tokenInfoData?.[internalSelectedToken]?.decimals || 18);
+
+
 
   useEffect(() => {
     if (!setSummaryData) return;

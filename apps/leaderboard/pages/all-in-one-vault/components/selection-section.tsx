@@ -19,7 +19,6 @@ import {
 } from 'wagmi';
 import Insufficient from '@/components/insufficient/insufficient';
 import { Address, erc20Abi, parseUnits } from 'viem';
-import { setupDevBundler } from 'next/dist/server/lib/router-utils/setup-dev-bundler';
 import { MaxUint256 } from 'ethers';
 import { AllInOneVaultABI } from '@/lib/abis';
 
@@ -54,7 +53,7 @@ export default function SelectionSection() {
       }),
     []
   );
-
+  console.log('🔗 Token Support Client:', selectedToken);
   const { data: tokenBalance } = useReadContract({
     address: selectedToken as `0x${string}`,
     abi: erc20Abi,
@@ -84,40 +83,14 @@ export default function SelectionSection() {
       enabled: !!selectedToken && !!address,
     },
   });
-  console.log('Allowance:', allowance);
-  console.log('Decimals:', decimals);
-
-  const parseAmounts = parseUnits(amount, decimals);
-  async function burnToVault() {
-    const {
-      data,
-      writeContract: burnTokens,
-      writeContractAsync,
-    } = useWriteContract({});
-    burnTokens({
-      address: ALL_IN_ONE_VAULT_PROXY,
-      abi: AllInOneVaultABI,
-      functionName: 'getReceipt',
-      args: [selectedToken as `0x${string}`, parseAmounts || BigInt(0)],
-    });
-  }
-
-  async function handleApproval() {
-    if (allowance && parseAmounts < allowance) {
-      const {
-        data,
-        writeContract: approveTokens,
-        writeContractAsync,
-      } = useWriteContract({});
-      approveTokens({
-        address: selectedToken as `0x${string}`,
-        abi: erc20Abi,
-        functionName: 'approve',
-        args: [ALL_IN_ONE_VAULT_PROXY, MaxUint256] as [Address, bigint],
-      });
-    }
-    burnToVault();
-  }
+  const parseAmount = parseUnits(
+    amount || '0',
+    decimals || 18
+  ).toString();
+  console.log('🔐 Allowance:', allowance);
+  console.log('🔢 Decimals:', decimals);
+  console.log('💰 Token Balance:', tokenBalance);
+  console.log('💵 Amount:', parseAmount);
 
   return (
     <>
@@ -155,7 +128,7 @@ export default function SelectionSection() {
         tokenAddress={selectedToken as `0x${string}`}
         tokenDecimals={18}
         tokenSymbol={tokenName}
-        userAmount={1000n} // Replace with actual user amount
+        userAmount={BigInt(parseAmount)}
         onSuccess={() => console.log('Burn successful!')}
         onError={(error) => console.error(error)}
       />
