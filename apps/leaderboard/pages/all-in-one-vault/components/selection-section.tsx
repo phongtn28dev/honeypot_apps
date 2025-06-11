@@ -53,7 +53,7 @@ export default function SelectionSection() {
       }),
     []
   );
-  
+
   console.log('🔗 Token Support Client:', selectedToken);
   const { data: tokenBalance } = useReadContract({
     address: selectedToken as `0x${string}`,
@@ -84,10 +84,7 @@ export default function SelectionSection() {
       enabled: !!selectedToken && !!address,
     },
   });
-  const parseAmount = parseUnits(
-    amount || '0',
-    decimals || 18
-  ).toString();
+  const parseAmount = parseUnits(amount || '0', decimals || 18).toString();
   console.log('🔐 Allowance:', allowance);
   console.log('🔢 Decimals:', decimals);
   console.log('💰 Token Balance:', tokenBalance);
@@ -107,16 +104,17 @@ export default function SelectionSection() {
         onAmountChange={onAmountChange}
         tokenSupportClient={tokenSupportClient}
         tokenBalance={tokenBalance}
+        userAddress={address}
         className="w-full"
       />
 
-      {/* {insufficientBalance && (
+      {insufficientBalance && (
         <Insufficient
           balance={summaryData.balance}
           selectedToken={selectedToken}
           tokenName={tokenName}
         />
-      )} */}
+      )}
 
       <SummaryCard
         className="w-full mb-6"

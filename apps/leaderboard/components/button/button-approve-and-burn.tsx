@@ -52,8 +52,6 @@ export function ApproveAndBurnButton({
     const token = new Token(80094, tokenAddress, tokenDecimals, tokenSymbol);
     return CurrencyAmount.fromRawAmount(token, parsedAmount.toString());
   }, [parsedAmount, tokenAddress, tokenDecimals, tokenSymbol]);
-  console.log('Currency Amount:', currencyAmount);
-
   const { approvalState, approvalCallback } = useApprove(
     currencyAmount,
     ALL_IN_ONE_VAULT_PROXY

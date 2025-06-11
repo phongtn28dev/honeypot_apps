@@ -24,6 +24,7 @@ interface InputSectionProps {
   tokenSupportClient?: ApolloClient<any>;
   totalWeight?: bigint | null;
   tokenBalance?: bigint | null;
+  userAddress?: string;
 }
 
 export default function InputSection({
@@ -40,10 +41,14 @@ export default function InputSection({
   tokenSupportClient,
   totalWeight,
   tokenBalance,
+  userAddress,
 }: InputSectionProps) {
   const [internalSelectedToken, setInternalSelectedToken] = useState<string>(
     selectedToken || ''
   );
+
+  const isDisabled = !userAddress;
+
   const {
     data: tokenSupportData,
     loading: tokenSupportLoading,
@@ -52,9 +57,9 @@ export default function InputSection({
     client: tokenSupportClient,
     errorPolicy: 'all',
     notifyOnNetworkStatusChange: true,
+    skip: isDisabled,
   });
   const tokenSupportList = tokenSupportData?.supportReceipts?.items || [];
-  
 
   const tokenAddresses = tokenSupportList.map(
     (token: { id: string }) => token.id
@@ -63,19 +68,23 @@ export default function InputSection({
     data: tokenInfoData,
     isLoading: tokenInfoLoading,
     error: tokenInfoError,
-  } = useGetSupportTokenInfo({ tokens: tokenAddresses });
-  console.log(
-    'Token Info Data:',
-    tokenInfoData,)
-  useEffect(() => {
-    setInternalSelectedToken(selectedToken || '');
-  }, [selectedToken]);
-  setDecimals?.(tokenInfoData?.[internalSelectedToken]?.decimals || 18);
+  } = useGetSupportTokenInfo({ tokens: isDisabled ? [] : tokenAddresses });
 
-
+  console.log('Token Info Data:', tokenInfoData);
 
   useEffect(() => {
-    if (!setSummaryData) return;
+    if (!isDisabled) {
+      setInternalSelectedToken(selectedToken || '');
+    }
+  }, [selectedToken, isDisabled]);
+
+  useEffect(() => {
+    if (isDisabled) return;
+    setDecimals?.(tokenInfoData?.[internalSelectedToken]?.decimals || 18);
+  }, [tokenInfoData, internalSelectedToken, setDecimals, isDisabled]);
+
+  useEffect(() => {
+    if (!setSummaryData || isDisabled) return;
     if (!amount || amount.trim() === '') {
       setSummaryData({
         weightPerToken:
@@ -126,9 +135,12 @@ export default function InputSection({
     tokenBalance,
     setSummaryData,
     setInsufficientBalance,
+    isDisabled,
   ]);
 
   const handleTokenChange = (keys: any) => {
+    if (isDisabled) return;
+    
     const selectedKey = Array.from(keys)[0] as string;
     setInternalSelectedToken(selectedKey);
     onTokenChange?.(selectedKey);
@@ -136,13 +148,12 @@ export default function InputSection({
     const selectedTokenData = tokenSupportList.find(
       (token: { id: string; weight: string }) => token.id === selectedKey
     );
-    
-    // Set token name from tokenInfoData
+
     const tokenInfo = tokenInfoData?.[selectedKey];
     if (setTokenName && tokenInfo) {
       setTokenName(tokenInfo.symbol);
     }
-    
+
     if (selectedTokenData) {
       const weightValue = parseFloat(selectedTokenData.weight);
       if (setWeightPerCurrentToken) {
@@ -169,26 +180,35 @@ export default function InputSection({
     }
   };
 
+  const handleAmountChange = (value: string) => {
+    if (isDisabled) return;
+    onAmountChange?.(value);
+  };
+
   return (
-    <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 ${className}`}>
+    <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 ${className} ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}>
       <div>
         <label className="block text-sm font-medium text-gray-800 mb-2">
           Choose a token
         </label>
         <WarppedNextSelect
-          placeholder="Select a token"
-          selectedKeys={internalSelectedToken ? [internalSelectedToken] : []}
+          placeholder={isDisabled ? "Connect wallet to select token" : "Select a token"}
+          selectedKeys={internalSelectedToken && !isDisabled ? [internalSelectedToken] : []}
           onSelectionChange={handleTokenChange}
+          isDisabled={isDisabled}
           className="w-full border-1 rounded-[12px] solid border-black"
           classNames={{
-            trigger:
-              'h-[48px] bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200',
+            trigger: `h-[48px] bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 ${
+              isDisabled 
+                ? 'cursor-not-allowed bg-gray-100' 
+                : 'hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'
+            }`,
             popoverContent: 'bg-white border border-gray-300 shadow-lg',
             listboxWrapper: 'p-0',
             listbox: 'p-0',
           }}
         >
-          {tokenSupportList.map((token: { id: string; weight: string }) => {
+          {!isDisabled && tokenSupportList.map((token: { id: string; weight: string }) => {
             const tokenInfo = tokenInfoData?.[token.id];
             return (
               <SelectItem
@@ -218,15 +238,20 @@ export default function InputSection({
           Enter amount
         </label>
         <Input
-          placeholder="Enter amount"
-          value={amount}
-          onChange={(e) => onAmountChange?.(e.target.value)}
-          className="h-[48px] bg-white border-1 rounded-[12px] solid border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow text-gray-900 font-medium"
+          placeholder={isDisabled ? "Connect wallet to enter amount" : "Enter amount"}
+          value={isDisabled ? '' : amount}
+          onChange={(e) => handleAmountChange(e.target.value)}
+          isDisabled={isDisabled}
+          className={`h-[48px] bg-white border-1 rounded-[12px] solid border-black transition-shadow text-gray-900 font-medium ${
+            isDisabled 
+              ? 'cursor-not-allowed bg-gray-100 shadow-none' 
+              : 'shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'
+          }`}
           type="number"
           min="0"
           step="0.01"
-          isClearable={true}
-          onClear={() => onAmountChange?.('')}
+          isClearable={!isDisabled}
+          onClear={() => !isDisabled && onAmountChange?.('')}
         />
       </div>
     </div>
