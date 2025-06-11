@@ -1,4 +1,5 @@
-import { POOL_REWARD } from '@/lib/algebra/graphql/queries/pool-reward';
+import { ALL_IN_ONE_VAULT } from '@/config/algebra/addresses';
+import { TOTAL_WEIGHT } from '@/lib/algebra/graphql/queries/total-weight';
 import {
   useQuery as useApolloQuery,
   ApolloClient,
@@ -6,6 +7,8 @@ import {
 } from '@apollo/client';
 import { Card } from '@nextui-org/react';
 import { memo, useMemo } from 'react';
+import { erc20Abi } from 'viem';
+import { useReadContract } from 'wagmi';
 
 interface SummaryData {
   weightPerToken: string | number;
@@ -61,16 +64,25 @@ const SummaryCard = memo(function SummaryCard({
       }),
     []
   );
+
+  // estimated reward = (receipt.receiptWeight * poolReward) / totalWeight
   const {
-    data: poolRewards,
-    loading: poolRewardsLoading,
-    error: poolRewardsError,
-  } = useApolloQuery(POOL_REWARD, {
+    data: totalWeight,
+    loading: totalWeightLoading,
+    error: totalWeightError,
+  } = useApolloQuery(TOTAL_WEIGHT, {
     client: tokenSupportClient,
     errorPolicy: 'all',
     notifyOnNetworkStatusChange: true,
   });
-  console.log('🏆 Pool Rewards Data:', poolRewards, poolRewardsError);
+  const { data: poolReward } = useReadContract({
+    address: `0xbaadcc2962417c01af99fb2b7c75706b9bd6babe`,
+    abi: erc20Abi,
+    functionName: 'balanceOf',
+    args: ALL_IN_ONE_VAULT ? [ALL_IN_ONE_VAULT as `0x${string}`] : undefined,
+  });
+  console.log('🏆 Pool Rewards Data:', totalWeight, totalWeightError);
+  console.log('🔗 Pool Rewards:', poolReward);
 
   const summaryItems = useMemo(
     () => [
