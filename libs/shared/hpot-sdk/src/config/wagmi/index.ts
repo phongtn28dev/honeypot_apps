@@ -14,7 +14,7 @@ import { berachainMainnet, networks } from '../chains';
 const pId = '23b1ff4e22147bdf7cab13c0ee4bed90';
 
 // Check if wallet needs to be disconnected
-const shouldSetDisconnectedState = () => {
+const setAllWalletsDisconnectedInStorage = () => {
   if (typeof window === 'undefined') return false;
 
   const wagmiStore = localStorage.getItem('wagmi.store');
@@ -41,7 +41,7 @@ const shouldSetAllWalletsDisconnectedInStorage = () => {
   if (typeof window === 'undefined') return;
   
   // Only set disconnected states if needed
-  if (!shouldSetDisconnectedState()) return;
+  if (!setAllWalletsDisconnectedInStorage()) return;
 
   // Set wagmi states
   localStorage.setItem('wagmi.connected', 'false');
