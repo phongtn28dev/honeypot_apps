@@ -7,20 +7,39 @@ export function formatAmountWithAlphabetSymbol(
 ): string {
   if (Number(amount) === 0) return '0';
 
+  const numAmount = Number(amount);
+
+  // For large numbers, use compact notation but ensure decimals are preserved
+  if (Math.abs(numAmount) >= 1000) {
+    const compactFormatter = new Intl.NumberFormat('en-US', {
+      notation: 'compact',
+      maximumFractionDigits: decimals,
+      minimumFractionDigits: decimals,
+    });
+
+    let formatted = compactFormatter.format(numAmount);
+
+    // If compact notation doesn't preserve our desired decimals, manually add them
+    if (decimals > 0 && !formatted.includes('.')) {
+      const suffixMatch = formatted.match(/[KMBTQ]$/);
+      if (suffixMatch) {
+        const numberPart = formatted.slice(0, -1);
+        const suffix = suffixMatch[0];
+        const decimalPart = '.'.padEnd(decimals + 1, '0');
+        formatted = numberPart + decimalPart + suffix;
+      }
+    }
+
+    return formatted;
+  }
+
+  // For smaller numbers, use regular formatting
   const USformatter = new Intl.NumberFormat('en-US', {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
-    minimumSignificantDigits: decimals,
-    maximumSignificantDigits: decimals,
-    notation: 'compact',
   });
 
-  if (decimals === 0) {
-    return USformatter.format(Number(amount));
-  }
-
-  const USformattedNumber = USformatter.format(Number(amount));
-  return USformattedNumber;
+  return USformatter.format(numAmount);
 }
 
 export function formatAmountWithScientificNotation(

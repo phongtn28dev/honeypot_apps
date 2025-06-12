@@ -69,8 +69,8 @@ export const WasabeeIDOActionComponent = observer(
         <div className="w-full flex items-center justify-between">
           <div className="text-sm text-[#4D4D4D]">Sale Time</div>
           <div className="text-base font-bold">
-            {startsAt?.format('DD/MM/YYYY HH:mm')} -{' '}
-            {endsAt?.format('DD/MM/YYYY HH:mm')}
+            {startsAt?.format('DD MMM YYYY HH:mm')} -{' '}
+            {endsAt?.format('DD MMM YYYY HH:mm')}
           </div>
         </div>
         <div className="w-full flex items-center justify-between">
@@ -84,7 +84,7 @@ export const WasabeeIDOActionComponent = observer(
           <div className="gap-2 text-center">
             <div>
               <div className="text-xl font-bold">
-                {endsAt && dayjs(endsAt).format('DD/MM/YYYY')}
+                {endsAt && dayjs(endsAt).format('DD MMM YYYY')}
               </div>
             </div>
           </div>
@@ -130,7 +130,61 @@ const IDOStartedComponent = observer(
               `Insufficient WBERA balance. You have ${wethBalance.toString()} WBERA but need ${wasabeeIDO.amountIn.toString()} WBERA`
             );
           }
-          await wasabeeIDO.buyWithWETH();
+
+          // Check and approve WBERA manually if needed
+          if (wasabeeIDO.weth?.contract) {
+            const amountInWei = BigInt(
+              wasabeeIDO.amountIn.times(1e18).toFixed(0).toString()
+            );
+
+            // Check current allowance
+            const allowance = await wasabeeIDO.weth.contract.read.allowance([
+              wallet.account as `0x${string}`,
+              wasabeeIDO.address as `0x${string}`,
+            ]);
+
+            console.log('WBERA Allowance Check:', {
+              currentAllowance: allowance.toString(),
+              requiredAmount: amountInWei.toString(),
+              needsApproval: BigInt(allowance.toString()) < amountInWei,
+            });
+
+            // If allowance is insufficient, approve
+            if (BigInt(allowance.toString()) < amountInWei) {
+              console.log('Approving WBERA...');
+              try {
+                await wasabeeIDO.weth.approve.call([
+                  wasabeeIDO.address as `0x${string}`,
+                  amountInWei,
+                ]);
+                console.log('WBERA approval completed');
+              } catch (approvalError: any) {
+                console.error('WBERA approval failed:', approvalError);
+                if (
+                  approvalError.message?.includes('User rejected') ||
+                  approvalError.message?.includes('user rejected') ||
+                  approvalError.code === 4001
+                ) {
+                  throw new Error('Transaction cancelled by user');
+                }
+                throw new Error(`Approval failed: ${approvalError.message}`);
+              }
+            }
+          }
+
+          try {
+            await wasabeeIDO.buyWithWETH();
+          } catch (buyError: any) {
+            console.error('Buy with WBERA failed:', buyError);
+            if (
+              buyError.message?.includes('User rejected') ||
+              buyError.message?.includes('user rejected') ||
+              buyError.code === 4001
+            ) {
+              throw new Error('Transaction cancelled by user');
+            }
+            throw buyError;
+          }
         } else {
           const ethBalance = wallet.balance?.div(10 ** 18) ?? new BigNumber(0);
           console.log('BERA Balance Check:', {
@@ -144,7 +198,20 @@ const IDOStartedComponent = observer(
               `Insufficient BERA balance. You have ${ethBalance.toString()} BERA but need ${wasabeeIDO.amountIn.toString()} BERA`
             );
           }
-          await wasabeeIDO.buyWithETH();
+
+          try {
+            await wasabeeIDO.buyWithETH();
+          } catch (buyError: any) {
+            console.error('Buy with BERA failed:', buyError);
+            if (
+              buyError.message?.includes('User rejected') ||
+              buyError.message?.includes('user rejected') ||
+              buyError.code === 4001
+            ) {
+              throw new Error('Transaction cancelled by user');
+            }
+            throw buyError;
+          }
         }
 
         // Update balances after successful transaction
@@ -159,18 +226,30 @@ const IDOStartedComponent = observer(
         }
       } catch (error: any) {
         console.error('Transaction Error:', error);
-        // Show more user-friendly error message
-        if (error.message.includes('ERC20InsufficientBalance')) {
+
+        // Handle different types of errors with appropriate messages
+        if (
+          error.message?.includes('User rejected') ||
+          error.message?.includes('user rejected') ||
+          error.message?.includes('Transaction cancelled by user')
+        ) {
+          // Don't show error toast for user cancellation
+          console.log('Transaction cancelled by user');
+        } else if (error.message?.includes('ERC20InsufficientBalance')) {
           WrappedToastify.error({
             message:
               'Insufficient token balance. Please check your balance and try again.',
           });
+        } else if (error.code === 4001) {
+          // MetaMask user rejection error code
+          console.log('Transaction cancelled by user');
         } else {
           WrappedToastify.error({
             message: `Transaction failed: ${error.message}`,
           });
         }
       } finally {
+        // Always ensure loading state is cleared
         setIsLoading(false);
       }
     };
@@ -200,21 +279,30 @@ const IDOStartedComponent = observer(
       ? wasabeeIDO.amountIn.div(wasabeeIDO.priceInETH)
       : new BigNumber(0);
 
+    // Check if wallet is connected and not zero address
+    const isWalletConnected =
+      wallet.account &&
+      wallet.account !== '0x0000000000000000000000000000000000000000';
+
     return (
       <div className="bg-white rounded-[16px] border border-black p-4 text-center">
         <div className="text-lg font-bold mb-2">Sale Started</div>
         <div>
           <div className="text-left text-sm text-[#4D4D4D]">
             <span>Balance: </span>{' '}
-            <DynamicFormatAmount
-              amount={
-                useWETH
-                  ? wasabeeIDO.weth?.balance?.toString() ?? '0'
-                  : wallet.balance?.div(10 ** 18).toString() ?? '0'
-              }
-              decimals={5}
-              endWith={useWETH ? 'WBERA' : 'BERA'}
-            />{' '}
+            {isWalletConnected ? (
+              <DynamicFormatAmount
+                amount={
+                  useWETH
+                    ? wasabeeIDO.weth?.balance?.toString() ?? '0'
+                    : wallet.walletBalance?.div(10 ** 18).toString() ?? '0'
+                }
+                decimals={5}
+                endWith={useWETH ? 'WBERA' : 'BERA'}
+              />
+            ) : (
+              <span>wallet not connected</span>
+            )}{' '}
           </div>
           <div className="w-full text-sm text-[#4D4D4D] mb-4 md:flex items-center gap-2">
             <div className="w-full flex flex-col items-end">
@@ -300,11 +388,13 @@ const IDOStartedComponent = observer(
           <Button
             onPress={buyTokens}
             isLoading={isLoading}
-            isDisabled={isLoading}
+            isDisabled={isLoading || !isWalletConnected}
             className="w-full bg-black text-white hover:bg-gray-800"
           >
             {isLoading
               ? 'Processing...'
+              : !isWalletConnected
+              ? 'Connect Wallet'
               : `Buy with ${useWETH ? 'WBERA' : 'BERA'}`}
           </Button>
         </div>

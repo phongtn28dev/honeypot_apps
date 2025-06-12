@@ -45,6 +45,13 @@ export class Wallet {
   }
   universalAccount: UniversalAccount | undefined = undefined;
 
+  get walletBalance() {
+    if (this.account === zeroAddress) {
+      return new BigNumber(0);
+    }
+    return this.balance.div(10 ** 18);
+  }
+
   get currentChain() {
     return this.networksMap[this.currentChainId];
   }

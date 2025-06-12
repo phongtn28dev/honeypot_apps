@@ -172,7 +172,7 @@ const WasabeeIDOPage = observer(() => {
                     <div className="text-[24px] text-[#4D4D4D] text-shadow-[1.481px_2.963px_0px_0px_#AF7F3D] text-stroke-1 text-stroke-black text-center">
                       {DynamicFormatAmount({
                         amount: wasabeeIDO?.idoTotalAmount.toString() ?? 0,
-                        decimals: 2,
+                        decimals: 3,
                         endWith: wasabeeIDO?.idoToken?.symbol ?? '',
                       })}
                     </div>
@@ -246,7 +246,11 @@ const WasabeeIDOPage = observer(() => {
                                 <td className="py-2 text-right">
                                   {new Date(
                                     Number(purchase.timestamp) * 1000
-                                  ).toLocaleString()}
+                                  ).toLocaleDateString('en-GB', {
+                                    day: '2-digit',
+                                    month: 'short',
+                                    year: 'numeric',
+                                  })}
                                 </td>
                               </tr>
                             )
