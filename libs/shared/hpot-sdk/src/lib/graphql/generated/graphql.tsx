@@ -18792,7 +18792,7 @@ export type SingleVaultDetailsQueryResult = Apollo.QueryResult<SingleVaultDetail
 export const WasabeeIdoDocument = gql`
     query WasabeeIDO($id: ID!) {
   idopools(where: {id: $id}) {
-    purchases {
+    purchases(orderBy: timestamp, orderDirection: desc) {
       id
       buyer
       ethAmount

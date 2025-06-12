@@ -246,10 +246,14 @@ const WasabeeIDOPage = observer(() => {
                                 <td className="py-2 text-right">
                                   {new Date(
                                     Number(purchase.timestamp) * 1000
-                                  ).toLocaleDateString('en-GB', {
+                                  ).toLocaleString('en-GB', {
                                     day: '2-digit',
                                     month: 'short',
                                     year: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    second: '2-digit',
+                                    hour12: false,
                                   })}
                                 </td>
                               </tr>
