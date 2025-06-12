@@ -299,23 +299,188 @@ const WasabeeIDOPage = observer(() => {
           </div>
         </CardContainer>
 
-        {/* <CardContainer
+        <CardContainer
           className="bg-white border-3 border-[#FFCD4D] px-[50px] py-[100px]"
           showBottomBorder={false}
         >
-          <ReactMarkdown
-            components={{
-              a: ({ node, ...props }) => (
-                <a {...props} target="_blank" rel="noopener noreferrer">
-                  {props.children}
+          <div className="space-y-8">
+            {/* About Wasabee */}
+            <div className="space-y-4">
+              <h2 className="text-[24px] text-[#0D0D0D] font-gliker text-stroke-0.5 text-stroke-white text-shadow-[1px_2px_0px_#AF7F3D]">
+                About Wasabee
+              </h2>
+              <p className="text-[#4D4D4D] leading-relaxed">
+                Wasabee is a concentrated liquidity DEX to support meme and
+                long-tail asset trading on Berachain. With support for
+                concentrated liquidity and dynamic fee mechanisms, Wasabee is
+                uniquely designed to meet the fast-evolving needs of meme
+                trading markets. Further, leveraging advanced liquidity
+                management through its Automated Liquidity Manager (ALM),
+                Wasabee ensures deep liquidity and optimizes fee collection for
+                users.
+              </p>
+              <p className="text-[#4D4D4D] leading-relaxed">
+                Wasabee has been selected for Berachain's RFA program, with
+                three active pools integrated into Berachain's
+                Proof-of-Liquidity (PoL) system, making them eligible for both
+                BERA and BGT incentives.
+              </p>
+              <div className="space-y-2">
+                <p className="text-[#4D4D4D] font-medium">Key Links:</p>
+                <ul className="text-[#4D4D4D] space-y-1 ml-4">
+                  <li>
+                    •{' '}
+                    <a
+                      href="https://x.com/WasabeeFi/status/1887806031335665817"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline"
+                    >
+                      RFA announcement
+                    </a>
+                  </li>
+                  <li>
+                    •{' '}
+                    <a
+                      href="https://hub.forum.berachain.com/t/general-non-bex-reward-vault-request-for-ibera-wbera-on-wasabee/793"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline"
+                    >
+                      iBERA-WBERA vault
+                    </a>
+                  </li>
+                  <li>
+                    •{' '}
+                    <a
+                      href="https://hub.forum.berachain.com/t/general-non-bex-reward-vault-request-for-wgbera-wbera-on-wasabee/795"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline"
+                    >
+                      wgBERA-WBERA
+                    </a>
+                  </li>
+                  <li>
+                    •{' '}
+                    <a
+                      href="https://hub.forum.berachain.com/t/general-non-bex-reward-vault-request-for-weth-wbera-on-wasabee/655"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline"
+                    >
+                      WETH-WBERA
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Fair Launch */}
+            <div className="space-y-4">
+              <h2 className="text-[24px] text-[#0D0D0D] font-gliker text-stroke-0.5 text-stroke-white text-shadow-[1px_2px_0px_#AF7F3D]">
+                Fair Launch
+              </h2>
+              <p className="text-[#4D4D4D] leading-relaxed">
+                Wasabee is a VC-free project, ensuring a fully community-driven
+                fair launch. All unsold public sale tokens will be permanently
+                burned.
+              </p>
+            </div>
+
+            {/* Tokenomics */}
+            <div className="space-y-4">
+              <h2 className="text-[24px] text-[#0D0D0D] font-gliker text-stroke-0.5 text-stroke-white text-shadow-[1px_2px_0px_#AF7F3D]">
+                Tokenomics
+              </h2>
+              <div className="flex justify-center">
+                <Image
+                  src="/images/wasabee-tokenomics.jpg"
+                  alt="Wasabee Tokenomics Distribution"
+                  width={600}
+                  height={600}
+                  className="rounded-lg"
+                />
+              </div>
+            </div>
+
+            {/* Token Utility */}
+            <div className="space-y-4">
+              <h2 className="text-[24px] text-[#0D0D0D] font-gliker text-stroke-0.5 text-stroke-white text-shadow-[1px_2px_0px_#AF7F3D]">
+                Token Utility
+              </h2>
+              <ul className="text-[#4D4D4D] space-y-3">
+                <li>
+                  <strong>Reward Vault Incentives:</strong> Deploy $BEE to
+                  kick-start PoL reward pools—driving deeper TVL and higher
+                  yield for participants.
+                </li>
+                <li>
+                  <strong>Staking & Governance:</strong> Stake $BEE to vote on
+                  DAO proposals and shape how incentives are distributed; early
+                  stakers earn "Founding Member" status with enhanced voting
+                  weight.
+                </li>
+                <li>
+                  <strong>Liquidity Farming:</strong> Provide $BEE–WBERA
+                  liquidity to earn ongoing farming rewards while bolstering
+                  pool depth.
+                </li>
+                <li>
+                  <strong>Trading-Fee Reduction:</strong> Once activated,
+                  holding $BEE grants tiered discounts on swap fees.
+                </li>
+              </ul>
+            </div>
+
+            {/* Wasabee Team */}
+            <div className="space-y-4">
+              <h2 className="text-[24px] text-[#0D0D0D] font-gliker text-stroke-0.5 text-stroke-white text-shadow-[1px_2px_0px_#AF7F3D]">
+                Wasabee Team
+              </h2>
+              <p className="text-[#4D4D4D] leading-relaxed">
+                Wasabee is built by seasoned DeFi operators with DEX experience
+                dating back to 2020. We're mission-driven to bring meme
+                liquidity into the concentrated liquidity era—without
+                rent-seeking intermediaries.
+              </p>
+            </div>
+
+            {/* Community and Partnerships */}
+            <div className="space-y-4">
+              <h2 className="text-[24px] text-[#0D0D0D] font-gliker text-stroke-0.5 text-stroke-white text-shadow-[1px_2px_0px_#AF7F3D]">
+                Community and Partnerships
+              </h2>
+              <p className="text-[#4D4D4D] leading-relaxed">
+                Wasabee builds community through its Genesis NFT collection, The
+                Hive Awakens (1,000 supply), launched in March 2025 via
+                whitelisted free mint to reward early supporters. We've also
+                formed key partnerships across the Berachain ecosystem,
+                including Honeypot Finance (launchpad), Ooga Booga (aggregator),
+                BeraPaw (BGT derivatives), and TerpLayer (BTCfi), working
+                together to drive liquidity, visibility, and long-tail asset
+                adoption.
+              </p>
+            </div>
+
+            {/* Links */}
+            <div className="space-y-4">
+              <h2 className="text-[24px] text-[#0D0D0D] font-gliker text-stroke-0.5 text-stroke-white text-shadow-[1px_2px_0px_#AF7F3D]">
+                Links
+              </h2>
+              <div className="text-[#4D4D4D]">
+                <a
+                  href="https://wasabee.xyz/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  https://wasabee.xyz/
                 </a>
-              ),
-            }}
-            remarkPlugins={[remarkGfm]}
-          >
-            {wasabeeIDO?.description}
-          </ReactMarkdown>
-        </CardContainer> */}
+              </div>
+            </div>
+          </div>
+        </CardContainer>
       </div>
     </div>
   );
