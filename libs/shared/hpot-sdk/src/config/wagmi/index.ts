@@ -10,11 +10,6 @@ import { injected, safe } from 'wagmi/connectors';
 import { cookieStorage, createStorage, Config, http } from 'wagmi';
 import { berachainMainnet, networks } from '../chains';
 
-declare global {
-  interface Window {
-    okxwallet?: any;
-  }
-}
 
 const pId = '23b1ff4e22147bdf7cab13c0ee4bed90';
 
@@ -42,7 +37,7 @@ const shouldSetDisconnectedState = () => {
 };
 
 // Set all wallet states to disconnected
-const setWalletStatesDisconnected = () => {
+const shouldSetAllWalletsDisconnectedInStorage = () => {
   if (typeof window === 'undefined') return;
   
   // Only set disconnected states if needed
@@ -83,9 +78,7 @@ let customWallets = () => {
 
 const connectors = () => [
   safe(),
-  injected({
-    shimDisconnect: true,
-  }),
+  injected(),
   ...connectorsForWallets(
     [
       {
@@ -108,20 +101,14 @@ const connectors = () => [
 //   );
 // }
 
-// Create a custom storage that handles disconnection
+
+//  persistent storage 
 const createCustomStorage = () => {
   const storage = typeof window !== 'undefined' ? window.localStorage : cookieStorage;
   
   return {
     ...storage,
     setItem: (key: string, value: string) => {
-      // If setting a disconnected state, set all wallet states to disconnected
-      if (value === 'true' && (
-        key.includes('disconnected') || 
-        key === 'wagmi.connected'
-      )) {
-        setWalletStatesDisconnected();
-      }
       storage.setItem(key, value);
     },
     getItem: storage.getItem.bind(storage),
@@ -131,7 +118,7 @@ const createCustomStorage = () => {
 
 export const createWagmiConfig = (overrideConfig?: Partial<Config>) => {
   // Set  wallet states to disconnected when creating new config
-  setWalletStatesDisconnected();
+shouldSetAllWalletsDisconnectedInStorage();
   
   return getDefaultConfig({
     connectors: connectors(),
@@ -150,7 +137,7 @@ export const createWagmiConfig = (overrideConfig?: Partial<Config>) => {
     },
     // @ts-ignore
     chains: networks.map((network) => network.chain),
-    ssr: true, // If your dApp uses server side rendering (SSR
+    ssr: false, 
     storage: createStorage({
       storage: createCustomStorage(),
     }),
