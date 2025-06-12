@@ -73,3 +73,12 @@ apps/*/.vercel/*
 
 #webpack analyzer
 **/nodejs.html
+
+# cursor
+.cursor/*
+#vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json

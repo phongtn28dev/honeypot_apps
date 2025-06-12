@@ -253,6 +253,7 @@ export class WasabeeIDO {
 
   async buyWithETH() {
     if (!this.address || this.amountIn.lte(0)) {
+      console.log('No address or amount in');
       return;
     }
 

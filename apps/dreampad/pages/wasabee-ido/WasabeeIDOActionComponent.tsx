@@ -171,7 +171,7 @@ const IDOStartedComponent = observer(
               }
             }
           }
-
+          console.log('Buying with WBERA...');
           try {
             await wasabeeIDO.buyWithWETH();
           } catch (buyError: any) {
@@ -200,6 +200,7 @@ const IDOStartedComponent = observer(
           }
 
           try {
+            console.log('Buying with BERA...');
             await wasabeeIDO.buyWithETH();
           } catch (buyError: any) {
             console.error('Buy with BERA failed:', buyError);
@@ -218,7 +219,6 @@ const IDOStartedComponent = observer(
         wasabeeIDO.weth?.getBalance();
         wasabeeIDO.idoToken?.getBalance();
         wasabeeIDO.loadEthPurchased();
-        wasabeeIDO.setAmountIn('0');
         if (refetchPurchaseHistory) {
           setTimeout(() => {
             refetchPurchaseHistory();
@@ -295,7 +295,7 @@ const IDOStartedComponent = observer(
                 amount={
                   useWETH
                     ? wasabeeIDO.weth?.balance?.toString() ?? '0'
-                    : wallet.walletBalance?.div(10 ** 18).toString() ?? '0'
+                    : wallet.walletBalance?.toString() ?? '0'
                 }
                 decimals={5}
                 endWith={useWETH ? 'WBERA' : 'BERA'}
