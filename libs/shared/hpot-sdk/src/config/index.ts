@@ -5,3 +5,4 @@ export * from './subgraphEndPoint';
 export * from './algebra/default-chain-id';
 export * from './wagmi';
 export * from './chains';
+export * from './wasabeeIDOmetadata';

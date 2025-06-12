@@ -2685,6 +2685,148 @@ export enum HoldingToken_OrderBy {
   TokenVolumeUsd = 'token__volumeUSD'
 }
 
+export type IdoPool = {
+  __typename?: 'IDOPool';
+  address: Scalars['Bytes']['output'];
+  endTime: Scalars['BigInt']['output'];
+  feeRate: Scalars['BigInt']['output'];
+  id: Scalars['ID']['output'];
+  idoSold: Scalars['BigInt']['output'];
+  idoToken: Scalars['Bytes']['output'];
+  idoTotalAmount: Scalars['BigInt']['output'];
+  maxEthPerWallet: Scalars['BigInt']['output'];
+  priceInETH: Scalars['BigInt']['output'];
+  purchases: Array<Purchase>;
+  startTime: Scalars['BigInt']['output'];
+  withdraws: Array<Withdraw>;
+};
+
+
+export type IdoPoolPurchasesArgs = {
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Purchase_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<Purchase_Filter>;
+};
+
+
+export type IdoPoolWithdrawsArgs = {
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Withdraw_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<Withdraw_Filter>;
+};
+
+export type IdoPool_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  address?: InputMaybe<Scalars['Bytes']['input']>;
+  address_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  address_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  address_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  address_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  address_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  address_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  address_not?: InputMaybe<Scalars['Bytes']['input']>;
+  address_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  address_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  and?: InputMaybe<Array<InputMaybe<IdoPool_Filter>>>;
+  endTime?: InputMaybe<Scalars['BigInt']['input']>;
+  endTime_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  endTime_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  endTime_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  endTime_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  endTime_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  endTime_not?: InputMaybe<Scalars['BigInt']['input']>;
+  endTime_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  feeRate?: InputMaybe<Scalars['BigInt']['input']>;
+  feeRate_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  feeRate_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  feeRate_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  feeRate_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  feeRate_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  feeRate_not?: InputMaybe<Scalars['BigInt']['input']>;
+  feeRate_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_not?: InputMaybe<Scalars['ID']['input']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  idoSold?: InputMaybe<Scalars['BigInt']['input']>;
+  idoSold_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  idoSold_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  idoSold_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  idoSold_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  idoSold_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  idoSold_not?: InputMaybe<Scalars['BigInt']['input']>;
+  idoSold_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  idoToken?: InputMaybe<Scalars['Bytes']['input']>;
+  idoToken_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  idoToken_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  idoToken_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  idoToken_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  idoToken_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  idoToken_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  idoToken_not?: InputMaybe<Scalars['Bytes']['input']>;
+  idoToken_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  idoToken_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  idoTotalAmount?: InputMaybe<Scalars['BigInt']['input']>;
+  idoTotalAmount_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  idoTotalAmount_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  idoTotalAmount_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  idoTotalAmount_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  idoTotalAmount_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  idoTotalAmount_not?: InputMaybe<Scalars['BigInt']['input']>;
+  idoTotalAmount_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  maxEthPerWallet?: InputMaybe<Scalars['BigInt']['input']>;
+  maxEthPerWallet_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  maxEthPerWallet_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  maxEthPerWallet_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  maxEthPerWallet_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  maxEthPerWallet_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  maxEthPerWallet_not?: InputMaybe<Scalars['BigInt']['input']>;
+  maxEthPerWallet_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  or?: InputMaybe<Array<InputMaybe<IdoPool_Filter>>>;
+  priceInETH?: InputMaybe<Scalars['BigInt']['input']>;
+  priceInETH_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  priceInETH_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  priceInETH_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  priceInETH_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  priceInETH_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  priceInETH_not?: InputMaybe<Scalars['BigInt']['input']>;
+  priceInETH_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  purchases_?: InputMaybe<Purchase_Filter>;
+  startTime?: InputMaybe<Scalars['BigInt']['input']>;
+  startTime_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  startTime_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  startTime_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  startTime_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  startTime_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  startTime_not?: InputMaybe<Scalars['BigInt']['input']>;
+  startTime_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  withdraws_?: InputMaybe<Withdraw_Filter>;
+};
+
+export enum IdoPool_OrderBy {
+  Address = 'address',
+  EndTime = 'endTime',
+  FeeRate = 'feeRate',
+  Id = 'id',
+  IdoSold = 'idoSold',
+  IdoToken = 'idoToken',
+  IdoTotalAmount = 'idoTotalAmount',
+  MaxEthPerWallet = 'maxEthPerWallet',
+  PriceInEth = 'priceInETH',
+  Purchases = 'purchases',
+  StartTime = 'startTime',
+  Withdraws = 'withdraws'
+}
+
 export type IchiVault = {
   __typename?: 'IchiVault';
   allowTokenA: Scalars['Boolean']['output'];
@@ -8135,6 +8277,115 @@ export enum Pot2Pump_OrderBy {
   TotalRefundAmount = 'totalRefundAmount'
 }
 
+export type Purchase = {
+  __typename?: 'Purchase';
+  blockNumber: Scalars['BigInt']['output'];
+  buyer: Scalars['Bytes']['output'];
+  ethAmount: Scalars['BigInt']['output'];
+  id: Scalars['ID']['output'];
+  pool: IdoPool;
+  timestamp: Scalars['BigInt']['output'];
+  tokenAmount: Scalars['BigInt']['output'];
+};
+
+export type Purchase_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<Purchase_Filter>>>;
+  blockNumber?: InputMaybe<Scalars['BigInt']['input']>;
+  blockNumber_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  blockNumber_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  blockNumber_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  blockNumber_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  blockNumber_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  blockNumber_not?: InputMaybe<Scalars['BigInt']['input']>;
+  blockNumber_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  buyer?: InputMaybe<Scalars['Bytes']['input']>;
+  buyer_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  buyer_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  buyer_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  buyer_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  buyer_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  buyer_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  buyer_not?: InputMaybe<Scalars['Bytes']['input']>;
+  buyer_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  buyer_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  ethAmount?: InputMaybe<Scalars['BigInt']['input']>;
+  ethAmount_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  ethAmount_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  ethAmount_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  ethAmount_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  ethAmount_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  ethAmount_not?: InputMaybe<Scalars['BigInt']['input']>;
+  ethAmount_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_not?: InputMaybe<Scalars['ID']['input']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  or?: InputMaybe<Array<InputMaybe<Purchase_Filter>>>;
+  pool?: InputMaybe<Scalars['String']['input']>;
+  pool_?: InputMaybe<IdoPool_Filter>;
+  pool_contains?: InputMaybe<Scalars['String']['input']>;
+  pool_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_ends_with?: InputMaybe<Scalars['String']['input']>;
+  pool_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_gt?: InputMaybe<Scalars['String']['input']>;
+  pool_gte?: InputMaybe<Scalars['String']['input']>;
+  pool_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  pool_lt?: InputMaybe<Scalars['String']['input']>;
+  pool_lte?: InputMaybe<Scalars['String']['input']>;
+  pool_not?: InputMaybe<Scalars['String']['input']>;
+  pool_not_contains?: InputMaybe<Scalars['String']['input']>;
+  pool_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  pool_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  pool_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  pool_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_starts_with?: InputMaybe<Scalars['String']['input']>;
+  pool_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  timestamp_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  tokenAmount?: InputMaybe<Scalars['BigInt']['input']>;
+  tokenAmount_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  tokenAmount_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  tokenAmount_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  tokenAmount_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  tokenAmount_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  tokenAmount_not?: InputMaybe<Scalars['BigInt']['input']>;
+  tokenAmount_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+};
+
+export enum Purchase_OrderBy {
+  BlockNumber = 'blockNumber',
+  Buyer = 'buyer',
+  EthAmount = 'ethAmount',
+  Id = 'id',
+  Pool = 'pool',
+  PoolAddress = 'pool__address',
+  PoolEndTime = 'pool__endTime',
+  PoolFeeRate = 'pool__feeRate',
+  PoolId = 'pool__id',
+  PoolIdoSold = 'pool__idoSold',
+  PoolIdoToken = 'pool__idoToken',
+  PoolIdoTotalAmount = 'pool__idoTotalAmount',
+  PoolMaxEthPerWallet = 'pool__maxEthPerWallet',
+  PoolPriceInEth = 'pool__priceInETH',
+  PoolStartTime = 'pool__startTime',
+  Timestamp = 'timestamp',
+  TokenAmount = 'tokenAmount'
+}
+
 export type Query = {
   __typename?: 'Query';
   /** Access to subgraph metadata */
@@ -8179,6 +8430,8 @@ export type Query = {
   holdingTokens: Array<HoldingToken>;
   ichiVault?: Maybe<IchiVault>;
   ichiVaults: Array<IchiVault>;
+  idopool?: Maybe<IdoPool>;
+  idopools: Array<IdoPool>;
   lbppool?: Maybe<LbpPool>;
   lbppools: Array<LbpPool>;
   liquidatorData?: Maybe<LiquidatorData>;
@@ -8223,6 +8476,8 @@ export type Query = {
   positions: Array<Position>;
   pot2Pump?: Maybe<Pot2Pump>;
   pot2Pumps: Array<Pot2Pump>;
+  purchase?: Maybe<Purchase>;
+  purchases: Array<Purchase>;
   redeem?: Maybe<Redeem>;
   redeems: Array<Redeem>;
   refund?: Maybe<Refund>;
@@ -8273,6 +8528,8 @@ export type Query = {
   vaultTransfers: Array<VaultTransfer>;
   vaultWithdraw?: Maybe<VaultWithdraw>;
   vaultWithdraws: Array<VaultWithdraw>;
+  withdraw?: Maybe<Withdraw>;
+  withdraws: Array<Withdraw>;
 };
 
 
@@ -8638,6 +8895,24 @@ export type QueryIchiVaultsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<IchiVault_Filter>;
+};
+
+
+export type QueryIdopoolArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryIdopoolsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<IdoPool_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<IdoPool_Filter>;
 };
 
 
@@ -9034,6 +9309,24 @@ export type QueryPot2PumpsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<Pot2Pump_Filter>;
+};
+
+
+export type QueryPurchaseArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryPurchasesArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Purchase_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Purchase_Filter>;
 };
 
 
@@ -9484,6 +9777,24 @@ export type QueryVaultWithdrawsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<VaultWithdraw_Filter>;
+};
+
+
+export type QueryWithdrawArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryWithdrawsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Withdraw_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Withdraw_Filter>;
 };
 
 export type Redeem = {
@@ -9985,6 +10296,8 @@ export type Subscription = {
   holdingTokens: Array<HoldingToken>;
   ichiVault?: Maybe<IchiVault>;
   ichiVaults: Array<IchiVault>;
+  idopool?: Maybe<IdoPool>;
+  idopools: Array<IdoPool>;
   lbppool?: Maybe<LbpPool>;
   lbppools: Array<LbpPool>;
   liquidatorData?: Maybe<LiquidatorData>;
@@ -10029,6 +10342,8 @@ export type Subscription = {
   positions: Array<Position>;
   pot2Pump?: Maybe<Pot2Pump>;
   pot2Pumps: Array<Pot2Pump>;
+  purchase?: Maybe<Purchase>;
+  purchases: Array<Purchase>;
   redeem?: Maybe<Redeem>;
   redeems: Array<Redeem>;
   refund?: Maybe<Refund>;
@@ -10079,6 +10394,8 @@ export type Subscription = {
   vaultTransfers: Array<VaultTransfer>;
   vaultWithdraw?: Maybe<VaultWithdraw>;
   vaultWithdraws: Array<VaultWithdraw>;
+  withdraw?: Maybe<Withdraw>;
+  withdraws: Array<Withdraw>;
 };
 
 
@@ -10444,6 +10761,24 @@ export type SubscriptionIchiVaultsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<IchiVault_Filter>;
+};
+
+
+export type SubscriptionIdopoolArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionIdopoolsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<IdoPool_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<IdoPool_Filter>;
 };
 
 
@@ -10840,6 +11175,24 @@ export type SubscriptionPot2PumpsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<Pot2Pump_Filter>;
+};
+
+
+export type SubscriptionPurchaseArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionPurchasesArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Purchase_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Purchase_Filter>;
 };
 
 
@@ -11290,6 +11643,24 @@ export type SubscriptionVaultWithdrawsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<VaultWithdraw_Filter>;
+};
+
+
+export type SubscriptionWithdrawArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionWithdrawsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Withdraw_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Withdraw_Filter>;
 };
 
 export type Swap = {
@@ -14937,6 +15308,105 @@ export enum VaultWithdraw_OrderBy {
   VaultTotalSupply = 'vault__totalSupply'
 }
 
+export type Withdraw = {
+  __typename?: 'Withdraw';
+  amount: Scalars['BigInt']['output'];
+  blockNumber: Scalars['BigInt']['output'];
+  id: Scalars['ID']['output'];
+  pool: IdoPool;
+  timestamp: Scalars['BigInt']['output'];
+  to: Scalars['Bytes']['output'];
+};
+
+export type Withdraw_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  amount?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  amount_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_not?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  and?: InputMaybe<Array<InputMaybe<Withdraw_Filter>>>;
+  blockNumber?: InputMaybe<Scalars['BigInt']['input']>;
+  blockNumber_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  blockNumber_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  blockNumber_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  blockNumber_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  blockNumber_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  blockNumber_not?: InputMaybe<Scalars['BigInt']['input']>;
+  blockNumber_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_not?: InputMaybe<Scalars['ID']['input']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  or?: InputMaybe<Array<InputMaybe<Withdraw_Filter>>>;
+  pool?: InputMaybe<Scalars['String']['input']>;
+  pool_?: InputMaybe<IdoPool_Filter>;
+  pool_contains?: InputMaybe<Scalars['String']['input']>;
+  pool_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_ends_with?: InputMaybe<Scalars['String']['input']>;
+  pool_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_gt?: InputMaybe<Scalars['String']['input']>;
+  pool_gte?: InputMaybe<Scalars['String']['input']>;
+  pool_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  pool_lt?: InputMaybe<Scalars['String']['input']>;
+  pool_lte?: InputMaybe<Scalars['String']['input']>;
+  pool_not?: InputMaybe<Scalars['String']['input']>;
+  pool_not_contains?: InputMaybe<Scalars['String']['input']>;
+  pool_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  pool_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  pool_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  pool_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_starts_with?: InputMaybe<Scalars['String']['input']>;
+  pool_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  timestamp_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  to?: InputMaybe<Scalars['Bytes']['input']>;
+  to_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  to_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  to_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  to_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  to_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  to_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  to_not?: InputMaybe<Scalars['Bytes']['input']>;
+  to_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  to_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+};
+
+export enum Withdraw_OrderBy {
+  Amount = 'amount',
+  BlockNumber = 'blockNumber',
+  Id = 'id',
+  Pool = 'pool',
+  PoolAddress = 'pool__address',
+  PoolEndTime = 'pool__endTime',
+  PoolFeeRate = 'pool__feeRate',
+  PoolId = 'pool__id',
+  PoolIdoSold = 'pool__idoSold',
+  PoolIdoToken = 'pool__idoToken',
+  PoolIdoTotalAmount = 'pool__idoTotalAmount',
+  PoolMaxEthPerWallet = 'pool__maxEthPerWallet',
+  PoolPriceInEth = 'pool__priceInETH',
+  PoolStartTime = 'pool__startTime',
+  Timestamp = 'timestamp',
+  To = 'to'
+}
+
 export type _Block_ = {
   __typename?: '_Block_';
   /** The hash of the block */
@@ -15426,6 +15896,13 @@ export type SingleVaultDetailsQueryVariables = Exact<{
 
 
 export type SingleVaultDetailsQuery = { __typename?: 'Query', ichiVault?: { __typename?: 'IchiVault', id: string, sender: any, tokenA: any, allowTokenA: boolean, tokenB: any, allowTokenB: boolean, count: any, createdAtTimestamp: any, holdersCount: number, totalShares: any, feeApr_1d: any, feeApr_3d: any, feeApr_7d: any, feeApr_30d: any, vaultShares: Array<{ __typename?: 'VaultShare', id: string, vaultShareBalance: any }>, vaultDeposits: Array<{ __typename?: 'VaultDeposit', id: string, createdAtTimestamp: any, amount0: any, amount1: any, shares: any, to: any }>, vaultWithdraws: Array<{ __typename?: 'VaultWithdraw', id: string, createdAtTimestamp: any, amount0: any, amount1: any, shares: any, to: any }>, vaultCollectFees: Array<{ __typename?: 'VaultCollectFee', id: string, createdAtTimestamp: any, feeAmount0: any, feeAmount1: any, sender: any }>, pool: { __typename?: 'Pool', id: string, totalValueLockedUSD: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any }, poolHourData: Array<{ __typename?: 'PoolHourData', feesUSD: any, id: string, tvlUSD: any, txCount: any, volumeUSD: any, periodStartUnix: number }>, poolDayData: Array<{ __typename?: 'PoolDayData', date: number, volumeUSD: any, feesUSD: any, tvlUSD: any }> } } | null };
+
+export type WasabeeIdoQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type WasabeeIdoQuery = { __typename?: 'Query', idopools: Array<{ __typename?: 'IDOPool', purchases: Array<{ __typename?: 'Purchase', id: string, buyer: any, ethAmount: any, tokenAmount: any, timestamp: any }> }> };
 
 export const BundleFieldsFragmentDoc = gql`
     fragment BundleFields on Bundle {
@@ -18312,3 +18789,49 @@ export type SingleVaultDetailsQueryHookResult = ReturnType<typeof useSingleVault
 export type SingleVaultDetailsLazyQueryHookResult = ReturnType<typeof useSingleVaultDetailsLazyQuery>;
 export type SingleVaultDetailsSuspenseQueryHookResult = ReturnType<typeof useSingleVaultDetailsSuspenseQuery>;
 export type SingleVaultDetailsQueryResult = Apollo.QueryResult<SingleVaultDetailsQuery, SingleVaultDetailsQueryVariables>;
+export const WasabeeIdoDocument = gql`
+    query WasabeeIDO($id: ID!) {
+  idopools(where: {id: $id}) {
+    purchases {
+      id
+      buyer
+      ethAmount
+      tokenAmount
+      timestamp
+    }
+  }
+}
+    `;
+
+/**
+ * __useWasabeeIdoQuery__
+ *
+ * To run a query within a React component, call `useWasabeeIdoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWasabeeIdoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWasabeeIdoQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useWasabeeIdoQuery(baseOptions: Apollo.QueryHookOptions<WasabeeIdoQuery, WasabeeIdoQueryVariables> & ({ variables: WasabeeIdoQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<WasabeeIdoQuery, WasabeeIdoQueryVariables>(WasabeeIdoDocument, options);
+      }
+export function useWasabeeIdoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WasabeeIdoQuery, WasabeeIdoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<WasabeeIdoQuery, WasabeeIdoQueryVariables>(WasabeeIdoDocument, options);
+        }
+export function useWasabeeIdoSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<WasabeeIdoQuery, WasabeeIdoQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<WasabeeIdoQuery, WasabeeIdoQueryVariables>(WasabeeIdoDocument, options);
+        }
+export type WasabeeIdoQueryHookResult = ReturnType<typeof useWasabeeIdoQuery>;
+export type WasabeeIdoLazyQueryHookResult = ReturnType<typeof useWasabeeIdoLazyQuery>;
+export type WasabeeIdoSuspenseQueryHookResult = ReturnType<typeof useWasabeeIdoSuspenseQuery>;
+export type WasabeeIdoQueryResult = Apollo.QueryResult<WasabeeIdoQuery, WasabeeIdoQueryVariables>;

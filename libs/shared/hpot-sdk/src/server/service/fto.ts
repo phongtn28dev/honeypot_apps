@@ -92,14 +92,8 @@ export const ftoService = {
     });
 
     let updateFlag = false;
-    console.log('getProjectInfoproject: data.chain_id', data.chain_id);
-    console.log(
-      'getProjectInfoproject: chainsMap[data.chain_id]',
-      chainsMap[data.chain_id]
-    );
     const publicClient = createPublicClientByChain(chainsMap[data.chain_id]);
     const readQueue = [];
-    console.log('getProjectInfoproject: ', project);
     if (!project) {
       project = {
         id: -8888,
@@ -144,8 +138,6 @@ export const ftoService = {
     }
 
     await Promise.all(readQueue);
-
-    console.log('readQueue done: ', project);
 
     if (updateFlag) {
       console.log('updateFtoProject: ', project);

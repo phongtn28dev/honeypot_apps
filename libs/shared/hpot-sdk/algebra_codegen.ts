@@ -9,6 +9,7 @@ const config: CodegenConfig = {
       subgraph.algebra_farming,
       subgraph.bgt_market,
       subgraph.lbp,
+      subgraph.wasabee_ido,
     ]),
   ],
   documents: 'src/lib/graphql/queries/!(*.d).{ts,tsx}',

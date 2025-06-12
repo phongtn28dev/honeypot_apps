@@ -89,6 +89,7 @@ export function getSubgraphClientByChainId(
       algebra_farming: null as any,
       bgt_market: null as any,
       lbp: null as any,
+      wasabee_ido: null as any,
     };
   }
 
