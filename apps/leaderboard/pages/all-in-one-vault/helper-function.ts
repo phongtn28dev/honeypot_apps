@@ -20,7 +20,7 @@ export const calculateSummaryData = (
 
   return {
     weightPerToken: weightPerToken.toString(),
-    balance: balance.toFixed(1),
+    balance: balance.toString(),
     receiptWeight: receiptWeight,
   };
 };
