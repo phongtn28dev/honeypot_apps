@@ -1,0 +1,2 @@
+patchedDependencies:
+  '@particle-network/universal-account-sdk': patches/@particle-network__universal-account-sdk.patch

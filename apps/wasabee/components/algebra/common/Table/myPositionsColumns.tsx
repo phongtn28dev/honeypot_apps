@@ -28,7 +28,11 @@ export const myPositionsColumns: ColumnDef<MyPosition>[] = [
         Liquidity
       </HeaderItem>
     ),
-    cell: ({ getValue }) => <span className="font-medium">${(getValue() as number).toFixed(2)}</span>,
+    cell: ({ getValue }) => <span className="font-medium">${DynamicFormatAmount({
+      amount: (getValue() as number) ?? 0,
+      decimals: 2,
+      endWith: '',
+    })}</span>,
   },
   {
     accessorKey: "feesUSD",

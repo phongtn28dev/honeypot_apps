@@ -124,7 +124,7 @@ export const WalletConnect = () => {
                           className="flex cursor-pointer bg-[#202020] text-white px-3 lg:px-4 py-1.5 lg:py-2 rounded-2xl gap-1.5 lg:gap-2 items-center shrink-0 text-xs sm:text-sm lg:text-base"
                         >
                           <Image
-                            src={currentChain.iconUrl}
+                            src={currentChain?.iconUrl}
                             alt="icon"
                             width={18}
                             height={18}
