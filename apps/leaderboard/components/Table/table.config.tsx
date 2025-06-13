@@ -9,6 +9,8 @@ import {
   formatDuration,
   intervalToDuration,
 } from 'date-fns';
+import { useWriteContract } from 'wagmi';
+import { AllInOneVaultABI } from '@/lib/abis';
 
 export interface StakingData {
   id: string;
@@ -130,6 +132,13 @@ export const columns: ColumnDef<ReceiptTableData>[] = [
       const claimableAt = parseInt(data.claimableAt);
       const now = Math.floor(Date.now() / 1000);
       const isClaimable = now >= claimableAt;
+      const {
+        data: hash,
+        isPending,
+        isError: isWriteError,
+        error: writeError,
+        writeContract: claimReceipt,
+      } = useWriteContract();
 
       let actionConfig;
 
@@ -139,7 +148,6 @@ export const columns: ColumnDef<ReceiptTableData>[] = [
           isDisabled: true,
           className:
             'bg-gray-400 text-gray-700 px-3 py-1 rounded-md cursor-not-allowed',
-          onClick: () => {},
         };
       } else if (isClaimable && !data.isClaimed) {
         actionConfig = {
@@ -148,8 +156,14 @@ export const columns: ColumnDef<ReceiptTableData>[] = [
           className:
             'px-3 py-1 rounded-md text-black cursor-pointer hover:opacity-80 transition-opacity',
           style: { background: 'rgba(255, 169, 49, 1)' },
-          onClick: () => {
-            console.log('Claiming receipt:', data.receiptId);
+          onClick: async () => {
+            const hash = await claimReceipt({
+              address: `0x20F4b92054F745c19ea3f3053B77372e73332945`,
+              abi: AllInOneVaultABI,
+              functionName: 'claim',
+              args: [BigInt(data.id)],
+            });
+            console.log('Claim transaction hash:', hash);
           },
         };
       } else {
@@ -158,7 +172,6 @@ export const columns: ColumnDef<ReceiptTableData>[] = [
           isDisabled: true,
           className: 'px-3 py-1 rounded-md text-gray-600 cursor-not-allowed',
           style: { background: 'rgba(204, 204, 204, 1)' },
-          onClick: () => {},
         };
       }
 
