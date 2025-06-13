@@ -70,8 +70,6 @@ export default function InputSection({
     error: tokenInfoError,
   } = useGetSupportTokenInfo({ tokens: isDisabled ? [] : tokenAddresses });
 
-  console.log('Token Info Data:', tokenInfoData);
-
   useEffect(() => {
     if (!isDisabled) {
       setInternalSelectedToken(selectedToken || '');
@@ -133,8 +131,6 @@ export default function InputSection({
     tokenSupportList,
     totalWeight,
     tokenBalance,
-    setSummaryData,
-    setInsufficientBalance,
     isDisabled,
   ]);
 
@@ -249,7 +245,7 @@ export default function InputSection({
           }`}
           type="number"
           min="0"
-          step="0.01"
+          step="0.001"
           isClearable={!isDisabled}
           onClear={() => !isDisabled && onAmountChange?.('')}
         />

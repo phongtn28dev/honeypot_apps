@@ -17,7 +17,11 @@ import { LoadingDisplay } from '@/components/loading-display/loading-display';
 import ErrorIcon from '@/components/svg/ErrorIcon';
 import { transformReceiptData } from './utils/helper';
 
-export default function AllInOneVaultTable() {
+interface AllInOneVaultTableProps {
+  onRefetchExpose?: (refetchFn: () => void) => void;
+}
+
+export default function AllInOneVaultTable({ onRefetchExpose }: AllInOneVaultTableProps = {}) {
   const [currentTableData, setCurrentTableData] =
     useState<ReceiptTableData[]>([]);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -42,6 +46,7 @@ export default function AllInOneVaultTable() {
     loading: receiptsLoading,
     error: receiptsError,
     refetch: refetchReceipts,
+    networkStatus,
   } = useApolloQuery(RECEIPTS_LIST, {
     client: allInOneVaultClient,
     variables: { user: address || '' },
@@ -51,14 +56,47 @@ export default function AllInOneVaultTable() {
   });
   const listReceipts = receiptsData?.receipts?.items || [];
 
+  // Track previous receipt count to detect new data
+  const [previousReceiptCount, setPreviousReceiptCount] = useState(0);
+
+  useEffect(() => {
+    if (onRefetchExpose) {
+      onRefetchExpose(() => refetchReceipts());
+    }
+  }, [onRefetchExpose, refetchReceipts]);
+
   useEffect(() => {
     if (listReceipts) {
       const transformedData = transformReceiptData(listReceipts);
       setCurrentTableData(transformedData);
+      
+      // Only refetch if we have new receipts (count increased)
+      if (listReceipts.length > previousReceiptCount && previousReceiptCount > 0) {
+        console.log('🔄 New receipts detected, refetching data...');
+        refetchReceipts();
+      }
+      
+      setPreviousReceiptCount(listReceipts.length);
     }
-  }, [receiptsData, refreshKey]);
+  }, [receiptsData, refreshKey, refetchReceipts, listReceipts.length, previousReceiptCount]);
 
-  // Set up interval to refresh table data every second for real-time countdown
+  // Handle successful query completion and auto-refetch for new data
+  useEffect(() => {
+    if (!receiptsLoading && !receiptsError && receiptsData && networkStatus === 7) {
+      // NetworkStatus 7 means query completed successfully
+      console.log('✅ Query completed successfully, checking for updates...');
+      
+      // Set a timeout to refetch after a short delay to check for new data
+      const timeout = setTimeout(() => {
+        if (listReceipts.length > 0) {
+          refetchReceipts();
+        }
+      }, 2000); // Wait 2 seconds before refetching
+      
+      return () => clearTimeout(timeout);
+    }
+  }, [receiptsData, receiptsLoading, receiptsError, networkStatus, refetchReceipts, listReceipts.length]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       if (listReceipts) {

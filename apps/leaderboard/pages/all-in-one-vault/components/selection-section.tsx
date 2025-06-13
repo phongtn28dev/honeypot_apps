@@ -22,7 +22,11 @@ import { Address, erc20Abi, parseUnits } from 'viem';
 import { MaxUint256 } from 'ethers';
 import { AllInOneVaultABI } from '@/lib/abis';
 
-export default function SelectionSection() {
+interface SelectionSectionProps {
+  onRefetchReceipts?: (() => void) | null;
+}
+
+export default function SelectionSection({ onRefetchReceipts }: SelectionSectionProps = {}) {
   const { address } = useAccount();
   const [selectedToken, setSelectedToken] = useState<string>('');
   const [tokenName, setTokenName] = useState<string>('');
@@ -54,7 +58,6 @@ export default function SelectionSection() {
     []
   );
 
-  console.log('🔗 Token Support Client:', selectedToken);
   const { data: tokenBalance } = useReadContract({
     address: selectedToken as `0x${string}`,
     abi: erc20Abi,
@@ -64,6 +67,7 @@ export default function SelectionSection() {
       enabled: !!selectedToken && !!address,
     },
   });
+  console.log('🔍', tokenBalance);
 
   const onTokenChange = (token: string) => {
     setSelectedToken(token);
@@ -74,21 +78,16 @@ export default function SelectionSection() {
     setAmount(newAmount);
     setInsufficientBalance(false);
   };
-
-  const { data: allowance } = useReadContract({
-    address: selectedToken as `0x${string}`,
-    abi: erc20Abi,
-    functionName: 'allowance',
-    args: [address as `0x${string}`, `0x20F4b92054F745c19ea3f3053B77372e73332945`],
-    query: {
-      enabled: !!selectedToken && !!address,
-    },
-  });
   const parseAmount = parseUnits(amount || '0', decimals || 18).toString();
-  console.log('🔐 Allowance:', allowance);
-  console.log('🔢 Decimals:', decimals);
-  console.log('💰 Token Balance:', tokenBalance);
-  console.log('💵 Amount:', parseAmount);
+
+  const handleBurnSuccess = () => {
+    console.log('Burn successful!');
+    if (onRefetchReceipts) {
+      onRefetchReceipts();
+    }
+  };
+
+  console.log(summaryData);
 
   return (
     <>
@@ -128,7 +127,7 @@ export default function SelectionSection() {
         tokenDecimals={18}
         tokenSymbol={tokenName}
         userAmount={BigInt(parseAmount)}
-        onSuccess={() => console.log('Burn successful!')}
+        onSuccess={handleBurnSuccess}
         onError={(error) => console.error(error)}
       />
     </>
