@@ -189,6 +189,32 @@ const WasabeeIDOPage = observer(() => {
                       })}
                     </div>
                   </div>
+                  <div className="bg-white rounded-[16px] border border-black p-5 shadow-[4px_4px_0px_0px_#D29A0D] hover:shadow-[2px_2px_0px_0px_#D29A0D] transition-shadow">
+                    <div className="text-sm text-[#171414] mb-2 text-center">
+                      Sale Progress
+                    </div>
+                    <div className="text-[24px] text-[#4D4D4D] text-shadow-[1.481px_2.963px_0px_0px_#AF7F3D] text-stroke-1 text-stroke-black text-center mb-3">
+                      {wasabeeIDO?.idoTotalAmount.gt(0)
+                        ? `${wasabeeIDO.idoSold
+                            .div(wasabeeIDO.idoTotalAmount)
+                            .times(100)
+                            .toFixed(1)}%`
+                        : '0%'}
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-3 border border-black">
+                      <div
+                        className="bg-gradient-to-r from-[#FFCD4D] to-[#D29A0D] h-full rounded-full transition-all duration-300"
+                        style={{
+                          width: wasabeeIDO?.idoTotalAmount.gt(0)
+                            ? `${wasabeeIDO.idoSold
+                                .div(wasabeeIDO.idoTotalAmount)
+                                .times(100)
+                                .toNumber()}%`
+                            : '0%',
+                        }}
+                      ></div>
+                    </div>
+                  </div>
                 </div>
                 <div className="flex flex-col h-full">
                   <div className="text-lg font-semibold mb-4">

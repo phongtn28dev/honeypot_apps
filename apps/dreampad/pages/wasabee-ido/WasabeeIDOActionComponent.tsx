@@ -116,6 +116,27 @@ const IDOStartedComponent = observer(
           throw new Error('No wallet account connected');
         }
 
+        // Calculate remaining tokens available
+        const remainingTokens = wasabeeIDO.idoTotalAmount.minus(
+          wasabeeIDO.idoSold
+        );
+        const outputAmount = wasabeeIDO.amountIn.gt(0)
+          ? wasabeeIDO.amountIn.div(wasabeeIDO.priceInETH)
+          : new BigNumber(0);
+
+        // Check if trying to buy more than what's available
+        if (outputAmount.gt(remainingTokens)) {
+          WrappedToastify.warn({
+            message: `Warning: You're trying to buy ${outputAmount.toFixed(
+              6
+            )} ${
+              wasabeeIDO.idoToken?.symbol
+            } but only ${remainingTokens.toFixed(6)} ${
+              wasabeeIDO.idoToken?.symbol
+            } tokens are available. Your purchase will be limited to the remaining amount.`,
+          });
+        }
+
         // Check balances before attempting transaction
         if (useWETH) {
           const wethBalance = wasabeeIDO.weth?.balance ?? new BigNumber(0);
@@ -284,6 +305,9 @@ const IDOStartedComponent = observer(
       wallet.account &&
       wallet.account !== '0x0000000000000000000000000000000000000000';
 
+    // Check if IDO is sold out
+    const isSoldOut = wasabeeIDO.idoSold.gte(wasabeeIDO.idoTotalAmount);
+
     return (
       <div className="bg-white rounded-[16px] border border-black p-4 text-center">
         <div className="text-lg font-bold mb-2">Sale Started</div>
@@ -388,11 +412,13 @@ const IDOStartedComponent = observer(
           <Button
             onPress={buyTokens}
             isLoading={isLoading}
-            isDisabled={isLoading || !isWalletConnected}
-            className="w-full bg-black text-white hover:bg-gray-800"
+            isDisabled={isLoading || !isWalletConnected || isSoldOut}
+            className="w-full bg-black text-white hover:bg-gray-800 disabled:bg-gray-400 disabled:text-gray-600"
           >
             {isLoading
               ? 'Processing...'
+              : isSoldOut
+              ? 'Sold Out'
               : !isWalletConnected
               ? 'Connect Wallet'
               : `Buy with ${useWETH ? 'WBERA' : 'BERA'}`}
