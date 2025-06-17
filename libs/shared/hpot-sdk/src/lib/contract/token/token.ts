@@ -32,6 +32,11 @@ export class Token implements BaseContract {
     }`;
     const token = Token.tokensMap[key];
 
+    // Ensure decimals is  a number 
+    if (args.decimals !== undefined) {
+      args.decimals = Number(args.decimals);
+    }
+
     if (!token) {
       Token.tokensMap[key] = new Token({
         address: lowerAddress,
