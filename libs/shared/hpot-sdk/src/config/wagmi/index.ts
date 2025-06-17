@@ -10,17 +10,65 @@ import { injected, safe } from 'wagmi/connectors';
 import { cookieStorage, createStorage, Config, http } from 'wagmi';
 import { berachainMainnet, networks } from '../chains';
 
+
 const pId = '23b1ff4e22147bdf7cab13c0ee4bed90';
 
-let customWallets = () => [
-  metaMaskWallet,
+// Check if wallet needs to be disconnected
+const setAllWalletsDisconnectedInStorage = () => {
+  if (typeof window === 'undefined') return false;
+
+  const wagmiStore = localStorage.getItem('wagmi.store');
+  const recentConnectorId = localStorage.getItem('wagmi.recentConnectorId');
+
+  // If no store or recent connector,  set disconnected state
+  if (!wagmiStore || !recentConnectorId) return true;
+
+  try {
+    const store = JSON.parse(wagmiStore);
+    // Check if there are any active connections
+    if (store?.state?.connections?.value?.length > 0 || store?.state?.current) {
+      return false;
+    }
+  } catch (e) {
+    console.error('Error parsing wagmi.store:', e);
+  }
+
+  return false;
+};
+
+// Set all wallet states to disconnected
+const shouldSetAllWalletsDisconnectedInStorage = () => {
+  if (typeof window === 'undefined') return;
+  
+  // Only set disconnected states if needed
+  if (!setAllWalletsDisconnectedInStorage()) return;
+
+  // Set wagmi states
+  localStorage.setItem('wagmi.connected', 'false');
+  localStorage.setItem('wagmi.injected.shimDisconnect', 'true');
+  
+  // Set specific wallet states to disconnected
+  localStorage.setItem('wagmi.okx.disconnected', 'true');
+  localStorage.setItem('wagmi.metaMask.disconnected', 'true');
+  localStorage.setItem('wagmi.rainbow.disconnected', 'true');
+  localStorage.setItem('wagmi.walletConnect.disconnected', 'true');
+  localStorage.setItem('wagmi.bitget.disconnected', 'true');
+  localStorage.setItem('wagmi.com.okex.wallet.disconnected', 'true');
+  localStorage.setItem('wagmi.app.phantom.disconnected', 'true');
+};
+
+let customWallets = () => {
+    
+  return [
+    metaMaskWallet,
   rainbowWallet,
   walletConnectWallet,
   bitgetWallet,
   okxWallet,
   // holdstationWallet,
   // berasigWallet,
-];
+  ];
+};
 
 // if(!window.bitkeep){
 //   customWallets.unshift(bitgetWallet);
@@ -53,8 +101,26 @@ const connectors = () => [
 //   );
 // }
 
-export const createWagmiConfig = (overrideConfig?: Partial<Config>) =>
-  getDefaultConfig({
+
+//  persistent storage 
+const createCustomStorage = () => {
+  const storage = typeof window !== 'undefined' ? window.localStorage : cookieStorage;
+  
+  return {
+    ...storage,
+    setItem: (key: string, value: string) => {
+      storage.setItem(key, value);
+    },
+    getItem: storage.getItem.bind(storage),
+    removeItem: storage.removeItem.bind(storage),
+  };
+};
+
+export const createWagmiConfig = (overrideConfig?: Partial<Config>) => {
+  // Set  wallet states to disconnected when creating new config
+shouldSetAllWalletsDisconnectedInStorage();
+  
+  return getDefaultConfig({
     connectors: connectors(),
     appName: 'honeypot-finance',
     projectId: pId,
@@ -71,9 +137,10 @@ export const createWagmiConfig = (overrideConfig?: Partial<Config>) =>
     },
     // @ts-ignore
     chains: networks.map((network) => network.chain),
-    ssr: true, // If your dApp uses server side rendering (SSR
+    ssr: false, 
     storage: createStorage({
-      storage: cookieStorage,
+      storage: createCustomStorage(),
     }),
     ...overrideConfig,
   });
+};
