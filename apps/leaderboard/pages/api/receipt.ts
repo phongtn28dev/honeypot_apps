@@ -22,10 +22,7 @@ export default async function handler(
   }
   
   try {
-    // Convert ID to bigint
     const receiptId = BigInt(id.toString());
-    
-    // Fetch receipt data from the contract
     const receipt = await client.readContract({
       address: ALL_IN_ONE_VAULT_PROXY,
       abi: AllInOneVaultABI,
@@ -33,7 +30,6 @@ export default async function handler(
       args: [receiptId],
     });
     
-    // Format the response
     const formattedReceipt = {
       user: receipt[0],
       token: receipt[1],

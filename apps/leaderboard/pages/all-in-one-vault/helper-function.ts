@@ -25,88 +25,6 @@ export const calculateSummaryData = (
   };
 };
 
-export const handleTokenChange = (
-  token: string,
-  amount: string,
-  weightPerToken: number,
-  totalWeight: bigint | null | undefined,
-  tokenBalance: bigint | null | undefined,
-  setSelectedToken: (token: string) => void,
-  setInsufficientBalance: (insufficient: boolean) => void,
-  setSummaryData: (data: any) => void
-) => {
-  setSelectedToken(token);
-  setInsufficientBalance(false);
-
-  if (token && amount && weightPerToken) {
-    const newSummaryData = calculateSummaryData(
-      token,
-      amount,
-      weightPerToken,
-      totalWeight,
-      tokenBalance
-    );
-    if (newSummaryData) {
-      setSummaryData(newSummaryData);
-
-      const amountValue = parseFloat(amount);
-      const balanceValue = parseFloat(newSummaryData.balance);
-
-      if (amountValue > balanceValue) {
-        setInsufficientBalance(true);
-      }
-    }
-  }
-};
-
-export const handleAmountChange = (
-  newAmount: string,
-  selectedToken: string,
-  weightPerToken: number,
-  totalWeight: bigint | null | undefined,
-  tokenBalance: bigint | null | undefined,
-  setAmount: (amount: string) => void,
-  setInsufficientBalance: (insufficient: boolean) => void,
-  setSummaryData: (data: any) => void
-) => {
-  setAmount(newAmount);
-
-  if (selectedToken && newAmount && weightPerToken) {
-    const newSummaryData = calculateSummaryData(
-      selectedToken,
-      newAmount,
-      weightPerToken,
-      totalWeight,
-      tokenBalance
-    );
-    if (newSummaryData) {
-      setSummaryData(newSummaryData);
-
-      const amountValue = parseFloat(newAmount);
-      const balanceValue = parseFloat(newSummaryData.balance);
-
-      if (amountValue > balanceValue) {
-        setInsufficientBalance(true);
-        toast.error(
-          `Insufficient balance! You only have ${balanceValue} ${selectedToken} tokens available.`,
-          {
-            position: 'top-right',
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          }
-        );
-      } else {
-        setInsufficientBalance(false);
-      }
-    }
-  } else {
-    setInsufficientBalance(false);
-  }
-};
-
 export const handleCooldownComplete = (
   event: CustomEvent,
   setCurrentTableData: React.Dispatch<React.SetStateAction<ReceiptTableData[]>>
@@ -155,20 +73,4 @@ export const updateClaimedReceipt = (
       return item;
     })
   );
-};
-
-export const resetFormState = (
-  setSelectedToken: (token: string) => void,
-  setAmount: (amount: string) => void,
-  setInsufficientBalance: (insufficient: boolean) => void,
-  setSummaryData: (data: any) => void
-) => {
-  setSelectedToken('');
-  setAmount('');
-  setInsufficientBalance(false);
-  setSummaryData({
-    weightPerToken: '-',
-    balance: '-',
-    receiptWeight: '-',
-  });
 };
