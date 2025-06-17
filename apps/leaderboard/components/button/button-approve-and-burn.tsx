@@ -38,7 +38,6 @@ export function ApproveAndBurnButton({
   const [isProcessing, setIsProcessing] = useState(false);
   const currencyAmount = useMemo(() => {
     if (!userAmount || !tokenAddress) return undefined;
-    console.log('User Amount:', userAmount);
     const token = new Token(80094, tokenAddress, tokenDecimals, tokenSymbol);
     return CurrencyAmount.fromRawAmount(token, userAmount.toString());
   }, [userAmount, tokenAddress, tokenDecimals, tokenSymbol]);
@@ -67,18 +66,13 @@ export function ApproveAndBurnButton({
 
   try {
     setIsProcessing(true);
-    console.log('Executing burn to vault directly');
-    console.log('User Amount:', userAmount);
-    console.log('Token Address:', tokenAddress);
     const hash = await executeGetReceipt({
       address: `0x20F4b92054F745c19ea3f3053B77372e73332945`,
       abi: AllInOneVaultABI,
       functionName: 'getReceipt',
       args: [tokenAddress, userAmount],
     });
-    console.log('Transaction hash:', hash);
     const receipt = await waitForTransactionReceipt(config, { hash });
-    console.log('Transaction receipt:', receipt);
     onSuccess?.();
   } catch (error) {
     console.error('Burn to vault failed:', error);

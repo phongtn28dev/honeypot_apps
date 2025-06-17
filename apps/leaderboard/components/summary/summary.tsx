@@ -71,7 +71,6 @@ const SummaryCard = memo(function SummaryCard({
     []
   );
 
-  // estimated reward = (receipt.receiptWeight * poolReward) / totalWeight
   const {
     data: totalWeight,
     loading: totalWeightLoading,
