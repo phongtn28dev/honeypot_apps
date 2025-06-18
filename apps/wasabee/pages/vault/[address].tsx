@@ -136,8 +136,7 @@ export const VaultDetail = observer(() => {
 
     vaultDetails?.getTotalAmounts();
   }, [vault, wallet.isInit, wallet.account]);
-
-  console.log(vault?.token0?.address,vault?.token1?.address,"the adress is [valut]")
+    
   return (
     <div className="container mx-auto px-4 font-gliker">
       {/* Add Back Button */}
