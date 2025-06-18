@@ -137,6 +137,7 @@ export const VaultDetail = observer(() => {
     vaultDetails?.getTotalAmounts();
   }, [vault, wallet.isInit, wallet.account]);
 
+  console.log(vault?.token0?.address,vault?.token1?.address,"the adress is [valut]")
   return (
     <div className="container mx-auto px-4 font-gliker">
       {/* Add Back Button */}
@@ -184,7 +185,7 @@ export const VaultDetail = observer(() => {
                 href={`/swap?inputCurrency=${vault?.token0?.address}&outputCurrency=${vault?.token1?.address}`}
                 className="w-full md:w-auto"
               >
-                <Button className="w-full rounded-[8px] border border-black bg-[#FFCD4D] p-2 text-[#202020] shadow-[2px_2px_0px_0px_#000] hover:translate-y-[2px] hover:shadow-[2px_1px_0px_0px_#000] active:translate-y-[2px] active:shadow-none">
+                <Button disabled={!vault?.token0?.address || !vault?.token1?.address } className="w-full rounded-[8px] border border-black bg-[#FFCD4D] p-2 text-[#202020] shadow-[2px_2px_0px_0px_#000] hover:translate-y-[2px] hover:shadow-[2px_1px_0px_0px_#000] active:translate-y-[2px] active:shadow-none">
                   Swap
                 </Button>
               </Link>
