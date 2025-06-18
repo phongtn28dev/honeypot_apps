@@ -90,10 +90,43 @@ export default function GenericTanstackTable<T>({
   emptyMessage = 'No data available',
 }: GenericTanstackTableProps<T>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = React.useState('');
+  
+  // Manual pagination state to maintain current page
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0,
+    pageSize: pageSize,
+  });
+
+  // Track data length to detect significant changes
+  const previousDataLength = React.useRef(data.length);
+  const isFirstRender = React.useRef(true);
+
+  // Only reset pagination if data length changes significantly
+  React.useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      previousDataLength.current = data.length;
+      return;
+    }
+
+    const currentDataLength = data.length;
+    const lengthDifference = Math.abs(currentDataLength - previousDataLength.current);
+    
+    // Only reset if data length changed significantly (not just status updates)
+    if (lengthDifference > 1 || currentDataLength === 0) {
+      const maxPage = Math.max(0, Math.ceil(currentDataLength / pagination.pageSize) - 1);
+      if (pagination.pageIndex > maxPage) {
+        setPagination(prev => ({
+          ...prev,
+          pageIndex: Math.max(0, maxPage)
+        }));
+      }
+    }
+    
+    previousDataLength.current = currentDataLength;
+  }, [data.length, pagination.pageSize, pagination.pageIndex]);
 
   const table = useReactTable({
     data,
@@ -101,24 +134,44 @@ export default function GenericTanstackTable<T>({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: enableSorting ? getSortedRowModel() : undefined,
     getFilteredRowModel: enableFiltering ? getFilteredRowModel() : undefined,
-    getPaginationRowModel: enablePagination
-      ? getPaginationRowModel()
-      : undefined,
+    getPaginationRowModel: enablePagination ? getPaginationRowModel() : undefined,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
+    onPaginationChange: setPagination,
     globalFilterFn: globalFilterFn,
     state: {
       sorting,
       columnFilters,
       globalFilter,
+      pagination,
     },
-    initialState: {
-      pagination: {
-        pageSize,
-      },
-    },
+    // Prevent automatic page reset
+    autoResetPageIndex: false,
+    manualPagination: false,
   });
+
+  // Safe navigation functions with bounds checking
+  const goToPage = React.useCallback((pageIndex: number) => {
+    const maxPage = Math.max(0, table.getPageCount() - 1);
+    const targetPage = Math.max(0, Math.min(pageIndex, maxPage));
+    setPagination(prev => ({
+      ...prev,
+      pageIndex: targetPage
+    }));
+  }, [table]);
+
+  const nextPage = React.useCallback(() => {
+    if (table.getCanNextPage()) {
+      goToPage(pagination.pageIndex + 1);
+    }
+  }, [table, pagination.pageIndex, goToPage]);
+
+  const previousPage = React.useCallback(() => {
+    if (table.getCanPreviousPage()) {
+      goToPage(pagination.pageIndex - 1);
+    }
+  }, [table, pagination.pageIndex, goToPage]);
 
   return (
     <div
@@ -133,7 +186,7 @@ export default function GenericTanstackTable<T>({
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="px-4 py-3 text-center text-sm  text-gray-500 bg-gray-50/50"
+                    className="px-4 py-3 text-center text-sm text-gray-500 bg-gray-50/50"
                   >
                     {header.isPlaceholder ? null : (
                       <div
@@ -191,8 +244,7 @@ export default function GenericTanstackTable<T>({
         <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-700">
-              Page {table.getState().pagination.pageIndex + 1} of{' '}
-              {table.getPageCount()}
+              Page {pagination.pageIndex + 1} of {table.getPageCount()}
             </span>
             <span className="text-sm text-gray-500">
               ({table.getFilteredRowModel().rows.length} total rows)
@@ -200,17 +252,16 @@ export default function GenericTanstackTable<T>({
           </div>
           <div className="flex items-center gap-2">
             <Button
-              //   variant="outline"
               size="sm"
-              onClick={() => table.previousPage()}
+              onClick={previousPage}
               disabled={!table.getCanPreviousPage()}
             >
               Previous
             </Button>
+
             <Button
-              //   variant="outline"
               size="sm"
-              onClick={() => table.nextPage()}
+              onClick={nextPage}
               disabled={!table.getCanNextPage()}
             >
               Next
