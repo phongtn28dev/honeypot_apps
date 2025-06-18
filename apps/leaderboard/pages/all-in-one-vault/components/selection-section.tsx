@@ -67,7 +67,6 @@ export default function SelectionSection({ onRefetchReceipts }: SelectionSection
       enabled: !!selectedToken && !!address,
     },
   });
-  console.log('🔍', tokenBalance);
 
   const onTokenChange = (token: string) => {
     setSelectedToken(token);
@@ -81,13 +80,11 @@ export default function SelectionSection({ onRefetchReceipts }: SelectionSection
   const parseAmount = parseUnits(amount || '0', decimals || 18).toString();
 
   const handleBurnSuccess = () => {
-    console.log('Burn successful!');
     if (onRefetchReceipts) {
       onRefetchReceipts();
     }
   };
 
-  console.log(summaryData);
 
   return (
     <>
