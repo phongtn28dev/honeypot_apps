@@ -32,7 +32,7 @@ export const TokenLogo = observer(
         loadSymbol: true,
       });
     }, [token]);
-    console.log(token.logoURI,"token Logo URI is")
+
     return (
       <Tooltip
         content={
