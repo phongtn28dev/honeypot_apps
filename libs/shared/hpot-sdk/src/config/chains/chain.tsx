@@ -465,6 +465,12 @@ export const berachainNetwork = new Network({
       logoURI:
         'https://app.oogabooga.io/_next/image?url=https%3A%2F%2Fimages.oogabooga.io%2Fooga.png&w=64&q=75',
     },
+    '0x93a0cb3ee34aa983db262f904021911ecd199228': {
+      name: 'Bee Token',
+      symbol: 'BEE',
+      decimals: 18,
+      logoURI: '/images/icons/tokens/bee-token-icon.jpg',
+    },
   },
   validatedFtoAddresses: [],
   validatedMemeAddresses: [],
