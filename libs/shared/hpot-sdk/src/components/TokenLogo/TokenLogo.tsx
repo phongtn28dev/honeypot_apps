@@ -32,6 +32,7 @@ export const TokenLogo = observer(
         loadSymbol: true,
       });
     }, [token]);
+
     return (
       <Tooltip
         content={

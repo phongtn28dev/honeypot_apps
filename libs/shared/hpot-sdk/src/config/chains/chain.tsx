@@ -367,7 +367,7 @@ export const berachainNetwork = new Network({
       name: 'iBERA',
       symbol: 'iBERA',
       decimals: 18,
-      logoURI: 'https://infrared.finance/_next/static/media/ibera.a6d10126.svg',
+      logoURI: 'https://infrared.finance/assets/tokens/ibera.svg',
     },
     '0x08a38caa631de329ff2dad1656ce789f31af3142': {
       name: 'YEET',
