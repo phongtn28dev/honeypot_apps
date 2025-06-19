@@ -82,5 +82,11 @@ export async function getMultipleTokensData(
     query: MultipleTokensDocument,
     variables: { tokenIds },
   });
-  return (tokenQuery?.data?.tokens as Token[]) || [];
+ 
+  const transformedTokens = tokenQuery?.data?.tokens.map((token) => ({
+    ...token,
+    decimals: Number(token.decimals)
+  }));
+
+  return (transformedTokens as Token[]) || [];
 }
